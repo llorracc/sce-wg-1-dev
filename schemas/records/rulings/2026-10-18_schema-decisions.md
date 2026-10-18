@@ -38,4 +38,14 @@ are approximate to about ten minutes. His words are kept outside this public rep
   order proposed; a method file names the stage file's own targets, each with a comment; the seven requests go to the Bellman
   maintainer through the bellman session under the owner's name; ρ = 1 is dropped from the family for now, which requires
   ρ > 1 as BST does.
+- **18:28:39** (the transcript's stamp). Answers to the evening's walkthrough of what was open. The Markov family's switch
+  for permanent income while unemployed gets a third value, `grows` (growth applies, ψ = 1), and `continues` is to be the
+  family's standard world; the owner's question of what the code does now is answered by the HAFiscal session's reading:
+  the code's default world is `continues`. The precision levels are settings, not error targets. The three optional
+  results-file keys are accepted. Of the Markov stage file's open points: the replacement incomes are ξ_U and ξ_X and groups
+  are named rather than indexed; the borrowing limit is stated in the household's units, which the owner reads as making
+  explicit what the code did implicitly. The benchmark's own toy specification follows bst/1's newborn. The commit of
+  unknown origin is the owner's own. He asked for a fuller account of the Markov family's newborn before ruling, and asked
+  whether the zero hazard of a recession's onset means HAFiscal treats the onset as an unanticipated shock; both wait. He
+  asked for a memorial followed by a push.
 - **17:44.** The memorial is asked for: the records brought current and committed in this repository, without a push.

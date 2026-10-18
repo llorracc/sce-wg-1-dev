@@ -4,7 +4,8 @@ Faults found in this project's own work, with their status.
 
 - **A commit of unknown origin.** `1ca65f0`, "Add draft schemas for the buffer-stock family bst/1", at 11:37:20 EDT on
   2026-10-18, author `llorracc`, carrying this session's attribution trailer, with the seven first-version files. No command
-  of this session made it; the owner was asked whether he did. **Status:** open. It is local only; the branch has no remote.
+  of this session made it; the owner was asked whether he did. **Status:** closed 2026-10-18 18:28, the owner confirming that
+  he made it himself.
 - **Moments cancelling to zero.** The truncated lognormal's moment of large order was computed as an exponential times a
   difference of two normal CDFs that both round to one, so it came out as zero and the tail-exponent search ran to overflow.
   **Status:** fixed 2026-10-18 17:21, every law's moments computed in log space with the complementary tails; the tail

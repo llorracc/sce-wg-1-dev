@@ -5,7 +5,7 @@ so every record here is written for publication: the owner's decisions are recor
 words, and nothing from private repositories appears beyond a pointer.
 
 Standing rules and state:
-- [Project state](memory/project_state.md) — what exists in `schemas/`, what is settled, what is open, as of 2026-10-18 17:45 EDT.
+- [Project state](memory/project_state.md) — what exists in `schemas/`, what is settled, what is open, as of 2026-10-18 18:38 EDT.
 - [Notation and foundation](memory/feedback_notation-and-foundation.md) — Buffer Stock Theory's notation first, then SolvingMicroDSOPs'; the Bellman-SYM stage file is the foundation of a family's statement.
 - [Iterate and propose](memory/feedback_iterate-and-propose.md) — a schema changes only after the proposed change and its downstream consequences have been put to the owner.
 - [One written form](memory/feedback_one-written-form.md) — a model has one spelling in a parameter file, because the hash is its identity.
@@ -13,7 +13,7 @@ Standing rules and state:
 
 Rulings, journal, findings:
 - [Rulings of 2026-10-17](rulings/2026-10-17_schema-decisions.md) — the handoff day: the word "schema", the shock laws, the truncated lognormal default, the guard hook.
-- [Rulings of 2026-10-18](rulings/2026-10-18_schema-decisions.md) — the family's name, the toy's laws, notation, the stage-file foundation, the newborn, the bounds, welfare, ρ > 1, the restructuring.
+- [Rulings of 2026-10-18](rulings/2026-10-18_schema-decisions.md) — the family's name, the toy's laws, notation, the stage-file foundation, the newborn, the bounds, welfare, ρ > 1, the restructuring; in the evening, the three-valued switch, the levels as settings, the optional keys.
 - [Journal of 2026-10-18](journal/2026-10-18_session-record.md) — the day's events in order, with their stamps.
 - [The lower tail of the stationary distribution](findings/2026-10-18_lower-tail-and-welfare.md) — when population welfare and marginal welfare are finite; verified against an EGM solution.
 - [The checker's first verdicts](findings/2026-10-18_checker-and-emitter.md) — the toy's and the library member's condition margins; the emitter's first results file and its convergence measurement.

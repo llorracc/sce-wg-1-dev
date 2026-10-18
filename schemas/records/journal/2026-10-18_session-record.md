@@ -43,7 +43,25 @@ timestamps, or from the fleet's relay checker.
   state of the household whose place it takes, and a newborn draws ψ in its first quarter. It adds that the code's growth and
   ψ while unemployed are two separate settings, the paper's corrected world being growth with ψ suppressed, which neither
   of the stage file's labels names. The library member's and the untruncated toy's results files validate.
+- **17:52.** The first memorial: two commits, local only.
+- **17:55.** The bellman session reports the seven requests filed in its repository under the owner's name, uncommitted.
+- **18:28:39.** The owner answers the walkthrough of what was open (see the rulings).
+- **18:31–18:37.** Applied: the results document (the levels as settings, the stationarity-residual sentence, the rule for
+  the lower end of m, the optional provenance keys, the validator named), the results validator and its tests (54 pass),
+  the design note (ξ_U and ξ_X, named groups, the borrowing limit's units, the three-valued switch with `continues` the
+  standard, the newborn's status, the reduction test), the README and the foundation plan's status. The bellman session
+  edits its verified copy of the Markov stage file to the three-valued label, elaborates and calibrates it with three files
+  under both Bellman versions, and reports that a value outside the set is refused at calibration; the files are filed. The
+  HAFiscal session is sent the owner's approval of the benchmark's newborn for its own relay check, and asked which world
+  produced the paper's published numbers and whether the paper's text says anything of a newborn's state. Noted for the
+  newborn decision: in a stationary population under one regime, the code's convention, one transition of the chain from
+  the dead household's state, yields the chain's stationary distribution, since death is independent of the state; so the
+  choice is between entering the chain in its stationary distribution with a first-quarter ψ and bst/1's born-employed
+  newborn without one.
+- **18:38.** The second memorial, followed by the branch's first push, both on the owner's word of 18:28.
 
-**State at the memorial.** Branch `buffer-stock-schema-work_CDC`, local only, one commit of unknown origin above `main`, the
-whole of `schemas/` otherwise uncommitted until this memorial's commits. 51 checker tests pass. Running elsewhere: the
-emitter's levels two and three; the bellman session's filing of the requests. Open: the items listed in the project state.
+**State at the second memorial (18:38 EDT).** Branch `buffer-stock-schema-work_CDC`: the owner's first-draft commit, the
+first memorial's two commits, and this memorial's, to be pushed to the fork. 54 checker tests pass. Running elsewhere: the
+emitter's ladder; the HAFiscal session's answers to the two questions. Open: the Markov family's newborn, the zero hazard as
+a fixed feature or a key, the published numbers' world, the Matsya job, and the words in other sessions that the project
+state lists.
