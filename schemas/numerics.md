@@ -9,31 +9,36 @@ numerical choice.
 
 ## Method file
 
-A method file chooses, for each part of the model, the algorithm that computes it. A part is named:
-- by an address that the family's model schema publishes, such as `household.expectation.permanent_shock` in
-  [`bst/1`](bst-1/model.md#addressable-parts);
-- or by a kind, such as `expectation`, which covers every part of that kind.
-
-An entry for a named part overrides an entry for its kind.
+A method file chooses, for each part of the model, the algorithm that computes it. A part is named by the family's stage
+file's own target, as Bellman's methods files name it: a block's id such as `policy`, a block's line such as
+`dcsn_to_arvl.value`, or an operator's name such as `E_{ψ,θ,e}`, which covers every occurrence. The family's model schema
+lists its targets with a comment on each ([`bst/1`](bst-1/model.md#method-targets)); two parts the stage cannot name, the
+stationary population and the diagnostics' expectation, keep names of the schema's own. An entry for a line overrides one
+for its block, and a block's entry overrides an operator name's.
 
 The file holds **no values**. Each method it names is defined in a **method registry**. The registry declares the method's
 contract and **the settings it reads**: each setting's name, type, allowed range and meaning.
 
 ```yaml
 methods:
-  - on: expectation
-    method: equiprobable-quantile-nodes
-  - on: household.expectation.transitory_shock
-    method: gauss-hermite-with-unemployment-atom
-  - on: household.choice
+  - on: policy                    # the choice of c
     method: endogenous-grid
-  - on: household.rule
+  - on: evaluate                  # the rule between the points where it was computed
     method: linear-interpolation
-  - on: population.distribution
+  - on: dcsn_to_arvl              # the joint expectation over the shocks and the unemployment event
+    method: equiprobable-quantile-nodes
+  - on: cntn_to_dcsn.value        # the value, kept for population welfare
+    method: value-function
+  - on: population.distribution   # the stationary population; no stage target
     method: histogram
-  - on: diagnostics.expectation
+  - on: diagnostics.expectation   # the Euler residuals' expectation; no stage target
     method: gauss-legendre-on-support
 ```
+
+**The value and welfare.** Population welfare needs the value function v, which a method such as the endogenous grid method
+does not produce by itself. The target `cntn_to_dcsn.value` names how it is obtained: `value-function`, the solver's own v, which
+the family's recursion defines; or `simulated-utility`, the discounted sum of
+utility along simulated paths, which reads the simulation's agent count, periods and seed and carries a standard error.
 
 **Covering several parts.** A method that does several parts at once, such as one that fuses the quadrature of a shock with
 the expectation step, is one method. Its contract lists the parts it covers. The method file names it once and the registry
@@ -95,8 +100,11 @@ A results file records:
 Results from one suite share the first two hashes and differ in the third. Gathering them shows how each quantity converges
 with each setting. A comparison of two toolkits takes its tolerances from that measured convergence, not from fixed numbers.
 
+Each hash is the SHA-256 of a canonical JSON serialization of the parsed file: keys sorted, no white space, and every number
+written as the shortest decimal that reads back to the same double. So `0.10` and `0.1` hash alike, as do `1` and `1.0`,
+while any change of value changes the hash. The files are written in a strict YAML subset, with no anchors, aliases, tags,
+merge keys, repeated keys, booleans or infinities, so that the parsed values are unambiguous.
+
 ## Open points
 
 - **The registry.** The shared registry is not written: which methods it holds, their contracts and their declared settings.
-- **The canonical form for hashing.** It has yet to be fixed. A strong candidate is canonical JSON over the parsed values, with
-  each number in its exact binary form, so that `0.10` and `0.1` hash alike.

@@ -1,0 +1,323 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "bst/1 results file",
+  "description": "What a toolkit returns for one member of bst/1, as results.md states it. Draft.",
+  "$comment": "Conventions. Every quantity a domain rule can switch off is an object with a status: value, undefined or not computed. Inside a numeric map or array an entry is a number or null, and the enclosing block names its null entries under undefined or not_computed. Values are plain numbers; error estimates go in the optional errors tree that mirrors the value tree. The validator checks names, types and ranges; the checker checks that the comparison points are the request file's, that arrays have the comparison points' length, that statuses agree with the member's domain rules, and that the hashes are the files'.",
+  "type": "object",
+  "required": ["family", "parameter_file_sha256", "method_file_sha256", "settings_sha256", "request_file_sha256",
+               "toolkit", "provenance", "types", "pooled"],
+  "additionalProperties": false,
+  "properties": {
+    "family": { "const": "bst/1" },
+    "parameter_file_sha256": { "$ref": "#/$defs/Sha256" },
+    "method_file_sha256": { "$ref": "#/$defs/Sha256" },
+    "settings_sha256": { "$ref": "#/$defs/Sha256" },
+    "request_file_sha256": { "$ref": "#/$defs/Sha256" },
+    "toolkit": {
+      "type": "object",
+      "required": ["name", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "commit": { "type": "string" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["hardware", "threads", "wall_seconds"],
+      "additionalProperties": false,
+      "properties": {
+        "hardware": { "type": "string" },
+        "threads": { "type": "integer", "minimum": 1 },
+        "wall_seconds": { "type": "number", "minimum": 0 },
+        "method_file": { "type": "string", "description": "The path of the method file whose hash is recorded." },
+        "settings_file": { "type": "string" },
+        "request_file": { "type": "string" },
+        "solver": {
+          "type": "object",
+          "description": "How the solve ended, as the toolkit reports it.",
+          "additionalProperties": true
+        }
+      }
+    },
+    "types": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/TypeResults" }
+    },
+    "pooled": { "$ref": "#/$defs/PooledResults" },
+    "errors": {
+      "type": "object",
+      "description": "Optional error estimates, in a tree that mirrors the value tree: errors.types[i].population.m.gl and so on.",
+      "additionalProperties": true
+    }
+  },
+
+  "$defs": {
+    "Sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "Status": { "enum": ["value", "undefined", "not computed"] },
+    "NumberOrNull": { "type": ["number", "null"] },
+    "NumberArray": { "type": "array", "items": { "type": "number" } },
+    "NullableArray": { "type": "array", "items": { "$ref": "#/$defs/NumberOrNull" } },
+    "KeyList": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+
+    "Quantity": {
+      "description": "One number that a domain rule can switch off.",
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "$ref": "#/$defs/Status" },
+        "value": { "type": "number" }
+      },
+      "if": { "properties": { "status": { "const": "value" } } },
+      "then": { "required": ["value"] }
+    },
+
+    "Probabilities": {
+      "description": "The standard probabilities, as the keys of a GL or quantile map.",
+      "enum": ["0.01", "0.05", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "0.95", "0.99", "0.999", "1"]
+    },
+    "ProbabilityMap": {
+      "type": "object",
+      "required": ["0.01", "0.05", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "0.95", "0.99", "0.999", "1"],
+      "additionalProperties": false,
+      "propertyNames": { "$ref": "#/$defs/Probabilities" },
+      "patternProperties": { "^.*$": { "$ref": "#/$defs/NumberOrNull" } }
+    },
+
+    "DistributionBlock": {
+      "description": "One variable under one measure: its GL ordinates, optionally its quantiles, and the keys left null.",
+      "type": "object",
+      "required": ["gl"],
+      "additionalProperties": false,
+      "properties": {
+        "gl": { "$ref": "#/$defs/ProbabilityMap" },
+        "quantiles": { "$ref": "#/$defs/ProbabilityMap" },
+        "undefined": { "$ref": "#/$defs/KeyList" },
+        "not_computed": { "$ref": "#/$defs/KeyList" }
+      }
+    },
+
+    "PopulationBlock": {
+      "description": "The stationary population under the population measure.",
+      "type": "object",
+      "required": ["m", "a", "c", "mean_c", "mass_at_constraint", "fraction_a_nonpositive", "mean_mpc", "mpc_by_a_quartile"],
+      "additionalProperties": false,
+      "properties": {
+        "m": { "$ref": "#/$defs/DistributionBlock" },
+        "a": { "$ref": "#/$defs/DistributionBlock" },
+        "c": { "$ref": "#/$defs/DistributionBlock" },
+        "mean_c": { "$ref": "#/$defs/Quantity" },
+        "mass_at_constraint": { "type": "number", "minimum": 0, "maximum": 1 },
+        "fraction_a_nonpositive": { "type": "number", "minimum": 0, "maximum": 1 },
+        "mean_mpc": { "type": "number" },
+        "mpc_by_a_quartile": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "number" } }
+      }
+    },
+
+    "IncomeMeasureBlock": {
+      "description": "The stationary population under the income measure; the whole block carries a status, since the measure may not exist.",
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "$ref": "#/$defs/Status" },
+        "m": { "$ref": "#/$defs/DistributionBlock" },
+        "a": { "$ref": "#/$defs/DistributionBlock" },
+        "mass_at_constraint": { "type": "number", "minimum": 0, "maximum": 1 },
+        "mean_a": { "$ref": "#/$defs/Quantity" },
+        "mean_mpc": { "type": "number" }
+      },
+      "if": { "properties": { "status": { "const": "value" } } },
+      "then": { "required": ["m", "a", "mass_at_constraint", "mean_a", "mean_mpc"] }
+    },
+
+    "Welfare": {
+      "description": "W = E[v(m)] and F = E[u(c(m))], in utils; one status for both, since one condition governs them.",
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "$ref": "#/$defs/Status" },
+        "mean_value": { "type": "number" },
+        "mean_felicity": { "type": "number" },
+        "income_measure": {
+          "type": "object",
+          "required": ["status"],
+          "additionalProperties": false,
+          "properties": {
+            "status": { "$ref": "#/$defs/Status" },
+            "mean_value": { "type": "number" },
+            "mean_felicity": { "type": "number" }
+          }
+        }
+      },
+      "if": { "properties": { "status": { "const": "value" } } },
+      "then": { "required": ["mean_value", "mean_felicity"] }
+    },
+
+    "MarginalWelfare": {
+      "description": "M = E[u'(c(m))] overall, within each quartile of a, and at the constraint; the status is the mean's, and a quartile left null is named under undefined.",
+      "type": "object",
+      "required": ["status", "by_a_quartile", "at_constraint"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "$ref": "#/$defs/Status" },
+        "mean": { "type": "number" },
+        "by_a_quartile": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "$ref": "#/$defs/NumberOrNull" } },
+        "at_constraint": { "$ref": "#/$defs/NumberOrNull" },
+        "undefined": { "$ref": "#/$defs/KeyList" },
+        "not_computed": { "$ref": "#/$defs/KeyList" },
+        "gl": { "$ref": "#/$defs/ProbabilityMap" },
+        "income_measure": {
+          "type": "object",
+          "required": ["status"],
+          "additionalProperties": false,
+          "properties": {
+            "status": { "$ref": "#/$defs/Status" },
+            "mean": { "type": "number" }
+          }
+        }
+      },
+      "if": { "properties": { "status": { "const": "value" } } },
+      "then": { "required": ["mean"] }
+    },
+
+    "Kink": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "$ref": "#/$defs/Status" },
+        "m": { "type": "number" },
+        "slope_below": { "type": "number" },
+        "slope_above": { "type": "number" }
+      },
+      "if": { "properties": { "status": { "const": "value" } } },
+      "then": { "required": ["m", "slope_below", "slope_above"] }
+    },
+
+    "SpecialPoint": {
+      "description": "The buffer stock target or the pseudo-target, with c and the MPC there.",
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "$ref": "#/$defs/Status" },
+        "m": { "type": "number" },
+        "c": { "type": "number" },
+        "mpc": { "type": "number" }
+      },
+      "if": { "properties": { "status": { "const": "value" } } },
+      "then": { "required": ["m", "c", "mpc"] }
+    },
+
+    "Rule": {
+      "description": "The rule and its derivative at the comparison points, in the request file's order.",
+      "type": "object",
+      "required": ["c", "mpc"],
+      "additionalProperties": false,
+      "properties": {
+        "c": { "$ref": "#/$defs/NumberArray" },
+        "mpc": { "$ref": "#/$defs/NumberArray" }
+      }
+    },
+
+    "ExportedRule": {
+      "description": "The rule at dense points of the toolkit's choosing, the kink included, with the range stated.",
+      "type": "object",
+      "required": ["m", "c", "range"],
+      "additionalProperties": false,
+      "properties": {
+        "m": { "$ref": "#/$defs/NumberArray" },
+        "c": { "$ref": "#/$defs/NumberArray" },
+        "range": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "number" } }
+      }
+    },
+
+    "EulerResiduals": {
+      "type": "object",
+      "required": ["r", "max_abs", "expectation_method"],
+      "additionalProperties": false,
+      "properties": {
+        "r": { "$ref": "#/$defs/NumberArray" },
+        "max_abs": { "type": "number", "minimum": 0 },
+        "expectation_method": { "type": "string", "description": "The method of the part diagnostics.expectation, which must differ from the household's." }
+      }
+    },
+
+    "StationarityResidual": {
+      "type": "object",
+      "required": ["population"],
+      "additionalProperties": false,
+      "properties": {
+        "population": { "type": "number", "minimum": 0 },
+        "income": { "$ref": "#/$defs/NumberOrNull" },
+        "method": { "type": "string" }
+      }
+    },
+
+    "Simulation": {
+      "description": "Present when the stationary population was simulated.",
+      "type": "object",
+      "required": ["agents", "periods", "seed"],
+      "additionalProperties": false,
+      "properties": {
+        "agents": { "type": "integer", "minimum": 1 },
+        "periods": { "type": "integer", "minimum": 1 },
+        "seed": { "type": "integer" },
+        "burn_in": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "TypeResults": {
+      "type": "object",
+      "required": ["beta", "share", "comparison_points", "rule", "exported_rule", "kink", "target", "pseudo_target",
+                   "population", "income_measure", "welfare", "marginal_welfare", "euler_residuals",
+                   "stationarity_residual"],
+      "additionalProperties": false,
+      "properties": {
+        "beta": { "type": "number", "exclusiveMinimum": 0 },
+        "share": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "comparison_points": { "$ref": "#/$defs/NumberArray" },
+        "rule": { "$ref": "#/$defs/Rule" },
+        "exported_rule": { "$ref": "#/$defs/ExportedRule" },
+        "kink": { "$ref": "#/$defs/Kink" },
+        "target": { "$ref": "#/$defs/SpecialPoint" },
+        "pseudo_target": { "$ref": "#/$defs/SpecialPoint" },
+        "population": { "$ref": "#/$defs/PopulationBlock" },
+        "income_measure": { "$ref": "#/$defs/IncomeMeasureBlock" },
+        "welfare": { "$ref": "#/$defs/Welfare" },
+        "marginal_welfare": { "$ref": "#/$defs/MarginalWelfare" },
+        "euler_residuals": { "$ref": "#/$defs/EulerResiduals" },
+        "stationarity_residual": { "$ref": "#/$defs/StationarityResidual" },
+        "bellman_residual": {
+          "type": "object",
+          "required": ["status"],
+          "additionalProperties": false,
+          "properties": {
+            "status": { "$ref": "#/$defs/Status" },
+            "r": { "$ref": "#/$defs/NumberArray" },
+            "max_abs": { "type": "number", "minimum": 0 }
+          }
+        },
+        "simulation": { "$ref": "#/$defs/Simulation" }
+      }
+    },
+
+    "PooledResults": {
+      "description": "The types pooled by share; the rule has no pooled form.",
+      "type": "object",
+      "required": ["population", "income_measure", "welfare", "marginal_welfare"],
+      "additionalProperties": false,
+      "properties": {
+        "population": { "$ref": "#/$defs/PopulationBlock" },
+        "income_measure": { "$ref": "#/$defs/IncomeMeasureBlock" },
+        "welfare": { "$ref": "#/$defs/Welfare" },
+        "marginal_welfare": { "$ref": "#/$defs/MarginalWelfare" }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+# The toy with untruncated lognormal laws: the model the benchmark's published atoms converge to as the node count grows.
+family: bst/1
+period: quarter
+crra: 2.0
+types:
+  - {beta: 0.822, share: 0.14285714285714285}
+  - {beta: 0.850, share: 0.14285714285714285}
+  - {beta: 0.878, share: 0.14285714285714285}
+  - {beta: 0.906, share: 0.14285714285714285}
+  - {beta: 0.934, share: 0.14285714285714285}
+  - {beta: 0.962, share: 0.14285714285714285}
+  - {beta: 0.990, share: 0.14285714285714285}
+survival: 0.99375
+return: 1.01
+borrowing_constraint: 0.0
+income:
+  growth: 1.0019026
+  permanent_shock: {LogNormal: {sd_log: 0.05477225575051661}}
+  unemployment: {prob: 0.044, income: 0.7}
+  employed_shock: {LogNormal: {sd_log: 0.34641016151377546}}

@@ -25,3 +25,7 @@ docs/project-a.html
 docs/special-issue-proposal.pdf
 project-a/special-issue-proposal.pdf
 project-a/special-issue-proposal.tex
+
+# Python caches from the schema checker and its tests.
+__pycache__/
+.pytest_cache/

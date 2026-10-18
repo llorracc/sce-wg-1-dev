@@ -1,0 +1,64 @@
+# bst/1, one stage for any member with ρ > 1 whose laws of ψ and θ are
+# LogNormal, in the notation of Buffer Stock Theory (sce-wg-1-dev
+# schemas/bst-1/model.md). Revised by hand on 2026-10-18. The family
+# requires ρ > 1, as Buffer Stock Theory does; log utility is outside it.
+# ξ is transitory income and θ the mean-one employed draw. Unemployment is a
+# Bernoulli label e, so that ξ_min = 0 needs no point mass. The constraint in
+# force is a ≥ max(a_Art, a_Nat), stated in the set Xa, the feasible set and
+# the complementarity clause on the Euler equation. a_Nat is determined by the
+# laws and is supplied with the calibration. Survivors only: newborns, types
+# and shares, and the stationary population have no spelling in a stage file.
+
+@stage: buffer_stock
+
+Xm := ℝ
+Xa := [max(a_Art, a_Nat), inf)
+Emp := {emp, unemp}   :: ["the unemployment event: employed; unemployed"]
+
+β     : ℝ₊₊          :: ["discount factor of the type"]
+ℒ     : (0,1]        :: ["probability of surviving into the next period, perpetual youth"]
+ρ     : (1, inf)     :: ["coefficient of relative risk aversion, greater than one as in Buffer Stock Theory"]
+R     : ℝ₊₊          :: ["gross return on assets, earned by survivors, with no annuity market"]
+𝒢     : ℝ₊₊          :: ["growth factor of permanent income"]
+a_Art : ℝ            :: ["artificial borrowing limit a̲_Art, as a ratio to permanent income"]
+a_Nat : ℝ            :: ["natural borrowing limit a̲_Nat, as a ratio to permanent income, determined by the laws: 0 when any law is unbounded below; the constraint in force is a̲ = max(a̲_Art, a̲_Nat)"]
+σ_ψ   : ℝ₊₊          :: ["standard deviation of log ψ"]
+σ_θ   : ℝ₊₊          :: ["standard deviation of log θ"]
+p_zero : [0,1)       :: ["probability ℘ of unemployment"]
+ξ_min : ℝ₊           :: ["transitory income ξ̲ when unemployed, the minimum of ξ, as a ratio to permanent income; requires p_zero*ξ_min < 1"]
+
+ψ : ℝ₊₊
+ψ ~ LogNormal(-(σ_ψ^2)/2, σ_ψ)   :: ["permanent shock, E[ψ] = 1"]
+θ : ℝ₊₊
+θ ~ LogNormal(-(σ_θ^2)/2, σ_θ)   :: ["employed transitory draw, E[θ] = 1; drawn but unused when unemployed"]
+e : Emp
+e ~ Bernoulli(p_zero)            :: ["unemployment event: unemp with probability p_zero, independent of ψ and θ"]
+
+𝑢(c : ℝ₊₊) := c^(1-ρ)/(1-ρ)       :: [id=util]
+𝑑𝑢(c : ℝ₊₊) := c^(-ρ)             :: [id=marg_util]
+𝑑𝑢𝑖𝑛𝑣(x : ℝ₊₊) := x^(-1/ρ)        :: [id=inv_marg_util]
+𝒞(x : Xm) := (0, x - max(a_Art, a_Nat)]   :: [id=feasible]
+
+[id=arvl_to_dcsn, (k : Xa, ψ, θ, e) : !arvl -> (m : Xm) : !dcsn] {
+    ξ = (θ*(1 - p_zero*ξ_min)/(1 - p_zero), ξ_min)[e]   :: [id=transitory_income, "ξ = ξ_min when unemployed, else θ(1 - ℘ξ_min)/(1 - ℘), so E[ξ] = 1"]
+    m = R*k/(𝒢*ψ) + ξ                                   :: [id=market_resources, "a survivor's resources; k is last period's a"]
+}
+
+[id=dcsn_to_cntn, (m, c : ℝ₊₊ @ !ctrl) : !dcsn -> (a : Xa) : !cntn] {
+    a = m - c                         :: [id=savings]
+}
+
+[id=cntn_to_dcsn, (V[>] : ℝ @ !vlu, c) : !cntn -> (V : ℝ @ !vlu, dV : ℝ₊₊ @ !mrgnvl) : !dcsn] {
+    V  = 𝑢(c) + β*ℒ*V[>]              :: [id=value]
+    dV = 𝑑𝑢(c)                        :: [id=marginal]
+}
+
+[id=dcsn_to_arvl, (V, dV) : !dcsn -> (V[<] : ℝ @ !vlu, dV[<] : ℝ₊₊ @ !mrgnvl) : !arvl] {
+    V[<]  = E_{ψ,θ,e}((𝒢*ψ)^(1-ρ) * V)         :: [id=value]
+    dV[<] = E_{ψ,θ,e}(R * (𝒢*ψ)^(-ρ) * dV)     :: [id=marginal]
+}
+
+[id=policy, (V[>] : ℝ @ !vlu, dV[>] : ℝ₊₊ @ !mrgnvl) : !cntn -> (c : ℝ₊₊ @ !ctrl) : !dcsn] {
+    c     = argmax_{cp : 𝒞(m)}(𝑢(cp) + β*ℒ*V[>])   :: [id=optimality, !doc]
+    𝑑𝑢(c) = β*ℒ*dV[>] ⟂ m - c >= max(a_Art, a_Nat)   :: [id=euler]
+}

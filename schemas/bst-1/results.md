@@ -4,7 +4,8 @@ Draft; see the [README](../README.md).
 
 A results file is JSON, written by a program and checked by a validator. It reports quantities that the
 [model schema](model.md) defines, at arguments that the toolkit does not choose. It never reports a toolkit's grid, histogram
-or interpolant. Every value is a ratio to permanent income. Items are **required** unless they are marked optional.
+or interpolant. Every value is a ratio to permanent income, in BST's notation. Items are **required** unless they are marked
+optional.
 
 ## Identity and provenance
 
@@ -29,17 +30,17 @@ Each point is rounded to three significant figures.
 ## The rule, for each type
 
 **At the comparison points:**
-- c_k(m);
-- the MPC c_k′(m), as a derivative, not a finite difference.
+- c_i(m);
+- the MPC c_i′(m), as a derivative, not a finite difference.
 
 **At the special points.** Each value is reported with its status, `undefined` when its domain rule fails
-([regularity conditions](regularity.md)):
-- **The kink m*_k,** the largest m at which the borrowing constraint binds, with the rule's slope on each side.
-- **The buffer stock target m̌_k,** where E[m_{t+1}] = m_t for a survivor, with c and the MPC there.
-- **The pseudo-target m̂_k,** where E[M_{t+1}]/M_t = G for a survivor, with c and the MPC there.
+([conditions](conditions.md)):
+- **The kink m*_i,** the largest m at which the artificial borrowing constraint binds, with the rule's slope on each side.
+- **The buffer stock target m̌_i,** where E[m_{t+1}] = m_t for a survivor, with c and the MPC there.
+- **The pseudo-target m̂_i,** where E[M_{t+1}]/M_t = 𝒢 for a survivor, with c and the MPC there.
 
-For a survivor, E[m′] = R a(m) E[ψ^(−1)]/G + 1, so m̌ solves R a(m) E[ψ^(−1)]/G + 1 = m. In levels, E[M_{t+1}] = R A_t + G P_t,
-so m̂ is where the rule meets the locus a(m) = (G/R)(m − 1).
+For a survivor, E[m′] = R a(m) E[ψ^(−1)]/𝒢 + 1, so m̌ solves R a(m) E[ψ^(−1)]/𝒢 + 1 = m. In levels, E[M_{t+1}] = R A_t + 𝒢 P_t,
+so m̂ is where the rule meets the locus a(m) = (𝒢/R)(m − 1).
 
 **The exported rule.** Each type's rule at dense points of the toolkit's choosing, with the kink included and the range stated,
 so that a reader can compute dynamics that the results file does not report.
@@ -53,13 +54,13 @@ Under the **population measure**, for m, a and c:
   0.9, 0.95, 0.99, 0.999 and 1. GL(1) is the mean.
 - The quantiles at the same probabilities (optional).
 - The mean of c, the aggregate ratio of consumption to income.
-- The mass at the borrowing limit, a = −b, and the fraction with a ≤ 0.
+- The mass at the borrowing constraint, a = a̲, and the fraction with a ≤ 0.
 - The mean MPC, and the mean MPC within each quartile of a. The quartiles are defined through the quantile rank, so a mass point
   needs no tie rule.
 
 Under the **income measure**, for m and a:
 - the GL ordinates at the same probabilities;
-- the mass at the borrowing limit;
+- the mass at the borrowing constraint;
 - the mean of a;
 - the mean MPC, the weighting that aggregate consumption responses use.
 
@@ -80,6 +81,29 @@ exponent.
 The laws of a and c are images of the law of m under the rule. Reporting all three therefore checks the rule's consistency more
 than it adds information: a disagreement in a alone points to the rule.
 
+## Welfare and marginal welfare
+
+**Always reported**, for each type and pooled by share, under the population measure, in utils:
+- **W_i = E[v_i(m)]**, the mean of the value function over the stationary population, with v_i the value of the household's
+  problem as the [model schema](model.md) states it.
+- **F_i = E[u(c_i(m))]**, the mean felicity, the planner's flow welfare; for a stationary population a planner's sum discounted
+  at R is F_i/(1 − 1/R) per household.
+- **M_i = E[u′(c_i(m))]**, the mean marginal utility of consumption, equal by the envelope condition to the mean marginal
+  value of resources E[v_i′(m)]: the first-order welfare effect, in utils, of one unit of normalized resources given to every
+  household; and the same mean within each quartile of a and at the borrowing constraint, the value of a targeted unit.
+- Optional: the GL ordinates of u′(c) at the standard probabilities, and all of the above under the income measure.
+
+No conversion to consumption units and no bang for the buck are reported. HAFiscal's welfare measure weights each
+household's gain by its own marginal utility in normal times, so a uniform marginal transfer in the stationary member scores
+one by construction; the measure is built in the experiments layer from these statistics. Each statistic is `undefined`
+where the [conditions](conditions.md) say its mean is infinite: W and F fail the welfare condition for impatient enough
+members with a zero-income event; M and its bottom-quartile mean fail for every growth-impatient member without mortality
+whose worst income is an atom and whose artificial constraint does not bind, BST's baseline among them. The upper quartiles
+and the GL ordinates for p < 1 stay defined. A toolkit reports the status with the number, since a finite-sample estimate of
+an infinite mean looks stable. How v_i was obtained is the method on the target `cntn_to_dcsn.value`
+([numerical methods](../numerics.md)): the value function the solver computes, or discounted utility along simulated paths,
+which then carries a standard error; u and u′ at the rule need nothing beyond the rule and the distribution.
+
 ## Diagnostics that need no reference solution (required)
 
 Convergence across a suite shows that a toolkit is stable, not that it is right. These diagnostics test a solution against the
@@ -87,15 +111,15 @@ model itself.
 
 **Euler residuals, at each comparison point and for each type.** Let
 
-    ĉ(m) = (u′)^(−1)( β L R E[(G ψ′)^(−ρ) u′(c(m′))] ),   m′ = R (m − c(m))/(G ψ′) + θ′.
+    ĉ(m) = (u′)^(−1)( β_i ℒ R E[(𝒢 ψ′)^(−ρ) u′(c(m′))] ),   m′ = R (m − c(m))/(𝒢 ψ′) + ξ′.
 
 The residual is
 
-    r(m) = min( ĉ(m) − c(m),  m + b − c(m) ) / c(m),
+    r(m) = min( ĉ(m) − c(m),  m − a̲ − c(m) ) / c(m),
 
 in units of consumption. It is zero for the exact rule:
 - where the household saves, c = ĉ;
-- where the constraint binds, c = m + b ≤ ĉ.
+- where the constraint binds, c = m − a̲ ≤ ĉ.
 
 So the same formula serves at, above and below the kink. The expectation in ĉ is the part `diagnostics.expectation`. It must be
 computed by a method different from the household's own expectation, and stated, so that a toolkit cannot score its own
@@ -149,6 +173,8 @@ The validator is not yet written. The shape will be roughly:
       "pseudo_target": {"status": "value", "m": 1.21, "c": 0.99, "mpc": 0.09},
       "population": {"m": {"gl": {"0.01": 0.0031, "1": "undefined"}}},
       "income_measure": {"m": {"gl": {"0.01": 0.0029}}},
+      "welfare": {"status": "value", "mean_value": -31.2, "mean_felicity": -1.03},
+      "marginal_welfare": {"status": "value", "mean": 1.07, "by_a_quartile": [2.1, 1.1, 0.7, 0.4], "at_constraint": 2.6},
       "euler_residuals": {"r": [1e-6, -2e-6], "max_abs": 2e-6},
       "stationarity_residual": {"population": 3e-5, "income": 4e-5}
     }

@@ -1,0 +1,14 @@
+# bst/1 member: the community library's buffer-stock model (annual period),
+# in the names of buffer_stock.bl.
+calibration:
+  ρ: 2.0
+  β: 0.96
+  ℒ: 1.0
+  R: 1.04
+  𝒢: 1.03
+  a_Art: 0.0
+  a_Nat: 0.0
+  σ_ψ: 0.1
+  σ_θ: 0.1
+  p_zero: 0.005
+  ξ_min: 0.0

@@ -1,0 +1,14 @@
+# The community library's buffer-stock model (QuantEcon community-library pull request 5) as a bst/1 member.
+family: bst/1
+period: year
+crra: 2.0
+types:
+  - {beta: 0.96, share: 1.0}
+survival: 1.0
+return: 1.04
+borrowing_constraint: 0.0
+income:
+  growth: 1.03
+  permanent_shock: {LogNormal: {sd_log: 0.1}}
+  unemployment: {prob: 0.005, income: 0.0}
+  employed_shock: {LogNormal: {sd_log: 0.1}}

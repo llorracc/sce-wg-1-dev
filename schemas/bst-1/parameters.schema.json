@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "bst/1 parameter file",
+  "description": "One member of the family bst/1, as model.md names its free parameters, in BST's notation. Draft.",
+  "$comment": "This validator checks names, types and ranges. The checker checks the rest: shares summing to one, types in increasing order of beta with no repeat, income 0 when the unemployment probability is 0, the scale condition wp * xi_min < 1, the artificial borrowing constraint no lower than the natural one, each shock law's own rules, and the validity conditions of conditions.md.",
+  "type": "object",
+  "required": ["family", "period", "crra", "types", "survival", "return", "borrowing_constraint", "income"],
+  "additionalProperties": false,
+  "properties": {
+    "family": { "const": "bst/1" },
+    "period": {
+      "description": "The length of a period, as a label. Every rate and probability in the file is per period.",
+      "enum": ["year", "quarter", "month"]
+    },
+    "crra": {
+      "description": "rho, the coefficient of relative risk aversion, greater than 1 as in BST.",
+      "type": "number", "exclusiveMinimum": 1
+    },
+    "types": {
+      "description": "The discount-factor types, in increasing order of beta, with population shares omega summing to one.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["beta", "share"],
+        "additionalProperties": false,
+        "properties": {
+          "beta": { "type": "number", "exclusiveMinimum": 0 },
+          "share": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "survival": {
+      "description": "The survival probability (BST's script L); 1 switches mortality off.",
+      "type": "number", "exclusiveMinimum": 0, "maximum": 1
+    },
+    "return": {
+      "description": "R, the gross return on assets.",
+      "type": "number", "exclusiveMinimum": 0
+    },
+    "borrowing_constraint": {
+      "description": "The artificial borrowing constraint a_Art, the lowest permitted end-of-period assets as a ratio to permanent income: a number no greater than 0 and no lower than the natural constraint a_Nat, or the word natural for a_Art = a_Nat.",
+      "oneOf": [
+        { "type": "number", "maximum": 0 },
+        { "const": "natural" }
+      ]
+    },
+    "income": {
+      "type": "object",
+      "required": ["growth", "permanent_shock", "unemployment", "employed_shock"],
+      "additionalProperties": false,
+      "properties": {
+        "growth": {
+          "description": "The growth factor of permanent income (BST's script G).",
+          "type": "number", "exclusiveMinimum": 0
+        },
+        "permanent_shock": {
+          "description": "The law of psi.",
+          "$ref": "../shock-laws.schema.json"
+        },
+        "unemployment": {
+          "type": "object",
+          "required": ["prob", "income"],
+          "additionalProperties": false,
+          "properties": {
+            "prob": {
+              "description": "wp, the probability of the unemployment event each period. With 0, income must be 0 too, so that the file has one written form.",
+              "type": "number", "minimum": 0, "exclusiveMaximum": 1
+            },
+            "income": {
+              "description": "xi_min, the transitory shock's value in the unemployment event: income while unemployed as a ratio to permanent income; 0 in BST.",
+              "type": "number", "minimum": 0
+            }
+          }
+        },
+        "employed_shock": {
+          "description": "The law of theta, the employed draw, before the scaling (1 - wp xi_min)/(1 - wp) that keeps the mean of the transitory shock at one.",
+          "$ref": "../shock-laws.schema.json"
+        }
+      }
+    }
+  }
+}

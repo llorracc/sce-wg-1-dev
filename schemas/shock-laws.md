@@ -135,7 +135,7 @@ Rules:
 - At least one stretch where both u and Q rise. A table of steps alone is a `Discrete` law, and a single rising stretch
   is a `Uniform` law; both must be written as such.
 - No interior point lies exactly on the line through its neighbors. Such a point adds nothing, and would give the same
-  law a second written form. The checker tests this in exact decimal arithmetic on the numbers as written.
+  law a second written form. The checker tests this on the parsed numbers, in exact rational arithmetic.
 - The mean, Σ (u₊ − u)(Q + Q₊)/2 over consecutive points, must equal one to within 10⁻¹².
 
 Every expectation is E[f(ψ)] = ∫₀¹ f(Q(u)) du. On a rising stretch it is an integral of f over an interval of ψ, so the
@@ -148,6 +148,22 @@ model.
 ```yaml
 {Tabulated: {points: [[0.0, 0.5], [0.1, 0.5], [0.5, 1.0], [1.0, 1.6]]}}   # a point mass of 0.1 at 0.5, then two rising stretches
 ```
+
+## Bellman-SYM counterparts
+
+The language the stage files are written in has seven law families. Where a law here has one, the stage file writes it;
+where it has none, a member using that law has no stage file until the language gains the family, which is among the
+requests to Bellman's maintainer in [`foundation.md`](foundation.md).
+
+| law | in Bellman-SYM |
+|---|---|
+| Degenerate | `LogNormal(0, 0)`, a point mass at one |
+| LogNormal | `LogNormal(−σ²/2, σ)` |
+| TruncatedLogNormal | none |
+| Uniform | none |
+| Discrete | `Mixture((p₁, v₁), …)`, point masses with weights; the mean is not checked |
+| NormalMixture | `Mixture((w₁, LogNormal(…)), …)` without truncation or the common shift; truncated components have none |
+| Tabulated | none |
 
 ## Reserved for a later version
 
