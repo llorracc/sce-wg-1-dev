@@ -1,8 +1,8 @@
 # The stage file as the foundation of a family's statement
 
 Draft design note, 2026-10-18; see the [README](README.md). Approved by Chris the same day; of the six steps below, the first
-four were done that evening, the fifth is under way (the bellman session is writing the Markov family's stage file), and the
-sixth waits for the model document to settle and for Chris's word.
+five were done that evening (the fifth, the Markov family's stage file, was delivered by the bellman session at 17:40 EDT and
+gained its three-valued switch by 18:37), and the sixth waits for the model document to settle and for Chris's word.
 
 ## The ruling
 

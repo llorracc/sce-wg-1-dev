@@ -71,6 +71,14 @@ def test_sample_validates():
     jsonschema.Draft202012Validator(SCHEMA).validate(sample())
 
 
+def test_optional_provenance_keys_validate():
+    data = sample()
+    data["toolkit"]["driver"] = "bst_bench/schema_results.py 0.1"
+    data["provenance"]["environment"] = {"python": "3.12.3", "numpy": "2.5.0", "blas": "openblas"}
+    data["provenance"]["parameter_file"] = "schemas/bst-1/members/toy.yaml"
+    jsonschema.Draft202012Validator(SCHEMA).validate(data)
+
+
 @pytest.mark.parametrize("change", [
     lambda d: d["types"][0]["welfare"].pop("mean_value"),
     lambda d: d["types"][0]["population"]["m"]["gl"].pop("0.5"),
@@ -80,6 +88,8 @@ def test_sample_validates():
     lambda d: d.update(parameter_file_sha256="abc"),
     lambda d: d["types"][0].update(extra=1),
     lambda d: d["types"][0]["marginal_welfare"].update(status="value"),
+    lambda d: d["toolkit"].update(driver=1),
+    lambda d: d["provenance"].update(environment="numpy 2.5"),
 ])
 def test_rejections(change):
     data = copy.deepcopy(sample())

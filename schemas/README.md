@@ -65,8 +65,9 @@ The family `bst/1`:
 
 The family `bst-markov_ui-and-agg/1`, HAFiscal's household problem, begun stage-file first:
 - [`bst-markov_ui-and-agg/bellman/bst_markov_ui.bl`](bst-markov_ui-and-agg/bellman/bst_markov_ui.bl): the household's
-  problem in Bellman-SYM, with two calibration files for the dropout group's middle type, one per value of the switch for
-  permanent income while unemployed. Its prose documents are not yet written; the design is in the note below.
+  problem in Bellman-SYM, with three calibration files for the dropout group's middle type, one per value of the switch for
+  permanent income while unemployed (`continues`, the family's standard; `grows`; `frozen`). Its prose documents are not yet
+  written; the design is in the note below.
 
 Design notes:
 - [`foundation.md`](foundation.md): the plan for making the Bellman-SYM stage file the foundation of a family's statement,

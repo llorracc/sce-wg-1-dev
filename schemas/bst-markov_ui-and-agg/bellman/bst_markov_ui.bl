@@ -8,7 +8,8 @@
 # probabilities the current regime selects. Employed income is e θ; the
 # benefit and exhaustion states have fixed replacement incomes. Permanent
 # income in a quarter of unemployment follows the label parameter P_u:
-# continues (𝒢ψ applies) or frozen (P unchanged). The splurge is outside the
+# continues (𝒢ψ applies), grows (𝒢 applies and ψ = 1) or frozen (P
+# unchanged). The splurge is outside the
 # stage, as the family's observation map. Survivors only, as in bst/1.
 
 @stage: bst_markov_ui
@@ -17,7 +18,7 @@ Xm := ℝ
 Xa := [max(a_Art, a_Nat), inf)
 Z   := {E, U_2, U_1, X}        :: ["employment states in the order of the rows: employed; unemployed with two quarters of benefits left, this one included; unemployed with one quarter left; unemployed without benefits"]
 Reg := {normal, recession}     :: ["macro regime in the order of the rows: normal, absorbing; recession"]
-Pu  := {continues, frozen}     :: ["permanent income in a quarter of unemployment: 𝒢ψ applies; P is unchanged"]
+Pu  := {continues, grows, frozen}   :: ["permanent income in a quarter of unemployment: 𝒢ψ applies; 𝒢 applies and ψ = 1; P is unchanged"]
 
 β     : ℝ₊₊          :: ["discount factor of the type"]
 ℒ     : (0,1]        :: ["probability of surviving into the next quarter, perpetual youth (1 - D)"]
@@ -43,7 +44,7 @@ r ~ Categorical(((1, 0), (h_x, 1 - h_x))[r_prev])   :: ["this quarter's regime, 
 z : Z
 z ~ Categorical(((1 - (π_eu_n, π_eu_r)[r], (π_eu_n, π_eu_r)[r], 0, 0), ((π_ue_n, π_ue_r)[r], 0, 1 - (π_ue_n, π_ue_r)[r], 0), ((π_ue_n, π_ue_r)[r], 0, 0, 1 - (π_ue_n, π_ue_r)[r]), ((π_ue_n, π_ue_r)[r], 0, 0, 1 - (π_ue_n, π_ue_r)[r]))[z_prev])   :: ["this quarter's employment state, from the row of the previous state z_prev, with the probabilities of this quarter's regime r"]
 ψ : ℝ₊₊
-ψ ~ LogNormal(-((σ_ψ, (σ_ψ, 0)[P_u], (σ_ψ, 0)[P_u], (σ_ψ, 0)[P_u])[z]^2)/2, (σ_ψ, (σ_ψ, 0)[P_u], (σ_ψ, 0)[P_u], (σ_ψ, 0)[P_u])[z])   :: ["mean-one permanent shock; ψ = 1 in a quarter of unemployment when P_u is frozen"]
+ψ ~ LogNormal(-((σ_ψ, (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u])[z]^2)/2, (σ_ψ, (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u])[z])   :: ["mean-one permanent shock; ψ = 1 in a quarter of unemployment when P_u is grows or frozen"]
 θ : ℝ₊₊
 θ ~ LogNormal(-(σ_θ^2)/2, σ_θ)   :: ["mean-one employed draw; drawn but unused when unemployed"]
 
@@ -52,7 +53,7 @@ z ~ Categorical(((1 - (π_eu_n, π_eu_r)[r], (π_eu_n, π_eu_r)[r], 0, 0), ((π_
 𝒞(x : Xm) := (0, x - max(a_Art, a_Nat)]   :: [id=feasible]
 
 [id=arvl_to_dcsn, (k : Xa, z_prev : Z, r_prev : Reg, r, z, ψ, θ) : !arvl -> (m : Xm, z_d : Z, r_d : Reg) : !dcsn] {
-    Γ   = (𝒢, (𝒢, 1)[P_u], (𝒢, 1)[P_u], (𝒢, 1)[P_u])[z]   :: [id=growth, "the growth factor of this quarter: 𝒢 when employed; 𝒢 or 1 in a quarter of unemployment"]
+    Γ   = (𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[z]   :: [id=growth, "the growth factor of this quarter: 𝒢 when employed; 𝒢, 𝒢 or 1 in a quarter of unemployment, by the label"]
     ξ   = (e*θ, ξ_U, ξ_U, ξ_X)[z]     :: [id=transitory_income, "income divided by permanent income"]
     m   = R*k/(Γ*ψ) + ξ               :: [id=market_resources, "a survivor's resources; k is last quarter's a"]
     z_d = z                           :: [id=employment_state]
@@ -71,8 +72,8 @@ z ~ Categorical(((1 - (π_eu_n, π_eu_r)[r], (π_eu_n, π_eu_r)[r], 0, 0), ((π_
 }
 
 [id=dcsn_to_arvl, (V, dV) : !dcsn -> (V[<] : ℝ @ !vlu, dV[<] : ℝ₊₊ @ !mrgnvl) : !arvl] {
-    V[<]  = E_{r,z,ψ,θ}(((𝒢, (𝒢, 1)[P_u], (𝒢, 1)[P_u], (𝒢, 1)[P_u])[z]*ψ)^(1-ρ) * V)         :: [id=value]
-    dV[<] = E_{r,z,ψ,θ}(R * ((𝒢, (𝒢, 1)[P_u], (𝒢, 1)[P_u], (𝒢, 1)[P_u])[z]*ψ)^(-ρ) * dV)     :: [id=marginal]
+    V[<]  = E_{r,z,ψ,θ}(((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[z]*ψ)^(1-ρ) * V)         :: [id=value]
+    dV[<] = E_{r,z,ψ,θ}(R * ((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[z]*ψ)^(-ρ) * dV)     :: [id=marginal]
 }
 
 [id=policy, (V[>] : ℝ @ !vlu, dV[>] : ℝ₊₊ @ !mrgnvl) : !cntn -> (c : ℝ₊₊ @ !ctrl) : !dcsn] {

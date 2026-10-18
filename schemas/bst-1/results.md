@@ -14,6 +14,8 @@ optional.
 - The hash of the request file, which holds the comparison points.
 - The toolkit and its version.
 - The hardware, the threads and the wall time.
+- Optional: the numerical environment, a free-form object of library versions; the driver, the program that assembled the
+  file when the toolkit has more than one; and the parameter file's path. The hash, not the path, identifies the member.
 
 ## Comparison points
 
@@ -22,7 +24,8 @@ them. It is kept out of the parameter file, so that asking for more points never
 
 Its points come, by a stated rule, from a quick solution of the member. For each type they are:
 - the stationary quantiles of m at u = 0.01, 0.05, 0.1, 0.2, …, 0.9, 0.95 and 0.99;
-- the lower end of m;
+- the lower end of m: the member's own infimum of m when consumption is positive there, else the 0.001 quantile, never a
+  point of the toolkit's grid;
 - several points above the 99th percentile.
 
 Each point is rounded to three significant figures.
@@ -128,7 +131,9 @@ quadrature as exact. Report r at each point and the maximum of |r|.
 **The stationarity residual, for each type and measure.** Push the reported stationary distribution of m forward one period,
 under the reported rule and the shock laws, by a method stated for that purpose. Report the largest absolute difference between
 the GL ordinates of m before and after the step, over the reported probabilities. It is zero for an exactly stationary
-distribution, and it detects a toolkit that reports a transient.
+distribution, and it detects a toolkit that reports a transient. For a distribution obtained by a linear solve of a discretized
+transition, the residual is that solve's own residual and tests nothing further; the diagnostic bites on iterated and simulated
+distributions.
 
 **The Bellman residual** at the comparison points, in consumption-equivalent units, for methods that compute a value
 (optional).
@@ -142,8 +147,11 @@ distribution, and it detects a toolkit that reports a transient.
 
 - Each value may carry the toolkit's own error estimate.
 - A simulated value carries its standard error and its sample size.
-- One run, at the toolkit's high precision, is required. The precision levels `low` and `medium` are optional elements of a
-  suite ([numerical methods](../numerics.md)), with relative errors of about 10⁻² and 10⁻³ against 10⁻⁴ for `high`.
+- One run, at the toolkit's `high` level, is required; `low` and `medium` are optional. The levels are named elements of a
+  settings suite ([numerical methods](../numerics.md)): settings, not error targets. No level promises a relative error, since
+  what a level reaches depends on the method; the first measurement, HARK's equiprobable discretization near the kink, is in
+  the [records](../records/findings/2026-10-18_checker-and-emitter.md). The only source of a tolerance is measured
+  convergence, as the comparison below says.
 
 ## The comparison
 
@@ -155,7 +163,7 @@ distribution, and it detects a toolkit that reports a transient.
 
 ## Sketch of the form
 
-The validator is not yet written. The shape will be roughly:
+The validator is [`results.schema.json`](results.schema.json). The shape is roughly:
 
 ```json
 {
@@ -164,7 +172,7 @@ The validator is not yet written. The shape will be roughly:
   "method_file_sha256": "…",
   "settings_sha256": "…",
   "request_file_sha256": "…",
-  "toolkit": {"name": "…", "version": "…"},
+  "toolkit": {"name": "…", "version": "…", "driver": "…"},
   "types": [
     {
       "rule": {"m": [0.42, 0.61], "c": [0.40, 0.55], "mpc": [0.91, 0.42]},

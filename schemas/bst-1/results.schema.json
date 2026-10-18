@@ -20,7 +20,9 @@
       "properties": {
         "name": { "type": "string", "minLength": 1 },
         "version": { "type": "string", "minLength": 1 },
-        "commit": { "type": "string" }
+        "commit": { "type": "string" },
+        "driver": { "type": "string", "minLength": 1,
+                    "description": "The program that assembled the file, when the toolkit has more than one emitter." }
       }
     },
     "provenance": {
@@ -34,9 +36,15 @@
         "method_file": { "type": "string", "description": "The path of the method file whose hash is recorded." },
         "settings_file": { "type": "string" },
         "request_file": { "type": "string" },
+        "parameter_file": { "type": "string", "description": "The parameter file's path, for the reader; its hash identifies the member." },
         "solver": {
           "type": "object",
           "description": "How the solve ended, as the toolkit reports it.",
+          "additionalProperties": true
+        },
+        "environment": {
+          "type": "object",
+          "description": "The numerical environment: library versions, BLAS and the like, free-form.",
           "additionalProperties": true
         }
       }
