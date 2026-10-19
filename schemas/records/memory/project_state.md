@@ -1,6 +1,6 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of 2026-10-19 08:10 EDT"
+description: "What the schema project holds, what is settled and what is open, as of 2026-10-19 09:37 EDT"
 metadata:
   type: project
 ---
@@ -47,9 +47,13 @@ results document, the numerics document and the README's vocabulary follow it. S
 the population forward under another representation reports it in an optional block that decides the population's
 conditions.
 
-**Open with the owner:** the form of the
-stage files' tightened domains, pending Matsya's answer on derived parameters in the language; whether the Markov stage
-file's natural constraint becomes a per-state entry. **Next work:** the proposal's implementation on his approval, then
+Fixed on 2026-10-19 by 09:31: levels are bold, as BST writes them; the Markov family's constraint in force is the per-state
+fixed point with the artificial limit inside; both stage files declare their limits on (−∞, 0]; the community-library and
+law-family sentences are corrected.
+
+**Open with the owner:** the pull request giving Bellman-SYM a truncated lognormal, planned outside the repository, since it
+names the private repository's files, and checked against Bellman's code by the bellman session, with six questions for
+him; filing Bellman's parameter-condition defect. **Next work:** the proposal's implementation on his approval, then
 the rest of the prose of `bst-markov_ui-and-agg/1`: the results schema, the parameter validator and the members. See
 [`../deferred.md`](../deferred.md).
 
