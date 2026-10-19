@@ -28,11 +28,12 @@ are shared with other families.
 | 𝒢 | the growth factor of permanent income | BST (SolvingMicroDSOPs: Γ) |
 | R, β, ρ | the return factor, the discount factor, relative risk aversion | BST |
 | m, c, a | market resources, consumption and end-of-period assets, as ratios to permanent income | BST |
+| 𝐩, 𝐦, 𝐜, 𝐚 | permanent income, and market resources, consumption and end-of-period assets in levels | BST |
 | k, b | beginning-of-period capital (last period's a) and bank balances b = R k/(𝒢ψ) | BST |
 | a̲_Art, a̲_Nat, a̲ | the artificial borrowing constraint, the natural one, and the one in force, max(a̲_Art, a̲_Nat) | SolvingMicroDSOPs' a̲, HARK's names |
 | Þ | the absolute patience factor (R β ℒ)^(1/ρ) | BST |
 
-A bound carries a mark; in LaTeX, a̲ is `\underline{a}`.
+A bound carries a mark and a level is bold; in LaTeX, a̲ is `\underline{a}` and 𝐩 is `\mathbf{p}`.
 
 ## Population
 
@@ -43,8 +44,8 @@ A bound carries a mark; in LaTeX, a̲ is `\underline{a}`.
 
 ## Income
 
-- Permanent income: P_t = 𝒢 ψ_t P_{t−1}, where ψ is a positive shock with E[ψ] = 1.
-- Transitory income is ξ_t P_t:
+- Permanent income: 𝐩_t = 𝒢 ψ_t 𝐩_{t−1}, where ψ is a positive shock with E[ψ] = 1.
+- Transitory income is ξ_t 𝐩_t:
   - with probability ℘, the unemployment event, ξ = ξ̲, with ξ̲ ≥ 0; BST's baseline is ξ̲ = 0, the zero-income event;
   - otherwise ξ = θ (1 − ℘ξ̲)/(1 − ℘), where θ is a positive shock with E[θ] = 1.
 
@@ -57,9 +58,9 @@ A bound carries a mark; in LaTeX, a̲ is `\underline{a}`.
 ## Events within a period, in order
 
 1. Survival is drawn.
-2. A survivor draws ψ_t and ξ_t. Then P_t = 𝒢 ψ_t P_{t−1}, bank balances are b_t = R k_t/(𝒢 ψ_t) with k_t = a_{t−1}, and market
+2. A survivor draws ψ_t and ξ_t. Then 𝐩_t = 𝒢 ψ_t 𝐩_{t−1}, bank balances are b_t = R k_t/(𝒢 ψ_t) with k_t = a_{t−1}, and market
    resources are m_t = b_t + ξ_t.
-3. A newborn is **born employed**: it arrives with P_t = 1 and k_t = 0, and its first transitory draw is the employed branch of
+3. A newborn is **born employed**: it arrives with 𝐩_t = 1 and k_t = 0, and its first transitory draw is the employed branch of
    ξ, so m_t = θ_t (1 − ℘ξ̲)/(1 − ℘) > 0. No newborn can draw the unemployment event.
 4. The agent consumes c_t, and end-of-period assets are a_t = m_t − c_t ≥ a̲.
 
@@ -70,7 +71,7 @@ In ratios to permanent income, a survivor's resources evolve as
 ## Preferences and markets
 
 - Utility is u(c) = c^(1−ρ)/(1−ρ) with ρ > 1, as BST assumes; log utility is outside the family for now. Lifetime utility
-  is E Σ_s (β_i ℒ)^s u(C_{t+s}).
+  is E Σ_s (β_i ℒ)^s u(𝐜_{t+s}).
 - Death ends utility, and there is no bequest motive.
 - There is no annuity market: survivors earn R, not R/ℒ. What becomes of the assets of the dead is outside the household's
   problem.
@@ -94,8 +95,10 @@ value.
 
 - **Sets and parameters.** m ∈ ℝ; a ∈ [a̲, ∞) with a̲ = max(a̲_Art, a̲_Nat); the unemployment event e ∈ {employed,
   unemployed}; the parameters β, ℒ, ρ, R, 𝒢, a̲_Art, a̲_Nat, σ_ψ, σ_θ, ℘ and ξ̲, with the domains above. The stage file writes
-  one law family, the lognormal, for ψ and θ; the family allows any of the shock laws, and a member with another law has no
-  stage file until the language gains the family. The file declares σ_ψ and σ_θ positive: a zero spread is the degenerate
+  one law family, the lognormal, for ψ and θ; the family allows any of the shock laws, and a member with another law needs a
+  stage file written with that law's family: a discrete law can be written today as a mixture of point masses, while the
+  truncated lognormal, the uniform and the tabulated law have no family in Bellman-SYM yet, the truncated lognormal's being
+  planned. The file declares σ_ψ and σ_θ positive: a zero spread is the degenerate
   law, another family in the language.
 - **Shocks.** ψ ~ LogNormal(−σ_ψ²/2, σ_ψ); θ ~ LogNormal(−σ_θ²/2, σ_θ); e ~ Bernoulli(℘). The three are independent of each
   other and of the state.
@@ -123,7 +126,7 @@ what the stage file does not impose: it states one period, and the family states
 For each type, the stationary population is the distribution of m that the events above leave unchanged. Equivalently, it is
 the distribution of a at the end of the period. It is counted under two measures:
 - the **population measure**, which gives each agent weight one;
-- the **income measure**, which weights each agent by its permanent income P and is normalized to total weight one. This is the
+- the **income measure**, which weights each agent by its permanent income 𝐩 and is normalized to total weight one. This is the
   permanent-income-neutral measure of Harmenberg (2021).
 
 **Population welfare** of type i is W_i = E[v_i(m)] under its stationary population, and pooled welfare is Σ ω_i W_i.
@@ -151,7 +154,7 @@ admitted laws, the truncation point, or zero for a law unbounded below ([conditi
 ## What the family fixes, so that no parameter file can state it
 
 - E[ψ] = 1, E[θ] = 1, and the scaling (1 − ℘ξ̲)/(1 − ℘) of the employed draw.
-- A newborn's P = 1 and k = 0, and that it is born employed.
+- A newborn's 𝐩 = 1 and k = 0, and that it is born employed.
 - The order of events above.
 
 ## Method targets
@@ -224,5 +227,6 @@ standard deviation of the log 0.1:
       unemployment: {prob: 0.005, income: 0.0}
       employed_shock: {LogNormal: {sd_log: 0.1}}
 
-Two names collide with the community library's. It writes the transitory shock as bold ξ and its lognormal part as θ, as BST
-does, but it uses b for the bank balance in the sense of BST's b, and 𝒢 for growth; its ℘ is BST's.
+The community library follows BST's notation: bold ξ for the transitory shock and θ for its positive part, b for the bank
+balance relative to next period's permanent income, 𝒢 for growth, ℘ for the zero-income probability, and bold letters for
+levels. It departs in one name: it writes relative risk aversion as γ, where BST and these schemas write ρ.

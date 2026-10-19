@@ -6,8 +6,8 @@ This document carries [`bst/1`'s conditions](../bst-1/conditions.md) over to the
 that document's four kinds of statement, validity conditions, domain rules, implications and the simulation phase, all
 computed exactly by the checker from the parameter file, the chain and the [shock laws'](../shock-laws.md) closed-form
 moments. What changes: the household's state carries the employment state z; the growth factor and the law of the
-permanent shock vary with z under `grows` and `frozen`; income in the unemployed states is an atom; the natural borrowing
-constraint depends on the state; and the conditions that are scalar inequalities in `bst/1` become conditions on a matrix
+permanent shock vary with z under `grows` and `frozen`; income in the unemployed states is an atom; the borrowing
+constraint in force depends on the state; and the conditions that are scalar inequalities in `bst/1` become conditions on a matrix
 over the chain, which reduce to `bst/1`'s under `continues`. The stationary problem is the normal regime's, since normal is
 absorbing, so the chain below is the normal regime's. The derivations are of 2026-10-18 and are deductions unless a check is
 named.
@@ -27,34 +27,43 @@ For one group and its type i:
   z′ only through Γ(z′) = 𝒢 and the law of ψ is the same in every state, so M_f = E[f] P and λ(M_f) = E[f]: every condition
   below is then `bst/1`'s with the group's 𝒢.
 
-## The natural borrowing constraint, by state
+## The constraint in force, by state
 
-With u(0) = −∞ the household never lets next quarter's worst income force zero consumption, in any state it can reach. The
-natural constraint therefore solves, over the states,
+With u(0) = −∞ the household never lets next quarter's worst income force zero consumption, in any state it can reach, and
+it never ends a quarter below the artificial limit a̲_Art. A state's limit must therefore keep feasible the constraint in
+force, artificial or natural, in every state that can follow, and the constraint in force solves, over the states,
 
-    a̲_Nat(z) = max over z′ with P[z, z′] > 0 of  (Γ(z′) ψ̲(z′)/R) (a̲_Nat(z′) − ξ̲(z′)),
+    a̲(z) = max( a̲_Art,  max over z′ with P[z, z′] > 0 of  (Γ(z′) ψ̲(z′)/R) (a̲(z′) − ξ̲(z′)) ),
 
-a fixed point that a few iterations from zero reach, each bracket being nonpositive. When the chain is i.i.d. and the
-state has one income floor, this is `bst/1`'s a̲_Nat = −ξ̲_min κ/(1 − κ) with κ = ψ̲ 𝒢/R. Three consequences:
-- With lognormal laws, θ̲ = 0 and ψ̲ = 0 in the employed state, which is reachable from every state, so a̲_Nat(z) = 0 for every
-  z; the calibration files' `a_Nat: 0.0` is right for them.
-- With truncated laws the natural constraint is negative, and it can differ by state. The employed state is reachable from
-  every state, so its term is a candidate everywhere; the constraint is the same in every state whenever that term is the
-  largest, which it is when the employed floor e θ̲ ψ̲ is the lowest income and the multipliers are equal, as under
-  `continues` at the paper's calibration, where a̲_Nat is then `bst/1`'s formula with ξ̲_min = e θ̲. It differs by state when
-  an unemployed branch's term is larger: a replacement income below the employed floor, as in the paper's low-benefits
-  member, or a larger multiplier on the unemployed branch, as under `frozen`, where Γ ψ̲ is 1 rather than 𝒢 ψ̲.
-- The constraint in force in state z is a̲(z) = max(a̲_Art, a̲_Nat(z)). The stage file carries one entry `a_Nat`; a per-state
-  entry, selected by z, is proposed to the owner, since a member whose natural constraint differs by state and whose
-  `borrowing_constraint` is `natural` has no single value to write. With the paper's a̲_Art = 0 the constraint in force is 0
-  in every state and the point is moot.
+a fixed point that a few iterations from zero reach, each bracket being nonpositive. HARK's Markov solver computes the same
+recursion: a state's natural bound comes from the next states' lowest resources, which already carry the artificial limit.
+The **natural limits** a̲_Nat(z) are the same recursion without a̲_Art: the constraint in force of a member written with
+`borrowing_constraint: natural`. In `bst/1`, one state, the recursion gives a̲ = max(a̲_Art, a̲_Nat) with
+a̲_Nat = −ξ̲_min κ/(1 − κ) and κ = ψ̲ 𝒢/R. In the chain the artificial limit has to sit inside the recursion: taking
+max(a̲_Art, a̲_Nat(z)) after the fact understates the limit of a state that can be followed by one in which the artificial
+limit binds, since the first must leave room for the second. Consequences:
+- With lognormal laws, θ̲ = 0 and ψ̲ = 0 in the employed state, which can follow every state, so its term is zero, every
+  other term is negative, and a̲(z) = max(a̲_Art, 0) = 0 in every state and under every value of the switch. The stage
+  file's single limit, with `a_Nat: 0.0`, is therefore exact for every member it states.
+- With truncated laws the limits are negative and can differ by state. They are the same in every state when the employed
+  state's term, a candidate everywhere, is the largest, as at the paper's calibration under `continues`. They differ when a
+  state's own worst income is low enough for its term to be the larger, as for the paper's low-benefits member, whose
+  exhaustion income lies below the employed floor; and an artificial limit above the lowest natural limit binds in some
+  states and, through the recursion, tightens the limits of the states that can precede them. A larger multiplier
+  Γ ψ̲/R, which the unemployed states have under `grows` and `frozen`, makes a state's term more negative and so can only
+  loosen the limits of the states before it.
+- A stage file with bounded laws needs the per-state limits, which the language can state as four calibrated values selected
+  by z, computed by the checker until the language can derive them. A toolkit's effective member, whose laws are discrete,
+  has state-dependent limits in general and reports them per state. With the paper's a̲_Art = 0 the constraint in force is
+  zero in every state, whatever the laws.
 
 ## Validity conditions
 
 A member that fails any of these is rejected:
 - the parameter domains of the [model schema](model.md) and the rules of the [shock laws](../shock-laws.md); the shares
   summing to one within each group and across groups;
-- a̲_Nat(z) ≤ a̲_Art ≤ 0 for every z, for one written form, or `natural`, which means a̲_Art = a̲_Nat(z) in each state;
+- a̲_Art ≤ 0 and, for one written form, above the lowest of the natural limits a̲_Nat(z), since an artificial limit at or
+  below it binds in no state and describes the same model as `natural`; or `natural`, for no artificial limit;
 - for every group and type, the FVAC and the RIC or the WRIC of the table below.
 
 BST's existence theorem is for independent income with bounded support and ρ > 1. For the chain the family requires the
@@ -92,9 +101,10 @@ A quantity a member does not define is reported as `undefined`.
 
 The special points of the rule, in each state z:
 - **The buffer stock target m̌_i(z)**, where E[m′ | m, z] = m for a survivor, needs the GIC-Mod of state z with Þ̄.
-- **The pseudo-target m̂_i(z)**, where E[M′ | z]/M equals the expected growth of permanent income from z, E[Γ(z′) ψ′ | z],
+- **The pseudo-target m̂_i(z)**, where E[𝐦′ | z]/𝐦 equals the expected growth of permanent income from z, E[Γ(z′) ψ′ | z],
   needs the GIC of state z with Þ̄.
-- **The kink m*_i(z)** needs the artificial constraint to bind in that state: a̲_Art > a̲_Nat(z).
+- **The kink m*_i(z)** needs the artificial limit to be the constraint in force in that state and to lie strictly above
+  the limit the following states impose: a̲(z) = a̲_Art > max over successors z′ of (Γ(z′) ψ̲(z′)/R)(a̲(z′) − ξ̲(z′)).
 
 The stationary population over (m, z), for each group and type:
 
@@ -107,15 +117,15 @@ The stationary population over (m, z), for each group and type:
 - **Income measure.** It exists when ℒ λ(M_f) < 1 with f = Γ(z′) ψ′, which is ℒ 𝒢 < 1 under `continues`. Its moment of order
   j is finite exactly when ℒ λ(M_f) < 1 with f = (Þ̄/(Γ(z′) ψ′))^j Γ(z′) ψ′, which under `continues` is
   ℒ 𝒢 (Þ̄/𝒢)^j E[ψ^(1−j)] < 1. Under `continues` the measure's transition factorizes, permanent income being independent of
-  the state; under `grows` and `frozen` it is computed on the joint law of (m, z, P).
+  the state; under `grows` and `frozen` it is computed on the joint law of (m, z, 𝐩).
 
 **With ℒ = 1:** the population measure needs the GIC-Szeidl and the income measure the GIC-Harmenberg, in the forms of the
 table, with the moments' roots as above without the factor ℒ.
 
-**The levels.** Statistics in levels need the distribution of permanent income P itself, a mixture over ages of the newborn's
-level law carried forward by the state-dependent growth. Its moment of order j is finite exactly when j < ζ_P, where ζ_P
-solves ℒ λ(M_f) = 1 with f = (Γ(z′) ψ′)^ζ, which under `continues` is ℒ 𝒢^ζ E[ψ^ζ] = 1. The mean of P is finite exactly when
-the income measure exists. For the paper's calibration ζ_P is a little above one, so the mean of P is finite and its
+**The levels.** Statistics in levels need the distribution of permanent income 𝐩 itself, a mixture over ages of the newborn's
+level law carried forward by the state-dependent growth. Its moment of order j is finite exactly when j < ζ_𝐩, where ζ_𝐩
+solves ℒ λ(M_f) = 1 with f = (Γ(z′) ψ′)^ζ, which under `continues` is ℒ 𝒢^ζ E[ψ^ζ] = 1. The mean of 𝐩 is finite exactly when
+the income measure exists. For the paper's calibration ζ_𝐩 is a little above one, so the mean of 𝐩 is finite and its
 variance is not: the Pareto tail of permanent income that perpetual youth with lifelong growth produces, which the levels
 Lorenz curve of wealth inherits in its upper tail. A pooled statistic in levels is defined when it is defined for every group
 and type.
@@ -130,14 +140,15 @@ and the welfare conditions of the simulation phase hold.
 
 Exact consequences of the parameters, which the comparison tests a results file against:
 - **The limiting MPC.** In every state, c_i′(m, z) → 1 − Þ_i/R as m → ∞ under the RIC, and → 0 when it fails.
-- **The natural borrowing constraint by state**, from the fixed point above; zero in every state under lognormal laws.
+- **The constraint in force by state**, from the fixed point above, and the natural limits by state; zero in every state
+  under lognormal laws.
 - **The worst income by state**, ξ̲(z) ψ̲(z), and the probability p̲(z).
 - **The newborn's lowest resources.** A newborn's m is at least e θ̲, and exactly that when θ has mass at its floor.
 - **The employment marginal of the stationary population.** Since newborns are born employed, it is not the chain's
   stationary distribution π but μ = (1 − ℒ) e_E (I − ℒ P)^(−1), with e_E the unit row of the employed state: the chain's
   distribution with a flow (1 − ℒ) reborn into E each quarter. With ℒ = 1 it is π. A toolkit that places newborns otherwise
   will miss it.
-- **The tail exponents** ζ of the two measures and ζ_P of the level distribution.
+- **The tail exponents** ζ of the two measures and ζ_𝐩 of the level distribution.
 - **Consistency of the rule and the distribution.** The laws of a and c under the stationary population are the images of the
   law of (m, z) under the rule and the observation map.
 - **The reduction to `bst/1`.** A member written as the [model schema](model.md) describes solves the same problem as its
@@ -146,15 +157,16 @@ Exact consequences of the parameters, which the comparison tests a results file 
 
 ## The simulation phase
 
-**Positivity.** Survivors satisfy it by the natural constraint of their state, an implication of ρ > 1. Newborns satisfy it
+**Positivity.** Survivors satisfy it by the constraint in force in their state, an implication of ρ > 1. Newborns satisfy it
 by the family's convention: born employed with no assets, so m = e θ > 0 under every shock law.
 
 **The welfare conditions.** As in `bst/1`, W_i and F_i are finite exactly when E[(m − m̲(z))^(−(ρ−1))] is under the
 stationary population, and M_i exactly when E[(m − m̲(z))^(−ρ)] is, with m̲(z) the lowest resources in state z from which
 positive consumption is feasible. The cases are `bst/1`'s, taken state by state:
-- Where the artificial constraint binds, a̲_Art > a̲_Nat(z), the rule keeps consumption above a positive value in that state.
+- Where the artificial limit is the constraint in force and lies strictly above the limit the following states impose, the
+  rule keeps consumption above a positive value in that state.
   With truncated laws and the paper's a̲_Art = 0 this is every state, and all three means are finite.
-- With lognormal laws, a̲_Nat(z) = a̲_Art = 0 and the constraint binds nowhere; resources near zero are reached only in the
+- With lognormal laws, every state's limit is zero, the natural one, and an artificial limit of zero binds nowhere; resources near zero are reached only in the
   employed state, with a density that vanishes faster than any power, since θ is lognormal, while the unemployed states'
   incomes are positive atoms. Every moment is then finite, as in `bst/1`'s thin-density case.
 - A member with an atom at the worst income and no binding constraint, such as `income_without_benefits` below the employed
@@ -172,8 +184,8 @@ As for [`bst/1`](../bst-1/conditions.md#the-stated-member-and-the-effective-memb
 the stated member and for a toolkit's effective member alike, and decided for each by the same arithmetic on its own
 expectations. Here the expectations a toolkit reports are conditional on the next state, E[(Γ(z′) ψ′)^k | z′] for the
 powers the conditions use, E[log ψ | z′] and E[ψ log ψ | z′], with the chain's rows, from which the dominant eigenvalues
-are arithmetic; and the lowest values by state, ξ̲(z) and ψ̲(z), from which the natural limits by state are the fixed
-point above. The definition of a law's lowest value as the limit of a representation's bottommost point, and its
+are arithmetic; and the lowest values by state, ξ̲(z) and ψ̲(z), from which the constraints in force by state are
+the fixed point above. The definition of a law's lowest value as the limit of a representation's bottommost point, and its
 consequence that truncated laws keep every effective member in the stated member's regime, carry over unchanged.
 
 ## Open points
@@ -181,7 +193,8 @@ consequence that truncated laws keep every effective member in the stated member
 - **A theorem.** Existence of the household's problem's solution with the chain, and the Kesten–Goldie-type result behind
   the tail exponents with a Markov-modulated factor, are not cited; the forms above are the natural generalizations and
   reduce to `bst/1`'s, which were checked numerically for the atom case.
-- **The per-state natural constraint in the stage file**, proposed to the owner above.
+- **The per-state limits in a stage file with bounded laws**: four calibrated limits selected by z, which the language can
+  state (tested 2026-10-19); they wait for the truncated lognormal's family in Bellman-SYM.
 - **The targets by state** are defined by analogy and have not been checked against a solution.
 - **The income measure's chain** for the GIC-Harmenberg with ℒ = 1 is stated in words only.
 - **The boundary cases.** Equality in any condition is left open.

@@ -84,7 +84,17 @@ with the addresses.
 What the families need the language to gain, for its maintainers to weigh, in the order the schemas need them:
 1. The missing law families, with a stated mean-one convention: the truncated lognormal with the stated standard
    deviation after truncation, the uniform in levels, the tabulated quantile law, and a check that a declared law has mean
-   one.
+   one. On 2026-10-19 Chris directed that the truncated lognormal be incorporated first, and the bellman session scoped it
+   from the package's code: a new law family in the package, with no change to the grammar, since a law declared with
+   any family name already parses and elaborates; its meaning, its argument checks and its resolution into a measure are
+   what the package would add, with the language's documentation, Matsya's configuration and the hosted service following.
+   Two parameterizations were weighed: the location and scale of the normal before truncation, as the lognormal family
+   takes them, which leaves the mean-one location to be computed outside the file; or the schemas' own three numbers, the
+   standard deviation of the log after truncation and the two bounds in standard deviations, with the location and scale
+   derived inside the family so that the law has mean one. The second is recommended for the schemas: it is the only form
+   in which a stage file states a mean-one truncated law by itself, and the converter writes the parameter file's numbers
+   straight through. The first would still be needed later for truncated components of a mixture, whose locations are
+   stated rather than set for mean one.
 2. A population construct: types with shares, survival as an event with replacement, and the newborn's placement.
 3. A statement of infinite-horizon stationarity, the fixed point the stage file does not impose.
 4. A derived parameter in the calibration, so that a̲_Nat is computed from the laws rather than written by hand.

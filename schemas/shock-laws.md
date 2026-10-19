@@ -151,9 +151,11 @@ model.
 
 ## Bellman-SYM counterparts
 
-The language the stage files are written in has seven law families. Where a law here has one, the stage file writes it;
-where it has none, a member using that law has no stage file until the language gains the family, which is among the
-requests to Bellman's maintainer in [`foundation.md`](foundation.md).
+The language the stage files are written in, Bellman-SYM, has seven law families. Where a law here has one, a stage file
+can write it, though a member whose law differs from the family a stage file writes needs a stage file of its own; where it
+has none, a member using that law has no stage file until the language gains the family, which is among the requests to
+Bellman's maintainer in [`foundation.md`](foundation.md). The truncated lognormal is the first of them: on 2026-10-19 the
+owner directed that it be added, with bounds at three standard deviations on both sides and mean one by default.
 
 | law | in Bellman-SYM |
 |---|---|

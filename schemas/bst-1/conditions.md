@@ -122,7 +122,7 @@ Statistics that need less:
 condition of the simulation phase, below, holds; **marginal welfare** M_i, and its bottom-quartile mean, when the marginal
 condition holds.
 
-These conditions differ from the GIC-Liv, which concerns aggregate growth, because newborns here enter at P = 1, not at the
+These conditions differ from the GIC-Liv, which concerns aggregate growth, because newborns here enter at 𝐩 = 1, not at the
 population's mean permanent income.
 
 ## Implications
