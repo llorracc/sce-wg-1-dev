@@ -11,6 +11,17 @@ tolerances and simulation sizes stay each toolkit's own choice.
 
 - **Family:** a versioned template of models with named parameters, such as `bst/1` ("buffer-stock theory, version 1").
 - **Member:** one complete parameterization of a family.
+- **Stated member:** the member a parameter file names, with its laws as stated. In general what can be computed about it
+  is a limit, approached numerically; for the laws the schemas admit, whose moments have closed forms, the checker computes
+  it exactly.
+- **Effective member:** the member a toolkit actually solves, with its own approximation of the laws in its own
+  representation, which the schemas never see. They know it through the expectations the family names, the conditions
+  decided on it, and the derived parameters it used, all reported in the results file ([`effective-member.md`](effective-member.md)).
+- **Derived parameter:** a quantity the parameters determine that enters the model's statement, such as the natural
+  borrowing limit or the employed-income scale; a toolkit uses its effective member's own and reports it.
+- **Model-changing and method-only settings:** descriptions of a toolkit's settings, not requirements on them: the first
+  alter its effective member, such as a shock's nodes or a truncation; the second alter only how the solution is
+  approximated, such as a grid or a tolerance. The two converge in different things and are read separately.
 - **Model schema:** the document that states a family's math.
 - **Parameter file:** a member written down, in YAML, to the parameter schema. Its hash, taken over a canonical
   serialization, identifies the model.
@@ -29,8 +40,8 @@ tolerances and simulation sizes stay each toolkit's own choice.
 - **Validity condition:** a condition on the parameters that a member must meet to be accepted at all.
 - **Domain rule:** a condition that decides whether a member defines one reported quantity. A quantity it does not define is
   reported as `undefined`.
-- **Implication:** an exact consequence of a member's parameters, such as the limiting MPC or the natural borrowing
-  constraint, that a results file is tested against.
+- **Implication:** an exact consequence of a member's parameters that tests a solution, such as the limiting MPC or a tail
+  exponent, computed for the stated member by the checker.
 - **Method target:** the stage file's own name for a part a method attaches to: a block, a block's line, or an operator's
   name covering every occurrence.
 - **Observation map:** a stated transformation from the standard rule to what a household does, such as HAFiscal's splurge,
@@ -66,14 +77,26 @@ The family `bst/1`:
 The family `bst-markov_ui-and-agg/1`, HAFiscal's household problem, begun stage-file first:
 - [`bst-markov_ui-and-agg/bellman/bst_markov_ui.bl`](bst-markov_ui-and-agg/bellman/bst_markov_ui.bl): the household's
   problem in Bellman-SYM, with three calibration files for the dropout group's middle type, one per value of the switch for
-  permanent income while unemployed (`continues`, the family's standard; `grows`; `frozen`). Its prose documents are not yet
-  written; the design is in the note below.
+  permanent income while unemployed (`continues`, the family's standard; `grows`; `frozen`).
+- [`bst-markov_ui-and-agg/model.md`](bst-markov_ui-and-agg/model.md): the model schema, read from the stage file, with the
+  groups, the newborn's level law, the splurge as an observation map, the regime, the parameter file and the reduction to
+  `bst/1`.
+- [`bst-markov_ui-and-agg/conditions.md`](bst-markov_ui-and-agg/conditions.md): `bst/1`'s conditions carried over to the
+  chain, each as a condition on a matrix over the states that reduces to `bst/1`'s under `continues`; the natural borrowing
+  constraint by state; the levels' tail exponent; the employment marginal that born-employed newborns imply. Its results
+  schema, parameter validator and members are not yet written; the design is in the note below.
 
 Design notes:
 - [`foundation.md`](foundation.md): the plan for making the Bellman-SYM stage file the foundation of a family's statement,
   with the requests it implies for the language.
+- [`effective-member.md`](effective-member.md): approved and executed on 2026-10-18: the schemas state the problem without
+  specifying methods or forms; a toolkit approximates the laws as it sees fit, solves its own effective member, and reports
+  the expectations the family names, every condition's factor and verdict decided on it, and the derived parameters it
+  used, trusted to compute them in its own representation; the checker verifies what needs no representation and keeps
+  the stated member's closed-form limits where the law admits them.
 - [`hafiscal-models-and-test-suite.md`](hafiscal-models-and-test-suite.md): how the schemas describe HAFiscal's household
   models, the family `bst-markov_ui-and-agg/1` they need, and the test suite over members, methods and settings.
 
 Not yet written: the validators for the method, settings, suite and request files; the method registry; and the checker's
-reading of a results file against a member's domain rules.
+reading of a results file's values against the request file's points. Its reading of a results file's report on the
+effective member, the expectations, the factors, the verdicts, the statuses and the derived parameters, is written.

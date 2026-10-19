@@ -95,7 +95,8 @@ value.
 - **Sets and parameters.** m ∈ ℝ; a ∈ [a̲, ∞) with a̲ = max(a̲_Art, a̲_Nat); the unemployment event e ∈ {employed,
   unemployed}; the parameters β, ℒ, ρ, R, 𝒢, a̲_Art, a̲_Nat, σ_ψ, σ_θ, ℘ and ξ̲, with the domains above. The stage file writes
   one law family, the lognormal, for ψ and θ; the family allows any of the shock laws, and a member with another law has no
-  stage file until the language gains the family.
+  stage file until the language gains the family. The file declares σ_ψ and σ_θ positive: a zero spread is the degenerate
+  law, another family in the language.
 - **Shocks.** ψ ~ LogNormal(−σ_ψ²/2, σ_ψ); θ ~ LogNormal(−σ_θ²/2, σ_θ); e ~ Bernoulli(℘). The three are independent of each
   other and of the state.
 - **Arrival to decision** (`arvl_to_dcsn`): ξ = ξ̲ in the unemployment event, else θ (1 − ℘ξ̲)/(1 − ℘); m = R k/(𝒢 ψ) + ξ.
@@ -129,6 +130,23 @@ the distribution of a at the end of the period. It is counted under two measures
 The [results](results.md) also report the mean felicity E[u(c_i(m))] and the mean marginal utility E[u′(c_i(m))], which
 is the marginal welfare of a unit of resources. [Conditions](conditions.md) says when each measure exists, which of its
 moments are finite, and when these means are finite. Pooled statistics weight the types by their shares ω_i.
+
+## Derived parameters
+
+Quantities the parameters determine that enter the model's statement. The checker computes each for the stated member, in
+closed form for the admitted laws; a toolkit solves its effective member on that member's own terms, so it uses its
+effective member's own values and reports them ([results](results.md), [`effective-member.md`](../effective-member.md)).
+
+| Derived parameter | Formula | Inputs | Where it enters |
+|---|---|---|---|
+| the employed-income scale | (1 − ℘ξ̲)/(1 − ℘) | ℘, ξ̲ | the income map, so that E[ξ] = 1; fixed by the family and the same under every representation |
+| the worst income | ξ̲_min ψ̲, with ξ̲_min the lowest value of ξ and ψ̲ of ψ | the laws' lowest values | the natural limit; the lower tail of the stationary population |
+| its probability p̲ | the mass at the worst income | the laws' masses at their lowest values | the WRIC; the MPC at the lower limit; the atom case of the welfare conditions |
+| the natural borrowing limit a̲_Nat | −ξ̲_min κ/(1 − κ) with κ = ψ̲ 𝒢/R; none when κ ≥ 1 | ξ̲_min, ψ̲, 𝒢, R | the constraint in force |
+| the constraint in force a̲ | max(a̲_Art, a̲_Nat) | a̲_Art, a̲_Nat | the budget; the kink's existence |
+
+A law's lowest value is defined as the limit of a representation's bottommost point as its number of points grows: for the
+admitted laws, the truncation point, or zero for a law unbounded below ([conditions](conditions.md)).
 
 ## What the family fixes, so that no parameter file can state it
 

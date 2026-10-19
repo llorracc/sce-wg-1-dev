@@ -1,9 +1,13 @@
 # Describing HAFiscal's household models with the schemas, and a test suite
 
-Draft, fourth version, 2026-10-18, written in the sce-wg-1-dev session. Status at 18:38 EDT the same day: of the milestones
+Draft, fourth version, 2026-10-18, written in the sce-wg-1-dev session. Status at 08:10 EDT on 2026-10-19, with the
+results schema and the checker now governed by the effective-member restructuring of the previous evening
+([`effective-member.md`](effective-member.md)): of the milestones
 at the end, the first is done (the checker and the `bst/1` validators and members), the second is under way (the emitter's
-first results files validate; its ladder levels are running), and the Markov family's stage file exists ahead of its prose,
-with its three-valued switch for permanent income while unemployed. It rests on the paper's public model and parameterization
+first results files validate; its ladder levels are running), and the Markov family has its stage file, with its
+three-valued switch for permanent income while unemployed, and its model and conditions documents
+(`bst-markov_ui-and-agg/model.md` and `conditions.md`, written the same evening once every open point was ruled on); its
+results, validator and members are still to write. It rests on the paper's public model and parameterization
 sections (`HAFiscal-Public/Subfiles/Model.tex`, `Parameterization.tex`, `Tables/calibration.tex`), the public code
 (`HAFiscal-Public/Code/HA-Models/FromPandemicCode/`), the benchmark `bst_bench` in HAFiscal-Latest, the schemas in
 `llorracc/sce-wg-1-dev/schemas/`, and the answers of the HAFiscal-Latest, HARK and bellman sessions. Nothing here quotes a
@@ -115,7 +119,7 @@ member:
 | employed income | θ (1 − ℘ξ̲)/(1 − ℘), so E[ξ] = 1 | θ, no rescaling |
 | shocks | the 7-point atoms of lognormals with log variances 0.003 and 0.12, declared as the model | 7-point discretizations, as numerics |
 | splurge | none | ς |
-| newborn | P = 1, a = 0, born employed: its first draw is the employed branch of ξ; the benchmark's own specification is to follow (decided 2026-10-18) | P from a group lognormal, a = 0; its employment state and first-quarter shocks are open with the owner |
+| newborn | P = 1, a = 0, born employed: its first draw is the employed branch of ξ; the benchmark's own specification follows since 2026-10-18 | the same, with P drawn from the group's level law (decided 2026-10-18) |
 | borrowing | a ≥ 0 | the same |
 | regime, feedback | none | the recession and AD, in the experiments |
 
@@ -182,9 +186,9 @@ additions and one convention change, and a new family states it; `bst/1` stays a
 aggregate state. The aggregate state is read here as the macro regime, normal or recession, which the household carries as a
 Markov state of its problem with the regime's hazards as parameters, so that its chain is the product of the regime and the
 employment state, as in HARK's aggregate-and-individual Markov consumer. The aggregate-demand feedback, under which the rule
-also carries aggregate consumption as an argument, stays in the experiments layer as the closure; if the name is meant to put
-that feedback inside the family, the family must also state the household's belief rule about the aggregate, which is a
-further addition.
+also carries aggregate consumption as an argument, stays in the experiments layer as the closure: Chris confirmed on
+2026-10-18 that "agg" names the regime alone, the feedback being a different household problem, for a later family or
+version that would also state the household's belief rule about the aggregate.
 
 **What it adds to `bst/1`:**
 1. **Employment as a Markov chain** with benefit duration and exhaustion, in place of i.i.d. unemployment, with an income map
@@ -206,18 +210,33 @@ further addition.
 so that E[ξ] = 1. Making e explicit is what lets a `bst/1` member be written as a `bst-markov_ui-and-agg/1` member exactly (below).
 
 **Conventions the paper leaves open, and how the family fixes them** (the HAFiscal session checked the code):
-- The newborn's employment state: open with the owner (2026-10-18). The code gives a newborn one transition of the current
-  regime's chain from the state of the household whose place it takes, a first-quarter ψ, and a transitory shock of one; in
-  a stationary population under one regime that is the chain's stationary distribution, since death is independent of the
-  state. The alternative is `bst/1`'s convention, born employed with no first-quarter ψ, which makes the reduction below
-  exact. An earlier version of this note said the code draws the state from the stationary distribution; it does not.
+- The newborn follows `bst/1`'s convention (the owner's ruling of 2026-10-18): born employed, with no assets, its permanent
+  income drawn from the group's level law, no ψ in its first quarter, and its first transitory draw the employed branch,
+  e θ. The paper's text is silent on a newborn's employment state and first-quarter shocks; its revised text gives a
+  newborn zero assets and market resources equal to its first income draw, which this convention satisfies. The code does
+  otherwise: a newborn takes one transition of the current regime's chain from the state of the household whose place it
+  takes (the chain's stationary distribution, in a stationary population under one regime, since death is independent of
+  the state), draws ψ in its first quarter, and gets a transitory shock of one. A toolkit that cannot birth a household
+  employed without a first-quarter ψ records the deviation in its provenance. An earlier version of this note said the
+  code draws the state from the stationary distribution; it does not.
+- The onset of a recession is unanticipated: the normal regime is absorbing in the household's problem, so the parameter
+  file carries no hazard of entering a recession; the onset is the experiments layer's event, and the recession's exit
+  hazard is the parameter the household knows (the owner's ruling of 2026-10-18, after confirming that this is how the
+  published code treats it).
 - Permanent income in a quarter of unemployment: the paper's text keeps growth going and does not say whether ψ is drawn.
   The code has growth and ψ as two separate settings: growth applies in every state, ψ is drawn in every state in its
   default world, and ψ = 1 while unemployed in the paper's corrected text. The family carries a required parameter,
   `unemployed_permanent_income`, with three values: `continues` (Γψ applies every quarter), `grows` (Γ applies and ψ = 1
-  while unemployed) and `frozen` (P is unchanged while unemployed). `continues` is the family's standard world. No file
-  omits the key, since a default would be a second written form of one model. Which world produced the published numbers is
-  being confirmed with the HAFiscal session.
+  while unemployed) and `frozen` (P is unchanged while unemployed). `continues` is the family's standard world and the one
+  the paper's text describes: its income equation applies to every household, and its footnote keeps each group's growth
+  rate unchanged during unemployment. `frozen` reproduces the published numbers, since the published code neither grew
+  permanent income nor drew ψ while a household was unemployed; `grows` is the corrected code's world. The published code's
+  choice had a computational motive: with ψ fixed at one in the unemployed states, each of those states carries a single
+  income atom instead of a full set, which keeps a Markov solve and a transition matrix small, and the few unemployed
+  households of a simulated panel add no shock noise. Against that, only under `continues` is permanent income independent
+  of the employment state, which a one-dimensional transition-matrix method (the Harmenberg factorization) needs to be
+  exact; that, and the paper's text, make `continues` the standard, confirmed by the owner on 2026-10-18. No file omits the
+  key, since a default would be a second written form of one model.
 - Survival is a constant 1 − D at every age, in the solution and in the simulation: perpetual youth with no maximum age. A
   toolkit's maximum-age setting (HARK's `T_age`) must be off.
 
@@ -235,7 +254,6 @@ shocks:
   permanent_shock: {LogNormal: {sd_log: 0.0548}}
   employed_shock:  {LogNormal: {sd_log: 0.346}}
 regimes:
-  normal: {recession_hazard: 0.0}
   recession: {exit_hazard: 0.1666666666666667}
 employment:
   benefit_quarters: 2
@@ -273,17 +291,17 @@ groups:
 ```
 
 Shares within a group sum to one, and group shares sum to one. The file lists the β values as numbers: how they were chosen is
-estimation, the group's layer, not the family's. The member above, solved with 7 nodes per shock, is the paper's calibration in the family's standard world; the
+estimation, the group's layer, not the family's. The member above, solved with 7 nodes per shock, is the paper's calibration in the family's standard world, and with the
+switch at `frozen` it is the member that reproduces the published numbers; the
 same file with `TruncatedLogNormal` laws at ±3 is the truncated variant the shock-law spec recommends.
 
 **A `bst/1` member as a `bst-markov_ui-and-agg/1` member.** One group with the `bst/1` types; `growth` = 𝒢; `job_loss` = ℘ and
 `job_finding` = 1 − ℘, so that the chain is i.i.d. with unemployment probability ℘ every quarter; `income_with_benefits` =
 `income_without_benefits` = ξ̲; `income_employed` = (1 − ℘ξ̲)/(1 − ℘); `splurge` = 0; `unemployed_permanent_income` =
 `continues`, since `bst/1` draws ψ every quarter; any `benefit_quarters`; and one regime, the normal one, with the recession's
-parameters equal to the normal ones. The two families must then produce the same rule exactly, and the same stationary distribution if this family adopts `bst/1`'s
-newborn convention; under the code's convention the distributions differ only by the newborn's state and first-quarter ψ and
-are compared approximately. That is a cross-family consistency test the suite should run, and it is the test that the Markov
-machinery reduces correctly.
+parameters equal to the normal ones. The two families must then produce the same rule and, since this family's newborn follows `bst/1`'s convention, the same
+stationary distribution, exactly. That is a cross-family consistency test the suite should run, and it is the test that the
+Markov machinery reduces correctly.
 
 **Conditions.** The conditions of `bst-1/conditions.md` carry over with 𝒢 = Γ, the group's growth factor, since the chain
 touches only transitory income and the permanent shock is unchanged. Two differences:
@@ -361,7 +379,8 @@ and every run is one (member, method, settings element, request file) → one re
 | `library` | bst/1 | the community library's model | a published model from outside; untruncated laws |
 | `toy-crra-3`, `toy-R-1005`, `toy-R-1015` | bst/1 | the paper's robustness variants applied to the toy | mirrors HAFiscal's own sensitivity set, less its ρ = 1 variant, which `bst/1` excludes |
 | `toy-as-hafiscal` | hafiscal/1 | `toy` rewritten as a `bst-markov_ui-and-agg/1` member | cross-family consistency |
-| `paper-published` | hafiscal/1 | the paper's normal-times calibration with `LogNormal` laws; 21 problems | with 7 nodes as a setting, the published model |
+| `paper-published` | hafiscal/1 | the paper's normal-times calibration with `LogNormal` laws and the switch at `frozen`; 21 problems | with 7 nodes as a setting, the published numbers |
+| `paper-text` | hafiscal/1 | the same with the switch at `continues`, the family's standard world | the model the paper's text describes |
 | `paper-truncated` | hafiscal/1 | the same with `TruncatedLogNormal` laws at ±3 | the truncated variant; where the N-node solutions must converge |
 | `paper-no-splurge` | hafiscal/1 | ς = 0 with the paper's re-estimated β | the paper's splurge-free robustness |
 | `paper-low-benefits` | hafiscal/1 | ξ_U = 0.3, ξ_X = 0.15 | the paper's benefits robustness |
@@ -582,8 +601,8 @@ results file must record:
 
 ## Questions
 
-For the HAFiscal session: the benchmark's toy specification follows `bst/1`'s newborn (decided 2026-10-18), and which world
-produced the published numbers. The bellman session's corrections to the June Bellman description of the household
+For the HAFiscal session: nothing open; the benchmark's toy specification follows `bst/1`'s newborn since its version of
+2026-10-18, and it answered which world produced the published numbers. The bellman session's corrections to the June Bellman description of the household
 problem were passed to it to check.
 
 For the HARK session: nothing open; the `NewbornPermShk` pull request is for Chris to approve in that session.
@@ -591,8 +610,9 @@ For the HARK session: nothing open; the `NewbornPermShk` pull request is for Chr
 For the bellman session: nothing open.
 
 **Decisions taken by Chris, 2026-10-18:**
-1. The family is named `bst-markov_ui-and-agg`, version 1. One reading to confirm: whether "agg" covers the regime alone, as
-   above, or the aggregate-demand feedback too.
+1. The family is named `bst-markov_ui-and-agg`, version 1. "agg" covers the aggregate regime alone (confirmed 2026-10-18):
+   under the aggregate-demand feedback the rule takes aggregate consumption as an argument, a different household problem,
+   which belongs to a later family or version, with the closure in the experiments layer.
 2. The toy's true model is truncated at ±3; an untruncated member stays in the suite.
 3. The draft goes into the public fork without the benchmark's atoms and the dry-run results.
 4. The emitter and the newborn flag go ahead, iteratively: any improvement to the schema that the work suggests is to be
@@ -607,5 +627,7 @@ For the bellman session: nothing open.
 7. In the evening: the permanent-income switch has three values, with `continues` the standard; the precision levels are
    settings, not error targets; the results file gains three optional provenance keys; the replacement incomes are ξ_U and
    ξ_X, and groups are named, not indexed; the borrowing limit is stated in the household's units; the benchmark's toy
-   follows `bst/1`'s newborn. Open: this family's newborn convention, and whether the zero hazard of a recession's onset is
-   a fixed feature of the family rather than a key of the parameter file.
+   follows `bst/1`'s newborn.
+8. Later that evening: this family's newborn follows `bst/1`'s convention; the normal regime is absorbing and the parameter
+   file carries no hazard of entering a recession; "agg" is the regime alone; the Matsya completeness job on `bst/1` goes
+   ahead. Nothing of the stage file's points stays open.

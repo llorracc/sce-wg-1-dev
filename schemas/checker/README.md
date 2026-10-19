@@ -52,3 +52,19 @@ MPC, the MPC at the lower limit); and the domain statuses (the targets, the kink
 their means and variances, and welfare). For the member: the laws' moments, the lowest value of the transitory shock, the
 worst-income probability p̲, the natural borrowing constraint, the constraint written, the employed draw's scale, and the
 lowest resources a newborn can have.
+
+## Verifying a results file
+
+    uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml --verify-results r.json
+
+validates the results file against `bst-1/results.schema.json` and verifies its report on the toolkit's effective member
+against the member (`effective-member.md`): each factor as the arithmetic of the reported expectations and the parameters,
+each verdict against its factor, each status against the verdicts, each derived parameter as the arithmetic of the reported
+lowest values, the lowest values against the stated member's infima, and the expectations against what every law obeys.
+The expectations' values themselves are the toolkit's and are trusted. The member's own report is the stated member's, the
+limit a toolkit's effective member approaches; a condition whose margin lies within the closed forms' precision is marked
+`undecided`.
+
+When the results file carries `effective_member.population`, the population's expectations decide the GIC-Szeidl, the
+GIC-Harmenberg and the welfare conditions, and its lowest values are held to the stated infima too; the household's block
+decides the rest.

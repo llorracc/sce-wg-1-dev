@@ -2,8 +2,8 @@
 
 Draft; see the [README](../README.md).
 
-This document collects four kinds of statement about a member of [`bst/1`](model.md), all computed exactly by the **checker**
-from the parameter file and the [shock laws'](../shock-laws.md) closed-form moments, never from a toolkit's quadrature:
+This document collects four kinds of statement about a member of [`bst/1`](model.md), each defined for any member, whatever
+its laws:
 
 - **validity conditions**, restrictions on the parameters under which the household's problem has a solution; a member that
   fails one is rejected;
@@ -12,8 +12,13 @@ from the parameter file and the [shock laws'](../shock-laws.md) closed-form mome
 - **implications**, exact consequences of the parameters that a results file can be tested against;
 - **the simulation phase**, the conditions under which the stationary population and its welfare are well defined.
 
-A condition computed from a discretized shock depends on the number of nodes; these are computed from the laws themselves. The
-notation is BST's, as in the [model schema](model.md).
+Every condition is an inequality between a factor and a bound, and every factor is arithmetic on the parameters and on a
+few **expectations** under the laws, which the table below names for each condition. The **checker** evaluates them for the
+**stated member**, the one the parameter file names, in closed form for the laws the schemas admit, as the limit a
+toolkit's effective member approaches; a **toolkit** evaluates them for its **effective member**, the member it actually
+solves with its own approximation of the laws, and reports the expectations, the factors and the verdicts
+([results](results.md), [`effective-member.md`](../effective-member.md)). The notation is BST's, as in the
+[model schema](model.md).
 
 ## Notation
 
@@ -46,22 +51,27 @@ lognormal, is set aside for now.
 
 ## The conditions
 
-Each condition carries its name in BST and HARK's name for its factor.
+Each condition carries its name in BST, the expectations it rests on, which a toolkit reports for its effective member, and
+HARK's name for its factor.
 
-| Condition | Inequality | What it governs | HARK factor |
-|---|---|---|---|
-| AIC, absolute impatience | Þ < 1 | consumption growth as m → ∞ is below one | `APFac` |
-| RIC, return impatience | Þ/R < 1 | the MPC as m → ∞ is 1 − Þ/R > 0 | `RPFac` |
-| WRIC, weak return impatience | p̲^(1/ρ) Þ/R < 1 | stands in for the RIC for existence; the MPC at the lower limit of m is 1 − p̲^(1/ρ) Þ/R | `WRPFac` |
-| FHWC, finite human wealth | 𝒢/R < 1 | human wealth is finite | `FHWFac` |
-| PF-FVAC, perfect-foresight finite value of autarky | β ℒ 𝒢^(1−ρ) < 1 | the perfect-foresight value of autarky is finite | `PFVAFac` |
-| FVAC, finite value of autarky | β ℒ 𝒢^(1−ρ) E[ψ^(1−ρ)] < 1 | the value of autarky is finite | `VAFac` |
-| GIC, growth impatience | Þ/𝒢 < 1 | the pseudo-target m̂ exists | `GPFacRaw` |
-| GIC-Mod, strong growth impatience | Þ E[ψ^(−1)]/𝒢 < 1 | the buffer stock target m̌ exists | `GPFacMod` |
-| GIC-Szeidl, log growth impatience | log(Þ/𝒢) < E[log ψ] | with ℒ = 1, the stationary population exists under the population measure; on strict failure, households escape to infinite m | `check_GICSdl`, from `ELogPermShk` |
-| GIC-Harmenberg | Þ/𝒢 < exp(E[ψ log ψ]) | with ℒ = 1, the stationary population exists under the income measure; weaker than the GIC, since E[ψ log ψ] ≥ 0 | `GPFacHrm` |
-| GIC-Liv, mortality-adjusted growth impatience | ℒ Þ/𝒢 < 1 | aggregate balanced growth with Modigliani-style destruction of estates | `GPFacLiv` |
-| The rate condition | (R/𝒢)(Þ/𝒢) compared with E[ψ²] | only how fast c(m) approaches its perfect-foresight bound; not a validity condition | none |
+| Condition | Inequality | Rests on | What it governs | HARK factor |
+|---|---|---|---|---|
+| AIC, absolute impatience | Þ < 1 | the parameters | consumption growth as m → ∞ is below one | `APFac` |
+| RIC, return impatience | Þ/R < 1 | the parameters | the MPC as m → ∞ is 1 − Þ/R > 0 | `RPFac` |
+| WRIC, weak return impatience | p̲^(1/ρ) Þ/R < 1 | p̲, the mass at the worst income | stands in for the RIC for existence; the MPC at the lower limit of m is 1 − p̲^(1/ρ) Þ/R | `WRPFac` |
+| FHWC, finite human wealth | 𝒢/R < 1 | the parameters | human wealth is finite | `FHWFac` |
+| PF-FVAC, perfect-foresight finite value of autarky | β ℒ 𝒢^(1−ρ) < 1 | the parameters | the perfect-foresight value of autarky is finite | `PFVAFac` |
+| FVAC, finite value of autarky | β ℒ 𝒢^(1−ρ) E[ψ^(1−ρ)] < 1 | E[ψ^(1−ρ)] | the value of autarky is finite | `VAFac` |
+| GIC, growth impatience | Þ/𝒢 < 1 | the parameters | the pseudo-target m̂ exists | `GPFacRaw` |
+| GIC-Mod, strong growth impatience | Þ E[ψ^(−1)]/𝒢 < 1 | E[ψ^(−1)] | the buffer stock target m̌ exists | `GPFacMod` |
+| GIC-Szeidl, log growth impatience | log(Þ/𝒢) < E[log ψ] | E[log ψ] | with ℒ = 1, the stationary population exists under the population measure; on strict failure, households escape to infinite m | `check_GICSdl`, from `ELogPermShk` |
+| GIC-Harmenberg | Þ/𝒢 < exp(E[ψ log ψ]) | E[ψ log ψ] | with ℒ = 1, the stationary population exists under the income measure; weaker than the GIC, since E[ψ log ψ] ≥ 0 | `GPFacHrm` |
+| GIC-Liv, mortality-adjusted growth impatience | ℒ Þ/𝒢 < 1 | the parameters | aggregate balanced growth with Modigliani-style destruction of estates | `GPFacLiv` |
+| The rate condition | (R/𝒢)(Þ/𝒢) compared with E[ψ²] | E[ψ²] | only how fast c(m) approaches its perfect-foresight bound; not a validity condition | none |
+| The welfare conditions, below | the atom case's factor below one | E[ψ^(ρ−1)] for W and F, E[ψ^ρ] for M, and p̲ | population welfare and marginal welfare are finite | none |
+
+The expectations a toolkit reports are therefore E[ψ], E[θ], E[ψ^(1−ρ)], E[ψ^(−1)], E[log ψ], E[ψ log ψ], E[ψ²],
+E[ψ^(ρ−1)], E[ψ^ρ] and p̲, under its own representation of the laws, with the lowest values of ψ and of income beside them.
 
 Notes:
 - Under a lognormal ψ, the GIC, GIC-Szeidl and GIC-Mod are one inequality, Þ/𝒢 < e^(kσ²), at k = 0, −1/2 and −1. Under the
@@ -182,6 +192,44 @@ The checker classifies each member by these cases and reports population welfare
 bottom-quartile mean, as `undefined` where the moment is infinite; the upper quartiles and the GL ordinates of u′(c) for
 p < 1 stay defined. A finite-sample or finite-grid estimate of an infinite mean looks stable and drifts slowly, by about five
 percent per decade of truncation at BST's baseline, which is why the status is reported with the number.
+
+## The stated member and the effective member
+
+The member a parameter file names is the **stated member**; the member a toolkit solves, with its own approximation of the
+laws in its own representation, is its **effective member** ([`effective-member.md`](../effective-member.md)). Everything
+above is defined for both, and is decided for each by the same arithmetic on its own expectations.
+
+- **The lowest value of a law** is defined as the limit of a representation's bottommost point as its number of points
+  grows without bound. It is then a property of the law and not of any representation, since every consistent scheme's
+  lowest point tends to it; a toolkit's reported lowest value is its approximation of that primitive, as its reported
+  E[ψ^(−1)] is of the law's, and it lies at or above the limit. For a truncated law the limit is the truncation point,
+  positive and finite, so the stated member has a finite natural limit and a positive worst income, and every effective
+  member shares that regime, differing in value only. For a law unbounded below the limit is zero while every finite
+  representation's lowest point is positive, so every effective member has a finite natural limit where the stated member
+  has none, and a kink under a zero artificial limit where the stated member has none: the regime never converges, only
+  the value. That is why the truncated lognormal is the recommended law, and why a member with an untruncated law is a
+  limit case, to be read as such.
+- **Verdicts.** The checker decides each condition for the stated member and reports the factor with its margin; a verdict
+  whose margin lies within the precision of the closed forms is `undecided`. A toolkit decides each condition for its
+  effective member and reports the factor and the verdict; the checker recomputes the factor from the reported
+  expectations and the parameters, which catches a factor that leaves out a term, and checks that the verdict agrees with
+  it and that the statuses of the quantities follow the verdicts. Near a boundary the stated and the effective member can
+  sit on opposite sides; the two factors say by how much, and the comparison reports the difference of regime rather than
+  counting a disagreement of values.
+- **The lower tail of an effective member.** A finite representation has an atom at its lowest value, so an effective
+  member whose artificial constraint does not bind falls under the atom case above, with p̲ the representation's mass at
+  the worst income, whatever the stated member's case; as the representation refines, p̲ falls and the effective
+  member's welfare verdicts approach the stated member's. Where the artificial constraint binds in the effective member,
+  which the exact natural limit of a stated member with truncated laws can make it do even where the stated member's does
+  not, every welfare mean is finite there.
+- **Two representations in one toolkit.** A toolkit may solve the household under one representation of the laws and
+  push the population forward under another. The household's representation is its effective member; it reports the
+  population's beside it when the two differ ([results](results.md)), and the population's then decides the conditions
+  that are about the stationary population, the GIC-Szeidl, the GIC-Harmenberg, the welfare conditions and the tail
+  exponents, while the household's decides the rest, the natural limit and the constraint in force among them.
+- **Admission.** A member is admitted to a suite by the stated member's validity conditions. A toolkit whose effective
+  member fails one that the stated member passes reports so; the run is read as a discretization too coarse for the
+  member, not as a defect of the member.
 
 ## Open points
 

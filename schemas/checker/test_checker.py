@@ -13,9 +13,10 @@ import pytest
 from scipy.integrate import quad
 from scipy.special import ndtr, ndtri
 
-from bst1 import Member, MemberError, load_member
+from bst1 import CASE_ATOM, CASE_BINDING, Member, MemberError, load_member, validate_results, verdict
 from canonical import StrictYAMLError, load_strict, model_hash
 from laws import law_from_mapping
+from test_results_schema import sample as schema_sample
 
 MEMBERS = Path(__file__).resolve().parent.parent / "bst-1" / "members"
 
@@ -255,6 +256,117 @@ def test_bellman_calibration_matches_the_filed_one():
         load_member(MEMBERS / "toy.yaml").bellman_calibration(0)
     untruncated = load_member(MEMBERS / "toy-untruncated.yaml").bellman_calibration(6)
     assert untruncated["β"] == 0.990 and untruncated["a_Nat"] == 0.0 and untruncated["ξ_min"] == 0.7
+
+
+def _consistent_results(member: Member) -> dict:
+    """A results file whose effective member coincides with the stated member: the stated values, reported as a toolkit
+    would report its own, with the statuses that its own verdicts imply."""
+    data = schema_sample()
+    data["parameter_file_sha256"] = member.hash
+    data["effective_member"] = {"expectations": member.expectations(), "lowest": member.lowest(),
+                                "derived": member.derived()}
+    c = member.conditions(member.types[0]["beta"])
+    block = {x["name"]: {"factor": x["factor"], "bound": x["bound"], "holds": x["holds"]} for x in c["conditions"]}
+    w = c["welfare"]
+    block["welfare"] = {"case": w["welfare_case"], "factor": w["welfare_factor"], "holds": w["welfare_finite"]}
+    block["marginal_welfare"] = {"case": w["marginal_case"], "factor": w["marginal_factor"],
+                                 "holds": w["marginal_finite"]}
+    t = data["types"][0]
+    t["beta"] = member.types[0]["beta"]
+    t["conditions"] = block
+    d = c["domain"]
+    t["kink"] = {"status": "value", "m": 0.4, "slope_below": 1.0, "slope_above": 0.9} if d["kink"] else {"status": "undefined"}
+    for key, defined in (("target", d["buffer_stock_target"]), ("pseudo_target", d["pseudo_target"])):
+        t[key] = {"status": "value", "m": 1.3, "c": 1.0, "mpc": 0.1} if defined else {"status": "undefined"}
+    if not d["income_measure"]:
+        t["income_measure"] = {"status": "undefined"}
+    if not d["welfare"]:
+        t["welfare"] = {"status": "undefined"}
+    if d["marginal_welfare"]:
+        t["marginal_welfare"] = {"status": "value", "mean": 1.0, "by_a_quartile": [2.0, 1.0, 0.7, 0.4],
+                                 "at_constraint": None, "undefined": ["at_constraint"]}
+    return data
+
+
+def test_a_consistent_report_verifies():
+    member = load_member(MEMBERS / "library.yaml")
+    data = _consistent_results(member)
+    assert validate_results(data) == []
+    assert member.verify_results(data) == []
+    # The library member's kink is undefined, its target defined and its marginal welfare undefined, by its own verdicts.
+    t = data["types"][0]
+    assert t["kink"]["status"] == "undefined" and t["target"]["status"] == "value"
+    assert t["marginal_welfare"]["status"] == "undefined"
+    assert t["conditions"]["welfare"]["case"] == CASE_ATOM
+
+
+@pytest.mark.parametrize("change, problem", [
+    (lambda d: d["types"][0]["conditions"]["FVAC"].update(factor=d["types"][0]["conditions"]["FVAC"]["factor"] * 1.1),
+     "FVAC/factor"),
+    (lambda d: d["types"][0]["conditions"]["GIC-Mod"].update(holds=False), "GIC-Mod/holds"),
+    (lambda d: d["types"][0]["target"].update(status="undefined"), "target/status"),
+    (lambda d: d["types"][0]["kink"].update(status="value", m=0.4, slope_below=1.0, slope_above=0.9), "kink/status"),
+    (lambda d: d["effective_member"]["derived"].update(natural_limit=-0.1), "natural_limit"),
+    (lambda d: d["effective_member"]["expectations"].update(psi_inverse=0.9), "psi_inverse"),
+    (lambda d: d["types"][0]["conditions"]["welfare"].update(case=CASE_BINDING), "welfare/case"),
+    (lambda d: d.update(parameter_file_sha256="1" * 64), "sha256"),
+])
+def test_an_inconsistent_report_is_caught(change, problem):
+    member = load_member(MEMBERS / "library.yaml")
+    data = _consistent_results(member)
+    change(data)
+    assert validate_results(data) == []
+    problems = member.verify_results(data)
+    assert any(problem in p for p in problems), problems
+
+
+def test_the_population_block_decides_the_population_conditions():
+    # The library member has L = 1, so the GIC-Szeidl decides whether the stationary population exists. A population
+    # block whose E[log psi] is far below the household's flips that verdict, and the toolkit's report must follow it.
+    member = load_member(MEMBERS / "library.yaml")
+    data = _consistent_results(member)
+    population = {"expectations": dict(member.expectations(), psi_log=-1.0), "lowest": member.lowest()}
+    data["effective_member"]["population"] = population
+    assert validate_results(data) == []
+    # A report still decided on the household's law is caught at the condition's bound.
+    stale = member.verify_results(data)
+    assert any("GIC-Szeidl/bound" in p for p in stale), stale
+    t = data["types"][0]
+    szeidl = t["conditions"]["GIC-Szeidl"]
+    szeidl.update(bound=-1.0, holds=szeidl["factor"] < -1.0)
+    assert not szeidl["holds"]
+    # With the verdict corrected, the statuses that follow from it must follow.
+    stale = member.verify_results(data)
+    assert any("welfare/status" in p for p in stale), stale
+    t["welfare"] = {"status": "undefined"}
+    t["marginal_welfare"] = {"status": "undefined", "by_a_quartile": [None] * 4, "at_constraint": None,
+                             "undefined": ["mean", "by_a_quartile", "at_constraint"]}
+    assert member.verify_results(data) == []
+    # The population block's lowest values are held to the stated infima as well.
+    data["effective_member"]["population"]["lowest"] = {"psi": member.lowest()["psi"], "income": -0.0}
+    assert validate_results(data) == []
+    assert member.verify_results(data) == []
+
+
+def test_a_toolkit_lowest_value_below_the_infimum_is_caught():
+    member = load_member(MEMBERS / "toy.yaml")
+    low = member.lowest()
+    assert low["psi"] > 0 and low["income"] > 0
+    # A representation's lowest value lies at or above the law's infimum, which is the limit of those values.
+    problems = member.verify_results({
+        "family": "bst/1", "parameter_file_sha256": member.hash,
+        "effective_member": {"expectations": member.expectations(), "lowest": {"psi": low["psi"] * 0.5, "income": low["income"]},
+                             "derived": member.derived()},
+        "types": [],
+    })
+    assert any("lowest/psi" in p and "below the stated infimum" in p for p in problems)
+
+
+def test_verdicts_name_the_undecided_margin():
+    assert verdict(0.1) == "holds" and verdict(-0.1) == "fails" and verdict(1e-14) == "undecided"
+    report = load_member(MEMBERS / "library.yaml").report()
+    assert report["member"] == "stated"
+    assert all(c["verdict"] in ("holds", "fails") for c in report["types"][0]["conditions"])
 
 
 def test_welfare_condition_fails_for_an_impatient_zero_income_member():

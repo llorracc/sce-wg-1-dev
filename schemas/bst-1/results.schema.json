@@ -2,13 +2,14 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "bst/1 results file",
   "description": "What a toolkit returns for one member of bst/1, as results.md states it. Draft.",
-  "$comment": "Conventions. Every quantity a domain rule can switch off is an object with a status: value, undefined or not computed. Inside a numeric map or array an entry is a number or null, and the enclosing block names its null entries under undefined or not_computed. Values are plain numbers; error estimates go in the optional errors tree that mirrors the value tree. The validator checks names, types and ranges; the checker checks that the comparison points are the request file's, that arrays have the comparison points' length, that statuses agree with the member's domain rules, and that the hashes are the files'.",
+  "$comment": "Conventions. Every quantity a domain rule can switch off is an object with a status: value, undefined or not computed; a status is the toolkit's own, decided on its effective member by its own verdicts. Inside a numeric map or array an entry is a number or null, and the enclosing block names its null entries under undefined or not_computed. Values are plain numbers; error estimates go in the optional errors tree that mirrors the value tree. The validator checks names, types and ranges; the checker checks what needs no representation of the laws: that each factor is the arithmetic of the reported expectations and the parameters, that each verdict agrees with its factor, that the statuses follow the verdicts, that the derived parameters are the arithmetic of the lowest values, that the lowest values lie at or above the stated member's infima, that the expectations obey what every law obeys, that the comparison points are the request file's, and that the hashes are the files'.",
   "type": "object",
   "required": ["family", "parameter_file_sha256", "method_file_sha256", "settings_sha256", "request_file_sha256",
-               "toolkit", "provenance", "types", "pooled"],
+               "toolkit", "provenance", "effective_member", "types", "pooled"],
   "additionalProperties": false,
   "properties": {
     "family": { "const": "bst/1" },
+    "effective_member": { "$ref": "#/$defs/EffectiveMember" },
     "parameter_file_sha256": { "$ref": "#/$defs/Sha256" },
     "method_file_sha256": { "$ref": "#/$defs/Sha256" },
     "settings_sha256": { "$ref": "#/$defs/Sha256" },
@@ -65,6 +66,120 @@
   "$defs": {
     "Sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
     "Status": { "enum": ["value", "undefined", "not computed"] },
+
+    "Expectations": {
+      "description": "The expectations of conditions.md, evaluated under a representation of the laws.",
+      "type": "object",
+      "required": ["psi_mean", "theta_mean", "psi_pow_1_minus_rho", "psi_inverse", "psi_log", "psi_log_psi",
+                   "psi_squared", "psi_pow_rho_minus_1", "psi_pow_rho", "worst_income_mass"],
+      "additionalProperties": false,
+      "properties": {
+        "psi_mean": { "type": "number", "exclusiveMinimum": 0 },
+        "theta_mean": { "type": "number", "exclusiveMinimum": 0 },
+        "psi_pow_1_minus_rho": { "type": "number", "exclusiveMinimum": 0 },
+        "psi_inverse": { "type": "number", "exclusiveMinimum": 0 },
+        "psi_log": { "type": "number" },
+        "psi_log_psi": { "type": "number" },
+        "psi_squared": { "type": "number", "exclusiveMinimum": 0 },
+        "psi_pow_rho_minus_1": { "type": "number", "exclusiveMinimum": 0 },
+        "psi_pow_rho": { "type": "number", "exclusiveMinimum": 0 },
+        "worst_income_mass": { "type": "number", "minimum": 0, "maximum": 1,
+                               "description": "The probability that income takes its lowest value, under the representation." }
+      }
+    },
+
+    "Lowest": {
+      "description": "The lowest values of the permanent shock and of the income ratio under a representation; at or above the stated member's infima, which are the limits of these as a representation refines.",
+      "type": "object",
+      "required": ["psi", "income"],
+      "additionalProperties": false,
+      "properties": {
+        "psi": { "type": "number", "minimum": 0 },
+        "income": { "type": "number", "minimum": 0 }
+      }
+    },
+
+    "EffectiveMember": {
+      "description": "What the toolkit solved, known through the expectations the family names, the lowest values of its representation, and the derived parameters it used; never through a form of the laws. The household's representation is the effective member; a toolkit that pushes the population forward under another representation reports that one under population, which then decides the conditions on the stationary population.",
+      "type": "object",
+      "required": ["expectations", "lowest", "derived"],
+      "additionalProperties": false,
+      "properties": {
+        "expectations": { "$ref": "#/$defs/Expectations" },
+        "lowest": { "$ref": "#/$defs/Lowest" },
+        "population": {
+          "description": "Present only when the population's transition runs under a representation other than the household's. When present it decides the GIC-Szeidl, the GIC-Harmenberg, the welfare conditions and the tail exponents; the natural limit and the constraint in force stay the household's.",
+          "type": "object",
+          "required": ["expectations", "lowest"],
+          "additionalProperties": false,
+          "properties": {
+            "expectations": { "$ref": "#/$defs/Expectations" },
+            "lowest": { "$ref": "#/$defs/Lowest" },
+            "representation": { "type": "string" }
+          }
+        },
+        "derived": {
+          "description": "The derived parameters the toolkit used: its effective member's own, which the checker recomputes from the lowest values.",
+          "type": "object",
+          "required": ["natural_limit", "constraint_in_force", "worst_income", "employed_scale"],
+          "additionalProperties": false,
+          "properties": {
+            "natural_limit": { "$ref": "#/$defs/NumberOrNull", "description": "null when no finite natural limit exists." },
+            "constraint_in_force": { "type": "number" },
+            "worst_income": { "type": "number", "minimum": 0 },
+            "employed_scale": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "representation": { "type": "string", "description": "A free description of how the toolkit represents the laws; not read by the checker." }
+      }
+    },
+
+    "Condition": {
+      "description": "One condition decided on the effective member: the factor the toolkit computed, the bound it is compared with, and the verdict.",
+      "type": "object",
+      "required": ["factor", "bound", "holds"],
+      "additionalProperties": false,
+      "properties": {
+        "factor": { "type": "number" },
+        "bound": { "type": "number" },
+        "holds": { "type": "boolean" }
+      }
+    },
+
+    "LowerTailCondition": {
+      "description": "A welfare condition decided on the effective member: the lower-tail case, the factor where the case has one, and the verdict.",
+      "type": "object",
+      "required": ["case", "factor", "holds"],
+      "additionalProperties": false,
+      "properties": {
+        "case": { "type": "string", "minLength": 1 },
+        "factor": { "$ref": "#/$defs/NumberOrNull" },
+        "holds": { "type": "boolean" }
+      }
+    },
+
+    "Conditions": {
+      "description": "Every condition of conditions.md, decided by the toolkit on its effective member for this type; required in full.",
+      "type": "object",
+      "required": ["AIC", "RIC", "WRIC", "FHWC", "PF-FVAC", "FVAC", "GIC", "GIC-Mod", "GIC-Szeidl", "GIC-Harmenberg",
+                   "GIC-Liv", "welfare", "marginal_welfare"],
+      "additionalProperties": false,
+      "properties": {
+        "AIC": { "$ref": "#/$defs/Condition" },
+        "RIC": { "$ref": "#/$defs/Condition" },
+        "WRIC": { "$ref": "#/$defs/Condition" },
+        "FHWC": { "$ref": "#/$defs/Condition" },
+        "PF-FVAC": { "$ref": "#/$defs/Condition" },
+        "FVAC": { "$ref": "#/$defs/Condition" },
+        "GIC": { "$ref": "#/$defs/Condition" },
+        "GIC-Mod": { "$ref": "#/$defs/Condition" },
+        "GIC-Szeidl": { "$ref": "#/$defs/Condition" },
+        "GIC-Harmenberg": { "$ref": "#/$defs/Condition" },
+        "GIC-Liv": { "$ref": "#/$defs/Condition" },
+        "welfare": { "$ref": "#/$defs/LowerTailCondition" },
+        "marginal_welfare": { "$ref": "#/$defs/LowerTailCondition" }
+      }
+    },
     "NumberOrNull": { "type": ["number", "null"] },
     "NumberArray": { "type": "array", "items": { "type": "number" } },
     "NullableArray": { "type": "array", "items": { "$ref": "#/$defs/NumberOrNull" } },
@@ -246,13 +361,24 @@
     },
 
     "EulerResiduals": {
+      "description": "Against the stated member's law, by a method other than the household's own, with that method's precision stated; optionally the same under the toolkit's own representation of the laws.",
       "type": "object",
-      "required": ["r", "max_abs", "expectation_method"],
+      "required": ["r", "max_abs", "expectation_method", "expectation_precision"],
       "additionalProperties": false,
       "properties": {
         "r": { "$ref": "#/$defs/NumberArray" },
         "max_abs": { "type": "number", "minimum": 0 },
-        "expectation_method": { "type": "string", "description": "The method of the part diagnostics.expectation, which must differ from the household's." }
+        "expectation_method": { "type": "string", "description": "The method of the part diagnostics.expectation, which must differ from the household's." },
+        "expectation_precision": { "type": "number", "minimum": 0, "description": "The precision of the diagnostic's own expectation, as the toolkit measured it, for instance by refining it once more." },
+        "under_effective_laws": {
+          "type": "object",
+          "required": ["r", "max_abs"],
+          "additionalProperties": false,
+          "properties": {
+            "r": { "$ref": "#/$defs/NumberArray" },
+            "max_abs": { "type": "number", "minimum": 0 }
+          }
+        }
       }
     },
 
@@ -282,13 +408,14 @@
 
     "TypeResults": {
       "type": "object",
-      "required": ["beta", "share", "comparison_points", "rule", "exported_rule", "kink", "target", "pseudo_target",
-                   "population", "income_measure", "welfare", "marginal_welfare", "euler_residuals",
+      "required": ["beta", "share", "conditions", "comparison_points", "rule", "exported_rule", "kink", "target",
+                   "pseudo_target", "population", "income_measure", "welfare", "marginal_welfare", "euler_residuals",
                    "stationarity_residual"],
       "additionalProperties": false,
       "properties": {
         "beta": { "type": "number", "exclusiveMinimum": 0 },
         "share": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "conditions": { "$ref": "#/$defs/Conditions" },
         "comparison_points": { "$ref": "#/$defs/NumberArray" },
         "rule": { "$ref": "#/$defs/Rule" },
         "exported_rule": { "$ref": "#/$defs/ExportedRule" },

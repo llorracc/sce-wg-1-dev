@@ -1,8 +1,10 @@
 # The stage file as the foundation of a family's statement
 
-Draft design note, 2026-10-18; see the [README](README.md). Approved by Chris the same day; of the six steps below, the first
-five were done that evening (the fifth, the Markov family's stage file, was delivered by the bellman session at 17:40 EDT and
-gained its three-valued switch by 18:37), and the sixth waits for the model document to settle and for Chris's word.
+Draft design note, 2026-10-18; see the [README](README.md). Approved by Chris the same day, and all six steps below were
+done that day: the fifth, the Markov family's stage file, was delivered by the bellman session at 17:40 EDT and gained its
+three-valued switch by 18:37; the sixth, the completeness job, ran at 20:32 on Chris's word and is reported in the
+[records](records/findings/2026-10-18_matsya-completeness-job.md). The plan is EXECUTED; the two further requests the job
+produced are at the end.
 
 ## The ruling
 
@@ -99,3 +101,16 @@ Taken by Chris on 2026-10-18:
 - The requests go to Bellman's maintainer through the bellman session, under Chris's name.
 - ρ = 1 is dropped from `bst/1` for now, for simplicity: the family requires ρ > 1, as BST does, so there is no second stage
   file.
+
+## Found by the completeness job
+
+Two further points for Bellman's maintainer, found when the job of step 6 ran on 2026-10-18 and to be filed on Chris's word
+in the bellman session:
+8. The dossier should name which label a Bernoulli over two labels draws with probability p; the convention that it draws
+   the second is on the laws page only, and the job's own round trip misread it.
+9. A job whose fixed point differs from its initial declaration should say so in its status; convergence compares adjacent
+   cycles only, so a change in the first cycle can converge unremarked.
+10. A condition on a parameter that names another parameter, `a_Art : (-inf, 0], >= a_Nat`, is accepted but not evaluated at
+    calibration, although both sides are calibrated numbers, and its presence switches off the check of the parameter's own
+    interval: a calibration outside (−∞, 0] passes with the condition and is refused without it. Found on 2026-10-18 when
+    the artificial limit's domain was tightened on Chris's ruling.

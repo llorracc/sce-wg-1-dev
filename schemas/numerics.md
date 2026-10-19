@@ -7,6 +7,24 @@ its own schema. The split exists so that one method can be fixed and run under m
 sizes and grid placements can run in parallel, and the suite of results then shows how each reported quantity depends on each
 numerical choice.
 
+## What the schemas prescribe, and what they do not
+
+The schemas state the problem and nothing about how it is solved. A method file and a settings file are a toolkit's own
+record of what it did, stated so that a results file can be identified and so that a suite can show how each quantity
+converges; nothing in them is prescribed by the schemas, neither a discretization of a law, nor a grid, nor a quadrature,
+nor a form for any of them. What a toolkit must do is solve the problem it is handed and report, in the results file, what
+it solved: the expectations the family names, evaluated under its own approximation of the laws; every condition of the
+family's table, decided on that approximation; and the derived parameters it used. That approximation is the toolkit's
+**effective member** ([`effective-member.md`](effective-member.md)); the schemas never see its representation.
+
+Two kinds of setting, as descriptions and not as requirements. A **model-changing** setting alters the effective member:
+the number and placement of a shock's nodes, a truncation, the discretization of a level law. A **method-only** setting
+alters only how the effective member's solution is approximated: the asset grid, the interpolation, the solver's tolerance,
+the histogram of the stationary population, a simulation's sample size. Along a ladder the first kind converges in the
+reported expectations and the second in the solution, and a suite's report reads the two separately. The method on
+`diagnostics.expectation` states its own precision in the results file, since the diagnostics are computed against the
+stated member's law.
+
 ## Method file
 
 A method file chooses, for each part of the model, the algorithm that computes it. A part is named by the family's stage

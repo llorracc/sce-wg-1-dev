@@ -33,11 +33,36 @@ def population():
     }
 
 
+def conditions():
+    def c(factor, bound=1.0):
+        return {"factor": factor, "bound": bound, "holds": factor < bound}
+
+    return {
+        "AIC": c(0.99), "RIC": c(0.95), "WRIC": c(0.5), "FHWC": c(0.99), "PF-FVAC": c(0.93), "FVAC": c(0.94),
+        "GIC": c(0.96), "GIC-Mod": c(0.97), "GIC-Szeidl": c(-0.04, -0.005), "GIC-Harmenberg": c(0.96, 1.005),
+        "GIC-Liv": c(0.96),
+        "welfare": {"case": "an atom at the worst income", "factor": 0.07, "holds": True},
+        "marginal_welfare": {"case": "an atom at the worst income", "factor": 1.07, "holds": False},
+    }
+
+
+def effective_member():
+    return {
+        "expectations": {"psi_mean": 1.0, "theta_mean": 1.0, "psi_pow_1_minus_rho": 1.01, "psi_inverse": 1.01,
+                         "psi_log": -0.005, "psi_log_psi": 0.005, "psi_squared": 1.01, "psi_pow_rho_minus_1": 1.0,
+                         "psi_pow_rho": 1.01, "worst_income_mass": 0.005},
+        "lowest": {"psi": 0.0, "income": 0.0},
+        "derived": {"natural_limit": 0.0, "constraint_in_force": 0.0, "worst_income": 0.0,
+                    "employed_scale": 1.0050251256281406},
+        "representation": "equiprobable nodes with exact conditional means, seven per shock",
+    }
+
+
 def sample():
     h = "0" * 64
     points = [0.25, 0.5, 1.0, 2.0, 5.0]
     one_type = {
-        "beta": 0.96, "share": 1.0, "comparison_points": points,
+        "beta": 0.96, "share": 1.0, "conditions": conditions(), "comparison_points": points,
         "rule": {"c": [0.25, 0.5, 0.93, 1.3, 1.9], "mpc": [1.0, 1.0, 0.5, 0.29, 0.18]},
         "exported_rule": {"m": [0.1, 1.0, 50.0], "c": [0.1, 0.93, 7.6], "range": [0.01, 500.0]},
         "kink": {"status": "undefined"},
@@ -50,12 +75,14 @@ def sample():
         "marginal_welfare": {"status": "undefined", "by_a_quartile": [None, 1.1, 0.7, 0.4], "at_constraint": None,
                              "undefined": ["mean", "by_a_quartile[0]", "at_constraint"]},
         "euler_residuals": {"r": [0.0, 0.0, 1e-6, -2e-6, 1e-7], "max_abs": 2e-6,
-                            "expectation_method": "bst_bench:gauss-legendre-log-support"},
+                            "expectation_method": "bst_bench:gauss-legendre-log-support",
+                            "expectation_precision": 1e-9},
         "stationarity_residual": {"population": 3e-5, "income": 4e-5},
     }
     return {
         "family": "bst/1", "parameter_file_sha256": h, "method_file_sha256": h, "settings_sha256": h,
         "request_file_sha256": h,
+        "effective_member": effective_member(),
         "toolkit": {"name": "bst_bench", "version": "0.3"},
         "provenance": {"hardware": "jhu-dell", "threads": 1, "wall_seconds": 12.5},
         "types": [one_type],
@@ -90,6 +117,13 @@ def test_optional_provenance_keys_validate():
     lambda d: d["types"][0]["marginal_welfare"].update(status="value"),
     lambda d: d["toolkit"].update(driver=1),
     lambda d: d["provenance"].update(environment="numpy 2.5"),
+    lambda d: d["types"][0].pop("conditions"),
+    lambda d: d["types"][0]["conditions"]["GIC-Mod"].update(holds="yes"),
+    lambda d: d["types"][0]["conditions"].pop("welfare"),
+    lambda d: d.pop("effective_member"),
+    lambda d: d["effective_member"]["expectations"].pop("psi_inverse"),
+    lambda d: d["effective_member"]["lowest"].update(psi=-0.1),
+    lambda d: d["types"][0]["euler_residuals"].pop("expectation_precision"),
 ])
 def test_rejections(change):
     data = copy.deepcopy(sample())

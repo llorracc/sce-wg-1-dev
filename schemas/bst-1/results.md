@@ -3,9 +3,11 @@
 Draft; see the [README](../README.md).
 
 A results file is JSON, written by a program and checked by a validator. It reports quantities that the
-[model schema](model.md) defines, at arguments that the toolkit does not choose. It never reports a toolkit's grid, histogram
-or interpolant. Every value is a ratio to permanent income, in BST's notation. Items are **required** unless they are marked
-optional.
+[model schema](model.md) defines, at arguments that the toolkit does not choose, and it reports what the toolkit solved: its
+**effective member**, known through the expectations the family names, the conditions decided on it and the derived
+parameters it used, never through a form of its laws ([`effective-member.md`](../effective-member.md)). It never reports a
+toolkit's grid, histogram or interpolant. Every value is a ratio to permanent income, in BST's notation. Items are
+**required** unless they are marked optional.
 
 ## Identity and provenance
 
@@ -16,6 +18,31 @@ optional.
 - The hardware, the threads and the wall time.
 - Optional: the numerical environment, a free-form object of library versions; the driver, the program that assembled the
   file when the toolkit has more than one; and the parameter file's path. The hash, not the path, identifies the member.
+
+## The effective member
+
+What the toolkit solved, reported in numbers free of any representation:
+- **The expectations** the [conditions](conditions.md) name, under the toolkit's own approximation of the laws: E[ψ],
+  E[θ], E[ψ^(1−ρ)], E[ψ^(−1)], E[log ψ], E[ψ log ψ], E[ψ²], E[ψ^(ρ−1)], E[ψ^ρ], and p̲, the mass at the worst income. The
+  means are reported, not required to be one, since an approximation need not preserve them.
+- **The lowest values** of ψ and of income under that approximation, which lie at or above the stated member's infima.
+- **The derived parameters** the toolkit used, its effective member's own: the natural limit, the constraint in force, the
+  worst income and the employed-income scale ([model schema](model.md#derived-parameters)).
+- **For each type, every condition** of the family's table: the factor the toolkit computed, the bound, and the verdict,
+  holds or fails; and the two welfare conditions with their lower-tail case. Required in full: each is arithmetic on the
+  expectations and the parameters.
+- **The population's representation**, optional, under `population`: the same expectations and lowest values, present
+  only when the toolkit pushes the population forward under a representation other than the one it solved the household
+  with, as a transition-matrix method with its own node count does. When present it decides the conditions on the
+  stationary population, the GIC-Szeidl, the GIC-Harmenberg, the two welfare conditions and the tail exponents; the
+  household's block decides everything else, the natural limit and the constraint in force among them. When absent, the
+  household's block decides everything.
+
+The checker verifies what needs no representation: each factor as the arithmetic of the reported expectations, each
+verdict against its factor, each status against the verdicts, each derived parameter as the arithmetic of the lowest values,
+the lowest values against the stated infima, and the expectations against what every law obeys. The expectations' values
+themselves are the toolkit's to compute and are trusted. The stated member's own verdicts, which are statements about a
+limit, do not appear in a results file; the checker's report of the member carries them.
 
 ## Comparison points
 
@@ -36,8 +63,8 @@ Each point is rounded to three significant figures.
 - c_i(m);
 - the MPC c_i′(m), as a derivative, not a finite difference.
 
-**At the special points.** Each value is reported with its status, `undefined` when its domain rule fails
-([conditions](conditions.md)):
+**At the special points.** Each value is reported with its status, `undefined` when its domain rule fails in the toolkit's
+effective member, by the toolkit's own verdicts ([conditions](conditions.md)):
 - **The kink m*_i,** the largest m at which the artificial borrowing constraint binds, with the rule's slope on each side.
 - **The buffer stock target m̌_i,** where E[m_{t+1}] = m_t for a survivor, with c and the MPC there.
 - **The pseudo-target m̂_i,** where E[M_{t+1}]/M_t = 𝒢 for a survivor, with c and the MPC there.
@@ -126,7 +153,10 @@ in units of consumption. It is zero for the exact rule:
 
 So the same formula serves at, above and below the kink. The expectation in ĉ is the part `diagnostics.expectation`. It must be
 computed by a method different from the household's own expectation, and stated, so that a toolkit cannot score its own
-quadrature as exact. Report r at each point and the maximum of |r|.
+quadrature as exact. Report r at each point and the maximum of |r|. The expectation is taken against the stated member's
+law, so the residual measures the whole error of the toolkit's solution as an approximation to the stated problem, and the
+method states its own precision, measured for instance by refining it once more. Optionally the same residuals under the
+toolkit's own representation of the laws, which measure the solution's error on its effective member alone.
 
 **The stationarity residual, for each type and measure.** Push the reported stationary distribution of m forward one period,
 under the reported rule and the shock laws, by a method stated for that purpose. Report the largest absolute difference between
@@ -142,6 +172,10 @@ distributions.
 
 - `undefined`: the member defines no such value, because a domain rule fails.
 - `not computed`: the toolkit did not compute an optional value.
+
+A status is the toolkit's own, decided on its effective member by the verdicts it reports. The checker's report of the
+member gives the stated member's verdict beside it, which is a statement about a limit, `undecided` when the closed form's
+margin is within its precision.
 
 ## Errors and precision
 
@@ -160,6 +194,10 @@ distributions.
   across each toolkit's suite, widened by the standard errors of simulated values.
 - If two toolkits each converge within their own errors and still disagree, at least one is wrong or is solving a different model.
   The diagnostics above help say which.
+- Two toolkits whose effective members sit on opposite sides of a condition's boundary report opposite verdicts, and
+  opposite statuses for the quantity the condition governs. The comparison reports that as a difference of regime, with
+  both factors and the stated member's limit verdict where the closed form gives one, rather than as a disagreement of
+  values.
 
 ## Sketch of the form
 
@@ -173,8 +211,14 @@ The validator is [`results.schema.json`](results.schema.json). The shape is roug
   "settings_sha256": "…",
   "request_file_sha256": "…",
   "toolkit": {"name": "…", "version": "…", "driver": "…"},
+  "effective_member": {
+    "expectations": {"psi_mean": 1.0, "psi_inverse": 1.003, "psi_log": -0.0015, "…": "…"},
+    "lowest": {"psi": 0.85, "income": 0.29},
+    "derived": {"natural_limit": -0.23, "constraint_in_force": 0.0, "worst_income": 0.25, "employed_scale": 1.014}
+  },
   "types": [
     {
+      "conditions": {"GIC-Mod": {"factor": 0.97, "bound": 1, "holds": true}, "…": "…"},
       "rule": {"m": [0.42, 0.61], "c": [0.40, 0.55], "mpc": [0.91, 0.42]},
       "kink": {"status": "value", "m": 0.38, "slope_below": 1.0, "slope_above": 0.93},
       "target": {"status": "value", "m": 1.39, "c": 1.01, "mpc": 0.07},
