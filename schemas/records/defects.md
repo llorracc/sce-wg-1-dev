@@ -17,3 +17,9 @@ Faults found in this project's own work, with their status.
   the bellman session could not match one. **Status:** corrected at 17:40 from file stamps and marked approximate.
 - **The first convention of the HAFiscal family's worst income.** The draft stated it as the exhaustion income, which holds only
   when the employed income cannot fall below it. **Status:** corrected 2026-10-18 on the bellman session's finding.
+- **The natural constraint claimed to differ by state under truncated laws.** The Markov family's conditions document
+  said so of every truncated member; it differs by state only when an unemployed branch's term is the larger, and at the
+  paper's calibration under `continues` it is the same in every state. **Status:** corrected 2026-10-18 21:10, on the
+  owner's question.
+- **Two of the owner's words quoted in the journal.** The entry for the restructuring's approval quoted them; the records
+  keep his decisions in substance only. **Status:** removed 2026-10-18 22:5x, caught by the scan before the commit.

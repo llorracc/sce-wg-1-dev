@@ -16,4 +16,23 @@ library's reporting welfare defined and marginal welfare `undefined` as the chec
 residual at the kink falls as 9.8·10⁻³, 3.9·10⁻³, 1.4·10⁻³, 5.3·10⁻⁴, about n^{−1.4}, and HARK's solve time is linear in the
 joint nodes, so a relative error of 10⁻⁴ near the kink would need about two hundred nodes per shock. The precision levels
 are therefore settings, and tolerances come from measured convergence, as `results.md` says of the comparison; the wording
-of the levels as error targets is open with the owner.
+of the levels as error targets was settled the same evening: the levels are settings.
+
+**The effective member, reported and verified** (the HAFiscal-Latest session's emitter, version 0.2, by 23:24 the same
+day, within the hour of the schema's revision): the three members' first-level files carry the effective-member block and
+the conditions block, with every status from the toolkit's own verdicts, and the checker's verification finds each
+consistent with its member. What moved, as the design note predicted: the untruncated toy has a kink in the effective
+member, its natural limit about −5.6 from the lowest node of the permanent shock, behind the zero artificial constraint,
+where the stated member has none; the toy keeps its regime, its effective natural limit about −5.5 against the stated
+−1.7, both behind the binding zero constraint, with a worst-income mass of about 0.02 where the stated member has none;
+the library member keeps its regime, the zero-income atom being in the representation, and its welfare factors agree
+with the checker's to the digit. At seven nodes the expectations sit in the fourth digit from the closed forms, so no
+verdict crosses a bound for these members. The two residuals separate the errors as intended: at the first level the
+residual against the stated law near the kink is about 10⁻², while the diagnostic's own precision is 10⁻⁶ to 4·10⁻⁵ and
+the residual under the solver's own nodes 10⁻⁷ to 10⁻⁵, so the 10⁻² is the discretization's distance from the law, not
+the solver's or the diagnostic's error. One question came out of it, for the owner: the emitter's fourth level solves the
+household on more nodes than it runs the population's forward transition on, and the conditions on the stationary
+population's existence are then decided on a law the population does not use. The toy's second level, at fifteen nodes,
+verifies clean as well (23:23), with the request file unchanged and the rule unchanged to the last digit; the one reported
+quantity that moved with the effective member is the buffer stock target, now found with the effective E[1/ψ], by about
+four parts in a thousand for the toy's most patient type and by much less for the impatient ones.
