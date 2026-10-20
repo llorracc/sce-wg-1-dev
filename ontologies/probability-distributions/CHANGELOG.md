@@ -24,7 +24,12 @@ formula syntax and the two written forms. The first rows, all new:
   bound meaning three and `null` meaning none;
 - the uniform on the unit interval, as a named measure, and the uniform, with its subfamily of mean one written by the
   parameter files' half-width;
-- the standard Gumbel, as a named measure, and the type I extreme-value law, Bellman-SYM's `TypeIExtremeValue(μ, s)`.
+- the standard Gumbel, as a named measure, and the type I extreme-value law, Bellman-SYM's `TypeIExtremeValue(μ, s)`;
+- the finite mixture, a case of the product with a kernel, which Bellman-SYM writes `Mixture`;
+- the finite discrete law on real points, and its subfamily of mean one, written by the parameter files' `Discrete`;
+- the categorical law on labels, with the Bernoulli law as its chart for two labels;
+- the finite Markov kernel, a family whose argument is the current state, which Bellman-SYM writes `DiscreteMarkov` or
+  `MarkovChain`.
 
 Every coordinate that is an expectation under the law says so, and the tests check it by quadrature. Every named
-measure states its density and support, and the tests integrate each from them.
+measure states its density and support, and the tests integrate each from them. Coordinates may be vectors and matrices.

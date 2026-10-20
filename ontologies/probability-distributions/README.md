@@ -147,7 +147,12 @@ names, `+ - * / **`, comparisons, `and` and `or`, the functions `sqrt`, `exp`, `
 standard normal distribution function), `phi` (its density) and `xphi` (x·φ(x), zero at an infinite x), and the constants
 `inf` and `pi`. Infinite values follow IEEE arithmetic, so a bound of `inf` passes through exp and log. In a moment's
 formula `k` is the order; in an operator's map or set `z` is the variable; in a coordinate's `as_expectation`, `E(·)` is
-the expectation under the law and `X` the draw. The constant `euler_gamma` is Euler's γ = 0.5772156649015329. Nothing else parses, so any consumer can read a formula without running code
+the expectation under the law and `X` the draw. The constant `euler_gamma` is Euler's γ = 0.5772156649015329.
+
+A coordinate may be a vector or a matrix. Arithmetic and comparisons on vectors are elementwise, and a condition holds
+when it holds at every entry; `x[j]` is entry j, counted from one; `[a, b]` is a vector; and `sum`, `min`, `max`,
+`count`, `first`, `last`, `index` (1, 2, …, n), `increasing` (strictly) and `row(M, i)` act on vectors and matrices. In
+a mixture's construction `j` is the component; in a kernel's properties the state's name is the current position. Nothing else parses, so any consumer can read a formula without running code
 from the source.
 
 ## Identifiers and the namespace
@@ -192,10 +197,11 @@ of probability distributions", *Bioinformatics* 32(17):2719–2721, doi:10.1093/
 | truncated lognormal, with Bellman-SYM's `TruncatedLogNormal(μ, σ, l, u)` as its canonical chart, and its subfamily of mean one, written by the parameter files' chart (the standard deviation of the logarithm after truncation, bounds in standard deviations, an omitted bound meaning three and `null` none) | in this release |
 | uniform, with Bellman-SYM's `Uniform(a, b)` as its canonical chart, and its subfamily of mean one, written by the parameter files' `{Uniform: {half_width: w}}` | in this release |
 | type I extreme value (Gumbel), with Bellman-SYM's `TypeIExtremeValue(μ, s)` as its canonical chart | in this release |
-| finite discrete law on real points | to come |
-| categorical and Bernoulli laws | to come |
-| finite Markov kernel | to come |
-| finite mixture, with the parameter files' lognormal mixtures `LogNormalMixture` and `TruncatedLogNormalMixture` | to come |
+| finite discrete law on real points, written by Bellman-SYM as a `Mixture` of numbers, and its subfamily of mean one, written by the parameter files' `Discrete` | in this release |
+| categorical law on labels, Bellman-SYM's `Categorical`, with `Bernoulli(p)` as its chart for two labels | in this release |
+| finite Markov kernel, Bellman-SYM's `DiscreteMarkov` and `MarkovChain`, two spellings of one chart | in this release |
+| finite mixture, an operator, Bellman-SYM's `Mixture` | in this release |
+| the lognormal mixtures, with the parameter files' `LogNormalMixture` and `TruncatedLogNormalMixture` | to come |
 | quantile table | to come |
 
 Families outside this list, such as the gamma, Weibull and beta, enter when a schema or a toolkit needs them.
