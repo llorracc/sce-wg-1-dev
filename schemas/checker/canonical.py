@@ -1,7 +1,7 @@
 """Strict YAML loading, the canonical serialization, and the hash that identifies a model.
 
-A parameter file is YAML in a strict subset: no anchors, aliases, tags or merge keys, no repeated keys, no infinities or
-NaN. Its hash is the SHA-256 of a canonical JSON serialization of the parsed values: keys sorted, no white space, every
+A parameter file is YAML in a strict subset: no anchors, aliases, tags or merge keys, no repeated keys, no booleans, no
+infinities or NaN. Null appears only where a validator admits it, which is a truncation bound's "no bound". Its hash is the SHA-256 of a canonical JSON serialization of the parsed values: keys sorted, no white space, every
 number written as the shortest decimal that reads back to the same double. So `0.10` and `0.1` hash alike, as do `1`
 and `1.0`, while two files that differ in any value differ in their hash.
 """
@@ -57,8 +57,10 @@ def _check_values(value, path: str) -> None:
     elif isinstance(value, list):
         for index, item in enumerate(value):
             _check_values(item, f"{path}/{index}")
-    elif isinstance(value, bool) or value is None:
-        raise StrictYAMLError(f"a boolean or null at {path or '/'}; the schemas use numbers and strings only")
+    elif value is None:
+        return  # admitted only where a validator says so: a truncation bound's "no bound"
+    elif isinstance(value, bool):
+        raise StrictYAMLError(f"a boolean at {path or '/'}; the schemas use numbers, strings and null only")
     elif isinstance(value, float) and not math.isfinite(value):
         raise StrictYAMLError(f"an infinite or undefined number at {path or '/'}")
     elif not isinstance(value, (int, float, str)):

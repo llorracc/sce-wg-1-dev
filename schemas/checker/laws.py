@@ -4,7 +4,13 @@ Every law is a positive random variable with mean one. A law object answers `mom
 power for any real k; `mean_log`, the expectation of the log; `mean_x_log_x`, the expectation of the variable times its
 log; `infimum` and `supremum` of the support; and `mass_at_infimum`. These are what the regularity conditions of a family
 read. `check` returns the problems the validator cannot express, as a list of sentences; an empty list means the law is
-well formed.
+well formed. `bellman` returns the law's Bellman-SYM call, the converter's output, or None where Bellman-SYM has no
+family for it.
+
+A truncation bound left out of a parameter file is three standard deviations; null is no bound. `filled` writes the
+defaults in, and the hash is taken over the filled form, so a law written with its defaults and without them hash alike.
+Each law is a chart of a subfamily of mean one in the ontology of probability distributions, whose identifier the law's
+class names; the conversions to Bellman-SYM's charts are the ontology's.
 """
 
 from __future__ import annotations
@@ -16,6 +22,25 @@ from scipy.special import log_ndtr, logsumexp, ndtr
 
 TOLERANCE = 1e-12
 INF = math.inf
+DEFAULT_BOUND = 3.0  # an omitted truncation bound, in standard deviations of the normal before truncation
+
+
+def _bound(params: dict, key: str) -> float:
+    """A truncation bound: three standard deviations when left out, none when null."""
+    if key not in params:
+        return -DEFAULT_BOUND if key == "bot" else DEFAULT_BOUND
+    value = params[key]
+    if value is None:
+        return -INF if key == "bot" else INF
+    return float(value)
+
+
+def _num(x: float) -> str:
+    """A number as Bellman-SYM reads it: the shortest decimal that reads back to the same double, or inf."""
+    x = float(x)
+    if math.isinf(x):
+        return "inf" if x > 0 else "-inf"
+    return repr(x)
 
 
 def _phi(z: float) -> float:
@@ -51,7 +76,7 @@ class _TruncatedNormalInLogs:
     """ln X = location + scale * Z, with Z standard normal conditioned on bot <= Z <= top.
 
     `sd_log` and `mean_log` are the standard deviation and the mean of ln X after truncation; `scale` and `location`
-    are those of the normal before it. A missing bound is infinite.
+    are those of the normal before it. An infinite bound is no bound.
     """
 
     def __init__(self, sd_log: float, bot: float, top: float):
@@ -101,6 +126,7 @@ FLOOR_ATOM, FLOOR_DENSITY, FLOOR_THIN = "atom", "density", "thin"
 
 class Degenerate:
     name = "Degenerate"
+    ontology = "PD_0000025"  # the point mass at one, chart degenerate
 
     def __init__(self, params: dict):
         self.params = params
@@ -121,18 +147,22 @@ class Degenerate:
     mass_at_infimum = 1.0
     floor_kind = FLOOR_ATOM
 
+    def bellman(self):
+        return "LogNormal(0, 0)"
+
 
 class TruncatedLogNormal:
-    """Also serves LogNormal, with both bounds infinite."""
+    """Also serves LogNormal, with no bound on either side."""
 
     name = "TruncatedLogNormal"
+    ontology = "PD_0000032"  # the truncated lognormal with mean one, chart sd-log-standardized-bounds
 
     def __init__(self, params: dict, require_bound: bool = True):
         self.params = params
         self.require_bound = require_bound
         sd_log = params["sd_log"]
-        self.bot = params.get("bot", -INF)
-        self.top = params.get("top", INF)
+        self.bot = _bound(params, "bot")
+        self.top = _bound(params, "top")
         if sd_log > 0 and self.bot < self.top:
             self.normal = _TruncatedNormalInLogs(sd_log, self.bot, self.top)
             self.normal.location = -self.normal.log_mgf_at_location_zero(1.0)
@@ -142,7 +172,7 @@ class TruncatedLogNormal:
         if self.params["sd_log"] <= 0:
             problems.append("sd_log must be positive")
         if self.require_bound and math.isinf(self.bot) and math.isinf(self.top):
-            problems.append("a lognormal truncated on neither side is LogNormal")
+            problems.append("a lognormal with no bound on either side is LogNormal")
         if not self.bot < self.top:
             problems.append("bot must be below top")
         return problems
@@ -177,17 +207,28 @@ class TruncatedLogNormal:
     def floor_kind(self):
         return FLOOR_THIN if math.isinf(self.bot) else FLOOR_DENSITY
 
+    def bellman(self):
+        """TruncatedLogNormal(μ, σ, l, u): the normal's location and scale in logs, and the bounds in the draw's units."""
+        n = self.normal
+        return f"TruncatedLogNormal({_num(n.location)}, {_num(n.scale)}, {_num(self.infimum)}, {_num(self.supremum)})"
+
 
 class LogNormal(TruncatedLogNormal):
     name = "LogNormal"
+    ontology = "PD_0000019"  # the lognormal with mean one, chart sd-log
 
     def __init__(self, params: dict):
-        super().__init__({"sd_log": params["sd_log"]}, require_bound=False)
+        super().__init__({"sd_log": params["sd_log"], "bot": None, "top": None}, require_bound=False)
         self.params = params
+
+    def bellman(self):
+        sd = self.params["sd_log"]
+        return f"LogNormal({_num(-sd * sd / 2)}, {_num(sd)})"
 
 
 class Uniform:
     name = "Uniform"
+    ontology = "PD_0000037"  # the uniform with mean one, chart half-width
 
     def __init__(self, params: dict):
         self.params = params
@@ -225,9 +266,13 @@ class Uniform:
     mass_at_infimum = 0.0
     floor_kind = FLOOR_DENSITY
 
+    def bellman(self):
+        return f"Uniform({_num(1 - self.w)}, {_num(1 + self.w)})"
+
 
 class Discrete:
     name = "Discrete"
+    ontology = "PD_0000045"  # the finite discrete law with mean one, chart values-probabilities
 
     def __init__(self, params: dict):
         self.params = params
@@ -282,31 +327,42 @@ class Discrete:
 
     floor_kind = FLOOR_ATOM
 
+    def bellman(self):
+        """A Mixture of numbers, each a point mass."""
+        return "Mixture(" + ", ".join(f"({_num(p)}, {_num(v)})" for p, v in zip(self.probs, self.values)) + ")"
 
-class NormalMixture:
-    name = "NormalMixture"
+
+class _MixtureInLogs:
+    """ln X = c + Y, Y drawn from component j with probability weight_j: a normal in logs, truncated or not, stated by
+    its mean and standard deviation after truncation, with one common shift c making the mean one."""
+
+    truncated = False
 
     def __init__(self, params: dict):
         self.params = params
         self.components = params["components"]
+        self.bounds = [(_bound(c, "bot"), _bound(c, "top")) if self.truncated else (-INF, INF) for c in self.components]
         self.normals = []
-        for c in self.components:
-            if c["sd_log"] > 0 and c.get("bot", -INF) < c.get("top", INF):
-                n = _TruncatedNormalInLogs(c["sd_log"], c.get("bot", -INF), c.get("top", INF))
+        for c, (bot, top) in zip(self.components, self.bounds):
+            if c["sd_log"] > 0 and bot < top:
+                n = _TruncatedNormalInLogs(c["sd_log"], bot, top)
                 n.location = c["mean_log"] - n.scale * n.ez
                 self.normals.append(n)
         self.weights = [c["weight"] for c in self.components]
         if len(self.normals) == len(self.components):
             self.shift = -math.log(sum(w * n.mgf(1.0) for w, n in zip(self.weights, self.normals)))
 
+    def _order_key(self, c, bounds):
+        return (c["mean_log"], c["sd_log"])
+
     def check(self):
         problems = []
         if len(self.components) < 2:
             problems.append("at least two components; one component is LogNormal or TruncatedLogNormal")
-        for i, c in enumerate(self.components):
+        for i, (c, (bot, top)) in enumerate(zip(self.components, self.bounds)):
             if c["sd_log"] <= 0:
                 problems.append(f"component {i}: sd_log must be positive")
-            if not c.get("bot", -INF) < c.get("top", INF):
+            if not bot < top:
                 problems.append(f"component {i}: bot must be below top")
             if c["weight"] <= 0:
                 problems.append(f"component {i}: weight must be positive")
@@ -315,9 +371,9 @@ class NormalMixture:
         centered = sum(c["weight"] * c["mean_log"] for c in self.components)
         if abs(centered) > TOLERANCE:
             problems.append(f"the weighted mean of mean_log is {centered!r}, not 0")
-        keys = [(c["mean_log"], c["sd_log"]) for c in self.components]
+        keys = [self._order_key(c, b) for c, b in zip(self.components, self.bounds)]
         if any(b <= a for a, b in zip(keys, keys[1:])):
-            problems.append("components must be in increasing order of mean_log, then sd_log, with no repeat")
+            problems.append(self.order_rule)
         return problems
 
     def log_moment(self, k):
@@ -352,11 +408,49 @@ class NormalMixture:
     def floor_kind(self):
         return FLOOR_THIN if any(math.isinf(n.lower()) for n in self.normals) else FLOOR_DENSITY
 
+    def bellman(self):
+        """A Mixture of each component's law: LogNormal(μ, σ), or TruncatedLogNormal(μ, σ, l, u) for a component with a
+        bound, μ including the common shift."""
+        parts = []
+        for w, n, (bot, top) in zip(self.weights, self.normals, self.bounds):
+            mu, sigma = self.shift + n.location, n.scale
+            if math.isinf(bot) and math.isinf(top):
+                law = f"LogNormal({_num(mu)}, {_num(sigma)})"
+            else:
+                low = 0.0 if math.isinf(bot) else math.exp(mu + sigma * bot)
+                high = INF if math.isinf(top) else math.exp(mu + sigma * top)
+                law = f"TruncatedLogNormal({_num(mu)}, {_num(sigma)}, {_num(low)}, {_num(high)})"
+            parts.append(f"({_num(w)}, {law})")
+        return "Mixture(" + ", ".join(parts) + ")"
+
+
+class LogNormalMixture(_MixtureInLogs):
+    name = "LogNormalMixture"
+    ontology = "PD_0000054"  # the lognormal mixture with mean one, chart relative-means
+    order_rule = "components must be in increasing order of mean_log, then sd_log, with no repeat"
+
+
+class TruncatedLogNormalMixture(_MixtureInLogs):
+    name = "TruncatedLogNormalMixture"
+    ontology = "PD_0000058"  # the truncated lognormal mixture with mean one, chart relative-means-standardized-bounds
+    truncated = True
+    order_rule = "components must be in increasing order of mean_log, then sd_log, bot and top, with no repeat"
+
+    def _order_key(self, c, bounds):
+        return (c["mean_log"], c["sd_log"], *bounds)
+
+    def check(self):
+        problems = super().check()
+        if all(math.isinf(bot) and math.isinf(top) for bot, top in self.bounds):
+            problems.append("no component has a bound: the law is LogNormalMixture")
+        return problems
+
 
 class Tabulated:
     """A quantile function Q, linear in u between the listed points."""
 
     name = "Tabulated"
+    ontology = "PD_0000063"  # the quantile table with mean one, chart points
 
     def __init__(self, params: dict):
         self.params = params
@@ -452,8 +546,31 @@ class Tabulated:
     def floor_kind(self):
         return FLOOR_ATOM if self.mass_at_infimum > 0 else FLOOR_DENSITY
 
+    def bellman(self):
+        return None  # Bellman-SYM has no quantile table
 
-LAWS = {cls.name: cls for cls in (Degenerate, LogNormal, TruncatedLogNormal, Uniform, Discrete, NormalMixture, Tabulated)}
+
+LAWS = {cls.name: cls for cls in (Degenerate, LogNormal, TruncatedLogNormal, Uniform, Discrete, LogNormalMixture,
+                                  TruncatedLogNormalMixture, Tabulated)}
+
+
+def filled(value):
+    """The value with every omitted truncation bound written in, wherever a law that takes bounds appears: the form the
+    hash is taken over. A null bound stays null."""
+    if isinstance(value, dict):
+        if len(value) == 1 and next(iter(value)) in ("TruncatedLogNormal", "TruncatedLogNormalMixture"):
+            (name, params), = value.items()
+            if isinstance(params, dict):
+                if name == "TruncatedLogNormal":
+                    return {name: {"bot": -DEFAULT_BOUND, "top": DEFAULT_BOUND, **params}}
+                if isinstance(params.get("components"), list):
+                    return {name: {**params, "components": [
+                        {"bot": -DEFAULT_BOUND, "top": DEFAULT_BOUND, **c} if isinstance(c, dict) else c
+                        for c in params["components"]]}}
+        return {key: filled(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [filled(item) for item in value]
+    return value
 
 
 def law_from_mapping(mapping: dict):

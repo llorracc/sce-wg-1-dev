@@ -15,7 +15,7 @@ from scipy.special import ndtr, ndtri
 
 from bst1 import CASE_ATOM, CASE_BINDING, Member, MemberError, load_member, validate_results, verdict
 from canonical import StrictYAMLError, load_strict, model_hash
-from laws import law_from_mapping
+from laws import filled, law_from_mapping
 from test_results_schema import sample as schema_sample
 
 MEMBERS = Path(__file__).resolve().parent.parent / "bst-1" / "members"
@@ -33,7 +33,7 @@ def numerical(law, f):
     if name == "Uniform":
         w = p["half_width"]
         return quad(lambda x: f(x) / (2 * w), 1 - w, 1 + w, epsabs=1e-13, epsrel=1e-12)[0]
-    if name == "NormalMixture":
+    if name in ("LogNormalMixture", "TruncatedLogNormalMixture"):
         total = 0.0
         for w, n in zip(law.weights, law.normals):
             lo, hi = n.lower(), n.upper()
@@ -58,18 +58,24 @@ def numerical(law, f):
     raise NotImplementedError(name)
 
 
+TRUNCATED_MIXTURE = {"TruncatedLogNormalMixture": {"components": [
+    {"weight": 0.1, "mean_log": -0.9, "sd_log": 0.30, "bot": -3.0, "top": 3.0},
+    {"weight": 0.9, "mean_log": 0.1, "sd_log": 0.05, "bot": -3.0, "top": 3.0}]}}
+
 LAWS = [
     {"LogNormal": {"sd_log": 0.3}},
     {"TruncatedLogNormal": {"sd_log": 0.2, "bot": -2.0, "top": 2.0}},
-    {"TruncatedLogNormal": {"sd_log": 0.4, "bot": -3.0}},
-    {"TruncatedLogNormal": {"sd_log": 0.1, "top": 1.5}},
+    {"TruncatedLogNormal": {"sd_log": 0.3}},  # both bounds omitted: three standard deviations
+    {"TruncatedLogNormal": {"sd_log": 0.4, "bot": -3.0, "top": None}},  # truncated below only
+    {"TruncatedLogNormal": {"sd_log": 0.1, "bot": None, "top": 1.5}},  # truncated above only
     {"Uniform": {"half_width": 0.4}},
-    {"NormalMixture": {"components": [
-        {"weight": 0.1, "mean_log": -0.9, "sd_log": 0.30, "bot": -3.0, "top": 3.0},
-        {"weight": 0.9, "mean_log": 0.1, "sd_log": 0.05, "bot": -3.0, "top": 3.0}]}},
-    {"NormalMixture": {"components": [
+    {"LogNormalMixture": {"components": [
         {"weight": 0.5, "mean_log": -0.2, "sd_log": 0.2},
-        {"weight": 0.5, "mean_log": 0.2, "sd_log": 0.1, "top": 2.0}]}},
+        {"weight": 0.5, "mean_log": 0.2, "sd_log": 0.1}]}},
+    TRUNCATED_MIXTURE,
+    {"TruncatedLogNormalMixture": {"components": [
+        {"weight": 0.5, "mean_log": -0.2, "sd_log": 0.2, "bot": None, "top": None},
+        {"weight": 0.5, "mean_log": 0.2, "sd_log": 0.1, "bot": None, "top": 2.0}]}},
     {"Tabulated": {"points": [[0.0, 0.5], [0.1, 0.5], [0.5, 1.0], [1.0, 1.6]]}},
     {"Tabulated": {"points": [[0.0, 0.5], [0.4, 0.75], [0.4, 1.1], [1.0, 1.4]]}},
 ]
@@ -94,7 +100,7 @@ def test_truncated_lognormal_keeps_the_stated_standard_deviation():
 
 
 def test_mixture_components_have_the_stated_means_after_truncation():
-    law = law_from_mapping(LAWS[5])
+    law = law_from_mapping(TRUNCATED_MIXTURE)
     for n, c in zip(law.normals, law.params["components"]):
         assert n.mean() == pytest.approx(c["mean_log"], abs=1e-12)
 
@@ -105,14 +111,93 @@ def test_mixture_components_have_the_stated_means_after_truncation():
     ({"Uniform": {"half_width": 1.0}}, "half_width"),
     ({"Discrete": {"values": [0.8, 1.3], "probs": [0.5, 0.5]}}, "mean"),
     ({"Discrete": {"values": [1.2, 0.8], "probs": [0.5, 0.5]}}, "increasing"),
-    ({"NormalMixture": {"components": [
+    ({"LogNormalMixture": {"components": [
         {"weight": 0.5, "mean_log": 0.1, "sd_log": 0.2}, {"weight": 0.5, "mean_log": -0.1, "sd_log": 0.2}]}}, "order"),
+    ({"TruncatedLogNormal": {"sd_log": 0.1, "bot": None, "top": None}}, "is LogNormal"),
+    ({"TruncatedLogNormalMixture": {"components": [
+        {"weight": 0.5, "mean_log": -0.1, "sd_log": 0.2, "bot": None, "top": None},
+        {"weight": 0.5, "mean_log": 0.1, "sd_log": 0.2, "bot": None, "top": None}]}}, "is LogNormalMixture"),
+    ({"TruncatedLogNormalMixture": {"components": [
+        {"weight": 0.5, "mean_log": -0.1, "sd_log": 0.2, "bot": 1.0, "top": -1.0},
+        {"weight": 0.5, "mean_log": 0.1, "sd_log": 0.2}]}}, "bot must be below top"),
     ({"Tabulated": {"points": [[0.0, 0.5], [0.5, 1.0], [1.0, 1.5]]}}, "line through its neighbors"),
     ({"Tabulated": {"points": [[0.0, 0.5], [0.1, 0.5], [0.5, 1.0], [1.0, 1.7]]}}, "mean"),
     ({"Tabulated": {"points": [[0.0, 0.5], [0.0, 0.6], [0.5, 1.0], [1.0, 1.6]]}}, "repeated"),
 ])
 def test_law_rules(mapping, problem):
     assert any(problem in p for p in law_from_mapping(mapping).check())
+
+
+def test_an_omitted_bound_is_three_standard_deviations_and_hashes_so():
+    omitted = {"TruncatedLogNormal": {"sd_log": 0.3}}
+    written = {"TruncatedLogNormal": {"sd_log": 0.3, "bot": -3.0, "top": 3.0}}
+    none_above = {"TruncatedLogNormal": {"sd_log": 0.3, "top": None}}
+    a, b, c = (law_from_mapping(m) for m in (omitted, written, none_above))
+    assert (a.bot, a.top) == (b.bot, b.top) == (-3.0, 3.0)
+    assert (c.bot, c.top) == (-3.0, math.inf)
+    assert a.moment(-1.0) == b.moment(-1.0) != c.moment(-1.0)
+    assert model_hash(filled(omitted)) == model_hash(filled(written)) != model_hash(filled(none_above))
+    mixture = {"TruncatedLogNormalMixture": {"components": [
+        {"weight": 0.5, "mean_log": -0.1, "sd_log": 0.2}, {"weight": 0.5, "mean_log": 0.1, "sd_log": 0.2, "top": None}]}}
+    components = filled(mixture)["TruncatedLogNormalMixture"]["components"]
+    assert [(c["bot"], c["top"]) for c in components] == [(-3.0, 3.0), (-3.0, None)]
+
+
+def test_null_is_admitted_only_as_a_bound():
+    toy = load_strict((MEMBERS / "toy.yaml").read_text().replace("top: 3.0}}\n  unemployment", "top: null}}\n  unemployment"))
+    assert toy["income"]["permanent_shock"]["TruncatedLogNormal"]["top"] is None
+    assert math.isinf(Member(toy).psi.top)
+    toy["income"]["permanent_shock"]["TruncatedLogNormal"]["sd_log"] = None
+    with pytest.raises(MemberError, match="permanent_shock"):
+        Member(toy)
+
+
+@pytest.mark.parametrize("mapping", LAWS, ids=[next(iter(m)) + str(i) for i, m in enumerate(LAWS)])
+def test_the_bellman_call_states_the_same_law(mapping):
+    """The converter's Bellman-SYM call, read back by its family's own definition, has mean one and the law's
+    lowest and highest values: the canonical coordinates are right."""
+    law = law_from_mapping(mapping)
+    call = law.bellman()
+    if call is None:
+        assert law.name == "Tabulated"
+        return
+    numbers = lambda text: [float(x) for x in text.replace("(", " ").replace(")", " ").replace(",", " ").split()
+                            if x[0].isdigit() or x[0] == "-" or x == "inf"]
+
+    def mean_and_range(head: str, args: list[float]):
+        if head == "LogNormal":
+            mu, sigma = args
+            return math.exp(mu + sigma * sigma / 2), 0.0, math.inf
+        if head == "TruncatedLogNormal":
+            mu, sigma, low, high = args
+            a = -math.inf if low == 0 else (math.log(low) - mu) / sigma
+            b = math.inf if math.isinf(high) else (math.log(high) - mu) / sigma
+            mass = ndtr(b) - ndtr(a)
+            return math.exp(mu + sigma * sigma / 2) * (ndtr(b - sigma) - ndtr(a - sigma)) / mass, low, high
+        if head == "Uniform":
+            a, b = args
+            return (a + b) / 2, a, b
+        raise AssertionError(head)
+
+    head = call.split("(", 1)[0]
+    if head == "Mixture":
+        inner = call[len("Mixture("):-1]
+        parts = [p.strip().rstrip(")") for p in inner.split("), (")]
+        mean, low, high = 0.0, math.inf, 0.0
+        for part in parts:
+            weight, law_text = part.lstrip("(").split(", ", 1)
+            if "(" in law_text:
+                sub_head = law_text.split("(", 1)[0]
+                m, lo, hi = mean_and_range(sub_head, numbers(law_text.split("(", 1)[1]))
+            else:
+                m = lo = hi = float(law_text)
+            mean += float(weight) * m
+            low, high = min(low, lo), max(high, hi)
+    else:
+        mean, low, high = mean_and_range(head, numbers(call.split("(", 1)[1]))
+    assert mean == pytest.approx(1.0, abs=1e-12), call
+    assert low == pytest.approx(law.infimum, rel=1e-12, abs=1e-15), call
+    assert high == pytest.approx(law.supremum, rel=1e-12), call
 
 
 def test_members_load_and_report():

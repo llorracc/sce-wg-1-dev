@@ -20,7 +20,7 @@ from referencing import Registry, Resource
 from scipy.optimize import brentq
 
 from canonical import load_strict, model_hash
-from laws import FLOOR_ATOM, FLOOR_DENSITY, FLOOR_THIN, TOLERANCE, law_from_mapping
+from laws import FLOOR_ATOM, FLOOR_DENSITY, FLOOR_THIN, TOLERANCE, filled, law_from_mapping
 
 SCHEMAS = Path(__file__).resolve().parent.parent
 PARAMETER_SCHEMA = SCHEMAS / "bst-1" / "parameters.schema.json"
@@ -112,7 +112,7 @@ class Member:
         problems = validate(data)
         if problems:
             raise MemberError("; ".join(problems))
-        self.hash = model_hash(data)
+        self.hash = model_hash(filled(data))  # over the filled form: omitted bounds written in
         self.rho = data["crra"]
         self.types = data["types"]
         self.L = data["survival"]

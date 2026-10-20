@@ -455,8 +455,9 @@ How the three files map to Bellman's, and what is lost:
 - The parameter file maps to a calibration file, a flat mapping of names to values ("The Bellman factory"). The law family
   lives in the stage file, so a change of law is a different stage file; structured values (types with shares, laws as
   mappings) have no place; and the mean-one condition is never enforced. Of the shock laws, `Degenerate` is a lognormal with
-  zero standard deviation, `Discrete` a mixture of point masses, `NormalMixture` a mixture of lognormals without truncation or
-  shift; `TruncatedLogNormal`, `Uniform` and `Tabulated` have no counterpart ("Shock distributions").
+  zero standard deviation, `Discrete` a mixture of point masses, `LogNormalMixture` a mixture of lognormals with the shift
+  folded in, and `Uniform` Bellman's own; `TruncatedLogNormal` and `TruncatedLogNormalMixture` wait for Bellman-SYM's
+  truncated lognormal, and `Tabulated` has no counterpart (`shock-laws.md`, "Bellman-SYM counterparts").
 - The method file maps to a per-stage methods file whose `on:` addresses are syntactic and local to one stage: a block, a
   line, an operator name covering every occurrence, or one occurrence ("Methodization"). The two expectation parts of
   `bst/1` fall on one joint expectation in Bellman's buffer-stock stage; `household.rule` has no separate target, since the

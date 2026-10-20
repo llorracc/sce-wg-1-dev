@@ -3,6 +3,7 @@ results file against it.
 
     uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml [--json out.json]
     uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml --verify-results r.json
+    uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml --bellman-laws
 
 Exit status 0 when the file is a valid member whose every type passes the validity conditions (and, with
 --verify-results, when the results file validates and its report is consistent), 1 otherwise. The report is the STATED
@@ -63,6 +64,8 @@ def main(argv=None) -> int:
     parser.add_argument("--json", type=Path, help="write the full report as JSON to this file")
     parser.add_argument("--bellman-calibration", type=int, metavar="TYPE",
                         help="print the Bellman calibration of this type (0-based) instead of the report")
+    parser.add_argument("--bellman-laws", action="store_true",
+                        help="print each shock law as the Bellman-SYM call that states it, instead of the report")
     parser.add_argument("--verify-results", type=Path, metavar="RESULTS",
                         help="validate this results file and verify its report against the member, instead of the report")
     args = parser.parse_args(argv)
@@ -82,6 +85,11 @@ def main(argv=None) -> int:
                 print(f"  {p}")
             return 1
         print(f"{args.verify_results}: validates, and its report is consistent with the member {member.hash[:12]}…")
+        return 0
+    if args.bellman_laws:
+        for shock, law in (("permanent_shock", member.psi), ("employed_shock", member.theta)):
+            call = law.bellman()
+            print(f"{shock}: {call if call is not None else f'none ({law.name} has no Bellman-SYM family)'}")
         return 0
     if args.bellman_calibration is not None:
         try:
