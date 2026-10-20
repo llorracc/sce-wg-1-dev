@@ -21,7 +21,7 @@
         "citation": "Swat MJ, Grenon P, Wimalaratne S (2016). ProbOnto: ontology and knowledge base of probability distributions. Bioinformatics 32(17):2719-2721. doi:10.1093/bioinformatics/btw170"
       }
     ],
-    "source_sha256": "30f188e331c7c17a6ba17cf9738ede1803e340d1d1dfa57e325bec3c0f7df247"
+    "source_sha256": "2ef9d5c6d5fd02ee163d05f1a9138d1e3a9560e2a186a0c0e93a8756687d8252"
   },
   "retired": [],
   "rows": [
@@ -949,7 +949,13 @@
               "bot": "-3",
               "top": "3"
             },
-            "none": "null"
+            "none": {
+              "token": "null",
+              "values": {
+                "bot": "-inf",
+                "top": "inf"
+              }
+            }
           }
         ]
       }
@@ -1950,7 +1956,13 @@
               "bot": "-3",
               "top": "3"
             },
-            "none": "null",
+            "none": {
+              "token": "null",
+              "values": {
+                "bot": "-inf",
+                "top": "inf"
+              }
+            },
             "per_component": true
           }
         ],

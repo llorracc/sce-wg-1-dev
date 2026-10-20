@@ -90,8 +90,8 @@ Two formats are declared: `parameter-file`, the YAML parameter files of the work
 Bellman-SYM stage files. A chart's `written_as` gives each format's spellings of a point of the chart, more than one where
 a format has synonyms. Each spelling is given twice: as a reader sees it (`spelling`), and as a writer builds it, by its
 `head` (a stage file's family call, a parameter file's key) and its `arguments` (positional, or by field), each a formula
-in the chart's coordinates. A keyed form may give `defaults` for fields left out and the `none` token for an absent
-bound, and a mixture's form may write its fields once per component (`per_component`), each field's formula then a vector
+in the chart's coordinates. A keyed form may give `defaults` for fields left out, and `none`: the token for an
+absent bound with the value it stands for in each field, as the parameter files' `null` is −∞ in `bot` and ∞ in `top`; and a mixture's form may write its fields once per component (`per_component`), each field's formula then a vector
 over the components.
 
 A default belongs to a written form, not to the law. The parameter files' rule that an omitted truncation bound means

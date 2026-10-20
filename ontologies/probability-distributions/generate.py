@@ -333,6 +333,10 @@ def build(source: dict, digest: str) -> dict:
                             if not isinstance(args, dict) or k not in args:
                                 raise SourceError(f"{cwhere}: a default for {k!r}, which is not a field of {fmt}")
                             _check_formula(v, set(), f"{cwhere}, default of {k}")
+                        for k, v in form.get("none", {}).get("values", {}).items():
+                            if not isinstance(args, dict) or k not in args:
+                                raise SourceError(f"{cwhere}: a none value for {k!r}, which is not a field of {fmt}")
+                            _check_formula(v, set(), f"{cwhere}, none value of {k}")
                 crow["written_as"] = {fmt: [dict(form) for form in forms] for fmt, forms in chart["written_as"].items()}
             if "cross_references" in chart:
                 refs = []
@@ -426,6 +430,7 @@ VOCABULARY = {
         "spelling": "How the format writes a point of the chart.",
         "default": "A coordinate's default in a written form, as name = value.",
         "noneToken": "The token a format writes for an absent bound.",
+        "noneValue": "The value the none token stands for in a field, as name = value.",
         "perComponent": "Whether a written form gives its fields once per component of a mixture.",
         "where": "A boundary's condition.",
         "infimum": "The infimum of the support.",
@@ -482,7 +487,8 @@ def _written_pairs(pd: str, row: dict) -> list[tuple[str, str]]:
             if form.get("per_component"):
                 inner.append((f"{pd}:perComponent", "true"))
             if "none" in form:
-                inner.append((f"{pd}:noneToken", _lit(form["none"])))
+                inner.append((f"{pd}:noneToken", _lit(form["none"]["token"])))
+                inner += [(f"{pd}:noneValue", _lit(f"{k} = {v}")) for k, v in form["none"]["values"].items()]
             pairs.append((f"{pd}:writtenAs", _bnode(inner)))
     return pairs
 

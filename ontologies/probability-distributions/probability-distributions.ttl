@@ -15,7 +15,7 @@
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:source <http://www.probonto.org/ontology> ;
     dcterms:bibliographicCitation "Swat MJ, Grenon P, Wimalaratne S (2016). ProbOnto: ontology and knowledge base of probability distributions. Bioinformatics 32(17):2719-2721. doi:10.1093/bioinformatics/btw170"@en ;
-    pd:sourceDigest "sha256:30f188e331c7c17a6ba17cf9738ede1803e340d1d1dfa57e325bec3c0f7df247" .
+    pd:sourceDigest "sha256:2ef9d5c6d5fd02ee163d05f1a9138d1e3a9560e2a186a0c0e93a8756687d8252" .
 
 skos:definition a owl:AnnotationProperty .
 skos:notation a owl:AnnotationProperty .
@@ -207,6 +207,9 @@ pd:default
 pd:noneToken
     a owl:DatatypeProperty ;
     skos:definition "The token a format writes for an absent bound."@en .
+pd:noneValue
+    a owl:DatatypeProperty ;
+    skos:definition "The value the none token stands for in a field, as name = value."@en .
 pd:perComponent
     a owl:DatatypeProperty ;
     skos:definition "Whether a written form gives its fields once per component of a mixture."@en .
@@ -593,7 +596,7 @@ pd:PD_0000032
     pd:fromCanonical [ pd:name "bot" ; pd:formula "a" ] ;
     pd:fromCanonical [ pd:name "top" ; pd:formula "b" ] ;
     pd:conversion "irrational" ;
-    pd:writtenAs [ pd:format "parameter-file" ; pd:spelling "{TruncatedLogNormal: {sd_log: σ, bot: bot, top: top}}" ; pd:head "TruncatedLogNormal" ; pd:argument [ pd:position 1 ; pd:name "sd_log" ; pd:formula "sd_log" ] ; pd:argument [ pd:position 2 ; pd:name "bot" ; pd:formula "bot" ] ; pd:argument [ pd:position 3 ; pd:name "top" ; pd:formula "top" ] ; pd:default "bot = -3" ; pd:default "top = 3" ; pd:noneToken "null" ] .
+    pd:writtenAs [ pd:format "parameter-file" ; pd:spelling "{TruncatedLogNormal: {sd_log: σ, bot: bot, top: top}}" ; pd:head "TruncatedLogNormal" ; pd:argument [ pd:position 1 ; pd:name "sd_log" ; pd:formula "sd_log" ] ; pd:argument [ pd:position 2 ; pd:name "bot" ; pd:formula "bot" ] ; pd:argument [ pd:position 3 ; pd:name "top" ; pd:formula "top" ] ; pd:default "bot = -3" ; pd:default "top = 3" ; pd:noneToken "null" ; pd:noneValue "bot = -inf" ; pd:noneValue "top = inf" ] .
 
 pd:PD_0000033
     a owl:NamedIndividual, pd:Measure ;
@@ -953,7 +956,7 @@ pd:PD_0000058
     pd:fromCanonical [ pd:name "bot" ; pd:formula "a" ] ;
     pd:fromCanonical [ pd:name "top" ; pd:formula "b" ] ;
     pd:conversion "irrational" ;
-    pd:writtenAs [ pd:format "parameter-file" ; pd:spelling "{TruncatedLogNormalMixture: {components: [{weight: w₁, mean_log: m₁, sd_log: s₁, bot: b₁, top: t₁}, …]}}" ; pd:head "TruncatedLogNormalMixture" ; pd:argument [ pd:position 1 ; pd:name "weight" ; pd:formula "weights" ] ; pd:argument [ pd:position 2 ; pd:name "mean_log" ; pd:formula "mean_log" ] ; pd:argument [ pd:position 3 ; pd:name "sd_log" ; pd:formula "sd_log" ] ; pd:argument [ pd:position 4 ; pd:name "bot" ; pd:formula "bot" ] ; pd:argument [ pd:position 5 ; pd:name "top" ; pd:formula "top" ] ; pd:default "bot = -3" ; pd:default "top = 3" ; pd:perComponent true ; pd:noneToken "null" ] ;
+    pd:writtenAs [ pd:format "parameter-file" ; pd:spelling "{TruncatedLogNormalMixture: {components: [{weight: w₁, mean_log: m₁, sd_log: s₁, bot: b₁, top: t₁}, …]}}" ; pd:head "TruncatedLogNormalMixture" ; pd:argument [ pd:position 1 ; pd:name "weight" ; pd:formula "weights" ] ; pd:argument [ pd:position 2 ; pd:name "mean_log" ; pd:formula "mean_log" ] ; pd:argument [ pd:position 3 ; pd:name "sd_log" ; pd:formula "sd_log" ] ; pd:argument [ pd:position 4 ; pd:name "bot" ; pd:formula "bot" ] ; pd:argument [ pd:position 5 ; pd:name "top" ; pd:formula "top" ] ; pd:default "bot = -3" ; pd:default "top = 3" ; pd:perComponent true ; pd:noneToken "null" ; pd:noneValue "bot = -inf" ; pd:noneValue "top = inf" ] ;
     pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "Mixture((w₁, TruncatedLogNormal(μ₁, σ₁, l₁, u₁)), …), computed from the chart" ; pd:head "Mixture" ] .
 
 pd:PD_0000059

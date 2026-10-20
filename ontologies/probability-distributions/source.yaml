@@ -451,7 +451,7 @@ families:
               head: TruncatedLogNormal
               arguments: {sd_log: sd_log, bot: bot, top: top}
               defaults: {bot: "-3", top: "3"}
-              none: "null"
+              none: {token: "null", values: {bot: "-inf", top: inf}}
 
   - id: PD_0000034
     name: uniform
@@ -857,7 +857,7 @@ families:
               head: TruncatedLogNormalMixture
               arguments: {weight: weights, mean_log: mean_log, sd_log: sd_log, bot: bot, top: top}
               defaults: {bot: "-3", top: "3"}
-              none: "null"
+              none: {token: "null", values: {bot: "-inf", top: inf}}
               per_component: true
           bellman-sym:
             - spelling: "Mixture((w₁, TruncatedLogNormal(μ₁, σ₁, l₁, u₁)), …), computed from the chart"

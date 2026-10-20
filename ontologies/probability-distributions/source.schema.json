@@ -367,8 +367,14 @@
           "type": "boolean"
         },
         "none": {
-          "description": "The token the format writes for an absent bound.",
-          "$ref": "#/$defs/Text"
+          "description": "The token a keyed format writes for an absent bound, and the value it stands for in each field that admits it.",
+          "type": "object",
+          "required": ["token", "values"],
+          "additionalProperties": false,
+          "properties": {
+            "token": { "$ref": "#/$defs/Text" },
+            "values": { "$ref": "#/$defs/Definitions" }
+          }
         }
       }
     },
