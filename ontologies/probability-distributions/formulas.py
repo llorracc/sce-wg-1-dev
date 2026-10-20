@@ -63,7 +63,7 @@ FUNCTIONS = {
     "phi": _phi,  # its density
     "xphi": _xphi,  # x times phi(x), zero at an infinite x
 }
-CONSTANTS = {"inf": math.inf, "pi": math.pi}
+CONSTANTS = {"inf": math.inf, "pi": math.pi, "euler_gamma": 0.5772156649015329}  # Euler's constant γ
 EXPECTATION = "E"  # E(g(X)): the expectation of g of the draw X, allowed in a coordinate's as_expectation only
 TRANSCENDENTAL = {"sqrt", "exp", "log", "Phi", "phi", "xphi"}
 

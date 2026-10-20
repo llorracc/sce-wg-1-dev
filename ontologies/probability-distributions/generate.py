@@ -137,8 +137,12 @@ def build(source: dict, digest: str) -> dict:
     rows: list[dict] = []
 
     for m in source["measures"]:
+        where = f"measure {m['name']}"
         rows.append({"id": m["id"], "kind": "measure", "name": m["name"], "label": m["label"],
-                     "stated_set": m["stated_set"], "notation": m["notation"], "definition": m["definition"]})
+                     "stated_set": m["stated_set"], "notation": m["notation"],
+                     "density": _check_formula(m["density"], {"z"}, f"{where}, density"),
+                     "support": {k: _check_formula(m["support"][k], set(), f"{where}, support") for k in ("lower", "upper")},
+                     "definition": m["definition"]})
 
     for op in source["operators"]:
         where = f"operator {op['name']}"
@@ -367,6 +371,7 @@ VOCABULARY = {
         "toCanonicalAuxiliary": "An auxiliary quantity of the conversion to the canonical chart.",
         "fromCanonicalAuxiliary": "An auxiliary quantity of the conversion from the canonical chart.",
         "hasPropertyValue": "The value of a property for the family's members, in the canonical coordinates.",
+        "support": "The support of a named measure, by its infimum and supremum.",
         "property": "The property a value is the value of.",
         "coordinate": "A coordinate of the chart.",
         "toCanonical": "A formula giving one canonical coordinate in this chart's coordinates.",
@@ -377,6 +382,7 @@ VOCABULARY = {
     "data": {
         "statedSet": "The set the measures live on.",
         "notation": "The mathematical notation for the measure.",
+        "density": "A measure's density with respect to Lebesgue measure, as a formula in z.",
         "measureExpression": "The family's measure in the operator notation, in the canonical coordinates.",
         "map": "The map of a case of the pushforward, as a formula in z and the arguments.",
         "set": "The set of a case of conditioning, as a condition in z and the arguments.",
@@ -486,7 +492,10 @@ def turtle(table: dict) -> str:
             pairs.append(("skos:definition", _lit(row["definition"], "en")))
         kind = row["kind"]
         if kind == "measure":
-            pairs += [(f"{pd}:statedSet", _lit(row["stated_set"])), (f"{pd}:notation", _lit(row["notation"]))]
+            pairs += [(f"{pd}:statedSet", _lit(row["stated_set"])), (f"{pd}:notation", _lit(row["notation"])),
+                      (f"{pd}:density", _lit(row["density"])),
+                      (f"{pd}:support", _bnode([(f"{pd}:infimum", _lit(row["support"]["lower"])),
+                                                (f"{pd}:supremum", _lit(row["support"]["upper"]))]))]
         elif kind == "operator":
             if "case_of" in row:
                 pairs.append((f"{pd}:caseOf", ref(row["case_of"])))

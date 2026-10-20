@@ -37,7 +37,25 @@ measures:
     label: standard normal
     stated_set: ℝ
     notation: N(0, 1)
+    density: exp(-z**2/2)/sqrt(2*pi)
+    support: {lower: "-inf", upper: inf}
     definition: The measure on ℝ with density φ(z) = exp(−z²/2)/√(2π) with respect to Lebesgue measure.
+  - id: PD_0000033
+    name: unit-uniform
+    label: uniform on the unit interval
+    stated_set: "[0, 1]"
+    notation: U(0, 1)
+    density: "1"
+    support: {lower: "0", upper: "1"}
+    definition: Lebesgue measure on [0, 1].
+  - id: PD_0000038
+    name: standard-gumbel
+    label: standard Gumbel
+    stated_set: ℝ
+    notation: Gumbel(0, 1)
+    density: exp(-(z + exp(-z)))
+    support: {lower: "-inf", upper: inf}
+    definition: The measure on ℝ with distribution function exp(−exp(−z)), and so density exp(−z − exp(−z)).
 
 operators:
   - id: PD_0000002
@@ -410,3 +428,90 @@ families:
               arguments: {sd_log: sd_log, bot: bot, top: top}
               defaults: {bot: "-3", top: "3"}
               none: "null"
+
+  - id: PD_0000034
+    name: uniform
+    label: uniform
+    stated_set: "[a, b]"
+    definition: The law with constant density on [a, b].
+    measure: Uniform(a, b) = aff(a, b − a)∗ U(0, 1)
+    built_from:
+      base: unit-uniform
+      operators:
+        - {operator: affine-pushforward, location: a, scale: b - a}
+    canonical_chart: endpoints
+    charts:
+      - id: PD_0000035
+        name: endpoints
+        label: the endpoints
+        coordinates:
+          - {name: a, symbol: a, meaning: the lower endpoint, domain: real}
+          - {name: b, symbol: b, meaning: the upper endpoint, domain: real}
+        domain_conditions: ["a < b"]
+        written_as:
+          bellman-sym:
+            - {spelling: "Uniform(a, b)", head: Uniform, arguments: [a, b]}
+        cross_references:
+          - {predicate: skos:exactMatch, target: probonto:PROB_k0000703, note: "Uniform1 (minimum, maximum)"}
+    properties:
+      support: {infimum: a, supremum: b, mass_at_infimum: "0"}
+      mean: (a + b)/2
+      moments: {orders: nonnegative-integers, formula: (b**(k + 1) - a**(k + 1))/((k + 1)*(b - a))}
+
+  - id: PD_0000036
+    name: mean-one-uniform
+    label: uniform with mean one
+    subfamily_of: uniform
+    constraints: [mean-one]
+    definition: >-
+      The uniform laws centered at one. Their chart is the parameter files' Uniform, whose half-width below one keeps
+      every value positive.
+    charts:
+      - id: PD_0000037
+        name: half-width
+        label: the half-width
+        coordinates:
+          - {name: w, symbol: w, meaning: the half-width, domain: positive, as_expectation: sqrt(3*(E(X**2) - E(X)**2))}
+        domain_conditions: ["w < 1"]
+        to_canonical: {a: 1 - w, b: 1 + w}
+        from_canonical: {w: (b - a)/2}
+        conversion: exact
+        written_as:
+          parameter-file:
+            - {spelling: "{Uniform: {half_width: w}}", head: Uniform, arguments: {half_width: w}}
+          bellman-sym:
+            - {spelling: "Uniform(1 - w, 1 + w)", head: Uniform, arguments: [1 - w, 1 + w]}
+
+  - id: PD_0000039
+    name: type-1-extreme-value
+    label: type I extreme value (Gumbel)
+    stated_set: ℝ
+    definition: >-
+      The law of μ + sG, G standard Gumbel, with distribution function exp(−exp(−(x − μ)/s)): the taste shock of logit
+      choice.
+    measure: TypeIExtremeValue(μ, s) = aff(μ, s)∗ Gumbel(0, 1)
+    built_from:
+      base: standard-gumbel
+      operators:
+        - {operator: affine-pushforward, location: mu, scale: s}
+    canonical_chart: location-scale
+    charts:
+      - id: PD_0000040
+        name: location-scale
+        label: location and scale
+        coordinates:
+          - name: mu
+            symbol: μ
+            meaning: the location, which is the mode
+            domain: real
+            as_expectation: E(X) - euler_gamma*sqrt(6*(E(X**2) - E(X)**2))/pi
+          - {name: s, symbol: s, meaning: the scale, domain: positive, as_expectation: sqrt(6*(E(X**2) - E(X)**2))/pi}
+        written_as:
+          bellman-sym:
+            - {spelling: "TypeIExtremeValue(μ, s)", head: TypeIExtremeValue, arguments: [mu, s]}
+        cross_references:
+          - {predicate: skos:exactMatch, target: probonto:PROB_k0000032, note: "Gumbel1 (location, scale)"}
+    properties:
+      support: {infimum: "-inf", supremum: inf, mass_at_infimum: "0"}
+      mean: mu + euler_gamma*s
+      moments: {orders: nonnegative-integers}

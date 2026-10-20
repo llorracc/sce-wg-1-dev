@@ -86,7 +86,7 @@
     "Measure": {
       "description": "A measure named because families are built from it.",
       "type": "object",
-      "required": ["id", "name", "label", "stated_set", "notation", "definition"],
+      "required": ["id", "name", "label", "stated_set", "notation", "density", "support", "definition"],
       "additionalProperties": false,
       "properties": {
         "id": { "$ref": "#/$defs/Id" },
@@ -94,6 +94,16 @@
         "label": { "$ref": "#/$defs/Text" },
         "stated_set": { "$ref": "#/$defs/Text" },
         "notation": { "$ref": "#/$defs/Text" },
+        "density": {
+          "description": "The density with respect to Lebesgue measure, a formula in z.",
+          "$ref": "#/$defs/Formula"
+        },
+        "support": {
+          "type": "object",
+          "required": ["lower", "upper"],
+          "additionalProperties": false,
+          "properties": { "lower": { "$ref": "#/$defs/Formula" }, "upper": { "$ref": "#/$defs/Formula" } }
+        },
         "definition": { "$ref": "#/$defs/Text" }
       }
     },

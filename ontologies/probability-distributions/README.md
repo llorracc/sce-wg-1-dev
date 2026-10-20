@@ -15,7 +15,7 @@ distribution.
 Everything in the ontology is one of six kinds.
 
 - A **measure** is the object: a probability measure on a stated set. A few measures are named because families are built
-  from them, such as the standard normal N(0, 1).
+  from them, such as the standard normal N(0, 1); each states its density and support, from which the tests integrate.
 - A **family** is a named map from a parameter space into measures. A kernel, such as a Markov transition, is a family one
   of whose arguments is a state.
 - A **chart** is a coordinate system on a family's parameters: the normal's mean and standard deviation, or its mean and
@@ -147,7 +147,7 @@ names, `+ - * / **`, comparisons, `and` and `or`, the functions `sqrt`, `exp`, `
 standard normal distribution function), `phi` (its density) and `xphi` (x·φ(x), zero at an infinite x), and the constants
 `inf` and `pi`. Infinite values follow IEEE arithmetic, so a bound of `inf` passes through exp and log. In a moment's
 formula `k` is the order; in an operator's map or set `z` is the variable; in a coordinate's `as_expectation`, `E(·)` is
-the expectation under the law and `X` the draw. Nothing else parses, so any consumer can read a formula without running code
+the expectation under the law and `X` the draw. The constant `euler_gamma` is Euler's γ = 0.5772156649015329. Nothing else parses, so any consumer can read a formula without running code
 from the source.
 
 ## Identifiers and the namespace
@@ -190,8 +190,8 @@ of probability distributions", *Bioinformatics* 32(17):2719–2721, doi:10.1093/
 | point mass, with its subfamily at one | in this release |
 | truncated normal, with Bellman-SYM's `TruncatedNormal(μ, σ, l, u)` as its canonical chart | in this release |
 | truncated lognormal, with Bellman-SYM's `TruncatedLogNormal(μ, σ, l, u)` as its canonical chart, and its subfamily of mean one, written by the parameter files' chart (the standard deviation of the logarithm after truncation, bounds in standard deviations, an omitted bound meaning three and `null` none) | in this release |
-| uniform | to come |
-| type I extreme value (Gumbel), Bellman-SYM's `TypeIExtremeValue(μ, s)` | to come |
+| uniform, with Bellman-SYM's `Uniform(a, b)` as its canonical chart, and its subfamily of mean one, written by the parameter files' `{Uniform: {half_width: w}}` | in this release |
+| type I extreme value (Gumbel), with Bellman-SYM's `TypeIExtremeValue(μ, s)` as its canonical chart | in this release |
 | finite discrete law on real points | to come |
 | categorical and Bernoulli laws | to come |
 | finite Markov kernel | to come |

@@ -21,6 +21,10 @@ formula syntax and the two written forms. The first rows, all new:
 - the truncated lognormal, conditioned on an interval in the draw's units, and its reduction to the lognormal when
   neither bound binds; its subfamily of mean one, written by the parameter files' chart: the standard deviation of the
   logarithm after truncation, and the bounds in standard deviations of the normal before truncation, with an omitted
-  bound meaning three and `null` meaning none.
+  bound meaning three and `null` meaning none;
+- the uniform on the unit interval, as a named measure, and the uniform, with its subfamily of mean one written by the
+  parameter files' half-width;
+- the standard Gumbel, as a named measure, and the type I extreme-value law, Bellman-SYM's `TypeIExtremeValue(μ, s)`.
 
-Every coordinate that is an expectation under the law says so, and the tests check it by quadrature.
+Every coordinate that is an expectation under the law says so, and the tests check it by quadrature. Every named
+measure states its density and support, and the tests integrate each from them.

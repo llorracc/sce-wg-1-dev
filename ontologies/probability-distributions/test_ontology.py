@@ -31,7 +31,7 @@ SAMPLES = {
     "extended-nonnegative": (0.0, 0.6, 1.4, INF),
 }
 MIN_MASS = 1e-3  # the least mass a truncation may keep at a tested point
-CUTOFF = 40.0  # the standard normal's mass beyond this many standard deviations is negligible
+CUTOFF = 40.0  # a base measure's mass beyond ±CUTOFF is negligible: the normal's and the Gumbel's both
 PANEL, NODES = 0.5, 16  # composite Gauss-Legendre: panel width and nodes per panel
 
 
@@ -91,26 +91,33 @@ def family_env(family: dict, point: dict) -> dict:
     return formulas.evaluate_all(family.get("where", {}), point)
 
 
-def Phi(z: float) -> float:
-    return 0.5 * math.erfc(-z / math.sqrt(2.0))
-
-
 class Degenerate(Exception):
     """A point whose truncation keeps too little mass to test at the tolerance."""
 
 
-def standard_normal_rule(lower: float, upper: float) -> tuple[np.ndarray, np.ndarray]:
-    """Nodes and weights for the standard normal conditioned on [lower, upper], by composite Gauss-Legendre."""
-    if Phi(upper) - Phi(lower) < MIN_MASS:
+def base_rule(measure: dict, lower: float, upper: float) -> tuple[np.ndarray, np.ndarray]:
+    """Nodes and weights for a named measure conditioned on [lower, upper], by composite Gauss-Legendre against the
+    density the row states. Unconditioned, the weights must sum to one, which checks the density; conditioned, they are
+    divided by the interval's mass, found the same way and not from any formula of the rows."""
+    lo_base = formulas.evaluate(measure["support"]["lower"], {})
+    hi_base = formulas.evaluate(measure["support"]["upper"], {})
+    conditioned = lower > lo_base or upper < hi_base
+    a, b = max(lower, lo_base, -CUTOFF), min(upper, hi_base, CUTOFF)
+    if not a < b:
         raise Degenerate
-    a, b = max(lower, -CUTOFF), min(upper, CUTOFF)
     panels = max(1, math.ceil((b - a) / PANEL))
     edges = np.linspace(a, b, panels + 1)
     x, w = np.polynomial.legendre.leggauss(NODES)
     mid, half = (edges[:-1] + edges[1:]) / 2, (edges[1:] - edges[:-1]) / 2
     z = (mid[:, None] + half[:, None] * x[None, :]).ravel()
-    weights = (half[:, None] * w[None, :]).ravel() * np.exp(-0.5 * z * z) / math.sqrt(2.0 * math.pi)
-    return z, weights / (Phi(upper) - Phi(lower))
+    density = np.broadcast_to(np.asarray(formulas.evaluate(measure["density"], {"z": z}), dtype=float), z.shape)
+    weights = (half[:, None] * w[None, :]).ravel() * density
+    if conditioned:
+        mass = float(weights.sum())
+        if mass < MIN_MASS:
+            raise Degenerate
+        weights = weights / mass
+    return z, weights
 
 
 def quadrature(rows: dict, family: dict, point: dict) -> tuple[np.ndarray, np.ndarray]:
@@ -124,7 +131,6 @@ def quadrature(rows: dict, family: dict, point: dict) -> tuple[np.ndarray, np.nd
         mass = np.array([formulas.evaluate(a["mass"], env) for a in props["atoms"]], dtype=float)
         return at, mass
     built = family["built_from"]
-    assert rows[built["base"]]["name"] == "standard-normal", "no quadrature for this base measure"
     env = family_env(family, point)
     forward, inverse = [], []  # the increasing maps applied so far, and their inverses
     lower, upper = -INF, INF  # the base's conditioning interval
@@ -146,7 +152,7 @@ def quadrature(rows: dict, family: dict, point: dict) -> tuple[np.ndarray, np.nd
             lower, upper = max(lower, lo), min(upper, hi)
         else:
             raise AssertionError(f"no quadrature rule for the operator {op}")
-    z, w = standard_normal_rule(lower, upper)
+    z, w = base_rule(rows[built["base"]], lower, upper)
     for f in forward:
         z = f(z)
     return z, w
