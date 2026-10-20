@@ -153,6 +153,11 @@ def build(source: dict, digest: str) -> dict:
         for key in ("map", "set"):
             if key in op:
                 row[key] = _check_formula(op[key], {"z"} | {a["name"] for a in op["arguments"]}, where)
+        if "written_as" in op:
+            for fmt in op["written_as"]:
+                if fmt not in meta["formats"]:
+                    raise SourceError(f"{where}: the format {fmt!r} is not declared")
+            row["written_as"] = {fmt: [dict(f) for f in forms] for fmt, forms in op["written_as"].items()}
         row["definition"] = op["definition"]
         rows.append(row)
 
@@ -180,9 +185,16 @@ def build(source: dict, digest: str) -> dict:
         row["definition"] = fam["definition"]
         aux, known = _check_definitions(fam.get("where", {}), set(canon), f"{where}, where") if fam is root \
             else ({}, set(canon))
+        state = fam.get("state")
+        if state is not None:
+            _check_formula(state["range"], known, f"{where}, state range")
         if fam is root:
             row["measure"] = fam["measure"]
+            if state is not None:
+                row["state"] = dict(state)
             if "built_from" in fam:
+                mixing = fam["built_from"].get("mixture")
+                component_names = known | ({"j"} if mixing else set())
                 steps = []
                 for i, step in enumerate(fam["built_from"]["operators"]):
                     op = index["operators"].get(step["operator"])
@@ -194,10 +206,14 @@ def build(source: dict, digest: str) -> dict:
                         raise SourceError(f"{where}: step {i} gives {sorted(given)} to {op['name']}, "
                                           f"which takes {sorted(expected)}")
                     steps.append({"operator": op["id"], "arguments": {
-                        a["name"]: _check_formula(step[a["name"]], known, f"{where}, step {i}")
+                        a["name"]: _check_formula(step[a["name"]], component_names, f"{where}, step {i}")
                         for a in op["arguments"]}})
                 row["built_from"] = {"base": ident("measures", fam["built_from"]["base"], where),
                                      "operators": steps}
+                if mixing:
+                    row["built_from"] = {"mixture": {"weights": _check_formula(mixing["weights"], known,
+                                                                               f"{where}, mixture weights")},
+                                         **row["built_from"]}
             if aux:
                 row["where"] = aux
             row["canonical_chart"] = canonical["id"]
@@ -206,7 +222,8 @@ def build(source: dict, digest: str) -> dict:
             props = {}
             for name, value in fam["properties"].items():
                 ident("properties", name, where)
-                allowed = known | ({"k"} if name in ("moments", "log-moments") else set())
+                allowed = known | ({"k"} if name in ("moments", "log-moments") else set()) \
+                    | ({state["name"]} if state else set())
                 if isinstance(value, str):
                     props[name] = _check_formula(value, allowed, f"{where}, {name}")
                 elif isinstance(value, list):
@@ -378,6 +395,7 @@ VOCABULARY = {
         "fromCanonical": "A formula giving one of this chart's coordinates in the canonical coordinates.",
         "writtenAs": "How a format writes a point of the chart.",
         "argument": "An argument of an operator, or of one step of a construction.",
+        "state": "A kernel's state argument.",
     },
     "data": {
         "statedSet": "The set the measures live on.",
@@ -412,6 +430,8 @@ VOCABULARY = {
         "atomAt": "The point of an atom.",
         "atomMass": "The mass of an atom.",
         "provenance": "Where a row's content comes from, when it is copied.",
+        "range": "The number of positions a kernel's state takes, as a formula.",
+        "mixtureWeights": "The weights of a construction's components, as a formula.",
         "sourceDigest": "The SHA-256 of the source file the ontology was generated from.",
     },
 }
@@ -439,6 +459,25 @@ def _block(subject: str, pairs: list[tuple[str, str]], indent: str = "") -> str:
 
 def _bnode(pairs: list[tuple[str, str]]) -> str:
     return "[ " + " ; ".join(f"{p} {o}" for p, o in pairs) + " ]"
+
+
+def _written_pairs(pd: str, row: dict) -> list[tuple[str, str]]:
+    pairs = []
+    for fmt, forms in row.get("written_as", {}).items():
+        for form in forms:
+            inner = [(f"{pd}:format", _lit(fmt)), (f"{pd}:spelling", _lit(form["spelling"])),
+                     (f"{pd}:head", _lit(form["head"]))]
+            args = form.get("arguments", [])
+            items = args.items() if isinstance(args, dict) else ((None, a) for a in args)
+            for i, (k, v) in enumerate(items, 1):
+                inner.append((f"{pd}:argument", _bnode([(f"{pd}:position", str(i))]
+                                                       + ([(f"{pd}:name", _lit(k))] if k else [])
+                                                       + [(f"{pd}:formula", _lit(v))])))
+            inner += [(f"{pd}:default", _lit(f"{k} = {v}")) for k, v in form.get("defaults", {}).items()]
+            if "none" in form:
+                inner.append((f"{pd}:noneToken", _lit(form["none"])))
+            pairs.append((f"{pd}:writtenAs", _bnode(inner)))
+    return pairs
 
 
 def turtle(table: dict) -> str:
@@ -505,6 +544,7 @@ def turtle(table: dict) -> str:
             for key in ("map", "set"):
                 if key in row:
                     pairs.append((f"{pd}:{key}", _lit(row[key])))
+            pairs += _written_pairs(pd, row)
         elif kind == "constraint":
             pairs += [(f"{pd}:constrains", ref(row["property"])), (f"{pd}:relation", _lit(row["relation"])),
                       (f"{pd}:value", _lit(row["value"]))]
@@ -516,6 +556,11 @@ def turtle(table: dict) -> str:
                 pairs += [(f"{pd}:hasConstraint", ref(c)) for c in row["constraints"]]
             if "measure" in row:
                 pairs.append((f"{pd}:measureExpression", _lit(row["measure"])))
+            if "state" in row:
+                st = row["state"]
+                pairs.append((f"{pd}:state", _bnode([(f"{pd}:name", _lit(st["name"])), (f"{pd}:symbol", _lit(st["symbol"])),
+                                                     (f"{pd}:meaning", _lit(st["meaning"], "en")),
+                                                     (f"{pd}:range", _lit(st["range"]))])))
             if "built_from" in row:
                 steps = []
                 for i, s in enumerate(row["built_from"]["operators"], 1):
@@ -523,8 +568,10 @@ def turtle(table: dict) -> str:
                             for j, (k, v) in enumerate(s["arguments"].items(), 1)]
                     steps.append(_bnode([(f"{pd}:position", str(i)), (f"{pd}:operator", ref(s["operator"]))]
                                         + [(f"{pd}:argument", a) for a in args]))
-                pairs.append((f"{pd}:builtFrom", _bnode([(f"{pd}:base", ref(row["built_from"]["base"]))]
-                                                         + [(f"{pd}:step", s) for s in steps])))
+                mixing = row["built_from"].get("mixture")
+                pairs.append((f"{pd}:builtFrom", _bnode(
+                    ([(f"{pd}:mixtureWeights", _lit(mixing["weights"]))] if mixing else [])
+                    + [(f"{pd}:base", ref(row["built_from"]["base"]))] + [(f"{pd}:step", s) for s in steps])))
             for i, (k, v) in enumerate(row.get("where", {}).items(), 1):
                 pairs.append((f"{pd}:auxiliary", _bnode([(f"{pd}:position", str(i)), (f"{pd}:name", _lit(k)),
                                                          (f"{pd}:formula", _lit(v))])))
@@ -572,20 +619,7 @@ def turtle(table: dict) -> str:
             pairs += [(f"{pd}:fromCanonical", b) for b in formula_pairs(row.get("from_canonical", {}))]
             if "conversion" in row:
                 pairs.append((f"{pd}:conversion", _lit(row["conversion"])))
-            for fmt, forms in row.get("written_as", {}).items():
-                for form in forms:
-                    inner = [(f"{pd}:format", _lit(fmt)), (f"{pd}:spelling", _lit(form["spelling"])),
-                             (f"{pd}:head", _lit(form["head"]))]
-                    args = form.get("arguments", [])
-                    items = args.items() if isinstance(args, dict) else ((None, a) for a in args)
-                    for i, (k, v) in enumerate(items, 1):
-                        inner.append((f"{pd}:argument", _bnode([(f"{pd}:position", str(i))]
-                                                               + ([(f"{pd}:name", _lit(k))] if k else [])
-                                                               + [(f"{pd}:formula", _lit(v))])))
-                    inner += [(f"{pd}:default", _lit(f"{k} = {v}")) for k, v in form.get("defaults", {}).items()]
-                    if "none" in form:
-                        inner.append((f"{pd}:noneToken", _lit(form["none"])))
-                    pairs.append((f"{pd}:writtenAs", _bnode(inner)))
+            pairs += _written_pairs(pd, row)
             for x in row.get("cross_references", []):
                 pairs.append((x["predicate"], f"<{x['iri']}>"))
             if "provenance" in row:

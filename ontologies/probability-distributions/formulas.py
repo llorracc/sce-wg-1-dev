@@ -2,8 +2,10 @@
 
 A formula is an arithmetic expression in Python's syntax over the coordinates of a chart: numbers, names, + - * / **,
 unary minus, comparisons, `and`/`or`, and calls to the functions in FUNCTIONS. A coordinate's meaning may also be given
-as an expectation, E(g(X)), the expected value under the law of a formula in the draw X. Nothing else parses, so a
-formula can be read by any consumer and evaluated without running code from the source. The generator rejects a formula
+as an expectation, E(g(X)), the expected value under the law of a formula in the draw X. A coordinate may be a vector or
+a matrix: arithmetic and comparisons on vectors are elementwise, x[j] is entry j counted from one, [a, b] is a vector,
+and the functions include sums and the like. Nothing else parses, so a formula can be read by any consumer and evaluated
+without running code from the source. The generator rejects a formula
 outside this syntax, or one naming anything but the coordinates its place allows.
 
 The evaluator serves the generator's checks and the tests. The ontology provides no routines for the distributions
@@ -55,6 +57,10 @@ def _xphi(x):
     return 0.0 if math.isinf(x) else x * _phi(x)
 
 
+def _increasing(x) -> bool:
+    return all(a < b for a, b in zip(list(x)[:-1], list(x)[1:]))
+
+
 FUNCTIONS = {
     "sqrt": _sqrt,
     "exp": _exp,
@@ -62,6 +68,16 @@ FUNCTIONS = {
     "Phi": _Phi,  # the standard normal distribution function
     "phi": _phi,  # its density
     "xphi": _xphi,  # x times phi(x), zero at an infinite x
+    # vectors and matrices
+    "sum": lambda x: _np.sum(x) if _np is not None else sum(x),
+    "min": lambda x: _np.min(x) if _np is not None else min(x),
+    "max": lambda x: _np.max(x) if _np is not None else max(x),
+    "count": len,  # the number of entries; of a matrix, its rows
+    "first": lambda x: x[0],
+    "last": lambda x: x[-1],
+    "index": lambda x: _np.arange(1, len(x) + 1) if _np is not None else list(range(1, len(x) + 1)),  # 1, 2, ..., n
+    "increasing": _increasing,  # strictly
+    "row": lambda m, i: m[int(i) - 1],  # row i of a matrix, counted from one
 }
 CONSTANTS = {"inf": math.inf, "pi": math.pi, "euler_gamma": 0.5772156649015329}  # Euler's constant γ
 EXPECTATION = "E"  # E(g(X)): the expectation of g of the draw X, allowed in a coordinate's as_expectation only
@@ -94,8 +110,15 @@ def parse(text: str) -> ast.Expression:
     except SyntaxError as e:
         raise FormulaError(f"not a formula: {text!r} ({e.msg})") from None
     for node in ast.walk(tree):
-        if isinstance(node, (ast.Expression, ast.Load, ast.UnaryOp, ast.USub, ast.UAdd, ast.BoolOp, ast.And, ast.Or)):
+        if isinstance(node, (ast.Expression, ast.Load, ast.UnaryOp, ast.USub, ast.UAdd, ast.BoolOp, ast.And, ast.Or,
+                             ast.List)):
             continue
+        if isinstance(node, ast.Subscript):
+            index = node.slice
+            if isinstance(node.value, ast.Name) and (isinstance(index, ast.Name) or (
+                    isinstance(index, ast.Constant) and isinstance(index.value, int) and index.value >= 1)):
+                continue
+            raise FormulaError(f"{text!r}: an entry is written name[j] or name[k], k a whole number from 1")
         if isinstance(node, ast.BinOp) and type(node.op) in _BINARY:
             continue
         if isinstance(node, ast.Compare) and all(type(op) in _COMPARE for op in node.ops):
@@ -172,16 +195,25 @@ def evaluate(text: str, env: dict):
         if isinstance(node, ast.BinOp):
             return _BINARY[type(node.op)](ev(node.left), ev(node.right))
         if isinstance(node, ast.Compare):
-            left = ev(node.left)
+            left, results = ev(node.left), []
             for op, right_node in zip(node.ops, node.comparators):
                 right = ev(right_node)
-                if not _COMPARE[type(op)](left, right):
-                    return False
+                results.append(_COMPARE[type(op)](left, right))
                 left = right
-            return True
+            if any(_array(r) for r in results):
+                return _np.logical_and.reduce([_np.asarray(r) for r in results])
+            return all(results)
         if isinstance(node, ast.BoolOp):
             values = [ev(v) for v in node.values]
+            if any(_array(v) for v in values):
+                combine = _np.logical_and if isinstance(node.op, ast.And) else _np.logical_or
+                return combine.reduce([_np.asarray(v) for v in values])
             return all(values) if isinstance(node.op, ast.And) else any(values)
+        if isinstance(node, ast.Subscript):
+            return ev(node.value)[int(ev(node.slice)) - 1]
+        if isinstance(node, ast.List):
+            items = [ev(e) for e in node.elts]
+            return _np.array(items, dtype=float) if _np is not None else items
         if isinstance(node, ast.Call) and node.func.id == EXPECTATION:
             if EXPECTATION not in env:
                 raise FormulaError(f"{text!r}: an expectation needs a law to take it under")

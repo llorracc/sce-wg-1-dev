@@ -15,7 +15,7 @@
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:source <http://www.probonto.org/ontology> ;
     dcterms:bibliographicCitation "Swat MJ, Grenon P, Wimalaratne S (2016). ProbOnto: ontology and knowledge base of probability distributions. Bioinformatics 32(17):2719-2721. doi:10.1093/bioinformatics/btw170"@en ;
-    pd:sourceDigest "sha256:4252464e41136eb3f7d2e554092562177b0eb0228847bf215732334af4b93551" .
+    pd:sourceDigest "sha256:1c005a53a56d54c0e99ffe18fff2f1b805e59a2ee1fe002fc4ec6d8dfea069a6" .
 
 skos:definition a owl:AnnotationProperty .
 skos:notation a owl:AnnotationProperty .
@@ -129,6 +129,9 @@ pd:writtenAs
 pd:argument
     a owl:ObjectProperty ;
     skos:definition "An argument of an operator, or of one step of a construction."@en .
+pd:state
+    a owl:ObjectProperty ;
+    skos:definition "A kernel's state argument."@en .
 pd:statedSet
     a owl:DatatypeProperty ;
     skos:definition "The set the measures live on."@en .
@@ -225,6 +228,12 @@ pd:atomMass
 pd:provenance
     a owl:DatatypeProperty ;
     skos:definition "Where a row's content comes from, when it is copied."@en .
+pd:range
+    a owl:DatatypeProperty ;
+    skos:definition "The number of positions a kernel's state takes, as a formula."@en .
+pd:mixtureWeights
+    a owl:DatatypeProperty ;
+    skos:definition "The weights of a construction's components, as a formula."@en .
 pd:sourceDigest
     a owl:DatatypeProperty ;
     skos:definition "The SHA-256 of the source file the ontology was generated from."@en .
@@ -671,3 +680,126 @@ pd:PD_0000040
     pd:coordinate [ pd:position 2 ; pd:name "s" ; pd:symbol "s" ; pd:meaning "the scale"@en ; pd:domain "positive" ; pd:asExpectation "sqrt(6*(E(X**2) - E(X)**2))/pi" ] ;
     pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "TypeIExtremeValue(μ, s)" ; pd:head "TypeIExtremeValue" ; pd:argument [ pd:position 1 ; pd:formula "mu" ] ; pd:argument [ pd:position 2 ; pd:formula "s" ] ] ;
     skos:exactMatch <http://www.probonto.org/ontology#PROB_k0000032> .
+
+pd:PD_0000041
+    a owl:NamedIndividual, pd:Operator ;
+    rdfs:label "finite mixture"@en ;
+    skos:notation "finite-mixture" ;
+    skos:definition "Σⱼ wⱼ μⱼ: draw a label j with probability wⱼ, then a value from μⱼ. It is the product of the categorical law on the labels with the kernel sending j to μⱼ, projected onto the value."@en ;
+    pd:caseOf pd:PD_0000004 ;
+    pd:argument [ pd:position 1 ; pd:name "weights" ; pd:meaning "a probability vector w"@en ] ;
+    pd:argument [ pd:position 2 ; pd:name "components" ; pd:meaning "the laws μ₁, …, μₙ"@en ] ;
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "Mixture((w₁, J₁), …, (wₙ, Jₙ))" ; pd:head "Mixture" ] .
+
+pd:PD_0000042
+    a owl:NamedIndividual, pd:Family ;
+    rdfs:label "finite discrete law on real points"@en ;
+    skos:notation "finite-discrete" ;
+    skos:definition "The law putting mass pᵢ at each of finitely many real points vᵢ, at least two."@en ;
+    pd:statedSet "{v₁, …, vₙ}" ;
+    pd:measureExpression "Σᵢ pᵢ δ(vᵢ), a finite mixture of point masses" ;
+    pd:canonicalChart pd:PD_0000043 ;
+    pd:hasChart pd:PD_0000043 ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000007 ; pd:infimum "first(values)" ; pd:supremum "last(values)" ; pd:massAtInfimum "first(probs)" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000008 ; pd:formula "sum(probs*values)" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000009 ; pd:orders "nonnegative-integers" ; pd:formula "sum(probs*values**k)" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000011 ; pd:value [ pd:atomAt "values" ; pd:atomMass "probs" ] ] .
+
+pd:PD_0000043
+    a owl:NamedIndividual, pd:Chart ;
+    rdfs:label "the points and their probabilities"@en ;
+    skos:notation "finite-discrete/values-probabilities" ;
+    pd:chartOf pd:PD_0000042 ;
+    pd:coordinate [ pd:position 1 ; pd:name "values" ; pd:symbol "v" ; pd:meaning "the points, strictly increasing"@en ; pd:domain "real-vector" ] ;
+    pd:coordinate [ pd:position 2 ; pd:name "probs" ; pd:symbol "p" ; pd:meaning "their probabilities"@en ; pd:domain "positive-probability-vector" ] ;
+    pd:domainCondition "count(values) == count(probs)" ;
+    pd:domainCondition "count(values) >= 2" ;
+    pd:domainCondition "increasing(values)" ;
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "Mixture((p₁, v₁), …, (pₙ, vₙ))" ; pd:head "Mixture" ] .
+
+pd:PD_0000044
+    a owl:NamedIndividual, pd:Family ;
+    rdfs:label "finite discrete law with mean one"@en ;
+    skos:notation "mean-one-finite-discrete" ;
+    skos:definition "The finite discrete laws on positive points whose mean is one. Their chart is the parameter files' Discrete: the points are the model, not a quadrature of another law."@en ;
+    pd:subfamilyOf pd:PD_0000042 ;
+    pd:hasConstraint pd:PD_0000012 ;
+    pd:hasChart pd:PD_0000045 .
+
+pd:PD_0000045
+    a owl:NamedIndividual, pd:Chart ;
+    rdfs:label "the points and their probabilities"@en ;
+    skos:notation "mean-one-finite-discrete/values-probabilities" ;
+    pd:chartOf pd:PD_0000044 ;
+    pd:coordinate [ pd:position 1 ; pd:name "values" ; pd:symbol "v" ; pd:meaning "the points, positive and strictly increasing"@en ; pd:domain "positive-vector" ] ;
+    pd:coordinate [ pd:position 2 ; pd:name "probs" ; pd:symbol "p" ; pd:meaning "their probabilities"@en ; pd:domain "positive-probability-vector" ] ;
+    pd:domainCondition "count(values) == count(probs)" ;
+    pd:domainCondition "count(values) >= 2" ;
+    pd:domainCondition "increasing(values)" ;
+    pd:domainCondition "sum(probs*values) == 1" ;
+    pd:toCanonical [ pd:name "values" ; pd:formula "values" ] ;
+    pd:toCanonical [ pd:name "probs" ; pd:formula "probs" ] ;
+    pd:fromCanonical [ pd:name "values" ; pd:formula "values" ] ;
+    pd:fromCanonical [ pd:name "probs" ; pd:formula "probs" ] ;
+    pd:conversion "exact" ;
+    pd:writtenAs [ pd:format "parameter-file" ; pd:spelling "{Discrete: {values: [v₁, …, vₙ], probs: [p₁, …, pₙ]}}" ; pd:head "Discrete" ; pd:argument [ pd:position 1 ; pd:name "values" ; pd:formula "values" ] ; pd:argument [ pd:position 2 ; pd:name "probs" ; pd:formula "probs" ] ] .
+
+pd:PD_0000046
+    a owl:NamedIndividual, pd:Family ;
+    rdfs:label "categorical"@en ;
+    skos:notation "categorical" ;
+    skos:definition "The law drawing the label in position i of a finite set with probability fᵢ. Bellman-SYM also takes its weights as the rows of a matrix, or as the one row a previous state selects; the latter is the categorical law at that row."@en ;
+    pd:statedSet "the positions 1, …, n of a finite set of labels" ;
+    pd:measureExpression "Σᵢ fᵢ δ(i)" ;
+    pd:canonicalChart pd:PD_0000047 ;
+    pd:hasChart pd:PD_0000047 ;
+    pd:hasChart pd:PD_0000048 ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000011 ; pd:value [ pd:atomAt "index(f)" ; pd:atomMass "f" ] ] .
+
+pd:PD_0000047
+    a owl:NamedIndividual, pd:Chart ;
+    rdfs:label "the weights, in the order of the labels"@en ;
+    skos:notation "categorical/weights" ;
+    pd:chartOf pd:PD_0000046 ;
+    pd:coordinate [ pd:position 1 ; pd:name "f" ; pd:symbol "f" ; pd:meaning "the probability of each label"@en ; pd:domain "probability-vector" ] ;
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "Categorical((f₁, …, fₙ))" ; pd:head "Categorical" ; pd:argument [ pd:position 1 ; pd:formula "f" ] ] ;
+    skos:closeMatch <http://www.probonto.org/ontology#PROB_k0000248> .
+
+pd:PD_0000048
+    a owl:NamedIndividual, pd:Chart ;
+    rdfs:label "the probability of the second of two labels"@en ;
+    skos:notation "categorical/bernoulli" ;
+    pd:chartOf pd:PD_0000046 ;
+    pd:coordinate [ pd:position 1 ; pd:name "p" ; pd:symbol "p" ; pd:meaning "the probability of the second label"@en ; pd:domain "unit-interval" ] ;
+    pd:covers "count(f) == 2" ;
+    pd:toCanonical [ pd:name "f" ; pd:formula "[1 - p, p]" ] ;
+    pd:fromCanonical [ pd:name "p" ; pd:formula "last(f)" ] ;
+    pd:conversion "exact" ;
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "Bernoulli(p)" ; pd:head "Bernoulli" ; pd:argument [ pd:position 1 ; pd:formula "p" ] ] ;
+    skos:closeMatch <http://www.probonto.org/ontology#PROB_k0000000> .
+
+pd:PD_0000049
+    a owl:NamedIndividual, pd:Family ;
+    rdfs:label "finite Markov kernel"@en ;
+    skos:notation "finite-markov-kernel" ;
+    skos:definition "A Markov kernel on finitely many real points: from the point in position i, the next draw is xⱼ with probability Πᵢⱼ. Bellman-SYM writes it with either of two names; given a third argument, the previous state, a declaration is the kernel at that state."@en ;
+    pd:statedSet "{x₁, …, xₙ}, the points" ;
+    pd:measureExpression "κ(i, ·) = Σⱼ Πᵢⱼ δ(xⱼ)" ;
+    pd:state [ pd:name "i" ; pd:symbol "i" ; pd:meaning "the position of the current point"@en ; pd:range "count(points)" ] ;
+    pd:canonicalChart pd:PD_0000050 ;
+    pd:hasChart pd:PD_0000050 ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000008 ; pd:formula "sum(row(Pi, i)*points)" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000009 ; pd:orders "nonnegative-integers" ; pd:formula "sum(row(Pi, i)*points**k)" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000011 ; pd:value [ pd:atomAt "points" ; pd:atomMass "row(Pi, i)" ] ] .
+
+pd:PD_0000050
+    a owl:NamedIndividual, pd:Chart ;
+    rdfs:label "the transition matrix and the points"@en ;
+    skos:notation "finite-markov-kernel/transitions-points" ;
+    pd:chartOf pd:PD_0000049 ;
+    pd:coordinate [ pd:position 1 ; pd:name "Pi" ; pd:symbol "Π" ; pd:meaning "the transition probabilities, row i the law from point i"@en ; pd:domain "stochastic-matrix" ] ;
+    pd:coordinate [ pd:position 2 ; pd:name "points" ; pd:symbol "x" ; pd:meaning "the points, strictly increasing"@en ; pd:domain "real-vector" ] ;
+    pd:domainCondition "count(Pi) == count(points)" ;
+    pd:domainCondition "increasing(points)" ;
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "DiscreteMarkov(Π, points)" ; pd:head "DiscreteMarkov" ; pd:argument [ pd:position 1 ; pd:formula "Pi" ] ; pd:argument [ pd:position 2 ; pd:formula "points" ] ] ;
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "MarkovChain(Π, points)" ; pd:head "MarkovChain" ; pd:argument [ pd:position 1 ; pd:formula "Pi" ] ; pd:argument [ pd:position 2 ; pd:formula "points" ] ] .

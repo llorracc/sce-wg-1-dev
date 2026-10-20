@@ -102,6 +102,19 @@ operators:
       - {name: upper, meaning: the upper bound u; inf for none}
     set: lower <= z <= upper
     definition: Conditioning on the interval [l, u], which must have positive measure.
+  - id: PD_0000041
+    name: finite-mixture
+    label: finite mixture
+    case_of: kernel-product
+    arguments:
+      - {name: weights, meaning: a probability vector w}
+      - {name: components, meaning: "the laws μ₁, …, μₙ"}
+    written_as:
+      bellman-sym:
+        - {spelling: "Mixture((w₁, J₁), …, (wₙ, Jₙ))", head: Mixture}
+    definition: >-
+      Σⱼ wⱼ μⱼ: draw a label j with probability wⱼ, then a value from μⱼ. It is the product of the categorical law on the
+      labels with the kernel sending j to μⱼ, projected onto the value.
 
 properties:
   - id: PD_0000007
@@ -515,3 +528,130 @@ families:
       support: {infimum: "-inf", supremum: inf, mass_at_infimum: "0"}
       mean: mu + euler_gamma*s
       moments: {orders: nonnegative-integers}
+
+  - id: PD_0000042
+    name: finite-discrete
+    label: finite discrete law on real points
+    stated_set: "{v₁, …, vₙ}"
+    definition: The law putting mass pᵢ at each of finitely many real points vᵢ, at least two.
+    measure: Σᵢ pᵢ δ(vᵢ), a finite mixture of point masses
+    canonical_chart: values-probabilities
+    charts:
+      - id: PD_0000043
+        name: values-probabilities
+        label: the points and their probabilities
+        coordinates:
+          - {name: values, symbol: v, meaning: "the points, strictly increasing", domain: real-vector}
+          - {name: probs, symbol: p, meaning: their probabilities, domain: positive-probability-vector}
+        domain_conditions:
+          - count(values) == count(probs)
+          - count(values) >= 2
+          - increasing(values)
+        written_as:
+          bellman-sym:
+            - {spelling: "Mixture((p₁, v₁), …, (pₙ, vₙ))", head: Mixture}
+    properties:
+      support: {infimum: first(values), supremum: last(values), mass_at_infimum: first(probs)}
+      mean: sum(probs*values)
+      moments: {orders: nonnegative-integers, formula: sum(probs*values**k)}
+      atoms: [{at: values, mass: probs}]
+
+  - id: PD_0000044
+    name: mean-one-finite-discrete
+    label: finite discrete law with mean one
+    subfamily_of: finite-discrete
+    constraints: [mean-one]
+    definition: >-
+      The finite discrete laws on positive points whose mean is one. Their chart is the parameter files' Discrete: the
+      points are the model, not a quadrature of another law.
+    charts:
+      - id: PD_0000045
+        name: values-probabilities
+        label: the points and their probabilities
+        coordinates:
+          - {name: values, symbol: v, meaning: "the points, positive and strictly increasing", domain: positive-vector}
+          - {name: probs, symbol: p, meaning: their probabilities, domain: positive-probability-vector}
+        domain_conditions:
+          - count(values) == count(probs)
+          - count(values) >= 2
+          - increasing(values)
+          - sum(probs*values) == 1
+        to_canonical: {values: values, probs: probs}
+        from_canonical: {values: values, probs: probs}
+        conversion: exact
+        written_as:
+          parameter-file:
+            - spelling: "{Discrete: {values: [v₁, …, vₙ], probs: [p₁, …, pₙ]}}"
+              head: Discrete
+              arguments: {values: values, probs: probs}
+
+  - id: PD_0000046
+    name: categorical
+    label: categorical
+    stated_set: the positions 1, …, n of a finite set of labels
+    definition: >-
+      The law drawing the label in position i of a finite set with probability fᵢ. Bellman-SYM also takes its weights
+      as the rows of a matrix, or as the one row a previous state selects; the latter is the categorical law at that row.
+    measure: Σᵢ fᵢ δ(i)
+    canonical_chart: weights
+    charts:
+      - id: PD_0000047
+        name: weights
+        label: the weights, in the order of the labels
+        coordinates:
+          - {name: f, symbol: f, meaning: the probability of each label, domain: probability-vector}
+        written_as:
+          bellman-sym:
+            - {spelling: "Categorical((f₁, …, fₙ))", head: Categorical, arguments: [f]}
+        cross_references:
+          - predicate: skos:closeMatch
+            target: probonto:PROB_k0000248
+            note: CategoricalNonordered1 (categoryProb)
+      - id: PD_0000048
+        name: bernoulli
+        label: the probability of the second of two labels
+        coordinates:
+          - {name: p, symbol: p, meaning: the probability of the second label, domain: unit-interval}
+        covers: count(f) == 2
+        to_canonical: {f: "[1 - p, p]"}
+        from_canonical: {p: last(f)}
+        conversion: exact
+        written_as:
+          bellman-sym:
+            - {spelling: "Bernoulli(p)", head: Bernoulli, arguments: [p]}
+        cross_references:
+          - predicate: skos:closeMatch
+            target: probonto:PROB_k0000000
+            note: Bernoulli1 (probability), on {0, 1} rather than on two labels
+    properties:
+      atoms: [{at: index(f), mass: f}]
+
+  - id: PD_0000049
+    name: finite-markov-kernel
+    label: finite Markov kernel
+    stated_set: "{x₁, …, xₙ}, the points"
+    definition: >-
+      A Markov kernel on finitely many real points: from the point in position i, the next draw is xⱼ with probability
+      Πᵢⱼ. Bellman-SYM writes it with either of two names; given a third argument, the previous state, a declaration is
+      the kernel at that state.
+    measure: κ(i, ·) = Σⱼ Πᵢⱼ δ(xⱼ)
+    state: {name: i, symbol: i, meaning: the position of the current point, range: count(points)}
+    canonical_chart: transitions-points
+    charts:
+      - id: PD_0000050
+        name: transitions-points
+        label: the transition matrix and the points
+        coordinates:
+          - {name: Pi, symbol: Π, meaning: "the transition probabilities, row i the law from point i", domain: stochastic-matrix}
+          - {name: points, symbol: x, meaning: "the points, strictly increasing", domain: real-vector}
+        domain_conditions:
+          - count(Pi) == count(points)
+          - increasing(points)
+        written_as:
+          bellman-sym:
+            - {spelling: "DiscreteMarkov(Π, points)", head: DiscreteMarkov, arguments: [Pi, points]}
+            - {spelling: "MarkovChain(Π, points)", head: MarkovChain, arguments: [Pi, points]}
+    properties:
+      mean: sum(row(Pi, i)*points)
+      moments: {orders: nonnegative-integers, formula: "sum(row(Pi, i)*points**k)"}
+      atoms: [{at: points, mass: "row(Pi, i)"}]

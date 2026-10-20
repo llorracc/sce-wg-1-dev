@@ -27,8 +27,17 @@ INF = math.inf
 SAMPLES = {
     "real": (-1.3, 0.0, 0.45),
     "positive": (0.05, 0.3, 0.9),
+    "unit-interval": (0.0, 0.3, 1.0),
     "extended-real": (-INF, -2.0, 0.5, INF),
     "extended-nonnegative": (0.0, 0.6, 1.4, INF),
+    # vectors of two and three entries; a chart's joint conditions keep the combinations that fit together
+    "real-vector": ([-0.25, 0.25], [-0.5, 0.0, 0.5], [0.5, 1.5], [0.5, 1.0, 1.5]),
+    "positive-vector": ([0.5, 1.5], [0.5, 1.0, 1.5], [0.05, 0.3], [0.1, 0.2, 0.4]),
+    "unit-interval-vector": ([0.0, 1.0], [0.0, 0.25, 1.0]),
+    "extended-real-vector": ([-2.0, -INF], [-3.0, -2.0, -INF], [2.0, INF], [3.0, 2.0, INF]),
+    "probability-vector": ([0.5, 0.5], [0.25, 0.5, 0.25], [0.75, 0.25], [0.0, 1.0]),
+    "positive-probability-vector": ([0.5, 0.5], [0.25, 0.5, 0.25], [0.75, 0.25]),
+    "stochastic-matrix": ([[0.9, 0.1], [0.2, 0.8]], [[0.5, 0.25, 0.25], [0.1, 0.8, 0.1], [0.0, 0.5, 0.5]]),
 }
 MIN_MASS = 1e-3  # the least mass a truncation may keep at a tested point
 CUTOFF = 40.0  # a base measure's mass beyond ±CUTOFF is negligible: the normal's and the Gumbel's both
@@ -46,10 +55,20 @@ def rows(table):
     return {r["id"]: r for r in table["rows"]}
 
 
-def close(a: float, b: float) -> bool:
-    if math.isinf(a) or math.isinf(b):
-        return a == b
-    return abs(a - b) <= TOLERANCE * max(1.0, abs(a), abs(b))
+def close(a, b) -> bool:
+    a, b = np.asarray(a, dtype=float), np.asarray(b, dtype=float)
+    if a.shape != b.shape:
+        return False
+    infinite = np.isinf(a) | np.isinf(b)
+    if not np.array_equal(a[infinite], b[infinite]):
+        return False
+    a, b = a[~infinite], b[~infinite]
+    return bool(np.all(np.abs(a - b) <= TOLERANCE * np.maximum(1.0, np.maximum(np.abs(a), np.abs(b)))))
+
+
+def holds(condition: str, env: dict) -> bool:
+    """A condition holds when it holds at every entry."""
+    return bool(np.all(formulas.evaluate(condition, env)))
 
 
 def points(chart: dict, coordinates: list[dict] | None = None):
@@ -57,9 +76,12 @@ def points(chart: dict, coordinates: list[dict] | None = None):
     coordinates = chart["coordinates"] if coordinates is None else coordinates
     names = [c["name"] for c in coordinates]
     for values in itertools.product(*(SAMPLES[c["domain"]] for c in coordinates)):
-        p = dict(zip(names, values))
-        if all(formulas.evaluate(c, p) for c in chart.get("domain_conditions", [])):
-            yield p
+        p = {n: (np.array(v, dtype=float) if isinstance(v, list) else v) for n, v in zip(names, values)}
+        try:
+            if all(holds(c, p) for c in chart.get("domain_conditions", [])):
+                yield p
+        except (ValueError, IndexError):  # vectors of different lengths do not fit together
+            continue
 
 
 def root(rows: dict, family: dict) -> dict:
@@ -120,18 +142,40 @@ def base_rule(measure: dict, lower: float, upper: float) -> tuple[np.ndarray, np
     return z, weights
 
 
-def quadrature(rows: dict, family: dict, point: dict) -> tuple[np.ndarray, np.ndarray]:
+def states(family: dict, point: dict) -> list:
+    """The states at which to test a kernel, or one empty state for a law."""
+    if "state" not in family:
+        return [{}]
+    n = int(formulas.evaluate(family["state"]["range"], family_env(family, point)))
+    return [{family["state"]["name"]: i} for i in range(1, n + 1)]
+
+
+def quadrature(rows: dict, family: dict, point: dict, state: dict | None = None) -> tuple[np.ndarray, np.ndarray]:
     """Nodes and weights integrating against the family's measure at a point of its canonical chart, built from the
-    row's own definition: its atoms, or its base measure carried through its operators. Conditioning on an interval
-    after increasing maps is conditioning the base on the interval's preimage, since f⁻¹(f(A)) = A."""
+    row's own definition: its atoms, or its base measure carried through its operators, component by component for a
+    mixture. Conditioning on an interval after increasing maps is conditioning the base on the interval's preimage,
+    since f⁻¹(f(A)) = A."""
     props = family["properties"]
+    env = {**family_env(family, point), **(state or {})}
     if "atoms" in props:
-        env = family_env(family, point)
-        at = np.array([formulas.evaluate(a["at"], env) for a in props["atoms"]], dtype=float)
-        mass = np.array([formulas.evaluate(a["mass"], env) for a in props["atoms"]], dtype=float)
+        at = np.concatenate([np.atleast_1d(np.asarray(formulas.evaluate(a["at"], env), dtype=float))
+                             for a in props["atoms"]])
+        mass = np.concatenate([np.atleast_1d(np.asarray(formulas.evaluate(a["mass"], env), dtype=float))
+                               for a in props["atoms"]])
         return at, mass
     built = family["built_from"]
-    env = family_env(family, point)
+    if "mixture" in built:
+        weights = np.atleast_1d(np.asarray(formulas.evaluate(built["mixture"]["weights"], env), dtype=float))
+        nodes, masses = [], []
+        for j, wj in enumerate(weights, 1):
+            z, w = _construct(rows, built, {**env, "j": j})
+            nodes.append(z)
+            masses.append(wj * w)
+        return np.concatenate(nodes), np.concatenate(masses)
+    return _construct(rows, built, env)
+
+
+def _construct(rows: dict, built: dict, env: dict) -> tuple[np.ndarray, np.ndarray]:
     forward, inverse = [], []  # the increasing maps applied so far, and their inverses
     lower, upper = -INF, INF  # the base's conditioning interval
     for step in built["operators"]:
@@ -201,7 +245,7 @@ def test_conversions_round_trip(rows):
             if "subfamily_of" in fam:
                 continue  # a reduced chart reaches only its subfamily
             for c in points(canonical):
-                if "covers" in chart and not formulas.evaluate(chart["covers"], c):
+                if "covers" in chart and not holds(chart["covers"], c):
                     continue
                 again = to_canonical(chart, from_canonical(chart, c))
                 assert all(close(again[k], c[k]) for k in c), (chart["qualified_name"], c, again)
@@ -213,12 +257,12 @@ def test_means_and_moments_agree_with_the_measures(rows):
     for fam in root_families(rows):
         props = fam["properties"]
         canonical = rows[fam["canonical_chart"]]
-        for p in points(canonical):
+        for p, state in ((p, s) for p in points(canonical) for s in states(fam, p)):
             try:
-                x, w = quadrature(rows, fam, p)
+                x, w = quadrature(rows, fam, p, state)
             except Degenerate:
                 continue
-            env = family_env(fam, p)
+            env = {**family_env(fam, p), **state}
             assert close(float(w.sum()), 1.0), (fam["name"], p)
             if "mean" in props:
                 assert close(float(w @ x), formulas.evaluate(props["mean"], env)), (fam["name"], p)
@@ -310,7 +354,7 @@ def test_reductions_meet_the_family_they_name(rows):
         for r in fam.get("reductions", []):
             chart = rows[r["chart"]]
             for p in points(canonical):
-                if not formulas.evaluate(r["when"], family_env(fam, p)):
+                if not holds(r["when"], family_env(fam, p)):
                     continue
                 there = to_canonical(chart, {c["name"]: p[c["name"]] for c in chart["coordinates"]})
                 _same_law(rows, fam, p, rows[r["family"]], there, (fam["name"], r, p))
