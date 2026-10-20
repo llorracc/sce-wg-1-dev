@@ -131,7 +131,9 @@ by identifier.
   coordinates; its `boundaries`, where its domain meets another family; and its `reductions`, where a point of its domain
   is a member of another family. A subfamily gives instead the family it is a `subfamily_of` and its `constraints`.
 - A **chart** gives its `family`, whether it is `canonical`, its `coordinates`, each with a name, a symbol, a meaning and a
-  domain, and its `domain_conditions` on the coordinates jointly. A chart other than the canonical one also gives
+  domain, and its `domain_conditions` on the coordinates jointly. A coordinate that is an expectation under the law says
+  so in `as_expectation`, so that its meaning can be checked: the standard deviation of the logarithm after truncation
+  is `sqrt(E(log(X)**2) - E(log(X))**2)`, which no chart before truncation satisfies. A chart other than the canonical one also gives
   `to_canonical` and `from_canonical`, one formula per coordinate, with auxiliary quantities in `to_canonical_where` and
   `from_canonical_where`; `conversion`, `exact` when every formula is rational and `irrational` otherwise; and `covers`,
   when it reaches only part of the canonical domain. Then come `written_as`, per format, and `cross_references`.
@@ -144,7 +146,8 @@ A formula is an arithmetic expression in Python's syntax over a chart's coordina
 names, `+ - * / **`, comparisons, `and` and `or`, the functions `sqrt`, `exp`, `log` (with log 0 = −∞), `Phi` (the
 standard normal distribution function), `phi` (its density) and `xphi` (x·φ(x), zero at an infinite x), and the constants
 `inf` and `pi`. Infinite values follow IEEE arithmetic, so a bound of `inf` passes through exp and log. In a moment's
-formula `k` is the order; in an operator's map or set `z` is the variable. Nothing else parses, so any consumer can read a formula without running code
+formula `k` is the order; in an operator's map or set `z` is the variable; in a coordinate's `as_expectation`, `E(·)` is
+the expectation under the law and `X` the draw. Nothing else parses, so any consumer can read a formula without running code
 from the source.
 
 ## Identifiers and the namespace
@@ -186,7 +189,7 @@ of probability distributions", *Bioinformatics* 32(17):2719–2721, doi:10.1093/
 | lognormal, with its subfamily of mean one | in this release |
 | point mass, with its subfamily at one | in this release |
 | truncated normal, with Bellman-SYM's `TruncatedNormal(μ, σ, l, u)` as its canonical chart | in this release |
-| truncated lognormal, with the parameter files' chart of mean one (the standard deviation of the logarithm after truncation, bounds in standard deviations) and Bellman-SYM's `TruncatedLogNormal(μ, σ, l, u)` | to come |
+| truncated lognormal, with Bellman-SYM's `TruncatedLogNormal(μ, σ, l, u)` as its canonical chart, and its subfamily of mean one, written by the parameter files' chart (the standard deviation of the logarithm after truncation, bounds in standard deviations, an omitted bound meaning three and `null` none) | in this release |
 | uniform | to come |
 | type I extreme value (Gumbel), Bellman-SYM's `TypeIExtremeValue(μ, s)` | to come |
 | finite discrete law on real points | to come |

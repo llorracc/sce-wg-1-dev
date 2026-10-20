@@ -52,9 +52,11 @@ def load(path: Path = SOURCE) -> tuple[dict, str]:
     return source, hashlib.sha256(raw).hexdigest()
 
 
-def _check_formula(text: str, allowed: set[str], where: str) -> str:
+def _check_formula(text: str, allowed: set[str], where: str, expectation: bool = False) -> str:
     try:
         extra = formulas.names(text) - allowed
+        if formulas.uses_expectation(text) and not expectation:
+            raise SourceError(f"{where}: {text!r} takes an expectation, which only a coordinate's as_expectation may")
     except formulas.FormulaError as e:
         raise SourceError(f"{where}: {e}") from None
     if extra:
@@ -251,6 +253,9 @@ def build(source: dict, digest: str) -> dict:
             own = coords(chart)
             if len(set(own)) != len(own):
                 raise SourceError(f"{cwhere}: a coordinate name is used twice")
+            for c in chart["coordinates"]:
+                if "as_expectation" in c:
+                    _check_formula(c["as_expectation"], {"X"}, f"{cwhere}, {c['name']}.as_expectation", expectation=True)
             is_canonical = fam is root and chart["name"] == root["canonical_chart"]
             crow = {"id": chart["id"], "kind": "chart", "name": chart["name"],
                     "qualified_name": f"{fam['name']}/{chart['name']}", "label": chart["label"],
@@ -385,6 +390,7 @@ VOCABULARY = {
         "symbol": "The symbol of a coordinate.",
         "meaning": "What a coordinate or an argument is.",
         "domain": "The domain of a coordinate.",
+        "asExpectation": "A coordinate's meaning as an expectation under the law, a formula in E(·) of the draw X.",
         "formula": "A formula in the ontology's formula syntax.",
         "covers": "The part of the canonical chart's domain a chart reaches, as a condition.",
         "conversion": "exact when the conversion is rational in the coordinates; irrational otherwise.",
@@ -543,7 +549,9 @@ def turtle(table: dict) -> str:
                 pairs.append((f"{pd}:coordinate", _bnode([(f"{pd}:position", str(i)), (f"{pd}:name", _lit(c["name"])),
                                                          (f"{pd}:symbol", _lit(c["symbol"])),
                                                          (f"{pd}:meaning", _lit(c["meaning"], "en")),
-                                                         (f"{pd}:domain", _lit(c["domain"]))])))
+                                                         (f"{pd}:domain", _lit(c["domain"]))]
+                                                        + ([(f"{pd}:asExpectation", _lit(c["as_expectation"]))]
+                                                           if "as_expectation" in c else []))))
             pairs += [(f"{pd}:domainCondition", _lit(c)) for c in row.get("domain_conditions", [])]
             if "covers" in row:
                 pairs.append((f"{pd}:covers", _lit(row["covers"])))

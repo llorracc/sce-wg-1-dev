@@ -15,7 +15,7 @@
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:source <http://www.probonto.org/ontology> ;
     dcterms:bibliographicCitation "Swat MJ, Grenon P, Wimalaratne S (2016). ProbOnto: ontology and knowledge base of probability distributions. Bioinformatics 32(17):2719-2721. doi:10.1093/bioinformatics/btw170"@en ;
-    pd:sourceDigest "sha256:ec6edb31a6fb2684f32f13b939419979122f9cad780c6b176b5b37fb2542864b" .
+    pd:sourceDigest "sha256:bb96f39474c7cc9a3d3674465290da5447f30fb7e95b09127221c8170743e780" .
 
 skos:definition a owl:AnnotationProperty .
 skos:notation a owl:AnnotationProperty .
@@ -171,6 +171,9 @@ pd:meaning
 pd:domain
     a owl:DatatypeProperty ;
     skos:definition "The domain of a coordinate."@en .
+pd:asExpectation
+    a owl:DatatypeProperty ;
+    skos:definition "A coordinate's meaning as an expectation under the law, a formula in E(·) of the draw X."@en .
 pd:formula
     a owl:DatatypeProperty ;
     skos:definition "A formula in the ontology's formula syntax."@en .
@@ -327,8 +330,8 @@ pd:PD_0000014
     rdfs:label "mean and standard deviation"@en ;
     skos:notation "normal/mean-sd" ;
     pd:chartOf pd:PD_0000013 ;
-    pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the mean"@en ; pd:domain "real" ] ;
-    pd:coordinate [ pd:position 2 ; pd:name "sigma" ; pd:symbol "σ" ; pd:meaning "the standard deviation"@en ; pd:domain "positive" ] ;
+    pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the mean"@en ; pd:domain "real" ; pd:asExpectation "E(X)" ] ;
+    pd:coordinate [ pd:position 2 ; pd:name "sigma" ; pd:symbol "σ" ; pd:meaning "the standard deviation"@en ; pd:domain "positive" ; pd:asExpectation "sqrt(E(X**2) - E(X)**2)" ] ;
     skos:exactMatch <http://www.probonto.org/ontology#PROB_k0000239> .
 
 pd:PD_0000015
@@ -336,8 +339,8 @@ pd:PD_0000015
     rdfs:label "mean and variance"@en ;
     skos:notation "normal/mean-variance" ;
     pd:chartOf pd:PD_0000013 ;
-    pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the mean"@en ; pd:domain "real" ] ;
-    pd:coordinate [ pd:position 2 ; pd:name "v" ; pd:symbol "v" ; pd:meaning "the variance"@en ; pd:domain "positive" ] ;
+    pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the mean"@en ; pd:domain "real" ; pd:asExpectation "E(X)" ] ;
+    pd:coordinate [ pd:position 2 ; pd:name "v" ; pd:symbol "v" ; pd:meaning "the variance"@en ; pd:domain "positive" ; pd:asExpectation "E(X**2) - E(X)**2" ] ;
     pd:toCanonical [ pd:name "mu" ; pd:formula "mu" ] ;
     pd:toCanonical [ pd:name "sigma" ; pd:formula "sqrt(v)" ] ;
     pd:fromCanonical [ pd:name "mu" ; pd:formula "mu" ] ;
@@ -368,8 +371,8 @@ pd:PD_0000017
     rdfs:label "mean and standard deviation of the logarithm"@en ;
     skos:notation "lognormal/meanlog-sdlog" ;
     pd:chartOf pd:PD_0000016 ;
-    pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the mean of ln X"@en ; pd:domain "real" ] ;
-    pd:coordinate [ pd:position 2 ; pd:name "sigma" ; pd:symbol "σ" ; pd:meaning "the standard deviation of ln X"@en ; pd:domain "positive" ] ;
+    pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the mean of ln X"@en ; pd:domain "real" ; pd:asExpectation "E(log(X))" ] ;
+    pd:coordinate [ pd:position 2 ; pd:name "sigma" ; pd:symbol "σ" ; pd:meaning "the standard deviation of ln X"@en ; pd:domain "positive" ; pd:asExpectation "sqrt(E(log(X)**2) - E(log(X))**2)" ] ;
     pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "LogNormal(μ, σ)" ; pd:head "LogNormal" ; pd:argument [ pd:position 1 ; pd:formula "mu" ] ; pd:argument [ pd:position 2 ; pd:formula "sigma" ] ] ;
     skos:exactMatch <http://www.probonto.org/ontology#PROB_k0000428> .
 
@@ -387,7 +390,7 @@ pd:PD_0000019
     rdfs:label "standard deviation of the logarithm"@en ;
     skos:notation "mean-one-lognormal/sd-log" ;
     pd:chartOf pd:PD_0000018 ;
-    pd:coordinate [ pd:position 1 ; pd:name "sigma" ; pd:symbol "σ" ; pd:meaning "the standard deviation of ln X"@en ; pd:domain "positive" ] ;
+    pd:coordinate [ pd:position 1 ; pd:name "sigma" ; pd:symbol "σ" ; pd:meaning "the standard deviation of ln X"@en ; pd:domain "positive" ; pd:asExpectation "sqrt(E(log(X)**2) - E(log(X))**2)" ] ;
     pd:toCanonical [ pd:name "mu" ; pd:formula "-sigma**2/2" ] ;
     pd:toCanonical [ pd:name "sigma" ; pd:formula "sigma" ] ;
     pd:fromCanonical [ pd:name "sigma" ; pd:formula "sigma" ] ;
@@ -416,14 +419,14 @@ pd:PD_0000021
     rdfs:label "the point"@en ;
     skos:notation "point-mass/value" ;
     pd:chartOf pd:PD_0000020 ;
-    pd:coordinate [ pd:position 1 ; pd:name "x" ; pd:symbol "x" ; pd:meaning "the point"@en ; pd:domain "real" ] .
+    pd:coordinate [ pd:position 1 ; pd:name "x" ; pd:symbol "x" ; pd:meaning "the point"@en ; pd:domain "real" ; pd:asExpectation "E(X)" ] .
 
 pd:PD_0000022
     a owl:NamedIndividual, pd:Chart ;
     rdfs:label "a normal with variance zero"@en ;
     skos:notation "point-mass/normal-zero-variance" ;
     pd:chartOf pd:PD_0000020 ;
-    pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the point"@en ; pd:domain "real" ] ;
+    pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the point"@en ; pd:domain "real" ; pd:asExpectation "E(X)" ] ;
     pd:toCanonical [ pd:name "x" ; pd:formula "mu" ] ;
     pd:fromCanonical [ pd:name "mu" ; pd:formula "x" ] ;
     pd:conversion "exact" ;
@@ -434,7 +437,7 @@ pd:PD_0000023
     rdfs:label "a lognormal with zero spread"@en ;
     skos:notation "point-mass/lognormal-zero-spread" ;
     pd:chartOf pd:PD_0000020 ;
-    pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the logarithm of the point"@en ; pd:domain "real" ] ;
+    pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the logarithm of the point"@en ; pd:domain "real" ; pd:asExpectation "E(log(X))" ] ;
     pd:covers "x > 0" ;
     pd:toCanonical [ pd:name "x" ; pd:formula "exp(mu)" ] ;
     pd:fromCanonical [ pd:name "mu" ; pd:formula "log(x)" ] ;
@@ -500,3 +503,71 @@ pd:PD_0000028
     pd:domainCondition "l < u" ;
     pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "TruncatedNormal(μ, σ, l, u)" ; pd:head "TruncatedNormal" ; pd:argument [ pd:position 1 ; pd:formula "mu" ] ; pd:argument [ pd:position 2 ; pd:formula "sigma" ] ; pd:argument [ pd:position 3 ; pd:formula "l" ] ; pd:argument [ pd:position 4 ; pd:formula "u" ] ] ;
     skos:closeMatch <http://www.probonto.org/ontology#PROB_k0000681> .
+
+pd:PD_0000029
+    a owl:NamedIndividual, pd:Family ;
+    rdfs:label "truncated lognormal"@en ;
+    skos:notation "truncated-lognormal" ;
+    skos:definition "The law of exp(μ + σZ) given l ≤ exp(μ + σZ) ≤ u, Z standard normal: the exponential of a normal truncated to [ln l, ln u]."@en ;
+    pd:statedSet "[l, u] ∩ (0, ∞)" ;
+    pd:measureExpression "TruncatedLogNormal(μ, σ, l, u) = (exp∗ aff(μ, σ)∗ N(0, 1))|[l, u] = exp∗ ((aff(μ, σ)∗ N(0, 1))|[ln l, ln u])" ;
+    pd:builtFrom [ pd:base pd:PD_0000001 ; pd:step [ pd:position 1 ; pd:operator pd:PD_0000005 ; pd:argument [ pd:position 1 ; pd:name "location" ; pd:formula "mu" ] ; pd:argument [ pd:position 2 ; pd:name "scale" ; pd:formula "sigma" ] ] ; pd:step [ pd:position 2 ; pd:operator pd:PD_0000006 ] ; pd:step [ pd:position 3 ; pd:operator pd:PD_0000026 ; pd:argument [ pd:position 1 ; pd:name "lower" ; pd:formula "l" ] ; pd:argument [ pd:position 2 ; pd:name "upper" ; pd:formula "u" ] ] ] ;
+    pd:auxiliary [ pd:position 1 ; pd:name "a" ; pd:formula "(log(l) - mu)/sigma" ] ;
+    pd:auxiliary [ pd:position 2 ; pd:name "b" ; pd:formula "(log(u) - mu)/sigma" ] ;
+    pd:auxiliary [ pd:position 3 ; pd:name "D" ; pd:formula "Phi(b) - Phi(a)" ] ;
+    pd:canonicalChart pd:PD_0000030 ;
+    pd:hasChart pd:PD_0000030 ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000007 ; pd:infimum "l" ; pd:supremum "u" ; pd:massAtInfimum "0" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000008 ; pd:formula "exp(mu + sigma**2/2)*(Phi(b - sigma) - Phi(a - sigma))/D" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000009 ; pd:orders "all-real" ; pd:formula "exp(k*mu + k**2*sigma**2/2)*(Phi(b - k*sigma) - Phi(a - k*sigma))/D" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000010 ; pd:orders "nonnegative-integers" ] ;
+    pd:reduction [ pd:when "l == 0 and u == inf" ; pd:reductionChart pd:PD_0000017 ] .
+
+pd:PD_0000030
+    a owl:NamedIndividual, pd:Chart ;
+    rdfs:label "the mean and standard deviation of the logarithm before truncation, and the bounds"@en ;
+    skos:notation "truncated-lognormal/meanlog-sdlog-bounds" ;
+    pd:chartOf pd:PD_0000029 ;
+    pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the mean of ln X before truncation"@en ; pd:domain "real" ] ;
+    pd:coordinate [ pd:position 2 ; pd:name "sigma" ; pd:symbol "σ" ; pd:meaning "the standard deviation of ln X before truncation"@en ; pd:domain "positive" ] ;
+    pd:coordinate [ pd:position 3 ; pd:name "l" ; pd:symbol "l" ; pd:meaning "the lower bound, in the draw's units; 0 for none"@en ; pd:domain "extended-nonnegative" ] ;
+    pd:coordinate [ pd:position 4 ; pd:name "u" ; pd:symbol "u" ; pd:meaning "the upper bound, in the draw's units; inf for none"@en ; pd:domain "extended-nonnegative" ] ;
+    pd:domainCondition "l < u" ;
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "TruncatedLogNormal(μ, σ, l, u)" ; pd:head "TruncatedLogNormal" ; pd:argument [ pd:position 1 ; pd:formula "mu" ] ; pd:argument [ pd:position 2 ; pd:formula "sigma" ] ; pd:argument [ pd:position 3 ; pd:formula "l" ] ; pd:argument [ pd:position 4 ; pd:formula "u" ] ] .
+
+pd:PD_0000031
+    a owl:NamedIndividual, pd:Family ;
+    rdfs:label "truncated lognormal with mean one"@en ;
+    skos:notation "mean-one-truncated-lognormal" ;
+    skos:definition "The truncated lognormal laws whose mean is one. Their chart is the parameter files' TruncatedLogNormal: the standard deviation of the logarithm after truncation, and the bounds in standard deviations of the normal before truncation."@en ;
+    pd:subfamilyOf pd:PD_0000029 ;
+    pd:hasConstraint pd:PD_0000012 ;
+    pd:hasChart pd:PD_0000032 .
+
+pd:PD_0000032
+    a owl:NamedIndividual, pd:Chart ;
+    rdfs:label "the standard deviation of the logarithm after truncation, and the bounds in standard deviations"@en ;
+    skos:notation "mean-one-truncated-lognormal/sd-log-standardized-bounds" ;
+    pd:chartOf pd:PD_0000031 ;
+    pd:coordinate [ pd:position 1 ; pd:name "sd_log" ; pd:symbol "σ" ; pd:meaning "the standard deviation of ln X, after truncation"@en ; pd:domain "positive" ; pd:asExpectation "sqrt(E(log(X)**2) - E(log(X))**2)" ] ;
+    pd:coordinate [ pd:position 2 ; pd:name "bot" ; pd:symbol "bot" ; pd:meaning "the lower bound, in standard deviations of the normal before truncation; -inf for none"@en ; pd:domain "extended-real" ] ;
+    pd:coordinate [ pd:position 3 ; pd:name "top" ; pd:symbol "top" ; pd:meaning "the upper bound, in standard deviations of the normal before truncation; inf for none"@en ; pd:domain "extended-real" ] ;
+    pd:domainCondition "bot < top" ;
+    pd:domainCondition "bot > -inf or top < inf" ;
+    pd:toCanonicalAuxiliary [ pd:position 1 ; pd:name "D" ; pd:formula "Phi(top) - Phi(bot)" ] ;
+    pd:toCanonicalAuxiliary [ pd:position 2 ; pd:name "v" ; pd:formula "1 + (xphi(bot) - xphi(top))/D - ((phi(bot) - phi(top))/D)**2" ] ;
+    pd:toCanonicalAuxiliary [ pd:position 3 ; pd:name "s" ; pd:formula "sd_log/sqrt(v)" ] ;
+    pd:toCanonicalAuxiliary [ pd:position 4 ; pd:name "m" ; pd:formula "-s**2/2 - log((Phi(top - s) - Phi(bot - s))/D)" ] ;
+    pd:fromCanonicalAuxiliary [ pd:position 1 ; pd:name "a" ; pd:formula "(log(l) - mu)/sigma" ] ;
+    pd:fromCanonicalAuxiliary [ pd:position 2 ; pd:name "b" ; pd:formula "(log(u) - mu)/sigma" ] ;
+    pd:fromCanonicalAuxiliary [ pd:position 3 ; pd:name "D" ; pd:formula "Phi(b) - Phi(a)" ] ;
+    pd:fromCanonicalAuxiliary [ pd:position 4 ; pd:name "v" ; pd:formula "1 + (xphi(a) - xphi(b))/D - ((phi(a) - phi(b))/D)**2" ] ;
+    pd:toCanonical [ pd:name "mu" ; pd:formula "m" ] ;
+    pd:toCanonical [ pd:name "sigma" ; pd:formula "s" ] ;
+    pd:toCanonical [ pd:name "l" ; pd:formula "exp(m + s*bot)" ] ;
+    pd:toCanonical [ pd:name "u" ; pd:formula "exp(m + s*top)" ] ;
+    pd:fromCanonical [ pd:name "sd_log" ; pd:formula "sigma*sqrt(v)" ] ;
+    pd:fromCanonical [ pd:name "bot" ; pd:formula "a" ] ;
+    pd:fromCanonical [ pd:name "top" ; pd:formula "b" ] ;
+    pd:conversion "irrational" ;
+    pd:writtenAs [ pd:format "parameter-file" ; pd:spelling "{TruncatedLogNormal: {sd_log: σ, bot: bot, top: top}}" ; pd:head "TruncatedLogNormal" ; pd:argument [ pd:position 1 ; pd:name "sd_log" ; pd:formula "sd_log" ] ; pd:argument [ pd:position 2 ; pd:name "bot" ; pd:formula "bot" ] ; pd:argument [ pd:position 3 ; pd:name "top" ; pd:formula "top" ] ; pd:default "bot = -3" ; pd:default "top = 3" ; pd:noneToken "null" ] .

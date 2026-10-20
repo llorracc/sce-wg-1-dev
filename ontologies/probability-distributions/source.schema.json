@@ -289,6 +289,10 @@
         "domain": {
           "description": "real: ℝ; positive: (0, ∞); nonnegative: [0, ∞); unit-interval: [0, 1]; extended-real: [−∞, ∞]; extended-nonnegative: [0, ∞].",
           "enum": ["real", "positive", "nonnegative", "unit-interval", "extended-real", "extended-nonnegative"]
+        },
+        "as_expectation": {
+          "description": "The coordinate's meaning as an expectation under the law at the point: a formula in E(·) of the draw X, such as sqrt(E(log(X)**2) - E(log(X))**2) for the standard deviation of the logarithm.",
+          "$ref": "#/$defs/Formula"
         }
       }
     },

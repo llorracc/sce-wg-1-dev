@@ -17,4 +17,10 @@ formula syntax and the two written forms. The first rows, all new:
 - the point mass, with its charts of a normal with variance zero and a lognormal with zero spread, and its subfamily at
   one;
 - the truncated normal, conditioned on an interval in the variate's units, with the operator of truncation to an
-  interval, and its reduction to the normal when neither bound binds.
+  interval, and its reduction to the normal when neither bound binds;
+- the truncated lognormal, conditioned on an interval in the draw's units, and its reduction to the lognormal when
+  neither bound binds; its subfamily of mean one, written by the parameter files' chart: the standard deviation of the
+  logarithm after truncation, and the bounds in standard deviations of the normal before truncation, with an omitted
+  bound meaning three and `null` meaning none.
+
+Every coordinate that is an expectation under the law says so, and the tests check it by quadrature.

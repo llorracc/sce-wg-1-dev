@@ -137,16 +137,16 @@ families:
         name: mean-sd
         label: mean and standard deviation
         coordinates:
-          - {name: mu, symbol: μ, meaning: the mean, domain: real}
-          - {name: sigma, symbol: σ, meaning: the standard deviation, domain: positive}
+          - {name: mu, symbol: μ, meaning: the mean, domain: real, as_expectation: E(X)}
+          - {name: sigma, symbol: σ, meaning: the standard deviation, domain: positive, as_expectation: sqrt(E(X**2) - E(X)**2)}
         cross_references:
           - {predicate: skos:exactMatch, target: probonto:PROB_k0000239, note: "Normal1 (mean, stdev)"}
       - id: PD_0000015
         name: mean-variance
         label: mean and variance
         coordinates:
-          - {name: mu, symbol: μ, meaning: the mean, domain: real}
-          - {name: v, symbol: v, meaning: the variance, domain: positive}
+          - {name: mu, symbol: μ, meaning: the mean, domain: real, as_expectation: E(X)}
+          - {name: v, symbol: v, meaning: the variance, domain: positive, as_expectation: E(X**2) - E(X)**2}
         to_canonical: {mu: mu, sigma: sqrt(v)}
         from_canonical: {mu: mu, v: sigma**2}
         conversion: irrational
@@ -180,8 +180,8 @@ families:
         name: meanlog-sdlog
         label: mean and standard deviation of the logarithm
         coordinates:
-          - {name: mu, symbol: μ, meaning: the mean of ln X, domain: real}
-          - {name: sigma, symbol: σ, meaning: the standard deviation of ln X, domain: positive}
+          - {name: mu, symbol: μ, meaning: the mean of ln X, domain: real, as_expectation: E(log(X))}
+          - {name: sigma, symbol: σ, meaning: the standard deviation of ln X, domain: positive, as_expectation: sqrt(E(log(X)**2) - E(log(X))**2)}
         written_as:
           bellman-sym:
             - {spelling: "LogNormal(μ, σ)", head: LogNormal, arguments: [mu, sigma]}
@@ -206,7 +206,7 @@ families:
         name: sd-log
         label: standard deviation of the logarithm
         coordinates:
-          - {name: sigma, symbol: σ, meaning: the standard deviation of ln X, domain: positive}
+          - {name: sigma, symbol: σ, meaning: the standard deviation of ln X, domain: positive, as_expectation: sqrt(E(log(X)**2) - E(log(X))**2)}
         to_canonical: {mu: -sigma**2/2, sigma: sigma}
         from_canonical: {sigma: sigma}
         conversion: exact
@@ -230,12 +230,12 @@ families:
         name: value
         label: the point
         coordinates:
-          - {name: x, symbol: x, meaning: the point, domain: real}
+          - {name: x, symbol: x, meaning: the point, domain: real, as_expectation: E(X)}
       - id: PD_0000022
         name: normal-zero-variance
         label: a normal with variance zero
         coordinates:
-          - {name: mu, symbol: μ, meaning: the point, domain: real}
+          - {name: mu, symbol: μ, meaning: the point, domain: real, as_expectation: E(X)}
         to_canonical: {x: mu}
         from_canonical: {mu: x}
         conversion: exact
@@ -246,7 +246,7 @@ families:
         name: lognormal-zero-spread
         label: a lognormal with zero spread
         coordinates:
-          - {name: mu, symbol: μ, meaning: the logarithm of the point, domain: real}
+          - {name: mu, symbol: μ, meaning: the logarithm of the point, domain: real, as_expectation: E(log(X))}
         covers: x > 0
         to_canonical: {x: exp(mu)}
         from_canonical: {mu: log(x)}
@@ -319,3 +319,94 @@ families:
       moments: {orders: nonnegative-integers}
     reductions:
       - {when: l == -inf and u == inf, family: normal, chart: mean-sd}
+
+  - id: PD_0000029
+    name: truncated-lognormal
+    label: truncated lognormal
+    stated_set: "[l, u] ∩ (0, ∞)"
+    definition: >-
+      The law of exp(μ + σZ) given l ≤ exp(μ + σZ) ≤ u, Z standard normal: the exponential of a normal truncated to
+      [ln l, ln u].
+    measure: TruncatedLogNormal(μ, σ, l, u) = (exp∗ aff(μ, σ)∗ N(0, 1))|[l, u] = exp∗ ((aff(μ, σ)∗ N(0, 1))|[ln l, ln u])
+    built_from:
+      base: standard-normal
+      operators:
+        - {operator: affine-pushforward, location: mu, scale: sigma}
+        - {operator: exponential-pushforward}
+        - {operator: interval-conditioning, lower: l, upper: u}
+    where:
+      a: (log(l) - mu)/sigma
+      b: (log(u) - mu)/sigma
+      D: Phi(b) - Phi(a)
+    canonical_chart: meanlog-sdlog-bounds
+    charts:
+      - id: PD_0000030
+        name: meanlog-sdlog-bounds
+        label: the mean and standard deviation of the logarithm before truncation, and the bounds
+        coordinates:
+          - {name: mu, symbol: μ, meaning: the mean of ln X before truncation, domain: real}
+          - {name: sigma, symbol: σ, meaning: the standard deviation of ln X before truncation, domain: positive}
+          - {name: l, symbol: l, meaning: "the lower bound, in the draw's units; 0 for none", domain: extended-nonnegative}
+          - {name: u, symbol: u, meaning: "the upper bound, in the draw's units; inf for none", domain: extended-nonnegative}
+        domain_conditions: ["l < u"]
+        written_as:
+          bellman-sym:
+            - {spelling: "TruncatedLogNormal(μ, σ, l, u)", head: TruncatedLogNormal, arguments: [mu, sigma, l, u]}
+    properties:
+      support: {infimum: l, supremum: u, mass_at_infimum: "0"}
+      mean: exp(mu + sigma**2/2)*(Phi(b - sigma) - Phi(a - sigma))/D
+      moments: {orders: all-real, formula: exp(k*mu + k**2*sigma**2/2)*(Phi(b - k*sigma) - Phi(a - k*sigma))/D}
+      log-moments: {orders: nonnegative-integers}
+    reductions:
+      - {when: l == 0 and u == inf, family: lognormal, chart: meanlog-sdlog}
+
+  - id: PD_0000031
+    name: mean-one-truncated-lognormal
+    label: truncated lognormal with mean one
+    subfamily_of: truncated-lognormal
+    constraints: [mean-one]
+    definition: >-
+      The truncated lognormal laws whose mean is one. Their chart is the parameter files' TruncatedLogNormal: the
+      standard deviation of the logarithm after truncation, and the bounds in standard deviations of the normal before
+      truncation.
+    charts:
+      - id: PD_0000032
+        name: sd-log-standardized-bounds
+        label: the standard deviation of the logarithm after truncation, and the bounds in standard deviations
+        coordinates:
+          - name: sd_log
+            symbol: σ
+            meaning: the standard deviation of ln X, after truncation
+            domain: positive
+            as_expectation: sqrt(E(log(X)**2) - E(log(X))**2)
+          - name: bot
+            symbol: bot
+            meaning: the lower bound, in standard deviations of the normal before truncation; -inf for none
+            domain: extended-real
+          - name: top
+            symbol: top
+            meaning: the upper bound, in standard deviations of the normal before truncation; inf for none
+            domain: extended-real
+        domain_conditions:
+          - bot < top
+          - bot > -inf or top < inf
+        to_canonical_where:
+          D: Phi(top) - Phi(bot)
+          v: 1 + (xphi(bot) - xphi(top))/D - ((phi(bot) - phi(top))/D)**2
+          s: sd_log/sqrt(v)
+          m: -s**2/2 - log((Phi(top - s) - Phi(bot - s))/D)
+        to_canonical: {mu: m, sigma: s, l: exp(m + s*bot), u: exp(m + s*top)}
+        from_canonical_where:
+          a: (log(l) - mu)/sigma
+          b: (log(u) - mu)/sigma
+          D: Phi(b) - Phi(a)
+          v: 1 + (xphi(a) - xphi(b))/D - ((phi(a) - phi(b))/D)**2
+        from_canonical: {sd_log: sigma*sqrt(v), bot: a, top: b}
+        conversion: irrational
+        written_as:
+          parameter-file:
+            - spelling: "{TruncatedLogNormal: {sd_log: σ, bot: bot, top: top}}"
+              head: TruncatedLogNormal
+              arguments: {sd_log: sd_log, bot: bot, top: top}
+              defaults: {bot: "-3", top: "3"}
+              none: "null"

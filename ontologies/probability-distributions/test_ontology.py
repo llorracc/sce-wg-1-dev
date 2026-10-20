@@ -234,6 +234,30 @@ def test_means_and_moments_agree_with_the_measures(rows):
     assert checked > 0
 
 
+def test_coordinates_mean_what_they_say(rows):
+    """A coordinate stated as an expectation equals that expectation under the law at the point, by quadrature."""
+    checked = 0
+    for fam in rows.values():
+        if fam["kind"] != "family":
+            continue
+        top = root(rows, fam)
+        for chart in charts_of(rows, fam):
+            stated = [c for c in chart["coordinates"] if "as_expectation" in c]
+            if not stated:
+                continue
+            for p in points(chart):
+                try:
+                    x, w = quadrature(rows, top, to_canonical(chart, p))
+                except Degenerate:
+                    continue
+                expect = {"E": lambda g: float(w @ g(x))}
+                for c in stated:
+                    value = formulas.evaluate(c["as_expectation"], expect)
+                    assert close(value, p[c["name"]]), (chart["qualified_name"], c["name"], p, value)
+                    checked += 1
+    assert checked > 0
+
+
 def test_constraints_hold_on_their_subfamilies(rows):
     for fam in rows.values():
         if fam["kind"] != "family" or "subfamily_of" not in fam:

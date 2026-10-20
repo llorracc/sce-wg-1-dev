@@ -1,9 +1,10 @@
 """The formula syntax of the ontology's source, and an evaluator for it.
 
 A formula is an arithmetic expression in Python's syntax over the coordinates of a chart: numbers, names, + - * / **,
-unary minus, comparisons, `and`/`or`, and calls to the functions in FUNCTIONS. Nothing else parses, so a formula can be
-read by any consumer and evaluated without running code from the source. The generator rejects a formula outside this
-syntax, or one naming anything but the coordinates its place allows.
+unary minus, comparisons, `and`/`or`, and calls to the functions in FUNCTIONS. A coordinate's meaning may also be given
+as an expectation, E(g(X)), the expected value under the law of a formula in the draw X. Nothing else parses, so a
+formula can be read by any consumer and evaluated without running code from the source. The generator rejects a formula
+outside this syntax, or one naming anything but the coordinates its place allows.
 
 The evaluator serves the generator's checks and the tests. The ontology provides no routines for the distributions
 themselves.
@@ -14,27 +15,56 @@ from __future__ import annotations
 import ast
 import math
 
+try:  # numpy, where present, lets a formula be evaluated at many points at once, as an expectation is
+    import numpy as _np
+except ImportError:  # the generator needs none
+    _np = None
+
+def _array(x) -> bool:
+    return _np is not None and isinstance(x, _np.ndarray)
+
+
+def _sqrt(x):
+    return _np.sqrt(x) if _array(x) else math.sqrt(x)
+
+
+def _exp(x):
+    return _np.exp(x) if _array(x) else math.exp(x)
+
+
 def _log(x):
+    if _array(x):
+        with _np.errstate(divide="ignore"):
+            return _np.log(x)
     return -math.inf if x == 0 else math.log(x)
 
 
+def _Phi(x):
+    if _array(x):
+        return _np.vectorize(lambda t: 0.5 * math.erfc(-t / math.sqrt(2.0)))(x)
+    return 0.5 * math.erfc(-x / math.sqrt(2.0))
+
+
 def _phi(x):
-    return math.exp(-0.5 * x * x) / math.sqrt(2.0 * math.pi)
+    return _exp(-0.5 * x * x) / math.sqrt(2.0 * math.pi)
 
 
 def _xphi(x):
+    if _array(x):
+        return _np.where(_np.isinf(x), 0.0, x * _phi(_np.where(_np.isinf(x), 0.0, x)))
     return 0.0 if math.isinf(x) else x * _phi(x)
 
 
 FUNCTIONS = {
-    "sqrt": math.sqrt,
-    "exp": math.exp,
+    "sqrt": _sqrt,
+    "exp": _exp,
     "log": _log,  # log(0) = -inf
-    "Phi": lambda x: 0.5 * math.erfc(-x / math.sqrt(2.0)),  # the standard normal distribution function
+    "Phi": _Phi,  # the standard normal distribution function
     "phi": _phi,  # its density
     "xphi": _xphi,  # x times phi(x), zero at an infinite x
 }
 CONSTANTS = {"inf": math.inf, "pi": math.pi}
+EXPECTATION = "E"  # E(g(X)): the expectation of g of the draw X, allowed in a coordinate's as_expectation only
 TRANSCENDENTAL = {"sqrt", "exp", "log", "Phi", "phi", "xphi"}
 
 _BINARY = {
@@ -77,7 +107,9 @@ def parse(text: str) -> ast.Expression:
         if isinstance(node, ast.Name):
             continue
         if isinstance(node, ast.Call):
-            if isinstance(node.func, ast.Name) and node.func.id in FUNCTIONS and not node.keywords:
+            known = node.func.id in FUNCTIONS or (node.func.id == EXPECTATION and len(node.args) == 1) \
+                if isinstance(node.func, ast.Name) else False
+            if known and not node.keywords:
                 continue
             raise FormulaError(f"{text!r}: only {', '.join(sorted(FUNCTIONS))} may be called, with positional arguments")
         raise FormulaError(f"{text!r}: {type(node).__name__} is outside the formula syntax")
@@ -92,11 +124,15 @@ def names(text: str) -> set[str]:
     return used - set(CONSTANTS)
 
 
+def uses_expectation(text: str) -> bool:
+    return any(isinstance(n, ast.Call) and n.func.id == EXPECTATION for n in ast.walk(parse(text)))
+
+
 def is_exact(text: str) -> bool:
     """True when the formula is rational in its names: no transcendental function and no fractional power."""
     tree = parse(text)
     for node in ast.walk(tree):
-        if isinstance(node, ast.Call) and node.func.id in TRANSCENDENTAL:
+        if isinstance(node, ast.Call) and node.func.id in TRANSCENDENTAL | {EXPECTATION}:
             return False
         if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Pow):
             exponent = node.right
@@ -146,8 +182,18 @@ def evaluate(text: str, env: dict):
         if isinstance(node, ast.BoolOp):
             values = [ev(v) for v in node.values]
             return all(values) if isinstance(node.op, ast.And) else any(values)
+        if isinstance(node, ast.Call) and node.func.id == EXPECTATION:
+            if EXPECTATION not in env:
+                raise FormulaError(f"{text!r}: an expectation needs a law to take it under")
+            argument = node.args[0]
+            return env[EXPECTATION](lambda x: evaluate_node(argument, {**env, "X": x}))
         if isinstance(node, ast.Call):
             return FUNCTIONS[node.func.id](*[ev(a) for a in node.args])
         raise FormulaError(f"{text!r}: cannot evaluate {type(node).__name__}")
 
     return ev(tree)
+
+
+def evaluate_node(node: ast.AST, env: dict):
+    """Evaluate a parsed subexpression, as an expectation's argument is evaluated at each point of the draw."""
+    return evaluate(ast.unparse(node), env)

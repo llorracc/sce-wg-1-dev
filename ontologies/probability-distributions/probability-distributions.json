@@ -21,7 +21,7 @@
         "citation": "Swat MJ, Grenon P, Wimalaratne S (2016). ProbOnto: ontology and knowledge base of probability distributions. Bioinformatics 32(17):2719-2721. doi:10.1093/bioinformatics/btw170"
       }
     ],
-    "source_sha256": "ec6edb31a6fb2684f32f13b939419979122f9cad780c6b176b5b37fb2542864b"
+    "source_sha256": "bb96f39474c7cc9a3d3674465290da5447f30fb7e95b09127221c8170743e780"
   },
   "retired": [],
   "rows": [
@@ -204,13 +204,15 @@
           "name": "mu",
           "symbol": "μ",
           "meaning": "the mean",
-          "domain": "real"
+          "domain": "real",
+          "as_expectation": "E(X)"
         },
         {
           "name": "sigma",
           "symbol": "σ",
           "meaning": "the standard deviation",
-          "domain": "positive"
+          "domain": "positive",
+          "as_expectation": "sqrt(E(X**2) - E(X)**2)"
         }
       ],
       "cross_references": [
@@ -235,13 +237,15 @@
           "name": "mu",
           "symbol": "μ",
           "meaning": "the mean",
-          "domain": "real"
+          "domain": "real",
+          "as_expectation": "E(X)"
         },
         {
           "name": "v",
           "symbol": "v",
           "meaning": "the variance",
-          "domain": "positive"
+          "domain": "positive",
+          "as_expectation": "E(X**2) - E(X)**2"
         }
       ],
       "to_canonical": {
@@ -339,13 +343,15 @@
           "name": "mu",
           "symbol": "μ",
           "meaning": "the mean of ln X",
-          "domain": "real"
+          "domain": "real",
+          "as_expectation": "E(log(X))"
         },
         {
           "name": "sigma",
           "symbol": "σ",
           "meaning": "the standard deviation of ln X",
-          "domain": "positive"
+          "domain": "positive",
+          "as_expectation": "sqrt(E(log(X)**2) - E(log(X))**2)"
         }
       ],
       "written_as": {
@@ -396,7 +402,8 @@
           "name": "sigma",
           "symbol": "σ",
           "meaning": "the standard deviation of ln X",
-          "domain": "positive"
+          "domain": "positive",
+          "as_expectation": "sqrt(E(log(X)**2) - E(log(X))**2)"
         }
       ],
       "to_canonical": {
@@ -475,7 +482,8 @@
           "name": "x",
           "symbol": "x",
           "meaning": "the point",
-          "domain": "real"
+          "domain": "real",
+          "as_expectation": "E(X)"
         }
       ]
     },
@@ -492,7 +500,8 @@
           "name": "mu",
           "symbol": "μ",
           "meaning": "the point",
-          "domain": "real"
+          "domain": "real",
+          "as_expectation": "E(X)"
         }
       ],
       "to_canonical": {
@@ -528,7 +537,8 @@
           "name": "mu",
           "symbol": "μ",
           "meaning": "the logarithm of the point",
-          "domain": "real"
+          "domain": "real",
+          "as_expectation": "E(log(X))"
         }
       ],
       "covers": "x > 0",
@@ -733,6 +743,211 @@
           "note": "TruncatedNormal1 (mean, stdev, lowerBound, upperBound), whose bounds are finite"
         }
       ]
+    },
+    {
+      "id": "PD_0000029",
+      "kind": "family",
+      "name": "truncated-lognormal",
+      "label": "truncated lognormal",
+      "stated_set": "[l, u] ∩ (0, ∞)",
+      "definition": "The law of exp(μ + σZ) given l ≤ exp(μ + σZ) ≤ u, Z standard normal: the exponential of a normal truncated to [ln l, ln u].",
+      "measure": "TruncatedLogNormal(μ, σ, l, u) = (exp∗ aff(μ, σ)∗ N(0, 1))|[l, u] = exp∗ ((aff(μ, σ)∗ N(0, 1))|[ln l, ln u])",
+      "built_from": {
+        "base": "PD_0000001",
+        "operators": [
+          {
+            "operator": "PD_0000005",
+            "arguments": {
+              "location": "mu",
+              "scale": "sigma"
+            }
+          },
+          {
+            "operator": "PD_0000006",
+            "arguments": {}
+          },
+          {
+            "operator": "PD_0000026",
+            "arguments": {
+              "lower": "l",
+              "upper": "u"
+            }
+          }
+        ]
+      },
+      "where": {
+        "a": "(log(l) - mu)/sigma",
+        "b": "(log(u) - mu)/sigma",
+        "D": "Phi(b) - Phi(a)"
+      },
+      "canonical_chart": "PD_0000030",
+      "charts": [
+        "PD_0000030"
+      ],
+      "properties": {
+        "support": {
+          "infimum": "l",
+          "supremum": "u",
+          "mass_at_infimum": "0"
+        },
+        "mean": "exp(mu + sigma**2/2)*(Phi(b - sigma) - Phi(a - sigma))/D",
+        "moments": {
+          "orders": "all-real",
+          "formula": "exp(k*mu + k**2*sigma**2/2)*(Phi(b - k*sigma) - Phi(a - k*sigma))/D"
+        },
+        "log-moments": {
+          "orders": "nonnegative-integers"
+        }
+      },
+      "reductions": [
+        {
+          "when": "l == 0 and u == inf",
+          "family": "PD_0000016",
+          "chart": "PD_0000017"
+        }
+      ]
+    },
+    {
+      "id": "PD_0000030",
+      "kind": "chart",
+      "name": "meanlog-sdlog-bounds",
+      "qualified_name": "truncated-lognormal/meanlog-sdlog-bounds",
+      "label": "the mean and standard deviation of the logarithm before truncation, and the bounds",
+      "family": "PD_0000029",
+      "canonical": true,
+      "coordinates": [
+        {
+          "name": "mu",
+          "symbol": "μ",
+          "meaning": "the mean of ln X before truncation",
+          "domain": "real"
+        },
+        {
+          "name": "sigma",
+          "symbol": "σ",
+          "meaning": "the standard deviation of ln X before truncation",
+          "domain": "positive"
+        },
+        {
+          "name": "l",
+          "symbol": "l",
+          "meaning": "the lower bound, in the draw's units; 0 for none",
+          "domain": "extended-nonnegative"
+        },
+        {
+          "name": "u",
+          "symbol": "u",
+          "meaning": "the upper bound, in the draw's units; inf for none",
+          "domain": "extended-nonnegative"
+        }
+      ],
+      "domain_conditions": [
+        "l < u"
+      ],
+      "written_as": {
+        "bellman-sym": [
+          {
+            "spelling": "TruncatedLogNormal(μ, σ, l, u)",
+            "head": "TruncatedLogNormal",
+            "arguments": [
+              "mu",
+              "sigma",
+              "l",
+              "u"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "PD_0000031",
+      "kind": "family",
+      "name": "mean-one-truncated-lognormal",
+      "label": "truncated lognormal with mean one",
+      "subfamily_of": "PD_0000029",
+      "constraints": [
+        "PD_0000012"
+      ],
+      "definition": "The truncated lognormal laws whose mean is one. Their chart is the parameter files' TruncatedLogNormal: the standard deviation of the logarithm after truncation, and the bounds in standard deviations of the normal before truncation.",
+      "charts": [
+        "PD_0000032"
+      ]
+    },
+    {
+      "id": "PD_0000032",
+      "kind": "chart",
+      "name": "sd-log-standardized-bounds",
+      "qualified_name": "mean-one-truncated-lognormal/sd-log-standardized-bounds",
+      "label": "the standard deviation of the logarithm after truncation, and the bounds in standard deviations",
+      "family": "PD_0000031",
+      "canonical": false,
+      "coordinates": [
+        {
+          "name": "sd_log",
+          "symbol": "σ",
+          "meaning": "the standard deviation of ln X, after truncation",
+          "domain": "positive",
+          "as_expectation": "sqrt(E(log(X)**2) - E(log(X))**2)"
+        },
+        {
+          "name": "bot",
+          "symbol": "bot",
+          "meaning": "the lower bound, in standard deviations of the normal before truncation; -inf for none",
+          "domain": "extended-real"
+        },
+        {
+          "name": "top",
+          "symbol": "top",
+          "meaning": "the upper bound, in standard deviations of the normal before truncation; inf for none",
+          "domain": "extended-real"
+        }
+      ],
+      "domain_conditions": [
+        "bot < top",
+        "bot > -inf or top < inf"
+      ],
+      "to_canonical_where": {
+        "D": "Phi(top) - Phi(bot)",
+        "v": "1 + (xphi(bot) - xphi(top))/D - ((phi(bot) - phi(top))/D)**2",
+        "s": "sd_log/sqrt(v)",
+        "m": "-s**2/2 - log((Phi(top - s) - Phi(bot - s))/D)"
+      },
+      "to_canonical": {
+        "mu": "m",
+        "sigma": "s",
+        "l": "exp(m + s*bot)",
+        "u": "exp(m + s*top)"
+      },
+      "from_canonical_where": {
+        "a": "(log(l) - mu)/sigma",
+        "b": "(log(u) - mu)/sigma",
+        "D": "Phi(b) - Phi(a)",
+        "v": "1 + (xphi(a) - xphi(b))/D - ((phi(a) - phi(b))/D)**2"
+      },
+      "from_canonical": {
+        "sd_log": "sigma*sqrt(v)",
+        "bot": "a",
+        "top": "b"
+      },
+      "conversion": "irrational",
+      "written_as": {
+        "parameter-file": [
+          {
+            "spelling": "{TruncatedLogNormal: {sd_log: σ, bot: bot, top: top}}",
+            "head": "TruncatedLogNormal",
+            "arguments": {
+              "sd_log": "sd_log",
+              "bot": "bot",
+              "top": "top"
+            },
+            "defaults": {
+              "bot": "-3",
+              "top": "3"
+            },
+            "none": "null"
+          }
+        ]
+      }
     }
   ]
 }
