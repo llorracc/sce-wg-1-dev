@@ -102,6 +102,17 @@ operators:
       - {name: upper, meaning: the upper bound u; inf for none}
     set: lower <= z <= upper
     definition: Conditioning on the interval [l, u], which must have positive measure.
+  - id: PD_0000059
+    name: piecewise-linear-pushforward
+    label: piecewise-linear map
+    case_of: pushforward
+    arguments:
+      - {name: knots_u, meaning: "the knots' abscissae, nondecreasing"}
+      - {name: knots_q, meaning: "the knots' ordinates, nondecreasing"}
+    map: interp(z, knots_u, knots_q)
+    definition: >-
+      The pushforward under the nondecreasing piecewise-linear function through the knots; an abscissa listed twice is a
+      jump.
   - id: PD_0000041
     name: finite-mixture
     label: finite mixture
@@ -851,3 +862,68 @@ families:
           bellman-sym:
             - spelling: "Mixture((w₁, TruncatedLogNormal(μ₁, σ₁, l₁, u₁)), …), computed from the chart"
               head: Mixture
+
+  - id: PD_0000060
+    name: quantile-table
+    label: quantile table
+    stated_set: "[Q(0), Q(1)]"
+    definition: >-
+      The law whose quantile function Q, the inverse of the distribution function, is linear between the points of a
+      table: Q∗ U(0, 1). A stretch where u and Q both rise has a flat density; one where u rises and Q stays flat is a
+      point mass; a u listed twice, with Q higher the second time, is a gap in the support. The normal form removes an
+      interior point that lies on the line through its neighbors, which adds nothing; the canonical chart admits none.
+    measure: Q∗ U(0, 1), Q piecewise linear through the points (uᵢ, qᵢ)
+    built_from:
+      base: unit-uniform
+      operators:
+        - {operator: piecewise-linear-pushforward, knots_u: u, knots_q: q}
+    canonical_chart: points
+    charts:
+      - id: PD_0000061
+        name: points
+        label: the points of the table
+        coordinates:
+          - {name: u, symbol: u, meaning: "the probabilities, from 0 to 1", domain: unit-interval-vector}
+          - {name: q, symbol: Q, meaning: the quantiles there, domain: real-vector}
+        domain_conditions:
+          - count(u) == count(q) and count(u) >= 3
+          - first(u) == 0 and last(u) == 1 and first(diff(u)) > 0 and last(diff(u)) > 0
+          - diff(u) >= 0 and diff(q) >= 0
+          - heads(diff(u)) + tails(diff(u)) > 0
+          - diff(u) > 0 or diff(q) > 0
+          - any(diff(u)*diff(q) > 0)
+          - heads(diff(q))*tails(diff(u)) != tails(diff(q))*heads(diff(u))
+    properties:
+      support: {infimum: first(q), supremum: last(q), mass_at_infimum: first(diff(u))*(first(diff(q)) == 0)}
+      mean: sum(diff(u)*(heads(q) + tails(q))/2)
+
+  - id: PD_0000062
+    name: mean-one-quantile-table
+    label: quantile table with mean one
+    subfamily_of: quantile-table
+    constraints: [mean-one]
+    definition: >-
+      The quantile tables on positive values whose mean is one. Their chart is the parameter files' Tabulated, whose
+      checker accepts a mean within 10⁻¹² of one; the table is the law, not an approximation of one.
+    charts:
+      - id: PD_0000063
+        name: points
+        label: the points of the table
+        coordinates:
+          - {name: u, symbol: u, meaning: "the probabilities, from 0 to 1", domain: unit-interval-vector}
+          - {name: q, symbol: Q, meaning: "the quantiles there, positive", domain: positive-vector}
+        domain_conditions:
+          - count(u) == count(q) and count(u) >= 3
+          - first(u) == 0 and last(u) == 1 and first(diff(u)) > 0 and last(diff(u)) > 0
+          - diff(u) >= 0 and diff(q) >= 0
+          - heads(diff(u)) + tails(diff(u)) > 0
+          - diff(u) > 0 or diff(q) > 0
+          - any(diff(u)*diff(q) > 0)
+          - heads(diff(q))*tails(diff(u)) != tails(diff(q))*heads(diff(u))
+          - sum(diff(u)*(heads(q) + tails(q))/2) == 1
+        to_canonical: {u: u, q: q}
+        from_canonical: {u: u, q: q}
+        conversion: exact
+        written_as:
+          parameter-file:
+            - {spelling: "{Tabulated: {points: [[u₁, Q₁], …, [uₙ, Qₙ]]}}", head: Tabulated}

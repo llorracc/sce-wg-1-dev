@@ -7,8 +7,8 @@ compared, a toolkit's laws can be checked against one standard, and the provenan
 The ontology gives definitions, charts and conversion formulas. It provides no routines for sampling or evaluating a
 distribution.
 
-**Status: draft, version 0.1.0-draft.1.** The design below is settled. The catalog is being added one family at a time;
-[the catalog](#the-catalog) says which families are in and which are to come.
+**Status: draft, version 0.1.0-draft.1.** The design below is settled, and [the catalog](#the-catalog) holds every
+family the schemas' parameter files and Bellman-SYM's stage files write.
 
 ## The kinds
 
@@ -148,7 +148,7 @@ The source is the same, organized by kind, with charts inside their families and
 ## The formula syntax
 
 A formula is an arithmetic expression in Python's syntax over a chart's coordinates. It may use numbers, the coordinate
-names, `+ - * / **`, comparisons, `and` and `or`, the functions `sqrt`, `exp`, `log` (with log 0 = −∞), `Phi` (the
+names, `+ - * / **`, comparisons (`< <= > >= == !=`), `and` and `or`, the functions `sqrt`, `exp`, `log` (with log 0 = −∞), `Phi` (the
 standard normal distribution function), `phi` (its density) and `xphi` (x·φ(x), zero at an infinite x), and the constants
 `inf` and `pi`. Infinite values follow IEEE arithmetic, so a bound of `inf` passes through exp and log. In a moment's
 formula `k` is the order; in an operator's map or set `z` is the variable; in a coordinate's `as_expectation`, `E(·)` is
@@ -156,7 +156,9 @@ the expectation under the law and `X` the draw. The constant `euler_gamma` is Eu
 
 A coordinate may be a vector or a matrix. Arithmetic and comparisons on vectors are elementwise, and a condition holds
 when it holds at every entry; `x[j]` is entry j, counted from one; `[a, b]` is a vector; and `sum`, `min`, `max`,
-`count`, `first`, `last`, `index` (1, 2, …, n), `increasing` (strictly) and `row(M, i)` act on vectors and matrices. In
+`count`, `first`, `last`, `index` (1, 2, …, n), `increasing` (strictly), `lex_increasing`, `any`, `all`, `diff`
+(successive differences), `heads` and `tails` (all entries but the last, or the first), `row(M, i)` and `interp` (the
+piecewise-linear function through given points) act on vectors and matrices. In
 a mixture's construction `j` is the component; in a kernel's properties the state's name is the current position. Nothing else parses, so any consumer can read a formula without running code
 from the source.
 
@@ -208,7 +210,7 @@ of probability distributions", *Bioinformatics* 32(17):2719–2721, doi:10.1093/
 | finite mixture, an operator, Bellman-SYM's `Mixture` | in this release |
 | lognormal mixture, Bellman-SYM's `Mixture` of `LogNormal` components, and its subfamily of mean one, written by the parameter files' `LogNormalMixture` | in this release |
 | truncated lognormal mixture, Bellman-SYM's `Mixture` of `TruncatedLogNormal` components, and its subfamily of mean one, written by the parameter files' `TruncatedLogNormalMixture` | in this release |
-| quantile table | to come |
+| quantile table, the pushforward of the unit uniform under a piecewise-linear quantile function, and its subfamily of mean one, written by the parameter files' `Tabulated` | in this release |
 
 Families outside this list, such as the gamma, Weibull and beta, enter when a schema or a toolkit needs them.
 

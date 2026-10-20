@@ -31,9 +31,11 @@ SAMPLES = {
     "extended-real": (-INF, -2.0, 0.5, INF),
     "extended-nonnegative": (0.0, 0.6, 1.4, INF),
     # vectors of two and three entries; a chart's joint conditions keep the combinations that fit together
-    "real-vector": ([-0.25, 0.25], [-0.5, 0.0, 0.5], [0.5, 1.5], [0.5, 1.0, 1.5]),
-    "positive-vector": ([0.5, 1.5], [0.5, 1.0, 1.5], [0.05, 0.3], [0.1, 0.2, 0.4]),
-    "unit-interval-vector": ([0.0, 1.0], [0.0, 0.25, 1.0]),
+    "real-vector": ([-0.25, 0.25], [-0.5, 0.0, 0.5], [0.5, 1.5], [0.5, 1.0, 1.5], [0.5, 0.75, 2.0],
+                    [0.5, 0.5, 1.0, 2.0]),
+    "positive-vector": ([0.5, 1.5], [0.5, 1.0, 1.5], [0.05, 0.3], [0.1, 0.2, 0.4], [0.5, 0.75, 2.0],
+                        [0.5, 0.5, 1.0, 2.0]),
+    "unit-interval-vector": ([0.0, 1.0], [0.0, 0.25, 1.0], [0.0, 0.5, 1.0], [0.0, 0.5, 0.5, 1.0]),
     "extended-real-vector": ([-2.0, -INF], [-3.0, -2.0, -INF], [2.0, INF], [3.0, 2.0, INF]),
     "extended-nonnegative-vector": ([0.0, 0.5], [0.0, 0.2, 0.5], [0.0, 0.0], [2.0, INF], [3.0, 2.0, INF], [INF, INF]),
     "probability-vector": ([0.5, 0.5], [0.25, 0.5, 0.25], [0.75, 0.25], [0.0, 1.0]),
@@ -118,7 +120,7 @@ class Degenerate(Exception):
     """A point whose truncation keeps too little mass to test at the tolerance."""
 
 
-def base_rule(measure: dict, lower: float, upper: float) -> tuple[np.ndarray, np.ndarray]:
+def base_rule(measure: dict, lower: float, upper: float, breaks=()) -> tuple[np.ndarray, np.ndarray]:
     """Nodes and weights for a named measure conditioned on [lower, upper], by composite Gauss-Legendre against the
     density the row states. Unconditioned, the weights must sum to one, which checks the density; conditioned, they are
     divided by the interval's mass, found the same way and not from any formula of the rows."""
@@ -129,7 +131,7 @@ def base_rule(measure: dict, lower: float, upper: float) -> tuple[np.ndarray, np
     if not a < b:
         raise Degenerate
     panels = max(1, math.ceil((b - a) / PANEL))
-    edges = np.linspace(a, b, panels + 1)
+    edges = np.unique(np.concatenate([np.linspace(a, b, panels + 1), [t for t in breaks if a < t < b]]))
     x, w = np.polynomial.legendre.leggauss(NODES)
     mid, half = (edges[:-1] + edges[1:]) / 2, (edges[1:] - edges[:-1]) / 2
     z = (mid[:, None] + half[:, None] * x[None, :]).ravel()
@@ -179,6 +181,7 @@ def quadrature(rows: dict, family: dict, point: dict, state: dict | None = None)
 def _construct(rows: dict, built: dict, env: dict) -> tuple[np.ndarray, np.ndarray]:
     forward, inverse = [], []  # the increasing maps applied so far, and their inverses
     lower, upper = -INF, INF  # the base's conditioning interval
+    breaks = []  # points where a map has a kink, at which the base's panels must break
     for step in built["operators"]:
         op = rows[step["operator"]]["name"]
         args = {k: formulas.evaluate(f, env) for k, f in step["arguments"].items()}
@@ -190,6 +193,11 @@ def _construct(rows: dict, built: dict, env: dict) -> tuple[np.ndarray, np.ndarr
         elif op == "exponential-pushforward":
             forward.append(np.exp)
             inverse.append(lambda y: formulas.FUNCTIONS["log"](y))
+        elif op == "piecewise-linear-pushforward":
+            assert not forward, "a piecewise-linear map applies to the base"
+            knots_u, knots_q = np.asarray(args["knots_u"]), np.asarray(args["knots_q"])
+            forward.append(lambda z, ku=knots_u, kq=knots_q: np.interp(z, ku, kq))
+            breaks.extend(knots_u.tolist())
         elif op == "interval-conditioning":
             lo, hi = args["lower"], args["upper"]
             for g in reversed(inverse):
@@ -197,7 +205,7 @@ def _construct(rows: dict, built: dict, env: dict) -> tuple[np.ndarray, np.ndarr
             lower, upper = max(lower, lo), min(upper, hi)
         else:
             raise AssertionError(f"no quadrature rule for the operator {op}")
-    z, w = base_rule(rows[built["base"]], lower, upper)
+    z, w = base_rule(rows[built["base"]], lower, upper, breaks)
     for f in forward:
         z = f(z)
     return z, w

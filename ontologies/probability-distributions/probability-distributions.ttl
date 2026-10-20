@@ -15,7 +15,7 @@
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:source <http://www.probonto.org/ontology> ;
     dcterms:bibliographicCitation "Swat MJ, Grenon P, Wimalaratne S (2016). ProbOnto: ontology and knowledge base of probability distributions. Bioinformatics 32(17):2719-2721. doi:10.1093/bioinformatics/btw170"@en ;
-    pd:sourceDigest "sha256:a6a9f6c1e664a4ec11e8a250909f578a7f7372d7857adad0ae9bea40eb567b9f" .
+    pd:sourceDigest "sha256:30f188e331c7c17a6ba17cf9738ede1803e340d1d1dfa57e325bec3c0f7df247" .
 
 skos:definition a owl:AnnotationProperty .
 skos:notation a owl:AnnotationProperty .
@@ -955,3 +955,72 @@ pd:PD_0000058
     pd:conversion "irrational" ;
     pd:writtenAs [ pd:format "parameter-file" ; pd:spelling "{TruncatedLogNormalMixture: {components: [{weight: w₁, mean_log: m₁, sd_log: s₁, bot: b₁, top: t₁}, …]}}" ; pd:head "TruncatedLogNormalMixture" ; pd:argument [ pd:position 1 ; pd:name "weight" ; pd:formula "weights" ] ; pd:argument [ pd:position 2 ; pd:name "mean_log" ; pd:formula "mean_log" ] ; pd:argument [ pd:position 3 ; pd:name "sd_log" ; pd:formula "sd_log" ] ; pd:argument [ pd:position 4 ; pd:name "bot" ; pd:formula "bot" ] ; pd:argument [ pd:position 5 ; pd:name "top" ; pd:formula "top" ] ; pd:default "bot = -3" ; pd:default "top = 3" ; pd:perComponent true ; pd:noneToken "null" ] ;
     pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "Mixture((w₁, TruncatedLogNormal(μ₁, σ₁, l₁, u₁)), …), computed from the chart" ; pd:head "Mixture" ] .
+
+pd:PD_0000059
+    a owl:NamedIndividual, pd:Operator ;
+    rdfs:label "piecewise-linear map"@en ;
+    skos:notation "piecewise-linear-pushforward" ;
+    skos:definition "The pushforward under the nondecreasing piecewise-linear function through the knots; an abscissa listed twice is a jump."@en ;
+    pd:caseOf pd:PD_0000002 ;
+    pd:argument [ pd:position 1 ; pd:name "knots_u" ; pd:meaning "the knots' abscissae, nondecreasing"@en ] ;
+    pd:argument [ pd:position 2 ; pd:name "knots_q" ; pd:meaning "the knots' ordinates, nondecreasing"@en ] ;
+    pd:map "interp(z, knots_u, knots_q)" .
+
+pd:PD_0000060
+    a owl:NamedIndividual, pd:Family ;
+    rdfs:label "quantile table"@en ;
+    skos:notation "quantile-table" ;
+    skos:definition "The law whose quantile function Q, the inverse of the distribution function, is linear between the points of a table: Q∗ U(0, 1). A stretch where u and Q both rise has a flat density; one where u rises and Q stays flat is a point mass; a u listed twice, with Q higher the second time, is a gap in the support. The normal form removes an interior point that lies on the line through its neighbors, which adds nothing; the canonical chart admits none."@en ;
+    pd:statedSet "[Q(0), Q(1)]" ;
+    pd:measureExpression "Q∗ U(0, 1), Q piecewise linear through the points (uᵢ, qᵢ)" ;
+    pd:builtFrom [ pd:base pd:PD_0000033 ; pd:step [ pd:position 1 ; pd:operator pd:PD_0000059 ; pd:argument [ pd:position 1 ; pd:name "knots_u" ; pd:formula "u" ] ; pd:argument [ pd:position 2 ; pd:name "knots_q" ; pd:formula "q" ] ] ] ;
+    pd:canonicalChart pd:PD_0000061 ;
+    pd:hasChart pd:PD_0000061 ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000007 ; pd:infimum "first(q)" ; pd:supremum "last(q)" ; pd:massAtInfimum "first(diff(u))*(first(diff(q)) == 0)" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000008 ; pd:formula "sum(diff(u)*(heads(q) + tails(q))/2)" ] .
+
+pd:PD_0000061
+    a owl:NamedIndividual, pd:Chart ;
+    rdfs:label "the points of the table"@en ;
+    skos:notation "quantile-table/points" ;
+    pd:chartOf pd:PD_0000060 ;
+    pd:coordinate [ pd:position 1 ; pd:name "u" ; pd:symbol "u" ; pd:meaning "the probabilities, from 0 to 1"@en ; pd:domain "unit-interval-vector" ] ;
+    pd:coordinate [ pd:position 2 ; pd:name "q" ; pd:symbol "Q" ; pd:meaning "the quantiles there"@en ; pd:domain "real-vector" ] ;
+    pd:domainCondition "count(u) == count(q) and count(u) >= 3" ;
+    pd:domainCondition "first(u) == 0 and last(u) == 1 and first(diff(u)) > 0 and last(diff(u)) > 0" ;
+    pd:domainCondition "diff(u) >= 0 and diff(q) >= 0" ;
+    pd:domainCondition "heads(diff(u)) + tails(diff(u)) > 0" ;
+    pd:domainCondition "diff(u) > 0 or diff(q) > 0" ;
+    pd:domainCondition "any(diff(u)*diff(q) > 0)" ;
+    pd:domainCondition "heads(diff(q))*tails(diff(u)) != tails(diff(q))*heads(diff(u))" .
+
+pd:PD_0000062
+    a owl:NamedIndividual, pd:Family ;
+    rdfs:label "quantile table with mean one"@en ;
+    skos:notation "mean-one-quantile-table" ;
+    skos:definition "The quantile tables on positive values whose mean is one. Their chart is the parameter files' Tabulated, whose checker accepts a mean within 10⁻¹² of one; the table is the law, not an approximation of one."@en ;
+    pd:subfamilyOf pd:PD_0000060 ;
+    pd:hasConstraint pd:PD_0000012 ;
+    pd:hasChart pd:PD_0000063 .
+
+pd:PD_0000063
+    a owl:NamedIndividual, pd:Chart ;
+    rdfs:label "the points of the table"@en ;
+    skos:notation "mean-one-quantile-table/points" ;
+    pd:chartOf pd:PD_0000062 ;
+    pd:coordinate [ pd:position 1 ; pd:name "u" ; pd:symbol "u" ; pd:meaning "the probabilities, from 0 to 1"@en ; pd:domain "unit-interval-vector" ] ;
+    pd:coordinate [ pd:position 2 ; pd:name "q" ; pd:symbol "Q" ; pd:meaning "the quantiles there, positive"@en ; pd:domain "positive-vector" ] ;
+    pd:domainCondition "count(u) == count(q) and count(u) >= 3" ;
+    pd:domainCondition "first(u) == 0 and last(u) == 1 and first(diff(u)) > 0 and last(diff(u)) > 0" ;
+    pd:domainCondition "diff(u) >= 0 and diff(q) >= 0" ;
+    pd:domainCondition "heads(diff(u)) + tails(diff(u)) > 0" ;
+    pd:domainCondition "diff(u) > 0 or diff(q) > 0" ;
+    pd:domainCondition "any(diff(u)*diff(q) > 0)" ;
+    pd:domainCondition "heads(diff(q))*tails(diff(u)) != tails(diff(q))*heads(diff(u))" ;
+    pd:domainCondition "sum(diff(u)*(heads(q) + tails(q))/2) == 1" ;
+    pd:toCanonical [ pd:name "u" ; pd:formula "u" ] ;
+    pd:toCanonical [ pd:name "q" ; pd:formula "q" ] ;
+    pd:fromCanonical [ pd:name "u" ; pd:formula "u" ] ;
+    pd:fromCanonical [ pd:name "q" ; pd:formula "q" ] ;
+    pd:conversion "exact" ;
+    pd:writtenAs [ pd:format "parameter-file" ; pd:spelling "{Tabulated: {points: [[u₁, Q₁], …, [uₙ, Qₙ]]}}" ; pd:head "Tabulated" ] .

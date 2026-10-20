@@ -89,6 +89,7 @@ FUNCTIONS = {
     "diff": lambda x: x[1:] - x[:-1],  # successive differences
     "heads": lambda x: x[:-1],  # all entries but the last
     "tails": lambda x: x[1:],  # all entries but the first
+    "interp": lambda x, xs, ys: _np.interp(x, xs, ys),  # the piecewise-linear function through the points (xs, ys)
 }
 CONSTANTS = {"inf": math.inf, "pi": math.pi, "euler_gamma": 0.5772156649015329}  # Euler's constant γ
 EXPECTATION = "E"  # E(g(X)): the expectation of g of the draw X, allowed in a coordinate's as_expectation only
@@ -107,6 +108,7 @@ _COMPARE = {
     ast.Gt: lambda a, b: a > b,
     ast.GtE: lambda a, b: a >= b,
     ast.Eq: lambda a, b: a == b,
+    ast.NotEq: lambda a, b: a != b,
 }
 
 
