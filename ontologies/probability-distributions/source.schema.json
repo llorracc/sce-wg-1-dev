@@ -325,10 +325,15 @@
           "description": "real: ℝ; positive: (0, ∞); nonnegative: [0, ∞); unit-interval: [0, 1]; extended-real: [−∞, ∞]; extended-nonnegative: [0, ∞]; the vector domains hold those entrywise; probability-vector: entries in [0, 1] summing to one; positive-probability-vector: entries in (0, 1] summing to one; stochastic-matrix: rows that are probability vectors.",
           "enum": ["real", "positive", "nonnegative", "unit-interval", "extended-real", "extended-nonnegative",
                    "real-vector", "positive-vector", "unit-interval-vector", "extended-real-vector",
+                   "extended-nonnegative-vector",
                    "probability-vector", "positive-probability-vector", "stochastic-matrix"]
         },
         "as_expectation": {
           "description": "The coordinate's meaning as an expectation under the law at the point: a formula in E(·) of the draw X, such as sqrt(E(log(X)**2) - E(log(X))**2) for the standard deviation of the logarithm.",
+          "$ref": "#/$defs/Formula"
+        },
+        "as_component_expectation": {
+          "description": "For a vector coordinate of a mixture's chart: entry j's meaning as an expectation under component j's law, a formula in E(·) of the draw X.",
           "$ref": "#/$defs/Formula"
         }
       }
@@ -356,6 +361,10 @@
         "defaults": {
           "description": "A keyed format's value for a field left out.",
           "$ref": "#/$defs/Definitions"
+        },
+        "per_component": {
+          "description": "The fields are written once per component of a mixture, in a list under components, each field's formula a vector over the components.",
+          "type": "boolean"
         },
         "none": {
           "description": "The token the format writes for an absent bound.",

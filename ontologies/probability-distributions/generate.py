@@ -275,8 +275,11 @@ def build(source: dict, digest: str) -> dict:
             if len(set(own)) != len(own):
                 raise SourceError(f"{cwhere}: a coordinate name is used twice")
             for c in chart["coordinates"]:
-                if "as_expectation" in c:
-                    _check_formula(c["as_expectation"], {"X"}, f"{cwhere}, {c['name']}.as_expectation", expectation=True)
+                for key in ("as_expectation", "as_component_expectation"):
+                    if key in c:
+                        _check_formula(c[key], {"X"}, f"{cwhere}, {c['name']}.{key}", expectation=True)
+                if "as_component_expectation" in c and "mixture" not in root.get("built_from", {}):
+                    raise SourceError(f"{cwhere}: {c['name']} has a component's meaning, but {root['name']} mixes nothing")
             is_canonical = fam is root and chart["name"] == root["canonical_chart"]
             crow = {"id": chart["id"], "kind": "chart", "name": chart["name"],
                     "qualified_name": f"{fam['name']}/{chart['name']}", "label": chart["label"],
@@ -415,6 +418,7 @@ VOCABULARY = {
         "meaning": "What a coordinate or an argument is.",
         "domain": "The domain of a coordinate.",
         "asExpectation": "A coordinate's meaning as an expectation under the law, a formula in E(·) of the draw X.",
+        "asComponentExpectation": "A mixture chart's vector coordinate's meaning, entry by entry, as an expectation under each component's law.",
         "formula": "A formula in the ontology's formula syntax.",
         "covers": "The part of the canonical chart's domain a chart reaches, as a condition.",
         "conversion": "exact when the conversion is rational in the coordinates; irrational otherwise.",
@@ -422,6 +426,7 @@ VOCABULARY = {
         "spelling": "How the format writes a point of the chart.",
         "default": "A coordinate's default in a written form, as name = value.",
         "noneToken": "The token a format writes for an absent bound.",
+        "perComponent": "Whether a written form gives its fields once per component of a mixture.",
         "where": "A boundary's condition.",
         "infimum": "The infimum of the support.",
         "supremum": "The supremum of the support.",
@@ -474,6 +479,8 @@ def _written_pairs(pd: str, row: dict) -> list[tuple[str, str]]:
                                                        + ([(f"{pd}:name", _lit(k))] if k else [])
                                                        + [(f"{pd}:formula", _lit(v))])))
             inner += [(f"{pd}:default", _lit(f"{k} = {v}")) for k, v in form.get("defaults", {}).items()]
+            if form.get("per_component"):
+                inner.append((f"{pd}:perComponent", "true"))
             if "none" in form:
                 inner.append((f"{pd}:noneToken", _lit(form["none"])))
             pairs.append((f"{pd}:writtenAs", _bnode(inner)))
@@ -607,7 +614,10 @@ def turtle(table: dict) -> str:
                                                          (f"{pd}:meaning", _lit(c["meaning"], "en")),
                                                          (f"{pd}:domain", _lit(c["domain"]))]
                                                         + ([(f"{pd}:asExpectation", _lit(c["as_expectation"]))]
-                                                           if "as_expectation" in c else []))))
+                                                           if "as_expectation" in c else [])
+                                                        + ([(f"{pd}:asComponentExpectation",
+                                                             _lit(c["as_component_expectation"]))]
+                                                           if "as_component_expectation" in c else []))))
             pairs += [(f"{pd}:domainCondition", _lit(c)) for c in row.get("domain_conditions", [])]
             if "covers" in row:
                 pairs.append((f"{pd}:covers", _lit(row["covers"])))

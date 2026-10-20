@@ -51,7 +51,9 @@ to bounds in the draw's own units.
 Two written laws are the same law when they agree after four steps. First, fill the written form's defaults. Second,
 reduce the operator expression to its normal form, where a vacuous conditioning disappears: a family's `reductions`
 record where a point of its canonical chart is a member of another family, as `TruncatedNormal(μ, σ, -inf, inf)` is the
-normal `N(μ, σ)`. Third, convert to the family's canonical chart. Last, compare the canonical coordinates. They must be equal when every conversion is exact.
+normal `N(μ, σ)`; and a mixture's components are taken as a set, ordered and with equal components merged, since the
+same components in another order, or one component split in two, write the same law. Third, convert to the family's
+canonical chart. Last, compare the canonical coordinates. They must be equal when every conversion is exact.
 Where a conversion is irrational, such as a square root or a conditional moment, they must agree to a relative tolerance
 of 10⁻¹².
 
@@ -88,7 +90,9 @@ Two formats are declared: `parameter-file`, the YAML parameter files of the work
 Bellman-SYM stage files. A chart's `written_as` gives each format's spellings of a point of the chart, more than one where
 a format has synonyms. Each spelling is given twice: as a reader sees it (`spelling`), and as a writer builds it, by its
 `head` (a stage file's family call, a parameter file's key) and its `arguments` (positional, or by field), each a formula
-in the chart's coordinates.
+in the chart's coordinates. A keyed form may give `defaults` for fields left out and the `none` token for an absent
+bound, and a mixture's form may write its fields once per component (`per_component`), each field's formula then a vector
+over the components.
 
 A default belongs to a written form, not to the law. The parameter files' rule that an omitted truncation bound means
 three standard deviations is one. Defaults are filled before two laws are compared and before a file is hashed. A
@@ -133,7 +137,8 @@ by identifier.
 - A **chart** gives its `family`, whether it is `canonical`, its `coordinates`, each with a name, a symbol, a meaning and a
   domain, and its `domain_conditions` on the coordinates jointly. A coordinate that is an expectation under the law says
   so in `as_expectation`, so that its meaning can be checked: the standard deviation of the logarithm after truncation
-  is `sqrt(E(log(X)**2) - E(log(X))**2)`, which no chart before truncation satisfies. A chart other than the canonical one also gives
+  is `sqrt(E(log(X)**2) - E(log(X))**2)`, which no chart before truncation satisfies. A mixture's chart may state a
+  vector coordinate's meaning component by component, in `as_component_expectation`. A chart other than the canonical one also gives
   `to_canonical` and `from_canonical`, one formula per coordinate, with auxiliary quantities in `to_canonical_where` and
   `from_canonical_where`; `conversion`, `exact` when every formula is rational and `irrational` otherwise; and `covers`,
   when it reaches only part of the canonical domain. Then come `written_as`, per format, and `cross_references`.
@@ -201,7 +206,8 @@ of probability distributions", *Bioinformatics* 32(17):2719–2721, doi:10.1093/
 | categorical law on labels, Bellman-SYM's `Categorical`, with `Bernoulli(p)` as its chart for two labels | in this release |
 | finite Markov kernel, Bellman-SYM's `DiscreteMarkov` and `MarkovChain`, two spellings of one chart | in this release |
 | finite mixture, an operator, Bellman-SYM's `Mixture` | in this release |
-| the lognormal mixtures, with the parameter files' `LogNormalMixture` and `TruncatedLogNormalMixture` | to come |
+| lognormal mixture, Bellman-SYM's `Mixture` of `LogNormal` components, and its subfamily of mean one, written by the parameter files' `LogNormalMixture` | in this release |
+| truncated lognormal mixture, Bellman-SYM's `Mixture` of `TruncatedLogNormal` components, and its subfamily of mean one, written by the parameter files' `TruncatedLogNormalMixture` | in this release |
 | quantile table | to come |
 
 Families outside this list, such as the gamma, Weibull and beta, enter when a schema or a toolkit needs them.

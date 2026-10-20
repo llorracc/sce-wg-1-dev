@@ -35,6 +35,7 @@ SAMPLES = {
     "positive-vector": ([0.5, 1.5], [0.5, 1.0, 1.5], [0.05, 0.3], [0.1, 0.2, 0.4]),
     "unit-interval-vector": ([0.0, 1.0], [0.0, 0.25, 1.0]),
     "extended-real-vector": ([-2.0, -INF], [-3.0, -2.0, -INF], [2.0, INF], [3.0, 2.0, INF]),
+    "extended-nonnegative-vector": ([0.0, 0.5], [0.0, 0.2, 0.5], [0.0, 0.0], [2.0, INF], [3.0, 2.0, INF], [INF, INF]),
     "probability-vector": ([0.5, 0.5], [0.25, 0.5, 0.25], [0.75, 0.25], [0.0, 1.0]),
     "positive-probability-vector": ([0.5, 0.5], [0.25, 0.5, 0.25], [0.75, 0.25]),
     "stochastic-matrix": ([[0.9, 0.1], [0.2, 0.8]], [[0.5, 0.25, 0.25], [0.1, 0.8, 0.1], [0.0, 0.5, 0.5]]),
@@ -308,6 +309,33 @@ def test_coordinates_mean_what_they_say(rows):
     assert checked > 0
 
 
+def test_components_mean_what_they_say(rows):
+    """Entry j of a mixture chart's coordinate stated as a component's expectation equals that expectation under
+    component j's law, by quadrature."""
+    checked = 0
+    for fam in rows.values():
+        if fam["kind"] != "family":
+            continue
+        top = root(rows, fam)
+        for chart in charts_of(rows, fam):
+            stated = [c for c in chart["coordinates"] if "as_component_expectation" in c]
+            for p in (points(chart) if stated else []):
+                canonical = to_canonical(chart, p)
+                env = family_env(top, canonical)
+                weights = np.atleast_1d(formulas.evaluate(top["built_from"]["mixture"]["weights"], env))
+                for j in range(1, len(weights) + 1):
+                    try:
+                        x, w = _construct(rows, top["built_from"], {**env, "j": j})
+                    except Degenerate:
+                        continue
+                    expect = {"E": lambda g, x=x, w=w: float(w @ g(x))}
+                    for c in stated:
+                        value = formulas.evaluate(c["as_component_expectation"], expect)
+                        assert close(value, p[c["name"]][j - 1]), (chart["qualified_name"], c["name"], p, j, value)
+                        checked += 1
+    assert checked > 0
+
+
 def test_constraints_hold_on_their_subfamilies(rows):
     for fam in rows.values():
         if fam["kind"] != "family" or "subfamily_of" not in fam:
@@ -348,10 +376,10 @@ def test_boundaries_meet_the_family_they_name(rows):
 
 
 def test_reductions_meet_the_family_they_name(rows):
-    checked = 0
     for fam in root_families(rows):
         canonical = rows[fam["canonical_chart"]]
         for r in fam.get("reductions", []):
+            checked = 0
             chart = rows[r["chart"]]
             for p in points(canonical):
                 if not holds(r["when"], family_env(fam, p)):
@@ -362,7 +390,7 @@ def test_reductions_meet_the_family_they_name(rows):
                 assert close(float(w @ x), formulas.evaluate(rows[r["family"]]["properties"]["mean"],
                                                              family_env(rows[r["family"]], there)))
                 checked += 1
-    assert checked > 0 or not any(f.get("reductions") for f in root_families(rows))
+            assert checked > 0, (fam["name"], r, "no sample point satisfies the reduction")
 
 
 def test_written_forms_and_cross_references(table, rows):

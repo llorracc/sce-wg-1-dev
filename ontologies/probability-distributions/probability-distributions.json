@@ -21,7 +21,7 @@
         "citation": "Swat MJ, Grenon P, Wimalaratne S (2016). ProbOnto: ontology and knowledge base of probability distributions. Bioinformatics 32(17):2719-2721. doi:10.1093/bioinformatics/btw170"
       }
     ],
-    "source_sha256": "1c005a53a56d54c0e99ffe18fff2f1b805e59a2ee1fe002fc4ec6d8dfea069a6"
+    "source_sha256": "a6a9f6c1e664a4ec11e8a250909f578a7f7372d7857adad0ae9bea40eb567b9f"
   },
   "retired": [],
   "rows": [
@@ -1544,6 +1544,420 @@
               "Pi",
               "points"
             ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "PD_0000051",
+      "kind": "family",
+      "name": "lognormal-mixture",
+      "label": "lognormal mixture",
+      "stated_set": "(0, ∞)",
+      "definition": "A finite mixture of lognormal laws, at least two. Its components are compared as a set: the same components in another order, or a component split in two, write the same law.",
+      "measure": "Σⱼ wⱼ LogNormal(μⱼ, σⱼ), the mixture over the components of exp∗ aff(μⱼ, σⱼ)∗ N(0, 1)",
+      "built_from": {
+        "mixture": {
+          "weights": "weights"
+        },
+        "base": "PD_0000001",
+        "operators": [
+          {
+            "operator": "PD_0000005",
+            "arguments": {
+              "location": "mu[j]",
+              "scale": "sigma[j]"
+            }
+          },
+          {
+            "operator": "PD_0000006",
+            "arguments": {}
+          }
+        ]
+      },
+      "canonical_chart": "PD_0000052",
+      "charts": [
+        "PD_0000052"
+      ],
+      "properties": {
+        "support": {
+          "infimum": "0",
+          "supremum": "inf",
+          "mass_at_infimum": "0"
+        },
+        "mean": "sum(weights*exp(mu + sigma**2/2))",
+        "moments": {
+          "orders": "all-real",
+          "formula": "sum(weights*exp(k*mu + k**2*sigma**2/2))"
+        }
+      }
+    },
+    {
+      "id": "PD_0000052",
+      "kind": "chart",
+      "name": "components",
+      "qualified_name": "lognormal-mixture/components",
+      "label": "the weights, and each component's mean and standard deviation of the logarithm",
+      "family": "PD_0000051",
+      "canonical": true,
+      "coordinates": [
+        {
+          "name": "weights",
+          "symbol": "w",
+          "meaning": "the components' weights",
+          "domain": "positive-probability-vector"
+        },
+        {
+          "name": "mu",
+          "symbol": "μ",
+          "meaning": "each component's mean of ln X",
+          "domain": "real-vector"
+        },
+        {
+          "name": "sigma",
+          "symbol": "σ",
+          "meaning": "each component's standard deviation of ln X",
+          "domain": "positive-vector"
+        }
+      ],
+      "domain_conditions": [
+        "count(weights) == count(mu) and count(weights) == count(sigma)",
+        "count(weights) >= 2"
+      ],
+      "written_as": {
+        "bellman-sym": [
+          {
+            "spelling": "Mixture((w₁, LogNormal(μ₁, σ₁)), …, (wₙ, LogNormal(μₙ, σₙ)))",
+            "head": "Mixture"
+          }
+        ]
+      }
+    },
+    {
+      "id": "PD_0000053",
+      "kind": "family",
+      "name": "mean-one-lognormal-mixture",
+      "label": "lognormal mixture with mean one",
+      "subfamily_of": "PD_0000051",
+      "constraints": [
+        "PD_0000012"
+      ],
+      "definition": "The lognormal mixtures whose mean is one. Their chart is the parameter files' LogNormalMixture: ln X = c + Y, Y drawn from component j with probability wⱼ, each component's mean of Y stated relative to the others, and one common shift c making the mean one.",
+      "charts": [
+        "PD_0000054"
+      ]
+    },
+    {
+      "id": "PD_0000054",
+      "kind": "chart",
+      "name": "relative-means",
+      "qualified_name": "mean-one-lognormal-mixture/relative-means",
+      "label": "the weights, each component's relative mean and standard deviation of the logarithm",
+      "family": "PD_0000053",
+      "canonical": false,
+      "coordinates": [
+        {
+          "name": "weights",
+          "symbol": "w",
+          "meaning": "the components' weights",
+          "domain": "positive-probability-vector"
+        },
+        {
+          "name": "mean_log",
+          "symbol": "m",
+          "meaning": "each component's mean of ln X less the common shift",
+          "domain": "real-vector"
+        },
+        {
+          "name": "sd_log",
+          "symbol": "s",
+          "meaning": "each component's standard deviation of ln X",
+          "domain": "positive-vector",
+          "as_component_expectation": "sqrt(E(log(X)**2) - E(log(X))**2)"
+        }
+      ],
+      "domain_conditions": [
+        "count(weights) == count(mean_log) and count(weights) == count(sd_log)",
+        "count(weights) >= 2",
+        "sum(weights*mean_log) == 0",
+        "lex_increasing(mean_log, sd_log)"
+      ],
+      "to_canonical_where": {
+        "c": "-log(sum(weights*exp(mean_log + sd_log**2/2)))"
+      },
+      "to_canonical": {
+        "weights": "weights",
+        "mu": "c + mean_log",
+        "sigma": "sd_log"
+      },
+      "from_canonical_where": {
+        "c": "sum(weights*mu)"
+      },
+      "from_canonical": {
+        "weights": "weights",
+        "mean_log": "mu - c",
+        "sd_log": "sigma"
+      },
+      "conversion": "irrational",
+      "written_as": {
+        "parameter-file": [
+          {
+            "spelling": "{LogNormalMixture: {components: [{weight: w₁, mean_log: m₁, sd_log: s₁}, …]}}",
+            "head": "LogNormalMixture",
+            "arguments": {
+              "weight": "weights",
+              "mean_log": "mean_log",
+              "sd_log": "sd_log"
+            },
+            "per_component": true
+          }
+        ],
+        "bellman-sym": [
+          {
+            "spelling": "Mixture((w₁, LogNormal(c + m₁, s₁)), …), with c making the mean one",
+            "head": "Mixture"
+          }
+        ]
+      }
+    },
+    {
+      "id": "PD_0000055",
+      "kind": "family",
+      "name": "truncated-lognormal-mixture",
+      "label": "truncated lognormal mixture",
+      "stated_set": "(0, ∞)",
+      "definition": "A finite mixture of truncated lognormal laws, at least two. Its components are compared as a set; a component truncated on neither side is a lognormal.",
+      "measure": "Σⱼ wⱼ TruncatedLogNormal(μⱼ, σⱼ, lⱼ, uⱼ)",
+      "built_from": {
+        "mixture": {
+          "weights": "weights"
+        },
+        "base": "PD_0000001",
+        "operators": [
+          {
+            "operator": "PD_0000005",
+            "arguments": {
+              "location": "mu[j]",
+              "scale": "sigma[j]"
+            }
+          },
+          {
+            "operator": "PD_0000006",
+            "arguments": {}
+          },
+          {
+            "operator": "PD_0000026",
+            "arguments": {
+              "lower": "l[j]",
+              "upper": "u[j]"
+            }
+          }
+        ]
+      },
+      "where": {
+        "a": "(log(l) - mu)/sigma",
+        "b": "(log(u) - mu)/sigma",
+        "D": "Phi(b) - Phi(a)"
+      },
+      "canonical_chart": "PD_0000056",
+      "charts": [
+        "PD_0000056"
+      ],
+      "properties": {
+        "support": {
+          "infimum": "min(l)",
+          "supremum": "max(u)",
+          "mass_at_infimum": "0"
+        },
+        "mean": "sum(weights*exp(mu + sigma**2/2)*(Phi(b - sigma) - Phi(a - sigma))/D)",
+        "moments": {
+          "orders": "all-real",
+          "formula": "sum(weights*exp(k*mu + k**2*sigma**2/2)*(Phi(b - k*sigma) - Phi(a - k*sigma))/D)"
+        }
+      },
+      "reductions": [
+        {
+          "when": "all(l == 0) and all(u == inf)",
+          "family": "PD_0000051",
+          "chart": "PD_0000052"
+        }
+      ]
+    },
+    {
+      "id": "PD_0000056",
+      "kind": "chart",
+      "name": "components",
+      "qualified_name": "truncated-lognormal-mixture/components",
+      "label": "the weights, and each component's canonical truncated-lognormal coordinates",
+      "family": "PD_0000055",
+      "canonical": true,
+      "coordinates": [
+        {
+          "name": "weights",
+          "symbol": "w",
+          "meaning": "the components' weights",
+          "domain": "positive-probability-vector"
+        },
+        {
+          "name": "mu",
+          "symbol": "μ",
+          "meaning": "each component's mean of ln X before truncation",
+          "domain": "real-vector"
+        },
+        {
+          "name": "sigma",
+          "symbol": "σ",
+          "meaning": "each component's standard deviation of ln X before truncation",
+          "domain": "positive-vector"
+        },
+        {
+          "name": "l",
+          "symbol": "l",
+          "meaning": "each component's lower bound, in the draw's units",
+          "domain": "extended-nonnegative-vector"
+        },
+        {
+          "name": "u",
+          "symbol": "u",
+          "meaning": "each component's upper bound, in the draw's units",
+          "domain": "extended-nonnegative-vector"
+        }
+      ],
+      "domain_conditions": [
+        "count(weights) == count(mu) and count(weights) == count(sigma)",
+        "count(weights) == count(l) and count(weights) == count(u)",
+        "count(weights) >= 2",
+        "l < u"
+      ],
+      "written_as": {
+        "bellman-sym": [
+          {
+            "spelling": "Mixture((w₁, TruncatedLogNormal(μ₁, σ₁, l₁, u₁)), …)",
+            "head": "Mixture"
+          }
+        ]
+      }
+    },
+    {
+      "id": "PD_0000057",
+      "kind": "family",
+      "name": "mean-one-truncated-lognormal-mixture",
+      "label": "truncated lognormal mixture with mean one",
+      "subfamily_of": "PD_0000055",
+      "constraints": [
+        "PD_0000012"
+      ],
+      "definition": "The truncated lognormal mixtures whose mean is one. Their chart is the parameter files' TruncatedLogNormalMixture: ln X = c + Y, Y drawn from component j with probability wⱼ, component j a normal truncated at bounds in standard deviations of that normal before truncation, stated by its mean, relative to the others, and its standard deviation, both after truncation, with one common shift c making the mean one.",
+      "charts": [
+        "PD_0000058"
+      ]
+    },
+    {
+      "id": "PD_0000058",
+      "kind": "chart",
+      "name": "relative-means-standardized-bounds",
+      "qualified_name": "mean-one-truncated-lognormal-mixture/relative-means-standardized-bounds",
+      "label": "the weights, each component's relative mean and standard deviation of the logarithm after truncation, and its bounds",
+      "family": "PD_0000057",
+      "canonical": false,
+      "coordinates": [
+        {
+          "name": "weights",
+          "symbol": "w",
+          "meaning": "the components' weights",
+          "domain": "positive-probability-vector"
+        },
+        {
+          "name": "mean_log",
+          "symbol": "m",
+          "meaning": "each component's mean of ln X after truncation, less the common shift",
+          "domain": "real-vector"
+        },
+        {
+          "name": "sd_log",
+          "symbol": "s",
+          "meaning": "each component's standard deviation of ln X after truncation",
+          "domain": "positive-vector",
+          "as_component_expectation": "sqrt(E(log(X)**2) - E(log(X))**2)"
+        },
+        {
+          "name": "bot",
+          "symbol": "bot",
+          "meaning": "each component's lower bound, in standard deviations of its normal before truncation; -inf for none",
+          "domain": "extended-real-vector"
+        },
+        {
+          "name": "top",
+          "symbol": "top",
+          "meaning": "each component's upper bound, in standard deviations of its normal before truncation; inf for none",
+          "domain": "extended-real-vector"
+        }
+      ],
+      "domain_conditions": [
+        "count(weights) == count(mean_log) and count(weights) == count(sd_log)",
+        "count(weights) == count(bot) and count(weights) == count(top)",
+        "count(weights) >= 2",
+        "bot < top",
+        "any(bot > -inf) or any(top < inf)",
+        "sum(weights*mean_log) == 0",
+        "lex_increasing(mean_log, sd_log, bot, top)"
+      ],
+      "to_canonical_where": {
+        "D": "Phi(top) - Phi(bot)",
+        "lam": "(phi(bot) - phi(top))/D",
+        "v": "1 + (xphi(bot) - xphi(top))/D - lam**2",
+        "s": "sd_log/sqrt(v)",
+        "loc": "mean_log - s*lam",
+        "c": "-log(sum(weights*exp(loc + s**2/2)*(Phi(top - s) - Phi(bot - s))/D))"
+      },
+      "to_canonical": {
+        "weights": "weights",
+        "mu": "c + loc",
+        "sigma": "s",
+        "l": "exp(c + loc + s*bot)",
+        "u": "exp(c + loc + s*top)"
+      },
+      "from_canonical_where": {
+        "a": "(log(l) - mu)/sigma",
+        "b": "(log(u) - mu)/sigma",
+        "D": "Phi(b) - Phi(a)",
+        "lam": "(phi(a) - phi(b))/D",
+        "v": "1 + (xphi(a) - xphi(b))/D - lam**2",
+        "ml": "mu + sigma*lam",
+        "c": "sum(weights*ml)"
+      },
+      "from_canonical": {
+        "weights": "weights",
+        "mean_log": "ml - c",
+        "sd_log": "sigma*sqrt(v)",
+        "bot": "a",
+        "top": "b"
+      },
+      "conversion": "irrational",
+      "written_as": {
+        "parameter-file": [
+          {
+            "spelling": "{TruncatedLogNormalMixture: {components: [{weight: w₁, mean_log: m₁, sd_log: s₁, bot: b₁, top: t₁}, …]}}",
+            "head": "TruncatedLogNormalMixture",
+            "arguments": {
+              "weight": "weights",
+              "mean_log": "mean_log",
+              "sd_log": "sd_log",
+              "bot": "bot",
+              "top": "top"
+            },
+            "defaults": {
+              "bot": "-3",
+              "top": "3"
+            },
+            "none": "null",
+            "per_component": true
+          }
+        ],
+        "bellman-sym": [
+          {
+            "spelling": "Mixture((w₁, TruncatedLogNormal(μ₁, σ₁, l₁, u₁)), …), computed from the chart",
+            "head": "Mixture"
           }
         ]
       }

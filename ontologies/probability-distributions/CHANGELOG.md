@@ -29,7 +29,11 @@ formula syntax and the two written forms. The first rows, all new:
 - the finite discrete law on real points, and its subfamily of mean one, written by the parameter files' `Discrete`;
 - the categorical law on labels, with the Bernoulli law as its chart for two labels;
 - the finite Markov kernel, a family whose argument is the current state, which Bellman-SYM writes `DiscreteMarkov` or
-  `MarkovChain`.
+  `MarkovChain`;
+- the lognormal mixture and the truncated lognormal mixture, mixtures of their components, each with its subfamily of
+  mean one, written by the parameter files' `LogNormalMixture` and `TruncatedLogNormalMixture`: each component's mean
+  of the logarithm, stated relative to the others, and its standard deviation, after truncation where there is any, with
+  one common shift making the mean one.
 
 Every coordinate that is an expectation under the law says so, and the tests check it by quadrature. Every named
 measure states its density and support, and the tests integrate each from them. Coordinates may be vectors and matrices.

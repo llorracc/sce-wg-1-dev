@@ -61,6 +61,11 @@ def _increasing(x) -> bool:
     return all(a < b for a, b in zip(list(x)[:-1], list(x)[1:]))
 
 
+def _lex_increasing(*vectors) -> bool:
+    rows = list(zip(*[list(v) for v in vectors]))
+    return all(a < b for a, b in zip(rows[:-1], rows[1:]))
+
+
 FUNCTIONS = {
     "sqrt": _sqrt,
     "exp": _exp,
@@ -78,6 +83,12 @@ FUNCTIONS = {
     "index": lambda x: _np.arange(1, len(x) + 1) if _np is not None else list(range(1, len(x) + 1)),  # 1, 2, ..., n
     "increasing": _increasing,  # strictly
     "row": lambda m, i: m[int(i) - 1],  # row i of a matrix, counted from one
+    "any": lambda x: bool(_np.any(x)) if _np is not None else any(x),
+    "all": lambda x: bool(_np.all(x)) if _np is not None else all(x),
+    "lex_increasing": _lex_increasing,  # the vectors' entries, read as tuples, strictly increase
+    "diff": lambda x: x[1:] - x[:-1],  # successive differences
+    "heads": lambda x: x[:-1],  # all entries but the last
+    "tails": lambda x: x[1:],  # all entries but the first
 }
 CONSTANTS = {"inf": math.inf, "pi": math.pi, "euler_gamma": 0.5772156649015329}  # Euler's constant γ
 EXPECTATION = "E"  # E(g(X)): the expectation of g of the draw X, allowed in a coordinate's as_expectation only
