@@ -49,8 +49,9 @@ to bounds in the draw's own units.
 ## Identity
 
 Two written laws are the same law when they agree after four steps. First, fill the written form's defaults. Second,
-reduce the operator expression to its normal form, where a vacuous conditioning disappears. Third, convert to the
-family's canonical chart. Last, compare the canonical coordinates. They must be equal when every conversion is exact.
+reduce the operator expression to its normal form, where a vacuous conditioning disappears: a family's `reductions`
+record where a point of its canonical chart is a member of another family, as `TruncatedNormal(μ, σ, -inf, inf)` is the
+normal `N(μ, σ)`. Third, convert to the family's canonical chart. Last, compare the canonical coordinates. They must be equal when every conversion is exact.
 Where a conversion is irrational, such as a square root or a conditional moment, they must agree to a relative tolerance
 of 10⁻¹².
 
@@ -84,7 +85,10 @@ mean-and-variance chart.
 ## Written forms and defaults
 
 Two formats are declared: `parameter-file`, the YAML parameter files of the working group's schemas, and `bellman-sym`,
-Bellman-SYM stage files. A chart's `written_as` gives each format's spelling of a point of the chart.
+Bellman-SYM stage files. A chart's `written_as` gives each format's spellings of a point of the chart, more than one where
+a format has synonyms. Each spelling is given twice: as a reader sees it (`spelling`), and as a writer builds it, by its
+`head` (a stage file's family call, a parameter file's key) and its `arguments` (positional, or by field), each a formula
+in the chart's coordinates.
 
 A default belongs to a written form, not to the law. The parameter files' rule that an omitted truncation bound means
 three standard deviations is one. Defaults are filled before two laws are compared and before a file is hashed. A
@@ -122,22 +126,25 @@ and its `qualified_name` is `family/chart`), a `label` and, except for charts, a
 by identifier.
 
 - A **family** gives its `stated_set`; its `measure` in the operator notation above; `built_from`, its measure as operators
-  applied in order to a named measure, with the arguments as formulas in the canonical coordinates; its
-  `canonical_chart`; its `charts`; its `properties`, as formulas in the canonical coordinates; and its `boundaries`. A
-  subfamily gives instead the family it is a `subfamily_of` and its `constraints`.
-- A **chart** gives its `family`, whether it is `canonical`, and its `coordinates`, each with a name, a symbol, a meaning
-  and a domain. A chart other than the canonical one also gives `to_canonical` and `from_canonical`, one formula per
-  coordinate; `conversion`, `exact` when every formula is rational and `irrational` otherwise; and `covers`, when it reaches
-  only part of the canonical domain. Then come `written_as`, per format, and `cross_references`.
+  applied in order to a named measure, with the arguments as formulas in the canonical coordinates; `where`, auxiliary
+  quantities those formulas may use; its `canonical_chart`; its `charts`; its `properties`, as formulas in the canonical
+  coordinates; its `boundaries`, where its domain meets another family; and its `reductions`, where a point of its domain
+  is a member of another family. A subfamily gives instead the family it is a `subfamily_of` and its `constraints`.
+- A **chart** gives its `family`, whether it is `canonical`, its `coordinates`, each with a name, a symbol, a meaning and a
+  domain, and its `domain_conditions` on the coordinates jointly. A chart other than the canonical one also gives
+  `to_canonical` and `from_canonical`, one formula per coordinate, with auxiliary quantities in `to_canonical_where` and
+  `from_canonical_where`; `conversion`, `exact` when every formula is rational and `irrational` otherwise; and `covers`,
+  when it reaches only part of the canonical domain. Then come `written_as`, per format, and `cross_references`.
 
 The source is the same, organized by kind, with charts inside their families and references by name.
 
 ## The formula syntax
 
 A formula is an arithmetic expression in Python's syntax over a chart's coordinates. It may use numbers, the coordinate
-names, `+ - * / **`, comparisons, `and` and `or`, the functions `sqrt`, `exp`, `log`, `Phi` (the standard normal
-distribution function) and `phi` (its density), and the constants `inf` and `pi`. In a moment's formula `k` is the order;
-in an operator's map `z` is the variable. Nothing else parses, so any consumer can read a formula without running code
+names, `+ - * / **`, comparisons, `and` and `or`, the functions `sqrt`, `exp`, `log` (with log 0 = −∞), `Phi` (the
+standard normal distribution function), `phi` (its density) and `xphi` (x·φ(x), zero at an infinite x), and the constants
+`inf` and `pi`. Infinite values follow IEEE arithmetic, so a bound of `inf` passes through exp and log. In a moment's
+formula `k` is the order; in an operator's map or set `z` is the variable. Nothing else parses, so any consumer can read a formula without running code
 from the source.
 
 ## Identifiers and the namespace
@@ -178,9 +185,10 @@ of probability distributions", *Bioinformatics* 32(17):2719–2721, doi:10.1093/
 | normal, with charts mean and standard deviation (canonical) and mean and variance | in this release |
 | lognormal, with its subfamily of mean one | in this release |
 | point mass, with its subfamily at one | in this release |
-| truncated normal | to come |
+| truncated normal, with Bellman-SYM's `TruncatedNormal(μ, σ, l, u)` as its canonical chart | in this release |
 | truncated lognormal, with the parameter files' chart of mean one (the standard deviation of the logarithm after truncation, bounds in standard deviations) and Bellman-SYM's `TruncatedLogNormal(μ, σ, l, u)` | to come |
 | uniform | to come |
+| type I extreme value (Gumbel), Bellman-SYM's `TypeIExtremeValue(μ, s)` | to come |
 | finite discrete law on real points | to come |
 | categorical and Bernoulli laws | to come |
 | finite Markov kernel | to come |

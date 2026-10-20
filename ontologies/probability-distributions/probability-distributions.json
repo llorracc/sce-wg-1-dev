@@ -21,7 +21,7 @@
         "citation": "Swat MJ, Grenon P, Wimalaratne S (2016). ProbOnto: ontology and knowledge base of probability distributions. Bioinformatics 32(17):2719-2721. doi:10.1093/bioinformatics/btw170"
       }
     ],
-    "source_sha256": "f9239257ad8a12cc1ffcff70364cdb491476e4038771860583e5b989db42c748"
+    "source_sha256": "ec6edb31a6fb2684f32f13b939419979122f9cad780c6b176b5b37fb2542864b"
   },
   "retired": [],
   "rows": [
@@ -176,7 +176,6 @@
         "support": {
           "infimum": "-inf",
           "supremum": "inf",
-          "infimum_attained": false,
           "mass_at_infimum": "0"
         },
         "mean": "mu",
@@ -255,9 +254,16 @@
       },
       "conversion": "irrational",
       "written_as": {
-        "bellman-sym": {
-          "spelling": "N(μ, v)"
-        }
+        "bellman-sym": [
+          {
+            "spelling": "N(μ, v)",
+            "head": "N",
+            "arguments": [
+              "mu",
+              "v"
+            ]
+          }
+        ]
       },
       "cross_references": [
         {
@@ -301,7 +307,6 @@
         "support": {
           "infimum": "0",
           "supremum": "inf",
-          "infimum_attained": false,
           "mass_at_infimum": "0"
         },
         "mean": "exp(mu + sigma**2/2)",
@@ -344,9 +349,16 @@
         }
       ],
       "written_as": {
-        "bellman-sym": {
-          "spelling": "LogNormal(μ, σ)"
-        }
+        "bellman-sym": [
+          {
+            "spelling": "LogNormal(μ, σ)",
+            "head": "LogNormal",
+            "arguments": [
+              "mu",
+              "sigma"
+            ]
+          }
+        ]
       },
       "cross_references": [
         {
@@ -396,12 +408,25 @@
       },
       "conversion": "exact",
       "written_as": {
-        "parameter-file": {
-          "spelling": "{LogNormal: {sd_log: σ}}"
-        },
-        "bellman-sym": {
-          "spelling": "LogNormal(-σ^2/2, σ)"
-        }
+        "parameter-file": [
+          {
+            "spelling": "{LogNormal: {sd_log: σ}}",
+            "head": "LogNormal",
+            "arguments": {
+              "sd_log": "sigma"
+            }
+          }
+        ],
+        "bellman-sym": [
+          {
+            "spelling": "LogNormal(-σ^2/2, σ)",
+            "head": "LogNormal",
+            "arguments": [
+              "-sigma**2/2",
+              "sigma"
+            ]
+          }
+        ]
       }
     },
     {
@@ -422,7 +447,6 @@
         "support": {
           "infimum": "x",
           "supremum": "x",
-          "infimum_attained": true,
           "mass_at_infimum": "1"
         },
         "mean": "x",
@@ -479,9 +503,16 @@
       },
       "conversion": "exact",
       "written_as": {
-        "bellman-sym": {
-          "spelling": "N(μ, 0)"
-        }
+        "bellman-sym": [
+          {
+            "spelling": "N(μ, 0)",
+            "head": "N",
+            "arguments": [
+              "mu",
+              "0"
+            ]
+          }
+        ]
       }
     },
     {
@@ -509,9 +540,16 @@
       },
       "conversion": "irrational",
       "written_as": {
-        "bellman-sym": {
-          "spelling": "LogNormal(μ, 0)"
-        }
+        "bellman-sym": [
+          {
+            "spelling": "LogNormal(μ, 0)",
+            "head": "LogNormal",
+            "arguments": [
+              "mu",
+              "0"
+            ]
+          }
+        ]
       }
     },
     {
@@ -543,13 +581,158 @@
       "from_canonical": {},
       "conversion": "exact",
       "written_as": {
-        "parameter-file": {
-          "spelling": "{Degenerate: {}}"
-        },
-        "bellman-sym": {
-          "spelling": "LogNormal(0, 0)"
-        }
+        "parameter-file": [
+          {
+            "spelling": "{Degenerate: {}}",
+            "head": "Degenerate",
+            "arguments": {}
+          }
+        ],
+        "bellman-sym": [
+          {
+            "spelling": "LogNormal(0, 0)",
+            "head": "LogNormal",
+            "arguments": [
+              "0",
+              "0"
+            ]
+          }
+        ]
       }
+    },
+    {
+      "id": "PD_0000026",
+      "kind": "operator",
+      "name": "interval-conditioning",
+      "label": "truncation to an interval",
+      "case_of": "PD_0000003",
+      "arguments": [
+        {
+          "name": "lower",
+          "meaning": "the lower bound l; -inf for none"
+        },
+        {
+          "name": "upper",
+          "meaning": "the upper bound u; inf for none"
+        }
+      ],
+      "set": "lower <= z <= upper",
+      "definition": "Conditioning on the interval [l, u], which must have positive measure."
+    },
+    {
+      "id": "PD_0000027",
+      "kind": "family",
+      "name": "truncated-normal",
+      "label": "truncated normal",
+      "stated_set": "[l, u] ∩ ℝ",
+      "definition": "The law of μ + σZ given l ≤ μ + σZ ≤ u, Z standard normal.",
+      "measure": "TruncatedNormal(μ, σ, l, u) = (aff(μ, σ)∗ N(0, 1))|[l, u]",
+      "built_from": {
+        "base": "PD_0000001",
+        "operators": [
+          {
+            "operator": "PD_0000005",
+            "arguments": {
+              "location": "mu",
+              "scale": "sigma"
+            }
+          },
+          {
+            "operator": "PD_0000026",
+            "arguments": {
+              "lower": "l",
+              "upper": "u"
+            }
+          }
+        ]
+      },
+      "where": {
+        "a": "(l - mu)/sigma",
+        "b": "(u - mu)/sigma",
+        "D": "Phi(b) - Phi(a)"
+      },
+      "canonical_chart": "PD_0000028",
+      "charts": [
+        "PD_0000028"
+      ],
+      "properties": {
+        "support": {
+          "infimum": "l",
+          "supremum": "u",
+          "mass_at_infimum": "0"
+        },
+        "mean": "mu + sigma*(phi(a) - phi(b))/D",
+        "moments": {
+          "orders": "nonnegative-integers"
+        }
+      },
+      "reductions": [
+        {
+          "when": "l == -inf and u == inf",
+          "family": "PD_0000013",
+          "chart": "PD_0000014"
+        }
+      ]
+    },
+    {
+      "id": "PD_0000028",
+      "kind": "chart",
+      "name": "mean-sd-bounds",
+      "qualified_name": "truncated-normal/mean-sd-bounds",
+      "label": "the normal's mean and standard deviation, and the bounds",
+      "family": "PD_0000027",
+      "canonical": true,
+      "coordinates": [
+        {
+          "name": "mu",
+          "symbol": "μ",
+          "meaning": "the mean of the normal before truncation",
+          "domain": "real"
+        },
+        {
+          "name": "sigma",
+          "symbol": "σ",
+          "meaning": "the standard deviation of the normal before truncation",
+          "domain": "positive"
+        },
+        {
+          "name": "l",
+          "symbol": "l",
+          "meaning": "the lower bound; -inf for none",
+          "domain": "extended-real"
+        },
+        {
+          "name": "u",
+          "symbol": "u",
+          "meaning": "the upper bound; inf for none",
+          "domain": "extended-real"
+        }
+      ],
+      "domain_conditions": [
+        "l < u"
+      ],
+      "written_as": {
+        "bellman-sym": [
+          {
+            "spelling": "TruncatedNormal(μ, σ, l, u)",
+            "head": "TruncatedNormal",
+            "arguments": [
+              "mu",
+              "sigma",
+              "l",
+              "u"
+            ]
+          }
+        ]
+      },
+      "cross_references": [
+        {
+          "predicate": "skos:closeMatch",
+          "target": "probonto:PROB_k0000681",
+          "iri": "http://www.probonto.org/ontology#PROB_k0000681",
+          "note": "TruncatedNormal1 (mean, stdev, lowerBound, upperBound), whose bounds are finite"
+        }
+      ]
     }
   ]
 }

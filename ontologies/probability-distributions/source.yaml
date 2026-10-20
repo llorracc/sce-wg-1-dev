@@ -75,6 +75,15 @@ operators:
     arguments: []
     map: exp(z)
     definition: The pushforward under z ↦ exp(z).
+  - id: PD_0000026
+    name: interval-conditioning
+    label: truncation to an interval
+    case_of: conditioning
+    arguments:
+      - {name: lower, meaning: the lower bound l; -inf for none}
+      - {name: upper, meaning: the upper bound u; inf for none}
+    set: lower <= z <= upper
+    definition: Conditioning on the interval [l, u], which must have positive measure.
 
 properties:
   - id: PD_0000007
@@ -142,12 +151,13 @@ families:
         from_canonical: {mu: mu, v: sigma**2}
         conversion: irrational
         written_as:
-          bellman-sym: {spelling: "N(μ, v)"}
+          bellman-sym:
+            - {spelling: "N(μ, v)", head: N, arguments: [mu, v]}
         cross_references:
           - {predicate: skos:exactMatch, target: probonto:PROB_k0000265, note: "Normal2 (mean, var)"}
         provenance: ProbOnto 2.5, Normal2, with its conversion to Normal1.
     properties:
-      support: {infimum: "-inf", supremum: inf, infimum_attained: false, mass_at_infimum: "0"}
+      support: {infimum: "-inf", supremum: inf, mass_at_infimum: "0"}
       mean: mu
       moments: {orders: nonnegative-integers}
     boundaries:
@@ -173,11 +183,12 @@ families:
           - {name: mu, symbol: μ, meaning: the mean of ln X, domain: real}
           - {name: sigma, symbol: σ, meaning: the standard deviation of ln X, domain: positive}
         written_as:
-          bellman-sym: {spelling: "LogNormal(μ, σ)"}
+          bellman-sym:
+            - {spelling: "LogNormal(μ, σ)", head: LogNormal, arguments: [mu, sigma]}
         cross_references:
           - {predicate: skos:exactMatch, target: probonto:PROB_k0000428, note: "LogNormal1 (meanLog, stdevLog)"}
     properties:
-      support: {infimum: "0", supremum: inf, infimum_attained: false, mass_at_infimum: "0"}
+      support: {infimum: "0", supremum: inf, mass_at_infimum: "0"}
       mean: exp(mu + sigma**2/2)
       moments: {orders: all-real, formula: exp(k*mu + k**2*sigma**2/2)}
       log-moments: {orders: nonnegative-integers}
@@ -200,8 +211,10 @@ families:
         from_canonical: {sigma: sigma}
         conversion: exact
         written_as:
-          parameter-file: {spelling: "{LogNormal: {sd_log: σ}}"}
-          bellman-sym: {spelling: "LogNormal(-σ^2/2, σ)"}
+          parameter-file:
+            - {spelling: "{LogNormal: {sd_log: σ}}", head: LogNormal, arguments: {sd_log: sigma}}
+          bellman-sym:
+            - {spelling: "LogNormal(-σ^2/2, σ)", head: LogNormal, arguments: [-sigma**2/2, sigma]}
 
   - id: PD_0000020
     name: point-mass
@@ -227,7 +240,8 @@ families:
         from_canonical: {mu: x}
         conversion: exact
         written_as:
-          bellman-sym: {spelling: "N(μ, 0)"}
+          bellman-sym:
+            - {spelling: "N(μ, 0)", head: N, arguments: [mu, "0"]}
       - id: PD_0000023
         name: lognormal-zero-spread
         label: a lognormal with zero spread
@@ -238,9 +252,10 @@ families:
         from_canonical: {mu: log(x)}
         conversion: irrational
         written_as:
-          bellman-sym: {spelling: "LogNormal(μ, 0)"}
+          bellman-sym:
+            - {spelling: "LogNormal(μ, 0)", head: LogNormal, arguments: [mu, "0"]}
     properties:
-      support: {infimum: x, supremum: x, infimum_attained: true, mass_at_infimum: "1"}
+      support: {infimum: x, supremum: x, mass_at_infimum: "1"}
       mean: x
       moments: {orders: nonnegative-integers, formula: x**k}
       atoms: [{at: x, mass: "1"}]
@@ -260,5 +275,47 @@ families:
         from_canonical: {}
         conversion: exact
         written_as:
-          parameter-file: {spelling: "{Degenerate: {}}"}
-          bellman-sym: {spelling: "LogNormal(0, 0)"}
+          parameter-file:
+            - {spelling: "{Degenerate: {}}", head: Degenerate, arguments: {}}
+          bellman-sym:
+            - {spelling: "LogNormal(0, 0)", head: LogNormal, arguments: ["0", "0"]}
+
+  - id: PD_0000027
+    name: truncated-normal
+    label: truncated normal
+    stated_set: "[l, u] ∩ ℝ"
+    definition: The law of μ + σZ given l ≤ μ + σZ ≤ u, Z standard normal.
+    measure: TruncatedNormal(μ, σ, l, u) = (aff(μ, σ)∗ N(0, 1))|[l, u]
+    built_from:
+      base: standard-normal
+      operators:
+        - {operator: affine-pushforward, location: mu, scale: sigma}
+        - {operator: interval-conditioning, lower: l, upper: u}
+    where:
+      a: (l - mu)/sigma
+      b: (u - mu)/sigma
+      D: Phi(b) - Phi(a)
+    canonical_chart: mean-sd-bounds
+    charts:
+      - id: PD_0000028
+        name: mean-sd-bounds
+        label: the normal's mean and standard deviation, and the bounds
+        coordinates:
+          - {name: mu, symbol: μ, meaning: the mean of the normal before truncation, domain: real}
+          - {name: sigma, symbol: σ, meaning: the standard deviation of the normal before truncation, domain: positive}
+          - {name: l, symbol: l, meaning: the lower bound; -inf for none, domain: extended-real}
+          - {name: u, symbol: u, meaning: the upper bound; inf for none, domain: extended-real}
+        domain_conditions: ["l < u"]
+        written_as:
+          bellman-sym:
+            - {spelling: "TruncatedNormal(μ, σ, l, u)", head: TruncatedNormal, arguments: [mu, sigma, l, u]}
+        cross_references:
+          - predicate: skos:closeMatch
+            target: probonto:PROB_k0000681
+            note: TruncatedNormal1 (mean, stdev, lowerBound, upperBound), whose bounds are finite
+    properties:
+      support: {infimum: l, supremum: u, mass_at_infimum: "0"}
+      mean: mu + sigma*(phi(a) - phi(b))/D
+      moments: {orders: nonnegative-integers}
+    reductions:
+      - {when: l == -inf and u == inf, family: normal, chart: mean-sd}

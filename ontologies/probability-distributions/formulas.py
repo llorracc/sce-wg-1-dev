@@ -14,15 +14,28 @@ from __future__ import annotations
 import ast
 import math
 
+def _log(x):
+    return -math.inf if x == 0 else math.log(x)
+
+
+def _phi(x):
+    return math.exp(-0.5 * x * x) / math.sqrt(2.0 * math.pi)
+
+
+def _xphi(x):
+    return 0.0 if math.isinf(x) else x * _phi(x)
+
+
 FUNCTIONS = {
     "sqrt": math.sqrt,
     "exp": math.exp,
-    "log": math.log,
-    "Phi": lambda x: 0.5 * math.erfc(-x / math.sqrt(2.0)),  # the standard normal CDF
-    "phi": lambda x: math.exp(-0.5 * x * x) / math.sqrt(2.0 * math.pi),  # the standard normal density
+    "log": _log,  # log(0) = -inf
+    "Phi": lambda x: 0.5 * math.erfc(-x / math.sqrt(2.0)),  # the standard normal distribution function
+    "phi": _phi,  # its density
+    "xphi": _xphi,  # x times phi(x), zero at an infinite x
 }
 CONSTANTS = {"inf": math.inf, "pi": math.pi}
-TRANSCENDENTAL = {"sqrt", "exp", "log", "Phi", "phi"}
+TRANSCENDENTAL = {"sqrt", "exp", "log", "Phi", "phi", "xphi"}
 
 _BINARY = {
     ast.Add: lambda a, b: a + b,
@@ -94,8 +107,16 @@ def is_exact(text: str) -> bool:
     return True
 
 
+def evaluate_all(definitions: dict, env: dict) -> dict:
+    """Evaluate auxiliary definitions in order, each seeing the names before it; return env with them added."""
+    env = dict(env)
+    for name, text in definitions.items():
+        env[name] = evaluate(text, env)
+    return env
+
+
 def evaluate(text: str, env: dict):
-    """Evaluate a formula with the names in `env` (numbers, or numpy arrays where the operations allow)."""
+    """Evaluate a formula with the numbers in `env`."""
     tree = parse(text)
 
     def ev(node):

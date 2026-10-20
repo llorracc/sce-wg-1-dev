@@ -15,7 +15,7 @@
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:source <http://www.probonto.org/ontology> ;
     dcterms:bibliographicCitation "Swat MJ, Grenon P, Wimalaratne S (2016). ProbOnto: ontology and knowledge base of probability distributions. Bioinformatics 32(17):2719-2721. doi:10.1093/bioinformatics/btw170"@en ;
-    pd:sourceDigest "sha256:f9239257ad8a12cc1ffcff70364cdb491476e4038771860583e5b989db42c748" .
+    pd:sourceDigest "sha256:ec6edb31a6fb2684f32f13b939419979122f9cad780c6b176b5b37fb2542864b" .
 
 skos:definition a owl:AnnotationProperty .
 skos:notation a owl:AnnotationProperty .
@@ -90,6 +90,21 @@ pd:boundary
 pd:boundaryChart
     a owl:ObjectProperty ;
     skos:definition "The chart of the other family that writes the members at the boundary."@en .
+pd:reduction
+    a owl:ObjectProperty ;
+    skos:definition "Where a point of the canonical chart is a member of another family."@en .
+pd:reductionChart
+    a owl:ObjectProperty ;
+    skos:definition "The chart of the other family that writes the members a reduction names."@en .
+pd:auxiliary
+    a owl:ObjectProperty ;
+    skos:definition "An auxiliary quantity of the family, a formula in the canonical coordinates."@en .
+pd:toCanonicalAuxiliary
+    a owl:ObjectProperty ;
+    skos:definition "An auxiliary quantity of the conversion to the canonical chart."@en .
+pd:fromCanonicalAuxiliary
+    a owl:ObjectProperty ;
+    skos:definition "An auxiliary quantity of the conversion from the canonical chart."@en .
 pd:hasPropertyValue
     a owl:ObjectProperty ;
     skos:definition "The value of a property for the family's members, in the canonical coordinates."@en .
@@ -123,6 +138,18 @@ pd:measureExpression
 pd:map
     a owl:DatatypeProperty ;
     skos:definition "The map of a case of the pushforward, as a formula in z and the arguments."@en .
+pd:set
+    a owl:DatatypeProperty ;
+    skos:definition "The set of a case of conditioning, as a condition in z and the arguments."@en .
+pd:when
+    a owl:DatatypeProperty ;
+    skos:definition "The condition of a reduction."@en .
+pd:domainCondition
+    a owl:DatatypeProperty ;
+    skos:definition "A condition on a chart's coordinates jointly."@en .
+pd:head
+    a owl:DatatypeProperty ;
+    skos:definition "The name a format gives the law: a stage file's family call, a parameter file's key."@en .
 pd:relation
     a owl:DatatypeProperty ;
     skos:definition "How a constraint relates its property to its value."@en .
@@ -174,9 +201,6 @@ pd:infimum
 pd:supremum
     a owl:DatatypeProperty ;
     skos:definition "The supremum of the support."@en .
-pd:infimumAttained
-    a owl:DatatypeProperty ;
-    skos:definition "Whether the infimum of the support is attained."@en .
 pd:massAtInfimum
     a owl:DatatypeProperty ;
     skos:definition "The mass at the infimum of the support."@en .
@@ -293,7 +317,7 @@ pd:PD_0000013
     pd:canonicalChart pd:PD_0000014 ;
     pd:hasChart pd:PD_0000014 ;
     pd:hasChart pd:PD_0000015 ;
-    pd:hasPropertyValue [ pd:property pd:PD_0000007 ; pd:infimum "-inf" ; pd:supremum "inf" ; pd:infimumAttained false ; pd:massAtInfimum "0" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000007 ; pd:infimum "-inf" ; pd:supremum "inf" ; pd:massAtInfimum "0" ] ;
     pd:hasPropertyValue [ pd:property pd:PD_0000008 ; pd:formula "mu" ] ;
     pd:hasPropertyValue [ pd:property pd:PD_0000009 ; pd:orders "nonnegative-integers" ] ;
     pd:boundary [ pd:where "sigma = 0" ; pd:boundaryChart pd:PD_0000022 ] .
@@ -319,7 +343,7 @@ pd:PD_0000015
     pd:fromCanonical [ pd:name "mu" ; pd:formula "mu" ] ;
     pd:fromCanonical [ pd:name "v" ; pd:formula "sigma**2" ] ;
     pd:conversion "irrational" ;
-    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "N(μ, v)" ] ;
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "N(μ, v)" ; pd:head "N" ; pd:argument [ pd:position 1 ; pd:formula "mu" ] ; pd:argument [ pd:position 2 ; pd:formula "v" ] ] ;
     skos:exactMatch <http://www.probonto.org/ontology#PROB_k0000265> ;
     pd:provenance "ProbOnto 2.5, Normal2, with its conversion to Normal1."@en .
 
@@ -333,7 +357,7 @@ pd:PD_0000016
     pd:builtFrom [ pd:base pd:PD_0000001 ; pd:step [ pd:position 1 ; pd:operator pd:PD_0000005 ; pd:argument [ pd:position 1 ; pd:name "location" ; pd:formula "mu" ] ; pd:argument [ pd:position 2 ; pd:name "scale" ; pd:formula "sigma" ] ] ; pd:step [ pd:position 2 ; pd:operator pd:PD_0000006 ] ] ;
     pd:canonicalChart pd:PD_0000017 ;
     pd:hasChart pd:PD_0000017 ;
-    pd:hasPropertyValue [ pd:property pd:PD_0000007 ; pd:infimum "0" ; pd:supremum "inf" ; pd:infimumAttained false ; pd:massAtInfimum "0" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000007 ; pd:infimum "0" ; pd:supremum "inf" ; pd:massAtInfimum "0" ] ;
     pd:hasPropertyValue [ pd:property pd:PD_0000008 ; pd:formula "exp(mu + sigma**2/2)" ] ;
     pd:hasPropertyValue [ pd:property pd:PD_0000009 ; pd:orders "all-real" ; pd:formula "exp(k*mu + k**2*sigma**2/2)" ] ;
     pd:hasPropertyValue [ pd:property pd:PD_0000010 ; pd:orders "nonnegative-integers" ] ;
@@ -346,7 +370,7 @@ pd:PD_0000017
     pd:chartOf pd:PD_0000016 ;
     pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the mean of ln X"@en ; pd:domain "real" ] ;
     pd:coordinate [ pd:position 2 ; pd:name "sigma" ; pd:symbol "σ" ; pd:meaning "the standard deviation of ln X"@en ; pd:domain "positive" ] ;
-    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "LogNormal(μ, σ)" ] ;
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "LogNormal(μ, σ)" ; pd:head "LogNormal" ; pd:argument [ pd:position 1 ; pd:formula "mu" ] ; pd:argument [ pd:position 2 ; pd:formula "sigma" ] ] ;
     skos:exactMatch <http://www.probonto.org/ontology#PROB_k0000428> .
 
 pd:PD_0000018
@@ -368,8 +392,8 @@ pd:PD_0000019
     pd:toCanonical [ pd:name "sigma" ; pd:formula "sigma" ] ;
     pd:fromCanonical [ pd:name "sigma" ; pd:formula "sigma" ] ;
     pd:conversion "exact" ;
-    pd:writtenAs [ pd:format "parameter-file" ; pd:spelling "{LogNormal: {sd_log: σ}}" ] ;
-    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "LogNormal(-σ^2/2, σ)" ] .
+    pd:writtenAs [ pd:format "parameter-file" ; pd:spelling "{LogNormal: {sd_log: σ}}" ; pd:head "LogNormal" ; pd:argument [ pd:position 1 ; pd:name "sd_log" ; pd:formula "sigma" ] ] ;
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "LogNormal(-σ^2/2, σ)" ; pd:head "LogNormal" ; pd:argument [ pd:position 1 ; pd:formula "-sigma**2/2" ] ; pd:argument [ pd:position 2 ; pd:formula "sigma" ] ] .
 
 pd:PD_0000020
     a owl:NamedIndividual, pd:Family ;
@@ -382,7 +406,7 @@ pd:PD_0000020
     pd:hasChart pd:PD_0000021 ;
     pd:hasChart pd:PD_0000022 ;
     pd:hasChart pd:PD_0000023 ;
-    pd:hasPropertyValue [ pd:property pd:PD_0000007 ; pd:infimum "x" ; pd:supremum "x" ; pd:infimumAttained true ; pd:massAtInfimum "1" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000007 ; pd:infimum "x" ; pd:supremum "x" ; pd:massAtInfimum "1" ] ;
     pd:hasPropertyValue [ pd:property pd:PD_0000008 ; pd:formula "x" ] ;
     pd:hasPropertyValue [ pd:property pd:PD_0000009 ; pd:orders "nonnegative-integers" ; pd:formula "x**k" ] ;
     pd:hasPropertyValue [ pd:property pd:PD_0000011 ; pd:value [ pd:atomAt "x" ; pd:atomMass "1" ] ] .
@@ -403,7 +427,7 @@ pd:PD_0000022
     pd:toCanonical [ pd:name "x" ; pd:formula "mu" ] ;
     pd:fromCanonical [ pd:name "mu" ; pd:formula "x" ] ;
     pd:conversion "exact" ;
-    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "N(μ, 0)" ] .
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "N(μ, 0)" ; pd:head "N" ; pd:argument [ pd:position 1 ; pd:formula "mu" ] ; pd:argument [ pd:position 2 ; pd:formula "0" ] ] .
 
 pd:PD_0000023
     a owl:NamedIndividual, pd:Chart ;
@@ -415,7 +439,7 @@ pd:PD_0000023
     pd:toCanonical [ pd:name "x" ; pd:formula "exp(mu)" ] ;
     pd:fromCanonical [ pd:name "mu" ; pd:formula "log(x)" ] ;
     pd:conversion "irrational" ;
-    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "LogNormal(μ, 0)" ] .
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "LogNormal(μ, 0)" ; pd:head "LogNormal" ; pd:argument [ pd:position 1 ; pd:formula "mu" ] ; pd:argument [ pd:position 2 ; pd:formula "0" ] ] .
 
 pd:PD_0000024
     a owl:NamedIndividual, pd:Family ;
@@ -433,5 +457,46 @@ pd:PD_0000025
     pd:chartOf pd:PD_0000024 ;
     pd:toCanonical [ pd:name "x" ; pd:formula "1" ] ;
     pd:conversion "exact" ;
-    pd:writtenAs [ pd:format "parameter-file" ; pd:spelling "{Degenerate: {}}" ] ;
-    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "LogNormal(0, 0)" ] .
+    pd:writtenAs [ pd:format "parameter-file" ; pd:spelling "{Degenerate: {}}" ; pd:head "Degenerate" ] ;
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "LogNormal(0, 0)" ; pd:head "LogNormal" ; pd:argument [ pd:position 1 ; pd:formula "0" ] ; pd:argument [ pd:position 2 ; pd:formula "0" ] ] .
+
+pd:PD_0000026
+    a owl:NamedIndividual, pd:Operator ;
+    rdfs:label "truncation to an interval"@en ;
+    skos:notation "interval-conditioning" ;
+    skos:definition "Conditioning on the interval [l, u], which must have positive measure."@en ;
+    pd:caseOf pd:PD_0000003 ;
+    pd:argument [ pd:position 1 ; pd:name "lower" ; pd:meaning "the lower bound l; -inf for none"@en ] ;
+    pd:argument [ pd:position 2 ; pd:name "upper" ; pd:meaning "the upper bound u; inf for none"@en ] ;
+    pd:set "lower <= z <= upper" .
+
+pd:PD_0000027
+    a owl:NamedIndividual, pd:Family ;
+    rdfs:label "truncated normal"@en ;
+    skos:notation "truncated-normal" ;
+    skos:definition "The law of μ + σZ given l ≤ μ + σZ ≤ u, Z standard normal."@en ;
+    pd:statedSet "[l, u] ∩ ℝ" ;
+    pd:measureExpression "TruncatedNormal(μ, σ, l, u) = (aff(μ, σ)∗ N(0, 1))|[l, u]" ;
+    pd:builtFrom [ pd:base pd:PD_0000001 ; pd:step [ pd:position 1 ; pd:operator pd:PD_0000005 ; pd:argument [ pd:position 1 ; pd:name "location" ; pd:formula "mu" ] ; pd:argument [ pd:position 2 ; pd:name "scale" ; pd:formula "sigma" ] ] ; pd:step [ pd:position 2 ; pd:operator pd:PD_0000026 ; pd:argument [ pd:position 1 ; pd:name "lower" ; pd:formula "l" ] ; pd:argument [ pd:position 2 ; pd:name "upper" ; pd:formula "u" ] ] ] ;
+    pd:auxiliary [ pd:position 1 ; pd:name "a" ; pd:formula "(l - mu)/sigma" ] ;
+    pd:auxiliary [ pd:position 2 ; pd:name "b" ; pd:formula "(u - mu)/sigma" ] ;
+    pd:auxiliary [ pd:position 3 ; pd:name "D" ; pd:formula "Phi(b) - Phi(a)" ] ;
+    pd:canonicalChart pd:PD_0000028 ;
+    pd:hasChart pd:PD_0000028 ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000007 ; pd:infimum "l" ; pd:supremum "u" ; pd:massAtInfimum "0" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000008 ; pd:formula "mu + sigma*(phi(a) - phi(b))/D" ] ;
+    pd:hasPropertyValue [ pd:property pd:PD_0000009 ; pd:orders "nonnegative-integers" ] ;
+    pd:reduction [ pd:when "l == -inf and u == inf" ; pd:reductionChart pd:PD_0000014 ] .
+
+pd:PD_0000028
+    a owl:NamedIndividual, pd:Chart ;
+    rdfs:label "the normal's mean and standard deviation, and the bounds"@en ;
+    skos:notation "truncated-normal/mean-sd-bounds" ;
+    pd:chartOf pd:PD_0000027 ;
+    pd:coordinate [ pd:position 1 ; pd:name "mu" ; pd:symbol "μ" ; pd:meaning "the mean of the normal before truncation"@en ; pd:domain "real" ] ;
+    pd:coordinate [ pd:position 2 ; pd:name "sigma" ; pd:symbol "σ" ; pd:meaning "the standard deviation of the normal before truncation"@en ; pd:domain "positive" ] ;
+    pd:coordinate [ pd:position 3 ; pd:name "l" ; pd:symbol "l" ; pd:meaning "the lower bound; -inf for none"@en ; pd:domain "extended-real" ] ;
+    pd:coordinate [ pd:position 4 ; pd:name "u" ; pd:symbol "u" ; pd:meaning "the upper bound; inf for none"@en ; pd:domain "extended-real" ] ;
+    pd:domainCondition "l < u" ;
+    pd:writtenAs [ pd:format "bellman-sym" ; pd:spelling "TruncatedNormal(μ, σ, l, u)" ; pd:head "TruncatedNormal" ; pd:argument [ pd:position 1 ; pd:formula "mu" ] ; pd:argument [ pd:position 2 ; pd:formula "sigma" ] ; pd:argument [ pd:position 3 ; pd:formula "l" ] ; pd:argument [ pd:position 4 ; pd:formula "u" ] ] ;
+    skos:closeMatch <http://www.probonto.org/ontology#PROB_k0000681> .

@@ -62,6 +62,17 @@ def _check_formula(text: str, allowed: set[str], where: str) -> str:
     return text
 
 
+def _check_definitions(definitions: dict, allowed: set[str], where: str) -> tuple[dict, set[str]]:
+    """Check auxiliary definitions in order: each may use the allowed names and the definitions before it."""
+    names = set(allowed)
+    for name, text in definitions.items():
+        if name in names:
+            raise SourceError(f"{where}: the auxiliary {name!r} shadows a name already in use")
+        _check_formula(text, names, f"{where}, {name}")
+        names.add(name)
+    return dict(definitions), names
+
+
 def build(source: dict, digest: str) -> dict:
     """Resolve the source into the table: every check the schema cannot make, then one row per object."""
     meta = source["ontology"]
@@ -133,8 +144,9 @@ def build(source: dict, digest: str) -> dict:
         if "case_of" in op:
             row["case_of"] = ident("operators", op["case_of"], where)
         row["arguments"] = [dict(a) for a in op["arguments"]]
-        if "map" in op:
-            row["map"] = _check_formula(op["map"], {"z"} | {a["name"] for a in op["arguments"]}, where)
+        for key in ("map", "set"):
+            if key in op:
+                row[key] = _check_formula(op[key], {"z"} | {a["name"] for a in op["arguments"]}, where)
         row["definition"] = op["definition"]
         rows.append(row)
 
@@ -160,6 +172,8 @@ def build(source: dict, digest: str) -> dict:
             row["subfamily_of"] = families[fam["subfamily_of"]]["id"]
             row["constraints"] = [ident("constraints", c, where) for c in fam["constraints"]]
         row["definition"] = fam["definition"]
+        aux, known = _check_definitions(fam.get("where", {}), set(canon), f"{where}, where") if fam is root \
+            else ({}, set(canon))
         if fam is root:
             row["measure"] = fam["measure"]
             if "built_from" in fam:
@@ -174,17 +188,19 @@ def build(source: dict, digest: str) -> dict:
                         raise SourceError(f"{where}: step {i} gives {sorted(given)} to {op['name']}, "
                                           f"which takes {sorted(expected)}")
                     steps.append({"operator": op["id"], "arguments": {
-                        a["name"]: _check_formula(step[a["name"]], set(canon), f"{where}, step {i}")
+                        a["name"]: _check_formula(step[a["name"]], known, f"{where}, step {i}")
                         for a in op["arguments"]}})
                 row["built_from"] = {"base": ident("measures", fam["built_from"]["base"], where),
                                      "operators": steps}
+            if aux:
+                row["where"] = aux
             row["canonical_chart"] = canonical["id"]
         row["charts"] = [c["id"] for c in fam["charts"]]
         if fam is root:
             props = {}
             for name, value in fam["properties"].items():
                 ident("properties", name, where)
-                allowed = set(canon) | ({"k"} if name in ("moments", "log-moments") else set())
+                allowed = known | ({"k"} if name in ("moments", "log-moments") else set())
                 if isinstance(value, str):
                     props[name] = _check_formula(value, allowed, f"{where}, {name}")
                 elif isinstance(value, list):
@@ -214,6 +230,20 @@ def build(source: dict, digest: str) -> dict:
                 bounds.append({"where": b["where"], "family": target["id"], "chart": charts[b["chart"]]["id"]})
             if bounds:
                 row["boundaries"] = bounds
+            reductions = []
+            for r in fam.get("reductions", []):
+                _check_formula(r["when"], known, f"{where}, reduction")
+                target = families.get(r["family"])
+                if target is None or "subfamily_of" in target:
+                    raise SourceError(f"{where}: a reduction names {r['family']!r}, which is not a root family")
+                charts = {c["name"]: c for c in target["charts"]}
+                if r["chart"] not in charts:
+                    raise SourceError(f"{where}: family {r['family']} has no chart {r['chart']!r}")
+                if not set(coords(charts[r["chart"]])) <= set(canon):
+                    raise SourceError(f"{where}: a reduction's chart must use canonical coordinates of {fam['name']}")
+                reductions.append({"when": r["when"], "family": target["id"], "chart": charts[r["chart"]]["id"]})
+            if reductions:
+                row["reductions"] = reductions
         rows.append(row)
 
         for chart in fam["charts"]:
@@ -226,7 +256,11 @@ def build(source: dict, digest: str) -> dict:
                     "qualified_name": f"{fam['name']}/{chart['name']}", "label": chart["label"],
                     "family": fam["id"], "canonical": is_canonical,
                     "coordinates": [dict(c) for c in chart["coordinates"]]}
-            conversion_keys = {"covers", "to_canonical", "from_canonical", "conversion"}
+            if "domain_conditions" in chart:
+                crow["domain_conditions"] = [_check_formula(c, set(own), f"{cwhere}, domain condition")
+                                             for c in chart["domain_conditions"]]
+            conversion_keys = {"covers", "to_canonical", "from_canonical", "conversion", "to_canonical_where",
+                               "from_canonical_where"}
             if is_canonical:
                 if conversion_keys & set(chart):
                     raise SourceError(f"{cwhere}: the canonical chart carries no conversion")
@@ -240,25 +274,37 @@ def build(source: dict, digest: str) -> dict:
                     raise SourceError(f"{cwhere}: from_canonical must give exactly {own}")
                 if "covers" in chart:
                     crow["covers"] = _check_formula(chart["covers"], set(canon), f"{cwhere}, covers")
-                crow["to_canonical"] = {k: _check_formula(chart["to_canonical"][k], set(own), f"{cwhere}, {k}")
+                to_aux, to_known = _check_definitions(chart.get("to_canonical_where", {}), set(own),
+                                                      f"{cwhere}, to_canonical_where")
+                from_aux, from_known = _check_definitions(chart.get("from_canonical_where", {}), set(canon),
+                                                          f"{cwhere}, from_canonical_where")
+                if to_aux:
+                    crow["to_canonical_where"] = to_aux
+                crow["to_canonical"] = {k: _check_formula(chart["to_canonical"][k], to_known, f"{cwhere}, {k}")
                                         for k in canon}
-                crow["from_canonical"] = {k: _check_formula(chart["from_canonical"][k], set(canon), f"{cwhere}, {k}")
+                if from_aux:
+                    crow["from_canonical_where"] = from_aux
+                crow["from_canonical"] = {k: _check_formula(chart["from_canonical"][k], from_known, f"{cwhere}, {k}")
                                           for k in own}
-                exact = all(formulas.is_exact(f) for f in (*crow["to_canonical"].values(),
-                                                           *crow["from_canonical"].values()))
+                exact = all(formulas.is_exact(f) for f in (*to_aux.values(), *crow["to_canonical"].values(),
+                                                           *from_aux.values(), *crow["from_canonical"].values()))
                 if chart["conversion"] != ("exact" if exact else "irrational"):
                     raise SourceError(f"{cwhere}: its formulas make the conversion "
                                       f"{'exact' if exact else 'irrational'}, not {chart['conversion']}")
                 crow["conversion"] = chart["conversion"]
             if "written_as" in chart:
-                for fmt, form in chart["written_as"].items():
+                for fmt, forms in chart["written_as"].items():
                     if fmt not in formats:
                         raise SourceError(f"{cwhere}: the format {fmt!r} is not declared")
-                    for k, v in form.get("defaults", {}).items():
-                        if k not in own:
-                            raise SourceError(f"{cwhere}: a default for {k!r}, which is not a coordinate")
-                        _check_formula(v, set(), f"{cwhere}, default of {k}")
-                crow["written_as"] = {fmt: dict(form) for fmt, form in chart["written_as"].items()}
+                    for form in forms:
+                        args = form.get("arguments", [])
+                        for a in (args.values() if isinstance(args, dict) else args):
+                            _check_formula(a, set(own), f"{cwhere}, {fmt} argument")
+                        for k, v in form.get("defaults", {}).items():
+                            if not isinstance(args, dict) or k not in args:
+                                raise SourceError(f"{cwhere}: a default for {k!r}, which is not a field of {fmt}")
+                            _check_formula(v, set(), f"{cwhere}, default of {k}")
+                crow["written_as"] = {fmt: [dict(form) for form in forms] for fmt, forms in chart["written_as"].items()}
             if "cross_references" in chart:
                 refs = []
                 for ref in chart["cross_references"]:
@@ -310,6 +356,11 @@ VOCABULARY = {
         "operator": "The operator a step applies.",
         "boundary": "Where the canonical chart's domain ends at a member of another family.",
         "boundaryChart": "The chart of the other family that writes the members at the boundary.",
+        "reduction": "Where a point of the canonical chart is a member of another family.",
+        "reductionChart": "The chart of the other family that writes the members a reduction names.",
+        "auxiliary": "An auxiliary quantity of the family, a formula in the canonical coordinates.",
+        "toCanonicalAuxiliary": "An auxiliary quantity of the conversion to the canonical chart.",
+        "fromCanonicalAuxiliary": "An auxiliary quantity of the conversion from the canonical chart.",
         "hasPropertyValue": "The value of a property for the family's members, in the canonical coordinates.",
         "property": "The property a value is the value of.",
         "coordinate": "A coordinate of the chart.",
@@ -323,6 +374,10 @@ VOCABULARY = {
         "notation": "The mathematical notation for the measure.",
         "measureExpression": "The family's measure in the operator notation, in the canonical coordinates.",
         "map": "The map of a case of the pushforward, as a formula in z and the arguments.",
+        "set": "The set of a case of conditioning, as a condition in z and the arguments.",
+        "when": "The condition of a reduction.",
+        "domainCondition": "A condition on a chart's coordinates jointly.",
+        "head": "The name a format gives the law: a stage file's family call, a parameter file's key.",
         "relation": "How a constraint relates its property to its value.",
         "value": "A value, as a formula.",
         "position": "The position of a coordinate, a step or an argument, from one.",
@@ -340,7 +395,6 @@ VOCABULARY = {
         "where": "A boundary's condition.",
         "infimum": "The infimum of the support.",
         "supremum": "The supremum of the support.",
-        "infimumAttained": "Whether the infimum of the support is attained.",
         "massAtInfimum": "The mass at the infimum of the support.",
         "orders": "The orders for which a moment is finite.",
         "atomAt": "The point of an atom.",
@@ -433,8 +487,9 @@ def turtle(table: dict) -> str:
             for i, a in enumerate(row["arguments"], 1):
                 pairs.append((f"{pd}:argument", _bnode([(f"{pd}:position", str(i)), (f"{pd}:name", _lit(a["name"])),
                                                        (f"{pd}:meaning", _lit(a["meaning"], "en"))])))
-            if "map" in row:
-                pairs.append((f"{pd}:map", _lit(row["map"])))
+            for key in ("map", "set"):
+                if key in row:
+                    pairs.append((f"{pd}:{key}", _lit(row[key])))
         elif kind == "constraint":
             pairs += [(f"{pd}:constrains", ref(row["property"])), (f"{pd}:relation", _lit(row["relation"])),
                       (f"{pd}:value", _lit(row["value"]))]
@@ -455,6 +510,9 @@ def turtle(table: dict) -> str:
                                         + [(f"{pd}:argument", a) for a in args]))
                 pairs.append((f"{pd}:builtFrom", _bnode([(f"{pd}:base", ref(row["built_from"]["base"]))]
                                                          + [(f"{pd}:step", s) for s in steps])))
+            for i, (k, v) in enumerate(row.get("where", {}).items(), 1):
+                pairs.append((f"{pd}:auxiliary", _bnode([(f"{pd}:position", str(i)), (f"{pd}:name", _lit(k)),
+                                                         (f"{pd}:formula", _lit(v))])))
             if "canonical_chart" in row:
                 pairs.append((f"{pd}:canonicalChart", ref(row["canonical_chart"])))
             pairs += [(f"{pd}:hasChart", ref(c)) for c in row["charts"]]
@@ -467,8 +525,8 @@ def turtle(table: dict) -> str:
                     inner += [(f"{pd}:value", _bnode([(f"{pd}:atomAt", _lit(a["at"])), (f"{pd}:atomMass", _lit(a["mass"]))]))
                               for a in value]
                 else:
-                    keymap = {"infimum": "infimum", "supremum": "supremum", "infimum_attained": "infimumAttained",
-                              "mass_at_infimum": "massAtInfimum", "orders": "orders", "formula": "formula"}
+                    keymap = {"infimum": "infimum", "supremum": "supremum", "mass_at_infimum": "massAtInfimum",
+                              "orders": "orders", "formula": "formula"}
                     for k, v in value.items():
                         obj = ("true" if v else "false") if isinstance(v, bool) else _lit(v)
                         inner.append((f"{pd}:{keymap[k]}", obj))
@@ -476,6 +534,9 @@ def turtle(table: dict) -> str:
             for b in row.get("boundaries", []):
                 pairs.append((f"{pd}:boundary", _bnode([(f"{pd}:where", _lit(b["where"])),
                                                         (f"{pd}:boundaryChart", ref(b["chart"]))])))
+            for r in row.get("reductions", []):
+                pairs.append((f"{pd}:reduction", _bnode([(f"{pd}:when", _lit(r["when"])),
+                                                         (f"{pd}:reductionChart", ref(r["chart"]))])))
         elif kind == "chart":
             pairs.append((f"{pd}:chartOf", ref(row["family"])))
             for i, c in enumerate(row["coordinates"], 1):
@@ -483,18 +544,31 @@ def turtle(table: dict) -> str:
                                                          (f"{pd}:symbol", _lit(c["symbol"])),
                                                          (f"{pd}:meaning", _lit(c["meaning"], "en")),
                                                          (f"{pd}:domain", _lit(c["domain"]))])))
+            pairs += [(f"{pd}:domainCondition", _lit(c)) for c in row.get("domain_conditions", [])]
             if "covers" in row:
                 pairs.append((f"{pd}:covers", _lit(row["covers"])))
+            for key, prop in (("to_canonical_where", "toCanonicalAuxiliary"), ("from_canonical_where", "fromCanonicalAuxiliary")):
+                for i, (k, v) in enumerate(row.get(key, {}).items(), 1):
+                    pairs.append((f"{pd}:{prop}", _bnode([(f"{pd}:position", str(i)), (f"{pd}:name", _lit(k)),
+                                                          (f"{pd}:formula", _lit(v))])))
             pairs += [(f"{pd}:toCanonical", b) for b in formula_pairs(row.get("to_canonical", {}))]
             pairs += [(f"{pd}:fromCanonical", b) for b in formula_pairs(row.get("from_canonical", {}))]
             if "conversion" in row:
                 pairs.append((f"{pd}:conversion", _lit(row["conversion"])))
-            for fmt, form in row.get("written_as", {}).items():
-                inner = [(f"{pd}:format", _lit(fmt)), (f"{pd}:spelling", _lit(form["spelling"]))]
-                inner += [(f"{pd}:default", _lit(f"{k} = {v}")) for k, v in form.get("defaults", {}).items()]
-                if "none" in form:
-                    inner.append((f"{pd}:noneToken", _lit(form["none"])))
-                pairs.append((f"{pd}:writtenAs", _bnode(inner)))
+            for fmt, forms in row.get("written_as", {}).items():
+                for form in forms:
+                    inner = [(f"{pd}:format", _lit(fmt)), (f"{pd}:spelling", _lit(form["spelling"])),
+                             (f"{pd}:head", _lit(form["head"]))]
+                    args = form.get("arguments", [])
+                    items = args.items() if isinstance(args, dict) else ((None, a) for a in args)
+                    for i, (k, v) in enumerate(items, 1):
+                        inner.append((f"{pd}:argument", _bnode([(f"{pd}:position", str(i))]
+                                                               + ([(f"{pd}:name", _lit(k))] if k else [])
+                                                               + [(f"{pd}:formula", _lit(v))])))
+                    inner += [(f"{pd}:default", _lit(f"{k} = {v}")) for k, v in form.get("defaults", {}).items()]
+                    if "none" in form:
+                        inner.append((f"{pd}:noneToken", _lit(form["none"])))
+                    pairs.append((f"{pd}:writtenAs", _bnode(inner)))
             for x in row.get("cross_references", []):
                 pairs.append((x["predicate"], f"<{x['iri']}>"))
             if "provenance" in row:

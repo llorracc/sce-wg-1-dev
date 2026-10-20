@@ -124,6 +124,10 @@
           "description": "For a case of the pushforward: the map, a formula in z and the arguments.",
           "$ref": "#/$defs/Formula"
         },
+        "set": {
+          "description": "For a case of conditioning: the set, a condition in z and the arguments.",
+          "$ref": "#/$defs/Formula"
+        },
         "definition": { "$ref": "#/$defs/Text" }
       }
     },
@@ -177,11 +181,22 @@
           "$ref": "#/$defs/Text"
         },
         "built_from": { "$ref": "#/$defs/BuiltFrom" },
+        "where": {
+          "description": "Auxiliary quantities, in order, each a formula in the canonical coordinates and the quantities before it; the properties, the construction's arguments and the reductions may use them.",
+          "$ref": "#/$defs/Definitions"
+        },
         "canonical_chart": { "$ref": "#/$defs/Name" },
         "charts": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Chart" } },
         "properties": { "$ref": "#/$defs/FamilyProperties" },
-        "boundaries": { "type": "array", "items": { "$ref": "#/$defs/Boundary" } }
+        "boundaries": { "type": "array", "items": { "$ref": "#/$defs/Boundary" } },
+        "reductions": { "type": "array", "items": { "$ref": "#/$defs/Reduction" } }
       }
+    },
+
+    "Definitions": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/CoordinateName" },
+      "additionalProperties": { "$ref": "#/$defs/Formula" }
     },
 
     "Subfamily": {
@@ -229,28 +244,34 @@
         "name": { "$ref": "#/$defs/Name" },
         "label": { "$ref": "#/$defs/Text" },
         "coordinates": { "type": "array", "items": { "$ref": "#/$defs/Coordinate" } },
+        "domain_conditions": {
+          "description": "Conditions on the coordinates jointly, beyond each coordinate's own domain.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/Formula" }
+        },
         "covers": {
           "description": "The part of the canonical chart's domain this chart reaches, when it is not all of it: a condition in the canonical coordinates.",
           "$ref": "#/$defs/Formula"
         },
-        "to_canonical": {
-          "type": "object",
-          "propertyNames": { "$ref": "#/$defs/CoordinateName" },
-          "additionalProperties": { "$ref": "#/$defs/Formula" }
+        "to_canonical_where": {
+          "description": "Auxiliary quantities for to_canonical, in order, in this chart's coordinates and the quantities before them.",
+          "$ref": "#/$defs/Definitions"
         },
-        "from_canonical": {
-          "type": "object",
-          "propertyNames": { "$ref": "#/$defs/CoordinateName" },
-          "additionalProperties": { "$ref": "#/$defs/Formula" }
+        "to_canonical": { "$ref": "#/$defs/Definitions" },
+        "from_canonical_where": {
+          "description": "Auxiliary quantities for from_canonical, in order, in the canonical coordinates and the quantities before them.",
+          "$ref": "#/$defs/Definitions"
         },
+        "from_canonical": { "$ref": "#/$defs/Definitions" },
         "conversion": {
           "description": "exact when every formula of the conversion is rational in its coordinates; irrational otherwise.",
           "enum": ["exact", "irrational"]
         },
         "written_as": {
+          "description": "Per format, the spellings of a point of this chart; a format may have more than one.",
           "type": "object",
           "propertyNames": { "$ref": "#/$defs/Name" },
-          "additionalProperties": { "$ref": "#/$defs/WrittenForm" }
+          "additionalProperties": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/WrittenForm" } }
         },
         "cross_references": { "type": "array", "items": { "$ref": "#/$defs/CrossReference" } },
         "provenance": { "$ref": "#/$defs/Text" }
@@ -273,16 +294,27 @@
     },
 
     "WrittenForm": {
-      "description": "How a format writes a point of the chart. Defaults, which belong to the written form and not to the law, are filled before a written law is compared with another.",
+      "description": "How a format writes a point of the chart: as a reader sees it (spelling), and as a writer builds it (head and arguments). Defaults, which belong to the written form and not to the law, are filled before a written law is compared with another.",
       "type": "object",
-      "required": ["spelling"],
+      "required": ["spelling", "head"],
       "additionalProperties": false,
       "properties": {
         "spelling": { "$ref": "#/$defs/Text" },
+        "head": {
+          "description": "The name the format gives the law: a stage file's family call, a parameter file's key.",
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
+        },
+        "arguments": {
+          "description": "A positional format's arguments, in order, or a keyed format's fields, each a formula in the chart's coordinates.",
+          "oneOf": [
+            { "type": "array", "items": { "$ref": "#/$defs/Formula" } },
+            { "$ref": "#/$defs/Definitions" }
+          ]
+        },
         "defaults": {
-          "type": "object",
-          "propertyNames": { "$ref": "#/$defs/CoordinateName" },
-          "additionalProperties": { "$ref": "#/$defs/Formula" }
+          "description": "A keyed format's value for a field left out.",
+          "$ref": "#/$defs/Definitions"
         },
         "none": {
           "description": "The token the format writes for an absent bound.",
@@ -311,12 +343,11 @@
       "properties": {
         "support": {
           "type": "object",
-          "required": ["infimum", "supremum", "infimum_attained", "mass_at_infimum"],
+          "required": ["infimum", "supremum", "mass_at_infimum"],
           "additionalProperties": false,
           "properties": {
             "infimum": { "$ref": "#/$defs/Formula" },
             "supremum": { "$ref": "#/$defs/Formula" },
-            "infimum_attained": { "type": "boolean" },
             "mass_at_infimum": { "$ref": "#/$defs/Formula" }
           }
         },
@@ -348,6 +379,18 @@
           "enum": ["all-real", "nonnegative-integers"]
         },
         "formula": { "$ref": "#/$defs/Formula" }
+      }
+    },
+
+    "Reduction": {
+      "description": "Where a point of the canonical chart is a member of another family, as a vacuous conditioning is: the condition, and that family's chart, whose coordinates are canonical coordinates of this family.",
+      "type": "object",
+      "required": ["when", "family", "chart"],
+      "additionalProperties": false,
+      "properties": {
+        "when": { "$ref": "#/$defs/Formula" },
+        "family": { "$ref": "#/$defs/Name" },
+        "chart": { "$ref": "#/$defs/Name" }
       }
     },
 

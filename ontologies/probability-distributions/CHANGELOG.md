@@ -15,4 +15,6 @@ formula syntax and the two written forms. The first rows, all new:
 - the normal, with its charts of mean and standard deviation (canonical) and mean and variance;
 - the lognormal, with its subfamily of mean one;
 - the point mass, with its charts of a normal with variance zero and a lognormal with zero spread, and its subfamily at
-  one.
+  one;
+- the truncated normal, conditioned on an interval in the variate's units, with the operator of truncation to an
+  interval, and its reduction to the normal when neither bound binds.
