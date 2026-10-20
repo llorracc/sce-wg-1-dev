@@ -1,0 +1,535 @@
+"""Generate the ontology's Turtle file and JSON table from its one source, or check that they are current.
+
+    uv run --with pyyaml --with jsonschema python generate.py            # write both files
+    uv run --with pyyaml --with jsonschema python generate.py --check    # exit 1 if either is out of date
+
+The source is source.yaml, validated against source.schema.json. The generated files are probability-distributions.ttl,
+OWL 2 in Turtle, and probability-distributions.json, a flat table with one row per measure, operator, property,
+constraint, family and chart, references resolved to identifiers. The same source always gives the same bytes.
+
+Beyond the schema, the generator refuses a source whose identifiers repeat or reuse a retired one, whose names repeat,
+whose references do not resolve, whose formulas leave the formula syntax or name what their place does not allow, whose
+charts lack a conversion to the canonical chart or label it wrongly, or whose written forms and cross-references use a
+format or prefix the source does not declare.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+import jsonschema
+import yaml
+
+import formulas
+
+HERE = Path(__file__).resolve().parent
+SOURCE = HERE / "source.yaml"
+SCHEMA = HERE / "source.schema.json"
+TURTLE = HERE / "probability-distributions.ttl"
+TABLE = HERE / "probability-distributions.json"
+
+KINDS = {"measures": "measure", "operators": "operator", "properties": "property", "constraints": "constraint"}
+
+
+class SourceError(ValueError):
+    pass
+
+
+def load(path: Path = SOURCE) -> tuple[dict, str]:
+    """The source, validated against its schema, and the SHA-256 of its bytes."""
+    raw = path.read_bytes()
+    source = yaml.safe_load(raw.decode("utf-8"))
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    errors = sorted(jsonschema.Draft202012Validator(schema).iter_errors(source), key=lambda e: list(e.path))
+    if errors:
+        raise SourceError(
+            "; ".join(f"{'/'.join(map(str, e.path)) or '(root)'}: {e.message}" for e in errors[:10])
+        )
+    return source, hashlib.sha256(raw).hexdigest()
+
+
+def _check_formula(text: str, allowed: set[str], where: str) -> str:
+    try:
+        extra = formulas.names(text) - allowed
+    except formulas.FormulaError as e:
+        raise SourceError(f"{where}: {e}") from None
+    if extra:
+        raise SourceError(f"{where}: {text!r} names {sorted(extra)}; only {sorted(allowed)} are allowed here")
+    return text
+
+
+def build(source: dict, digest: str) -> dict:
+    """Resolve the source into the table: every check the schema cannot make, then one row per object."""
+    meta = source["ontology"]
+    retired = set(source["retired"])
+    seen_ids: dict[str, str] = {}
+
+    def claim(identifier: str, what: str) -> str:
+        if identifier in retired:
+            raise SourceError(f"{what}: {identifier} is retired and may not be used again")
+        if identifier in seen_ids:
+            raise SourceError(f"{what}: {identifier} is already {seen_ids[identifier]}")
+        seen_ids[identifier] = what
+        return identifier
+
+    # Names, by kind.
+    index: dict[str, dict[str, dict]] = {}
+    for key in (*KINDS, "families"):
+        index[key] = {}
+        for row in source[key]:
+            if row["name"] in index[key]:
+                raise SourceError(f"{key}: the name {row['name']!r} is used twice")
+            index[key][row["name"]] = row
+            claim(row["id"], f"{key[:-1] if key != 'properties' else 'property'} {row['name']}")
+    families = index["families"]
+    for fam in source["families"]:
+        names = [c["name"] for c in fam["charts"]]
+        if len(set(names)) != len(names):
+            raise SourceError(f"family {fam['name']}: a chart name is used twice")
+        for chart in fam["charts"]:
+            claim(chart["id"], f"chart {fam['name']}/{chart['name']}")
+
+    def ident(key: str, name: str, where: str) -> str:
+        if name not in index[key]:
+            raise SourceError(f"{where}: no {key[:-1] if key != 'properties' else 'property'} named {name!r}")
+        return index[key][name]["id"]
+
+    def root_of(fam: dict) -> dict:
+        chain = [fam["name"]]
+        while "subfamily_of" in fam:
+            parent = fam["subfamily_of"]
+            if parent not in families:
+                raise SourceError(f"family {chain[-1]}: no family named {parent!r}")
+            if parent in chain:
+                raise SourceError(f"family {fam['name']}: subfamily_of loops through {chain}")
+            chain.append(parent)
+            fam = families[parent]
+        return fam
+
+    def canonical_of(root: dict) -> dict:
+        charts = {c["name"]: c for c in root["charts"]}
+        if root["canonical_chart"] not in charts:
+            raise SourceError(f"family {root['name']}: no chart named {root['canonical_chart']!r}")
+        return charts[root["canonical_chart"]]
+
+    def coords(chart: dict) -> list[str]:
+        return [c["name"] for c in chart["coordinates"]]
+
+    formats = set(meta["formats"])
+    prefixes = meta["prefixes"]
+    rows: list[dict] = []
+
+    for m in source["measures"]:
+        rows.append({"id": m["id"], "kind": "measure", "name": m["name"], "label": m["label"],
+                     "stated_set": m["stated_set"], "notation": m["notation"], "definition": m["definition"]})
+
+    for op in source["operators"]:
+        where = f"operator {op['name']}"
+        row = {"id": op["id"], "kind": "operator", "name": op["name"], "label": op["label"]}
+        if "case_of" in op:
+            row["case_of"] = ident("operators", op["case_of"], where)
+        row["arguments"] = [dict(a) for a in op["arguments"]]
+        if "map" in op:
+            row["map"] = _check_formula(op["map"], {"z"} | {a["name"] for a in op["arguments"]}, where)
+        row["definition"] = op["definition"]
+        rows.append(row)
+
+    for p in source["properties"]:
+        rows.append({"id": p["id"], "kind": "property", "name": p["name"], "label": p["label"],
+                     "definition": p["definition"]})
+
+    for con in source["constraints"]:
+        where = f"constraint {con['name']}"
+        rows.append({"id": con["id"], "kind": "constraint", "name": con["name"], "label": con["label"],
+                     "property": ident("properties", con["property"], where), "relation": con["relation"],
+                     "value": _check_formula(con["value"], set(), where), "definition": con["definition"]})
+
+    for fam in source["families"]:
+        where = f"family {fam['name']}"
+        root = root_of(fam)
+        canonical = canonical_of(root)
+        canon = coords(canonical)
+        row = {"id": fam["id"], "kind": "family", "name": fam["name"], "label": fam["label"]}
+        if fam is root:
+            row["stated_set"] = fam["stated_set"]
+        else:
+            row["subfamily_of"] = families[fam["subfamily_of"]]["id"]
+            row["constraints"] = [ident("constraints", c, where) for c in fam["constraints"]]
+        row["definition"] = fam["definition"]
+        if fam is root:
+            row["measure"] = fam["measure"]
+            if "built_from" in fam:
+                steps = []
+                for i, step in enumerate(fam["built_from"]["operators"]):
+                    op = index["operators"].get(step["operator"])
+                    if op is None:
+                        raise SourceError(f"{where}: no operator named {step['operator']!r}")
+                    expected = {a["name"] for a in op["arguments"]}
+                    given = set(step) - {"operator"}
+                    if given != expected:
+                        raise SourceError(f"{where}: step {i} gives {sorted(given)} to {op['name']}, "
+                                          f"which takes {sorted(expected)}")
+                    steps.append({"operator": op["id"], "arguments": {
+                        a["name"]: _check_formula(step[a["name"]], set(canon), f"{where}, step {i}")
+                        for a in op["arguments"]}})
+                row["built_from"] = {"base": ident("measures", fam["built_from"]["base"], where),
+                                     "operators": steps}
+            row["canonical_chart"] = canonical["id"]
+        row["charts"] = [c["id"] for c in fam["charts"]]
+        if fam is root:
+            props = {}
+            for name, value in fam["properties"].items():
+                ident("properties", name, where)
+                allowed = set(canon) | ({"k"} if name in ("moments", "log-moments") else set())
+                if isinstance(value, str):
+                    props[name] = _check_formula(value, allowed, f"{where}, {name}")
+                elif isinstance(value, list):
+                    props[name] = [{k: _check_formula(v, allowed, f"{where}, {name}") for k, v in item.items()}
+                                   for item in value]
+                else:
+                    props[name] = {k: (_check_formula(v, allowed, f"{where}, {name}.{k}") if isinstance(v, str)
+                                       and k not in ("orders",) else v) for k, v in value.items()}
+            row["properties"] = props
+            bounds = []
+            for b in fam.get("boundaries", []):
+                coordinate, _, value = b["where"].partition(" = ")
+                if coordinate not in canon:
+                    raise SourceError(f"{where}: a boundary's condition names {coordinate!r}, "
+                                      f"not a canonical coordinate")
+                _check_formula(value, set(canon), f"{where}, boundary")
+                target = families.get(b["family"])
+                if target is None or "subfamily_of" in target:
+                    raise SourceError(f"{where}: a boundary names {b['family']!r}, which is not a root family")
+                charts = {c["name"]: c for c in target["charts"]}
+                if b["chart"] not in charts:
+                    raise SourceError(f"{where}: family {b['family']} has no chart {b['chart']!r}")
+                free = set(coords(charts[b["chart"]]))
+                if not free <= set(canon) - {coordinate}:
+                    raise SourceError(f"{where}: the boundary chart's coordinates {sorted(free)} must be "
+                                      f"canonical coordinates of {fam['name']} other than {coordinate}")
+                bounds.append({"where": b["where"], "family": target["id"], "chart": charts[b["chart"]]["id"]})
+            if bounds:
+                row["boundaries"] = bounds
+        rows.append(row)
+
+        for chart in fam["charts"]:
+            cwhere = f"chart {fam['name']}/{chart['name']}"
+            own = coords(chart)
+            if len(set(own)) != len(own):
+                raise SourceError(f"{cwhere}: a coordinate name is used twice")
+            is_canonical = fam is root and chart["name"] == root["canonical_chart"]
+            crow = {"id": chart["id"], "kind": "chart", "name": chart["name"],
+                    "qualified_name": f"{fam['name']}/{chart['name']}", "label": chart["label"],
+                    "family": fam["id"], "canonical": is_canonical,
+                    "coordinates": [dict(c) for c in chart["coordinates"]]}
+            conversion_keys = {"covers", "to_canonical", "from_canonical", "conversion"}
+            if is_canonical:
+                if conversion_keys & set(chart):
+                    raise SourceError(f"{cwhere}: the canonical chart carries no conversion")
+            else:
+                for key in ("to_canonical", "from_canonical", "conversion"):
+                    if key not in chart:
+                        raise SourceError(f"{cwhere}: a chart other than the canonical one needs {key}")
+                if set(chart["to_canonical"]) != set(canon):
+                    raise SourceError(f"{cwhere}: to_canonical must give exactly {canon}")
+                if set(chart["from_canonical"]) != set(own):
+                    raise SourceError(f"{cwhere}: from_canonical must give exactly {own}")
+                if "covers" in chart:
+                    crow["covers"] = _check_formula(chart["covers"], set(canon), f"{cwhere}, covers")
+                crow["to_canonical"] = {k: _check_formula(chart["to_canonical"][k], set(own), f"{cwhere}, {k}")
+                                        for k in canon}
+                crow["from_canonical"] = {k: _check_formula(chart["from_canonical"][k], set(canon), f"{cwhere}, {k}")
+                                          for k in own}
+                exact = all(formulas.is_exact(f) for f in (*crow["to_canonical"].values(),
+                                                           *crow["from_canonical"].values()))
+                if chart["conversion"] != ("exact" if exact else "irrational"):
+                    raise SourceError(f"{cwhere}: its formulas make the conversion "
+                                      f"{'exact' if exact else 'irrational'}, not {chart['conversion']}")
+                crow["conversion"] = chart["conversion"]
+            if "written_as" in chart:
+                for fmt, form in chart["written_as"].items():
+                    if fmt not in formats:
+                        raise SourceError(f"{cwhere}: the format {fmt!r} is not declared")
+                    for k, v in form.get("defaults", {}).items():
+                        if k not in own:
+                            raise SourceError(f"{cwhere}: a default for {k!r}, which is not a coordinate")
+                        _check_formula(v, set(), f"{cwhere}, default of {k}")
+                crow["written_as"] = {fmt: dict(form) for fmt, form in chart["written_as"].items()}
+            if "cross_references" in chart:
+                refs = []
+                for ref in chart["cross_references"]:
+                    prefix, _, local = ref["target"].partition(":")
+                    if prefix not in prefixes:
+                        raise SourceError(f"{cwhere}: the prefix {prefix!r} is not declared")
+                    refs.append({"predicate": ref["predicate"], "target": ref["target"],
+                                 "iri": prefixes[prefix] + local, **({"note": ref["note"]} if "note" in ref else {})})
+                crow["cross_references"] = refs
+            if "provenance" in chart:
+                crow["provenance"] = chart["provenance"]
+            rows.append(crow)
+
+    rows.sort(key=lambda r: r["id"])
+    return {
+        "ontology": {
+            "title": meta["title"], "version": meta["version"], "namespace": meta["namespace"],
+            "prefix": meta["prefix"], "license": meta["license"], "formats": meta["formats"],
+            "prefixes": meta["prefixes"], "sources": meta["sources"], "source_sha256": digest,
+        },
+        "retired": sorted(retired),
+        "rows": rows,
+    }
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Turtle
+
+VOCABULARY = {
+    "classes": {
+        "Measure": "A measure on a stated set.",
+        "Family": "A named map from a parameter space into measures. A kernel is a family one of whose arguments is a state.",
+        "Chart": "A coordinate system on a family's parameters. It changes no measure.",
+        "Operator": "A map from measures to measures.",
+        "Property": "A map from a measure to a value.",
+        "Constraint": "A property set equal to, or bounded by, a value. A constraint on a family defines a subfamily.",
+    },
+    "object": {
+        "caseOf": "The operator of which this one is a named case.",
+        "constrains": "The property a constraint sets.",
+        "subfamilyOf": "The family whose members satisfying the constraints make up this one.",
+        "hasConstraint": "A constraint defining the subfamily.",
+        "canonicalChart": "The chart in which two laws of the family are compared.",
+        "hasChart": "A chart of the family.",
+        "chartOf": "The family a chart coordinatizes.",
+        "builtFrom": "The family's measure as operators applied in order to a named measure.",
+        "base": "The measure a construction starts from.",
+        "step": "One operator of a construction.",
+        "operator": "The operator a step applies.",
+        "boundary": "Where the canonical chart's domain ends at a member of another family.",
+        "boundaryChart": "The chart of the other family that writes the members at the boundary.",
+        "hasPropertyValue": "The value of a property for the family's members, in the canonical coordinates.",
+        "property": "The property a value is the value of.",
+        "coordinate": "A coordinate of the chart.",
+        "toCanonical": "A formula giving one canonical coordinate in this chart's coordinates.",
+        "fromCanonical": "A formula giving one of this chart's coordinates in the canonical coordinates.",
+        "writtenAs": "How a format writes a point of the chart.",
+        "argument": "An argument of an operator, or of one step of a construction.",
+    },
+    "data": {
+        "statedSet": "The set the measures live on.",
+        "notation": "The mathematical notation for the measure.",
+        "measureExpression": "The family's measure in the operator notation, in the canonical coordinates.",
+        "map": "The map of a case of the pushforward, as a formula in z and the arguments.",
+        "relation": "How a constraint relates its property to its value.",
+        "value": "A value, as a formula.",
+        "position": "The position of a coordinate, a step or an argument, from one.",
+        "name": "A name within its row: of a coordinate, an argument, or a format.",
+        "symbol": "The symbol of a coordinate.",
+        "meaning": "What a coordinate or an argument is.",
+        "domain": "The domain of a coordinate.",
+        "formula": "A formula in the ontology's formula syntax.",
+        "covers": "The part of the canonical chart's domain a chart reaches, as a condition.",
+        "conversion": "exact when the conversion is rational in the coordinates; irrational otherwise.",
+        "format": "A written form, by its name in the ontology.",
+        "spelling": "How the format writes a point of the chart.",
+        "default": "A coordinate's default in a written form, as name = value.",
+        "noneToken": "The token a format writes for an absent bound.",
+        "where": "A boundary's condition.",
+        "infimum": "The infimum of the support.",
+        "supremum": "The supremum of the support.",
+        "infimumAttained": "Whether the infimum of the support is attained.",
+        "massAtInfimum": "The mass at the infimum of the support.",
+        "orders": "The orders for which a moment is finite.",
+        "atomAt": "The point of an atom.",
+        "atomMass": "The mass of an atom.",
+        "provenance": "Where a row's content comes from, when it is copied.",
+        "sourceDigest": "The SHA-256 of the source file the ontology was generated from.",
+    },
+}
+
+ANNOTATIONS = ["skos:definition", "skos:notation", "skos:exactMatch", "skos:closeMatch", "skos:broadMatch",
+               "skos:narrowMatch", "skos:relatedMatch", "dcterms:license", "dcterms:source",
+               "dcterms:bibliographicCitation"]
+
+KIND_CLASS = {"measure": "Measure", "family": "Family", "chart": "Chart", "operator": "Operator",
+              "property": "Property", "constraint": "Constraint"}
+
+
+def _lit(text, lang: str | None = None) -> str:
+    s = str(text).replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n").replace("\r", "\\r")
+    return f'"{s}"' + (f"@{lang}" if lang else "")
+
+
+def _block(subject: str, pairs: list[tuple[str, str]], indent: str = "") -> str:
+    lines = [f"{indent}{subject}"]
+    for i, (p, o) in enumerate(pairs):
+        end = " ." if i == len(pairs) - 1 else " ;"
+        lines.append(f"{indent}    {p} {o}{end}")
+    return "\n".join(lines)
+
+
+def _bnode(pairs: list[tuple[str, str]]) -> str:
+    return "[ " + " ; ".join(f"{p} {o}" for p, o in pairs) + " ]"
+
+
+def turtle(table: dict) -> str:
+    meta = table["ontology"]
+    ns = meta["namespace"]
+    pd = meta["prefix"]
+    out = [
+        f"# {meta['title']}, version {meta['version']}. Generated by generate.py from source.yaml; do not edit.",
+        f"@prefix {pd}: <{ns}> .",
+        "@prefix owl: <http://www.w3.org/2002/07/owl#> .",
+        "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .",
+        "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .",
+        "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .",
+        "@prefix skos: <http://www.w3.org/2004/02/skos/core#> .",
+        "@prefix dcterms: <http://purl.org/dc/terms/> .",
+    ]
+    for prefix, iri in meta["prefixes"].items():
+        out.append(f"@prefix {prefix}: <{iri}> .")
+    out.append("")
+
+    header = [("a", "owl:Ontology"), ("rdfs:label", _lit(meta["title"], "en")),
+              ("owl:versionInfo", _lit(meta["version"])), ("dcterms:license", f"<{meta['license']}>")]
+    for src in meta["sources"]:
+        header.append(("dcterms:source", f"<{src['iri']}>"))
+        header.append(("dcterms:bibliographicCitation", _lit(src["citation"], "en")))
+    header.append((f"{pd}:sourceDigest", _lit("sha256:" + meta["source_sha256"])))
+    out.append(_block(f"<{ns.rstrip('/')}>", header))
+    out.append("")
+
+    for p in ANNOTATIONS:
+        out.append(f"{p} a owl:AnnotationProperty .")
+    for name, text in VOCABULARY["classes"].items():
+        out.append(_block(f"{pd}:{name}", [("a", "owl:Class"), ("rdfs:label", _lit(name.lower(), "en")),
+                                             ("skos:definition", _lit(text, "en"))]))
+    for name, text in VOCABULARY["object"].items():
+        out.append(_block(f"{pd}:{name}", [("a", "owl:ObjectProperty"), ("skos:definition", _lit(text, "en"))]))
+    for name, text in VOCABULARY["data"].items():
+        out.append(_block(f"{pd}:{name}", [("a", "owl:DatatypeProperty"), ("skos:definition", _lit(text, "en"))]))
+    out.append("")
+
+    def ref(identifier: str) -> str:
+        return f"{pd}:{identifier}"
+
+    def formula_pairs(mapping: dict) -> list[str]:
+        return [_bnode([(f"{pd}:name", _lit(k)), (f"{pd}:formula", _lit(v))]) for k, v in mapping.items()]
+
+    for row in table["rows"]:
+        pairs = [("a", f"owl:NamedIndividual, {pd}:{KIND_CLASS[row['kind']]}"),
+                 ("rdfs:label", _lit(row["label"], "en")), ("skos:notation", _lit(row.get("qualified_name", row["name"])))]
+        if "definition" in row:
+            pairs.append(("skos:definition", _lit(row["definition"], "en")))
+        kind = row["kind"]
+        if kind == "measure":
+            pairs += [(f"{pd}:statedSet", _lit(row["stated_set"])), (f"{pd}:notation", _lit(row["notation"]))]
+        elif kind == "operator":
+            if "case_of" in row:
+                pairs.append((f"{pd}:caseOf", ref(row["case_of"])))
+            for i, a in enumerate(row["arguments"], 1):
+                pairs.append((f"{pd}:argument", _bnode([(f"{pd}:position", str(i)), (f"{pd}:name", _lit(a["name"])),
+                                                       (f"{pd}:meaning", _lit(a["meaning"], "en"))])))
+            if "map" in row:
+                pairs.append((f"{pd}:map", _lit(row["map"])))
+        elif kind == "constraint":
+            pairs += [(f"{pd}:constrains", ref(row["property"])), (f"{pd}:relation", _lit(row["relation"])),
+                      (f"{pd}:value", _lit(row["value"]))]
+        elif kind == "family":
+            if "stated_set" in row:
+                pairs.append((f"{pd}:statedSet", _lit(row["stated_set"])))
+            if "subfamily_of" in row:
+                pairs.append((f"{pd}:subfamilyOf", ref(row["subfamily_of"])))
+                pairs += [(f"{pd}:hasConstraint", ref(c)) for c in row["constraints"]]
+            if "measure" in row:
+                pairs.append((f"{pd}:measureExpression", _lit(row["measure"])))
+            if "built_from" in row:
+                steps = []
+                for i, s in enumerate(row["built_from"]["operators"], 1):
+                    args = [_bnode([(f"{pd}:position", str(j)), (f"{pd}:name", _lit(k)), (f"{pd}:formula", _lit(v))])
+                            for j, (k, v) in enumerate(s["arguments"].items(), 1)]
+                    steps.append(_bnode([(f"{pd}:position", str(i)), (f"{pd}:operator", ref(s["operator"]))]
+                                        + [(f"{pd}:argument", a) for a in args]))
+                pairs.append((f"{pd}:builtFrom", _bnode([(f"{pd}:base", ref(row["built_from"]["base"]))]
+                                                         + [(f"{pd}:step", s) for s in steps])))
+            if "canonical_chart" in row:
+                pairs.append((f"{pd}:canonicalChart", ref(row["canonical_chart"])))
+            pairs += [(f"{pd}:hasChart", ref(c)) for c in row["charts"]]
+            for name, value in row.get("properties", {}).items():
+                prop = next(r["id"] for r in table["rows"] if r["kind"] == "property" and r["name"] == name)
+                inner = [(f"{pd}:property", ref(prop))]
+                if isinstance(value, str):
+                    inner.append((f"{pd}:formula", _lit(value)))
+                elif isinstance(value, list):
+                    inner += [(f"{pd}:value", _bnode([(f"{pd}:atomAt", _lit(a["at"])), (f"{pd}:atomMass", _lit(a["mass"]))]))
+                              for a in value]
+                else:
+                    keymap = {"infimum": "infimum", "supremum": "supremum", "infimum_attained": "infimumAttained",
+                              "mass_at_infimum": "massAtInfimum", "orders": "orders", "formula": "formula"}
+                    for k, v in value.items():
+                        obj = ("true" if v else "false") if isinstance(v, bool) else _lit(v)
+                        inner.append((f"{pd}:{keymap[k]}", obj))
+                pairs.append((f"{pd}:hasPropertyValue", _bnode(inner)))
+            for b in row.get("boundaries", []):
+                pairs.append((f"{pd}:boundary", _bnode([(f"{pd}:where", _lit(b["where"])),
+                                                        (f"{pd}:boundaryChart", ref(b["chart"]))])))
+        elif kind == "chart":
+            pairs.append((f"{pd}:chartOf", ref(row["family"])))
+            for i, c in enumerate(row["coordinates"], 1):
+                pairs.append((f"{pd}:coordinate", _bnode([(f"{pd}:position", str(i)), (f"{pd}:name", _lit(c["name"])),
+                                                         (f"{pd}:symbol", _lit(c["symbol"])),
+                                                         (f"{pd}:meaning", _lit(c["meaning"], "en")),
+                                                         (f"{pd}:domain", _lit(c["domain"]))])))
+            if "covers" in row:
+                pairs.append((f"{pd}:covers", _lit(row["covers"])))
+            pairs += [(f"{pd}:toCanonical", b) for b in formula_pairs(row.get("to_canonical", {}))]
+            pairs += [(f"{pd}:fromCanonical", b) for b in formula_pairs(row.get("from_canonical", {}))]
+            if "conversion" in row:
+                pairs.append((f"{pd}:conversion", _lit(row["conversion"])))
+            for fmt, form in row.get("written_as", {}).items():
+                inner = [(f"{pd}:format", _lit(fmt)), (f"{pd}:spelling", _lit(form["spelling"]))]
+                inner += [(f"{pd}:default", _lit(f"{k} = {v}")) for k, v in form.get("defaults", {}).items()]
+                if "none" in form:
+                    inner.append((f"{pd}:noneToken", _lit(form["none"])))
+                pairs.append((f"{pd}:writtenAs", _bnode(inner)))
+            for x in row.get("cross_references", []):
+                pairs.append((x["predicate"], f"<{x['iri']}>"))
+            if "provenance" in row:
+                pairs.append((f"{pd}:provenance", _lit(row["provenance"], "en")))
+        out.append(_block(ref(row["id"]), pairs))
+        out.append("")
+    return "\n".join(out)
+
+
+def table_json(table: dict) -> str:
+    return json.dumps(table, ensure_ascii=False, indent=2) + "\n"
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    parser.add_argument("--check", action="store_true", help="exit 1 if a generated file is out of date")
+    args = parser.parse_args(argv)
+    try:
+        source, digest = load()
+        table = build(source, digest)
+    except SourceError as e:
+        print(f"source.yaml: {e}", file=sys.stderr)
+        return 1
+    outputs = {TABLE: table_json(table), TURTLE: turtle(table)}
+    if args.check:
+        stale = [p.name for p, text in outputs.items() if not p.exists() or p.read_text(encoding="utf-8") != text]
+        if stale:
+            print(f"out of date: {', '.join(stale)}; run generate.py", file=sys.stderr)
+            return 1
+        return 0
+    for path, text in outputs.items():
+        path.write_text(text, encoding="utf-8")
+    print(f"wrote {TABLE.name} and {TURTLE.name}: {len(table['rows'])} rows, version {table['ontology']['version']}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

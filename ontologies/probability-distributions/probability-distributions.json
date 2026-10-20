@@ -1,0 +1,555 @@
+{
+  "ontology": {
+    "title": "Probability distributions",
+    "version": "0.1.0-draft.1",
+    "namespace": "https://example.org/provisional/ontologies/probability-distributions/",
+    "prefix": "pd",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "formats": {
+      "parameter-file": "A parameter file of the working group's schemas, in YAML.",
+      "bellman-sym": "A Bellman-SYM stage file."
+    },
+    "prefixes": {
+      "probonto": "http://www.probonto.org/ontology#"
+    },
+    "sources": [
+      {
+        "name": "ProbOnto",
+        "version": "2.5",
+        "iri": "http://www.probonto.org/ontology",
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "citation": "Swat MJ, Grenon P, Wimalaratne S (2016). ProbOnto: ontology and knowledge base of probability distributions. Bioinformatics 32(17):2719-2721. doi:10.1093/bioinformatics/btw170"
+      }
+    ],
+    "source_sha256": "f9239257ad8a12cc1ffcff70364cdb491476e4038771860583e5b989db42c748"
+  },
+  "retired": [],
+  "rows": [
+    {
+      "id": "PD_0000001",
+      "kind": "measure",
+      "name": "standard-normal",
+      "label": "standard normal",
+      "stated_set": "ℝ",
+      "notation": "N(0, 1)",
+      "definition": "The measure on ℝ with density φ(z) = exp(−z²/2)/√(2π) with respect to Lebesgue measure."
+    },
+    {
+      "id": "PD_0000002",
+      "kind": "operator",
+      "name": "pushforward",
+      "label": "pushforward",
+      "arguments": [
+        {
+          "name": "map",
+          "meaning": "a measurable map f from the measure's set"
+        }
+      ],
+      "definition": "f∗μ(B) = μ(f⁻¹(B)), the law of f(X) when X has law μ."
+    },
+    {
+      "id": "PD_0000003",
+      "kind": "operator",
+      "name": "conditioning",
+      "label": "conditioning on a set",
+      "arguments": [
+        {
+          "name": "set",
+          "meaning": "a measurable set A with μ(A) > 0"
+        }
+      ],
+      "definition": "μ|A(B) = μ(B ∩ A)/μ(A), the law of X given X ∈ A. Truncation is conditioning on an interval."
+    },
+    {
+      "id": "PD_0000004",
+      "kind": "operator",
+      "name": "kernel-product",
+      "label": "product with a kernel",
+      "arguments": [
+        {
+          "name": "kernel",
+          "meaning": "a Markov kernel κ from the measure's set to a set Y"
+        }
+      ],
+      "definition": "(μ ⊗ κ)(A × B) = ∫_A κ(x, B) μ(dx), a measure on the product of the two sets: draw X from μ, then Y from κ(X, ·)."
+    },
+    {
+      "id": "PD_0000005",
+      "kind": "operator",
+      "name": "affine-pushforward",
+      "label": "affine map",
+      "case_of": "PD_0000002",
+      "arguments": [
+        {
+          "name": "location",
+          "meaning": "a real number a"
+        },
+        {
+          "name": "scale",
+          "meaning": "a positive number b"
+        }
+      ],
+      "map": "location + scale*z",
+      "definition": "The pushforward under z ↦ a + b·z."
+    },
+    {
+      "id": "PD_0000006",
+      "kind": "operator",
+      "name": "exponential-pushforward",
+      "label": "exponential map",
+      "case_of": "PD_0000002",
+      "arguments": [],
+      "map": "exp(z)",
+      "definition": "The pushforward under z ↦ exp(z)."
+    },
+    {
+      "id": "PD_0000007",
+      "kind": "property",
+      "name": "support",
+      "label": "support",
+      "definition": "The smallest closed set of full measure, recorded by its infimum and supremum, whether the infimum is attained, and the mass at the infimum."
+    },
+    {
+      "id": "PD_0000008",
+      "kind": "property",
+      "name": "mean",
+      "label": "mean",
+      "definition": "E[X], where it is finite."
+    },
+    {
+      "id": "PD_0000009",
+      "kind": "property",
+      "name": "moments",
+      "label": "moments",
+      "definition": "E[X^k]: the orders k for which it is finite, and its closed form in the canonical coordinates where it has one."
+    },
+    {
+      "id": "PD_0000010",
+      "kind": "property",
+      "name": "log-moments",
+      "label": "moments of the logarithm",
+      "definition": "E[(ln X)^k], for a law on (0, ∞), with the orders k for which it is finite."
+    },
+    {
+      "id": "PD_0000011",
+      "kind": "property",
+      "name": "atoms",
+      "label": "atoms",
+      "definition": "The points of positive mass and their masses."
+    },
+    {
+      "id": "PD_0000012",
+      "kind": "constraint",
+      "name": "mean-one",
+      "label": "mean one",
+      "property": "PD_0000008",
+      "relation": "=",
+      "value": "1",
+      "definition": "E[X] = 1. A constraint defines a subfamily; the reduced parameterization it induces is that subfamily's chart."
+    },
+    {
+      "id": "PD_0000013",
+      "kind": "family",
+      "name": "normal",
+      "label": "normal",
+      "stated_set": "ℝ",
+      "definition": "The law of μ + σZ, Z standard normal.",
+      "measure": "N(μ, σ) = aff(μ, σ)∗ N(0, 1)",
+      "built_from": {
+        "base": "PD_0000001",
+        "operators": [
+          {
+            "operator": "PD_0000005",
+            "arguments": {
+              "location": "mu",
+              "scale": "sigma"
+            }
+          }
+        ]
+      },
+      "canonical_chart": "PD_0000014",
+      "charts": [
+        "PD_0000014",
+        "PD_0000015"
+      ],
+      "properties": {
+        "support": {
+          "infimum": "-inf",
+          "supremum": "inf",
+          "infimum_attained": false,
+          "mass_at_infimum": "0"
+        },
+        "mean": "mu",
+        "moments": {
+          "orders": "nonnegative-integers"
+        }
+      },
+      "boundaries": [
+        {
+          "where": "sigma = 0",
+          "family": "PD_0000020",
+          "chart": "PD_0000022"
+        }
+      ]
+    },
+    {
+      "id": "PD_0000014",
+      "kind": "chart",
+      "name": "mean-sd",
+      "qualified_name": "normal/mean-sd",
+      "label": "mean and standard deviation",
+      "family": "PD_0000013",
+      "canonical": true,
+      "coordinates": [
+        {
+          "name": "mu",
+          "symbol": "μ",
+          "meaning": "the mean",
+          "domain": "real"
+        },
+        {
+          "name": "sigma",
+          "symbol": "σ",
+          "meaning": "the standard deviation",
+          "domain": "positive"
+        }
+      ],
+      "cross_references": [
+        {
+          "predicate": "skos:exactMatch",
+          "target": "probonto:PROB_k0000239",
+          "iri": "http://www.probonto.org/ontology#PROB_k0000239",
+          "note": "Normal1 (mean, stdev)"
+        }
+      ]
+    },
+    {
+      "id": "PD_0000015",
+      "kind": "chart",
+      "name": "mean-variance",
+      "qualified_name": "normal/mean-variance",
+      "label": "mean and variance",
+      "family": "PD_0000013",
+      "canonical": false,
+      "coordinates": [
+        {
+          "name": "mu",
+          "symbol": "μ",
+          "meaning": "the mean",
+          "domain": "real"
+        },
+        {
+          "name": "v",
+          "symbol": "v",
+          "meaning": "the variance",
+          "domain": "positive"
+        }
+      ],
+      "to_canonical": {
+        "mu": "mu",
+        "sigma": "sqrt(v)"
+      },
+      "from_canonical": {
+        "mu": "mu",
+        "v": "sigma**2"
+      },
+      "conversion": "irrational",
+      "written_as": {
+        "bellman-sym": {
+          "spelling": "N(μ, v)"
+        }
+      },
+      "cross_references": [
+        {
+          "predicate": "skos:exactMatch",
+          "target": "probonto:PROB_k0000265",
+          "iri": "http://www.probonto.org/ontology#PROB_k0000265",
+          "note": "Normal2 (mean, var)"
+        }
+      ],
+      "provenance": "ProbOnto 2.5, Normal2, with its conversion to Normal1."
+    },
+    {
+      "id": "PD_0000016",
+      "kind": "family",
+      "name": "lognormal",
+      "label": "lognormal",
+      "stated_set": "(0, ∞)",
+      "definition": "The law of exp(μ + σZ), Z standard normal.",
+      "measure": "LogNormal(μ, σ) = exp∗ aff(μ, σ)∗ N(0, 1)",
+      "built_from": {
+        "base": "PD_0000001",
+        "operators": [
+          {
+            "operator": "PD_0000005",
+            "arguments": {
+              "location": "mu",
+              "scale": "sigma"
+            }
+          },
+          {
+            "operator": "PD_0000006",
+            "arguments": {}
+          }
+        ]
+      },
+      "canonical_chart": "PD_0000017",
+      "charts": [
+        "PD_0000017"
+      ],
+      "properties": {
+        "support": {
+          "infimum": "0",
+          "supremum": "inf",
+          "infimum_attained": false,
+          "mass_at_infimum": "0"
+        },
+        "mean": "exp(mu + sigma**2/2)",
+        "moments": {
+          "orders": "all-real",
+          "formula": "exp(k*mu + k**2*sigma**2/2)"
+        },
+        "log-moments": {
+          "orders": "nonnegative-integers"
+        }
+      },
+      "boundaries": [
+        {
+          "where": "sigma = 0",
+          "family": "PD_0000020",
+          "chart": "PD_0000023"
+        }
+      ]
+    },
+    {
+      "id": "PD_0000017",
+      "kind": "chart",
+      "name": "meanlog-sdlog",
+      "qualified_name": "lognormal/meanlog-sdlog",
+      "label": "mean and standard deviation of the logarithm",
+      "family": "PD_0000016",
+      "canonical": true,
+      "coordinates": [
+        {
+          "name": "mu",
+          "symbol": "μ",
+          "meaning": "the mean of ln X",
+          "domain": "real"
+        },
+        {
+          "name": "sigma",
+          "symbol": "σ",
+          "meaning": "the standard deviation of ln X",
+          "domain": "positive"
+        }
+      ],
+      "written_as": {
+        "bellman-sym": {
+          "spelling": "LogNormal(μ, σ)"
+        }
+      },
+      "cross_references": [
+        {
+          "predicate": "skos:exactMatch",
+          "target": "probonto:PROB_k0000428",
+          "iri": "http://www.probonto.org/ontology#PROB_k0000428",
+          "note": "LogNormal1 (meanLog, stdevLog)"
+        }
+      ]
+    },
+    {
+      "id": "PD_0000018",
+      "kind": "family",
+      "name": "mean-one-lognormal",
+      "label": "lognormal with mean one",
+      "subfamily_of": "PD_0000016",
+      "constraints": [
+        "PD_0000012"
+      ],
+      "definition": "The lognormal laws whose mean is one.",
+      "charts": [
+        "PD_0000019"
+      ]
+    },
+    {
+      "id": "PD_0000019",
+      "kind": "chart",
+      "name": "sd-log",
+      "qualified_name": "mean-one-lognormal/sd-log",
+      "label": "standard deviation of the logarithm",
+      "family": "PD_0000018",
+      "canonical": false,
+      "coordinates": [
+        {
+          "name": "sigma",
+          "symbol": "σ",
+          "meaning": "the standard deviation of ln X",
+          "domain": "positive"
+        }
+      ],
+      "to_canonical": {
+        "mu": "-sigma**2/2",
+        "sigma": "sigma"
+      },
+      "from_canonical": {
+        "sigma": "sigma"
+      },
+      "conversion": "exact",
+      "written_as": {
+        "parameter-file": {
+          "spelling": "{LogNormal: {sd_log: σ}}"
+        },
+        "bellman-sym": {
+          "spelling": "LogNormal(-σ^2/2, σ)"
+        }
+      }
+    },
+    {
+      "id": "PD_0000020",
+      "kind": "family",
+      "name": "point-mass",
+      "label": "point mass",
+      "stated_set": "ℝ",
+      "definition": "All mass at one point. A family of its own: the normal with zero variance and the lognormal with zero spread are two of its charts, not members of those families.",
+      "measure": "δ(x)(B) = 1 if x ∈ B, 0 otherwise",
+      "canonical_chart": "PD_0000021",
+      "charts": [
+        "PD_0000021",
+        "PD_0000022",
+        "PD_0000023"
+      ],
+      "properties": {
+        "support": {
+          "infimum": "x",
+          "supremum": "x",
+          "infimum_attained": true,
+          "mass_at_infimum": "1"
+        },
+        "mean": "x",
+        "moments": {
+          "orders": "nonnegative-integers",
+          "formula": "x**k"
+        },
+        "atoms": [
+          {
+            "at": "x",
+            "mass": "1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "PD_0000021",
+      "kind": "chart",
+      "name": "value",
+      "qualified_name": "point-mass/value",
+      "label": "the point",
+      "family": "PD_0000020",
+      "canonical": true,
+      "coordinates": [
+        {
+          "name": "x",
+          "symbol": "x",
+          "meaning": "the point",
+          "domain": "real"
+        }
+      ]
+    },
+    {
+      "id": "PD_0000022",
+      "kind": "chart",
+      "name": "normal-zero-variance",
+      "qualified_name": "point-mass/normal-zero-variance",
+      "label": "a normal with variance zero",
+      "family": "PD_0000020",
+      "canonical": false,
+      "coordinates": [
+        {
+          "name": "mu",
+          "symbol": "μ",
+          "meaning": "the point",
+          "domain": "real"
+        }
+      ],
+      "to_canonical": {
+        "x": "mu"
+      },
+      "from_canonical": {
+        "mu": "x"
+      },
+      "conversion": "exact",
+      "written_as": {
+        "bellman-sym": {
+          "spelling": "N(μ, 0)"
+        }
+      }
+    },
+    {
+      "id": "PD_0000023",
+      "kind": "chart",
+      "name": "lognormal-zero-spread",
+      "qualified_name": "point-mass/lognormal-zero-spread",
+      "label": "a lognormal with zero spread",
+      "family": "PD_0000020",
+      "canonical": false,
+      "coordinates": [
+        {
+          "name": "mu",
+          "symbol": "μ",
+          "meaning": "the logarithm of the point",
+          "domain": "real"
+        }
+      ],
+      "covers": "x > 0",
+      "to_canonical": {
+        "x": "exp(mu)"
+      },
+      "from_canonical": {
+        "mu": "log(x)"
+      },
+      "conversion": "irrational",
+      "written_as": {
+        "bellman-sym": {
+          "spelling": "LogNormal(μ, 0)"
+        }
+      }
+    },
+    {
+      "id": "PD_0000024",
+      "kind": "family",
+      "name": "point-mass-at-one",
+      "label": "point mass at one",
+      "subfamily_of": "PD_0000020",
+      "constraints": [
+        "PD_0000012"
+      ],
+      "definition": "The one law all of whose mass is at one; the parameter files' only way to switch a shock off.",
+      "charts": [
+        "PD_0000025"
+      ]
+    },
+    {
+      "id": "PD_0000025",
+      "kind": "chart",
+      "name": "degenerate",
+      "qualified_name": "point-mass-at-one/degenerate",
+      "label": "no coordinates",
+      "family": "PD_0000024",
+      "canonical": false,
+      "coordinates": [],
+      "to_canonical": {
+        "x": "1"
+      },
+      "from_canonical": {},
+      "conversion": "exact",
+      "written_as": {
+        "parameter-file": {
+          "spelling": "{Degenerate: {}}"
+        },
+        "bellman-sym": {
+          "spelling": "LogNormal(0, 0)"
+        }
+      }
+    }
+  ]
+}
