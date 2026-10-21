@@ -91,9 +91,10 @@ for now; whether it is published is the owner's decision. In this stone's terms:
 - **Verified files.** The emitter's seven results files of 2026-10-20 validate and pass `check.py --verify-results`. They
   cover the first two levels of the three members and the toy's third ([the emitter's
   ladder](../records/findings/2026-10-20_emitter-ladder.md)).
-- **A second HARK implementation** of the same model is in QuantEcon's community library of baseline models
-  (QuantEcon/community-library#5). It has its own checks, among them an independent endogenous-grid solver, and its
-  calibration is `bst/1`'s `library` member.
+- **A second HARK implementation** of the same model is in QuantEcon's community library of baseline models, at
+  `solutions/buffer-stock/001-hark-egm/`. QuantEcon/community-library#5 added it as `projects/HARK/buffer-stock/`, and
+  #15 moved it there. It uses HARK alone, at `econ-ark` 0.17.1. Its checks include an independent endogenous-grid solver
+  written in NumPy and SciPy, and its calibration is `bst/1`'s `library` member.
 - **A check against QuantEcon's form.** The recasting of `bst/1` for QuantEcon's code was checked against HARK's solution
   of a member: see [`quantecon-jax.md`](quantecon-jax.md).
 
