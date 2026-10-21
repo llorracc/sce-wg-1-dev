@@ -18,7 +18,7 @@
 | library | second | yes |
 | toy-untruncated | second | yes |
 | toy | third | yes |
-| toy | fourth, with the population block | no file: stopped for lack of memory |
+| toy | fourth, with the population block | yes, from the rerun of 2026-10-21; the first attempt stopped for lack of memory |
 
 **What "verified" means.** The ladder ran `check.py --verify-results` at `4f99d01` after each file. It found each file
 valid, and its report consistent with the member: `2fe95c8cf8e5…` for the toy, `fee9fcced828…` for the library member,
@@ -48,9 +48,35 @@ the same seven files with the same hashes: the six of the first two levels by 21
 - The rerun follows a kernel comparison that has had the machine since 04:38:45.
 - It reads its own read-only copy of the schemas at `4f99d01`.
 
-**What it establishes.**
-- The seven files, the three members' first two levels and the toy's third, validate and verify against both checkers. The shock-law pull
-  request's filled form leaves the members' hashes unchanged.
-- A change of Python and numpy versions leaves every reported quantity at round-off, except Q(1).
+**The rerun's result,** reported by that session at 12:16 on 2026-10-21.
+- The toy's fourth level, with the population block, validates, and `check.py --verify-results` finds its report
+  consistent with the member `2fe95c8cf8e5…`. The checker of the shock-law pull request (#2, `0583a60`) finds the same, here.
+- Its seven types' lines are identical to the first attempt's. The population's transition kept the third level's 31
+  nodes a shock, and only the household's nodes doubled.
+- Its farthest mass point in m is 549, below the solution grid's top of 800.
 
-**What it does not:** the fourth level's file, with the population block, which waits for the rerun.
+**Convergence across the ladder,** the toy's largest relative change over its seven types, from each level to the
+next:
+
+| from, to | kink | target | mean a | W |
+|---|---|---|---|---|
+| first to second | 9.4·10⁻³ | 6.8·10⁻² | 9.1·10⁻² | 4.8·10⁻³ |
+| second to third | 3.6·10⁻³ | 2.4·10⁻² | 3.1·10⁻² | 1.5·10⁻³ |
+| third to fourth | 1.4·10⁻³ | 8.5·10⁻³ | 8.9·10⁻³ | 5.6·10⁻⁴ |
+
+- Each change is 2.6 to 3.5 times smaller than the one before; each level doubles the nodes and the grids.
+- Dividing the last change by that ratio less one estimates what the fourth level still misses: about 9·10⁻⁴ in the
+  kink, 5·10⁻³ in the target, 4·10⁻³ in mean a and 3·10⁻⁴ in W. That is an extrapolation from three changes, not a
+  measurement.
+- The most patient type, β = 0.99, moves most in the target and mean a.
+- These are the first measured error estimates e for the Rosetta Stones' comparison rule, |A − B| ≤ k(e_A + e_B).
+
+**What it establishes.**
+- All eight files, the three members' first two levels and the toy's third and fourth, validate and verify against
+  both checkers. The shock-law pull request's filled form leaves the members' hashes unchanged.
+- The emitter's use of the population block at the fourth level, where its two node counts differ, verifies.
+- A change of Python and numpy versions leaves every reported quantity at round-off, except Q(1).
+- Each level's changes fall by a factor of about three.
+
+**What it does not:** a measured error at the fourth level, which the extrapolation only estimates; and any comparison
+with a second toolkit.

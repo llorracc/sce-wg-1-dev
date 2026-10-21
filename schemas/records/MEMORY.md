@@ -5,14 +5,15 @@ so every record here is written for publication: the owner's decisions are recor
 words, and nothing from private repositories appears beyond a pointer.
 
 Standing rules and state:
-- [Project state](memory/project_state.md) — what exists in `schemas/`, the four draft pull requests and their merge order, what is settled, what is open, as of the memorial of 2026-10-21.
-- [Notation and foundation](memory/feedback_notation-and-foundation.md) — Buffer Stock Theory's notation first, then SolvingMicroDSOPs'; the Bellman-SYM stage file is the foundation of a family's statement.
+- [Project state](memory/project_state.md) — what exists in `schemas/`, the six draft pull requests and their merge order, what is settled, what is open, as of the second memorial of 2026-10-21.
+- [Notation and foundation](memory/feedback_notation-and-foundation.md) — Buffer Stock Theory's notation first, the BST paper the authority; a typeset and a plain-text spelling of each symbol; the Bellman-SYM stage file is the foundation of a family's statement.
 - [Iterate and propose](memory/feedback_iterate-and-propose.md) — a schema changes only after the proposed change and its downstream consequences have been put to the owner.
 - [One written form](memory/feedback_one-written-form.md) — a model has one spelling in a parameter file, because the hash is its identity.
 - [Matsya's answers are weighed](memory/feedback_matsya-answers-are-weighed.md) — judged against this project's needs and pushed back on where they do not fit.
 - [Matsya's work goes to Matsya](memory/feedback_route-matsya-work-to-matsya.md) — through the bellman session; what Matsya cannot do is said first and asked about.
 - [Consult the toolkits](memory/feedback_consult-the-toolkits.md) — what a results file carries, or a toolkit must compute, goes to the HARK and HAFiscal sessions for their views before a change is drafted.
 - [No timings](memory/feedback_no-timings.md) — public material carries no run times or speed figures of a toolkit.
+- [Checkable sources](memory/feedback_checkable-sources.md) — public documents cite what a reader can check; who read what stays in the records.
 - [References](memory/reference_pointers.md) — pull requests, sessions, other repositories' records that this work points to.
 
 Rulings, journal, findings:
@@ -20,18 +21,19 @@ Rulings, journal, findings:
 - [Rulings of 2026-10-18](rulings/2026-10-18_schema-decisions.md) — the family's name, the toy's laws, notation, the stage-file foundation, the newborn, the bounds, welfare, ρ > 1, the restructuring; in the evening, the three-valued switch, the levels as settings, the optional keys.
 - [Rulings of 2026-10-19](rulings/2026-10-19_schema-decisions.md) — the population block of the results file; no Matsya consultation on the Bellman defect; the truncated lognormal for Bellman-SYM, with its defaults; the five corrections; in the afternoon, an omitted bound as three standard deviations, existing syntax adopted where it can be, and an ontology of probability distributions through Matsya.
 - [Rulings of 2026-10-20](rulings/2026-10-20_schema-decisions.md) — the ontology's decisions, with Bellman's truncated lognormal aligned with its truncated normal; the four draft pull requests; the emitter program resumed; Q(1) dropped after the toolkits' sessions were consulted; the coverage check.
-- [Rulings of 2026-10-21](rulings/2026-10-21_schema-decisions.md) — nothing above 0.999 in the quantile maps; the coverage points each toolkit's; the coverage check's final wording; this memorial.
+- [Rulings of 2026-10-21](rulings/2026-10-21_schema-decisions.md) — nothing above 0.999 in the quantile maps; the coverage points each toolkit's; the Rosetta Stones and their home; no run time in results files; checkable sources; the BST paper the authority on notation, with two spellings and μ.
 - [Journal of 2026-10-18](journal/2026-10-18_session-record.md) — the day's events in order, with their stamps.
 - [Journal of 2026-10-19](journal/2026-10-19_session-record.md) — the population block applied; the bellman session's reading of the Bellman defect; the constraint in force corrected; levels bold; the truncated lognormal scoped and its pull request planned; after the memorial, the survey of existing syntax, the gathering of material and Matsya's four ontology sessions.
 - [Journal of 2026-10-20](journal/2026-10-20_session-record.md) — the ontology and the shock laws on it as draft pull requests; the converter checked at Bellman's draft; the emitter's ladder; Q(1) and the coverage check; through the ladder's end and its rerun early on 2026-10-21.
-- [Journal of 2026-10-21](journal/2026-10-21_session-record.md) — the records reviewed, the owner's four answers, the coverage check's final commit, the memorial.
+- [Journal of 2026-10-21](journal/2026-10-21_session-record.md) — the records reviewed, the coverage check's final commit, the memorial; then the Rosetta Stones, draft pull requests #5 and #6, Matsya's sessions, the toy's fourth level, the notation.
 - [The lower tail of the stationary distribution](findings/2026-10-18_lower-tail-and-welfare.md) — when population welfare and marginal welfare are finite; verified against an EGM solution.
 - [The checker's first verdicts](findings/2026-10-18_checker-and-emitter.md) — the toy's and the library member's condition margins; the emitter's first results file and its convergence measurement.
 - [The Matsya completeness job](findings/2026-10-18_matsya-completeness-job.md) — one job on the pushed bst/1 documents: a flipped unemployment law in the round trip, one borrowing limit for two, the rest in agreement.
 - [The Markov family's constraint in force](findings/2026-10-19_markov-constraint-in-force.md) — a fixed point with the artificial limit inside, as HARK computes it; the maximum understates it at low benefits.
 - [Matsya on an ontology of probability distributions](findings/2026-10-19_distribution-ontology-matsya.md) — ProbOnto as a copied vocabulary layer; three operators (pushforward, conditioning, kernel product); the schemas' laws placed in that algebra; weighed.
 - [The ontology's tests and the converter at Bellman's draft](findings/2026-10-20_ontology-and-converter-checks.md) — twelve tests and every deliberate break caught; the members' hashes unchanged; the converter's eleven calls elaborate with mean one at Bellman's draft; the uniform not yet integrated by Bellman's comparator.
-- [The emitter's ladder of 2026-10-20](findings/2026-10-20_emitter-ladder.md) — seven results files verified by both checkers; round-off agreement with version 0.2 except Q(1); the fourth level out of memory, and its rerun.
+- [The emitter's ladder of 2026-10-20](findings/2026-10-20_emitter-ladder.md) — eight results files verified by both checkers, the toy's fourth level from its rerun; round-off agreement with version 0.2 except Q(1); each level's changes about three times smaller.
+- [The Rosetta Stones' first findings](findings/2026-10-21_rosetta-stones.md) — the household recast exactly in the lecture's form; HARK's limiting MPCs, targets and tolerance above the grid; Matsya's three sessions weighed; the community library's HARK solution and a local QuantEcon module that agrees with HARK.
 - [The quantile at probability 1](findings/2026-10-20_the-quantile-at-one.md) — infinite in the model, a Pareto tail; a computed Q(1) tracks the grid's top and turns on the reading rule's round-off; both toolkits' answers.
 - [How far a representation reaches](findings/2026-10-20_coverage-of-the-representation.md) — the top node's mass at the first two levels; an upper bound on the per-period flow beyond the top; what a clipped representation misses of the mean.
 - [Deferred follow-ups](deferred.md) — what was put off, and what brings each item back.

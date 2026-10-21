@@ -101,3 +101,17 @@ Faults found in this project's own work, with their status.
   baseline models publishes no timings and no ranking of toolkits, and the HAFiscal-Latest session publishes none of its
   runs'. Found on that session's message of 08:02 on 2026-10-21. **Status:** removed from the records in the next commit;
   the branch's history keeps them. The memory on timings holds the rule.
+- **The natural limit written with the income while unemployed.** The HARK stone of draft #6 wrote the effective member's
+  natural limit with the income while unemployed where the worst income belongs: the lowest value of ξ, the lower of the
+  income while unemployed and the lowest employed node. On the toy's seven equiprobable nodes the lowest employed node is
+  0.558, below the income while unemployed of 0.7. The checker and `model.md`'s formulas were right. Found by the
+  community-library session's module at 12:33 on 2026-10-21. **Status:** fixed on #6's branch in `329d78c`, unpushed; it
+  waits for the notation pull request, so that #6 takes the new notation.
+- **The income while unemployed glossed as the minimum of ξ.** `bst/1`'s notation table and the stage file's gloss on its
+  unemployment income call that income the minimum of ξ. That is true only when no employed value is lower, as in BST,
+  where the income is 0; the toy's lowest employed income is 0.333, below its 0.7. Found on 2026-10-21. **Status:** open;
+  the notation pull request, approved at 13:03, replaces the gloss.
+- **Questions written with a mark the owner's terminal does not draw.** On 2026-10-21 notation questions put to the owner
+  used a combining underline, which his terminal shows as a bare letter; the questions read ambiguously, and he had to
+  ask what was meant. **Status:** closed: in the terminal, symbols with marks are written in LaTeX, beside their names in
+  words.
