@@ -99,7 +99,7 @@ Times are EDT, from the clock or an event's own stamp. The night's last events, 
 - **22:58:55.** HARK's final look: correct, with one optional wording change, made in the worktree at 22:59:08 and not
   committed.
 - **04:31:53, 2026-10-21.** The ladder ends.
-  - The toy's fourth level solved all seven types in 6 h 42 m, then was stopped by the run's own memory limit before it
+  - The toy's fourth level solved all seven types, then was stopped by the run's own memory limit before it
     wrote its file.
   - At 04:32 a job of this session, waiting on the run, verifies its seven results files with the shock-law pull
     request's checker: all consistent with their members.
@@ -114,7 +114,7 @@ Times are EDT, from the clock or an event's own stamp. The night's last events, 
   - **Before the rerun.** Version 0.5 is checked against version 0.3's files of the first level and the toy's second, for
     exact equality outside the provenance and the toolkit, with the checker on each file.
   - **The rerun.** The toy's fourth level reruns under the emitter program the owner resumed the day before. It follows
-    a kernel comparison that has had the machine since 04:38:45, and takes about seven hours.
+    a kernel comparison that has had the machine since 04:38:45.
   - **The schemas it reads.** The rerun reads a read-only export of the schemas at `4f99d01`, checked against the main
     checkout, so the main checkout no longer needs to stay there for the ladder. Merges still wait for the owner's word.
   - **Its final look at the coverage check.** `967b174` is correct and takes its four points. HARK's wording stands,

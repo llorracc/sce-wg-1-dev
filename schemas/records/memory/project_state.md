@@ -94,7 +94,7 @@ proposed to the working group yet.
 - Its ladder of 2026-10-20 wrote and verified the three members' first two levels and the toy's third, against both the
   branch's checker and #2's.
 - The toy's fourth level ran out of the run's memory after solving all seven types.
-- It reruns under the emitter's version 0.5, after a kernel comparison, in about seven hours. Its checker line comes when
+- It reruns under the emitter's version 0.5, after a kernel comparison. Its checker line comes when
   it ends.
 
 **Open with the owner:**

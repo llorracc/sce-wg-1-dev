@@ -12,6 +12,7 @@ Standing rules and state:
 - [Matsya's answers are weighed](memory/feedback_matsya-answers-are-weighed.md) — judged against this project's needs and pushed back on where they do not fit.
 - [Matsya's work goes to Matsya](memory/feedback_route-matsya-work-to-matsya.md) — through the bellman session; what Matsya cannot do is said first and asked about.
 - [Consult the toolkits](memory/feedback_consult-the-toolkits.md) — what a results file carries, or a toolkit must compute, goes to the HARK and HAFiscal sessions for their views before a change is drafted.
+- [No timings](memory/feedback_no-timings.md) — public material carries no run times or speed figures of a toolkit.
 - [References](memory/reference_pointers.md) — pull requests, sessions, other repositories' records that this work points to.
 
 Rulings, journal, findings:

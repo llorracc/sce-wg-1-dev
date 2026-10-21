@@ -96,3 +96,8 @@ Faults found in this project's own work, with their status.
   absorbed into the running turn and not answered then; his own choice at 07:16 had already put it here. Found by this
   session's review of its records on 2026-10-21. **Status:** answered in substance by the explanation at 21:52 of how
   the ontology's pull requests relate to the Bellman repository, and reported to him on 2026-10-21.
+- **Run times published.** The memorial of 2026-10-21, `5dbfd8e`, carried the emitter's run times: in the ladder
+  finding's table, and in the deferred list, the journal of 2026-10-20 and the project state. The community library of
+  baseline models publishes no timings and no ranking of toolkits, and the HAFiscal-Latest session publishes none of its
+  runs'. Found on that session's message of 08:02 on 2026-10-21. **Status:** removed from the records in the next commit;
+  the branch's history keeps them. The memory on timings holds the rule.

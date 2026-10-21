@@ -9,16 +9,16 @@
   installed package, where 0.2 wrote a constant that a repin had made wrong. It reports the thread count the linear
   algebra actually uses.
 
-| member | level | wall time | verified |
-|---|---|---|---|
-| toy, seven types | first | 29.6 s | yes |
-| library, one type | first | 7.4 s | yes |
-| toy-untruncated, seven types | first | 29.5 s | yes |
-| toy | second | 185.7 s | yes |
-| library | second | 41.9 s | yes |
-| toy-untruncated | second | 183.3 s | yes |
-| toy | third | 2,955.6 s | yes |
-| toy | fourth, with the population block | stopped after 6 h 42 m | no file |
+| member | level | verified |
+|---|---|---|
+| toy, seven types | first | yes |
+| library, one type | first | yes |
+| toy-untruncated, seven types | first | yes |
+| toy | second | yes |
+| library | second | yes |
+| toy-untruncated | second | yes |
+| toy | third | yes |
+| toy | fourth, with the population block | no file: stopped for lack of memory |
 
 **What "verified" means.** The ladder ran `check.py --verify-results` at `4f99d01` after each file. It found each file
 valid, and its report consistent with the member: `2fe95c8cf8e5…` for the toy, `fee9fcced828…` for the library member,
@@ -45,7 +45,7 @@ the same seven files with the same hashes: the six of the first two levels by 21
   agree bit for bit.
 - Its estimated peak is about 23 GB, under a limit of 32 GB.
 - Version 0.5 is first checked against version 0.3's files for exact equality outside the provenance and the toolkit.
-- The rerun takes about seven hours, and follows a kernel comparison that has had the machine since 04:38:45.
+- The rerun follows a kernel comparison that has had the machine since 04:38:45.
 - It reads its own read-only copy of the schemas at `4f99d01`.
 
 **What it establishes.**
