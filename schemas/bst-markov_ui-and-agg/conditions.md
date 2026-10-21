@@ -100,8 +100,8 @@ truncated laws and cannot under lognormal ones, where the employed floor is zero
 A quantity a member does not define is reported as `undefined`.
 
 The special points of the rule, in each state z:
-- **The buffer stock target m̌_i(z)**, where E[m′ | m, z] = m for a survivor, needs the GIC-Mod of state z with Þ̄.
-- **The pseudo-target m̂_i(z)**, where E[𝐦′ | z]/𝐦 equals the expected growth of permanent income from z, E[Γ(z′) ψ′ | z],
+- **The buffer stock target m̂_i(z)**, where E[m′ | m, z] = m for a survivor, needs the GIC-Mod of state z with Þ̄.
+- **The pseudo-target m̌_i(z)**, where E[𝐦′ | z]/𝐦 equals the expected growth of permanent income from z, E[Γ(z′) ψ′ | z],
   needs the GIC of state z with Þ̄.
 - **The kink m*_i(z)** needs the artificial limit to be the constraint in force in that state and to lie strictly above
   the limit the following states impose: `a_min(z)` = `a_Art` > max over successors z′ of (Γ(z′) `ψ_min(z′)`/R)(`a_min(z′)` − `ξ_min(z′)`).

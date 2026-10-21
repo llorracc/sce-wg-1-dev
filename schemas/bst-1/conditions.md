@@ -62,8 +62,8 @@ HARK's name for its factor.
 | FHWC, finite human wealth | 𝒢/R < 1 | the parameters | human wealth is finite | `FHWFac` |
 | PF-FVAC, perfect-foresight finite value of autarky | β ℒ 𝒢^(1−ρ) < 1 | the parameters | the perfect-foresight value of autarky is finite | `PFVAFac` |
 | FVAC, finite value of autarky | β ℒ 𝒢^(1−ρ) E[ψ^(1−ρ)] < 1 | E[ψ^(1−ρ)] | the value of autarky is finite | `VAFac` |
-| GIC, growth impatience | Þ/𝒢 < 1 | the parameters | the pseudo-target m̂ exists | `GPFacRaw` |
-| GIC-Mod, strong growth impatience | Þ E[ψ^(−1)]/𝒢 < 1 | E[ψ^(−1)] | the buffer stock target m̌ exists | `GPFacMod` |
+| GIC, growth impatience | Þ/𝒢 < 1 | the parameters | the pseudo-target m̌ exists | `GPFacRaw` |
+| GIC-Mod, strong growth impatience | Þ E[ψ^(−1)]/𝒢 < 1 | E[ψ^(−1)] | the buffer stock target m̂ exists | `GPFacMod` |
 | GIC-Szeidl, log growth impatience | log(Þ/𝒢) < E[log ψ] | E[log ψ] | with ℒ = 1, the stationary population exists under the population measure; on strict failure, households escape to infinite m | `check_GICSdl`, from `ELogPermShk` |
 | GIC-Harmenberg | Þ/𝒢 < exp(E[ψ log ψ]) | E[ψ log ψ] | with ℒ = 1, the stationary population exists under the income measure; weaker than the GIC, since E[ψ log ψ] ≥ 0 | `GPFacHrm` |
 | GIC-Liv, mortality-adjusted growth impatience | ℒ Þ/𝒢 < 1 | the parameters | aggregate balanced growth with Modigliani-style destruction of estates | `GPFacLiv` |
@@ -86,8 +86,8 @@ These decide whether a member defines each reported quantity. A quantity a membe
 `undefined` ([results](results.md)).
 
 The special points of the rule:
-- **The buffer stock target m̌_i** needs Þ̄ E[ψ^(−1)]/𝒢 < 1.
-- **The pseudo-target m̂_i** needs Þ̄/𝒢 < 1.
+- **The buffer stock target m̂_i** needs Þ̄ E[ψ^(−1)]/𝒢 < 1.
+- **The pseudo-target m̌_i** needs Þ̄/𝒢 < 1.
 - **The kink m*_i** needs the artificial constraint to bind somewhere: `a_Art` > `a_Nat`. It is absent, for example, when
   μ = 0 and `a_Art` = 0.
 

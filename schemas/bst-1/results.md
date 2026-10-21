@@ -66,11 +66,13 @@ Each point is rounded to three significant figures.
 **At the special points.** Each value is reported with its status, `undefined` when its domain rule fails in the toolkit's
 effective member, by the toolkit's own verdicts ([conditions](conditions.md)):
 - **The kink m*_i,** the largest m at which the artificial borrowing constraint binds, with the rule's slope on each side.
-- **The buffer stock target m̌_i,** where E[m_{t+1}] = m_t for a survivor, with c and the MPC there.
-- **The pseudo-target m̂_i,** where E[𝐦_{t+1}]/𝐦_t = 𝒢 for a survivor, with c and the MPC there.
+- **The buffer stock target m̂_i** (typeset `\hat{m}`, econ-ark's `\mTrgNrm`), where E[m_{t+1}] = m_t for a survivor,
+  with c and the MPC there.
+- **The pseudo-target m̌_i** (typeset `\check{m}`, econ-ark's `\mBalLvl`), where E[𝐦_{t+1}]/𝐦_t = 𝒢 for a
+  survivor, with c and the MPC there.
 
-For a survivor, E[m′] = R a(m) E[ψ^(−1)]/𝒢 + 1, so m̌ solves R a(m) E[ψ^(−1)]/𝒢 + 1 = m. In levels, E[𝐦_{t+1}] = R 𝐚_t + 𝒢 𝐩_t,
-so m̂ is where the rule meets the locus a(m) = (𝒢/R)(m − 1).
+For a survivor, E[m′] = R a(m) E[ψ^(−1)]/𝒢 + 1, so m̂ solves R a(m) E[ψ^(−1)]/𝒢 + 1 = m. In levels, E[𝐦_{t+1}] = R 𝐚_t + 𝒢 𝐩_t,
+so m̌ is where the rule meets the locus a(m) = (𝒢/R)(m − 1).
 
 **The exported rule.** Each type's rule at dense points of the toolkit's choosing, with the kink included and the range stated,
 so that a reader can compute dynamics that the results file does not report.
