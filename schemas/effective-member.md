@@ -149,7 +149,7 @@ No parameter file or hash of a stated member changes. The stage files are untouc
 
 Taken as recommended on 2026-10-18; any of them the owner can reverse.
 - The named expectations for `bst/1` are E[ψ], E[θ], E[ψ^(1−ρ)], E[ψ^(−1)], E[log ψ], E[ψ log ψ], E[ψ²], E[ψ^(ρ−1)],
-  E[ψ^ρ] and p̲, the last three for the welfare conditions and the WRIC; the lowest values of ψ and of income are asked for
+  E[ψ^ρ] and `p_worst`, the last three for the welfare conditions and the WRIC; the lowest values of ψ and of income are asked for
   beside them, the owner having asked for the arguments against and found them wanting.
 - The diagnostics' primary form stays the residual against the stated member's law, with the method's precision stated; the
   residual under the toolkit's own representation is optional.

@@ -17,44 +17,45 @@ named.
 For one group and its type i:
 - P is the normal regime's chain over Z = {E, U_2, U_1, X}, with π_eu and π_ue the normal-times probabilities, and π its
   stationary distribution. With π_eu > 0 and π_ue > 0 the chain is irreducible and aperiodic.
-- Γ(z) and the law of ψ given z are the model schema's: Γ(E) = 𝒢 with ψ drawn from its law; in a quarter of unemployment,
-  Γ = 𝒢 with ψ drawn under `continues`, Γ = 𝒢 with ψ = 1 under `grows`, and Γ = 1 with ψ = 1 under `frozen`.
-- ξ̲(z) is the lowest income in state z: e θ̲ in E, ξ_U in U_2 and U_1, ξ_X in X; and ψ̲(z) is the lowest value of ψ in z, the
+- 𝒢(z) and the law of ψ given z are the model schema's: 𝒢(E) = 𝒢 with ψ drawn from its law; in a quarter of
+  unemployment, 𝒢(z) = 𝒢 with ψ drawn under `continues`, 𝒢(z) = 𝒢 with ψ = 1 under `grows`, and 𝒢(z) = 1 with ψ = 1 under
+  `frozen`.
+- `ξ_min(z)` is the lowest income in state z: e `θ_min` in E, ξ_U in U_2 and U_1, ξ_X in X; and `ψ_min(z)` is the lowest value of ψ in z, the
   law's lowest value where ψ is drawn and 1 where it is fixed.
 - Þ_i = (R β_i ℒ)^(1/ρ) is the absolute patience factor, and Þ̄_i = min(Þ_i, R), as in `bst/1`.
 - For a function f of next quarter's state and shock, M_f is the matrix with entries M_f[z, z′] = P[z, z′] E[f(z′, ψ′) | z′],
   and λ(M_f) is its dominant eigenvalue, which exists and is positive since the entries are. Under `continues`, f depends on
-  z′ only through Γ(z′) = 𝒢 and the law of ψ is the same in every state, so M_f = E[f] P and λ(M_f) = E[f]: every condition
+  z′ only through 𝒢(z′) = 𝒢 and the law of ψ is the same in every state, so M_f = E[f] P and λ(M_f) = E[f]: every condition
   below is then `bst/1`'s with the group's 𝒢.
 
 ## The constraint in force, by state
 
 With u(0) = −∞ the household never lets next quarter's worst income force zero consumption, in any state it can reach, and
-it never ends a quarter below the artificial limit a̲_Art. A state's limit must therefore keep feasible the constraint in
+it never ends a quarter below the artificial limit `a_Art`. A state's limit must therefore keep feasible the constraint in
 force, artificial or natural, in every state that can follow, and the constraint in force solves, over the states,
 
-    a̲(z) = max( a̲_Art,  max over z′ with P[z, z′] > 0 of  (Γ(z′) ψ̲(z′)/R) (a̲(z′) − ξ̲(z′)) ),
+    a_min(z) = max( a_Art,  max over z′ with P[z, z′] > 0 of  (𝒢(z′) ψ_min(z′)/R) (a_min(z′) − ξ_min(z′)) ),
 
 a fixed point that a few iterations from zero reach, each bracket being nonpositive. HARK's Markov solver computes the same
 recursion: a state's natural bound comes from the next states' lowest resources, which already carry the artificial limit.
-The **natural limits** a̲_Nat(z) are the same recursion without a̲_Art: the constraint in force of a member written with
-`borrowing_constraint: natural`. In `bst/1`, one state, the recursion gives a̲ = max(a̲_Art, a̲_Nat) with
-a̲_Nat = −ξ̲_min κ/(1 − κ) and κ = ψ̲ 𝒢/R. In the chain the artificial limit has to sit inside the recursion: taking
-max(a̲_Art, a̲_Nat(z)) after the fact understates the limit of a state that can be followed by one in which the artificial
+The **natural limits** `a_Nat(z)` are the same recursion without `a_Art`: the constraint in force of a member written with
+`borrowing_constraint: natural`. In `bst/1`, one state, the recursion gives `a_min` = max(`a_Art`, `a_Nat`) with
+`a_Nat` = −`ξ_min` κ/(1 − κ) and κ = `ψ_min` 𝒢/R. In the chain the artificial limit has to sit inside the recursion: taking
+max(`a_Art`, `a_Nat(z)`) after the fact understates the limit of a state that can be followed by one in which the artificial
 limit binds, since the first must leave room for the second. Consequences:
-- With lognormal laws, θ̲ = 0 and ψ̲ = 0 in the employed state, which can follow every state, so its term is zero, every
-  other term is negative, and a̲(z) = max(a̲_Art, 0) = 0 in every state and under every value of the switch. The stage
+- With lognormal laws, `θ_min` = 0 and `ψ_min` = 0 in the employed state, which can follow every state, so its term is zero, every
+  other term is negative, and `a_min(z)` = max(`a_Art`, 0) = 0 in every state and under every value of the switch. The stage
   file's single limit, with `a_Nat: 0.0`, is therefore exact for every member it states.
 - With truncated laws the limits are negative and can differ by state. They are the same in every state when the employed
   state's term, a candidate everywhere, is the largest, as at the paper's calibration under `continues`. They differ when a
   state's own worst income is low enough for its term to be the larger, as for the paper's low-benefits member, whose
   exhaustion income lies below the employed floor; and an artificial limit above the lowest natural limit binds in some
   states and, through the recursion, tightens the limits of the states that can precede them. A larger multiplier
-  Γ ψ̲/R, which the unemployed states have under `grows` and `frozen`, makes a state's term more negative and so can only
+  𝒢(z′) `ψ_min(z′)`/R, which the unemployed states have under `grows` and `frozen`, makes a state's term more negative and so can only
   loosen the limits of the states before it.
 - A stage file with bounded laws needs the per-state limits, which the language can state as four calibrated values selected
   by z, computed by the checker until the language can derive them. A toolkit's effective member, whose laws are discrete,
-  has state-dependent limits in general and reports them per state. With the paper's a̲_Art = 0 the constraint in force is
+  has state-dependent limits in general and reports them per state. With the paper's `a_Art` = 0 the constraint in force is
   zero in every state, whatever the laws.
 
 ## Validity conditions
@@ -62,7 +63,7 @@ limit binds, since the first must leave room for the second. Consequences:
 A member that fails any of these is rejected:
 - the parameter domains of the [model schema](model.md) and the rules of the [shock laws](../shock-laws.md); the shares
   summing to one within each group and across groups;
-- a̲_Art ≤ 0 and, for one written form, above the lowest of the natural limits a̲_Nat(z), since an artificial limit at or
+- `a_Art` ≤ 0 and, for one written form, above the lowest of the natural limits `a_Nat(z)`, since an artificial limit at or
   below it binds in no state and describes the same model as `natural`; or `natural`, for no artificial limit;
 - for every group and type, the FVAC and the RIC or the WRIC of the table below.
 
@@ -78,21 +79,21 @@ which is `bst/1`'s with the group's 𝒢.
 |---|---|---|
 | AIC | Þ < 1 | the same |
 | RIC | Þ/R < 1 | the same |
-| WRIC | p̲(z)^(1/ρ) Þ/R < 1 in every state, with p̲(z) the probability from z that next quarter's income is its worst | Þ/R < 1 when no law has an atom at its floor, since p̲ = 0 |
-| FHWC | λ(M_f) < 1 with f = Γ(z′) ψ′/R | 𝒢/R < 1 |
-| PF-FVAC | λ(M_f) < 1 with f = β ℒ Γ(z′)^(1−ρ) | β ℒ 𝒢^(1−ρ) < 1 |
-| FVAC | λ(M_f) < 1 with f = β ℒ (Γ(z′) ψ′)^(1−ρ) | β ℒ 𝒢^(1−ρ) E[ψ^(1−ρ)] < 1 |
-| GIC, by state | Þ̄ < E[Γ(z′) ψ′ \| z] | Þ̄/𝒢 < 1 |
-| GIC-Mod, by state | Þ̄ E[1/(Γ(z′) ψ′) \| z] < 1 | Þ̄ E[ψ^(−1)]/𝒢 < 1 |
-| GIC-Szeidl | with ℒ = 1: log Þ̄ < Σ_z π(z) (log Γ(z) + E[log ψ \| z]) | log(Þ̄/𝒢) < E[log ψ] |
+| WRIC | `p_worst(z)`^(1/ρ) Þ/R < 1 in every state, with `p_worst(z)` the probability from z that next quarter's income is its worst | Þ/R < 1 when no law has an atom at its floor, since `p_worst` = 0 |
+| FHWC | λ(M_f) < 1 with f = 𝒢(z′) ψ′/R | 𝒢/R < 1 |
+| PF-FVAC | λ(M_f) < 1 with f = β ℒ 𝒢(z′)^(1−ρ) | β ℒ 𝒢^(1−ρ) < 1 |
+| FVAC | λ(M_f) < 1 with f = β ℒ (𝒢(z′) ψ′)^(1−ρ) | β ℒ 𝒢^(1−ρ) E[ψ^(1−ρ)] < 1 |
+| GIC, by state | Þ̄ < E[𝒢(z′) ψ′ \| z] | Þ̄/𝒢 < 1 |
+| GIC-Mod, by state | Þ̄ E[1/(𝒢(z′) ψ′) \| z] < 1 | Þ̄ E[ψ^(−1)]/𝒢 < 1 |
+| GIC-Szeidl | with ℒ = 1: log Þ̄ < Σ_z π(z) (log 𝒢(z) + E[log ψ \| z]) | log(Þ̄/𝒢) < E[log ψ] |
 | GIC-Harmenberg | with ℒ = 1: the same under the income measure's chain and E[ψ log ψ \| z] | Þ̄/𝒢 < exp(E[ψ log ψ]) |
-| GIC-Liv | ℒ λ(M_f) < 1 with f = Þ̄/Γ(z′) | ℒ Þ̄/𝒢 < 1 |
+| GIC-Liv | ℒ λ(M_f) < 1 with f = Þ̄/𝒢(z′) | ℒ Þ̄/𝒢 < 1 |
 
-The worst-income probability p̲(z) is the probability, from z, of reaching next quarter a state whose income floor is the
+The worst-income probability `p_worst(z)` is the probability, from z, of reaching next quarter a state whose income floor is the
 worst reachable one and of drawing that floor there: zero unless both the state's income is an atom and ψ there is fixed or
 has mass at its floor. Under `grows` and `frozen` the unemployed states' income is an atom and ψ there is fixed, so from U_1
 and X the probability of the exhaustion income ξ_X next quarter is 1 − π_ue; whether that is the worst income from those
-states depends on whether ξ_X lies below the employed floor e θ̲ ψ̲, which for the paper's calibration it does not under
+states depends on whether ξ_X lies below the employed floor e `θ_min` `ψ_min`, which for the paper's calibration it does not under
 truncated laws and cannot under lognormal ones, where the employed floor is zero and has no mass.
 
 ## Domain rules
@@ -100,11 +101,11 @@ truncated laws and cannot under lognormal ones, where the employed floor is zero
 A quantity a member does not define is reported as `undefined`.
 
 The special points of the rule, in each state z:
-- **The buffer stock target m̌_i(z)**, where E[m′ | m, z] = m for a survivor, needs the GIC-Mod of state z with Þ̄.
-- **The pseudo-target m̂_i(z)**, where E[𝐦′ | z]/𝐦 equals the expected growth of permanent income from z, E[Γ(z′) ψ′ | z],
+- **The buffer stock target m̂_i(z)**, where E[m′ | m, z] = m for a survivor, needs the GIC-Mod of state z with Þ̄.
+- **The pseudo-target m̌_i(z)**, where E[𝐦′ | z]/𝐦 equals the expected growth of permanent income from z, E[𝒢(z′) ψ′ | z],
   needs the GIC of state z with Þ̄.
 - **The kink m*_i(z)** needs the artificial limit to be the constraint in force in that state and to lie strictly above
-  the limit the following states impose: a̲(z) = a̲_Art > max over successors z′ of (Γ(z′) ψ̲(z′)/R)(a̲(z′) − ξ̲(z′)).
+  the limit the following states impose: `a_min(z)` = `a_Art` > max over successors z′ of (𝒢(z′) `ψ_min(z′)`/R)(`a_min(z′)` − `ξ_min(z′)`).
 
 The stationary population over (m, z), for each group and type:
 
@@ -112,10 +113,10 @@ The stationary population over (m, z), for each group and type:
 - **Population measure.** It exists for every valid member: a mixture over ages with geometric weights, the fixed point of a
   map that contracts at rate ℒ, as in `bst/1`, the chain adding a finite state.
 - **Its moments.** The moment of order j of m is finite exactly when j < ζ, where ζ > 0 solves ℒ λ(M_f) = 1 with
-  f = (Þ̄/(Γ(z′) ψ′))^ζ; when no root exists every moment is finite. Under `continues` this is `bst/1`'s root
+  f = (Þ̄/(𝒢(z′) ψ′))^ζ; when no root exists every moment is finite. Under `continues` this is `bst/1`'s root
   ℒ E[(Þ̄/(𝒢 ψ))^ζ] = 1.
-- **Income measure.** It exists when ℒ λ(M_f) < 1 with f = Γ(z′) ψ′, which is ℒ 𝒢 < 1 under `continues`. Its moment of order
-  j is finite exactly when ℒ λ(M_f) < 1 with f = (Þ̄/(Γ(z′) ψ′))^j Γ(z′) ψ′, which under `continues` is
+- **Income measure.** It exists when ℒ λ(M_f) < 1 with f = 𝒢(z′) ψ′, which is ℒ 𝒢 < 1 under `continues`. Its moment of order
+  j is finite exactly when ℒ λ(M_f) < 1 with f = (Þ̄/(𝒢(z′) ψ′))^j 𝒢(z′) ψ′, which under `continues` is
   ℒ 𝒢 (Þ̄/𝒢)^j E[ψ^(1−j)] < 1. Under `continues` the measure's transition factorizes, permanent income being independent of
   the state; under `grows` and `frozen` it is computed on the joint law of (m, z, 𝐩).
 
@@ -124,7 +125,7 @@ table, with the moments' roots as above without the factor ℒ.
 
 **The levels.** Statistics in levels need the distribution of permanent income 𝐩 itself, a mixture over ages of the newborn's
 level law carried forward by the state-dependent growth. Its moment of order j is finite exactly when j < ζ_𝐩, where ζ_𝐩
-solves ℒ λ(M_f) = 1 with f = (Γ(z′) ψ′)^ζ, which under `continues` is ℒ 𝒢^ζ E[ψ^ζ] = 1. The mean of 𝐩 is finite exactly when
+solves ℒ λ(M_f) = 1 with f = (𝒢(z′) ψ′)^ζ, which under `continues` is ℒ 𝒢^ζ E[ψ^ζ] = 1. The mean of 𝐩 is finite exactly when
 the income measure exists. For the paper's calibration ζ_𝐩 is a little above one, so the mean of 𝐩 is finite and its
 variance is not: the Pareto tail of permanent income that perpetual youth with lifelong growth produces, which the levels
 Lorenz curve of wealth inherits in its upper tail. A pooled statistic in levels is defined when it is defined for every group
@@ -142,8 +143,8 @@ Exact consequences of the parameters, which the comparison tests a results file 
 - **The limiting MPC.** In every state, c_i′(m, z) → 1 − Þ_i/R as m → ∞ under the RIC, and → 0 when it fails.
 - **The constraint in force by state**, from the fixed point above, and the natural limits by state; zero in every state
   under lognormal laws.
-- **The worst income by state**, ξ̲(z) ψ̲(z), and the probability p̲(z).
-- **The newborn's lowest resources.** A newborn's m is at least e θ̲, and exactly that when θ has mass at its floor.
+- **The worst income by state**, `ξ_min(z)` `ψ_min(z)`, and the probability `p_worst(z)`.
+- **The newborn's lowest resources.** A newborn's m is at least e `θ_min`, and exactly that when θ has mass at its floor.
 - **The employment marginal of the stationary population.** Since newborns are born employed, it is not the chain's
   stationary distribution π but μ = (1 − ℒ) e_E (I − ℒ P)^(−1), with e_E the unit row of the employed state: the chain's
   distribution with a flow (1 − ℒ) reborn into E each quarter. With ℒ = 1 it is π. A toolkit that places newborns otherwise
@@ -160,18 +161,18 @@ Exact consequences of the parameters, which the comparison tests a results file 
 **Positivity.** Survivors satisfy it by the constraint in force in their state, an implication of ρ > 1. Newborns satisfy it
 by the family's convention: born employed with no assets, so m = e θ > 0 under every shock law.
 
-**The welfare conditions.** As in `bst/1`, W_i and F_i are finite exactly when E[(m − m̲(z))^(−(ρ−1))] is under the
-stationary population, and M_i exactly when E[(m − m̲(z))^(−ρ)] is, with m̲(z) the lowest resources in state z from which
+**The welfare conditions.** As in `bst/1`, W_i and F_i are finite exactly when E[(m − `m_min(z)`)^(−(ρ−1))] is under the
+stationary population, and M_i exactly when E[(m − `m_min(z)`)^(−ρ)] is, with `m_min(z)` the lowest resources in state z from which
 positive consumption is feasible. The cases are `bst/1`'s, taken state by state:
 - Where the artificial limit is the constraint in force and lies strictly above the limit the following states impose, the
   rule keeps consumption above a positive value in that state.
-  With truncated laws and the paper's a̲_Art = 0 this is every state, and all three means are finite.
+  With truncated laws and the paper's `a_Art` = 0 this is every state, and all three means are finite.
 - With lognormal laws, every state's limit is zero, the natural one, and an artificial limit of zero binds nowhere; resources near zero are reached only in the
   employed state, with a density that vanishes faster than any power, since θ is lognormal, while the unemployed states'
   incomes are positive atoms. Every moment is then finite, as in `bst/1`'s thin-density case.
 - A member with an atom at the worst income and no binding constraint, such as `income_without_benefits` below the employed
   floor under truncated laws with `borrowing_constraint: natural`, falls under `bst/1`'s atom case with the chain's runs in
-  place of the i.i.d. runs: the condition is ℒ λ(M_f) < 1 with f = p̲(z′)^(1 − q/ρ) (Γ(z′) ψ′/Þ_i)^q on the states where the
+  place of the i.i.d. runs: the condition is ℒ λ(M_f) < 1 with f = `p_worst(z′)`^(1 − q/ρ) (𝒢(z′) ψ′/Þ_i)^q on the states where the
   atom is the worst income, at q = ρ − 1 for W_i and F_i and q = ρ for M_i. That form is a deduction from `bst/1`'s, not yet
   checked.
 
@@ -182,9 +183,9 @@ the checker reports the case it falls under.
 
 As for [`bst/1`](../bst-1/conditions.md#the-stated-member-and-the-effective-member): every statement above is defined for
 the stated member and for a toolkit's effective member alike, and decided for each by the same arithmetic on its own
-expectations. Here the expectations a toolkit reports are conditional on the next state, E[(Γ(z′) ψ′)^k | z′] for the
+expectations. Here the expectations a toolkit reports are conditional on the next state, E[(𝒢(z′) ψ′)^k | z′] for the
 powers the conditions use, E[log ψ | z′] and E[ψ log ψ | z′], with the chain's rows, from which the dominant eigenvalues
-are arithmetic; and the lowest values by state, ξ̲(z) and ψ̲(z), from which the constraints in force by state are
+are arithmetic; and the lowest values by state, `ξ_min(z)` and `ψ_min(z)`, from which the constraints in force by state are
 the fixed point above. The definition of a law's lowest value as the limit of a representation's bottommost point, and its
 consequence that truncated laws keep every effective member in the stated member's regime, carry over unchanged.
 

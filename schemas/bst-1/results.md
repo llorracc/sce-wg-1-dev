@@ -23,7 +23,7 @@ toolkit's grid, histogram or interpolant. Every value is a ratio to permanent in
 
 What the toolkit solved, reported in numbers free of any representation:
 - **The expectations** the [conditions](conditions.md) name, under the toolkit's own approximation of the laws: E[ψ],
-  E[θ], E[ψ^(1−ρ)], E[ψ^(−1)], E[log ψ], E[ψ log ψ], E[ψ²], E[ψ^(ρ−1)], E[ψ^ρ], and p̲, the mass at the worst income. The
+  E[θ], E[ψ^(1−ρ)], E[ψ^(−1)], E[log ψ], E[ψ log ψ], E[ψ²], E[ψ^(ρ−1)], E[ψ^ρ], and `p_worst`, the mass at the worst income. The
   means are reported, not required to be one, since an approximation need not preserve them.
 - **The lowest values** of ψ and of income under that approximation, which lie at or above the stated member's infima.
 - **The derived parameters** the toolkit used, its effective member's own: the natural limit, the constraint in force, the
@@ -66,11 +66,13 @@ Each point is rounded to three significant figures.
 **At the special points.** Each value is reported with its status, `undefined` when its domain rule fails in the toolkit's
 effective member, by the toolkit's own verdicts ([conditions](conditions.md)):
 - **The kink m*_i,** the largest m at which the artificial borrowing constraint binds, with the rule's slope on each side.
-- **The buffer stock target m̌_i,** where E[m_{t+1}] = m_t for a survivor, with c and the MPC there.
-- **The pseudo-target m̂_i,** where E[𝐦_{t+1}]/𝐦_t = 𝒢 for a survivor, with c and the MPC there.
+- **The buffer stock target m̂_i** (typeset `\hat{m}`, econ-ark's `\mTrgNrm`), where E[m_{t+1}] = m_t for a survivor,
+  with c and the MPC there.
+- **The pseudo-target m̌_i** (typeset `\check{m}`, econ-ark's `\mBalLvl`), where E[𝐦_{t+1}]/𝐦_t = 𝒢 for a
+  survivor, with c and the MPC there.
 
-For a survivor, E[m′] = R a(m) E[ψ^(−1)]/𝒢 + 1, so m̌ solves R a(m) E[ψ^(−1)]/𝒢 + 1 = m. In levels, E[𝐦_{t+1}] = R 𝐚_t + 𝒢 𝐩_t,
-so m̂ is where the rule meets the locus a(m) = (𝒢/R)(m − 1).
+For a survivor, E[m′] = R a(m) E[ψ^(−1)]/𝒢 + 1, so m̂ solves R a(m) E[ψ^(−1)]/𝒢 + 1 = m. In levels, E[𝐦_{t+1}] = R 𝐚_t + 𝒢 𝐩_t,
+so m̌ is where the rule meets the locus a(m) = (𝒢/R)(m − 1).
 
 **The exported rule.** Each type's rule at dense points of the toolkit's choosing, with the kink included and the range stated,
 so that a reader can compute dynamics that the results file does not report.
@@ -84,7 +86,7 @@ Under the **population measure**, for m, a and c:
   0.9, 0.95, 0.99, 0.999 and 1. GL(1) is the mean.
 - The quantiles at the same probabilities (optional).
 - The mean of c, the aggregate ratio of consumption to income.
-- The mass at the borrowing constraint, a = a̲, and the fraction with a ≤ 0.
+- The mass at the borrowing constraint, a = `a_min`, and the fraction with a ≤ 0.
 - The mean MPC, and the mean MPC within each quartile of a. The quartiles are defined through the quantile rank, so a mass point
   needs no tie rule.
 
@@ -145,11 +147,11 @@ model itself.
 
 The residual is
 
-    r(m) = min( ĉ(m) − c(m),  m − a̲ − c(m) ) / c(m),
+    r(m) = min( ĉ(m) − c(m),  m − `a_min` − c(m) ) / c(m),
 
 in units of consumption. It is zero for the exact rule:
 - where the household saves, c = ĉ;
-- where the constraint binds, c = m − a̲ ≤ ĉ.
+- where the constraint binds, c = m − `a_min` ≤ ĉ.
 
 So the same formula serves at, above and below the kink. The expectation in ĉ is the part `diagnostics.expectation`. It must be
 computed by a method different from the household's own expectation, and stated, so that a toolkit cannot score its own
