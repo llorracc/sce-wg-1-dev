@@ -236,7 +236,8 @@
         "mass_at_constraint": { "type": "number", "minimum": 0, "maximum": 1 },
         "fraction_a_nonpositive": { "type": "number", "minimum": 0, "maximum": 1 },
         "mean_mpc": { "type": "number" },
-        "mpc_by_a_quartile": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "number" } }
+        "mpc_by_a_quartile": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "number" } },
+        "coverage": { "$ref": "#/$defs/Coverage" }
       }
     },
 
@@ -251,10 +252,23 @@
         "a": { "$ref": "#/$defs/DistributionBlock" },
         "mass_at_constraint": { "type": "number", "minimum": 0, "maximum": 1 },
         "mean_a": { "$ref": "#/$defs/Quantity" },
-        "mean_mpc": { "type": "number" }
+        "mean_mpc": { "type": "number" },
+        "coverage": { "$ref": "#/$defs/Coverage" }
       },
       "if": { "properties": { "status": { "const": "value" } } },
       "then": { "required": ["m", "a", "mass_at_constraint", "mean_a", "mean_mpc"] }
+    },
+
+    "Coverage": {
+      "description": "How far the representation of the distribution reaches: a point top of m or a, and the measure's mass at or above it. For a grid, top is its highest point and top_mass the mass the grid holds there; for a simulation, top is a point the toolkit states and top_mass the sample's share at or above it. Optional; it lets a reader judge whether the top GL ordinates have converged.",
+      "type": "object",
+      "required": ["variable", "top", "top_mass"],
+      "additionalProperties": false,
+      "properties": {
+        "variable": { "enum": ["m", "a"] },
+        "top": { "type": "number" },
+        "top_mass": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
     },
 
     "Welfare": {

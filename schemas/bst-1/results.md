@@ -87,12 +87,18 @@ Under the **population measure**, for m, a and c:
 - The mass at the borrowing constraint, a = a̲, and the fraction with a ≤ 0.
 - The mean MPC, and the mean MPC within each quartile of a. The quartiles are defined through the quantile rank, so a mass point
   needs no tie rule.
+- The coverage of the representation (optional): a point `top` of m or a, and the measure's mass at or above it, `top_mass`.
+  For a grid, `top` is its highest point and `top_mass` the mass the grid holds there; for a simulation, `top` is a point the
+  toolkit states and `top_mass` the sample's share at or above it. With a Pareto tail of exponent α, the tail beyond `top`
+  contributes about α/(α − 1) · `top` · `top_mass` to the mean, so a reader can judge from it whether GL(0.999) and GL(1)
+  have converged. The tail exponents are in the checker's report.
 
 Under the **income measure**, for m and a:
 - the GL ordinates at the same probabilities;
 - the mass at the borrowing constraint;
 - the mean of a;
-- the mean MPC, the weighting that aggregate consumption responses use.
+- the mean MPC, the weighting that aggregate consumption responses use;
+- the coverage of the representation (optional), as under the population measure.
 
 Each ordinate or moment whose finiteness condition fails is reported as `undefined`. GL(p) for p < 1 is defined whenever the
 distribution is.
