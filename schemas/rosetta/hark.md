@@ -18,13 +18,13 @@ Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md). The toolkit is 
 | ℒ, `survival` | `LivPrb`, a list per period | survival at the end of t. It enters only the effective discount factor, `DiscFac`·`LivPrb`. R is not divided by ℒ, and the assets of the dead vanish | — |
 | R, `return` | `Rfree`, a list per period | element t governs the move from t to t + 1 | — |
 | 𝒢, `income.growth` | `PermGroFac`, a list per period | as `Rfree`. In `simulate()` the drawn `PermShk` includes it, as ψ𝒢; in the model file it does not | — |
-| ψ, `income.permanent_shock` | `PermShkStd`, the σ of log ψ, and `PermShkCount` | `MeanOneLogNormal(σ)`, with log ψ ~ N(−σ²/2, σ²). It is cut into `PermShkCount` equiprobable nodes at the conditional means of their bins, so that E[ψ] = 1 at the nodes | HARK's main has no truncated law. The adapter gives HARK the member's own nodes. It assigns `IncShkDstn`, then calls `construct("PermShkDstn", "TranShkDstn")`, since the condition factors and the targets read those two |
+| ψ, `income.permanent_shock` | `PermShkStd`, the σ of log ψ, and `PermShkCount` | `MeanOneLogNormal(σ)`, with log ψ ~ N(−σ²/2, σ²). It is cut into `PermShkCount` equiprobable nodes at the conditional means of their bins, so that E[ψ] = 1 at the nodes | HARK's main has no truncated law. The adapter gives HARK the member's own nodes. It assigns `IncShkDstn`, then calls `construct("PermShkDstn", "TranShkDstn")`, so that nothing is left stale. `GPFacMod`, `VAFac`, `GPFacHrm`, `ELogPermShk` and the target's E[1/ψ] read `PermShkDstn[0]`; `WorstPrb`, `WRPFac`, `MPCmax` and `bilt["hNrm"]` read `IncShkDstn[0]`; nothing reads `TranShkDstn`, and the target assumes that the transitory nodes have mean one |
 | θ, `income.employed_shock` | `TranShkStd` and `TranShkCount` | as ψ | as ψ |
 | ℘, `income.unemployment.prob` | `UnempPrb` | `MixtureTranIncShk`: an unemployed node ξ̲ with probability ℘, and the employed nodes scaled by (1 − ℘ξ̲)/(1 − ℘), each with probability (1 − ℘)/N | none: this is `bst/1`'s ξ exactly |
 | ξ̲, `income.unemployment.income` | `IncUnemp` | a ratio to permanent income | none. Retirement's `UnempPrbRet` and `IncUnempRet` are off at `T_retire = 0` |
 | ψ and ξ jointly | `IncShkDstn` | the independent product; its atoms are ψ and ξ | — |
 | a̲_Art, `borrowing_constraint` | `BoroCnstArt`, or `None` for `natural` | a bound on end-of-period a. The constraint in force is the larger of `BoroCnstNat` and `BoroCnstArt` | `IndShockConsumerType`'s default is 0.0 |
-| a̲_Nat | `BoroCnstNat`, computed by HARK | from the lowest nodes, not from the laws' infima | where the laws' own limit is tighter than the nodes', as with truncated laws and ξ̲ > 0, the adapter imposes it through `BoroCnstArt`. Draft pull request econ-ark/HARK#1861 records a discretized law's true bounds with its nodes; nothing reads them yet |
+| a̲_Nat | `BoroCnstNat`, computed by HARK | from the lowest nodes, not from the laws' infima | this is the effective member's natural limit, and the results file reports it as such (`effective_member.derived.natural_limit`), with the constraint in force the larger of a̲_Art and it. The laws' own limit is tighter wherever the laws reach below their nodes, as with ξ̲ > 0 and a truncated ψ, or an untruncated ψ, whose limit is 0. An adapter could impose that limit through `BoroCnstArt`, but it would then solve a different effective member, and none does. Draft pull request econ-ark/HARK#1861 records a discretized law's true bounds with its nodes; nothing reads them yet |
 | the newborn: employed, P = 1, no assets, θ an employed draw | `kLogInitMean`, `kLogInitStd` and `kNrmInitCount`; `pLogInitMean`, `pLogInitStd` and `pLvlInitCount`; `NewbornTransShk` | on main, `simulate()`'s newborn draws ψ and grows, P₀ = P_init·𝒢ψ. It has θ = 1 unless `NewbornTransShk` is set, which draws from the whole mixture, unemployment included. The transition-matrix simulator's newborns draw (ψ, θ) and grow | see the note on the newborn below |
 
 **The newborn.**
@@ -38,21 +38,27 @@ Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md). The toolkit is 
 
 | results file | HARK | note |
 |---|---|---|
-| the rule c(m) at the request points | `solution[0].cFunc` | a `LinearInterp`, or a cubic with `CubicBool`. Above the grid it approaches the limiting linear function, with intercept `MPCmin`·`hNrm` and slope `MPCmin`, under a lower envelope with the constraint |
+| the rule c(m) at the request points | `solution[0].cFunc` | a `LowerEnvelope` of the unconstrained rule, a `LinearInterp` or with `CubicBool` a cubic, and the constraint. Above the grid it approaches the limiting linear function `MPCmin`·(m + `hNrm`), with the iterates' values of both, so the method's tolerance matters there; see the method |
 | the value v(m) | `solution[0].vFunc`, with `vFuncBool` | a `ValueFuncCRRA` over a cubic in pseudo-inverse value. V = P^(1−ρ)·v(m) |
-| the MPC | `cFunc.derivative(m)`, or `eval_with_derivative` | a linear interpolant's MPC is piecewise constant |
-| the limiting MPCs | `solution[0].MPCmin`, as m → ∞, and `MPCmax`, at the lower limit | `bilt["MPCmin"]` and `bilt["MPCmax"]` are the perfect-foresight values, not these |
-| the target, and the balanced-growth point | `solution[0].mNrmTrg`, where E[m′] = m, and `mNrmStE` | computed in `post_solve` only when `cycles = 0`, `T_cycle = 1` and the type is exactly `IndShockConsumerType`. A subclass needs `force = True` |
-| human wealth | `solution[t].hNrm` | this excludes current income, so it is BST's h − 1. `bilt["hNrm"]` = 1/(1 − 𝒢/R) includes it |
+| the MPC | `cFunc.derivative(m)`, or `eval_with_derivative` | a linear interpolant's MPC is piecewise constant, and at an interior knot it is the left segment's slope. The envelope's derivative is the lower piece's, the unconstrained one's at a tie. A cubic's slope is continuous at the knots |
+| the limiting MPCs | `bilt["MPCmin"]`, as m → ∞, and `bilt["MPCmax"]`, at the lower limit: the closed forms, max(1 − `RPFac`, 0) and 1 − `WorstPrb`^(1/ρ)·`RPFac`, or 1 where the artificial constraint binds | `solution[0].MPCmin` and `MPCmax` are the solver's iterates, which approach them and lag at HARK's default tolerance |
+| the target, and the balanced-growth point | `solution[0].mNrmTrg`, where E[m′] = m, and `mNrmStE` | computed by `calc_stable_points` in `post_solve`, only when `cycles = 0`, `T_cycle = 1` and the type is exactly `IndShockConsumerType`. They are NaN unless the GICRaw holds, or if Newton's method fails. `post_solve` calls it without `force`, so a subclass must call `calc_stable_points(force=True)` itself after `solve()` |
+| human wealth | `solution[t].hNrm` | this excludes current income, so it is BST's h − 1 once it has converged. `bilt["hNrm"]` = E[ψξ]/(1 − 𝒢/R) over `IncShkDstn`'s nodes, which is 1/(1 − 𝒢/R) when they have mean one, includes it, and `bilt["hNrm"]` − 1 is the limit |
 | the condition factors | `check_conditions`, which sets `conditions` and `bilt`: `APFac`, `GPFacRaw`, `GPFacMod`, `GPFacLiv`, `GPFacHrm`, `RPFac`, `WRPFac`, `FHWFac`, `PFVAFac`, `VAFac` and `WorstPrb` | `VAFac` leaves ℒ out, where `APFac` and `PFVAFac` include it. The checker computes the factors itself from the reported expectations, so HARK's serve for comparison only |
 | the stationary distribution, on a grid | `initialize_sym()`; then `_simulator.make_transition_matrices(grid_specs, norm=None)`, `find_steady_state()`, and `get_long_run_dstn("mNrm")` or `get_long_run_average(...)` | Harmenberg's measure is `norm = "G"`. Its docstring says the tilt by `PermShk` alone is exact only without growth or without mortality. The newborns are this simulator's, not `bst/1`'s |
-| the stationary distribution, by simulation | `simulate()`, with `track_vars` and `history`; `income_shuffle`, `init_shuffle` and `death_shuffle` give exact quotas | for Harmenberg's measure: solve with `neutral_measure = False`; then set it, rebuild `IncShkDstn`, `PermShkDstn` and `TranShkDstn`, and simulate. Set before the solve, it changes the policy |
+| the stationary distribution, by simulation | `simulate()`, with `track_vars` and `history`; `income_shuffle`, `init_shuffle` and `death_shuffle` give exact quotas | for Harmenberg's measure: `neutral_measure` is an argument of HARK's own lognormal constructor, which multiplies ψ's weights by ψ, and set before the solve it changes the policy. With the member's nodes, the adapter solves first, then tilts its own ψ weights by ψ, assigns `IncShkDstn`, constructs `PermShkDstn` and `TranShkDstn`, and simulates. Each death is then replaced by one unweighted newborn, so newborns carry a share 1 − ℒ of the income mass where Harmenberg's measure gives them 1 − ℒ𝒢: the tilt alone is exact only when 𝒢 = 1 or ℒ = 1, and weighting each household by 𝒢 to the power of its age corrects it (derived from the code, not measured) |
 | welfare | none | the adapter computes it from `vFunc` |
 
 ## The method
 
 - **The solution:** `solve_one_period_ConsIndShock`, the endogenous grid method. It is iterated over an infinite horizon
   until the distance between successive solutions is below `tolerance`, by default 10⁻⁶.
+  - The distance is measured on the rule's knots alone (`ConsumerSolution.distance_criteria = ["vPfunc"]`), not on
+    `hNrm`, `MPCmin` or the limiting function. `hNrm` approaches its limit at the rate 𝒢/R an iteration, so it lags.
+  - On HARK's defaults, at the default tolerance, `hNrm` is 44.99 against its limit of 50.50, and c above the grid is
+    off by 0.0115 at m = 60 and 0.035 at m = 100, against less than 4·10⁻⁵ within the grid. `bst/1`'s population grids
+    reach 60, 120 and 240, so the tolerance must be tighter there: 10⁻⁸ keeps the gap at m = 60 below 10⁻⁴ on those
+    defaults.
   - The stage's `policy` block writes the maximization for the reader. Its operative line is the Euler equation with its
     complementarity clause, and HARK's endogenous grid method solves that relation.
   - The stage's `max(a_Art, a_Nat)` is HARK's own: the larger of `BoroCnstArt` and `BoroCnstNat`.
@@ -61,20 +67,34 @@ Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md). The toolkit is 
 - **The interpolation:** linear, or cubic with `CubicBool`. `vFuncBool` keeps the value function.
 - **The expectation:** over the nodes of `IncShkDstn`, which the adapter supplies. The method file's quadrature is
   therefore the adapter's choice of nodes, not HARK's.
-- **The diagnostics' expectation:** the Euler residuals are taken with a finer quadrature of the stated laws than the
-  household's, for example HARK's `expected` over a finer `IncShkDstn`.
+- **The diagnostics' expectation.** The Euler residuals are taken against the stated laws by a quadrature unlike the
+  household's. The emitter's own is Gauss–Legendre in logs, split at the rule's kink. HARK's `expected` would also serve,
+  over a finer discretization of the stated laws built apart from the agent's `IncShkDstn`, with the adapter making the
+  nodes of a truncated law. A finer law's lowest ψ node is lower than the household's, so with a̲ < 0 the next m could
+  leave the rule's domain.
 
 ## The adapter
 
 The adapter in use is the HAFiscal-Latest session's emitter of results files, in the buffer-stock benchmark. It is private
 for now; whether it is published is the owner's decision. In this stone's terms:
 - **Encode.** The lexicon's names, with HARK's own income inputs left as placeholders. `IncShkDstn` is replaced by the
-  laws' nodes, and then `construct("PermShkDstn", "TranShkDstn")` is called. After the solve, the emitter asserts that HARK
-  did not rebuild them.
+  laws' nodes, and then `construct("PermShkDstn", "TranShkDstn")` is called. The settings it passes are its own, not
+  HARK's defaults:
+  - `aXtraMin` = 10⁻⁶;
+  - `aXtraMax`, `aXtraCount` and `aXtraNestFac` from the level's top, points and nesting, with no `aXtraExtra`;
+  - `CubicBool` and `vFuncBool` set;
+  - the level's `tolerance`: 10⁻⁸ at the first level, 10⁻¹⁰ at the second, and 10⁻¹² at the third and fourth.
+  
+  So the grid and the tolerance honor the method file's settings, while the endogenous grid method, the cubic
+  interpolation and its approach above the grid are fixed inside.
 - **The call:** `solve()`.
 - **Decode.**
-  - HARK's `cFunc` and `vFunc` are read, and the constraint in force is read and asserted equal to the member's.
-  - The targets and the conditions come from the laws' nodes.
+  - After the solve it asserts three things: that `IncShkDstn` is unchanged; that both marginals are the laws' unique
+    nodes, with probabilities summed as HARK sums them; and that HARK's `mNrmMin` equals the effective member's
+    constraint in force, to 10⁻⁹.
+  - HARK's `cFunc` and `vFunc` are read. The natural limit reported is HARK's, from the nodes.
+  - The targets and the conditions come from the laws' nodes, and the Euler residuals from the emitter's own quadrature
+    of the stated laws.
   - The stationary population is computed outside HARK, by a linear lottery on an asset grid, with a node at an artificial
     constraint. Deaths come at the rate 1 − ℒ, and newborns from the member's newborn law.
   - It has two measures: the households', with ψ's law as given; and the income measure, with the probabilities tilted
@@ -83,14 +103,16 @@ for now; whether it is published is the owner's decision. In this stone's terms:
 **How it departs from HARK alone:**
 - the population is the emitter's own;
 - above the top of the solution grid, the rule is HARK's extrapolation, an exponential approach to the limiting linear
-  function, not a power law;
+  function, not a power law. But the population and every reported point lie below the solution grid's top, so the
+  extrapolation enters no reported quantity;
 - the newborns are the emitter's own.
 
 ## The evidence
 
 - **Verified files.** The emitter's seven results files of 2026-10-20 validate and pass `check.py --verify-results`. They
   cover the first two levels of the three members and the toy's third ([the emitter's
-  ladder](../records/findings/2026-10-20_emitter-ladder.md)).
+  ladder](../records/findings/2026-10-20_emitter-ladder.md)). The toy's fourth level will be the eighth, once its rerun
+  ends.
 - **A second HARK implementation** of the same model is in QuantEcon's community library of baseline models, at
   `solutions/buffer-stock/001-hark-egm/`. QuantEcon/community-library#5 added it as `projects/HARK/buffer-stock/`, and
   #15 moved it there. It uses HARK alone, at `econ-ark` 0.17.1. Its checks include an independent endogenous-grid solver

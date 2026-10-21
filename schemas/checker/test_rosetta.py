@@ -3,7 +3,8 @@
     uv run --with jsonschema --with pyyaml --with scipy --with numpy --with pytest pytest -q schemas/checker
 
 Each stone's lexicon has a row for every parameter of the stage file and every key of the parameter file, and its cards
-parse, carry the fields of a card and name only the stage's method targets. A parameter or key enters the family only with
+parse, carry the fields of a card, name only the stage's method targets, and give each part a whole-stage handler covers
+one of Bellman's verdicts, with a handler of its own exactly where the whole-stage handler cannot take it. A parameter or key enters the family only with
 its row in every stone.
 """
 
@@ -25,6 +26,8 @@ SYMBOLS = {"β": "β", "ℒ": "ℒ", "ρ": "ρ", "R": "R", "𝒢": "𝒢", "a_Ar
            "σ_ψ": "ψ", "σ_θ": "θ", "p_zero": "℘", "ξ_min": "ξ̲"}
 # Keys that identify a file rather than state a number of the model.
 NOT_PARAMETERS = {"family", "period"}
+# The verdicts of a whole-stage handler on the parts it covers, in Bellman's tokens.
+STATUSES = {"honours", "fixed", "requires_own_handler", "absent"}
 
 
 def stage_parameters() -> set[str]:
@@ -91,11 +94,20 @@ def test_the_cards_carry_a_card_s_fields_and_the_stage_s_targets(stone):
     assert set(cards) == {"toolkit", "handlers", "methods", "evidence", "examples"}
     assert {"package", "repository", "read_at"} <= set(cards["toolkit"])
     targets = method_targets()
+    methods = {entry["on"]: entry for entry in cards["methods"]}
+    assert set(methods) <= targets, sorted(set(methods) - targets)
     for handler in cards["handlers"]:
-        assert {"id", "target", "scope", "adapter_contract"} <= set(handler), handler.get("id")
+        assert {"id", "target", "scope", "transition_alignment", "single_step", "adapter_contract"} <= set(handler)
         assert {"encode", "decode", "status"} <= set(handler["adapter_contract"]), handler["id"]
         assert handler["target"] in targets, handler["target"]
-        assert set(handler.get("covers", {})) <= targets, handler["id"]
-    for entry in cards["methods"]:
-        assert entry["on"] in targets, entry["on"]
+        policy = handler.get("interior_policy", {})
+        assert set(policy) <= targets and handler["target"] not in policy, handler["id"]
+        for part, verdict in policy.items():
+            assert verdict["status"] in STATUSES, (part, verdict)
+            # A part the whole-stage handler runs names no handler of its own; one it cannot take names the adapter's.
+            named = methods.get(part, {}).get("handler")
+            if verdict["status"] in ("honours", "fixed"):
+                assert named is None, (part, named)
+            else:
+                assert named == "adapter", (part, named)
     assert "correctness" in cards["evidence"]

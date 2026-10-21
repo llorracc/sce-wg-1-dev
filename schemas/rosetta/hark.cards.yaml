@@ -1,6 +1,8 @@
 # HARK's Rosetta Stone for bst/1, as cards in the field names of Project Bellman's Rosetta stone. Draft, 2026-10-21.
 # The toolkit's side only: the operator's side (ranks, domains, syntax positions, the named nodes, grades) is Bellman's
-# to fill. The lexicon, the reasons and the sources are in hark.md.
+# to fill. The lexicon, the reasons and the sources are in hark.md. Values such as "!egm" are Bellman's method tags,
+# quoted so that YAML does not read them as tags; "on" is quoted because YAML 1.1 reads a bare on as true. The settings'
+# shared names follow numerics.md where it has them, and are provisional until the method registry is written.
 
 toolkit:
   package: HARK
@@ -17,72 +19,73 @@ handlers:
       - "solve()"
     target: policy
     scope: whole stage
-    method: endogenous-grid
-    covers:                  # what this whole-stage handler does with each part it covers
-      policy: fixes it inside
-      evaluate: honors the setting
-      dcsn_to_arvl: honors the setting
-      cntn_to_dcsn.value: honors the setting
+    transition_alignment: model_locked      # m' = R a / (G psi') + xi' is built into the solver
+    single_step: needs_wrapper              # solve() iterates to the stationary rule; the one-step solver is solve_one_period_ConsIndShock
+    argument_map:
+      "crra": CRRA
+      "types[].beta": DiscFac
+      "survival": "LivPrb, a list per period"
+      "return": "Rfree, a list per period"
+      "income.growth": "PermGroFac, a list per period"
+      "borrowing_constraint": "BoroCnstArt; None for natural"
+      "income.permanent_shock": "PermShkStd and PermShkCount, placeholders when the adapter supplies the nodes"
+      "income.employed_shock": "TranShkStd and TranShkCount, placeholders likewise"
+      "income.unemployment.prob": "UnempPrb, used only when HARK builds the laws"
+      "income.unemployment.income": "IncUnemp, likewise"
+    toolkit_settings_to_kwargs:
+      grid_min: aXtraMin
+      grid_max: aXtraMax
+      grid_points: aXtraCount
+      grid_nesting: aXtraNestFac
+      solution_tolerance: tolerance
+      cubic_interpolation: CubicBool
+      value_function: vFuncBool
+    interior_policy:                        # what this whole-stage handler does with each part it covers
+      evaluate: {status: honours, via: CubicBool, reason: "linear or cubic Hermite; the approach above the grid is fixed inside"}
+      dcsn_to_arvl: {status: honours, via: IncShkDstn, reason: "the expectation is a sum over the nodes the adapter supplies"}
+      cntn_to_dcsn.value: {status: honours, via: vFuncBool}
     adapter_contract:
       status: in use, as the HAFiscal-Latest session's emitter, private for now
       encode:
-        argument_map:
-          "crra": CRRA
-          "types[].beta": DiscFac
-          "survival": "LivPrb, a list per period"
-          "return": "Rfree, a list per period"
-          "income.growth": "PermGroFac, a list per period"
-          "borrowing_constraint": "BoroCnstArt; None for natural"
-          "income.permanent_shock": "PermShkStd and PermShkCount, placeholders when the adapter supplies the nodes"
-          "income.employed_shock": "TranShkStd and TranShkCount, placeholders likewise"
-          "income.unemployment.prob": "UnempPrb, used only when HARK builds the laws"
-          "income.unemployment.income": "IncUnemp, likewise"
-        fixed: {cycles: 0, T_cycle: 1}
-        toolkit_settings_to_kwargs:
-          grid_min: aXtraMin
-          grid_max: aXtraMax
-          grid_points: aXtraCount
-          grid_nesting: aXtraNestFac
-          tolerance: tolerance
-          cubic_interpolation: CubicBool
-          value_function: vFuncBool
         IncShkDstn:
           representation: "a DiscreteDistributionLabeled over PermShk and TranShk: the independent product of the nodes of psi and of xi, the unemployment node among xi's"
           scope: "built by the adapter from the member's laws; HARK must not rebuild it, and PermShkDstn and TranShkDstn are constructed from it"
         LivPrb:
           scope: "applied inside the solver, in the effective discount factor DiscFac * LivPrb; the adapter does not apply it again"
-      neutralization: "none: the solver's built-in law of motion, m' = R a / (G psi') + xi', is bst/1's"
+      neutralization: "cycles = 0 and T_cycle = 1 give the infinite horizon; nothing else is needed, since the solver's built-in law of motion, m' = R a / (G psi') + xi', is bst/1's"
       decode:
         cFunc: {kind: primary}
-        vFunc: {kind: primary, needs: vFuncBool}
-        mNrmMin: {kind: primary, check: "equal to the member's constraint in force"}
+        vFunc: {kind: primary, needs: vFuncBool, check: "finite at the request points, and in agreement with a policy evaluation under cFunc"}
+        mNrmMin: {kind: primary, check: "equal to the effective member's constraint in force, to 1e-9"}
+        natural_limit: {kind: primary, from: "BoroCnstNat, from the nodes' lowest values", reported_as: effective_member.derived.natural_limit}
         targets: {kind: derived, from: "the rule and the laws' nodes"}
         conditions: {kind: derived, from: "the laws' nodes"}
         population: {kind: derived, from: "the rule, by the adapter's own lottery"}
         welfare: {kind: derived, from: vFunc}
+        euler_residuals: {kind: derived, from: "the adapter's own quadrature of the stated laws"}
       inverse_data: ["the solution grid", "the laws' nodes and weights", "the constraint in force"]
       verify: {region: not yet stated, tolerance: not yet stated, boundary: not yet stated}
       settings_map:
         aXtraMin: {semantics: "the smallest end-of-period assets on the grid, above the natural limit", range: "> 0"}
         aXtraMax: {semantics: "the largest end-of-period assets on the grid, above the natural limit", range: "> aXtraMin"}
         aXtraCount: {semantics: "the number of grid points"}
-        aXtraNestFac: {semantics: "the depth of the multi-exponential nesting"}
-        tolerance: {semantics: "the distance between successive solutions at which the infinite-horizon iteration stops", range: "> 0"}
-        CubicBool: {semantics: "a cubic interpolant for the rule, in place of a linear one"}
+        aXtraNestFac: {semantics: "the depth of the multi-exponential nesting; 0 gives an exponential grid and -1 a uniform one"}
+        tolerance: {semantics: "the distance between successive rules at which the infinite-horizon iteration stops, measured on the rule's knots; hNrm, MPCmin and the rule above the grid lag it", range: "> 0"}
+        CubicBool: {semantics: "a cubic Hermite interpolant for the rule, in place of a linear one"}
         vFuncBool: {semantics: "the value function kept"}
 
-methods:                     # "on" is quoted: YAML 1.1 reads a bare on as true
-  - {"on": policy, method: endogenous-grid, handler: HARK.ConsumptionSaving.ConsIndShockModel.IndShockConsumerType}
-  - {"on": evaluate, method: "linear-interpolation, or cubic-hermite with CubicBool", handler: HARK.ConsumptionSaving.ConsIndShockModel.IndShockConsumerType}
-  - {"on": dcsn_to_arvl, method: "the adapter's nodes, supplied through IncShkDstn", handler: HARK.ConsumptionSaving.ConsIndShockModel.IndShockConsumerType}
-  - {"on": cntn_to_dcsn.value, method: value-function, handler: HARK.ConsumptionSaving.ConsIndShockModel.IndShockConsumerType}
-  - {"on": arvl_to_dcsn, method: "the adapter's own lottery on an asset grid", handler: adapter}
+methods:
+  - {"on": policy, method: endogenous-grid, method_tag: "!egm", settings: [solution_tolerance], handler: HARK.ConsumptionSaving.ConsIndShockModel.IndShockConsumerType}
+  - {"on": evaluate, method: "linear interpolation, or cubic Hermite with CubicBool", settings: [grid_min, grid_max, grid_points, grid_nesting, cubic_interpolation]}
+  - {"on": dcsn_to_arvl, method: "a sum over the adapter's nodes, supplied through IncShkDstn", method_tag: "!sum", settings: [nodes_per_shock]}
+  - {"on": cntn_to_dcsn.value, method: value-function, settings: [value_function]}
+  - {"on": arvl_to_dcsn, method: "the adapter's own lottery on an asset grid", method_tag: "!histogram", settings: [histogram_points], handler: adapter}
   - {"on": population.distribution, method: "the adapter's own fixed point", handler: adapter}
-  - {"on": diagnostics.expectation, method: "a finer quadrature of the stated laws than the household's", handler: adapter}
+  - {"on": diagnostics.expectation, method: "Gauss-Legendre in logs of the stated laws, split at the rule's kink", handler: adapter}
 
 evidence:
   source_walk: {read_at: "HARK main 4c285e86", by: the HARK session, on: "2026-10-21"}
-  output_checks: "the emitter asserts that HARK did not rebuild IncShkDstn, and that the constraint in force is the member's"
+  output_checks: "the emitter asserts that IncShkDstn is unchanged, that both marginals are the laws' unique nodes, and that the constraint in force is the effective member's"
   residual_checks: "the Euler residuals reported in each results file"
   verify_results: "the emitter's seven files of 2026-10-20 pass check.py --verify-results"
   cross_toolkit: none yet

@@ -28,8 +28,9 @@ member's nodes ψᵢ and weights wᵢ:
 - ξ's nodes and weights are unchanged, since ξ is independent of ψ.
 
 Then v(m) = max_c {u(c) + β̃ Ẽ[v(m′)]}, the lecture's form, holds exactly. So does the Euler equation:
-β̃Ẽ[R̂u′(c′)] = βℒR𝒢^(−ρ)E[ψ^(−ρ)u′(c′)]. The HARK session solved one member both ways, on the same nodes and the same
-grid: the rules agree to 1.3·10⁻¹⁵ and the values to 1.2·10⁻¹³.
+β̃Ẽ[R̂u′(c′)] = βℒR𝒢^(−ρ)E[ψ^(−ρ)u′(c′)]. The HARK session solved one calibration both ways, on the same nodes and the
+same grid: HARK's defaults with ξ̲ = 0 and the natural limit, on 200 grid points up to 40, not a `bst/1` member. The rules
+agree to 1.3·10⁻¹⁵ and the values to 1.2·10⁻¹³.
 
 **An equivalent change of the code, suggested by Matsya.** Keep the untilted law and R̂ = R/(𝒢ψ′). In `K`'s integrand,
 return R̂^ρ·u′(c′) in place of R̂·u′(c′), and replace β by βℒR^(1−ρ). This is the same Euler equation, since
@@ -44,7 +45,7 @@ Three cautions:
   - The lecture's R is never truncated, so the toy needs nodes.
 - **Only the household's problem is tilted.** Anything that is an expectation of m′ uses the untilted law: the target, the
   balanced-growth point and the growth patience factors.
-  - With HARK's rule for one member, the target is 2.138153 under the true law and 2.213246 under the tilted one.
+  - With HARK's rule for that calibration, the target is 2.138153 under the true law and 2.213246 under the tilted one.
   - The households' stationary measure uses ψ's law as given. The income measure tilts by ψ, not by ψ^(1−ρ).
 - **β̃ < 1 is the FVAC.** The lecture's check, β E R < 1, becomes βℒR𝒢^(−ρ)E[ψ^(−ρ)] < 1.
   - That is sufficient for the lecture's argument, and stricter than the GIC-Mod for ρ ≥ 1.
@@ -69,8 +70,9 @@ Three cautions:
 ## What the code needs, beyond the recasting
 
 These come from the HARK and HAFiscal-Latest sessions' readings of the lecture's code, checked here against its source.
-1. **Weighted nodes.** `K` averages with `jnp.mean` over the product of 100 draws of η and 100 of ζ, and equal weights
-   cannot carry the tilted ψ or the unemployment node. Two weight vectors replace the mean.
+1. **Weighted nodes.** `K` averages with `jnp.mean` over the product of 100 draws of η and 100 of ζ. Equal-weight draws
+   from the tilted law could carry the tilt, but equal weights cannot carry the member's own nodes once the tilt has made
+   their weights unequal, nor in general the unemployment node's ℘. Two weight vectors replace the mean.
 2. **Double precision.** The lecture never enables 64-bit floats, so it runs in single precision, about 10⁻⁷. The adapter
    enables them before any array is made.
 3. **The kink.**
@@ -92,6 +94,8 @@ These come from the HARK and HAFiscal-Latest sessions' readings of the lecture's
      households by p. And the run lasts until the stationarity residual is small, not a fixed T.
 7. **The MPC.** A linear interpolant's MPC is piecewise constant, so the MPC is compared at the request points, or by one
    common finite difference.
+8. **Convergence.** `solve_model` returns the rule alone, with no iteration count or last change, so a run stopped by
+   `max_iter` looks converged. The adapter takes one more step of `K` and checks its largest change in c against `tol`.
 
 The lecture's assumption E u′(Y) < ∞ fails when ξ̲ = 0, as in the `library` member. So the lecture's theory does not
 cover that member, although the algorithm still runs on nodes.
@@ -107,8 +111,8 @@ cover that member, although the algorithm still runs on nodes.
   - the call, `solve_model`;
   - *decode*, from the rule σ to the results file. The adapter computes the population, the value and the conditions from
     the untilted laws.
-- **The evidence.** The recasting, checked by the HARK session on one member against BST's form and HARK's solution. No
-  adapter run yet.
+- **The evidence.** The recasting, checked by the HARK session on one calibration, HARK's defaults with ξ̲ = 0, against
+  BST's form and HARK's solution. No adapter run yet.
 
 ## Sources
 

@@ -1,6 +1,8 @@
 # QuantEcon's JAX code: a Rosetta Stone for bst/1, as cards in the field names of Project Bellman's Rosetta stone.
 # Draft, 2026-10-21. The toolkit's side only: the operator's side is Bellman's to fill. The recasting, the lexicon, the
-# reasons and the sources are in quantecon-jax.md.
+# reasons and the sources are in quantecon-jax.md. Values such as "!egm" are Bellman's method tags, quoted so that YAML
+# does not read them as tags; "on" is quoted because YAML 1.1 reads a bare on as true. The settings' shared names follow
+# numerics.md where it has them, and are provisional until the method registry is written.
 
 toolkit:
   package: "QuantEcon lecture code: The Income Fluctuation Problem V, Stochastic Returns on Assets"
@@ -16,37 +18,42 @@ handlers:
       - "solve_model(ifp, c_init, a_init)"
     target: policy
     scope: whole stage
-    method: time-iteration-by-endogenous-grid
-    covers:                  # what this whole-stage handler does with each part it covers
-      policy: fixes it inside
-      evaluate: "fixes it inside: jnp.interp, which holds c constant above the grid"
-      dcsn_to_arvl: "cannot take it as written: an equal-weight mean over draws; weighted nodes need the extension"
+    transition_alignment: model_locked      # a' = R'(a - c) + Y' is built into K
+    single_step: needs_wrapper              # solve_model iterates K to convergence
+    argument_map:
+      "crra": "γ"
+      "types[].beta": "β, as beta-tilde = beta L G^(1-rho) sum_i w_i psi_i^(1-rho)"
+      "survival": "β, through beta-tilde"
+      "income.growth": "β and R, through beta-tilde and R-hat"
+      "return": "R, as R-hat_i = R / (G psi_i), with the weights tilted by psi_i^(1-rho)"
+      "income.permanent_shock": "the nodes psi_i and their tilted weights"
+      "income.employed_shock": "Y's nodes, with the employed scale"
+      "income.unemployment.prob": "Y's nodes: the unemployment node's weight"
+      "income.unemployment.income": "Y's nodes: the unemployment node's value"
+      "borrowing_constraint": "0 only; below 0 the savings grid starts at the limit"
+    toolkit_settings_to_kwargs:
+      create_ifp: {grid_max: grid_max, grid_points: grid_size}
+      solve_model: {solution_tolerance: tol, max_iterations: max_iter}
+    interior_policy:                        # what this whole-stage handler does with each part it covers
+      evaluate: {status: fixed, reason: "jnp.interp, which holds c constant above the grid"}
+      dcsn_to_arvl: {status: requires_own_handler, reason: "an equal-weight mean over Monte Carlo draws; the member's nodes, unequally weighted after the tilt, need two weight vectors"}
+      cntn_to_dcsn.value: {status: absent}
+    s_transformations:
+      tilt-psi:
+        level: intra-stage
+        what: "psi's weights tilted by psi^(1-rho), with beta-tilde = beta L G^(1-rho) sum_i w_i psi_i^(1-rho) and R-hat_i = R / (G psi_i)"
+        exact_when: "psi' is independent of xi'; for the household's problem only, since the simulation and every expectation of m' use the untilted law"
     adapter_contract:
       status: not written
       encode:
-        argument_map:
-          "crra": "γ"
-          "types[].beta": "β, as beta-tilde = beta L G^(1-rho) sum_i w_i psi_i^(1-rho)"
-          "survival": "β, through beta-tilde"
-          "income.growth": "β and R, through beta-tilde and R-hat"
-          "return": "R, as R-hat_i = R / (G psi_i), with the weights tilted by psi_i^(1-rho)"
-          "income.permanent_shock": "the nodes psi_i and their tilted weights"
-          "income.employed_shock": "Y's nodes, with the employed scale"
-          "income.unemployment.prob": "Y's nodes: the unemployment node's weight"
-          "income.unemployment.income": "Y's nodes: the unemployment node's value"
-          "borrowing_constraint": "0 only; below 0 the savings grid starts at the limit"
-        toolkit_settings_to_kwargs:
-          grid_max: grid_max
-          grid_points: grid_size
-          tolerance: tol
-          max_iterations: max_iter
         beta:
           scope: "beta-tilde carries beta, L, G^(1-rho) and the tilt's normalization; nothing else applies them"
         R:
           representation: "R-hat at psi's nodes, with the tilted weights; the lecture's lognormal form serves an untruncated psi only"
-      neutralization: "the recasting: the lecture's law a' = R'(a - c) + Y' is bst/1's under R' = R/(G psi'), Y' = xi', with psi's law tilted by psi^(1-rho) for the household's problem only"
+      neutralization: "the recasting s_transformations.tilt-psi: the lecture's law a' = R'(a - c) + Y' is bst/1's under R' = R/(G psi') and Y' = xi'"
       decode:
         "c_out, a_out": {kind: primary, note: "the rule on the endogenous grid, one column per Markov state"}
+        convergence: {kind: derived, check: "solve_model returns no iteration count and no last change, so a run stopped by max_iter looks converged: the adapter takes one more step of K and checks its max |change in c| against tol"}
         value: {kind: derived, from: "an evaluation of v under the converged rule, by the adapter"}
         targets: {kind: derived, from: "the rule and the untilted laws"}
         conditions: {kind: derived, from: "the untilted laws"}
@@ -58,19 +65,20 @@ handlers:
         grid_size: {semantics: "the number of savings points, from 0, evenly spaced as written"}
         tol: {semantics: "the largest change in c between iterations at which the iteration stops", range: "> 0"}
         max_iter: {semantics: "the most iterations"}
+        shock_draw_size: {semantics: "the number of Monte Carlo draws of each innovation, as written; replaced by the member's nodes under the extension"}
 
-methods:                     # "on" is quoted: YAML 1.1 reads a bare on as true
-  - {"on": policy, method: time-iteration-by-endogenous-grid, handler: ifp_advanced.solve_model}
-  - {"on": evaluate, method: linear-interpolation, handler: ifp_advanced.solve_model}
-  - {"on": dcsn_to_arvl, method: "weighted nodes, by the extension", handler: adapter}
+methods:
+  - {"on": policy, method: time iteration by the endogenous grid method, method_tag: "!egm", settings: [solution_tolerance, max_iterations], handler: ifp_advanced.solve_model}
+  - {"on": evaluate, method: linear interpolation, settings: [grid_max, grid_points]}
+  - {"on": dcsn_to_arvl, method: "a sum over the member's nodes with their weights, by the extension", method_tag: "!sum", settings: [nodes_per_shock], handler: adapter}
   - {"on": cntn_to_dcsn.value, method: "policy evaluation, by the adapter", handler: adapter}
-  - {"on": arvl_to_dcsn, method: "the adapter's own lottery, with the untilted laws", handler: adapter}
+  - {"on": arvl_to_dcsn, method: "the adapter's own lottery, with the untilted laws", method_tag: "!histogram", settings: [histogram_points], handler: adapter}
   - {"on": population.distribution, method: "the adapter's own fixed point", handler: adapter}
   - {"on": diagnostics.expectation, method: "a finer quadrature of the stated laws than the household's", handler: adapter}
 
 evidence:
   source_walk: {read_at: "lecture-python.myst 96ede2993", by: "the HARK and HAFiscal-Latest sessions, and checked here", on: "2026-10-21"}
-  recasting: "checked by the HARK session on one member: the rules agree with BST's form to 1.3e-15 and the values to 1.2e-13"
+  recasting: "checked by the HARK session on one calibration, HARK's defaults with xi_min = 0 and the natural limit: the rules agree with BST's form to 1.3e-15 and the values to 1.2e-13"
   verify_results: none yet
   cross_toolkit: none yet
   correctness: none
