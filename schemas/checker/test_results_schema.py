@@ -11,14 +11,17 @@ import pytest
 
 SCHEMA = json.loads((Path(__file__).resolve().parent.parent / "bst-1" / "results.schema.json").read_text())
 PROBS = ["0.01", "0.05", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "0.95", "0.99", "0.999", "1"]
+QUANTILE_PROBS = PROBS[:-1]
 
 
 def gl_map(scale=1.0, undefined=()):
     return {p: (None if p in undefined else scale * float(p)) for p in PROBS}
 
 
-def distribution(undefined=()):
+def distribution(undefined=(), quantiles=False):
     block = {"gl": gl_map(undefined=undefined)}
+    if quantiles:
+        block["quantiles"] = {p: 2.0 * float(p) for p in QUANTILE_PROBS}
     if undefined:
         block["undefined"] = list(undefined)
     return block
@@ -26,7 +29,7 @@ def distribution(undefined=()):
 
 def population():
     return {
-        "m": distribution(), "a": distribution(), "c": distribution(),
+        "m": distribution(quantiles=True), "a": distribution(), "c": distribution(),
         "mean_c": {"status": "value", "value": 1.0},
         "mass_at_constraint": 0.15, "fraction_a_nonpositive": 0.15, "mean_mpc": 0.4,
         "mpc_by_a_quartile": [0.8, 0.4, 0.25, 0.15],
@@ -110,6 +113,9 @@ def test_optional_provenance_keys_validate():
     lambda d: d["types"][0]["welfare"].pop("mean_value"),
     lambda d: d["types"][0]["population"]["m"]["gl"].pop("0.5"),
     lambda d: d["types"][0]["population"]["m"]["gl"].update({"0.33": 0.1}),
+    lambda d: d["types"][0]["population"]["m"]["gl"].pop("1"),
+    lambda d: d["types"][0]["population"]["m"]["quantiles"].update({"1": 60.0}),
+    lambda d: d["types"][0]["population"]["m"]["quantiles"].pop("0.999"),
     lambda d: d["types"][0]["target"].update(status="maybe"),
     lambda d: d["types"][0]["population"].update(mean_c=1.0),
     lambda d: d.update(parameter_file_sha256="abc"),
