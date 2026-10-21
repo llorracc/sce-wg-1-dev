@@ -23,8 +23,8 @@ Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md). The toolkit is 
 | ℘, `income.unemployment.prob` | `UnempPrb` | `MixtureTranIncShk`: an unemployed node ξ̲ with probability ℘, and the employed nodes scaled by (1 − ℘ξ̲)/(1 − ℘), each with probability (1 − ℘)/N | none: this is `bst/1`'s ξ exactly |
 | ξ̲, `income.unemployment.income` | `IncUnemp` | a ratio to permanent income | none. Retirement's `UnempPrbRet` and `IncUnempRet` are off at `T_retire = 0` |
 | ψ and ξ jointly | `IncShkDstn` | the independent product; its atoms are ψ and ξ | — |
-| a̲_Art, `borrowing_constraint` | `BoroCnstArt`, or `None` for `natural` | a bound on end-of-period a. The constraint in force is the larger of `BoroCnstNat` and `BoroCnstArt` | `IndShockConsumerType`'s default is 0.0 |
-| a̲_Nat | `BoroCnstNat`, computed by HARK | from the lowest nodes, not from the laws' infima | this is the effective member's natural limit, and the results file reports it as such (`effective_member.derived.natural_limit`), with the constraint in force the larger of a̲_Art and it. The laws' own limit is tighter wherever the laws reach below their nodes, as with ξ̲ > 0 and a truncated ψ, or an untruncated ψ, whose limit is 0. An adapter could impose that limit through `BoroCnstArt`, but it would then solve a different effective member, and none does. Draft pull request econ-ark/HARK#1861 records a discretized law's true bounds with its nodes; nothing reads them yet |
+| a̲_Art, `borrowing_constraint` | `BoroCnstArt`, or `None` for `natural` | a bound on end-of-period a. The constraint in force is the larger of the natural limit and `BoroCnstArt` | `IndShockConsumerType`'s default is 0.0 |
+| a̲_Nat | none stored: HARK computes a natural limit only as a local variable, inside the solver and `calc_limiting_values` | from the lowest nodes, not from the laws' infima. Where the artificial constraint binds, the solver's local value is a one-period limit from it, not the natural limit | the adapter computes the effective member's natural limit itself, from the nodes' lowest values: −ξ̲κ/(1 − κ) with κ = 𝒢ψ_min/R. The results file reports it (`effective_member.derived.natural_limit`), with the constraint in force the larger of a̲_Art and it. `solution[0].mNrmMin` equals it only where no artificial constraint binds. The laws' own limit is tighter whenever ξ̲ > 0, since ψ's law reaches below its lowest node: for a truncated ψ it is set by ψ's lower bound, and for an untruncated ψ it is 0. An adapter could impose that limit through `BoroCnstArt`, but it would then solve a different effective member, and none does. Draft pull request econ-ark/HARK#1861 records a discretized law's true bounds with its nodes; nothing reads them yet |
 | the newborn: employed, P = 1, no assets, θ an employed draw | `kLogInitMean`, `kLogInitStd` and `kNrmInitCount`; `pLogInitMean`, `pLogInitStd` and `pLvlInitCount`; `NewbornTransShk` | on main, `simulate()`'s newborn draws ψ and grows, P₀ = P_init·𝒢ψ. It has θ = 1 unless `NewbornTransShk` is set, which draws from the whole mixture, unemployment included. The transition-matrix simulator's newborns draw (ψ, θ) and grow | see the note on the newborn below |
 
 **The newborn.**
@@ -61,7 +61,8 @@ Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md). The toolkit is 
     defaults.
   - The stage's `policy` block writes the maximization for the reader. Its operative line is the Euler equation with its
     complementarity clause, and HARK's endogenous grid method solves that relation.
-  - The stage's `max(a_Art, a_Nat)` is HARK's own: the larger of `BoroCnstArt` and `BoroCnstNat`.
+  - The stage's `max(a_Art, a_Nat)` is HARK's own: the larger of `BoroCnstArt` and the natural limit it computes from the
+    nodes.
 - **The grid:** `aXtraGrid`, end-of-period assets above the natural limit, nested multi-exponentially. Its settings are
   `aXtraMin` (by default 0.001), `aXtraMax` (20), `aXtraCount` (48), `aXtraNestFac` (3) and `aXtraExtra`.
 - **The interpolation:** linear, or cubic with `CubicBool`. `vFuncBool` keeps the value function.
@@ -92,7 +93,8 @@ published is the owner's decision. In this stone's terms:
   - After the solve it asserts three things: that `IncShkDstn` is unchanged; that both marginals are the laws' unique
     nodes, with probabilities summed as HARK sums them; and that HARK's `mNrmMin` equals the effective member's
     constraint in force, to 10⁻⁹.
-  - HARK's `cFunc` and `vFunc` are read. The natural limit reported is HARK's, from the nodes.
+  - HARK's `cFunc` and `vFunc` are read. The natural limit reported is the emitter's own, computed from the nodes' lowest
+    values by the closed form above, which is also HARK's.
   - The targets and the conditions come from the laws' nodes, and the Euler residuals from the emitter's own quadrature
     of the stated laws.
   - The stationary population is computed outside HARK, by a linear lottery on an asset grid, with a node at an artificial
@@ -109,10 +111,10 @@ published is the owner's decision. In this stone's terms:
 
 ## The evidence
 
-- **Verified files.** The emitter's seven results files of 2026-10-20 validate and pass `check.py --verify-results`. They
-  cover the first two levels of the three members and the toy's third ([the emitter's
-  ladder](../records/findings/2026-10-20_emitter-ladder.md)). The toy's fourth level will be the eighth, once its rerun
-  ends.
+- **Verified files.** The emitter's eight results files validate and pass `check.py --verify-results`: the first two levels
+  of the three members and the toy's third, written on 2026-10-20 ([the emitter's
+  ladder](../records/findings/2026-10-20_emitter-ladder.md)), and the toy's fourth, with the population block, rerun on
+  2026-10-21.
 - **A second HARK implementation** of the same model is in QuantEcon's community library of baseline models, at
   `solutions/buffer-stock/001-hark-egm/`. QuantEcon/community-library#5 added it as `projects/HARK/buffer-stock/`, and
   #15 moved it there. It uses HARK alone, at `econ-ark` 0.17.1. Its checks include an independent endogenous-grid solver

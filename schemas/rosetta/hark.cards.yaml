@@ -57,7 +57,7 @@ handlers:
         cFunc: {kind: primary}
         vFunc: {kind: primary, needs: vFuncBool, check: "finite at the request points, and in agreement with a policy evaluation under cFunc"}
         mNrmMin: {kind: primary, check: "equal to the effective member's constraint in force, to 1e-9"}
-        natural_limit: {kind: primary, from: "BoroCnstNat, from the nodes' lowest values", reported_as: effective_member.derived.natural_limit}
+        natural_limit: {kind: derived, from: "the nodes' lowest values, as -xi_min kappa / (1 - kappa) with kappa = G psi_min / R; HARK stores no natural limit, and mNrmMin equals it only where no artificial constraint binds", reported_as: effective_member.derived.natural_limit}
         targets: {kind: derived, from: "the rule and the laws' nodes"}
         conditions: {kind: derived, from: "the laws' nodes"}
         population: {kind: derived, from: "the rule, by the adapter's own lottery"}
@@ -87,7 +87,7 @@ evidence:
   source_walk: {read_at: "HARK main 4c285e86", on: "2026-10-21"}
   output_checks: "the emitter asserts that IncShkDstn is unchanged, that both marginals are the laws' unique nodes, and that the constraint in force is the effective member's"
   residual_checks: "the Euler residuals reported in each results file"
-  verify_results: "the emitter's seven files of 2026-10-20 pass check.py --verify-results"
+  verify_results: "the emitter's eight files pass check.py --verify-results: seven of 2026-10-20, and the toy's fourth level, rerun on 2026-10-21"
   cross_toolkit: none yet
   correctness: none
 
