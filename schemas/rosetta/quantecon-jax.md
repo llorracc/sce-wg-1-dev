@@ -28,11 +28,11 @@ member's nodes ψᵢ and weights wᵢ:
 - ξ's nodes and weights are unchanged, since ξ is independent of ψ.
 
 Then v(m) = max_c {u(c) + β̃ Ẽ[v(m′)]}, the lecture's form, holds exactly. So does the Euler equation:
-β̃Ẽ[R̂u′(c′)] = βℒR𝒢^(−ρ)E[ψ^(−ρ)u′(c′)]. The HARK session solved one calibration both ways, on the same nodes and the
-same grid: HARK's defaults with ξ̲ = 0 and the natural limit, on 200 grid points up to 40, not a `bst/1` member. The rules
+β̃Ẽ[R̂u′(c′)] = βℒR𝒢^(−ρ)E[ψ^(−ρ)u′(c′)]. The household's problem was solved both ways for one calibration, with HARK's code at `4c285e86`, on the
+same nodes and the same grid: HARK's defaults with ξ̲ = 0 and the natural limit, on 200 grid points up to 40, not a `bst/1` member. The rules
 agree to 1.3·10⁻¹⁵ and the values to 1.2·10⁻¹³.
 
-**An equivalent change of the code, suggested by Matsya.** Keep the untilted law and R̂ = R/(𝒢ψ′). In `K`'s integrand,
+**An equivalent change of the code.** Keep the untilted law and R̂ = R/(𝒢ψ′). In `K`'s integrand,
 return R̂^ρ·u′(c′) in place of R̂·u′(c′), and replace β by βℒR^(1−ρ). This is the same Euler equation, since
 R̂(𝒢ψ′)^(1−ρ) = R^(1−ρ)R̂^ρ. The tilt is preferred: it leaves the lecture's operator as written, and needs only the weighted
 nodes that the unemployment node needs anyway.
@@ -69,7 +69,7 @@ Three cautions:
 
 ## What the code needs, beyond the recasting
 
-These come from the HARK and HAFiscal-Latest sessions' readings of the lecture's code, checked here against its source.
+Each was read in the lecture's code at `96ede2993` and checked against its source.
 1. **Weighted nodes.** `K` averages with `jnp.mean` over the product of 100 draws of η and 100 of ζ. Equal-weight draws
    from the tilted law could carry the tilt, but equal weights cannot carry the member's own nodes once the tilt has made
    their weights unequal, nor in general the unemployment node's ℘. Two weight vectors replace the mean.
@@ -111,13 +111,12 @@ cover that member, although the algorithm still runs on nodes.
   - the call, `solve_model`;
   - *decode*, from the rule σ to the results file. The adapter computes the population, the value and the conditions from
     the untilted laws.
-- **The evidence.** The recasting, checked by the HARK session on one calibration, HARK's defaults with ξ̲ = 0, against
-  BST's form and HARK's solution. No adapter run yet.
+- **The evidence.** The recasting, checked on one calibration, HARK's defaults with ξ̲ = 0, against BST's form and HARK's
+  solution. No adapter run yet.
 
 ## Sources
 
 - The lecture's source, `lectures/ifp_advanced.md` at `96ede2993`.
 - Ma, Stachurski and Toda (2020), *The income fluctuation problem and the evolution of wealth*, for the lecture's
   conditions.
-- The HARK session's and the HAFiscal-Latest session's readings of the code, on 2026-10-21, and the HARK session's check of
-  the recasting.
+- The check of the recasting, on 2026-10-21, with HARK's code at `4c285e86`.

@@ -59,14 +59,14 @@ A stone records no run times or speeds ([the memory on timings](../records/memor
       → the comparison of the files, at the request file's points
 
 Written so far: the stage file, the parameter and results schemas, and the checker. Not yet written:
-- the adapters, though HARK's exists as the HAFiscal-Latest session's emitter, private for now;
+- the adapters, though HARK's exists as the buffer-stock benchmark's emitter, which is not yet public;
 - the validators for the method, settings and request files ([`numerics.md`](../numerics.md));
 - the comparison.
 
 ## Comparing two toolkits
 
-These rules come from the HAFiscal-Latest session, which compared its emitter's versions number by number, from the HARK
-session, and from Matsya, asked on 2026-10-21.
+These rules come from comparing successive versions of one emitter's results files number by number, and from the
+reviews of this draft.
 - **The effective members are compared first,** once the two files' parameter-file hashes are found equal. That means
   their expectations, their lowest values, the derived parameters and every condition's factor and verdict.
   - Two toolkits whose effective members fall on opposite sides of a condition report a difference of regime, not of

@@ -1,8 +1,8 @@
 # HARK's Rosetta Stone for `bst/1`
 
 Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md). The toolkit is HARK's `IndShockConsumerType`.
-- **Where it was read.** What follows was read on HARK's main branch at commit `4c285e86`, of 2026-10-07, by the HARK
-  session, unless a draft pull request is named.
+- **Where it was read.** What follows was read on HARK's main branch at commit `4c285e86`, of 2026-10-07, unless a draft
+  pull request is named. The figures for HARK's defaults were computed with that code.
 - **The cards** are in [`hark.cards.yaml`](hark.cards.yaml).
 
 ## The lexicon
@@ -75,8 +75,8 @@ Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md). The toolkit is 
 
 ## The adapter
 
-The adapter in use is the HAFiscal-Latest session's emitter of results files, in the buffer-stock benchmark. It is private
-for now; whether it is published is the owner's decision. In this stone's terms:
+The adapter in use is the buffer-stock benchmark's emitter of results files, which is not yet public; whether it is
+published is the owner's decision. In this stone's terms:
 - **Encode.** The lexicon's names, with HARK's own income inputs left as placeholders. `IncShkDstn` is replaced by the
   laws' nodes, and then `construct("PermShkDstn", "TranShkDstn")` is called. The settings it passes are its own, not
   HARK's defaults:
@@ -122,8 +122,7 @@ for now; whether it is published is the owner's decision. In this stone's terms:
 
 ## Sources
 
-- **HARK itself:** its main branch at `4c285e86`, read by the HARK session, and the drafts econ-ark/HARK#1859, #1860 and
-  #1861.
+- **HARK itself:** its main branch at `4c285e86`, and the drafts econ-ark/HARK#1859, #1860 and #1861.
 - **HARK's names:** NARK (econ-ark/NARK), the naming conventions that left HARK's repository in 2024. It maps HARK's code
   names to LaTeX macros.
 - **A notation registry.** econ-ark/econ-ark-tools has one, `notation.yml` v0.6.0, which glosses some symbols with HARK's

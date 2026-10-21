@@ -45,7 +45,7 @@ handlers:
       dcsn_to_arvl: {status: honours, via: IncShkDstn, reason: "the expectation is a sum over the nodes the adapter supplies"}
       cntn_to_dcsn.value: {status: honours, via: vFuncBool}
     adapter_contract:
-      status: in use, as the HAFiscal-Latest session's emitter, private for now
+      status: in use, as the buffer-stock benchmark's emitter, not yet public
       encode:
         IncShkDstn:
           representation: "a DiscreteDistributionLabeled over PermShk and TranShk: the independent product of the nodes of psi and of xi, the unemployment node among xi's"
@@ -84,7 +84,7 @@ methods:
   - {"on": diagnostics.expectation, method: "Gauss-Legendre in logs of the stated laws, split at the rule's kink", handler: adapter}
 
 evidence:
-  source_walk: {read_at: "HARK main 4c285e86", by: the HARK session, on: "2026-10-21"}
+  source_walk: {read_at: "HARK main 4c285e86", on: "2026-10-21"}
   output_checks: "the emitter asserts that IncShkDstn is unchanged, that both marginals are the laws' unique nodes, and that the constraint in force is the effective member's"
   residual_checks: "the Euler residuals reported in each results file"
   verify_results: "the emitter's seven files of 2026-10-20 pass check.py --verify-results"
