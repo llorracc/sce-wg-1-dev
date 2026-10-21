@@ -103,8 +103,8 @@ distribution is.
 of m or a, the mass `top_mass` that the representation puts at or above it, and `beyond_top`, what the representation does
 with the mass the dynamics send beyond `top`:
 - `clipped`: a grid that puts that mass on its highest point, `top`. `top_mass` is the mass held there. In a lottery it also
-  holds part of the last cell's mass, so it is an upper bound on the mass beyond `top`: it measures how much the top binds,
-  not the model's mass above `top`.
+  holds part of the last cell's mass, so it is an upper bound on the mass the dynamics send beyond `top` each period: it
+  measures how much the top binds, not the model's mass above `top`.
 - `dropped`: a grid that drops that mass and renormalizes. `top_mass` is the mass dropped each period.
 - `kept`: a simulation, which loses nothing. `top` is a point the toolkit states, `top_mass` the sample's share at or above
   it, and `sample_size` the number of agent-periods pooled. A share of zero means only that the mass is below about
@@ -114,8 +114,8 @@ An optional list `tail` gives points below `top`, ascending, each with the mass 
 mass falls as x^(−α), so mass on the top far above what the tail's points extrapolate to is piling up there. With a tail
 exponent α > 1, which the checker's report gives for each type, a clipped representation misses about
 `top` · `top_mass`/(α − 1) of the mean; at α ≤ 1 the mean is infinite, as the domain rules say. When `top_mass` is well
-below 0.001, Q(0.999) and GL(0.999) lie below the top. In the pooled blocks the coverage is given only when the types
-share a top, with share-weighted masses.
+below 0.001, Q(0.999) lies below the top, so neither it nor GL(0.999) reads the mass held there. In the pooled blocks
+the coverage is given only when the types share a top, with share-weighted masses.
 
 Why generalized Lorenz ordinates:
 - They are defined whatever the distribution's mass points and gaps.
