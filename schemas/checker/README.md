@@ -40,8 +40,8 @@ tags or merge keys, no repeated keys, no booleans, no infinities.
 
 - The types' shares sum to one, within 10⁻¹².
 - The types are in strictly increasing order of β, so that a member has one written form.
-- With an unemployment probability ℘ of zero, the unemployment income μ is zero, for the same reason.
-- ℘μ < 1, so that employed income is positive.
+- With an unemployment probability ℘ of zero, the unemployment income ξ_U is zero, for the same reason.
+- ℘ξ_U < 1, so that employed income is positive.
 - The artificial borrowing constraint `a_Art`, a number no greater than zero or the word `natural`, is no lower than the natural
   constraint `a_Nat` = −`ξ_min` κ/(1 − κ), with κ = `ψ_min` 𝒢/R; a looser one never binds and would describe the same model.
 - Each law passes its own rules.

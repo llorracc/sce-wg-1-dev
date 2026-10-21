@@ -2,7 +2,7 @@
 and the verification of a results file against the member it reports on.
 
 The statements follow bst-1/conditions.md, in BST's notation: psi the permanent shock, xi the transitory shock, theta the
-employed draw, wp the unemployment probability, mu the unemployment income, L survival, G growth, a_Art and a_Nat the
+employed draw, wp the unemployment probability, xi_U the unemployment income, L survival, G growth, a_Art and a_Nat the
 artificial and natural borrowing constraints. What is computed here is computed for the STATED member, the one the parameter
 file names, from the laws' closed-form moments; it is the limit that a toolkit's effective member approaches, and nothing
 here discretizes a shock. A results file reports the toolkit's effective member through the expectations the family names,
@@ -120,13 +120,13 @@ class Member:
         income = data["income"]
         self.G = income["growth"]
         self.wp = income["unemployment"]["prob"]
-        self.mu = income["unemployment"]["income"]
+        self.xi_U = income["unemployment"]["income"]
         self.psi = law_from_mapping(income["permanent_shock"])
         self.theta = law_from_mapping(income["employed_shock"])
-        # The employed draw's scale, which keeps the mean of the transitory shock at one; it needs wp * mu < 1.
+        # The employed draw's scale, which keeps the mean of the transitory shock at one; it needs wp * xi_U < 1.
         self.employed_scale = None
-        if self.wp * self.mu < 1:
-            self.employed_scale = (1 - self.wp * self.mu) / (1 - self.wp)
+        if self.wp * self.xi_U < 1:
+            self.employed_scale = (1 - self.wp * self.xi_U) / (1 - self.wp)
         self.a_art = data["borrowing_constraint"]
         problems = self._check()
         if problems:
@@ -134,8 +134,8 @@ class Member:
 
     @property
     def xi_min(self):
-        """The unemployment income mu under its former name, for readers of this module that still use it."""
-        return self.mu
+        """The unemployment income xi_U under its former name, for readers of this module that still use it."""
+        return self.xi_U
 
     def _check(self) -> list[str]:
         problems = []
@@ -145,7 +145,7 @@ class Member:
         betas = [t["beta"] for t in self.types]
         if any(b <= a for a, b in zip(betas, betas[1:])):
             problems.append("types: betas must be strictly increasing, so that the file has one written form")
-        if self.wp == 0 and self.mu != 0:
+        if self.wp == 0 and self.xi_U != 0:
             problems.append("income/unemployment: with prob 0, income must be 0")
         if self.employed_scale is None:
             problems.append("income/unemployment: prob times income must be below 1, or the employed earn nothing")
@@ -164,17 +164,17 @@ class Member:
                             "a looser artificial constraint never binds, so write the natural one or 'natural'")
         return problems
 
-    # The transitory shock xi: mu with probability wp, else the scaled employed draw.
+    # The transitory shock xi: xi_U with probability wp, else the scaled employed draw.
 
     def xi_infimum(self) -> float:
         employed_low = self.employed_scale * self.theta.infimum
-        return min(self.mu, employed_low) if self.wp > 0 else employed_low
+        return min(self.xi_U, employed_low) if self.wp > 0 else employed_low
 
     def xi_mass_at_infimum(self) -> float:
         low = self.xi_infimum()
         employed_low = self.employed_scale * self.theta.infimum
         mass = 0.0
-        if self.wp > 0 and self.mu == low:
+        if self.wp > 0 and self.xi_U == low:
             mass += self.wp
         if employed_low == low:
             mass += (1 - self.wp) * self.theta.mass_at_infimum
@@ -182,7 +182,7 @@ class Member:
 
     def worst_income_probability(self) -> float:
         """p_min, the probability that income takes its lowest value; BST's wp when the unemployment event pays nothing."""
-        if self.wp > 0 and self.mu == 0:
+        if self.wp > 0 and self.xi_U == 0:
             return self.wp
         return self.xi_mass_at_infimum() * self.psi.mass_at_infimum
 
@@ -198,7 +198,7 @@ class Member:
     def xi_floor_kind(self) -> str:
         """How the transitory shock behaves at its lowest value: the unemployment atom, or the employed draw's floor."""
         employed_low = self.employed_scale * self.theta.infimum
-        if self.wp > 0 and self.mu <= employed_low:
+        if self.wp > 0 and self.xi_U <= employed_low:
             return FLOOR_ATOM
         return self.theta.floor_kind
 
@@ -421,7 +421,7 @@ class Member:
             problems.append("effective_member/derived/worst_income: not the product of the reported lowest values")
         if not _close(der["employed_scale"], self.employed_scale):
             problems.append(f"effective_member/derived/employed_scale: {der['employed_scale']!r} is not the family's "
-                            f"(1 - wp mu)/(1 - wp) = {self.employed_scale!r}")
+                            f"(1 - wp xi_U)/(1 - wp) = {self.employed_scale!r}")
 
         # The expectations obey what every law obeys, by Jensen, up to the reported mean.
         expectation_blocks = [("effective_member/expectations", E)]
@@ -531,7 +531,7 @@ class Member:
             "β": self.types[type_index]["beta"], "ℒ": self.L, "ρ": self.rho, "R": self.R, "𝒢": self.G,
             "a_Art": self.a_art, "a_Nat": a_nat,
             "σ_ψ": self.psi.params["sd_log"], "σ_θ": self.theta.params["sd_log"],
-            "p_zero": self.wp, "μ": self.mu,
+            "p_zero": self.wp, "ξ_U": self.xi_U,
         }
 
     def bellman_calibration_yaml(self, type_index: int = 0) -> str:

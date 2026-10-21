@@ -78,8 +78,8 @@ Two Markov states are drawn each quarter, the regime first.
   `continues` is the family's standard: it is the model the paper's text states, and it is the only value under which
   permanent income follows one law in every state and so is independent of the employment state. `grows` is the world of
   the paper's corrected code; `frozen` reproduces the published numbers.
-- **Transitory income** is ξ_t 𝐩_t with ξ_t set by the state: e θ_t when employed, ξ_U in U_2 and U_1, ξ_X in X, where θ is
-  a positive shock with E[θ] = 1. So E[ξ | employed] = e, and employed income is not rescaled for the unemployment
+- **Transitory income** is ξ_t 𝐩_t with ξ_t set by the state: e θ_t when employed, ξ_U in U_2 and U_1, ξ_X in X, where θ
+  is a positive shock with E[θ] = 1. So E[ξ | employed] = e, and employed income is not rescaled for the unemployment
   probability, as it is in `bst/1`.
 - ψ and θ are independent of each other, of the chains, over time and across households; θ is drawn every quarter and used
   only when employed. Their laws are parameters, each one of the [shock laws](../shock-laws.md), common to all groups; the
@@ -130,9 +130,9 @@ and every MPC the [results](results.md) report says which definition it uses.
 ## Parameter domains
 
 β_i > 0 (the validity conditions bound it above); shares positive and summing to one within each group and across groups;
-ρ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0 for each group; e > 0; ξ_U > 0 and ξ_X > 0; π_eu and π_ue in [0, 1] for each regime; h_x in
-[0, 1]; 0 ≤ ς < 1; `a_Art` ≤ 0 and above the lowest `a_Nat(z)`, or `natural`; the newborn's level law has a positive mean and a standard deviation of the log that
-may be zero.
+ρ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0 for each group; e > 0; ξ_U > 0 and ξ_X > 0; π_eu and π_ue in [0, 1] for each regime; h_x
+in [0, 1]; 0 ≤ ς < 1; `a_Art` ≤ 0 and above the lowest `a_Nat(z)`, or `natural`; the newborn's level law has a positive
+mean and a standard deviation of the log that may be zero.
 
 ## The household's problem, as the stage file states it
 
@@ -143,11 +143,11 @@ quarter's value and `[<]` this quarter's arrival value. A selector `(…)[z]` or
 - **Sets and parameters.** m ∈ ℝ; a ∈ [`a_min`, ∞) with `a_min` = max(`a_Art`, `a_Nat`), one limit for every state, which is exact for the file's lognormal
   laws, under which every state's limit is zero, while a stage file with bounded laws needs the per-state limits of
   [conditions](conditions.md); z ∈ Z = {E, U_2, U_1, X}; r ∈ {normal, recession};
-  P_u ∈ {continues, grows, frozen}; the parameters β, ℒ, ρ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, e, ξ_U, ξ_X, h_x, π_eu and π_ue by
-  regime, with the domains above. The file writes one law family, the lognormal, for ψ and θ; the family allows any of the
-  shock laws, and a member with another law needs a stage file written with that law's family: a discrete law can be
-  written today as a mixture of point masses, while the truncated lognormal, the uniform and the tabulated law have no
-  family in Bellman-SYM yet, the truncated lognormal's being planned.
+  P_u ∈ {continues, grows, frozen}; the parameters β, ℒ, ρ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, e, ξ_U, ξ_X, h_x, π_eu and
+  π_ue by regime, with the domains above. The file writes one law family, the lognormal, for ψ and θ; the family allows
+  any of the shock laws, and a member with another law needs a stage file written with that law's family: a discrete law
+  can be written today as a mixture of point masses, while the truncated lognormal, the uniform and the tabulated law
+  have no family in Bellman-SYM yet, the truncated lognormal's being planned.
 - **Shocks.** r ~ Categorical over the row of r_prev; z ~ Categorical over the row of z_prev with the probabilities of r;
   ψ ~ LogNormal(−σ²/2, σ) with σ = σ_ψ when employed, and in a quarter of unemployment σ_ψ under `continues` and 0 otherwise;
   θ ~ LogNormal(−σ_θ²/2, σ_θ), drawn but unused when unemployed.
@@ -298,7 +298,8 @@ dropout group's steady-state unemployment rate roughly doubles, as the paper sta
 
 One group with the `bst/1` types and `growth` = 𝒢; `job_loss` = ℘ and `job_finding` = 1 − ℘ in both regimes, so that the
 chain is unemployment with probability ℘ every quarter whatever the previous state; `income_with_benefits` =
-`income_without_benefits` = μ; `income_employed` = (1 − ℘μ)/(1 − ℘); `splurge` 0; `unemployed_permanent_income`
-`continues`; any `benefit_quarters`; `newborn_income: {mean: 1.0, sd_log: 0.0}`; and the recession's exit hazard irrelevant,
-since its parameters equal the normal ones. The two families then produce the same rule and the same stationary population
-exactly, the newborn convention being the same. That cross-family consistency test belongs in the suite.
+`income_without_benefits` = the `bst/1` member's ξ_U; `income_employed` = (1 − ℘ξ_U)/(1 − ℘); `splurge` 0;
+`unemployed_permanent_income` `continues`; any `benefit_quarters`; `newborn_income: {mean: 1.0, sd_log: 0.0}`; and the
+recession's exit hazard irrelevant, since its parameters equal the normal ones. The two families then produce the same
+rule and the same stationary population exactly, the newborn convention being the same. That cross-family consistency
+test belongs in the suite.

@@ -3,7 +3,7 @@
 # schemas/bst-1/model.md). Revised by hand on 2026-10-18. The family
 # requires ρ > 1, as Buffer Stock Theory does; log utility is outside it.
 # ξ is transitory income and θ the mean-one employed draw. Unemployment is a
-# Bernoulli label e, so that μ = 0 needs no point mass. The constraint in
+# Bernoulli label e, so that ξ_U = 0 needs no point mass. The constraint in
 # force is a ≥ max(a_Art, a_Nat), stated in the set Xa, the feasible set and
 # the complementarity clause on the Euler equation. a_Nat is determined by the
 # laws and is supplied with the calibration. Survivors only: newborns, types
@@ -25,7 +25,7 @@ a_Nat : (-inf, 0]    :: ["natural borrowing limit a_Nat, as a ratio to permanent
 σ_ψ   : ℝ₊₊          :: ["standard deviation of log ψ"]
 σ_θ   : ℝ₊₊          :: ["standard deviation of log θ"]
 p_zero : [0,1)       :: ["probability ℘ of unemployment"]
-μ     : ℝ₊           :: ["income μ while unemployed, as a ratio to permanent income; the lowest value of ξ only when no employed value is lower; requires p_zero*μ < 1"]
+ξ_U   : ℝ₊           :: ["income ξ_U while unemployed, as a ratio to permanent income; the lowest value of ξ only when no employed value is lower; requires p_zero*ξ_U < 1"]
 
 ψ : ℝ₊₊
 ψ ~ LogNormal(-(σ_ψ^2)/2, σ_ψ)   :: ["permanent shock, E[ψ] = 1"]
@@ -40,7 +40,7 @@ e ~ Bernoulli(p_zero)            :: ["unemployment event: unemp with probability
 𝒞(x : Xm) := (0, x - max(a_Art, a_Nat)]   :: [id=feasible]
 
 [id=arvl_to_dcsn, (k : Xa, ψ, θ, e) : !arvl -> (m : Xm) : !dcsn] {
-    ξ = (θ*(1 - p_zero*μ)/(1 - p_zero), μ)[e]   :: [id=transitory_income, "ξ = μ when unemployed, else θ(1 - ℘μ)/(1 - ℘), so E[ξ] = 1"]
+    ξ = (θ*(1 - p_zero*ξ_U)/(1 - p_zero), ξ_U)[e]   :: [id=transitory_income, "ξ = ξ_U when unemployed, else θ(1 - ℘ξ_U)/(1 - ℘), so E[ξ] = 1"]
     m = R*k/(𝒢*ψ) + ξ                                   :: [id=market_resources, "a survivor's resources; k is last period's a"]
 }
 
