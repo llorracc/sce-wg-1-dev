@@ -28,12 +28,12 @@
     },
     "provenance": {
       "type": "object",
-      "required": ["hardware", "threads", "wall_seconds"],
+      "description": "Where the file was computed. No run time: a results file describes a solution, and the files of different toolkits are read side by side.",
+      "required": ["hardware", "threads"],
       "additionalProperties": false,
       "properties": {
         "hardware": { "type": "string" },
         "threads": { "type": "integer", "minimum": 1 },
-        "wall_seconds": { "type": "number", "minimum": 0 },
         "method_file": { "type": "string", "description": "The path of the method file whose hash is recorded." },
         "settings_file": { "type": "string" },
         "request_file": { "type": "string" },
