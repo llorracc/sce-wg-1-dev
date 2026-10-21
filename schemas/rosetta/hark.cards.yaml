@@ -57,7 +57,7 @@ handlers:
         cFunc: {kind: primary}
         vFunc: {kind: primary, needs: vFuncBool, check: "finite at the request points, and in agreement with a policy evaluation under cFunc"}
         mNrmMin: {kind: primary, check: "equal to the effective member's constraint in force, to 1e-9"}
-        natural_limit: {kind: derived, from: "the nodes' lowest values, as -xi_min kappa / (1 - kappa) with kappa = G psi_min / R; HARK stores no natural limit, and mNrmMin equals it only where no artificial constraint binds", reported_as: effective_member.derived.natural_limit}
+        natural_limit: {kind: derived, from: "the nodes' lowest values, as -xi_min kappa / (1 - kappa) with kappa = G psi_min / R, where xi_min is the lowest node of xi, the worst income, and psi_min the lowest node of psi; HARK stores no natural limit, and mNrmMin equals it only where no artificial constraint binds", reported_as: effective_member.derived.natural_limit}
         targets: {kind: derived, from: "the rule and the laws' nodes"}
         conditions: {kind: derived, from: "the laws' nodes"}
         population: {kind: derived, from: "the rule, by the adapter's own lottery"}
