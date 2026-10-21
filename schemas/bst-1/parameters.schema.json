@@ -68,13 +68,13 @@
               "type": "number", "minimum": 0, "exclusiveMaximum": 1
             },
             "income": {
-              "description": "xi_min, the transitory shock's value in the unemployment event: income while unemployed as a ratio to permanent income; 0 in BST.",
+              "description": "mu, income while unemployed, as a ratio to permanent income; 0 in BST, where it is also the lowest value of the transitory shock xi.",
               "type": "number", "minimum": 0
             }
           }
         },
         "employed_shock": {
-          "description": "The law of theta, the employed draw, before the scaling (1 - wp xi_min)/(1 - wp) that keeps the mean of the transitory shock at one.",
+          "description": "The law of theta, the employed draw, before the scaling (1 - wp mu)/(1 - wp) that keeps the mean of the transitory shock at one.",
           "$ref": "../shock-laws.schema.json"
         }
       }

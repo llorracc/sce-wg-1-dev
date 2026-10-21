@@ -69,7 +69,7 @@ income ratio:
 
 The MPC out of a transitory income gain is then ς + (1 − ς) c̃′(m̃), and the paper's lottery MPCs include the splurge's share.
 Every MPC in the results must say which definition it uses. The parameter file's `borrowing_constraint` is in the household's
-units, a bound on a; the optimizer's limit is then a̲/(1 − ς), the map's consequence. The public code applies its zero limit
+units, a bound on a; the optimizer's limit is then `a_min`/(1 − ς), the map's consequence. The public code applies its zero limit
 inside the optimizer, where zero reads the same either way, so this only makes explicit what the code left implicit.
 
 **Numerics in the published code** (settings, not model): an end-of-period asset grid of 48 points from 0.001 to 40 above the
@@ -116,7 +116,7 @@ member:
 | R, ρ | 1.01, 2 | the same |
 | growth | one 𝒢 = 1.0019026 | Γ by group |
 | unemployment | i.i.d. each quarter with probability 0.044, income 0.7 𝐩 | the chain with benefit duration and exhaustion |
-| employed income | θ (1 − ℘ξ̲)/(1 − ℘), so E[ξ] = 1 | θ, no rescaling |
+| employed income | θ (1 − ℘μ)/(1 − ℘), so E[ξ] = 1 | θ, no rescaling |
 | shocks | the 7-point atoms of lognormals with log variances 0.003 and 0.12, declared as the model | 7-point discretizations, as numerics |
 | splurge | none | ς |
 | newborn | 𝐩 = 1, a = 0, born employed: its first draw is the employed branch of ξ; the benchmark's own specification follows since 2026-10-18 | the same, with 𝐩 drawn from the group's level law (decided 2026-10-18) |
@@ -166,7 +166,7 @@ income:
 ```
 
 The atoms are copied from `atoms_base.json` at full precision, with the employed atoms divided by the rescaling factor
-(1 − ℘ξ̲)/(1 − ℘), since `bst/1` applies that factor itself. The checker then verifies that each law's mean is one.
+(1 − ℘μ)/(1 − ℘), since `bst/1` applies that factor itself. The checker then verifies that each law's mean is one.
 
 The second form is the true model, with continuous laws. Chris decided on 2026-10-18 that the toy's true model is the
 truncated one, at ±3 standard deviations with the stated standard deviation kept, the convention HAFiscal's own shocks
@@ -206,7 +206,7 @@ version that would also state the household's belief rule about the aggregate.
    probability are given per regime. The stationary population is computed in the normal regime; the recession regime's rule
    is part of every member's solution, so the recession experiment is the onset alone.
 
-**The convention change:** employed income is e θ 𝐩 with e a parameter, 1 in the paper. `bst/1` fixes e = (1 − ℘ξ̲)/(1 − ℘)
+**The convention change:** employed income is e θ 𝐩 with e a parameter, 1 in the paper. `bst/1` fixes e = (1 − ℘μ)/(1 − ℘)
 so that E[ξ] = 1. Making e explicit is what lets a `bst/1` member be written as a `bst-markov_ui-and-agg/1` member exactly (below).
 
 **Conventions the paper leaves open, and how the family fixes them** (the HAFiscal session checked the code):
@@ -297,7 +297,7 @@ same file with `TruncatedLogNormal` laws at ±3 is the truncated variant the sho
 
 **A `bst/1` member as a `bst-markov_ui-and-agg/1` member.** One group with the `bst/1` types; `growth` = 𝒢; `job_loss` = ℘ and
 `job_finding` = 1 − ℘, so that the chain is i.i.d. with unemployment probability ℘ every quarter; `income_with_benefits` =
-`income_without_benefits` = ξ̲; `income_employed` = (1 − ℘ξ̲)/(1 − ℘); `splurge` = 0; `unemployed_permanent_income` =
+`income_without_benefits` = μ; `income_employed` = (1 − ℘μ)/(1 − ℘); `splurge` = 0; `unemployed_permanent_income` =
 `continues`, since `bst/1` draws ψ every quarter; any `benefit_quarters`; and one regime, the normal one, with the recession's
 parameters equal to the normal ones. The two families must then produce the same rule and, since this family's newborn follows `bst/1`'s convention, the same
 stationary distribution, exactly. That is a cross-family consistency test the suite should run, and it is the test that the
@@ -306,9 +306,9 @@ Markov machinery reduces correctly.
 **Conditions.** The conditions of `bst-1/conditions.md` carry over with 𝒢 = Γ, the group's growth factor, since the chain
 touches only transitory income and the permanent shock is unchanged. Two differences:
 - The worst income is the lesser of the exhaustion income and the lowest employed income, times the lowest ψ: zero with an
-  untruncated law, so a̲_Nat = 0 for every member with lognormal laws; with truncated laws it is positive and depends on the
+  untruncated law, so `a_Nat` = 0 for every member with lognormal laws; with truncated laws it is positive and depends on the
   switch for permanent income while unemployed; the constraint in force is then computed state by state, as the
-  family's conditions document states. A continuous law puts no mass at its infimum, so p̲ = 0 and the WRIC reduces
+  family's conditions document states. A continuous law puts no mass at its infimum, so `p_worst` = 0 and the WRIC reduces
   to the RIC. (Corrected on 2026-10-18 from "ρ_nb P > 0", which holds only when the employed income cannot fall below it.)
 - The paper's estimation imposes the GIC on every type, with an upper bound β^GIC per group; the checker computes that bound
   from the parameter file, so the suite can verify that every estimated β is below it.
@@ -375,7 +375,7 @@ and every run is one (member, method, settings element, request file) → one re
 | `toy` | bst/1 | the same with `TruncatedLogNormal` laws at ±3 | the true toy |
 | `toy-untruncated` | bst/1 | the same with `LogNormal` laws | the law the published atoms converge to as the node count grows |
 | `toy-no-mortality` | bst/1 | `toy` with ℒ = 1 | the ℒ = 1 conditions (Szeidl, Harmenberg) |
-| `toy-zero-income` | bst/1 | `toy` with ξ̲ = 0 | no kink; `undefined` statuses |
+| `toy-zero-income` | bst/1 | `toy` with μ = 0 | no kink; `undefined` statuses |
 | `toy-one-type` | bst/1 | `toy` with the median β only | the smallest member; quick checks |
 | `library` | bst/1 | the community library's model | a published model from outside; untruncated laws |
 | `toy-crra-3`, `toy-R-1005`, `toy-R-1015` | bst/1 | the paper's robustness variants applied to the toy | mirrors HAFiscal's own sensitivity set, less its ρ = 1 variant, which `bst/1` excludes |
@@ -426,7 +426,7 @@ that it differs from each toolkit's own.
   `newborn_growth`.
 
 **Realizing a `bst/1` member in HARK:** one `IndShockConsumerType` per type (`cycles` 0, `T_cycle` 1) with `CRRA`,
-`DiscFac`, `LivPrb`, `Rfree`, `PermGroFac`, `BoroCnstArt` = a̲_Art, `T_retire` 0, `UnempPrb` = ℘, `IncUnemp` = ξ̲, and the
+`DiscFac`, `LivPrb`, `Rfree`, `PermGroFac`, `BoroCnstArt` = `a_Art`, `T_retire` 0, `UnempPrb` = ℘, `IncUnemp` = μ, and the
 shock standard deviations; the solver discounts by `DiscFac·LivPrb` and survivors earn `Rfree`, which is `bst/1`'s perpetual
 youth. The unemployment atom is built exactly as `bst/1`'s ξ. Types with unequal shares are pooled by the harness, not by
 `AgentPopulation`. Newborns need overrides: `kLogInitMean` = −1000 for a = 0, `pLogInitMean` = 0 and `pLogInitStd` = 0 for
@@ -572,8 +572,8 @@ results file must record:
 4. `PermGroFacAgg` must stay 1; and the transition-matrix route's `newborn_growth` must be 1, not 𝒢, for `bst/1`'s income
    measure (to be verified against a P-weighted simulation).
 5. `T_age` must be `None`.
-6. `BoroCnstArt` = `None` means no artificial limit: with ξ̲ > 0 that allows borrowing to the natural limit computed from the
-   discretized worst income; pass a̲_Art explicitly.
+6. `BoroCnstArt` = `None` means no artificial limit: with μ > 0 that allows borrowing to the natural limit computed from the
+   discretized worst income; pass `a_Art` explicitly.
 7. The simulation draws the discretized shocks, so a simulated distribution belongs to the discretized model.
 8. Solving stops on the rule's change between iterations or silently at 5,000 cycles, neither an Euler criterion.
 9. Comparison points above the grid's top fall in the decay extrapolation; choose `grid_max` beyond the largest request point
@@ -620,8 +620,8 @@ For the bellman session: nothing open.
    proposed to Chris, with its downstream consequences thought through, before it is made.
 5. The bellman session writes the `bst/1` stage file by hand, filed in the fork; one Matsya question checks it; a Matsya job
    follows once, later, as the completeness test.
-6. Later the same day: BST's notation throughout (ξ the transitory shock, θ the employed draw, ℘, ξ̲, ℒ, 𝒢, a̲_Art and
-   a̲_Nat); ρ ≥ 1 with the log amendment, revised the same evening to ρ > 1 as in BST, log utility outside the family for
+6. Later the same day: BST's notation throughout (ξ the transitory shock, θ the employed draw, ℘, the income while unemployed, ℒ, 𝒢, `a_Art` and
+   `a_Nat`); ρ ≥ 1 with the log amendment, revised the same evening to ρ > 1 as in BST, log utility outside the family for
    now; a newborn is born employed; the natural borrowing constraint and ℘ are
    implications, not conditions; the welfare condition is a regularity condition for every bst-class problem, and population
    welfare is reported.
