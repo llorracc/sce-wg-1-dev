@@ -78,7 +78,7 @@ methods:
 
 evidence:
   source_walk: {read_at: "lecture-python.myst 96ede2993", on: "2026-10-21"}
-  recasting: "checked on one calibration, HARK's defaults with xi_min = 0 and the natural limit: the rules agree with BST's form to 1.3e-15 and the values to 1.2e-13"
+  recasting: "checked on one calibration, HARK's defaults with xi_U = 0 and the natural limit: the rules agree with BST's form to 1.3e-15 and the values to 1.2e-13"
   verify_results: none yet
   cross_toolkit: none yet
   correctness: none

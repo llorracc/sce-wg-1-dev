@@ -29,7 +29,7 @@ member's nodes ψᵢ and weights wᵢ:
 
 Then v(m) = max_c {u(c) + β̃ Ẽ[v(m′)]}, the lecture's form, holds exactly. So does the Euler equation:
 β̃Ẽ[R̂u′(c′)] = βℒR𝒢^(−ρ)E[ψ^(−ρ)u′(c′)]. The household's problem was solved both ways for one calibration, with HARK's code at `4c285e86`, on the
-same nodes and the same grid: HARK's defaults with ξ̲ = 0 and the natural limit, on 200 grid points up to 40, not a `bst/1` member. The rules
+same nodes and the same grid: HARK's defaults with ξ_U = 0 and the natural limit, on 200 grid points up to 40, not a `bst/1` member. The rules
 agree to 1.3·10⁻¹⁵ and the values to 1.2·10⁻¹³.
 
 **An equivalent change of the code.** Keep the untilted law and R̂ = R/(𝒢ψ′). In `K`'s integrand,
@@ -61,9 +61,9 @@ Three cautions:
 | ρ, `crra` | `γ` | — |
 | β, `types[].beta`, with the shares, `types[].share`; ℒ, `survival`; 𝒢, `income.growth`; the law of ψ, `income.permanent_shock` | `β`, as β̃ | the recasting, with one solution per type; the adapter pools the types with the shares |
 | R, `return`, with ψ and 𝒢 | `R`, as R̂ᵢ = R/(𝒢ψᵢ) with the tilted weights | `R = exp(a_r ζ + b_r)` is an untruncated lognormal, so the adapter passes nodes |
-| ξ, from θ (`income.employed_shock`), ℘ (`income.unemployment.prob`) and ξ̲ (`income.unemployment.income`) | `Y` | `Y = exp(a_y η + z b_y)` cannot hold the unemployment node, and with one state its mean is exp(a_y²/2), not one. The adapter passes ξ's nodes and weights |
+| ξ, from θ (`income.employed_shock`), ℘ (`income.unemployment.prob`) and ξ_U (`income.unemployment.income`) | `Y` | `Y = exp(a_y η + z b_y)` cannot hold the unemployment node, and with one state its mean is exp(a_y²/2), not one. The adapter passes ξ's nodes and weights |
 | the shocks' independence over time | `P`, the Markov chain of z | one state |
-| a̲_Art, `borrowing_constraint`, and a̲_Nat | 0 ≤ c ≤ a | the lecture has no borrowing: its constraint in force is 0, which is `bst/1`'s max(a̲_Art, a̲_Nat) when a̲_Art = 0. A constraint below 0 needs the savings grid to start at a̲, and the anchor at (m, c) = (a̲, 0) |
+| `a_Art`, `borrowing_constraint`, and `a_Nat` | 0 ≤ c ≤ a | the lecture has no borrowing: its constraint in force is 0, which is `bst/1`'s max(`a_Art`, `a_Nat`) when `a_Art` = 0. A constraint below 0 needs the savings grid to start at `a_min`, and the anchor at (m, c) = (`a_min`, 0) |
 | the newborn, and deaths at 1 − ℒ | none | the lecture's households start at half the grid's top and never die. The adapter computes the population itself |
 | V | none | the lecture iterates on consumption only. The adapter adds an evaluation of v under the converged rule |
 
@@ -97,7 +97,7 @@ Each was read in the lecture's code at `96ede2993` and checked against its sourc
 8. **Convergence.** `solve_model` returns the rule alone, with no iteration count or last change, so a run stopped by
    `max_iter` looks converged. The adapter takes one more step of `K` and checks its largest change in c against `tol`.
 
-The lecture's assumption E u′(Y) < ∞ fails when ξ̲ = 0, as in the `library` member. So the lecture's theory does not
+The lecture's assumption E u′(Y) < ∞ fails when ξ_U = 0, as in the `library` member. So the lecture's theory does not
 cover that member, although the algorithm still runs on nodes.
 
 ## The method, the adapter and the evidence
@@ -111,7 +111,7 @@ cover that member, although the algorithm still runs on nodes.
   - the call, `solve_model`;
   - *decode*, from the rule σ to the results file. The adapter computes the population, the value and the conditions from
     the untilted laws.
-- **The evidence.** The recasting, checked on one calibration, HARK's defaults with ξ̲ = 0, against BST's form and HARK's
+- **The evidence.** The recasting, checked on one calibration, HARK's defaults with ξ_U = 0, against BST's form and HARK's
   solution. No adapter run yet.
 
 ## Sources
