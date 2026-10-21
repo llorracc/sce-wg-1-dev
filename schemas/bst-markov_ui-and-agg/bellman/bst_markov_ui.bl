@@ -53,9 +53,9 @@ z ~ Categorical(((1 - (π_eu_n, π_eu_r)[r], (π_eu_n, π_eu_r)[r], 0, 0), ((π_
 𝒞(x : Xm) := (0, x - max(a_Art, a_Nat)]   :: [id=feasible]
 
 [id=arvl_to_dcsn, (k : Xa, z_prev : Z, r_prev : Reg, r, z, ψ, θ) : !arvl -> (m : Xm, z_d : Z, r_d : Reg) : !dcsn] {
-    Γ   = (𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[z]   :: [id=growth, "the growth factor of this quarter: 𝒢 when employed; 𝒢, 𝒢 or 1 in a quarter of unemployment, by the label"]
+    𝒢_t = (𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[z]   :: [id=growth, "the growth factor of this quarter: 𝒢 when employed; 𝒢, 𝒢 or 1 in a quarter of unemployment, by the label"]
     ξ   = (e*θ, ξ_U, ξ_U, ξ_X)[z]     :: [id=transitory_income, "income divided by permanent income"]
-    m   = R*k/(Γ*ψ) + ξ               :: [id=market_resources, "a survivor's resources; k is last quarter's a"]
+    m   = R*k/(𝒢_t*ψ) + ξ               :: [id=market_resources, "a survivor's resources; k is last quarter's a"]
     z_d = z                           :: [id=employment_state]
     r_d = r                           :: [id=regime]
 }

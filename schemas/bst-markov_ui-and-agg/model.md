@@ -25,7 +25,7 @@ Everything in [`bst/1`'s table](../bst-1/model.md#notation) keeps its meaning. T
 | `z` | z | the employment state, in Z = {E, U_2, U_1, X}: employed; unemployed with two quarters of benefits left, this one included; unemployed with one quarter left; unemployed without benefits | the paper's chain, named as the stage file names it |
 | `r` | r | the regime, normal or recession | the paper |
 | `\mathcal{G}` | 𝒢 | the group's growth factor of permanent income; the paper writes Γ_e | BST |
-| `\Gamma_{t}` | Γ_t | the growth factor applied in quarter t: 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the switch | the stage file |
+| `\mathcal{G}_{t}`, `\mathcal{G}(z)` | 𝒢_t, 𝒢(z) | the growth factor applied in quarter t, and as a function of the state: 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the switch; the stage file writes `𝒢_t` | BST's 𝒢, dated; not Γ, which econ-ark's notation keeps for the growth factor itself |
 | `e` | e | the scale of employed income, e θ; 1 in the paper | the convention change |
 | `\xi_{\mathrm{U}}`, `\xi_{\mathrm{X}}` | ξ_U, ξ_X | income with benefits and without, as ratios to permanent income; the paper's ρ_b and ρ_nb, renamed because ρ is risk aversion | BST's ξ |
 | `\pi_{\mathrm{eu}}`, `\pi_{\mathrm{ue}}` | π_eu, π_ue; by regime, `π_eu_n`, `π_eu_r`, `π_ue_n` and `π_ue_r` in the stage file | the probabilities of losing a job and of finding one, each by regime; π_eu is the group's | the paper |
@@ -69,11 +69,11 @@ Two Markov states are drawn each quarter, the regime first.
 
 ## Income
 
-- **Permanent income:** 𝐩_t = Γ_t ψ_t 𝐩_{t−1}, with Γ_t and the law of ψ_t set by the employment state and the switch:
-  - employed: Γ_t = 𝒢 and ψ_t is drawn from its law;
-  - in a quarter of unemployment under `continues`: the same, Γ_t = 𝒢 and ψ_t drawn;
-  - under `grows`: Γ_t = 𝒢 and ψ_t = 1;
-  - under `frozen`: Γ_t = 1 and ψ_t = 1, so 𝐩 is unchanged.
+- **Permanent income:** 𝐩_t = 𝒢_t ψ_t 𝐩_{t−1}, with 𝒢_t and the law of ψ_t set by the employment state and the switch:
+  - employed: 𝒢_t = 𝒢 and ψ_t is drawn from its law;
+  - in a quarter of unemployment under `continues`: the same, 𝒢_t = 𝒢 and ψ_t drawn;
+  - under `grows`: 𝒢_t = 𝒢 and ψ_t = 1;
+  - under `frozen`: 𝒢_t = 1 and ψ_t = 1, so 𝐩 is unchanged.
 
   `continues` is the family's standard: it is the model the paper's text states, and it is the only value under which
   permanent income follows one law in every state and so is independent of the employment state. `grows` is the world of
@@ -89,7 +89,7 @@ Two Markov states are drawn each quarter, the regime first.
 
 1. Survival is drawn.
 2. The regime r_t is drawn, then the employment state z_t.
-3. A survivor draws ψ_t and θ_t. Then 𝐩_t = Γ_t ψ_t 𝐩_{t−1}, bank balances are b_t = R k_t/(Γ_t ψ_t) with k_t = a_{t−1}, and
+3. A survivor draws ψ_t and θ_t. Then 𝐩_t = 𝒢_t ψ_t 𝐩_{t−1}, bank balances are b_t = R k_t/(𝒢_t ψ_t) with k_t = a_{t−1}, and
    market resources are m_t = b_t + ξ_t.
 4. A newborn is **born employed**, as in `bst/1`: z_t = E, k_t = 0, no ψ in its first quarter, and its first transitory
    draw is the employed branch, e θ_t; its permanent income 𝐩_t is drawn from its group's level law. So its market resources
@@ -98,7 +98,7 @@ Two Markov states are drawn each quarter, the regime first.
 
 In ratios to permanent income, a survivor's resources evolve as
 
-    m_{t+1} = R a_t / (Γ_{t+1} ψ_{t+1}) + ξ_{t+1}.
+    m_{t+1} = R a_t / (𝒢_{t+1} ψ_{t+1}) + ξ_{t+1}.
 
 ## The splurge, as an observation map
 
@@ -151,11 +151,11 @@ quarter's value and `[<]` this quarter's arrival value. A selector `(…)[z]` or
 - **Shocks.** r ~ Categorical over the row of r_prev; z ~ Categorical over the row of z_prev with the probabilities of r;
   ψ ~ LogNormal(−σ²/2, σ) with σ = σ_ψ when employed, and in a quarter of unemployment σ_ψ under `continues` and 0 otherwise;
   θ ~ LogNormal(−σ_θ²/2, σ_θ), drawn but unused when unemployed.
-- **Arrival to decision** (`arvl_to_dcsn`): Γ = 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the switch;
-  ξ = e θ, ξ_U, ξ_U or ξ_X by the state; m = R k/(Γ ψ) + ξ; the state and the regime are carried forward.
+- **Arrival to decision** (`arvl_to_dcsn`): 𝒢_t = 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the switch;
+  ξ = e θ, ξ_U, ξ_U or ξ_X by the state; m = R k/(𝒢_t ψ) + ξ; the state and the regime are carried forward.
 - **Decision to continuation** (`dcsn_to_cntn`): a = m − c, with the state and the regime carried.
 - **Continuation to decision** (`cntn_to_dcsn`): V = u(c) + β ℒ V[>]; dV = u′(c).
-- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{r,z,ψ,θ}[(Γ ψ)^(1−ρ) V]; dV[<] = E_{r,z,ψ,θ}[R (Γ ψ)^(−ρ) dV], the
+- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{r,z,ψ,θ}[(𝒢_t ψ)^(1−ρ) V]; dV[<] = E_{r,z,ψ,θ}[R (𝒢_t ψ)^(−ρ) dV], the
   expectation over this quarter's regime, state and shocks given last quarter's state and regime.
 - **The policy** (`policy`): c = argmax over 0 < c ≤ m − `a_min` of u(c) + β ℒ V[>], written as documentation; the operative line
   is the Euler equation with its complementarity clause, u′(c) = β ℒ dV[>] ⟂ m − c ≥ `a_min`. The language records `max` as a
@@ -164,12 +164,12 @@ quarter's value and `[<]` this quarter's arrival value. A selector `(…)[z]` or
 Composing the blocks across the quarter gives the recursion in the form BST writes it, for type i of a group, with the
 state (m, z, r):
 
-    v_i(m, z, r) = max over 0 < c ≤ m − `a_min(z)` of  u(c) + β_i ℒ E[(Γ′ ψ′)^(1−ρ) v_i(m′, z′, r′) | z, r],
-    m′           = R (m − c)/(Γ′ ψ′) + ξ′,
+    v_i(m, z, r) = max over 0 < c ≤ m − `a_min(z)` of  u(c) + β_i ℒ E[(𝒢′ ψ′)^(1−ρ) v_i(m′, z′, r′) | z, r],
+    m′           = R (m − c)/(𝒢′ ψ′) + ξ′,
 
 whose solution is the **consumption rule** c_i(m, z, r) and the value v_i(m, z, r), and the **Euler equation** in ratio form,
 
-    u′(c_i(m, z, r)) ≥ β_i ℒ R E[(Γ′ ψ′)^(−ρ) u′(c_i(m′, z′, r′)) | z, r],
+    u′(c_i(m, z, r)) ≥ β_i ℒ R E[(𝒢′ ψ′)^(−ρ) u′(c_i(m′, z′, r′)) | z, r],
 
 with equality wherever c_i(m, z, r) < m − `a_min(z)`. Since normal is absorbing, the rule in the normal regime is the solution of the
 problem with the regime removed, and the rule in the recession regime is solved given it. The identification of V[>] with
@@ -206,7 +206,7 @@ derived one.
 
 - E[ψ] = 1 and E[θ] = 1; the laws common to all groups.
 - The chain's states, its transitions and the two-quarter benefit countdown of the stage file; normal absorbing.
-- The three worlds of the switch, and that ψ = 1 and Γ = 1 are what `frozen` means.
+- The three worlds of the switch, and that ψ = 1 and 𝒢_t = 1 are what `frozen` means.
 - The newborn: born employed, no first-quarter ψ, the employed branch's draw, zero assets, 𝐩 from the group's level law.
 - The order of events, and the form of the observation map.
 
