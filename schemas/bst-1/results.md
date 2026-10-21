@@ -82,9 +82,10 @@ so that a reader can compute dynamics that the results file does not report.
 Under the **population measure**, for m, a and c:
 - The **generalized Lorenz ordinates** GL(p) = ∫₀^p Q(u) du, where Q is the quantile function, at p = 0.01, 0.05, 0.1, 0.2, …,
   0.9, 0.95, 0.99, 0.999 and 1. GL(1) is the mean.
-- The quantiles at the same probabilities except 1 (optional). Q(1) is the top of the support: infinite whenever the upper
-  tail is unbounded, and in a discretized distribution the last node that still carries mass, which moves with where the far
-  tail underflows and not with the solution.
+- The quantiles at the same probabilities except 1 (optional). Q(1) is the top of the support, infinite whenever the upper
+  tail is unbounded, as the tail exponents in the checker's report show it is for every type of the three members. A computed
+  Q(1) is the largest point with any mass at all: it grows with the representation's top, and read through a running total of
+  the masses it turns on round-off. It says nothing about the solution.
 - The mean of c, the aggregate ratio of consumption to income.
 - The mass at the borrowing constraint, a = a̲, and the fraction with a ≤ 0.
 - The mean MPC, and the mean MPC within each quartile of a. The quartiles are defined through the quantile rank, so a mass point
