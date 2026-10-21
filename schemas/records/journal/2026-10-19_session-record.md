@@ -74,3 +74,74 @@ Times are EDT, from the clock or an event's own stamp.
 Open with the owner: the six questions of the plan for the Bellman pull request on the truncated lognormal, which is kept
 outside this repository because it names the private repository's files; and, in the bellman session, whether to file the
 parameter-condition defect and to carry out the plan.
+
+## After the memorial
+
+- **09:41–09:45.** The six questions of the plan for the Bellman pull request are put to the owner, and answered at 09:45 (see
+  the rulings). They go to the bellman session at 09:48 with their stamp, so it can check them.
+- **09:50.** His answer on omitted bounds forces three smaller choices, put to him: whether one-sided truncation can still
+  be written, the hash over the filled form, and the bounds of a mixture's components.
+- **09:52–09:53.** The bellman session checks the relay and starts the branch work. It reports a refinement typed in its
+  window at 09:49:10, verified here in its transcript: the support is a condition, and the provider is an optional binding
+  passed to the solver.
+- **09:57.** His answers: one-sided truncation stays expressible, the hash over the filled form, and a truncated mixture
+  beside the untruncated one (see the rulings).
+- **10:03.** HARK compared, as he asked:
+  - HARK's main has no truncated lognormal. A requirements document on the HARK session's local branch, unpushed, has the
+    bounds in standard deviations, either bound infinite, mean one after truncation, and the standard deviation of the log
+    kept, all as the schemas have them.
+  - Proposed in reply: `null` for no bound on a side, and building blocks in logs from which `LogNormal`,
+    `TruncatedLogNormal`, `LogNormalMixture` and `TruncatedLogNormalMixture` are made.
+  - His direction to adopt existing syntax arrived as this went out, and the survey subsumed the proposal.
+- **10:08.** The plan `existing-syntax.md` is written, PROPOSED, with four questions. At 10:13 he answers them and adds two
+  principles (see the rulings).
+- **10:19.** The plan is ACTIVE.
+  - The gathering of material runs as a multi-agent workflow over nine groups of sources. Each source is read at its
+    official pages and quoted verbatim, a second reader re-reads every page to confirm or refute each claim, and a critic
+    names what is missing.
+  - The bellman session has his words and their stamp. Its branch goes ahead for everything no spelling touches, with the
+    family's name, argument order and bound spelling marked provisional.
+- **10:48.** The bellman session reports a checked build on its branch, not pushed:
+  - the truncated lognormal in its provisional spelling, the call it reads always recorded with all four arguments;
+  - closed forms that agree with quadrature to 10⁻¹⁵ over symmetric, one-sided and asymmetric bounds;
+  - the support condition split from the provider.
+- **10:54–10:57.** His direction toward an ontology of probability distributions. Agreed: the package survey becomes its
+  evaluation set. Three searches for candidates start, each quoting its sources.
+- **11:17–11:21.** The whole gathering is in, and is reported to him at 11:21; the bellman session has the paths.
+  - The package survey: nine groups and nineteen agents. Of the nine source files the second reader checked, one was
+    confirmed and eight corrected, none refuted; about 1,400 claims were checked and 46 corrections appended.
+  - The three candidate searches: ProbOnto is the only ontology with families, named parameterizations and conversion
+    formulas, but it is dormant since 2017 and has no operators. Every operator layer found is in code.
+- **11:40.** This session reaches its usage limit until 13:30.
+- **11:43–12:02.** His correction, then his goal (see the rulings).
+  - Explained: Matsya reads no web page, so the gathering needed doing outside it, but the substitution should have been
+    put to him first. A memory now says so.
+  - A brief for Matsya, kept outside this repository, goes to the bellman session. It proposes four Matsya sessions,
+    questions only, on public-safe digests of the material.
+  - A time label sent to the bellman session for his ontology direction, "about 10:35", is corrected to 10:54.
+  - Reported by the HAFiscal-Latest session: the emitter's fourth-level run was stopped at 11:39, on his word there, to
+    free the machine.
+- **12:19.** The bellman session reports his go-ahead there for the four Matsya sessions.
+- **12:20–19:36.** Nothing runs here. Matsya's first two sessions run from the bellman session: three turns each, every
+  answer with 2 to 13 citations, about 790 thousand input tokens on the service's key.
+- **19:36.** The bellman session reports that its local verifiers failed on the account's limit. His words there at
+  18:56:33, verified here, and his choices at 19:15, as reported, follow (see the rulings).
+- **19:38–19:40.** The six answers are weighed (see the findings). A note of his rulings and corrections goes to the bellman
+  session for Matsya's later sessions. It enters the third session seventeen seconds after that session's third question
+  was asked.
+- **19:52.** The third session is complete.
+  - Matsya found the location formula wrong in the bellman session's description of its branch, s²/2 subtracted twice.
+  - The bellman session fixed the branch's symbolic definition, which had copied the error, and added a test. The
+    branch's numerical code had been right throughout, as had this repository's formula and checker.
+- **19:53–20:04.** The third session is weighed. The fourth runs from 19:51 to 20:03.
+- **20:07–20:09.** Sixteen decisions go to the owner, each with a recommendation, in `existing-syntax.md`: twelve from this
+  session's weighing and four from Bellman's side, raised by the bellman session.
+
+**State at the end of the day (20:09 EDT).**
+- Nothing is committed since the memorial.
+- Uncommitted:
+  - the plan `existing-syntax.md`;
+  - the findings on Matsya's ontology sessions;
+  - the memory on routing Matsya's work.
+- Open: the sixteen decisions on the ontology.
+- Waiting on his word in the bellman session: the truncated-lognormal branch, checked and unpushed.

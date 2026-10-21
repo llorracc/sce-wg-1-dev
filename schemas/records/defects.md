@@ -57,3 +57,42 @@ Faults found in this project's own work, with their status.
   lacks are the continuous bounded laws, the truncated lognormal, the uniform and the tabulated law. A member with
   discrete laws needs only a stage file written with the mixture. Found 2026-10-19 on the owner's question. **Status:**
   fixed 2026-10-19 09:29, on the owner's word, in both families' model documents and the shock-law document.
+- **Matsya's assignment done here.** On 2026-10-19 the owner asked for Matsya to find or develop an ontology of probability
+  distributions. This session gathered and digested the candidates itself and mentioned it in one line, where the
+  substitution should have been put to him first, Matsya reading no web page. Found on his question at 11:43.
+  **Status:** closed 2026-10-19 12:01. The material went to Matsya through the bellman session as digests carrying no
+  recommendation, and the memory on routing Matsya's work holds the rule.
+- **Time labels by inference, and a misattribution, in messages to other sessions and to the owner.**
+  - On 2026-10-19 the owner's ontology direction was reported to the bellman session as made at about 10:35; its stamp
+    is 10:54:20.
+  - On 2026-10-20 his approval of the coverage check's revision was reported to the two toolkit sessions as made at
+    about 22:55; its stamp is 22:57:38.
+  - The question put to him at 22:52 called HARK's shortfall formula his.
+
+  **Status:** each corrected within minutes: at 12:02 on 2026-10-19, and at 22:58 on 2026-10-20.
+- **The ontology's catalog lines pushed late.** On 2026-10-20 the commit of the finite laws, `76304ab`, was pushed to the
+  ontology's draft without its README and changelog lines, an edit of those having failed. **Status:** fixed a minute
+  later in `96a8dac`.
+- **The quantile at probability 1, required in every quantile map.** `bst-1/results.schema.json` required Q(1), the top of
+  the support, which is infinite for every type of the three members, each having a finite tail exponent in the
+  checker's report. A computed Q(1) is the largest point with any mass. It grew with the grid's top across the emitter's
+  levels and turned on round-off in the reading. Found 2026-10-20 by the HAFiscal-Latest session, when an upgrade of
+  Python and numpy moved it alone. **Status:** fixed on the draft pull request #3 (`456994d`, `141d17e`), not merged.
+  Files written before keep Q(1), as files of record under `4f99d01`.
+- **The first reason given for leaving Q(1) out.** The draft's first commit blamed the far tail's underflow. The
+  HAFiscal-Latest session measured the cause as the reading rule: a running total of mass ending within 5·10⁻¹³ of one,
+  with either sign. **Status:** corrected 2026-10-20 22:44 in `141d17e`, on the owner's word, with the description to
+  match.
+- **A results-file change drafted without the toolkits.** The Q(1) change was drafted and opened as a draft pull request
+  on one session's recommendation and the owner's quick approval, before HARK's session or HAFiscal-Latest's had been
+  asked. Found on his question at 22:26 on 2026-10-20. **Status:** closed by 22:40, both sessions consulted and agreeing.
+  The memory on consulting the toolkits holds the rule.
+- **The coverage check's first formula.** The draft's first commit, `033908d`, said the tail beyond the top contributes
+  about α/(α − 1)·top·top_mass to the mean. That is the true tail's contribution; the computed mean already counts the
+  clipped mass at the top, so what the representation misses is about top·top_mass/(α − 1). Found by HARK's review at
+  22:47 on 2026-10-20. **Status:** corrected in `967b174` at 22:57, on the owner's word.
+- **A question of the owner's left unanswered.** On 2026-10-20 at 09:28 he asked, mid-turn, whether this session and
+  Matsya were discussing whether the ontology should live in Bellman's repository or in this one. The question was
+  absorbed into the running turn and not answered then; his own choice at 07:16 had already put it here. Found by this
+  session's review of its records on 2026-10-21. **Status:** answered in substance by the explanation at 21:52 of how
+  the ontology's pull requests relate to the Bellman repository, and reported to him on 2026-10-21.
