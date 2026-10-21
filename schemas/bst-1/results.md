@@ -87,11 +87,7 @@ Under the **population measure**, for m, a and c:
 - The mass at the borrowing constraint, a = a̲, and the fraction with a ≤ 0.
 - The mean MPC, and the mean MPC within each quartile of a. The quartiles are defined through the quantile rank, so a mass point
   needs no tie rule.
-- The coverage of the representation (optional): a point `top` of m or a, and the measure's mass at or above it, `top_mass`.
-  For a grid, `top` is its highest point and `top_mass` the mass the grid holds there; for a simulation, `top` is a point the
-  toolkit states and `top_mass` the sample's share at or above it. With a Pareto tail of exponent α, the tail beyond `top`
-  contributes about α/(α − 1) · `top` · `top_mass` to the mean, so a reader can judge from it whether GL(0.999) and GL(1)
-  have converged. The tail exponents are in the checker's report.
+- The coverage of the representation (optional; see below).
 
 Under the **income measure**, for m and a:
 - the GL ordinates at the same probabilities;
@@ -102,6 +98,24 @@ Under the **income measure**, for m and a:
 
 Each ordinate or moment whose finiteness condition fails is reported as `undefined`. GL(p) for p < 1 is defined whenever the
 distribution is.
+
+**The coverage of the representation** lets a reader judge whether GL(0.999) and GL(1) have converged. It gives a point `top`
+of m or a, the mass `top_mass` that the representation puts at or above it, and `beyond_top`, what the representation does
+with the mass the dynamics send beyond `top`:
+- `clipped`: a grid that puts that mass on its highest point, `top`. `top_mass` is the mass held there. In a lottery it also
+  holds part of the last cell's mass, so it is an upper bound on the mass beyond `top`: it measures how much the top binds,
+  not the model's mass above `top`.
+- `dropped`: a grid that drops that mass and renormalizes. `top_mass` is the mass dropped each period.
+- `kept`: a simulation, which loses nothing. `top` is a point the toolkit states, `top_mass` the sample's share at or above
+  it, and `sample_size` the number of agent-periods pooled. A share of zero means only that the mass is below about
+  3/`sample_size`, and pooled periods are correlated.
+
+An optional list `tail` gives points below `top`, ascending, each with the mass at or above it. Along a Pareto tail that
+mass falls as x^(−α), so mass on the top far above what the tail's points extrapolate to is piling up there. With a tail
+exponent α > 1, which the checker's report gives for each type, a clipped representation misses about
+`top` · `top_mass`/(α − 1) of the mean; at α ≤ 1 the mean is infinite, as the domain rules say. When `top_mass` is well
+below 0.001, Q(0.999) and GL(0.999) lie below the top. In the pooled blocks the coverage is given only when the types
+share a top, with share-weighted masses.
 
 Why generalized Lorenz ordinates:
 - They are defined whatever the distribution's mass points and gaps.
