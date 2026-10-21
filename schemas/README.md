@@ -59,6 +59,8 @@ Shared by every family:
 - [`shock-laws.md`](shock-laws.md): the shock laws a parameter file can use, and the two reserved for later.
 - [`shock-laws.schema.json`](shock-laws.schema.json): their validator.
 - [`numerics.md`](numerics.md): method files, settings files and suites.
+- [`rosetta/`](rosetta/README.md): the Rosetta Stones, one for each toolkit, which say how the toolkit solves a family's
+  members as the stage file states them; begun for `bst/1` with HARK and QuantEcon's JAX code.
 
 The family `bst/1`:
 - [`bst-1/model.md`](bst-1/model.md): the model schema, read from the stage file, with its method targets and its parameter

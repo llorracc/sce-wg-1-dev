@@ -1,0 +1,78 @@
+# QuantEcon's JAX code: a Rosetta Stone for bst/1, as cards in the field names of Project Bellman's Rosetta stone.
+# Draft, 2026-10-21. The toolkit's side only: the operator's side is Bellman's to fill. The recasting, the lexicon, the
+# reasons and the sources are in quantecon-jax.md.
+
+toolkit:
+  package: "QuantEcon lecture code: The Income Fluctuation Problem V, Stochastic Returns on Assets"
+  repository: "https://github.com/QuantEcon/lecture-python.myst"
+  import_root: "lectures/ifp_advanced.md (the lecture's code cells)"
+  read_at: {branch: main, commit: 96ede2993, date: "2026-08-12"}
+
+handlers:
+  - id: ifp_advanced.solve_model
+    calls:
+      - "jax.config.update('jax_enable_x64', True), before any array"
+      - "create_ifp(...), or an IFP built directly with the recast values"
+      - "solve_model(ifp, c_init, a_init)"
+    target: policy
+    scope: whole stage
+    method: time-iteration-by-endogenous-grid
+    covers:                  # what this whole-stage handler does with each part it covers
+      policy: fixes it inside
+      evaluate: "fixes it inside: jnp.interp, which holds c constant above the grid"
+      dcsn_to_arvl: "cannot take it as written: an equal-weight mean over draws; weighted nodes need the extension"
+    adapter_contract:
+      status: not written
+      encode:
+        argument_map:
+          "crra": "γ"
+          "types[].beta": "β, as beta-tilde = beta L G^(1-rho) sum_i w_i psi_i^(1-rho)"
+          "survival": "β, through beta-tilde"
+          "income.growth": "β and R, through beta-tilde and R-hat"
+          "return": "R, as R-hat_i = R / (G psi_i), with the weights tilted by psi_i^(1-rho)"
+          "income.permanent_shock": "the nodes psi_i and their tilted weights"
+          "income.employed_shock": "Y's nodes, with the employed scale"
+          "income.unemployment.prob": "Y's nodes: the unemployment node's weight"
+          "income.unemployment.income": "Y's nodes: the unemployment node's value"
+          "borrowing_constraint": "0 only; below 0 the savings grid starts at the limit"
+        toolkit_settings_to_kwargs:
+          grid_max: grid_max
+          grid_points: grid_size
+          tolerance: tol
+          max_iterations: max_iter
+        beta:
+          scope: "beta-tilde carries beta, L, G^(1-rho) and the tilt's normalization; nothing else applies them"
+        R:
+          representation: "R-hat at psi's nodes, with the tilted weights; the lecture's lognormal form serves an untruncated psi only"
+      neutralization: "the recasting: the lecture's law a' = R'(a - c) + Y' is bst/1's under R' = R/(G psi'), Y' = xi', with psi's law tilted by psi^(1-rho) for the household's problem only"
+      decode:
+        "c_out, a_out": {kind: primary, note: "the rule on the endogenous grid, one column per Markov state"}
+        value: {kind: derived, from: "an evaluation of v under the converged rule, by the adapter"}
+        targets: {kind: derived, from: "the rule and the untilted laws"}
+        conditions: {kind: derived, from: "the untilted laws"}
+        population: {kind: derived, from: "the rule, by the adapter, with deaths and bst/1's newborns"}
+      inverse_data: ["the savings grid", "the nodes and their weights, tilted and untilted", "beta-tilde"]
+      verify: {region: not yet stated, tolerance: not yet stated, boundary: not yet stated}
+      settings_map:
+        grid_max: {semantics: "the top of the savings grid", range: "> 0"}
+        grid_size: {semantics: "the number of savings points, from 0, evenly spaced as written"}
+        tol: {semantics: "the largest change in c between iterations at which the iteration stops", range: "> 0"}
+        max_iter: {semantics: "the most iterations"}
+
+methods:                     # "on" is quoted: YAML 1.1 reads a bare on as true
+  - {"on": policy, method: time-iteration-by-endogenous-grid, handler: ifp_advanced.solve_model}
+  - {"on": evaluate, method: linear-interpolation, handler: ifp_advanced.solve_model}
+  - {"on": dcsn_to_arvl, method: "weighted nodes, by the extension", handler: adapter}
+  - {"on": cntn_to_dcsn.value, method: "policy evaluation, by the adapter", handler: adapter}
+  - {"on": arvl_to_dcsn, method: "the adapter's own lottery, with the untilted laws", handler: adapter}
+  - {"on": population.distribution, method: "the adapter's own fixed point", handler: adapter}
+  - {"on": diagnostics.expectation, method: "a finer quadrature of the stated laws than the household's", handler: adapter}
+
+evidence:
+  source_walk: {read_at: "lecture-python.myst 96ede2993", by: "the HARK and HAFiscal-Latest sessions, and checked here", on: "2026-10-21"}
+  recasting: "checked by the HARK session on one member: the rules agree with BST's form to 1.3e-15 and the values to 1.2e-13"
+  verify_results: none yet
+  cross_toolkit: none yet
+  correctness: none
+
+examples: []
