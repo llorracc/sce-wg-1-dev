@@ -45,33 +45,34 @@ each of 21 types: three education groups times seven discount-factor atoms.
    aversion in BST's notation). Employed income is not rescaled, so the unconditional mean of income relative to 𝐩 is
    below one.
 4. Market resources 𝐦 = R 𝐚_{−1} + 𝐲, with R = 1.01.
-5. The splurge: 𝐜_sp = ς 𝐲 is consumed mechanically, with ς about a quarter (0.246 in the paper's text).
+5. The splurge: 𝐜_sp = ℷ 𝐲 is consumed mechanically, with ℷ about a quarter (0.246 in the paper's text).
 6. The household chooses 𝐜_opt, whose utility is CRRA with γ = 2.
 7. End-of-period assets 𝐚 = 𝐦 − 𝐜_sp − 𝐜_opt ≥ 0: no borrowing.
 8. Death with probability D; replacement by a newborn.
 
 **The employment chain** has 2 + T_UI states: employed (E); unemployed with k quarters of benefits left (U_k); unemployed
 without benefits (X). In normal times T_UI = 2, so four states.
-- From E: to U_{T_UI} with the group's job-loss probability π_eu (6.2, 3.1 and 1.8 percent by group), else stay.
-- From U_k: to E with probability π_ue = 2/3, else to U_{k−1} (to X from U_1).
-- From X: to E with probability π_ue, else stay.
+- From E: to U_{T_UI} with the group's job-loss probability `sep` (6.2, 3.1 and 1.8 percent by group), else stay.
+- From U_k: to E with probability `find` = 2/3, else to U_{k−1} (to X from U_1).
+- From X: to E with probability `find`, else stay.
 
-The chain is the same for every type within a group; only π_eu differs across groups.
+The chain is the same for every type within a group; only `sep` differs across groups.
 
 **The splurge has two readings, which are one model.** In the budget reading above, the splurge is deducted inside the
 household's budget before the choice. In the other reading the splurge stands outside the optimizer's problem: the optimizer
-receives the share 1 − ς of income and solves the standard buffer-stock problem, which by CRRA homotheticity is the same problem
-rescaled by 1 − ς. The public code's total consumption, (1 − ς) cLvl + ς pLvl TranShk, is the second reading. For the schema
-it is the natural one: the household problem stays in the standard form, and ς enters an
+receives the share 1 − ℷ of income and solves the standard buffer-stock problem, which by CRRA homotheticity is the same
+problem rescaled by 1 − ℷ. The public code's total consumption, (1 − ℷ) cLvl + ℷ pLvl TranShk, is the second reading.
+For the schema it is the natural one: the household problem stays in the standard form, and ℷ enters an
 **observation map** from the standard rule c̃(m̃) to what the household does. With m the household's resources ratio and ξ its
 income ratio:
 
-    m̃ = (m − ξ)/(1 − ς) + ξ,      c = (1 − ς) c̃(m̃) + ς ξ,      a = (1 − ς)(m̃ − c̃(m̃)).
+    m̃ = (m − ξ)/(1 − ℷ) + ξ,      c = (1 − ℷ) c̃(m̃) + ℷ ξ,      a = (1 − ℷ)(m̃ − c̃(m̃)).
 
-The MPC out of a transitory income gain is then ς + (1 − ς) c̃′(m̃), and the paper's lottery MPCs include the splurge's share.
-Every MPC in the results must say which definition it uses. The parameter file's `borrowing_constraint` is in the household's
-units, a bound on a; the optimizer's limit is then `a_min`/(1 − ς), the map's consequence. The public code applies its zero limit
-inside the optimizer, where zero reads the same either way, so this only makes explicit what the code left implicit.
+The MPC out of a transitory income gain is then ℷ + (1 − ℷ) c̃′(m̃), and the paper's lottery MPCs include the splurge's
+share. Every MPC in the results must say which definition it uses. The parameter file's `borrowing_constraint` is in the
+household's units, a bound on a; the optimizer's limit is then `a_min`/(1 − ℷ), the map's consequence. The public code
+applies its zero limit inside the optimizer, where zero reads the same either way, so this only makes explicit what the
+code left implicit.
 
 **Numerics in the published code** (settings, not model): an end-of-period asset grid of 48 points from 0.001 to 40 above the
 borrowing limit, with nesting factor 3 and two forced points; 7 equiprobable nodes for each shock, from untruncated lognormals;
@@ -83,19 +84,19 @@ estimation's.
 ### The recession and the policies: the experiments layer
 
 These change the household's environment, and the household re-solves with them in its chain once they arrive:
-- **Recession:** unannounced. At onset the unemployment rate doubles in every group; while it lasts, π_ue = 0.25 and π_eu =
-  5.1, 2.4 and 1.4 percent by group; it ends with probability 1/6 each quarter, a hazard the household knows, so during a recession
-  the regime is a state of its problem.
+- **Recession:** unannounced. At onset the unemployment rate doubles in every group; while it lasts, `find` = 0.25 and
+  `sep` = 5.1, 2.4 and 1.4 percent by group; it ends with probability 1/6 each quarter, a hazard the household knows, so
+  during a recession the regime is a state of its problem.
 - **Stimulus check:** a lump-sum transfer at onset, $1,200 to each household with permanent income below $100,000, phased out
   linearly to zero at $150,000; means-tested in levels, so the newborn income law and the group's growth matter.
 - **Extended unemployment benefits:** benefit states added to the chain for spells begun in the policy window, T_UI from 2
   to 4.
 - **Payroll tax cut:** employed income scaled up by 2 percent for 8 quarters, with a 50–50 belief in a two-year extension if
   the recession has not ended.
-- **Aggregate demand feedback:** income multiplied by AD(C) = (C/C̃)^κ with κ = 0.3 while the recession lasts, where C is
-  aggregate consumption relative to its steady path. This is the closure: the one piece outside any single household's
-  problem. Under it the household's rule takes the aggregate as an argument, c(m, j, C), with a belief about next quarter's C
-  as a linear rule per state, and an outer loop finds the equilibrium path of C.
+- **Aggregate demand feedback:** income multiplied by AD(C) = (C/C̃)^Ω with Ω = 0.3 while the recession lasts, where C
+  is aggregate consumption relative to its steady path. This is the closure: the one piece outside any single
+  household's problem. Under it the household's rule takes the aggregate as an argument, c(m, j, C), with a belief about
+  next quarter's C as a linear rule per state, and an outer loop finds the equilibrium path of C.
 
 Each is a dated, non-stationary problem solved backward from the stationary solution, then simulated from a population drawn
 from the stationary distribution. With the regime inside the family, the recession experiment is the onset itself: the
@@ -119,7 +120,7 @@ member:
 | unemployment | i.i.d. each quarter with probability 0.044, income 0.7 𝐩 | the chain with benefit duration and exhaustion |
 | employed income | θ (1 − ℘ξ_U)/(1 − ℘), so E[ξ] = 1 | θ, no rescaling |
 | shocks | the 7-point atoms of lognormals with log variances 0.003 and 0.12, declared as the model | 7-point discretizations, as numerics |
-| splurge | none | ς |
+| splurge | none | ℷ |
 | newborn | 𝐩 = 1, a = 0, born employed: its first draw is the employed branch of ξ; the benchmark's own specification follows since 2026-10-18 | the same, with 𝐩 drawn from the group's level law (decided 2026-10-18) |
 | borrowing | a ≥ 0 | the same |
 | regime, feedback | none | the recession and AD, in the experiments |
@@ -195,13 +196,13 @@ version that would also state the household's belief rule about the aggregate.
 1. **Employment as a Markov chain** with benefit duration and exhaustion, in place of i.i.d. unemployment, with an income map
    by state: the transitory law drawn in one state only, fixed replacement incomes in the others, and a stated rule for
    permanent income while unemployed. The chain's structure (the states, which transitions exist, the countdown) is fixed by
-   the family; the parameter file gives T_UI, π_ue and each group's π_eu. Bellman's own fixture for HAFiscal writes the
-   chain the same way, as four named states in one stage, since a state set of unstated size has no spelling there.
+   the family; the parameter file gives T_UI, `find` and each group's `sep`. Bellman's own fixture for HAFiscal writes
+   the chain the same way, as four named states in one stage, since a state set of unstated size has no spelling there.
 2. **Groups of types.** A group has its own growth factor, job-loss probability, newborn income law and list of types; a
    type's weight is its group's share times its share within the group. Every other primitive is common.
 3. **The newborn's permanent income in levels**, a lognormal with a free mean. This is not a mean-one shock law; it is a
    level law, and the family defines it.
-4. **The splurge**, as the observation map above, with ς = 0 switching it off.
+4. **The splurge**, as the observation map above, with ℷ = 0 switching it off.
 5. **The aggregate regime** as a Markov state: normal, which is absorbing in the stationary problem since a recession arrives
    unannounced, and recession, which ends with a stated hazard. The job-finding probability and each group's job-loss
    probability are given per regime. The stationary population is computed in the normal regime; the recession regime's rule
@@ -328,16 +329,16 @@ paper's own targets need:
   population, which are the estimation's targets; these need the distribution of 𝐩, hence the newborn income law and the
   income measure's machinery;
 - the mean MPC by wealth quartile, the paper's non-targeted moment, in both definitions: the optimizer's c̃′ and the
-  household's ς + (1 − ς) c̃′;
+  household's ℷ + (1 − ℷ) c̃′;
 - the aggregate ratio of consumption to income by group.
 
 **The experiments layer, sketched.** An experiment file names a base member and a dated sequence of changes to its
 environment: the regime chain (the recession with its exit hazard) applied from an unannounced onset; dated parameter paths
 (the benefit states opened for a window, the income scale of the tax cut, the belief about its extension); transfers in levels
-(the check with its means test); and a closure block (the aggregate-demand rule with κ, and the household's belief about the
-aggregate), under which the household's rule carries the aggregate as an argument. Its results are paths: aggregate consumption
-and income by quarter, each policy's consumption multipliers over horizons, and the welfare measures. This is the group's layer
-in the handoff's terms, and the schemas should reserve its place without designing it now.
+(the check with its means test); and a closure block (the aggregate-demand rule with Ω, and the household's belief about
+the aggregate), under which the household's rule carries the aggregate as an argument. Its results are paths: aggregate
+consumption and income by quarter, each policy's consumption multipliers over horizons, and the welfare measures. This
+is the group's layer in the handoff's terms, and the schemas should reserve its place without designing it now.
 
 ### What the shared schemas need, in order of difficulty
 
@@ -385,7 +386,7 @@ and every run is one (member, method, settings element, request file) → one re
 | `paper-published` | hafiscal/1 | the paper's normal-times calibration with `LogNormal` laws and the switch at `frozen`; 21 problems | with 7 nodes as a setting, the published numbers |
 | `paper-text` | hafiscal/1 | the same with the switch at `continues`, the family's standard world | the model the paper's text describes |
 | `paper-truncated` | hafiscal/1 | the same with `TruncatedLogNormal` laws at ±3 | the truncated variant; where the N-node solutions must converge |
-| `paper-no-splurge` | hafiscal/1 | ς = 0 with the paper's re-estimated β | the paper's splurge-free robustness |
+| `paper-no-splurge` | hafiscal/1 | ℷ = 0 with the paper's re-estimated β | the paper's splurge-free robustness |
 | `paper-low-benefits` | hafiscal/1 | ξ_U = 0.3, ξ_X = 0.15 | the paper's benefits robustness |
 | `paper-one-group` | hafiscal/1 | the high-school group alone | HAFiscal's own development member |
 | `paper-recession-permanent` | hafiscal/1 | the recession's chain as a stationary member | a stress test of the chain; not the paper's experiment |

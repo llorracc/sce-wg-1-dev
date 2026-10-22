@@ -43,7 +43,8 @@ tags or merge keys, no repeated keys, no booleans, no infinities.
 - With an unemployment probability ℘ of zero, the unemployment income ξ_U is zero, for the same reason.
 - ℘ξ_U < 1, so that employed income is positive.
 - The artificial borrowing constraint `a_Art`, a number no greater than zero or the word `natural`, is no lower than the natural
-  constraint `a_Nat` = −`ξ_min` κ/(1 − κ), with κ = `ψ_min` 𝒢/R; a looser one never binds and would describe the same model.
+  constraint `a_Nat` = −`ξ_min` `ψ_min`/(ℛ − `ψ_min`), with ℛ = R/𝒢; a looser one never binds and would describe the
+  same model.
 - Each law passes its own rules.
 - Every type passes the validity conditions: the FVAC, and the RIC or the WRIC.
 

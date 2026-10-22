@@ -97,7 +97,7 @@ def _close(a, b, tolerance=ARITHMETIC_TOLERANCE) -> bool:
 
 
 def natural_limit_from(lowest_psi: float, lowest_income: float, G: float, R: float) -> float | None:
-    """a_Nat from the lowest values of a representation: the capitalized worst income; None when kappa >= 1."""
+    """a_Nat from the lowest values of a representation: the capitalized worst income; None when psi_min >= R/G."""
     kappa = lowest_psi * G / R
     if kappa >= 1:
         return None
@@ -156,7 +156,7 @@ class Member:
         a_nat = self.natural_borrowing_constraint()
         if self.a_art == "natural":
             if math.isinf(a_nat):
-                problems.append("borrowing_constraint: 'natural' names no finite constraint, since kappa >= 1")
+                problems.append("borrowing_constraint: 'natural' names no finite constraint, since psi_min >= R/G")
             else:
                 self.a_art = a_nat
         elif a_nat > -math.inf and self.a_art < a_nat - TOLERANCE:
