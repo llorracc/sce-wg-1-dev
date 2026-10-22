@@ -1,21 +1,23 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 2026-10-22, after the fork's nine pull requests merged"
+description: "What the schema project holds, what is settled and what is open, as of the second memorial of 2026-10-22, after the fork's eleven pull requests merged"
 metadata:
   type: project
 ---
 
-**On the schemas' branch** (`buffer-stock-schema-work_CDC`, pushed). It holds the merged work of the fork's nine pull
+**On the schemas' branch** (`buffer-stock-schema-work_CDC`, pushed). It holds the merged work of the fork's eleven pull
 requests and `main`'s ontology. Nothing has been proposed to the working group's repository yet.
 - **Shared:**
   - `shock-laws.md` with its validator;
-  - `numerics.md` (method, settings and suite files, with the stage file's targets as a method file's addresses);
+  - `numerics.md` (method, settings and suite files, with the stage file's targets as a method file's addresses, under
+    the rules of attachment of #11);
   - `foundation.md` (the stage file as the foundation of a family's statement);
   - the design note `hafiscal-models-and-test-suite.md`;
   - the plan `existing-syntax.md`, executed for the distribution class;
   - `conventions.md`, with its standing check;
-  - `rosetta/`: the Rosetta Stones for HARK and QuantEcon's JAX code, with their cards;
-  - `adapters/`: HARK's adapter for `bst/1` (`adapters/hark/`), with its tests (5) and its gate.
+  - `rosetta/`: the Rosetta Stones for HARK and QuantEcon's JAX code, with their cards, HARK's describing its Markov
+    adapter since #11;
+  - `adapters/`: HARK's adapter for `bst/1` (`adapters/hark/`), with its tests (6) and its gate.
 - **`ontologies/probability-distributions/`:** the ontology of probability distributions, version 0.1.0-draft.1, rows
   `PD_0000001` to `PD_0000063`, its namespace provisional until `w3id.org/sce` is registered; 12 tests. The checker holds
   a pinned copy of its table.
@@ -50,6 +52,8 @@ requests and `main`'s ontology. Nothing has been proposed to the working group's
 | 6 | the Rosetta Stones for HARK and QuantEcon's JAX code | 23:10, `a955677` |
 | 8 | HARK's adapter for `bst/1`, on HARK's Markov consumer | 2026-10-22 12:56, `0cfe05c`, by the owner |
 | 9 | econ-ark's notation registry v5.0.0 and v6.0.0, and the HAFiscal design note's symbols | 2026-10-22 12:58, `673405f` |
+| 10 | registry v8.0.0: ξ_u and ξ_x, j for the employment state, ℘'s gloss, the design note's replacement rates | 2026-10-22 16:02:08, `613a9fb` |
+| 11 | each method where the stage gives it a place; HARK's Rosetta Stone for its Markov adapter | 2026-10-22 16:02:43, `a3f897a` |
 
 The branches are kept. With everything merged, the checker's 150 tests and the ontology's 12 pass.
 
@@ -65,7 +69,7 @@ The branches are kept. With everything merged, the checker's 150 tests and the o
   - the restructuring on the stage file;
   - the precision levels as settings, with measured convergence the only source of tolerances;
   - the switch's three values, with `continues` the standard;
-  - ξ_U and ξ_X for the replacement incomes, and named groups;
+  - ξ_u and ξ_x for the incomes while unemployed (ξ_U and ξ_X until #10), and named groups;
   - the borrowing limit in the household's units;
   - the benchmark's toy following bst/1's newborn.
 - **The truncated lognormal** as the usual law, with the stated standard deviation kept after truncation. An omitted
@@ -103,7 +107,9 @@ The branches are kept. With everything merged, the checker's 150 tests and the o
 - **Notation**: the BST paper and econ-ark's registry; the symbols in force are listed in
   [the notation memory](feedback_notation-and-foundation.md). Merged with #7 (2026-10-21) and #9 (2026-10-22). The
   registry's v8.0.0 rulings of 2026-10-22 (ξ_u and ξ_x, j for the employment state, ℘'s gloss, the design note's
-  replacement rates) are made by the next pull request.
+  replacement rates) are merged with #10.
+- **Method targets** (2026-10-22, #11): see [the memory on method attachment](feedback_method-attachment.md).
+  `bst/1`'s stage file stays free of any method's lines (15:11:02).
 - **Adapters** (20:41): a toolkit's adapter reads a parameter file, solves, and writes a results file; adapters live in
   `schemas/adapters/`. HARK's comes first, then dolo's; no QuantEcon module is published. HARK's is built on its Markov
   consumer with `bst/1` as the nonpersistent chain, starts from the benchmark's emitter with its private material taken
@@ -116,21 +122,21 @@ The branches are kept. With everything merged, the checker's 150 tests and the o
 - Each level's changes fall by a factor of about three, the first measured error estimates for comparing toolkits.
 - Its version 0.7 writes the run time only where the schema it validates against has the field.
 
-**The Rosetta Stones** (#6, merged).
-- HARK's stone still describes the standard consumer; it is to be revised for the adapter.
-- Matsya's third session, on HARK's source, waits for the owner's word in the bellman session.
+**The Rosetta Stones** (#6, revised in #11).
+- HARK's stone describes `MarkovConsumerType` at the adapter's pin, with the standard consumer in a section of its own.
+- Matsya's third session, on HARK's source, ran on 2026-10-22 and agrees with the stone (the findings of that day).
 
 **Open with the owner:**
 - in the HARK session: a tag on HARK's fork at the adapter's pinned commit, which he asked for, and #1858, which stays a
   draft;
 - registering `w3id.org/sce`, then the ontology's namespace with a new version and the checker's copy of its table;
 - what goes to the working group's repository, and when;
-- in the bellman session: the uniform for Bellman's comparator, Bellman's draft for the truncated lognormal, Matsya's third
-  session, and filing Bellman's parameter-condition defect.
+- in the bellman session: the uniform for Bellman's comparator, Bellman's draft for the truncated lognormal, and filing
+  Bellman's parameter-condition defect;
+- whether HARK's adapter should keep passing a member's `natural` constraint as the stated laws' natural limit (the
+  defects).
 
 **Next work:**
-- the pull request of registry v8.0.0's rulings (ξ_u, ξ_x, j, the design note, ℘'s gloss), approved at 14:35:13;
-- HARK's Rosetta Stone revised for the adapter;
 - dolo's adapter, written from the schemas, and the first comparison of two toolkits' results files;
 - the Markov family's results document, validator and members, with HARK's adapter extended to its chains;
 - the validators for the method, settings and request files; the survey's other classes;

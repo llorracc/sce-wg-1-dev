@@ -20,3 +20,8 @@ hold it with its stamps.
 **How to apply:** in a schema document, a stone or a pull request's description, cite a pinned commit, a public pull request
 or page, or a named public document. Describe anything private as not public, without its path or identifiers. Keep who read
 what, and when, in the journal and the findings. See [[feedback_no-timings]].
+
+**Bellman's documentation is not published** (2026-10-22: its site returned "Site not found", and its repository is
+private). A rule learned from Bellman, such as where a method attaches, is therefore stated in a public document as the
+schemas' own, and no Bellman page is cited for it; the findings record where it came from
+([[feedback_method-attachment]]).

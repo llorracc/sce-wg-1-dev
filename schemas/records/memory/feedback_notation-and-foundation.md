@@ -38,7 +38,8 @@ rules on it there; the schemas take each version by pull request (#7 for 1.0.0, 
   matching elasticity only;
 - in the Markov family `sep`, `find`, `p_exit`, `reg` and ℷ.
 
-The ξ_u, ξ_x and j of 2026-10-22 are made by the pull request after the memorial of that day.
+The ξ_u, ξ_x and j of 2026-10-22 were merged with #10 at 16:02:08 that day. A method's target names the operator in
+Bellman's spelling, `E_ψ_θ_j` ([[feedback_method-attachment]]).
 
 **How to apply:** look a symbol up in the registry, then BST's macros or SolvingMicroDSOPs' `Notation.md`, before writing it;
 write a minimum with BST's underline when typeset and with `_min` in plain text; never use a combining underline; propose a

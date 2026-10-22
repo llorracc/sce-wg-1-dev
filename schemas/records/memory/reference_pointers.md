@@ -5,8 +5,9 @@ metadata:
   type: reference
 ---
 
-- The fork's nine pull requests, all merged: https://github.com/llorracc/sce-wg-1-dev/pull/1 (the ontology, into `main`)
-  and pulls 2 to 7 on 2026-10-21, 8 and 9 on 2026-10-22 (into the schemas' branch). The project state lists what each held.
+- The fork's eleven pull requests, all merged: https://github.com/llorracc/sce-wg-1-dev/pull/1 (the ontology, into
+  `main`) and pulls 2 to 7 on 2026-10-21, 8 to 11 on 2026-10-22 (into the schemas' branch). The project state lists what
+  each held.
 - HARK's draft pull requests from the owner's fork that bear on the adapters: econ-ark/HARK#1858 (the Markov solver's
   expectations on the current state's points, and its value function; the HARK adapter's pin, commit `03a2c7a1` on
   llorracc/HARK's branch `markov-exact-expectations`), #1859 (the employment
@@ -34,7 +35,8 @@ metadata:
   notes on power-law decay, committed on its port branch and on master with a numerical battery, unpushed that day.
 - Bellman-SYM: the stage files here were elaborated and calibrated by the bellman session under Bellman at its repository
   head and under the Matsya service's installed version; the repository and its documentation site were not public on
-  2026-10-18, so its pages are cited by title.
+  2026-10-18, nor on 2026-10-22, so its pages were cited by title, and since 2026-10-22 its rules are stated as the
+  schemas' own.
 - Matsya: the design review of 2026-10-18 ran as four questions in one session and one stage-file question in another; the
   client is `bellman-matsya`. Its four questions-only sessions on the ontology of probability distributions ran from the
   bellman session on 2026-10-19; their answers are kept outside this repository, and the findings of that day hold what

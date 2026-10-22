@@ -26,9 +26,38 @@ Times are EDT, from the clock or an event's own stamp. The night's gate run for 
   him, and reports registry v8.0.0 merged at 14:18:09. At 14:35:13 the owner approves them as one draft pull request, `bst/1`'s
   label included, and asks for this memorial first.
 
-**State at the memorial.**
+**State at the first memorial (14:37:27, `69efda7`).**
 - The fork's pull requests #1 to #9 are merged; none is open.
 - **Next:** the pull request of the v8.0.0 rulings (ξ_u, ξ_x, j, the design note, ℘'s gloss); then HARK's Rosetta Stone
   revised for the adapter, and dolo's adapter.
 - **Open:** the tag on HARK's fork, with the owner in the HARK session; the bellman session's items; registering
   `w3id.org/sce`; what goes to the working group's repository.
+
+**After the first memorial.**
+- **14:40:50.** Draft #10 opens with the v8.0.0 rulings; the checker's 150 tests and the adapter's 5 pass.
+- **14:40 to 14:51.** The owner asks that the bellman session bring Bellman's repository up to date, then that it merge
+  GitHub's main into its feature branch. That session had been waiting on a question in its own window since 12:01 on
+  2026-10-21, with every message to it queued unread; the owner answers it there at about 14:48. At 14:49 it checks his
+  words with the relay checker and fetches: main is already in its branch, no branch moved, and nothing is merged or
+  pushed.
+- **14:52 to 15:09.** Matsya's third session on HARK's source runs from the bellman session (the findings).
+- **14:57.** A question of the owner's about Bellman's own repository is answered by the bellman session; it does not
+  bear on the schemas and is kept outside this repository.
+- **15:00 to 15:10.** The bellman session reports that ϱ elaborates and compiles in Bellman, and answers this session's
+  questions of 2026-10-21 on the cards' method tags: neither `!sum` nor `!exact-markov` on the block, and no tag for
+  HARK's cubic. Run through Bellman's check of a methods file, the schemas' method targets prove partly refused (the
+  findings). The owner rules at 15:11:02.
+- **15:11 to 15:26.** The fix is written on branch `method-attachment`, stacked on #10. The checker's 150 tests and the
+  adapter's 6 pass, a new test included. The bellman session's check admits every entry, and reports that none of
+  Bellman's documentation is published, so the rules are reworded as the schemas' own. Draft #11 opens at 15:26:33.
+- **16:01 to 16:03.** On the owner's word, #10 and #11 are taken out of draft and merged (the rulings). The checker's
+  150 tests pass on the merged branch, and the bellman session is told of the stage files' new names.
+
+**State at the second memorial.**
+- The fork's pull requests #1 to #11 are merged; none is open. The merged branches and their worktrees are kept.
+- **Next:** dolo's adapter, written from the schemas; then the Markov family's results document, validator and members,
+  with HARK's adapter extended to its chains; the validators for the method, settings and request files; the toy's
+  level-4 gate run.
+- **Open:** whether HARK's adapter should keep passing a `natural` constraint as the stated laws' limit; the tag on
+  HARK's fork, with the owner in the HARK session; the bellman session's items; registering `w3id.org/sce`; what goes to
+  the working group's repository.

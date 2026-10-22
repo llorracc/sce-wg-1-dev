@@ -32,3 +32,22 @@ The owner's decisions, in substance and by time (EDT). His words are kept outsid
   everywhere, the stage files' identifiers, the checker's attribute and HARK's adapter included; the HAFiscal design
   note's passage fixed; j for the employment state, `bst/1`'s label included, the same object; and ℘'s last gloss. The
   records are memorialized first.
+
+**After the first memorial (14:37):**
+- **14:40:40 to 14:43:21.** The bellman session's checkout of Bellman's repository is to be brought up to date: GitHub's
+  main merged into the feature branch it works on. Relayed there, and checked as typed by him; main was already in that
+  branch, so nothing was merged (the journal).
+- **About 14:48, in the bellman session** (reported here). Matsya's third session on HARK's source runs, once the six
+  excerpts of HARK's code are checked against HARK's own files at `4c285e86`. They were, and it ran (the findings).
+- **15:11:02** (question tool). `bst/1`'s stage file stays free of any method: it states the Euler equation and not the
+  endogenous grid method's lines, so the solution's method is time iteration on `policy.euler.solve`, with a toolkit's
+  endogenous grid method named as its handler, rather than `!egm` on a stage rewritten to admit it. In the same answer,
+  the fix of the method targets is made as one draft pull request on top of #10, tested, and pushed: both families'
+  tables, `numerics.md`, both Rosetta cards, the adapter's method file, and HARK's stone revised for its Markov adapter.
+  Opened as #11 at 15:26:33.
+- **16:01:39.** #10, then #11, merged in that order: both taken out of draft by this session, #10 merged at 16:02:08
+  (`613a9fb`), and #11, moved onto the schemas' branch, at 16:02:43 (`a3f897a`).
+- **17:57:03 and 17:57:06.** This memorial, and its push.
+
+Open with him from the afternoon: whether HARK's adapter should keep passing a member's `natural` constraint to HARK as
+the stated laws' natural limit (the defects); no member states `natural` yet.

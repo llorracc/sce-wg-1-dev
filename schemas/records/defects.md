@@ -123,3 +123,15 @@ Faults found in this project's own work, with their status.
 - **A push of unknown origin.** The schemas' branch was pushed to GitHub at 16:58:37 on 2026-10-21, carrying `12ff230`, the
   memorial of that afternoon; no command of this session made it, and that memorial had not been approved for pushing.
   **Status:** closed 20:33 on 2026-10-21, the owner confirming that he pushed it himself.
+- **Method targets that Bellman's methods files cannot use.** `bst/1`'s and the Markov family's tables, `numerics.md`,
+  both Rosetta cards and HARK's adapter attached the expectation's method to the block `dcsn_to_arvl` or its lines,
+  named an `evaluate` target that the stage does not have (calling it Bellman's name), put `!egm` on a policy block that
+  writes no endogenous grid, and tagged a quadrature of continuous laws `!sum`. Found on 2026-10-22 from the bellman
+  session's run of Bellman's check on the stage files. **Status:** fixed in #11 (`ab187c7`), merged at 16:02:43 on
+  2026-10-22, on the owner's ruling of 15:11:02 that `bst/1` stays free of any method's lines.
+- **A `natural` constraint passed as an artificial one.** HARK's adapter gives HARK `BoroCnstArt` = `a_Art`, and the
+  checker resolves a member's `natural` to the stated laws' natural limit. The adapter's effective member then has that
+  limit as an artificial constraint, above its nodes' own natural limit, where HARK's Rosetta Stone said that no adapter
+  does this. Found on 2026-10-22 while revising the stone. **Status:** the stone corrected in #11 to say what the
+  adapter does; whether the adapter should instead solve its nodes' own natural limit is open with the owner. No member
+  states `natural` yet.

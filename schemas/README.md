@@ -44,8 +44,11 @@ The names the validators fix, and the conventions they follow, are registered in
   reported as `undefined`.
 - **Implication:** an exact consequence of a member's parameters that tests a solution, such as the limiting MPC or a tail
   exponent, computed for the stated member by the checker.
-- **Method target:** the stage file's own name for a part a method attaches to: a block, a block's line, or an operator's
-  name covering every occurrence.
+- **Method target:** the stage file's own name for a part a method attaches to: a block, a line, or an operator's name
+  covering every occurrence. An expectation's method goes on its operator
+  ([`bst-1/model.md`](bst-1/model.md#method-targets)).
+- **Handler:** the routine a method entry names, which carries out what the entry's method tag leaves open, or a part
+  no tag names.
 - **Observation map:** a stated transformation from the standard rule to what a household does, such as HAFiscal's splurge,
   kept outside the household's problem.
 - **Level law:** a law of a quantity in levels, such as a newborn's permanent income, as against a mean-one shock law.
