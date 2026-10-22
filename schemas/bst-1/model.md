@@ -30,11 +30,11 @@ A plain-text name is never pasted into LaTeX as it stands: `ξ_min` is `\underli
 | typeset | plain text | meaning | source |
 |---|---|---|---|
 | `\psi`, `\underline{\psi}` | ψ, `ψ_min` | the permanent shock, E[ψ] = 1, and its lowest value | BST |
-| `\xi`, `\underline{\xi}` | ξ, `ξ_min` | the transitory shock, the ratio of income to permanent income, and its lowest value, the worst transitory income: the lower of ξ_U and the employed draw's lowest value `θ_min` (1 − ℘ξ_U)/(1 − ℘) | BST |
+| `\xi`, `\underline{\xi}` | ξ, `ξ_min` | the transitory shock, the ratio of income to permanent income, and its lowest value, the worst transitory income: the lower of ξ_u and the employed draw's lowest value `θ_min` (1 − ℘ξ_u)/(1 − ℘) | BST |
 | `\theta`, `\underline{\theta}` | θ, `θ_min` | the employed draw, E[θ] = 1, and its lowest value | BST |
 | `\sigma_{\psi}`, `\sigma_{\theta}` | σ_ψ, σ_θ | the standard deviations of log ψ and log θ, the parameters of the lognormal laws the stage file writes | BST |
-| `\wp` | ℘, `p_zero` in the stage file | the probability of unemployment, whatever ξ_U; BST's zero-income event when ξ_U = 0 | BST; econ-ark's `\pZero`, HARK's `UnempPrb` |
-| `\xi_{\mathrm{U}}` | ξ_U | income while unemployed, as a ratio to permanent income; 0 in BST, where it is the lowest value of ξ; in general it need not be the lowest | BST's ξ, subscripted as the Markov family writes it; econ-ark's `\IncUnemp` and HARK's `IncUnemp` |
+| `\wp` | ℘, `p_zero` in the stage file | the probability of unemployment, whatever ξ_u; BST's zero-income event when ξ_u = 0 | BST; econ-ark's `\pZero`, HARK's `UnempPrb` |
+| `\xi_{\mathrm{u}}` | ξ_u | income while unemployed, as a ratio to permanent income; 0 in BST, where it is the lowest value of ξ; in general it need not be the lowest | BST's ξ, subscripted as the Markov family writes it; econ-ark's `\IncUnemp`, HARK's `IncUnemp` |
 | `p_{\mathrm{worst}}` | `p_worst` | the probability of the worst income ψξ; ℘ in BST's case | this family; econ-ark's `\pWorst`, HARK's `WorstIncPrb` |
 | `\mathcal{L}` | ℒ | the probability of surviving into the next period | BST |
 | `\mathcal{G}` | 𝒢 | the growth factor of permanent income | BST (SolvingMicroDSOPs: Γ) |
@@ -61,10 +61,10 @@ A plain-text name is never pasted into LaTeX as it stands: `ξ_min` is `\underli
 
 - Permanent income: 𝐩_t = 𝒢 ψ_t 𝐩_{t−1}, where ψ is a positive shock with E[ψ] = 1.
 - Transitory income is ξ_t 𝐩_t:
-  - with probability ℘, the unemployment event, ξ = ξ_U, with ξ_U ≥ 0; BST's baseline is ξ_U = 0, the zero-income event;
-  - otherwise ξ = θ (1 − ℘ξ_U)/(1 − ℘), where θ is a positive shock with E[θ] = 1.
+  - with probability ℘, the unemployment event, ξ = ξ_u, with ξ_u ≥ 0; BST's baseline is ξ_u = 0, the zero-income event;
+  - otherwise ξ = θ (1 − ℘ξ_u)/(1 − ℘), where θ is a positive shock with E[θ] = 1.
 
-  Hence E[ξ] = 1. The scale needs 0 ≤ ℘ < 1 and ℘ξ_U < 1, so that employed income is positive.
+  Hence E[ξ] = 1. The scale needs 0 ≤ ℘ < 1 and ℘ξ_u < 1, so that employed income is positive.
 - ψ, θ and the unemployment event are independent of each other, over time and across agents. The expectation over (ψ′,
   ξ′) is over the product of their laws; a method that treats the two shocks separately composes as the product rule.
 - The laws of ψ and θ are parameters, each one of the [shock laws](../shock-laws.md). The usual choice is a truncated
@@ -76,7 +76,7 @@ A plain-text name is never pasted into LaTeX as it stands: `ξ_min` is `\underli
 2. A survivor draws ψ_t and ξ_t. Then 𝐩_t = 𝒢 ψ_t 𝐩_{t−1}, bank balances are b_t = R k_t/(𝒢 ψ_t) with k_t = a_{t−1}, and
    market resources are m_t = b_t + ξ_t.
 3. A newborn is **born employed**: it arrives with 𝐩_t = 1 and k_t = 0, and its first transitory draw is the employed
-   branch of ξ, so m_t = θ_t (1 − ℘ξ_U)/(1 − ℘) > 0. No newborn can draw the unemployment event.
+   branch of ξ, so m_t = θ_t (1 − ℘ξ_u)/(1 − ℘) > 0. No newborn can draw the unemployment event.
 4. The agent consumes c_t, and end-of-period assets are a_t = m_t − c_t ≥ `a_min`.
 
 In ratios to permanent income, a survivor's resources evolve as
@@ -101,7 +101,7 @@ In ratios to permanent income, a survivor's resources evolve as
 ## Parameter domains
 
 β_i > 0 (the validity conditions bound it above); ω_i > 0 with Σ ω_i = 1; ϱ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0; 0 ≤ ℘ < 1;
-ξ_U ≥ 0 with ℘ξ_U < 1; `a_Nat` ≤ `a_Art` ≤ 0.
+ξ_u ≥ 0 with ℘ξ_u < 1; `a_Nat` ≤ `a_Art` ≤ 0.
 
 ## The household's problem, as the stage file states it
 
@@ -109,20 +109,20 @@ The stage file [`bellman/buffer_stock.bl`](bellman/buffer_stock.bl) states one t
 in BST's notation. k is last period's a, the arrival state; `[>]` marks next period's value and `[<]` this period's
 arrival value.
 
-- **Sets and parameters.** m ∈ ℝ; a ∈ [`a_min`, ∞) with `a_min` = max(`a_Art`, `a_Nat`); the employment state z ∈
-  {employed, unemployed}; the parameters β, ℒ, ϱ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, ℘ and ξ_U, with the domains above.
+- **Sets and parameters.** m ∈ ℝ; a ∈ [`a_min`, ∞) with `a_min` = max(`a_Art`, `a_Nat`); the employment state j ∈
+  {employed, unemployed}; the parameters β, ℒ, ϱ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, ℘ and ξ_u, with the domains above.
   The stage file writes one law family, the lognormal, for ψ and θ; the family allows any of the shock laws, and a
   member with another law needs a stage file written with that law's family. A discrete law can be written today as a
   mixture of point masses, and the uniform with Bellman-SYM's `Uniform(a, b)`, since 2026-10-20. The truncated
   lognormal's family is in review, and the tabulated law has none yet. The file declares σ_ψ and σ_θ positive: a zero
   spread is the degenerate law, another family in the language.
-- **Shocks.** ψ ~ LogNormal(−σ_ψ²/2, σ_ψ); θ ~ LogNormal(−σ_θ²/2, σ_θ); z ~ Bernoulli(℘). The three are independent of
+- **Shocks.** ψ ~ LogNormal(−σ_ψ²/2, σ_ψ); θ ~ LogNormal(−σ_θ²/2, σ_θ); j ~ Bernoulli(℘). The three are independent of
   each other and of the state.
-- **Arrival to decision** (`arvl_to_dcsn`): ξ = ξ_U in the unemployment event, else θ (1 − ℘ξ_U)/(1 − ℘); m = R k/(𝒢 ψ)
+- **Arrival to decision** (`arvl_to_dcsn`): ξ = ξ_u in the unemployment event, else θ (1 − ℘ξ_u)/(1 − ℘); m = R k/(𝒢 ψ)
   + ξ.
 - **Decision to continuation** (`dcsn_to_cntn`): a = m − c.
 - **Continuation to decision** (`cntn_to_dcsn`): V = u(c) + β̊ V[>]; dV = u′(c).
-- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{ψ,θ,z}[(𝒢 ψ)^(1−ϱ) V]; dV[<] = E_{ψ,θ,z}[R (𝒢 ψ)^(−ϱ) dV].
+- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{ψ,θ,j}[(𝒢 ψ)^(1−ϱ) V]; dV[<] = E_{ψ,θ,j}[R (𝒢 ψ)^(−ϱ) dV].
 - **The policy** (`policy`): c = argmax over 0 < c ≤ m − `a_min` of u(c) + β̊ V[>], written as documentation; the
   operative line is the Euler equation with its complementarity clause, u′(c) = β̊ dV[>] ⟂ m − c ≥ `a_min`.
 
@@ -159,7 +159,7 @@ effective member's own values and reports them ([results](results.md), [`effecti
 
 | Derived parameter | Formula | Inputs | Where it enters |
 |---|---|---|---|
-| the employed-income scale | (1 − ℘ξ_U)/(1 − ℘) | ℘, ξ_U | the income map, so that E[ξ] = 1; fixed by the family and the same under every representation |
+| the employed-income scale | (1 − ℘ξ_u)/(1 − ℘) | ℘, ξ_u | the income map, so that E[ξ] = 1; fixed by the family and the same under every representation |
 | the worst income | `ξ_min` `ψ_min`, with `ξ_min` the lowest value of ξ and `ψ_min` of ψ | the laws' lowest values | the natural limit; the lower tail of the stationary population |
 | its probability `p_worst` | the mass at the worst income | the laws' masses at their lowest values | the WRIC; the MPC at the lower limit; the atom case of the welfare conditions |
 | the natural borrowing limit `a_Nat` | −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) with ℛ = R/𝒢; none when `ψ_min` ≥ ℛ | `ξ_min`, `ψ_min`, 𝒢, R | the constraint in force |
@@ -170,7 +170,7 @@ the admitted laws, the truncation point, or zero for a law unbounded below ([con
 
 ## What the family fixes, so that no parameter file can state it
 
-- E[ψ] = 1, E[θ] = 1, and the scaling (1 − ℘ξ_U)/(1 − ℘) of the employed draw.
+- E[ψ] = 1, E[θ] = 1, and the scaling (1 − ℘ξ_u)/(1 − ℘) of the employed draw.
 - A newborn's 𝐩 = 1 and k = 0, and that it is born employed.
 - The order of events above.
 
@@ -186,7 +186,7 @@ keep names of the schema's own. Each part exists once for each type, and a metho
 | `policy` | the choice of c: the root of the Euler line, or the maximization | the endogenous grid method, time iteration or value iteration attach here |
 | `evaluate` | the rule c_i(m) between the points where it was computed | linear, cubic Hermite or spline interpolation; Bellman's name for the policy's evaluation |
 | `dcsn_to_arvl` | the expectation over ψ′, θ′ and the unemployment event in the value and marginal-value lines | the quadrature of each shock is a setting of this one part, since the stage writes one joint expectation; `dcsn_to_arvl.value` and `dcsn_to_arvl.marginal` name the two lines separately |
-| `E_{ψ,θ,z}` | every occurrence of the joint expectation | the operator-name form, which covers both lines at once |
+| `E_{ψ,θ,j}` | every occurrence of the joint expectation | the operator-name form, which covers both lines at once |
 | `cntn_to_dcsn.value` | the value V, and hence population welfare | `value-function` keeps it; a method that drops it reports welfare from simulated utility instead |
 | `arvl_to_dcsn` | the population's transition: how ψ, θ and the event move the forward measure | the forward builder's method, for a toolkit that pushes a distribution rather than agents |
 | `population.distribution` | the stationary population, the fixed point of the forward map | no stage target: Monte Carlo, a histogram, or the eigenvector of a transition matrix |
@@ -202,7 +202,7 @@ these names:
 - `return` (R);
 - `borrowing_constraint` (`a_Art`), a number no greater than 0 and no less than `a_Nat`, or the word `natural` for
   `a_Art` = `a_Nat`;
-- `income`, holding `growth` (𝒢), `permanent_shock` (the law of ψ), `unemployment: {prob, income}` (℘ and ξ_U) and
+- `income`, holding `growth` (𝒢), `permanent_shock` (the law of ψ), `unemployment: {prob, income}` (℘ and ξ_u) and
   `employed_shock` (the law of θ).
 
 Every free parameter appears, and nothing is left to a toolkit's defaults. With `prob` 0, `income` is 0, so that the
@@ -229,7 +229,7 @@ file has one written form. The toy of the buffer-stock benchmark, with its true 
       employed_shock: {TruncatedLogNormal: {sd_log: 0.34641016151377546, bot: -3.0, top: 3.0}}
 
 The community library's buffer-stock model (QuantEcon community-library pull request 5, annual period) is BST's own
-version: K = 1 and ℒ = 1; ℘ = 0.005 with ξ_U = 0; 𝒢 = 1.03, R = 1.04, β = 0.96 and ϱ = 2; untruncated lognormal ψ and θ,
+version: K = 1 and ℒ = 1; ℘ = 0.005 with ξ_u = 0; 𝒢 = 1.03, R = 1.04, β = 0.96 and ϱ = 2; untruncated lognormal ψ and θ,
 each with standard deviation of the log 0.1:
 
     family: bst/1
@@ -246,5 +246,5 @@ each with standard deviation of the log 0.1:
       employed_shock: {LogNormal: {sd_log: 0.1}}
 
 The community library follows BST's notation: bold ξ for the transitory shock and θ for its positive part, b for the
-bank balance relative to next period's permanent income, 𝒢 for growth, ℘ for the zero-income probability, and bold
+bank balance relative to next period's permanent income, 𝒢 for growth, ℘ for the probability of unemployment, and bold
 letters for levels. It departs in one name: it writes relative risk aversion as γ, where BST and these schemas write ϱ.

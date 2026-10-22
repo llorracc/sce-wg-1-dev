@@ -25,8 +25,8 @@ HARK solves a `bst/1` household with its `MarkovConsumerType` on the nonpersiste
 [Markov family](../../bst-markov_ui-and-agg/model.md) writes a `bst/1` member. The chain has two employment states,
 employed and unemployed, and both rows of its matrix are (1 − ℘, ℘): unemployment with probability ℘ whatever the previous
 state.
-- **Income in each state.** Employed income is ψ times the employed draw scaled by (1 − ℘ξ_U)/(1 − ℘). Unemployed income is ψ
-  times ξ_U, since ψ is drawn in both states.
+- **Income in each state.** Employed income is ψ times the employed draw scaled by (1 − ℘ξ_u)/(1 − ℘). Unemployed income
+  is ψ times ξ_u, since ψ is drawn in both states.
 - **The rest is common.** Return, growth and survival are the same in both states, and newborns start employed.
 - **The nodes.** The laws are discretized by the adapter: equiprobable bins, each node the bin's exact conditional mean.
 - **The same rule in both states.** The end-of-period value does not depend on the current state, so the two states' rules

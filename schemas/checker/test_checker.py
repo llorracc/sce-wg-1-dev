@@ -340,7 +340,7 @@ def test_bellman_calibration_matches_the_filed_one():
     with pytest.raises(ValueError, match="no Bellman-SYM family"):
         load_member(MEMBERS / "toy.yaml").bellman_calibration(0)
     untruncated = load_member(MEMBERS / "toy-untruncated.yaml").bellman_calibration(6)
-    assert untruncated["β"] == 0.990 and untruncated["a_Nat"] == 0.0 and untruncated["ξ_U"] == 0.7
+    assert untruncated["β"] == 0.990 and untruncated["a_Nat"] == 0.0 and untruncated["ξ_u"] == 0.7
 
 
 def _consistent_results(member: Member) -> dict:

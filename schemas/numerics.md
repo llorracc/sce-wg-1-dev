@@ -30,7 +30,7 @@ against the stated member's law.
 
 A method file chooses, for each part of the model, the algorithm that computes it. A part is named by the family's stage
 file's own target, as Bellman's methods files name it: a block's id such as `policy`, a block's line such as
-`dcsn_to_arvl.value`, or an operator's name such as `E_{ψ,θ,z}`, which covers every occurrence. The family's model
+`dcsn_to_arvl.value`, or an operator's name such as `E_{ψ,θ,j}`, which covers every occurrence. The family's model
 schema lists its targets with a comment on each ([`bst/1`](bst-1/model.md#method-targets)); two parts the stage cannot
 name, the stationary population and the diagnostics' expectation, keep names of the schema's own. An entry for a line
 overrides one for its block, and a block's entry overrides an operator name's.
