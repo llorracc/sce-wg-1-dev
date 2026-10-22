@@ -15,7 +15,7 @@ How the member is solved.
   3. Each type is solved by HARK's MarkovConsumerType with two employment states, employed and unemployed, and identical
      rows: unemployment with probability wp whatever the previous state, the nonpersistent chain that writes bst/1 as a
      member of the Markov family. The employed state's income is the scaled employed draw, the unemployed state's the
-     income while unemployed xi_U; psi is drawn in both. The two states' rules must then be the same function of m, which
+     income while unemployed xi_u; psi is drawn in both. The two states' rules must then be the same function of m, which
      the adapter asserts. The rule is cubic Hermite and the value function is on.
   4. The stationary population, under the population measure and, when the adapter's verdicts say it exists, the income
      measure: a lottery onto an asset grid (Young, 2010) with mortality and newborn replacement in one sparse linear solve;
@@ -194,10 +194,10 @@ def employed_scale(member):
 
 def state_shocks(member, p_psi, psi, p_th, th):
     """The income shocks of each employment state, as (probabilities, psi, xi) over the product of the permanent nodes and the
-    state's transitory nodes: employed, the scaled employed draws; unemployed, the income while unemployed xi_U."""
+    state's transitory nodes: employed, the scaled employed draws; unemployed, the income while unemployed xi_u."""
     scale = employed_scale(member)
     employed = (np.outer(p_psi, p_th).ravel(), np.repeat(psi, len(th)), np.tile(scale * th, len(psi)))
-    unemployed = (np.asarray(p_psi, float).copy(), np.asarray(psi, float).copy(), np.full(len(psi), float(member.xi_U)))
+    unemployed = (np.asarray(p_psi, float).copy(), np.asarray(psi, float).copy(), np.full(len(psi), float(member.xi_u)))
     return employed, unemployed
 
 
@@ -207,7 +207,7 @@ def joint_shocks(member, p_psi, psi, p_th, th):
     scale = employed_scale(member)
     if member.wp > 0:
         p_xi = np.concatenate([[member.wp], (1.0 - member.wp) * p_th])
-        xi = np.concatenate([[member.xi_U], scale * th])
+        xi = np.concatenate([[member.xi_u], scale * th])
     else:
         p_xi, xi = p_th, scale * th
     return np.outer(p_psi, p_xi).ravel(), np.repeat(psi, len(xi)), np.tile(xi, len(psi))
@@ -231,11 +231,11 @@ def expectations_and_lowest(member, p_psi, psi, p_th, th):
     scale = employed_scale(member)
     if member.wp > 0:
         p_xi = np.concatenate([[member.wp], (1.0 - member.wp) * p_th])
-        xi = np.concatenate([[member.xi_U], scale * th])
+        xi = np.concatenate([[member.xi_u], scale * th])
     else:
         p_xi, xi = np.asarray(p_th, float), scale * th
     psi_low, inc_low = float(psi.min()), float(xi.min())
-    if member.wp > 0 and member.xi_U == 0.0:
+    if member.wp > 0 and member.xi_u == 0.0:
         p_min = float(member.wp)                 # income is zero whatever psi draws: the checker's own rule for p_min
     else:
         p_min = float(p_xi[xi == inc_low].sum()) * float(p_psi[psi == psi_low].sum())
@@ -753,7 +753,7 @@ def exact_expected_marginal_value(cf, member, a, m_kink, n=DIAG_NODES):
         p_th, th = law_quadrature(member.theta, n, split_at=split)
         emp = float(np.dot(p_th, np.asarray(cf(base + scale * th), float) ** (-rho)))
         if member.wp > 0:
-            emp = member.wp * float(cf(base + member.xi_U)) ** (-rho) + (1.0 - member.wp) * emp
+            emp = member.wp * float(cf(base + member.xi_u)) ** (-rho) + (1.0 - member.wp) * emp
         total += pp * (G * ps) ** (-rho) * emp
     return total
 
@@ -793,7 +793,7 @@ def m_infimum(member):
     shock that makes it smallest (a property of the member, not of any toolkit's nodes)."""
     xi_inf = employed_scale(member) * getattr(member.theta, "infimum", 1.0)
     if member.wp > 0:
-        xi_inf = min(xi_inf, member.xi_U)
+        xi_inf = min(xi_inf, member.xi_u)
     a_lo = float(member.a_art)
     ends = [p for p in (getattr(member.psi, "infimum", 1.0), getattr(member.psi, "supremum", 1.0)) if 0 < p < math.inf]
     return xi_inf + (min(member.R * a_lo / (member.G * p) for p in ends) if ends else 0.0)

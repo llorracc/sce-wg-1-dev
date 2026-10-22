@@ -4,7 +4,7 @@
 # schemas/hafiscal-models-and-test-suite.md, "The paper's model as a family").
 # Written by hand on 2026-10-18.
 # Two Markov states: the macro regime reg, drawn first, with normal absorbing;
-# then the employment state z, whose row the previous state selects and whose
+# then the employment state j, whose row the previous state selects and whose
 # probabilities the current regime selects. Employed income is e θ; the
 # benefit and exhaustion states have fixed replacement incomes. Permanent
 # income in a quarter of unemployment follows the label parameter P_u:
@@ -16,7 +16,7 @@
 
 Xm := ℝ
 Xa := [max(a_Art, a_Nat), inf)
-Z   := {E, U_2, U_1, X}        :: ["employment states in the order of the rows: employed; unemployed with two quarters of benefits left, this one included; unemployed with one quarter left; unemployed without benefits"]
+J   := {E, U_2, U_1, X}        :: ["employment states in the order of the rows: employed; unemployed with two quarters of benefits left, this one included; unemployed with one quarter left; unemployed without benefits"]
 Reg := {normal, recession}     :: ["macro regime in the order of the rows: normal, absorbing; recession"]
 Pu  := {continues, grows, frozen}   :: ["permanent income in a quarter of unemployment: 𝒢ψ applies; 𝒢 applies and ψ = 1; P is unchanged"]
 
@@ -30,8 +30,8 @@ a_Nat : (-inf, 0]    :: ["natural borrowing limit a_Nat, as a ratio to permanent
 σ_ψ   : ℝ₊₊          :: ["standard deviation of log ψ"]
 σ_θ   : ℝ₊₊          :: ["standard deviation of log θ, the employed draw"]
 e     : ℝ₊₊          :: ["scale of employed income, e θ; 1 in the paper"]
-ξ_U   : ℝ₊₊          :: ["income with benefits, as a ratio to permanent income (the paper's ρ_b)"]
-ξ_X   : ℝ₊₊          :: ["income without benefits, as a ratio to permanent income (the paper's ρ_nb)"]
+ξ_u   : ℝ₊₊          :: ["income with benefits, as a ratio to permanent income (the paper's ρ_b)"]
+ξ_x   : ℝ₊₊          :: ["income without benefits, as a ratio to permanent income (the paper's ρ_nb)"]
 P_u   : Pu           :: ["the family's switch unemployed_permanent_income"]
 p_exit : [0,1]       :: ["probability that a recession ends in a quarter (exit_hazard)"]
 sep_n  : [0,1]       :: ["probability of losing a job in a normal quarter, for the group (job_loss.normal)"]
@@ -41,10 +41,10 @@ find_r : [0,1]       :: ["probability of finding a job in a recession quarter (j
 
 reg : Reg
 reg ~ Categorical(((1, 0), (p_exit, 1 - p_exit))[reg_prev])   :: ["this quarter's regime, from the row of the previous regime reg_prev; normal is absorbing"]
-z : Z
-z ~ Categorical(((1 - (sep_n, sep_r)[reg], (sep_n, sep_r)[reg], 0, 0), ((find_n, find_r)[reg], 0, 1 - (find_n, find_r)[reg], 0), ((find_n, find_r)[reg], 0, 0, 1 - (find_n, find_r)[reg]), ((find_n, find_r)[reg], 0, 0, 1 - (find_n, find_r)[reg]))[z_prev])   :: ["this quarter's employment state, from the row of the previous state z_prev, with the probabilities of this quarter's regime reg"]
+j : J
+j ~ Categorical(((1 - (sep_n, sep_r)[reg], (sep_n, sep_r)[reg], 0, 0), ((find_n, find_r)[reg], 0, 1 - (find_n, find_r)[reg], 0), ((find_n, find_r)[reg], 0, 0, 1 - (find_n, find_r)[reg]), ((find_n, find_r)[reg], 0, 0, 1 - (find_n, find_r)[reg]))[j_prev])   :: ["this quarter's employment state, from the row of the previous state j_prev, with the probabilities of this quarter's regime reg"]
 ψ : ℝ₊₊
-ψ ~ LogNormal(-((σ_ψ, (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u])[z]^2)/2, (σ_ψ, (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u])[z])   :: ["mean-one permanent shock; ψ = 1 in a quarter of unemployment when P_u is grows or frozen"]
+ψ ~ LogNormal(-((σ_ψ, (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u])[j]^2)/2, (σ_ψ, (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u])[j])   :: ["mean-one permanent shock; ψ = 1 in a quarter of unemployment when P_u is grows or frozen"]
 θ : ℝ₊₊
 θ ~ LogNormal(-(σ_θ^2)/2, σ_θ)   :: ["mean-one employed draw; drawn but unused when unemployed"]
 
@@ -52,17 +52,17 @@ z ~ Categorical(((1 - (sep_n, sep_r)[reg], (sep_n, sep_r)[reg], 0, 0), ((find_n,
 𝑑𝑢(c : ℝ₊₊) := c^(-ϱ)             :: [id=marg_util]
 𝒞(x : Xm) := (0, x - max(a_Art, a_Nat)]   :: [id=feasible]
 
-[id=arvl_to_dcsn, (k : Xa, z_prev : Z, reg_prev : Reg, reg, z, ψ, θ) : !arvl -> (m : Xm, z_d : Z, reg_d : Reg) : !dcsn] {
-    𝒢_t = (𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[z]   :: [id=growth, "the growth factor of this quarter: 𝒢 when employed; 𝒢, 𝒢 or 1 in a quarter of unemployment, by the label"]
-    ξ   = (e*θ, ξ_U, ξ_U, ξ_X)[z]     :: [id=transitory_income, "income divided by permanent income"]
+[id=arvl_to_dcsn, (k : Xa, j_prev : J, reg_prev : Reg, reg, j, ψ, θ) : !arvl -> (m : Xm, j_d : J, reg_d : Reg) : !dcsn] {
+    𝒢_t = (𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[j]   :: [id=growth, "the growth factor of this quarter: 𝒢 when employed; 𝒢, 𝒢 or 1 in a quarter of unemployment, by the label"]
+    ξ   = (e*θ, ξ_u, ξ_u, ξ_x)[j]     :: [id=transitory_income, "income divided by permanent income"]
     m   = R*k/(𝒢_t*ψ) + ξ             :: [id=market_resources, "a survivor's resources; k is last quarter's a"]
-    z_d = z                           :: [id=employment_state]
+    j_d = j                           :: [id=employment_state]
     reg_d = reg                       :: [id=regime]
 }
 
-[id=dcsn_to_cntn, (m, z_d, reg_d, c : ℝ₊₊ @ !ctrl) : !dcsn -> (a : Xa, z_c : Z, reg_c : Reg) : !cntn] {
+[id=dcsn_to_cntn, (m, j_d, reg_d, c : ℝ₊₊ @ !ctrl) : !dcsn -> (a : Xa, j_c : J, reg_c : Reg) : !cntn] {
     a   = m - c                       :: [id=savings]
-    z_c = z_d                         :: [id=employment_state]
+    j_c = j_d                         :: [id=employment_state]
     reg_c = reg_d                     :: [id=regime]
 }
 
@@ -72,8 +72,8 @@ z ~ Categorical(((1 - (sep_n, sep_r)[reg], (sep_n, sep_r)[reg], 0, 0), ((find_n,
 }
 
 [id=dcsn_to_arvl, (V, dV) : !dcsn -> (V[<] : ℝ @ !vlu, dV[<] : ℝ₊₊ @ !mrgnvl) : !arvl] {
-    V[<]  = E_{reg,z,ψ,θ}(((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[z]*ψ)^(1-ϱ) * V)         :: [id=value]
-    dV[<] = E_{reg,z,ψ,θ}(R * ((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[z]*ψ)^(-ϱ) * dV)     :: [id=marginal]
+    V[<]  = E_{reg,j,ψ,θ}(((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[j]*ψ)^(1-ϱ) * V)         :: [id=value]
+    dV[<] = E_{reg,j,ψ,θ}(R * ((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[j]*ψ)^(-ϱ) * dV)     :: [id=marginal]
 }
 
 [id=policy, (V[>] : ℝ @ !vlu, dV[>] : ℝ₊₊ @ !mrgnvl) : !cntn -> (c : ℝ₊₊ @ !ctrl) : !dcsn] {

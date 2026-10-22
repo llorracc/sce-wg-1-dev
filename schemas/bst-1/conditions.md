@@ -34,16 +34,16 @@ holds, and 0 when it fails. For large m, then, m′ ≈ (ℛ (1 − `κ_min`)/ψ
 The moments of the permanent shock that the conditions use are E[ψ^k] for real k, E[log ψ] and E[ψ log ψ], with `ψ_min`,
 the lowest value of its support, and the mass there.
 
-`ξ_min` is the lowest value of the transitory shock ξ: ξ_U when ℘ > 0 and ξ_U lies below the employed draws, else the
-lowest employed draw `θ_min` (1 − ℘ξ_U)/(1 − ℘). `p_worst` is the probability that income ψξ takes its lowest value:
-- with ℘ > 0 and ξ_U = 0, BST's case, `p_worst` = ℘, since income is then zero whatever ψ is;
+`ξ_min` is the lowest value of the transitory shock ξ: ξ_u when ℘ > 0 and ξ_u lies below the employed draws, else the
+lowest employed draw `θ_min` (1 − ℘ξ_u)/(1 − ℘). `p_worst` is the probability that income ψξ takes its lowest value:
+- with ℘ > 0 and ξ_u = 0, BST's case, `p_worst` = ℘, since income is then zero whatever ψ is;
 - otherwise `p_worst` = P(ξ = `ξ_min`) · P(ψ = `ψ_min`), which is zero unless both laws put mass at their lowest values.
 
 ## Validity conditions
 
 A member that fails any of these is rejected outright:
 - the parameter domains of the [model schema](model.md) and the rules of the [shock laws](../shock-laws.md);
-- ℘ξ_U < 1, so that employed income is positive;
+- ℘ξ_u < 1, so that employed income is positive;
 - `a_Nat` ≤ `a_Art` ≤ 0, for one written form;
 - for every type, the FVAC, and the RIC or the WRIC, from the table below.
 
@@ -91,7 +91,7 @@ The special points of the rule:
 - **The buffer stock target m̂_i** needs ℛ (1 − `κ_min`) E[ψ^(−1)] < 1.
 - **The pseudo-target m̌_i** needs ℛ (1 − `κ_min`) < 1.
 - **The kink m*_i** needs the artificial constraint to bind somewhere: `a_Art` > `a_Nat`. It is absent, for example,
-  when ξ_U = 0 and `a_Art` = 0.
+  when ξ_u = 0 and `a_Art` = 0.
 
 When the RIC holds these are the GIC-Mod and the GIC. When it fails, the slope argument above replaces Þ̊ by R. That is a
 deduction, not yet checked against a published result. Both targets are defined conditional on survival, with ℒ entering
@@ -103,18 +103,18 @@ The stationary population, for each type:
 **With ℒ < 1:**
 - **Population measure.** The distribution exists for every valid member. It is a mixture over ages with geometric
   weights (1 − ℒ) ℒ^s, the unique fixed point of a map that contracts at rate ℒ.
-- **Its moments.** The moment of order j is finite exactly when ε > j, where ε > 0 solves ℒ E[(ℛ (1 − `κ_min`)/ψ)^ε] =
+- **Its moments.** The moment of order q is finite exactly when ε > q, where ε > 0 solves ℒ E[(ℛ (1 − `κ_min`)/ψ)^ε] =
   1. When no root exists, which happens when ℛ (1 − `κ_min`) is at most `ψ_min`, every moment is finite. In particular,
      the mean is finite exactly when
   ℒ ℛ (1 − `κ_min`) E[ψ^(−1)] < 1.
-- **Income measure.** It is defined when ℒ 𝒢 < 1. Its moment of order j is finite exactly when ℒ 𝒢 (ℛ (1 − `κ_min`))^j
-  E[ψ^(1−j)] < 1, so its mean is finite exactly when ℒ R (1 − `κ_min`) < 1. When ℒ 𝒢 ≥ 1 it is `undefined` for `bst/1`.
+- **Income measure.** It is defined when ℒ 𝒢 < 1. Its moment of order q is finite exactly when ℒ 𝒢 (ℛ (1 − `κ_min`))^q
+  E[ψ^(1−q)] < 1, so its mean is finite exactly when ℒ R (1 − `κ_min`) < 1. When ℒ 𝒢 ≥ 1 it is `undefined` for `bst/1`.
 
 **With ℒ = 1:**
-- The population measure needs the GIC-Szeidl. Its moment of order j is finite exactly when j < ε, where
+- The population measure needs the GIC-Szeidl. Its moment of order q is finite exactly when q < ε, where
   E[(ℛ (1 − `κ_min`)/ψ)^ε] = 1, so its mean is finite exactly when ℛ (1 − `κ_min`) E[ψ^(−1)] < 1.
-- The income measure needs the GIC-Harmenberg. Its moment of order j is finite exactly when (ℛ (1 − `κ_min`))^j
-  E[ψ^(1−j)] < 1, so its mean is finite exactly when ℛ (1 − `κ_min`) < 1.
+- The income measure needs the GIC-Harmenberg. Its moment of order q is finite exactly when (ℛ (1 − `κ_min`))^q
+  E[ψ^(1−q)] < 1, so its mean is finite exactly when ℛ (1 − `κ_min`) < 1.
 
 Statistics that need less:
 - The generalized Lorenz ordinates GL(p) = ∫₀^p Q(u) du are finite for p < 1 whenever the distribution exists. Only
@@ -136,10 +136,10 @@ Exact consequences of the parameters, which the comparison tests a results file 
   constraint does not bind there.
 - **The natural borrowing constraint.** With u(0) = −∞ the household never lets the worst income force zero consumption,
   so `a_Nat` = −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) when `ψ_min` < ℛ, and no finite natural constraint when `ψ_min` ≥ ℛ;
-  `a_Nat` = 0 whenever a law is unbounded below or ξ_U = 0 with ℘ > 0. The constraint in force is `a_min` = max(`a_Art`,
+  `a_Nat` = 0 whenever a law is unbounded below or ξ_u = 0 with ℘ > 0. The constraint in force is `a_min` = max(`a_Art`,
   `a_Nat`); the rule satisfies c(m) < m − `a_min` wherever the artificial constraint does not bind.
 - **The worst-income probability `p_worst`**, as defined above; with it, the natural constraint and the MPC bounds.
-- **The newborn's lowest resources.** A newborn's m is at least `θ_min` (1 − ℘ξ_U)/(1 − ℘), and exactly that when θ has
+- **The newborn's lowest resources.** A newborn's m is at least `θ_min` (1 − ℘ξ_u)/(1 − ℘), and exactly that when θ has
   mass at its lowest value.
 - **The tail exponents** ε of the two measures, which say how the stationary distribution's upper tail decays, and hence
   which moments are finite.
@@ -151,8 +151,8 @@ Exact consequences of the parameters, which the comparison tests a results file 
 
 **Positivity.** No household, survivor or newborn, arrives at the decision perch with resources at which no positive
 consumption is feasible. Survivors satisfy it by the natural borrowing constraint, an implication of ϱ > 1. Newborns
-satisfy it by the family's convention: born employed, with no assets, so m = θ (1 − ℘ξ_U)/(1 − ℘) > 0 under every shock
-law; the one parameter condition this leaves, ℘ξ_U < 1, is among the validity conditions.
+satisfy it by the family's convention: born employed, with no assets, so m = θ (1 − ℘ξ_u)/(1 − ℘) > 0 under every shock
+law; the one parameter condition this leaves, ℘ξ_u < 1, is among the validity conditions.
 
 **The welfare conditions.** Population welfare W_i = E[v_i(m)] and the mean felicity F_i = E[u(c_i(m))] are finite only
 if the stationary population puts little enough mass where v_i and u diverge, and the mean marginal utility M_i =
