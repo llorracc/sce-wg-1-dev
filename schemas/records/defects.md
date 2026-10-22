@@ -105,13 +105,21 @@ Faults found in this project's own work, with their status.
   natural limit with the income while unemployed where the worst income belongs: the lowest value of ξ, the lower of the
   income while unemployed and the lowest employed node. On the toy's seven equiprobable nodes the lowest employed node is
   0.558, below the income while unemployed of 0.7. The checker and `model.md`'s formulas were right. Found by the
-  community-library session's module at 12:33 on 2026-10-21. **Status:** fixed on #6's branch in `329d78c`, unpushed; it
-  waits for the notation pull request, so that #6 takes the new notation.
+  community-library session's module at 12:33 on 2026-10-21. **Status:** fixed in `329d78c`, pushed with #6 at 19:58 on
+  2026-10-21, in the new notation, where the worst income is `ξ_min` and the income while unemployed ξ_U.
 - **The income while unemployed glossed as the minimum of ξ.** `bst/1`'s notation table and the stage file's gloss on its
   unemployment income call that income the minimum of ξ. That is true only when no employed value is lower, as in BST,
-  where the income is 0; the toy's lowest employed income is 0.333, below its 0.7. Found on 2026-10-21. **Status:** open;
-  the notation pull request, approved at 13:03, replaces the gloss.
+  where the income is 0; the toy's lowest employed income is 0.333, below its 0.7. Found on 2026-10-21. **Status:** fixed
+  in #7, opened at 19:46 on 2026-10-21: the income while unemployed is ξ_U, glossed as the minimum of ξ only in BST's case.
 - **Questions written with a mark the owner's terminal does not draw.** On 2026-10-21 notation questions put to the owner
   used a combining underline, which his terminal shows as a bare letter; the questions read ambiguously, and he had to
   ask what was meant. **Status:** closed: in the terminal, symbols with marks are written in LaTeX, beside their names in
   words.
+- **The two targets the other way round.** The schemas wrote the buffer stock target `\check{m}` and the pseudo-target
+  `\hat{m}`, as BufferStockTheory's slides do; the paper and econ-ark's notation registry write the target `\hat{m}`
+  (`\mTrgNrm`) and the pseudo-target `\check{m}` (`\mBalLvl`). Found on 2026-10-21 while comparing the schemas with the
+  registry. **Status:** fixed in #7 (`96898b4`), on the owner's word of 17:06; the slides are the BufferStockTheory
+  session's.
+- **A push of unknown origin.** The schemas' branch was pushed to GitHub at 16:58:37 on 2026-10-21, carrying `12ff230`, the
+  memorial of that afternoon; no command of this session made it, and that memorial had not been approved for pushing.
+  **Status:** closed 20:33 on 2026-10-21, the owner confirming that he pushed it himself.

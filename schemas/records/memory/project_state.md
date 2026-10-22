@@ -1,11 +1,12 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the second memorial of 2026-10-21"
+description: "What the schema project holds, what is settled and what is open, as of the third memorial of 2026-10-21"
 metadata:
   type: project
 ---
 
-**On the schemas' branch** (`buffer-stock-schema-work_CDC`, pushed with the memorials of 2026-10-21). All of it is draft, and none has been
+**On the schemas' branch** (`buffer-stock-schema-work_CDC`; GitHub holds it to the second memorial of 2026-10-21, which the
+owner pushed himself; the third is local). All of it is draft, and none has been
 proposed to the working group yet.
 - **Shared:**
   - `shock-laws.md` with its validator;
@@ -39,13 +40,16 @@ proposed to the working group yet.
 | 3 | `drop-the-quantile-at-one` | `141d17e` | the schemas' branch | the quantile maps without Q(1), at the fourteen probabilities 0.01 to 0.999, the Lorenz maps keeping 1; 76 tests |
 | 4 | `coverage-of-the-representation` | `029a73f` | the schemas' branch | an optional `coverage` element in the population and income-measure blocks, with the toolkits' final wording; 82 tests |
 | 5 | `drop-the-wall-time` | `c1362d9` | the schemas' branch | no run time in a results file: the provenance keeps hardware and threads; 74 tests, 86 with #3 and #4 |
-| 6 | `rosetta-stones` | `a9e9043` | the schemas' branch | the Rosetta Stones for HARK and QuantEcon's JAX code, with their cards and a standing check, and `model.md`'s sentence on Bellman-SYM's families; 80 tests, 130 with #2. `329d78c` sits on the branch unpushed, waiting for the notation pull request |
+| 6 | `rosetta-stones` | `3b0448e` | `notation-bst`, #7's branch | the Rosetta Stones for HARK and QuantEcon's JAX code, with their cards and a standing check, and `model.md`'s sentence on Bellman-SYM's families; in #7's notation, with `329d78c`'s fix of the natural limit; built by merging #7's branch, not by a rebase; 87 tests, 150 with #2 to #5 |
+| 7 | `notation-bst` | `fd6c0b5` | the schemas' branch | the two spellings of each symbol, the notation tables and their standing check; ξ_U for the income while unemployed; the two targets as econ-ark's registry writes them; 𝒢_t for the Markov family's growth factor in a quarter; 80 tests, 93 with #3, #4 and #5 |
 
 **Merge order.**
 - #1 merges into `main` first. The schemas' branch then takes `main`, and #2 merges after that.
 - #3, #4 and #5 merge in any order: trial merges of each pair, and of all three, are clean. #3 and #4 share no file with
   #2; #5 shares the HAFiscal design note with it, in other places, and a trial merge of the two is clean.
-- #6 merges cleanly with #2 to #5. It takes the notation pull request's spelling before it merges.
+- #7 merges cleanly with #3, #4 and #5. With #2 one sentence of the checker's README conflicts: take #2's, with `a_Nat`.
+- #6 is based on #7's branch and merges after #7. If #7's branch is kept when #7 merges, #6's base is set back to the
+  schemas' branch by hand.
 - Every merge, and taking a draft out of draft, is the owner's word.
 - The main checkout no longer needs to stay at `4f99d01`, since the emitter's rerun reads its own copy of the schemas.
 
@@ -99,9 +103,12 @@ proposed to the working group yet.
 - **Notation** (2026-10-21): the BST paper is the authority.
   - Typeset, an underline marks a minimum (`\underline{\xi}`), and a word subscript is upright.
   - In plain text, names are in code font: `ξ_min`, `ψ_min`, `θ_min`, `a_Art`, `a_Nat`, `a_min`, `m_min`, `p_worst`.
-  - μ is the income while unemployed.
-  - Approved, and committed locally on branch `notation-bst` (`cbcc0c9`), unpushed: the two spellings, the notation
-    tables, μ for the income while unemployed, and the standing check. #6's stones take the new notation before both merge.
+  - ξ_U is the income while unemployed (19:25), after μ was withdrawn for its competing uses. `bst/1` allows the lowest
+    employed income below it.
+  - Econ-ark's notation registry, version 1.0.0 in econ-ark-tools, is in force beside BST: the target `\hat{m}`, the
+    pseudo-target `\check{m}`, 𝒢 for the growth factor (so 𝒢_t for the Markov family's factor in a quarter), and a bold
+    thorn for the patience factors.
+  - All of it is in draft #7, and #6's stones are written in it.
 
 **The emitter** (the HAFiscal-Latest session).
 - Its ladder of 2026-10-20 and the rerun of the toy's fourth level on 2026-10-21 wrote eight results files. All of them
@@ -117,7 +124,11 @@ proposed to the working group yet.
 
 **Open with the owner:**
 - every merge;
-- whether `bst/1` requires the lowest employed income to be at least the income while unemployed;
+- the documents' other combining marks (a bar, a tilde, a hat, a caron);
+- proposals not yet put to a decision: κ in the natural limit, which is the registry's MPC, and Þ̄ = min(Þ, R), a coinage
+  of these schemas whose bar means an upper bound elsewhere;
+- registry rows for the schemas' own symbols (θ, ξ_U, the minima, the limits, ℒ, `p_worst`) and a plain-text field;
+- in the econ-ark-tools session: the push of `\IncUnemp`'s fix;
 - publishing the QuantEcon module;
 - the name of the w3id.org namespace;
 - in the bellman session: the uniform for Bellman's comparator, Bellman's draft for the truncated lognormal, and Matsya's
@@ -125,7 +136,8 @@ proposed to the working group yet.
 - filing Bellman's parameter-condition defect.
 
 **Next work:**
-- the notation pull request, then #6 in its spelling with `329d78c`;
+- telling the bellman session how a stage file's names are typeset (`ξ_min` as `\underline{\xi}`, ξ_U as
+  `\xi_{\mathrm{U}}`, `a_Nat` as `\underline{a}_{\mathrm{Nat}}`), part of the approval of 13:03 and not yet sent;
 - the merges, on his word;
 - a line in #2's description saying the toy's third and fourth levels verify too;
 - the adapters, the comparison of results files, and the validators for the method, settings and request files;
@@ -135,6 +147,8 @@ proposed to the working group yet.
 See [`../deferred.md`](../deferred.md).
 
 **Elsewhere:**
+- **The econ-ark-tools session** keeps econ-ark's notation registry; it has `\IncUnemp` = ξ_U committed locally on a
+  branch, unpushed. **The NARK session** keeps econ-ark's naming conventions.
 - **The bellman session** holds Bellman's draft pull requests for the truncated lognormal and the uniform, and runs
   Matsya.
 - **The community-library session** builds the QuantEcon module in the owner's fork of the community library.

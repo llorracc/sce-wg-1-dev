@@ -12,8 +12,13 @@ metadata:
   - the coverage of the representation, https://github.com/llorracc/sce-wg-1-dev/pull/4, into the schemas' branch.
 - The fork's draft pull requests of 2026-10-21:
   - no run time in a results file, https://github.com/llorracc/sce-wg-1-dev/pull/5, into the schemas' branch;
-  - the Rosetta Stones for HARK and QuantEcon's JAX code, https://github.com/llorracc/sce-wg-1-dev/pull/6, into the
-    schemas' branch.
+  - the Rosetta Stones for HARK and QuantEcon's JAX code, https://github.com/llorracc/sce-wg-1-dev/pull/6, into
+    `notation-bst`, #7's branch, since the evening of 2026-10-21;
+  - the notation in two spellings, https://github.com/llorracc/sce-wg-1-dev/pull/7, into the schemas' branch.
+- Econ-ark's notation registry, `@resources/notation/notation.yml` in econ-ark/econ-ark-tools, with the generated
+  `econark-notation.sty`, `notation-math.yml` and `NOTATION.md`; version 1.0.0 on its master since econ-ark-tools' pull
+  requests #38 to #44 merged on 2026-10-21. Beside it, `econark-shortcuts.sty` in the same repository's `@resources`,
+  the macros most papers load, and econ-ark/NARK, econ-ark's naming conventions.
 - HARK's main branch at `4c285e86` (2026-10-07), the commit the HARK stone was read at.
 - QuantEcon's lecture on the income fluctuation problem with stochastic returns, `lectures/ifp_advanced.md` of
   QuantEcon/lecture-python.myst at `96ede2993` (2026-08-12), the code the QuantEcon stone describes.

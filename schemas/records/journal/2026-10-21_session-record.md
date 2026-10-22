@@ -104,3 +104,70 @@ Times are EDT, from the clock or an event's own stamp. The first hours of the da
   - publishing the QuantEcon module;
   - the uniform on Bellman's side;
   - the name of the w3id.org namespace.
+
+## After the second memorial
+
+- **13:15:56.** The notation pull request's commit, `dcad8a0` on branch `notation-bst`, replacing `cbcc0c9`.
+- **13:17.** This session's context is compacted; it continues from a summary.
+- **13:20–13:27.** The owner asks whether marks above a letter, such as a hat, need the same treatment for terminals. At
+  13:27:28 he withdraws μ for the income while unemployed (see the rulings). ξ_U, the Markov family's spelling, is proposed
+  in reply. μ is also econ-ark's registry's log excess resources.
+- **13:36–14:12.** How terminals on the machine draw combining marks is examined, and a terminal and a font are installed
+  there; the details are machine-local and kept on the machine. In the editor's terminal the marks above a letter draw on
+  it, and the combining underline one cell to its right. The owner accepts that at 14:11:58.
+- **14:18:54.** The owner asks whether econ-ark-tools' `notation.yml` is the notation registry, and if not whether it should
+  be. The answer, after the context was compacted again at about 15:14: it is the registry by design, with rulings,
+  declared dialects, generated outputs, a sync test and a lint, but not yet in practice. It was then small, behind
+  econark-shortcuts' nearly four hundred macros, it was at version 0.2.0 with seven pull requests open, and most papers did not
+  load it. The recommendation: make it the registry.
+- **16:58:37.** The schemas' branch, at `12ff230`, is pushed to GitHub by no command of this session (see the defects);
+  at 20:33 the owner confirms that he pushed it himself.
+- **17:03:44.** A new session in econ-ark-tools announces itself. Checked on GitHub, econ-ark-tools' pull requests #39 to
+  #44 merged from 14:52 to 14:53 and #38 at 16:42, so the registry's master is version 1.0.0:
+  - the growth factor 𝒢, with g ≈ ln 𝒢;
+  - ξ the transitory shock with the zero-income event included, and θ the employed shock;
+  - total wealth o;
+  - the target `\hat{m}` (`\mTrgNrm`) and the pseudo-target `\check{m}` (`\mBalLvl`), the other way round from the
+    schemas, which had followed BufferStockTheory's slides.
+
+  The answer to the owner is corrected: the registry is now in force. Overlaps with the schemas are reported to that
+  session.
+- **17:07:15.** That session relays the owner's approval of the target fix, typed there at 17:06:40 and checked as typed by
+  him, and reports his ruling that the registry's patience factors take a bold capital thorn, which the schemas already
+  follow.
+- **17:16:40–17:19:29.** On the owner's answers, the target fix (`96898b4`) and 𝒢_t for the Markov family's growth factor
+  in a quarter (`95f68b5`) are committed on `notation-bst`. The first commit had swept in part of the second's change to
+  one file; the two were split before anything was pushed.
+- **17:23–19:25.** The census of free letters for the income while unemployed, across econ-ark-tools' registry and
+  shortcuts, NARK, the papers' sources and the schemas. The owner chooses ξ_U at 19:25:18.
+- **19:27:03.** ξ_U in place of μ, `fd6c0b5`, wherever μ meant that income: the stage file's parameter, the converter's key,
+  the community-library calibration, the validator, the checker's attribute `xi_U` (with `xi_min` kept read-only) and
+  the prose. μ stays as a lognormal's log mean and, in the Markov family's conditions, a measure. 80 tests pass, and 93
+  with #3, #4 and #5 merged in; with #2 the one README sentence still conflicts.
+- **19:29–19:47.** This session's push of `notation-bst` is refused by its permission check. The owner runs the push
+  himself at 19:46:44, and draft #7 opens at 19:46:47, into the schemas' branch.
+- **19:48–19:58.** #6 onto #7.
+  - Rebased first: one paragraph of `bst-1/model.md` conflicts, and keeps both changes. The stones' twelve lines in the old
+    notation are rewritten: the income while unemployed is ξ_U, and the minimum and the limits are plain names.
+  - The owner would rather not force-push. The branch is rebuilt instead from its old head: a merge of `notation-bst`
+    (`acf5e02`, 19:55:26) and the notation commit (`3b0448e`, 19:55:31). Its tree is identical to the rebase's.
+  - 87 tests pass, and 150 with #2 to #5 merged in.
+  - Pushed at 19:58:11 as a fast-forward from `a9e9043`, with `329d78c` inside it. At 19:58:15 #6's base becomes
+    `notation-bst`, and its description is updated.
+- **19:58:47.** The owner asks for this memorial.
+- **19:59:01.** The owner asks for `\IncUnemp`'s expansion to be fixed. It is relayed to the econ-ark-tools session, which
+  commits `\xi_{\mathrm{U}}` locally on a branch there, unpushed, and checks it with pdflatex and KaTeX. That session also
+  corrects a claim made here: no SolvingMicroDSOPs document writes `\IncUnemp`, so nothing it renders changes.
+
+**State at the memorial.**
+- Pull requests, all drafts and unmerged: #1 to #7 in the fork. #6 is now based on #7's branch.
+- **Elsewhere, unpushed:** econ-ark-tools' `\IncUnemp` fix, which waits for the owner's word in that session.
+- **Open:**
+  - every merge;
+  - the documents' other combining marks;
+  - proposals not yet put to a decision: κ in the natural limit, the MPC's symbol in the registry, and Þ̄ = min(Þ, R),
+    a coinage of these schemas;
+  - registry rows for the schemas' own symbols, and a plain-text field;
+  - publishing the QuantEcon module;
+  - the uniform on Bellman's side;
+  - the name of the w3id.org namespace.

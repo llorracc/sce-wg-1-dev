@@ -21,7 +21,6 @@ What was put off, with what brings each back. Nothing here is lost by being defe
 | Publishing the QuantEcon module in the owner's fork of the community library, local on 2026-10-21; then the QuantEcon stone revised to its interface at a pinned commit, in place of the lecture's code | 2026-10-21 | the owner's word to push it |
 | The adapters: HARK's from the benchmark's emitter, not yet public, and QuantEcon's in this repository's schemas, importing the community library's solver at a pinned commit | 2026-10-21 | the QuantEcon module is published, and the owner decides whether the emitter is |
 | The comparison of two toolkits' results files, at a request file's points, by the Rosetta Stones' rules | 2026-10-21 | two toolkits' results files exist for one member |
-| Whether `bst/1` requires the lowest employed income to be at least the income while unemployed, as in BST, or allows it lower, as the toy's 0.333 against 0.7 does | 2026-10-21 | the owner rules; the notation pull request does not depend on it |
 | The Markov family's results document and validator carrying its effective-member report: the expectations conditional on the next state, the chain's rows, the lowest values by state | 2026-10-18 | when that family's results document is written |
 | The checker's verification of the Markov family's reports, with the dominant eigenvalues as arithmetic on the reported conditional expectations | 2026-10-18 | with that family's checker |
 | The joint lognormal law with a covariance matrix | 2026-10-18 | a family has correlated shocks |
@@ -40,4 +39,6 @@ effective-member proposal, approved at 22:41 after four corrections and executed
 population block of the results file, approved on 2026-10-19 at 08:05 and applied.
 
 Settled on 2026-10-21 and removed from this list: the emitter's use of the population block at its fourth level,
-verified with the rerun of the toy's fourth level by both checkers.
+verified with the rerun of the toy's fourth level by both checkers; and whether `bst/1` requires the lowest employed
+income to be at least the income while unemployed: it does not, since the owner gave at 17:23 the income's not lying
+below the worst transitory shock as the reason for its own symbol, ξ_U.

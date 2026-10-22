@@ -67,3 +67,32 @@ After the memorial:
     marks, a bar, a tilde, a hat and a caron, were not part of the proposal.
   - Bellman, when it typesets a stage file, maps the identifiers the same way; the bellman session is to be told.
 - **13:06:11.** This memorial.
+- **13:27:28.** μ is withdrawn for the income while unemployed: it has other common uses likely to be wanted here,
+  marginal utility and a measure, and econ-ark's notation registry already gives it to log excess resources. Proposed in
+  reply: ξ_U, as the Markov family writes it. **Open:** he has not chosen.
+- **17:06:40** (typed in the econ-ark-tools session, relayed, and checked as typed by him). The schemas follow econ-ark's
+  notation registry on the two targets: the buffer stock target is `\hat{m}` (`\mTrgNrm`) and the pseudo-target `\check{m}`
+  (`\mBalLvl`). The schemas had them the other way round, as BufferStockTheory's slides do. Made on the notation branch.
+- **Reported from the econ-ark-tools session, about 17:07.** The registry's patience factors take a bold capital thorn,
+  `\textbf{Þ}`, the rule these schemas already follow. The same session reported registry v1.0.0 on its master: the growth
+  factor is 𝒢, and ξ is the transitory shock with the zero-income event included.
+- **17:16:40.** Three answers:
+  - the underlined ξ now draws acceptably in his terminal, which he gave as a reason to keep it for the income while
+    unemployed (superseded at 17:23:10);
+  - the Markov family's growth factor in a quarter is 𝒢_t, not Γ_t, since the registry keeps Γ as a dialect for the
+    growth factor itself;
+  - the notation pull request is to be committed and pushed, as a draft like the others.
+- **17:23:10.** The income while unemployed needs a symbol of its own, since it need not lie below the worst transitory
+  shock. That settles the question left open at 12:45:30: `bst/1` allows the lowest employed income below the income while
+  unemployed, as the toy has it. μ stays declined for its competing uses, and he asks which letters are free.
+- **19:25:18.** **The income while unemployed is ξ_U** (typeset `\xi_{\mathrm{U}}`), the Markov family's spelling. A census
+  of the letters econ-ark's notation sources leave free was put to him first: ι, ϖ and ℵ are the least claimed, η is next,
+  and every Roman letter is assigned or prohibited by econ-ark's naming conventions. He chose ξ_U over them. This
+  supersedes the 13:03:35 item's μ and settles the 13:27:28 open question.
+- **19:48:17.** #6 is to be rebased onto the notation pull request, #7, and moved to its notation.
+- **19:55:00.** He would rather not force-push, and asks for another way; he approves editing #6, its base and its
+  description. Put to him in reply: merge #7's branch into #6's history instead, which needs only an ordinary push.
+- **19:58:06.** That is done: the ordinary push of #6, and the edit.
+- **19:58:47.** This memorial.
+- **19:59:01.** `\IncUnemp`'s expansion in econ-ark's shortcuts is to be fixed, from μ to ξ_U. The file is econ-ark-tools',
+  so the request went to that repository's session, which made the change locally; its push waits for his word there.
