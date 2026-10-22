@@ -66,6 +66,8 @@ Shared by every family:
 - [`numerics.md`](numerics.md): method files, settings files and suites.
 - [`rosetta/`](rosetta/README.md): the Rosetta Stones, one for each toolkit, which say how the toolkit solves a family's
   members as the stage file states them; begun for `bst/1` with HARK and QuantEcon's JAX code.
+- [`adapters/`](adapters/README.md): the adapters, one for each toolkit, which read a parameter file, solve the member with
+  the toolkit and write its results file; HARK's for `bst/1` first.
 
 The family `bst/1`:
 - [`bst-1/model.md`](bst-1/model.md): the model schema, read from the stage file, with its method targets and its parameter
