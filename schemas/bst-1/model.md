@@ -110,9 +110,9 @@ value.
 - **Sets and parameters.** m ∈ ℝ; a ∈ [`a_min`, ∞) with `a_min` = max(`a_Art`, `a_Nat`); the unemployment event e ∈ {employed,
   unemployed}; the parameters β, ℒ, ρ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, ℘ and ξ_U, with the domains above. The stage
   file writes one law family, the lognormal, for ψ and θ; the family allows any of the shock laws, and a member with
-  another law needs a stage file written with that law's family: a discrete law can be written today as a mixture of
-  point masses, while the truncated lognormal, the uniform and the tabulated law have no family in Bellman-SYM yet, the
-  truncated lognormal's being planned. The file declares σ_ψ and σ_θ positive: a zero spread is the degenerate
+  another law needs a stage file written with that law's family. A discrete law can be written today as a mixture of
+  point masses, and the uniform with Bellman-SYM's `Uniform(a, b)`, since 2026-10-20. The truncated lognormal's family is
+  in review, and the tabulated law has none yet. The file declares σ_ψ and σ_θ positive: a zero spread is the degenerate
   law, another family in the language.
 - **Shocks.** ψ ~ LogNormal(−σ_ψ²/2, σ_ψ); θ ~ LogNormal(−σ_θ²/2, σ_θ); e ~ Bernoulli(℘). The three are independent of each
   other and of the state.

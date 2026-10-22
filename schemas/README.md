@@ -64,6 +64,8 @@ Shared by every family:
   and the convention it follows or the reason it departs; the laws are charts of the
   [ontology of probability distributions](../ontologies/probability-distributions/).
 - [`numerics.md`](numerics.md): method files, settings files and suites.
+- [`rosetta/`](rosetta/README.md): the Rosetta Stones, one for each toolkit, which say how the toolkit solves a family's
+  members as the stage file states them; begun for `bst/1` with HARK and QuantEcon's JAX code.
 
 The family `bst/1`:
 - [`bst-1/model.md`](bst-1/model.md): the model schema, read from the stage file, with its method targets and its parameter
