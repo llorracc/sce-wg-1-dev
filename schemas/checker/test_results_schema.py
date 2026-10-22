@@ -33,6 +33,8 @@ def population():
         "mean_c": {"status": "value", "value": 1.0},
         "mass_at_constraint": 0.15, "fraction_a_nonpositive": 0.15, "mean_mpc": 0.4,
         "mpc_by_a_quartile": [0.8, 0.4, 0.25, 0.15],
+        "coverage": {"variable": "a", "beyond_top": "clipped", "top": 60.0, "top_mass": 3.5e-9,
+                     "tail": [{"point": 30.0, "mass": 9.0e-7}]},
     }
 
 
@@ -73,7 +75,8 @@ def sample():
         "pseudo_target": {"status": "value", "m": 1.21, "c": 0.99, "mpc": 0.09},
         "population": population(),
         "income_measure": {"status": "value", "m": distribution(), "a": distribution(), "mass_at_constraint": 0.1,
-                           "mean_a": {"status": "value", "value": 0.6}, "mean_mpc": 0.3},
+                           "mean_a": {"status": "value", "value": 0.6}, "mean_mpc": 0.3,
+                           "coverage": {"variable": "a", "beyond_top": "clipped", "top": 60.0, "top_mass": 9.4e-11}},
         "welfare": {"status": "value", "mean_value": -31.2, "mean_felicity": -1.03},
         "marginal_welfare": {"status": "undefined", "by_a_quartile": [None, 1.1, 0.7, 0.4], "at_constraint": None,
                              "undefined": ["mean", "by_a_quartile[0]", "at_constraint"]},
@@ -99,6 +102,20 @@ def sample():
 
 def test_sample_validates():
     jsonschema.Draft202012Validator(SCHEMA).validate(sample())
+
+
+def test_coverage_is_optional():
+    data = sample()
+    for block in (data["types"][0]["population"], data["types"][0]["income_measure"], data["pooled"]["population"]):
+        del block["coverage"]
+    jsonschema.Draft202012Validator(SCHEMA).validate(data)
+
+
+def test_a_simulation_s_coverage_validates():
+    data = sample()
+    data["types"][0]["population"]["coverage"] = {"variable": "m", "beyond_top": "kept", "top": 60.0, "top_mass": 0.0,
+                                                  "sample_size": 1000000}
+    jsonschema.Draft202012Validator(SCHEMA).validate(data)
 
 
 def test_optional_provenance_keys_validate():
@@ -130,6 +147,13 @@ def test_optional_provenance_keys_validate():
     lambda d: d["effective_member"]["expectations"].pop("psi_inverse"),
     lambda d: d["effective_member"]["lowest"].update(psi=-0.1),
     lambda d: d["types"][0]["euler_residuals"].pop("expectation_precision"),
+    lambda d: d["types"][0]["population"]["coverage"].update(top_mass=1.5),
+    lambda d: d["types"][0]["population"]["coverage"].pop("top"),
+    lambda d: d["types"][0]["income_measure"]["coverage"].update(variable="c"),
+    lambda d: d["types"][0]["population"]["coverage"].pop("beyond_top"),
+    lambda d: d["types"][0]["population"]["coverage"].update(beyond_top="truncated"),
+    lambda d: d["types"][0]["population"]["coverage"].update(beyond_top="kept"),
+    lambda d: d["types"][0]["population"]["coverage"]["tail"][0].update(mass=2.0),
 ])
 def test_rejections(change):
     data = copy.deepcopy(sample())

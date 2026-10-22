@@ -244,7 +244,8 @@
         "mass_at_constraint": { "type": "number", "minimum": 0, "maximum": 1 },
         "fraction_a_nonpositive": { "type": "number", "minimum": 0, "maximum": 1 },
         "mean_mpc": { "type": "number" },
-        "mpc_by_a_quartile": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "number" } }
+        "mpc_by_a_quartile": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "number" } },
+        "coverage": { "$ref": "#/$defs/Coverage" }
       }
     },
 
@@ -259,10 +260,39 @@
         "a": { "$ref": "#/$defs/DistributionBlock" },
         "mass_at_constraint": { "type": "number", "minimum": 0, "maximum": 1 },
         "mean_a": { "$ref": "#/$defs/Quantity" },
-        "mean_mpc": { "type": "number" }
+        "mean_mpc": { "type": "number" },
+        "coverage": { "$ref": "#/$defs/Coverage" }
       },
       "if": { "properties": { "status": { "const": "value" } } },
       "then": { "required": ["m", "a", "mass_at_constraint", "mean_a", "mean_mpc"] }
+    },
+
+    "Coverage": {
+      "description": "How far the representation of the distribution reaches, as results.md states it: a point top of m or a, the mass the representation puts at or above it, and what it does with the mass beyond. Optional; it lets a reader judge whether the top GL ordinates have converged.",
+      "type": "object",
+      "required": ["variable", "beyond_top", "top", "top_mass"],
+      "additionalProperties": false,
+      "properties": {
+        "variable": { "enum": ["m", "a"] },
+        "beyond_top": { "enum": ["clipped", "dropped", "kept"],
+                        "description": "clipped: a grid holding that mass on its highest point; dropped: a grid dropping it and renormalizing, top_mass then the mass dropped each period; kept: a simulation, top a stated point." },
+        "top": { "type": "number" },
+        "top_mass": { "type": "number", "minimum": 0, "maximum": 1 },
+        "sample_size": { "type": "integer", "minimum": 1, "description": "For a simulation, the agent-periods pooled." },
+        "tail": { "type": "array", "items": { "$ref": "#/$defs/TailPoint" },
+                  "description": "Points below top, ascending, each with the mass at or above it." }
+      },
+      "if": { "properties": { "beyond_top": { "const": "kept" } } },
+      "then": { "required": ["sample_size"] }
+    },
+    "TailPoint": {
+      "type": "object",
+      "required": ["point", "mass"],
+      "additionalProperties": false,
+      "properties": {
+        "point": { "type": "number" },
+        "mass": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
     },
 
     "Welfare": {
