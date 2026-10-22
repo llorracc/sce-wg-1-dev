@@ -5,7 +5,7 @@ so every record here is written for publication: the owner's decisions are recor
 words, and nothing from private repositories appears beyond a pointer.
 
 Standing rules and state:
-- [Project state](memory/project_state.md) — what exists in `schemas/`, the seven draft pull requests and their merge order, what is settled, what is open, as of the third memorial of 2026-10-21.
+- [Project state](memory/project_state.md) — what exists in `schemas/`, the seven pull requests, all merged on 2026-10-21; the adapters; what is settled, what is open, as of the fourth memorial of that day.
 - [Notation and foundation](memory/feedback_notation-and-foundation.md) — Buffer Stock Theory's notation first, the BST paper the authority, econ-ark's registry beside it; a typeset and a plain-text spelling of each symbol; ξ_U the income while unemployed; the Bellman-SYM stage file is the foundation of a family's statement.
 - [Iterate and propose](memory/feedback_iterate-and-propose.md) — a schema changes only after the proposed change and its downstream consequences have been put to the owner.
 - [One written form](memory/feedback_one-written-form.md) — a model has one spelling in a parameter file, because the hash is its identity.
@@ -21,7 +21,7 @@ Rulings, journal, findings:
 - [Rulings of 2026-10-18](rulings/2026-10-18_schema-decisions.md) — the family's name, the toy's laws, notation, the stage-file foundation, the newborn, the bounds, welfare, ρ > 1, the restructuring; in the evening, the three-valued switch, the levels as settings, the optional keys.
 - [Rulings of 2026-10-19](rulings/2026-10-19_schema-decisions.md) — the population block of the results file; no Matsya consultation on the Bellman defect; the truncated lognormal for Bellman-SYM, with its defaults; the five corrections; in the afternoon, an omitted bound as three standard deviations, existing syntax adopted where it can be, and an ontology of probability distributions through Matsya.
 - [Rulings of 2026-10-20](rulings/2026-10-20_schema-decisions.md) — the ontology's decisions, with Bellman's truncated lognormal aligned with its truncated normal; the four draft pull requests; the emitter program resumed; Q(1) dropped after the toolkits' sessions were consulted; the coverage check.
-- [Rulings of 2026-10-21](rulings/2026-10-21_schema-decisions.md) — nothing above 0.999 in the quantile maps; the coverage points each toolkit's; the Rosetta Stones and their home; no run time in results files; checkable sources; the BST paper the authority on notation, with two spellings; in the evening, the targets as the registry has them, 𝒢_t, ξ_U in place of μ, #6 onto #7 by a merge, and `\IncUnemp` fixed in econ-ark-tools.
+- [Rulings of 2026-10-21](rulings/2026-10-21_schema-decisions.md) — nothing above 0.999 in the quantile maps; the coverage points each toolkit's; the Rosetta Stones and their home; no run time in results files; checkable sources; the BST paper the authority on notation, with two spellings; in the evening, the targets as the registry has them, 𝒢_t, ξ_U in place of μ, #6 onto #7 by a merge, `\IncUnemp` fixed in econ-ark-tools; the notation batch, the adapters, and the fork's seven pull requests merged.
 - [Journal of 2026-10-18](journal/2026-10-18_session-record.md) — the day's events in order, with their stamps.
 - [Journal of 2026-10-19](journal/2026-10-19_session-record.md) — the population block applied; the bellman session's reading of the Bellman defect; the constraint in force corrected; levels bold; the truncated lognormal scoped and its pull request planned; after the memorial, the survey of existing syntax, the gathering of material and Matsya's four ontology sessions.
 - [Journal of 2026-10-20](journal/2026-10-20_session-record.md) — the ontology and the shock laws on it as draft pull requests; the converter checked at Bellman's draft; the emitter's ladder; Q(1) and the coverage check; through the ladder's end and its rerun early on 2026-10-21.
@@ -37,6 +37,7 @@ Rulings, journal, findings:
 - [The quantile at probability 1](findings/2026-10-20_the-quantile-at-one.md) — infinite in the model, a Pareto tail; a computed Q(1) tracks the grid's top and turns on the reading rule's round-off; both toolkits' answers.
 - [How far a representation reaches](findings/2026-10-20_coverage-of-the-representation.md) — the top node's mass at the first two levels; an upper bound on the per-period flow beyond the top; what a clipped representation misses of the mean.
 - [Econ-ark's notation sources](findings/2026-10-21_notation-sources.md) — the registry, the shortcuts and NARK; where the schemas agree with registry 1.0.0, what #7 fixed, what is undecided; the census of free letters; `\IncUnemp`.
+- [HARK's Markov consumer for bst/1](findings/2026-10-21_hark-markov-for-bst1.md) — the nonpersistent chain's mapping; HARK silently replacing a passed matrix; the per-state interpolation gap and #1858's fix; the gate for HARK's adapter.
 - [Deferred follow-ups](deferred.md) — what was put off, and what brings each item back.
 - [Defects](defects.md) — faults found and their status.
 

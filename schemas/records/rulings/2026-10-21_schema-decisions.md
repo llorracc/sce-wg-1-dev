@@ -96,3 +96,41 @@ After the memorial:
 - **19:58:47.** This memorial.
 - **19:59:01.** `\IncUnemp`'s expansion in econ-ark's shortcuts is to be fixed, from μ to ξ_U. The file is econ-ark-tools',
   so the request went to that repository's session, which made the change locally; its push waits for his word there.
+- **20:33:50.** He confirms that he pushed the schemas' branch at 16:58 himself.
+- **20:35:09.** The bellman session is to be told how stage-file names are typeset (sent), and a batch of notation
+  proposals is to be drafted for his decision.
+- **20:36:49.** No module of QuantEcon's code is to be published; the focus moves to a dolo module.
+- **20:37:57.** The first module is HARK's, before dolo's.
+- **20:39:38.** HARK's module is to use HARK's Markov consumer, not the standard one, with `bst/1` as the nonpersistent
+  chain of the Markov family's nesting: employed and unemployed states with identical rows, unemployment with
+  probability ℘ whatever the previous state. The HARK session is consulted first.
+- **20:41:10.** The modules are **adapters**, and they live in this repository's schemas (`schemas/adapters/`): an adapter
+  reads a parameter file, solves with its toolkit and writes a results file. HARK's starts from the benchmark's emitter,
+  scanned before anything is made public.
+- **20:41:46.** The nonpersistent chain is as read: the Markov family's nesting of `bst/1`.
+- **20:43:30.** The notation batch is approved as proposed:
+  - the natural limit written −`ξ_min` `ψ_min`/(ℛ − `ψ_min`), with ℛ = R/𝒢, without κ, which is econ-ark's MPC;
+  - the barred thorn replaced by R(1 − `κ_min`), with `κ_min` = max(0, 1 − Þ/R) the limiting MPC;
+  - in the Markov family `sep`, `find`, `p_exit`, `reg` and ℷ, and Ω in the HAFiscal design note; z kept for the
+    employment state;
+  - the plain-text rule narrowed to minima and word subscripts, marks above a letter kept;
+  - a request to econ-ark-tools' session for registry rows for the schemas' symbols, `\MPCmin` as max(0, 1 − Þ_R), and a
+    plain-text field.
+- **22:40:21** (typed in the econ-ark-tools session, relayed, and checked as typed by him). Every branch reconciling
+  notation is to be merged, and then the remaining differences reconciled.
+- **23:03:44** (question tool, in this session):
+  - #7 is pushed, taken out of draft and merged into the schemas' branch with a merge commit (`5b4207f1`, 23:04);
+    `notation-bst` is kept. #6's two commits are pushed and its base set back to the schemas' branch.
+  - The HARK adapter pins HARK pull request #1858's commit, the Markov solver's fix, until a release includes it.
+  - A public results file's provenance carries only what the results schema asks for, with package versions: no
+    operating-system or kernel string.
+  - The community-library session stops the QuantEcon module and keeps its commits local.
+- **23:04:15.** He asks for the remaining questions.
+- **23:06:16** (question tool):
+  - The fork's pull requests are merged in the planned order: #1 into `main` (23:07), the schemas' branch takes `main`,
+    then #2 (23:08), #3, #4, #5 and #6 (23:09–23:10), each with a merge commit. #2's one conflicting README sentence keeps
+    #2's wording with `a_Nat`.
+  - HARK's #1858 stays a draft; the adapter pins its commit.
+  - The ontology's namespace is `sce`, at w3id.org. Its registration, and the change of the namespace with a new version
+    of the ontology and of #2's copy of its table, are to follow; the source keeps its provisional namespace until then.
+  - The records are brought up to date, committed and pushed.

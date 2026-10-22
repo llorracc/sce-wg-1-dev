@@ -171,3 +171,34 @@ Times are EDT, from the clock or an event's own stamp. The first hours of the da
   - publishing the QuantEcon module;
   - the uniform on Bellman's side;
   - the name of the w3id.org namespace.
+
+## After the third memorial
+
+- **20:33–20:35.** The owner confirms he pushed the schemas' branch at 16:58. On his word, the bellman session is told how
+  a stage file's names are typeset, and a batch of notation proposals is drafted against econ-ark's registry.
+- **20:36–20:41.** The modules (see the rulings): no QuantEcon module; HARK's first, then dolo's; HARK's on its Markov
+  consumer, with `bst/1` as the nonpersistent chain; the modules are adapters, in `schemas/adapters/`.
+- **20:40–21:20.** HARK's Markov consumer, prototyped on HARK 0.17.2 with the chain's nodes split by state (see the
+  findings). The HARK and HAFiscal-Latest sessions are consulted. The latter agrees that its emitter becomes the adapter's
+  public basis, lists what must come out of it first, and proposes the gate; the HARK session measures the same gap on
+  main and finds that its draft #1858 removes it.
+- **20:43:30.** The owner approves the batch. It is committed on #7's branch (`3bf7892`): 80 tests pass, and 93 with #3,
+  #4 and #5 merged in. #6's branch takes it by a merge, and its HARK stone follows (`238f34e`). The econ-ark-tools session
+  takes the batch's request into the registry, which the owner merges at 21:32 as its version 2.1.0, with `\IncUnemp` =
+  ξ_U.
+- **22:14.** The registry's version 3.0.0 moves the return region's edge from ζ to ō, leaving ζ to the Pareto exponent, as
+  the schemas write it.
+- **22:40:21.** The owner, in the econ-ark-tools session, asks for every notation branch to be merged; relayed and
+  checked.
+- **23:03–23:10.** On the owner's answers in this session: #7 is pushed, taken out of draft and merged (23:04). #6's
+  branch is pushed and based on the schemas' branch again. Then #1 is merged into `main` (23:07). The schemas' branch
+  takes `main`, with this evening's earlier memorial, and is pushed. #2's branch takes the schemas' branch, keeping #2's
+  README sentence with `a_Nat`, and #2 merges (23:08), then #3, #4, #5 and #6 (23:09–23:10). With everything merged, the
+  checker's 150 tests and the ontology's 12 pass. The community-library session stops the QuantEcon module and keeps its
+  branches local.
+
+**State at the memorial.**
+- The fork has no open pull requests; its branches are kept.
+- **Next:** HARK's adapter, with the gate.
+- **Open:** registering `w3id.org/sce`; the dolo dry runs' files as dolo's adapter's public basis; what goes to the
+  working group's repository; the bellman session's items; HARK's #1858, kept in draft.
