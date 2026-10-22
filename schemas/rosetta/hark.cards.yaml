@@ -1,37 +1,40 @@
-# HARK's Rosetta Stone for bst/1, as cards in the field names of Project Bellman's Rosetta stone. Draft, 2026-10-21.
-# The toolkit's side only: the operator's side (ranks, domains, syntax positions, the named nodes, grades) is Bellman's
-# to fill. The lexicon, the reasons and the sources are in hark.md. Values such as "!egm" are Bellman's method tags,
-# quoted so that YAML does not read them as tags; "on" is quoted because YAML 1.1 reads a bare on as true. The settings'
-# shared names follow numerics.md where it has them, and are provisional until the method registry is written.
+# HARK's Rosetta Stone for bst/1, as cards in the field names of Project Bellman's Rosetta stone. Draft, begun
+# 2026-10-21 and revised on 2026-10-22 for HARK's adapter, which solves with MarkovConsumerType, and for the schemas'
+# rules of attachment. The toolkit's side only: the operator's side (ranks, domains, syntax positions, the named nodes,
+# grades) is Bellman's to fill. The lexicon, the reasons and the sources are in hark.md. Values such as "!quadrature"
+# are Bellman's method tags, quoted so that YAML does not read them as tags; "on" is quoted because YAML 1.1 reads a
+# bare on as true. A method entry lists only the settings its tag names, unless it names a handler that reads the rest;
+# the others are in the handler's toolkit_settings_to_kwargs. The settings' shared names follow numerics.md where it has
+# them, and are provisional until the method registry is written.
 
 toolkit:
   package: HARK
   repository: "https://github.com/econ-ark/HARK"
   import_root: HARK
-  read_at: {branch: main, commit: 4c285e86, date: "2026-10-07"}
+  read_at: {repository: "https://github.com/llorracc/HARK", branch: markov-exact-expectations, commit: 03a2c7a1, pull_request: "econ-ark/HARK#1858, a draft"}
+  also_read: {branch: main, commit: 4c285e86, date: "2026-10-07", for: "IndShockConsumerType, against which the adapter's gate measures the Markov rule"}
 
 handlers:
-  - id: HARK.ConsumptionSaving.ConsIndShockModel.IndShockConsumerType
+  - id: HARK.ConsumptionSaving.ConsMarkovModel.MarkovConsumerType
     calls:
-      - "IndShockConsumerType(**kwargs)"
-      - "IncShkDstn = [the member's nodes]"
-      - "construct('PermShkDstn', 'TranShkDstn')"
+      - "constructors = dict(init_indshk_markov['constructors'], MrkvArray=None, IncShkDstn=None)"
+      - "MarkovConsumerType(**kwargs), with the adapter's MrkvArray and IncShkDstn and those constructors"
       - "solve()"
-    target: policy
+    target: policy.euler.solve
     scope: whole stage
-    transition_alignment: model_locked      # m' = R a / (G psi') + xi' is built into the solver
-    single_step: needs_wrapper              # solve() iterates to the stationary rule; the one-step solver is solve_one_period_ConsIndShock
+    transition_alignment: model_locked      # m' = R a / (G psi') + xi' is built into the solver, in each next state
+    single_step: needs_wrapper              # solve() iterates to the stationary rule; the one-step solver is solve_one_period_ConsMarkov
     argument_map:
       "crra": CRRA
       "types[].beta": DiscFac
-      "survival": "LivPrb, a list per period"
-      "return": "Rfree, a list per period"
-      "income.growth": "PermGroFac, a list per period"
-      "borrowing_constraint": "BoroCnstArt; None for natural"
-      "income.permanent_shock": "PermShkStd and PermShkCount, placeholders when the adapter supplies the nodes"
-      "income.employed_shock": "TranShkStd and TranShkCount, placeholders likewise"
-      "income.unemployment.prob": "UnempPrb, used only when HARK builds the laws"
-      "income.unemployment.income": "IncUnemp, likewise"
+      "survival": "LivPrb, a list per period of one value per state, the same in both"
+      "return": "Rfree, likewise"
+      "income.growth": "PermGroFac, likewise"
+      "borrowing_constraint": "BoroCnstArt: a_Art, with natural resolved by the checker to the stated member's natural limit"
+      "income.unemployment.prob": "MrkvArray, a list per period of the chain's matrix, both rows (1 - p_zero, p_zero)"
+      "income.permanent_shock": "PermShk in both states' IncShkDstn: the adapter's nodes"
+      "income.employed_shock": "TranShk in the employed state's IncShkDstn: the adapter's nodes, scaled by (1 - p_zero xi_u)/(1 - p_zero)"
+      "income.unemployment.income": "TranShk in the unemployed state's IncShkDstn: xi_u at every node of psi"
     toolkit_settings_to_kwargs:
       grid_min: aXtraMin
       grid_max: aXtraMax
@@ -40,58 +43,62 @@ handlers:
       solution_tolerance: tolerance
       cubic_interpolation: CubicBool
       value_function: vFuncBool
+      nodes_per_shock: "IncShkDstn, built by the adapter; HARK's own counts are placeholders"
     interior_policy:                        # what this whole-stage handler does with each part it covers
-      evaluate: {status: honours, via: CubicBool, reason: "linear or cubic Hermite; the approach above the grid is fixed inside"}
-      dcsn_to_arvl: {status: honours, via: IncShkDstn, reason: "the expectation is a sum over the nodes the adapter supplies"}
+      policy: {status: honours, via: CubicBool, reason: "linear, or a cubic Hermite whose slopes are the solution's own MPCs; the approach above the grid is fixed inside"}
+      E_ψ_θ_j: {status: honours, via: "IncShkDstn and MrkvArray", reason: "the expectation is a sum over each next state's nodes, which the adapter supplies, weighted by the chain's row"}
       cntn_to_dcsn.value: {status: honours, via: vFuncBool}
     adapter_contract:
-      status: in use, as the buffer-stock benchmark's emitter, not yet public
+      status: "in use: schemas/adapters/hark/adapter.py"
       encode:
+        MrkvArray:
+          representation: "the nonpersistent chain: two states, employed and unemployed, both rows (1 - p_zero, p_zero)"
+          scope: "built by the adapter; HARK's constructor for it is switched off, since HARK otherwise replaces it with its defaults at construction"
         IncShkDstn:
-          representation: "a DiscreteDistributionLabeled over PermShk and TranShk: the independent product of the nodes of psi and of xi, the unemployment node among xi's"
-          scope: "built by the adapter from the member's laws; HARK must not rebuild it, and PermShkDstn and TranShkDstn are constructed from it"
+          representation: "one DiscreteDistributionLabeled over PermShk and TranShk per state: employed, the product of psi's nodes and the scaled employed nodes; unemployed, psi's nodes with TranShk = xi_u"
+          scope: "built by the adapter from the member's laws; HARK's constructor for it is switched off, since HARK otherwise rebuilds it on any update"
         LivPrb:
           scope: "applied inside the solver, in the effective discount factor DiscFac * LivPrb; the adapter does not apply it again"
-      neutralization: "cycles = 0 and T_cycle = 1 give the infinite horizon; nothing else is needed, since the solver's built-in law of motion, m' = R a / (G psi') + xi', is bst/1's"
+      neutralization: "cycles = 0 and T_cycle = 1 give the infinite horizon. Every row of the chain is the same, so the end-of-period value does not depend on the current state, and the two states' rules are bst/1's one rule"
       decode:
-        cFunc: {kind: primary}
-        vFunc: {kind: primary, needs: vFuncBool, check: "finite at the request points, and in agreement with a policy evaluation under cFunc"}
-        mNrmMin: {kind: primary, check: "equal to the effective member's constraint in force, to 1e-9"}
-        natural_limit: {kind: derived, from: "the nodes' lowest values, as -xi_min psi_min / (R/G - psi_min), where xi_min is the lowest node of xi, the worst income, and psi_min the lowest node of psi; HARK stores no natural limit, and mNrmMin equals it only where no artificial constraint binds", reported_as: effective_member.derived.natural_limit}
-        targets: {kind: derived, from: "the rule and the laws' nodes"}
-        conditions: {kind: derived, from: "the laws' nodes"}
+        cFunc: {kind: primary, check: "the two states' rules agree to 1e-12 relative; the employed state's is reported"}
+        vFunc: {kind: primary, needs: vFuncBool, check: "the two states' values agree to 1e-12 relative"}
+        mNrmMin: {kind: primary, check: "equal in the two states, and equal to the effective member's constraint in force, to 1e-9"}
+        natural_limit: {kind: derived, from: "the nodes' lowest values, as -xi_min psi_min / (R/G - psi_min), where xi_min is the lowest node of xi, the worst income, and psi_min the lowest node of psi; HARK stores no natural limit", reported_as: effective_member.derived.natural_limit}
+        targets: {kind: derived, from: "the rule and the laws' nodes, by the adapter; HARK's Markov consumer computes none"}
+        conditions: {kind: derived, from: "the laws' nodes, by the checker's arithmetic; HARK's Markov consumer has no condition checks"}
         population: {kind: derived, from: "the rule, by the adapter's own lottery"}
         welfare: {kind: derived, from: vFunc}
         euler_residuals: {kind: derived, from: "the adapter's own quadrature of the stated laws"}
-      inverse_data: ["the solution grid", "the laws' nodes and weights", "the constraint in force"]
+      inverse_data: ["the solution grid", "the laws' nodes and weights, by state", "the chain", "the constraint in force"]
       verify: {region: not yet stated, tolerance: not yet stated, boundary: not yet stated}
       settings_map:
         aXtraMin: {semantics: "the smallest end-of-period assets on the grid, above the natural limit", range: "> 0"}
         aXtraMax: {semantics: "the largest end-of-period assets on the grid, above the natural limit", range: "> aXtraMin"}
         aXtraCount: {semantics: "the number of grid points"}
         aXtraNestFac: {semantics: "the depth of the multi-exponential nesting; 0 gives an exponential grid and -1 a uniform one"}
-        tolerance: {semantics: "the distance between successive rules at which the infinite-horizon iteration stops, measured on the rule's knots; hNrm, MPCmin and the rule above the grid lag it", range: "> 0"}
-        CubicBool: {semantics: "a cubic Hermite interpolant for the rule, in place of a linear one"}
+        tolerance: {semantics: "the distance between successive solutions at which the infinite-horizon iteration stops; human wealth and the limiting MPC lag it", range: "> 0"}
+        CubicBool: {semantics: "a cubic Hermite interpolant for the rule, its slopes the solution's own MPCs, in place of a linear one"}
         vFuncBool: {semantics: "the value function kept"}
 
 methods:
-  - {"on": policy, method: endogenous-grid, method_tag: "!egm", settings: [solution_tolerance], handler: HARK.ConsumptionSaving.ConsIndShockModel.IndShockConsumerType}
-  - {"on": evaluate, method: "linear interpolation, or cubic Hermite with CubicBool", settings: [grid_min, grid_max, grid_points, grid_nesting, cubic_interpolation]}
-  - {"on": dcsn_to_arvl, method: "a sum over the adapter's nodes, supplied through IncShkDstn", method_tag: "!sum", settings: [nodes_per_shock]}
-  - {"on": cntn_to_dcsn.value, method: value-function, settings: [value_function]}
+  - {"on": policy.euler.solve, method: "time iteration, by the endogenous grid method at each step", method_tag: "!time-iteration", settings: [solution_tolerance, grid_min, grid_max, grid_points, grid_nesting], handler: HARK.ConsumptionSaving.ConsMarkovModel.MarkovConsumerType}
+  - {"on": policy, method: "linear interpolation; with CubicBool, as the adapter sets it, a cubic Hermite whose slopes are the solution's own MPCs, which no tag names", method_tag: "!Linear"}
+  - {"on": E_ψ_θ_j, method: "a quadrature of the stated laws: the adapter's nodes, given per state through IncShkDstn and weighted by the chain's row", method_tag: "!quadrature"}
+  - {"on": cntn_to_dcsn.value, method: value-function}
   - {"on": arvl_to_dcsn, method: "the adapter's own lottery on an asset grid", method_tag: "!histogram", settings: [histogram_points], handler: adapter}
   - {"on": population.distribution, method: "the adapter's own fixed point", handler: adapter}
   - {"on": diagnostics.expectation, method: "Gauss-Legendre in logs of the stated laws, split at the rule's kink", handler: adapter}
 
 evidence:
-  source_walk: {read_at: "HARK main 4c285e86", on: "2026-10-21"}
-  output_checks: "the emitter asserts that IncShkDstn is unchanged, that both marginals are the laws' unique nodes, and that the constraint in force is the effective member's"
+  source_walk: {read_at: "the fork's 03a2c7a1 for the Markov solver; HARK main 4c285e86 for the standard consumer", on: "2026-10-21"}
+  output_checks: "the adapter asserts that HARK solved with its chain and income process, that the two states' rules and values agree to 1e-12 relative, and that both states' lower limits equal the effective member's constraint in force. Its gate (schemas/adapters/hark/gate.py) measures the Markov rule against the standard consumer's on the same nodes, and its files against the buffer-stock benchmark's emitter's (records/findings/2026-10-21_hark-markov-for-bst1.md)"
   residual_checks: "the Euler residuals reported in each results file"
-  verify_results: "the emitter's eight files pass check.py --verify-results: seven of 2026-10-20, and the toy's fourth level, rerun on 2026-10-21"
+  verify_results: "the adapter's files pass check.py --verify-results at the first two levels of the toy, the library member and the untruncated toy, and at the toy's third"
   cross_toolkit: none yet
   correctness: none
 
 examples:
   - members: [toy, library, toy-untruncated]
-    results: "the emitter's files of 2026-10-20, at the first two levels, and the toy's third"
-    handlers: [HARK.ConsumptionSaving.ConsIndShockModel.IndShockConsumerType]
+    results: "the adapter's files at the first two levels, and the toy's third, from the gate's run of 2026-10-21 to 2026-10-22"
+    handlers: [HARK.ConsumptionSaving.ConsMarkovModel.MarkovConsumerType]

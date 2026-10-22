@@ -5,7 +5,7 @@ Draft, begun on 2026-10-21; see the [README](../README.md) of the schemas.
 A Rosetta Stone says how one toolkit solves a family's members as the family's stage file states them. With a stone for
 each toolkit, one stage file and one parameter file can be solved by every toolkit that has one. Each toolkit writes a
 results file, the checker verifies each file, and the files are compared. The first stones are for `bst/1`:
-- [`hark.md`](hark.md): HARK's `IndShockConsumerType`;
+- [`hark.md`](hark.md): HARK's `MarkovConsumerType`, as [HARK's adapter](../adapters/hark/README.md) uses it;
 - [`quantecon-jax.md`](quantecon-jax.md): the JAX code of QuantEcon's lecture on the income fluctuation problem with
   stochastic returns.
 
@@ -42,6 +42,11 @@ Each stone is a document, with its cards in a YAML file beside it.
    parts, and for each of them the stone says whether it honors the method file's setting, fixes the part inside, or
    cannot take it, so that the adapter must. The cards write these with Bellman's tokens: `honours`, `fixed`,
    `requires_own_handler` and `absent`. A part the whole-stage handler runs names no handler of its own.
+   - The targets are the stage's, under the rules of attachment ([method targets](../bst-1/model.md#method-targets)):
+     an expectation's method on its operator, `E_ψ_θ_j`; the solution on `policy.euler.solve`; the rule's interpolation
+     on `policy`.
+   - A method is written in words, with its tag beside it where it has one. An entry lists only the settings its tag
+     names, unless it names a handler that reads the rest; the others are in the handler's map of settings.
 5. **The evidence.** What has been checked and how:
    - the source, read at a stated version;
    - the checker's `--verify-results` on the adapter's files;
@@ -58,8 +63,9 @@ A stone records no run times or speeds ([the memory on timings](../records/memor
       → check.py --verify-results on each
       → the comparison of the files, at the request file's points
 
-Written so far: the stage file, the parameter and results schemas, and the checker. Not yet written:
-- the adapters, though HARK's exists as the buffer-stock benchmark's emitter, which is not yet public;
+Written so far: the stage file, the parameter and results schemas, the checker, and [HARK's adapter](../adapters/hark/).
+Not yet written:
+- the other toolkits' adapters;
 - the validators for the method, settings and request files ([`numerics.md`](../numerics.md));
 - the comparison.
 

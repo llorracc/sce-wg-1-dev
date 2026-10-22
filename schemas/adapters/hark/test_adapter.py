@@ -4,7 +4,8 @@
         --with sympy --with jsonschema --with pyyaml --with scipy --with referencing --with pytest pytest -q schemas/adapters/hark
 
 The Markov solution on the nonpersistent chain must give the same rule in both employment states and the standard consumer's
-rule on the same nodes, and the adapter's results file must validate and pass the checker's verification.
+rule on the same nodes, the adapter's results file must validate and pass the checker's verification, and its method file
+must name only the family's method targets, each once.
 """
 import pathlib
 import subprocess
@@ -48,6 +49,15 @@ def test_the_results_file_passes_the_checker(name, tmp_path):
     check = subprocess.run([sys.executable, str(adapter.SCHEMAS / "checker" / "check.py"), str(MEMBERS / f"{name}.yaml"),
                             "--verify-results", results], capture_output=True, text=True)
     assert check.returncode == 0, check.stdout + check.stderr
+
+
+def test_the_method_file_names_only_the_family_s_targets():
+    import re
+    text = (adapter.SCHEMAS / "bst-1" / "model.md").read_text(encoding="utf-8")
+    section = text.split("## Method targets", 1)[1].split("\n## ", 1)[0]
+    targets = {m.group(1) for line in section.splitlines() for m in [re.match(r"\| `([^`]+)`", line)] if m}
+    named = [entry["on"] for entry in adapter.METHODS]
+    assert set(named) <= targets and len(named) == len(set(named)), sorted(set(named) - targets)
 
 
 def test_the_provenance_does_not_name_the_machine(tmp_path):
