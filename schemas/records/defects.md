@@ -57,3 +57,69 @@ Faults found in this project's own work, with their status.
   lacks are the continuous bounded laws, the truncated lognormal, the uniform and the tabulated law. A member with
   discrete laws needs only a stage file written with the mixture. Found 2026-10-19 on the owner's question. **Status:**
   fixed 2026-10-19 09:29, on the owner's word, in both families' model documents and the shock-law document.
+- **Matsya's assignment done here.** On 2026-10-19 the owner asked for Matsya to find or develop an ontology of probability
+  distributions. This session gathered and digested the candidates itself and mentioned it in one line, where the
+  substitution should have been put to him first, Matsya reading no web page. Found on his question at 11:43.
+  **Status:** closed 2026-10-19 12:01. The material went to Matsya through the bellman session as digests carrying no
+  recommendation, and the memory on routing Matsya's work holds the rule.
+- **Time labels by inference, and a misattribution, in messages to other sessions and to the owner.**
+  - On 2026-10-19 the owner's ontology direction was reported to the bellman session as made at about 10:35; its stamp
+    is 10:54:20.
+  - On 2026-10-20 his approval of the coverage check's revision was reported to the two toolkit sessions as made at
+    about 22:55; its stamp is 22:57:38.
+  - The question put to him at 22:52 called HARK's shortfall formula his.
+
+  **Status:** each corrected within minutes: at 12:02 on 2026-10-19, and at 22:58 on 2026-10-20.
+- **The ontology's catalog lines pushed late.** On 2026-10-20 the commit of the finite laws, `76304ab`, was pushed to the
+  ontology's draft without its README and changelog lines, an edit of those having failed. **Status:** fixed a minute
+  later in `96a8dac`.
+- **The quantile at probability 1, required in every quantile map.** `bst-1/results.schema.json` required Q(1), the top of
+  the support, which is infinite for every type of the three members, each having a finite tail exponent in the
+  checker's report. A computed Q(1) is the largest point with any mass. It grew with the grid's top across the emitter's
+  levels and turned on round-off in the reading. Found 2026-10-20 by the HAFiscal-Latest session, when an upgrade of
+  Python and numpy moved it alone. **Status:** fixed on the draft pull request #3 (`456994d`, `141d17e`), not merged.
+  Files written before keep Q(1), as files of record under `4f99d01`.
+- **The first reason given for leaving Q(1) out.** The draft's first commit blamed the far tail's underflow. The
+  HAFiscal-Latest session measured the cause as the reading rule: a running total of mass ending within 5·10⁻¹³ of one,
+  with either sign. **Status:** corrected 2026-10-20 22:44 in `141d17e`, on the owner's word, with the description to
+  match.
+- **A results-file change drafted without the toolkits.** The Q(1) change was drafted and opened as a draft pull request
+  on one session's recommendation and the owner's quick approval, before HARK's session or HAFiscal-Latest's had been
+  asked. Found on his question at 22:26 on 2026-10-20. **Status:** closed by 22:40, both sessions consulted and agreeing.
+  The memory on consulting the toolkits holds the rule.
+- **The coverage check's first formula.** The draft's first commit, `033908d`, said the tail beyond the top contributes
+  about α/(α − 1)·top·top_mass to the mean. That is the true tail's contribution; the computed mean already counts the
+  clipped mass at the top, so what the representation misses is about top·top_mass/(α − 1). Found by HARK's review at
+  22:47 on 2026-10-20. **Status:** corrected in `967b174` at 22:57, on the owner's word.
+- **A question of the owner's left unanswered.** On 2026-10-20 at 09:28 he asked, mid-turn, whether this session and
+  Matsya were discussing whether the ontology should live in Bellman's repository or in this one. The question was
+  absorbed into the running turn and not answered then; his own choice at 07:16 had already put it here. Found by this
+  session's review of its records on 2026-10-21. **Status:** answered in substance by the explanation at 21:52 of how
+  the ontology's pull requests relate to the Bellman repository, and reported to him on 2026-10-21.
+- **Run times published.** The memorial of 2026-10-21, `5dbfd8e`, carried the emitter's run times: in the ladder
+  finding's table, and in the deferred list, the journal of 2026-10-20 and the project state. The community library of
+  baseline models publishes no timings and no ranking of toolkits, and the HAFiscal-Latest session publishes none of its
+  runs'. Found on that session's message of 08:02 on 2026-10-21. **Status:** removed from the records in the next commit;
+  the branch's history keeps them. The memory on timings holds the rule.
+- **The natural limit written with the income while unemployed.** The HARK stone of draft #6 wrote the effective member's
+  natural limit with the income while unemployed where the worst income belongs: the lowest value of ξ, the lower of the
+  income while unemployed and the lowest employed node. On the toy's seven equiprobable nodes the lowest employed node is
+  0.558, below the income while unemployed of 0.7. The checker and `model.md`'s formulas were right. Found by the
+  community-library session's module at 12:33 on 2026-10-21. **Status:** fixed in `329d78c`, pushed with #6 at 19:58 on
+  2026-10-21, in the new notation, where the worst income is `ξ_min` and the income while unemployed ξ_U.
+- **The income while unemployed glossed as the minimum of ξ.** `bst/1`'s notation table and the stage file's gloss on its
+  unemployment income call that income the minimum of ξ. That is true only when no employed value is lower, as in BST,
+  where the income is 0; the toy's lowest employed income is 0.333, below its 0.7. Found on 2026-10-21. **Status:** fixed
+  in #7, opened at 19:46 on 2026-10-21: the income while unemployed is ξ_U, glossed as the minimum of ξ only in BST's case.
+- **Questions written with a mark the owner's terminal does not draw.** On 2026-10-21 notation questions put to the owner
+  used a combining underline, which his terminal shows as a bare letter; the questions read ambiguously, and he had to
+  ask what was meant. **Status:** closed: in the terminal, symbols with marks are written in LaTeX, beside their names in
+  words.
+- **The two targets the other way round.** The schemas wrote the buffer stock target `\check{m}` and the pseudo-target
+  `\hat{m}`, as BufferStockTheory's slides do; the paper and econ-ark's notation registry write the target `\hat{m}`
+  (`\mTrgNrm`) and the pseudo-target `\check{m}` (`\mBalLvl`). Found on 2026-10-21 while comparing the schemas with the
+  registry. **Status:** fixed in #7 (`96898b4`), on the owner's word of 17:06; the slides are the BufferStockTheory
+  session's.
+- **A push of unknown origin.** The schemas' branch was pushed to GitHub at 16:58:37 on 2026-10-21, carrying `12ff230`, the
+  memorial of that afternoon; no command of this session made it, and that memorial had not been approved for pushing.
+  **Status:** closed 20:33 on 2026-10-21, the owner confirming that he pushed it himself.

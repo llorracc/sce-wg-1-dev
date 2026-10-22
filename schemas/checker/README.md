@@ -17,7 +17,7 @@ uv run --with jsonschema --with pyyaml --with scipy --with numpy --with pytest p
 ```
 
 The second command writes the member's one-type calibration for the stage file `bst-1/bellman/buffer_stock.bl`, in the
-stage's names, with a̲_Nat computed from the laws; it refuses a member whose laws are not the lognormals that stage file
+stage's names, with `a_Nat` computed from the laws; it refuses a member whose laws are not the lognormals that stage file
 writes. The third prints each shock law as the Bellman-SYM call that states it, the converter's output, by the ontology's
 conversions.
 
@@ -27,6 +27,8 @@ conversions.
 - [`check.py`](check.py): the command.
 - [`test_checker.py`](test_checker.py): the laws' closed forms against numerical integration, the three members, and
   the rejections.
+- [`test_notation.py`](test_notation.py): the standing check of the families' notation: no combining underline,
+  a row in the notation tables for every parameter a stage file declares, and every word in a typeset subscript upright.
 - [`test_results_schema.py`](test_results_schema.py): a results file in the shape of `results.md` against
   [`results.schema.json`](../bst-1/results.schema.json), and the rejections.
 - [`test_laws_against_ontology.py`](test_laws_against_ontology.py): every law read through the ontology's table alone,
@@ -54,10 +56,11 @@ model. A `null` bound stays `null`. The three members write their bounds, so the
 
 - The types' shares sum to one, within 10⁻¹².
 - The types are in strictly increasing order of β, so that a member has one written form.
-- With an unemployment probability ℘ of zero, the unemployment income ξ̲ is zero, for the same reason.
-- ℘ξ̲ < 1, so that employed income is positive.
-- The artificial borrowing constraint a̲_Art, a number no greater than zero or the word `natural`, is no lower than the natural
-  constraint a̲_Nat = −ξ̲_min κ/(1 − κ), with κ = ψ̲ 𝒢/R; a looser one never binds and would describe the same model.
+- With an unemployment probability ℘ of zero, the unemployment income ξ_U is zero, for the same reason.
+- ℘ξ_U < 1, so that employed income is positive.
+- The artificial borrowing constraint `a_Art`, a number no greater than zero or the word `natural`, is no lower than the natural
+  constraint `a_Nat` = −`ξ_min` `ψ_min`/(ℛ − `ψ_min`), with ℛ = R/𝒢; a looser one never binds and would describe the
+  same model.
 - Each law passes its own rules.
 - Every type passes the validity conditions: the FVAC, and the RIC or the WRIC.
 
@@ -66,7 +69,7 @@ model. A `null` bound stays `null`. The three members write their bounds, so the
 For each type: the factors and margins of every condition, the welfare condition among them; the implications (the limiting
 MPC, the MPC at the lower limit); and the domain statuses (the targets, the kink, the two measures with their tail exponents,
 their means and variances, and welfare). For the member: the laws' moments, the lowest value of the transitory shock, the
-worst-income probability p̲, the natural borrowing constraint, the constraint written, the employed draw's scale, and the
+worst-income probability `p_worst`, the natural borrowing constraint, the constraint written, the employed draw's scale, and the
 lowest resources a newborn can have.
 
 ## Verifying a results file
