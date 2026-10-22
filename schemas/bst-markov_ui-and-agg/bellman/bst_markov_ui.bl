@@ -22,7 +22,7 @@ Pu  := {continues, grows, frozen}   :: ["permanent income in a quarter of unempl
 
 β     : ℝ₊₊          :: ["discount factor of the type"]
 ℒ     : (0,1]        :: ["probability of surviving into the next quarter, perpetual youth (1 - D)"]
-ρ     : (1, inf)     :: ["coefficient of relative risk aversion"]
+ϱ     : (1, inf)     :: ["coefficient of relative risk aversion"]
 R     : ℝ₊₊          :: ["gross return on assets, earned by survivors, with no annuity market"]
 𝒢     : ℝ₊₊          :: ["growth factor of permanent income of the group"]
 a_Art : (-inf, 0]    :: ["artificial borrowing limit a_Art, as a ratio to permanent income; a_Art ≥ a_Nat, which the schemas' checker enforces"]
@@ -48,8 +48,8 @@ z ~ Categorical(((1 - (sep_n, sep_r)[reg], (sep_n, sep_r)[reg], 0, 0), ((find_n,
 θ : ℝ₊₊
 θ ~ LogNormal(-(σ_θ^2)/2, σ_θ)   :: ["mean-one employed draw; drawn but unused when unemployed"]
 
-𝑢(c : ℝ₊₊) := c^(1-ρ)/(1-ρ)       :: [id=util]
-𝑑𝑢(c : ℝ₊₊) := c^(-ρ)             :: [id=marg_util]
+𝑢(c : ℝ₊₊) := c^(1-ϱ)/(1-ϱ)       :: [id=util]
+𝑑𝑢(c : ℝ₊₊) := c^(-ϱ)             :: [id=marg_util]
 𝒞(x : Xm) := (0, x - max(a_Art, a_Nat)]   :: [id=feasible]
 
 [id=arvl_to_dcsn, (k : Xa, z_prev : Z, reg_prev : Reg, reg, z, ψ, θ) : !arvl -> (m : Xm, z_d : Z, reg_d : Reg) : !dcsn] {
@@ -72,8 +72,8 @@ z ~ Categorical(((1 - (sep_n, sep_r)[reg], (sep_n, sep_r)[reg], 0, 0), ((find_n,
 }
 
 [id=dcsn_to_arvl, (V, dV) : !dcsn -> (V[<] : ℝ @ !vlu, dV[<] : ℝ₊₊ @ !mrgnvl) : !arvl] {
-    V[<]  = E_{reg,z,ψ,θ}(((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[z]*ψ)^(1-ρ) * V)         :: [id=value]
-    dV[<] = E_{reg,z,ψ,θ}(R * ((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[z]*ψ)^(-ρ) * dV)     :: [id=marginal]
+    V[<]  = E_{reg,z,ψ,θ}(((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[z]*ψ)^(1-ϱ) * V)         :: [id=value]
+    dV[<] = E_{reg,z,ψ,θ}(R * ((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[z]*ψ)^(-ϱ) * dV)     :: [id=marginal]
 }
 
 [id=policy, (V[>] : ℝ @ !vlu, dV[>] : ℝ₊₊ @ !mrgnvl) : !cntn -> (c : ℝ₊₊ @ !ctrl) : !dcsn] {

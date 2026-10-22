@@ -30,7 +30,7 @@ What a stage file cannot carry, found by the bellman session and by Matsya's rea
 - the shock laws outside Bellman's seven families: the truncated lognormal, the uniform and the tabulated law have no
   counterpart, and no family's mean is checked;
 - a parameter the laws determine, such as `a_Nat`, which Bellman takes as a calibration entry;
-- a piecewise utility, which `bst/1` sidesteps by requiring ρ > 1, as BST does;
+- a piecewise utility, which `bst/1` sidesteps by requiring ϱ > 1, as BST does;
 - the conditions and implications, beyond conditions attached to a parameter's declaration, which the language records and
   calibration may or may not decide.
 
@@ -109,8 +109,8 @@ Taken by Chris on 2026-10-18:
 - The restructuring is approved in the order above.
 - The addresses become the stage file's own targets, each with a comment that explains it.
 - The requests go to Bellman's maintainer through the bellman session, under Chris's name.
-- ρ = 1 is dropped from `bst/1` for now, for simplicity: the family requires ρ > 1, as BST does, so there is no second stage
-  file.
+- ϱ = 1 is dropped from `bst/1` for now, for simplicity: the family requires ϱ > 1, as BST does, so there is no second
+  stage file.
 
 ## Found by the completeness job
 

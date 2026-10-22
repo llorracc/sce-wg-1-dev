@@ -38,14 +38,14 @@ A plain-text name is never pasted into LaTeX as it stands: `ξ_min` is `\underli
 | `p_{\mathrm{worst}}` | `p_worst` | the probability of the worst income ψξ; ℘ in BST's case | this family; econ-ark's `\pWorst`, HARK's `WorstIncPrb` |
 | `\mathcal{L}` | ℒ | the probability of surviving into the next period | BST |
 | `\mathcal{G}` | 𝒢 | the growth factor of permanent income | BST (SolvingMicroDSOPs: Γ) |
-| `\mathsf{R}`, `\beta`, `\rho` | R, β, ρ | the return factor, the discount factor, relative risk aversion | BST; econ-ark's `\Rfree`, `\DiscFac` and `\CRRA` |
+| `\mathsf{R}`, `\beta`, `\varrho` | R, β, ϱ | the return factor, the discount factor, relative risk aversion | BST; econ-ark's `\Rfree`, `\DiscFac` and `\CRRA` |
 | `m`, `c`, `a` | m, c, a | market resources, consumption and end-of-period assets, as ratios to permanent income | BST |
 | `\underline{m}` | `m_min` | the lowest market resources from which positive consumption is feasible | BST |
 | `\boldsymbol{\mathit{p}}`, `\boldsymbol{\mathit{m}}`, `\boldsymbol{\mathit{c}}`, `\boldsymbol{\mathit{a}}` | 𝐩, 𝐦, 𝐜, 𝐚 | permanent income, and market resources, consumption and end-of-period assets in levels | BST; econ-ark's `\pLvl`, `\mLvl`, `\cLvl` and `\aLvl` |
 | `k`, `b` | k, b | beginning-of-period kapital (last period's a) and bank balances b = R k/(𝒢ψ) | BST |
 | `\underline{a}_{\mathrm{Art}}`, `\underline{a}_{\mathrm{Nat}}`, `\underline{a}` | `a_Art`, `a_Nat`, `a_min` | the artificial borrowing constraint, the natural one, and the one in force, max(`a_Art`, `a_Nat`) | SolvingMicroDSOPs' `\underline{a}`; HARK's names |
-| `\mathring{\beta}` | β̊ | β ℒ, the discount factor with survival | econ-ark's `\DiscFacLiv` |
-| `\mathring{\textbf{Þ}}` | Þ̊ | the absolute patience factor with survival, (R β̊)^(1/ρ); Þ̊_R = Þ̊/R and Þ̊_𝒢 = Þ̊/𝒢 are the return and growth patience factors | econ-ark's `\APFacLiv`, `\RPFacLiv` and `\GPFacLiv`; BST's Þ |
+| `\mathring{\beta}` | β̊ | β ℒ, the discount factor with survival | econ-ark's `\DiscFacEff` |
+| `\mathring{\textbf{Þ}}` | Þ̊ | the absolute patience factor with survival, (R β̊)^(1/ϱ); Þ̊_R = Þ̊/R and Þ̊_𝒢 = Þ̊/𝒢 are the return and growth patience factors | econ-ark's `\APFacEff`, `\RPFacEff` and `\GPFacEff`; BST's Þ |
 | `\underline{\kappa}` | `κ_min` | the limiting MPC as m → ∞, max(0, 1 − Þ̊_R); the saving share a/m tends to 1 − `κ_min` | BST; econ-ark's `\MPCmin` |
 | `\mathcal{R}` | ℛ | R/𝒢, the return factor normalized by growth | BST; econ-ark's `\RNrmByG` |
 
@@ -85,7 +85,7 @@ In ratios to permanent income, a survivor's resources evolve as
 
 ## Preferences and markets
 
-- Utility is u(c) = c^(1−ρ)/(1−ρ) with ρ > 1, as BST assumes; log utility is outside the family for now. Lifetime
+- Utility is u(c) = c^(1−ϱ)/(1−ϱ) with ϱ > 1, as BST assumes; log utility is outside the family for now. Lifetime
   utility is E Σ_s β̊_i^s u(𝐜_{t+s}).
 - Death ends utility, and there is no bequest motive.
 - There is no annuity market: survivors earn R, not R/ℒ. What becomes of the assets of the dead is outside the
@@ -100,7 +100,7 @@ In ratios to permanent income, a survivor's resources evolve as
 
 ## Parameter domains
 
-β_i > 0 (the validity conditions bound it above); ω_i > 0 with Σ ω_i = 1; ρ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0; 0 ≤ ℘ < 1;
+β_i > 0 (the validity conditions bound it above); ω_i > 0 with Σ ω_i = 1; ϱ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0; 0 ≤ ℘ < 1;
 ξ_U ≥ 0 with ℘ξ_U < 1; `a_Nat` ≤ `a_Art` ≤ 0.
 
 ## The household's problem, as the stage file states it
@@ -110,7 +110,7 @@ in BST's notation. k is last period's a, the arrival state; `[>]` marks next per
 arrival value.
 
 - **Sets and parameters.** m ∈ ℝ; a ∈ [`a_min`, ∞) with `a_min` = max(`a_Art`, `a_Nat`); the employment state z ∈
-  {employed, unemployed}; the parameters β, ℒ, ρ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, ℘ and ξ_U, with the domains above.
+  {employed, unemployed}; the parameters β, ℒ, ϱ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, ℘ and ξ_U, with the domains above.
   The stage file writes one law family, the lognormal, for ψ and θ; the family allows any of the shock laws, and a
   member with another law needs a stage file written with that law's family. A discrete law can be written today as a
   mixture of point masses, and the uniform with Bellman-SYM's `Uniform(a, b)`, since 2026-10-20. The truncated
@@ -122,18 +122,18 @@ arrival value.
   + ξ.
 - **Decision to continuation** (`dcsn_to_cntn`): a = m − c.
 - **Continuation to decision** (`cntn_to_dcsn`): V = u(c) + β̊ V[>]; dV = u′(c).
-- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{ψ,θ,z}[(𝒢 ψ)^(1−ρ) V]; dV[<] = E_{ψ,θ,z}[R (𝒢 ψ)^(−ρ) dV].
+- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{ψ,θ,z}[(𝒢 ψ)^(1−ϱ) V]; dV[<] = E_{ψ,θ,z}[R (𝒢 ψ)^(−ϱ) dV].
 - **The policy** (`policy`): c = argmax over 0 < c ≤ m − `a_min` of u(c) + β̊ V[>], written as documentation; the
   operative line is the Euler equation with its complementarity clause, u′(c) = β̊ dV[>] ⟂ m − c ≥ `a_min`.
 
 Composing the blocks across the period gives the recursion in the form BST writes it, for type i:
 
-    v_i(m) = max over 0 < c ≤ m − a_min of  u(c) + β̊_i E[(𝒢 ψ′)^(1−ρ) v_i(m′)],
+    v_i(m) = max over 0 < c ≤ m − a_min of  u(c) + β̊_i E[(𝒢 ψ′)^(1−ϱ) v_i(m′)],
     m′     = R (m − c)/(𝒢 ψ′) + ξ′,
 
 whose solution is the **consumption rule** c_i(m) and the value v_i(m), and the **Euler equation** in ratio form,
 
-    u′(c_i(m)) ≥ β̊_i R E[(𝒢 ψ′)^(−ρ) u′(c_i(m′))],
+    u′(c_i(m)) ≥ β̊_i R E[(𝒢 ψ′)^(−ϱ) u′(c_i(m′))],
 
 with equality wherever c_i(m) < m − `a_min`. The identification of V[>] with next period's V[<], and the stationarity of
 v_i, are what the stage file does not impose: it states one period, and the family states the fixed point.
@@ -196,7 +196,7 @@ keep names of the schema's own. Each part exists once for each type, and a metho
 
 A parameter file is YAML in a strict subset, with no anchors, tags or merge keys. It holds the free parameters, under
 these names:
-- `crra` (ρ);
+- `crra` (ϱ);
 - `types`, a list of `{beta, share}` (β_i, ω_i), in increasing order of `beta`, with no repeat;
 - `survival` (ℒ);
 - `return` (R);
@@ -229,7 +229,7 @@ file has one written form. The toy of the buffer-stock benchmark, with its true 
       employed_shock: {TruncatedLogNormal: {sd_log: 0.34641016151377546, bot: -3.0, top: 3.0}}
 
 The community library's buffer-stock model (QuantEcon community-library pull request 5, annual period) is BST's own
-version: K = 1 and ℒ = 1; ℘ = 0.005 with ξ_U = 0; 𝒢 = 1.03, R = 1.04, β = 0.96 and ρ = 2; untruncated lognormal ψ and θ,
+version: K = 1 and ℒ = 1; ℘ = 0.005 with ξ_U = 0; 𝒢 = 1.03, R = 1.04, β = 0.96 and ϱ = 2; untruncated lognormal ψ and θ,
 each with standard deviation of the log 0.1:
 
     family: bst/1
@@ -247,4 +247,4 @@ each with standard deviation of the log 0.1:
 
 The community library follows BST's notation: bold ξ for the transitory shock and θ for its positive part, b for the
 bank balance relative to next period's permanent income, 𝒢 for growth, ℘ for the zero-income probability, and bold
-letters for levels. It departs in one name: it writes relative risk aversion as γ, where BST and these schemas write ρ.
+letters for levels. It departs in one name: it writes relative risk aversion as γ, where BST and these schemas write ϱ.

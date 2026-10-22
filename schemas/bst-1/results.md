@@ -24,8 +24,8 @@ toolkit's grid, histogram or interpolant. Every value is a ratio to permanent in
 
 What the toolkit solved, reported in numbers free of any representation:
 - **The expectations** the [conditions](conditions.md) name, under the toolkit's own approximation of the laws: E[ψ],
-  E[θ], E[ψ^(1−ρ)], E[ψ^(−1)], E[log ψ], E[ψ log ψ], E[ψ²], E[ψ^(ρ−1)], E[ψ^ρ], and `p_worst`, the mass at the worst income. The
-  means are reported, not required to be one, since an approximation need not preserve them.
+  E[θ], E[ψ^(1−ϱ)], E[ψ^(−1)], E[log ψ], E[ψ log ψ], E[ψ²], E[ψ^(ϱ−1)], E[ψ^ϱ], and `p_worst`, the mass at the worst
+  income. The means are reported, not required to be one, since an approximation need not preserve them.
 - **The lowest values** of ψ and of income under that approximation, which lie at or above the stated member's infima.
 - **The derived parameters** the toolkit used, its effective member's own: the natural limit, the constraint in force, the
   worst income and the employed-income scale ([model schema](model.md#derived-parameters)).
@@ -72,8 +72,8 @@ effective member, by the toolkit's own verdicts ([conditions](conditions.md)):
 - **The pseudo-target m̌_i** (typeset `\check{m}`, econ-ark's `\mBalLvl`), where E[𝐦_{t+1}]/𝐦_t = 𝒢 for a
   survivor, with c and the MPC there.
 
-For a survivor, E[m′] = R a(m) E[ψ^(−1)]/𝒢 + 1, so m̂ solves R a(m) E[ψ^(−1)]/𝒢 + 1 = m. In levels, E[𝐦_{t+1}] = R 𝐚_t + 𝒢 𝐩_t,
-so m̌ is where the rule meets the locus a(m) = (𝒢/R)(m − 1).
+For a survivor, E[m′] = R a(m) E[ψ^(−1)]/𝒢 + 1, so m̂ solves R a(m) E[ψ^(−1)]/𝒢 + 1 = m. In levels, E[𝐦_{t+1}] = R 𝐚_t +
+𝒢 𝐩_t, so m̌ is where the rule meets the locus a(m) = (𝒢/R)(m − 1).
 
 **The exported rule.** Each type's rule at dense points of the toolkit's choosing, with the kink included and the range stated,
 so that a reader can compute dynamics that the results file does not report.
@@ -167,7 +167,7 @@ model itself.
 
 **Euler residuals, at each comparison point and for each type.** Let
 
-    ĉ(m) = (u′)^(−1)( β̊_i R E[(𝒢 ψ′)^(−ρ) u′(c(m′))] ),   m′ = R (m − c(m))/(𝒢 ψ′) + ξ′.
+    ĉ(m) = (u′)^(−1)( β̊_i R E[(𝒢 ψ′)^(−ϱ) u′(c(m′))] ),   m′ = R (m − c(m))/(𝒢 ψ′) + ξ′.
 
 The residual is
 

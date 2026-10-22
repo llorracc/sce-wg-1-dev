@@ -38,7 +38,7 @@ Two observations of 2026-10-18 point at one gap.
 BST's assumption on the shocks is not parametric: ψ has mean one and bounded support in the strictly positive reals, and so
 has the employed draw. The paper says that this excludes the lognormal and other unbounded laws, and that it is consistent
 with every standard discretization of them onto a finite grid, Gauss–Hermite or equiprobable. Its conditions are
-expectations under whatever law the shocks have: the FVAC's E[ψ^(1−ρ)], the GIC-Mod's E[1/ψ], Szeidl's E[log ψ],
+expectations under whatever law the shocks have: the FVAC's E[ψ^(1−ϱ)], the GIC-Mod's E[1/ψ], Szeidl's E[log ψ],
 Harmenberg's E[ψ log ψ], the rate condition's E[ψ²], and the killed root of the tail. None has an analytical form in
 general; each is defined by the law, and is a number only once the law is a particular one.
 
@@ -60,11 +60,11 @@ conditions it satisfies; and the derived parameters it has.
 Given the parameter file, a method file and a settings file, a toolkit reports, in the results file:
 
 - **The expectations the family names**, evaluated under its effective member. Each family's conditions document lists,
-  for every condition and derived parameter, the expectations it rests on, as integrands: for `bst/1`, E[ψ^(1−ρ)], E[1/ψ],
-  E[log ψ], E[ψ log ψ] and E[ψ²], with the mean E[ψ] and E[θ] as the representation's own; for the Markov family the same
-  conditional on the next state, and the chain's rows. They are numbers free of any representation, which any toolkit that
-  computes the conditions has in hand, and they are the interface: pinned down as expectations, not as moments, since
-  E[log ψ] and E[ψ log ψ] are not moments and a later family's integrands need not be either.
+  for every condition and derived parameter, the expectations it rests on, as integrands: for `bst/1`, E[ψ^(1−ϱ)],
+  E[1/ψ], E[log ψ], E[ψ log ψ] and E[ψ²], with the mean E[ψ] and E[θ] as the representation's own; for the Markov family
+  the same conditional on the next state, and the chain's rows. They are numbers free of any representation, which any
+  toolkit that computes the conditions has in hand, and they are the interface: pinned down as expectations, not as
+  moments, since E[log ψ] and E[ψ log ψ] are not moments and a later family's integrands need not be either.
 - **The family's conditions, decided on its effective member:** for each condition in the family's table, the factor it
   computed and the verdict, holds or fails, required in full. Each factor is arithmetic on the reported expectations and the
   parameters, which the checker repeats.
@@ -106,7 +106,7 @@ Given the parameter file, a method file and a settings file, a toolkit reports, 
   leaves out survival; each verdict agrees with its factor; the statuses follow the verdicts; each derived parameter is the
   arithmetic of the reported lowest values; the reported lowest values lie at or above the stated member's infima and
   approach them along the toolkit's own ladder; and the expectations obey what holds for every mean-one law,
-  E[ψ^(1−ρ)] ≥ 1, E[1/ψ] ≥ 1, E[log ψ] ≤ 0 and E[ψ log ψ] ≥ 0, up to the reported mean's departure from one.
+  E[ψ^(1−ϱ)] ≥ 1, E[1/ψ] ≥ 1, E[log ψ] ≤ 0 and E[ψ log ψ] ≥ 0, up to the reported mean's departure from one.
 - Compares results files as approximations to the stated member's solution, with the differences of the toolkits' factors
   and verdicts reported beside the differences of their values.
 
@@ -148,9 +148,9 @@ No parameter file or hash of a stated member changes. The stage files are untouc
 ## The choices made at execution
 
 Taken as recommended on 2026-10-18; any of them the owner can reverse.
-- The named expectations for `bst/1` are E[ψ], E[θ], E[ψ^(1−ρ)], E[ψ^(−1)], E[log ψ], E[ψ log ψ], E[ψ²], E[ψ^(ρ−1)],
-  E[ψ^ρ] and `p_worst`, the last three for the welfare conditions and the WRIC; the lowest values of ψ and of income are asked for
-  beside them, the owner having asked for the arguments against and found them wanting.
+- The named expectations for `bst/1` are E[ψ], E[θ], E[ψ^(1−ϱ)], E[ψ^(−1)], E[log ψ], E[ψ log ψ], E[ψ²], E[ψ^(ϱ−1)],
+  E[ψ^ϱ] and `p_worst`, the last three for the welfare conditions and the WRIC; the lowest values of ψ and of income are
+  asked for beside them, the owner having asked for the arguments against and found them wanting.
 - The diagnostics' primary form stays the residual against the stated member's law, with the method's precision stated; the
   residual under the toolkit's own representation is optional.
 - The block of factors and verdicts is required in full; no `not computed` is admitted for a condition.

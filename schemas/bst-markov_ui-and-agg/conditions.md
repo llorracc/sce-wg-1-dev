@@ -22,7 +22,7 @@ For one group and its type i:
   under `frozen`.
 - `ξ_min(z)` is the lowest income in state z: e `θ_min` in E, ξ_U in U_2 and U_1, ξ_X in X; and `ψ_min(z)` is the lowest
   value of ψ in z, the law's lowest value where ψ is drawn and 1 where it is fixed.
-- Þ̊_i = (R β̊_i)^(1/ρ), with β̊_i = β_i ℒ, is the absolute patience factor with survival, and `κ_min` = max(0, 1 −
+- Þ̊_i = (R β̊_i)^(1/ϱ), with β̊_i = β_i ℒ, is the absolute patience factor with survival, and `κ_min` = max(0, 1 −
   Þ̊_{R,i}) is its limiting MPC as m → ∞, as in `bst/1`.
 - For a function f of next quarter's state and shock, M_f is the matrix with entries M_f[z, z′] = P[z, z′] E[f(z′, ψ′) |
   z′], and λ(M_f) is its dominant eigenvalue, which exists and is positive since the entries are. Under `continues`, f
@@ -69,7 +69,7 @@ A member that fails any of these is rejected:
   or below it binds in no state and describes the same model as `natural`; or `natural`, for no artificial limit;
 - for every group and type, the FVAC and the RIC or the WRIC of the table below.
 
-BST's existence theorem is for independent income with bounded support and ρ > 1. For the chain the family requires the
+BST's existence theorem is for independent income with bounded support and ϱ > 1. For the chain the family requires the
 analogous conditions, with the dominant eigenvalue in place of the expectation; a theorem is an open point.
 
 ## The conditions
@@ -81,10 +81,10 @@ form, which is `bst/1`'s with the group's 𝒢.
 |---|---|---|
 | AIC | Þ̊ < 1 | the same |
 | RIC | Þ̊_R < 1 | the same |
-| WRIC | `p_worst(z)`^(1/ρ) Þ̊_R < 1 in every state, with `p_worst(z)` the probability from z that next quarter's income is its worst | Þ̊_R < 1 when no law has an atom at its floor, since `p_worst` = 0 |
+| WRIC | `p_worst(z)`^(1/ϱ) Þ̊_R < 1 in every state, with `p_worst(z)` the probability from z that next quarter's income is its worst | Þ̊_R < 1 when no law has an atom at its floor, since `p_worst` = 0 |
 | FHWC | λ(M_f) < 1 with f = 𝒢(z′) ψ′/R | 𝒢/R < 1 |
-| PF-FVAC | λ(M_f) < 1 with f = β̊ 𝒢(z′)^(1−ρ) | β̊ 𝒢^(1−ρ) < 1 |
-| FVAC | λ(M_f) < 1 with f = β̊ (𝒢(z′) ψ′)^(1−ρ) | β̊ 𝒢^(1−ρ) E[ψ^(1−ρ)] < 1 |
+| PF-FVAC | λ(M_f) < 1 with f = β̊ 𝒢(z′)^(1−ϱ) | β̊ 𝒢^(1−ϱ) < 1 |
+| FVAC | λ(M_f) < 1 with f = β̊ (𝒢(z′) ψ′)^(1−ϱ) | β̊ 𝒢^(1−ϱ) E[ψ^(1−ϱ)] < 1 |
 | GIC, by state | R (1 − `κ_min`) < E[𝒢(z′) ψ′ \| z] | ℛ (1 − `κ_min`) < 1 |
 | GIC-Mod, by state | R (1 − `κ_min`) E[1/(𝒢(z′) ψ′) \| z] < 1 | ℛ (1 − `κ_min`) E[ψ^(−1)] < 1 |
 | GIC-Szeidl | with ℒ = 1: log(R (1 − `κ_min`)) < Σ_z π(z) (log 𝒢(z) + E[log ψ \| z]) | log(ℛ (1 − `κ_min`)) < E[log ψ] |
@@ -164,11 +164,11 @@ Exact consequences of the parameters, which the comparison tests a results file 
 
 ## The simulation phase
 
-**Positivity.** Survivors satisfy it by the constraint in force in their state, an implication of ρ > 1. Newborns
+**Positivity.** Survivors satisfy it by the constraint in force in their state, an implication of ϱ > 1. Newborns
 satisfy it by the family's convention: born employed with no assets, so m = e θ > 0 under every shock law.
 
-**The welfare conditions.** As in `bst/1`, W_i and F_i are finite exactly when E[(m − `m_min(z)`)^(−(ρ−1))] is under the
-stationary population, and M_i exactly when E[(m − `m_min(z)`)^(−ρ)] is, with `m_min(z)` the lowest resources in state z
+**The welfare conditions.** As in `bst/1`, W_i and F_i are finite exactly when E[(m − `m_min(z)`)^(−(ϱ−1))] is under the
+stationary population, and M_i exactly when E[(m − `m_min(z)`)^(−ϱ)] is, with `m_min(z)` the lowest resources in state z
 from which positive consumption is feasible. The cases are `bst/1`'s, taken state by state:
 - Where the artificial limit is the constraint in force and lies strictly above the limit the following states impose,
   the rule keeps consumption above a positive value in that state.
@@ -179,8 +179,8 @@ from which positive consumption is feasible. The cases are `bst/1`'s, taken stat
   thin-density case.
 - A member with an atom at the worst income and no binding constraint, such as `income_without_benefits` below the
   employed floor under truncated laws with `borrowing_constraint: natural`, falls under `bst/1`'s atom case with the
-  chain's runs in place of the i.i.d. runs: the condition is ℒ λ(M_f) < 1 with f = `p_worst(z′)`^(1 − q/ρ) (𝒢(z′)
-  ψ′/Þ̊_i)^q on the states where the atom is the worst income, at q = ρ − 1 for W_i and F_i and q = ρ for M_i. That form
+  chain's runs in place of the i.i.d. runs: the condition is ℒ λ(M_f) < 1 with f = `p_worst(z′)`^(1 − q/ϱ) (𝒢(z′)
+  ψ′/Þ̊_i)^q on the states where the atom is the worst income, at q = ϱ − 1 for W_i and F_i and q = ϱ for M_i. That form
   is a deduction from `bst/1`'s, not yet checked.
 
 So every member of the paper's calibration, in any of the three worlds and with either family of laws, defines W, F and

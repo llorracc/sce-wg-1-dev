@@ -13,7 +13,7 @@ Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md). The toolkit is 
 
 | `bst/1` | HARK | timing and normalization | where HARK differs, and what the adapter does |
 |---|---|---|---|
-| ρ, `crra` | `CRRA` | a number | — |
+| ϱ, `crra` | `CRRA` | a number | — |
 | β, `types[].beta`, with the shares, `types[].share` | `DiscFac` | a number | each of `bst/1`'s types is a separate agent: the adapter solves one `IndShockConsumerType` per type and pools them with the shares |
 | ℒ, `survival` | `LivPrb`, a list per period | survival at the end of t. It enters only the effective discount factor, `DiscFac`·`LivPrb`. R is not divided by ℒ, and the assets of the dead vanish | — |
 | R, `return` | `Rfree`, a list per period | element t governs the move from t to t + 1 | — |
@@ -39,9 +39,9 @@ Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md). The toolkit is 
 | results file | HARK | note |
 |---|---|---|
 | the rule c(m) at the request points | `solution[0].cFunc` | a `LowerEnvelope` of the unconstrained rule, a `LinearInterp` or with `CubicBool` a cubic, and the constraint. Above the grid it approaches the limiting linear function `MPCmin`·(m + `hNrm`), with the iterates' values of both, so the method's tolerance matters there; see the method |
-| the value v(m) | `solution[0].vFunc`, with `vFuncBool` | a `ValueFuncCRRA` over a cubic in pseudo-inverse value. V = P^(1−ρ)·v(m) |
+| the value v(m) | `solution[0].vFunc`, with `vFuncBool` | a `ValueFuncCRRA` over a cubic in pseudo-inverse value. V = P^(1−ϱ)·v(m) |
 | the MPC | `cFunc.derivative(m)`, or `eval_with_derivative` | a linear interpolant's MPC is piecewise constant, and at an interior knot it is the left segment's slope. The envelope's derivative is the lower piece's, the unconstrained one's at a tie. A cubic's slope is continuous at the knots |
-| the limiting MPCs | `bilt["MPCmin"]`, as m → ∞, and `bilt["MPCmax"]`, at the lower limit: the closed forms, max(1 − `RPFac`, 0) and 1 − `WorstPrb`^(1/ρ)·`RPFac`, or 1 where the artificial constraint binds | `solution[0].MPCmin` and `MPCmax` are the solver's iterates, which approach them and lag at HARK's default tolerance |
+| the limiting MPCs | `bilt["MPCmin"]`, as m → ∞, and `bilt["MPCmax"]`, at the lower limit: the closed forms, max(1 − `RPFac`, 0) and 1 − `WorstPrb`^(1/ϱ)·`RPFac`, or 1 where the artificial constraint binds | `solution[0].MPCmin` and `MPCmax` are the solver's iterates, which approach them and lag at HARK's default tolerance |
 | the target, and the balanced-growth point | `solution[0].mNrmTrg`, where E[m′] = m, and `mNrmStE` | computed by `calc_stable_points` in `post_solve`, only when `cycles = 0`, `T_cycle = 1` and the type is exactly `IndShockConsumerType`. They are NaN unless the GICRaw holds, or if Newton's method fails. `post_solve` calls it without `force`, so a subclass must call `calc_stable_points(force=True)` itself after `solve()` |
 | human wealth | `solution[t].hNrm` | this excludes current income, so it is BST's h − 1 once it has converged. `bilt["hNrm"]` = E[ψξ]/(1 − 𝒢/R) over `IncShkDstn`'s nodes, which is 1/(1 − 𝒢/R) when they have mean one, includes it, and `bilt["hNrm"]` − 1 is the limit |
 | the condition factors | `check_conditions`, which sets `conditions` and `bilt`: `APFac`, `GPFacRaw`, `GPFacMod`, `GPFacLiv`, `GPFacHrm`, `RPFac`, `WRPFac`, `FHWFac`, `PFVAFac`, `VAFac` and `WorstPrb` | `VAFac` leaves ℒ out, where `APFac` and `PFVAFac` include it. The checker computes the factors itself from the reported expectations, so HARK's serve for comparison only |

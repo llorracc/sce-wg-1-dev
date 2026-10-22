@@ -23,7 +23,7 @@ solves with its own approximation of the laws, and reports the expectations, the
 ## Notation
 
 For type i:
-- the absolute patience factor, with survival, is Þ̊_i = (R β̊_i)^(1/ρ), where β̊_i = β_i ℒ;
+- the absolute patience factor, with survival, is Þ̊_i = (R β̊_i)^(1/ϱ), where β̊_i = β_i ℒ;
 - the return patience factor is Þ̊_{R,i} = Þ̊_i/R, and the growth patience factor is Þ̊_{𝒢,i} = Þ̊_i/𝒢;
 - type i's limiting MPC as m → ∞ is `κ_min` = max(0, 1 − Þ̊_{R,i}), typeset `\underline{\kappa}`;
 - ℛ = R/𝒢 is the return factor normalized by growth.
@@ -47,7 +47,7 @@ A member that fails any of these is rejected outright:
 - `a_Nat` ≤ `a_Art` ≤ 0, for one written form;
 - for every type, the FVAC, and the RIC or the WRIC, from the table below.
 
-BST's existence theorem assumes shocks with bounded support and ρ > 1. Existence for unbounded laws, such as the
+BST's existence theorem assumes shocks with bounded support and ϱ > 1. Existence for unbounded laws, such as the
 untruncated lognormal, is set aside for now.
 
 ## The conditions
@@ -59,20 +59,20 @@ and HARK's name for its factor.
 |---|---|---|---|---|
 | AIC, absolute impatience | Þ̊ < 1 | the parameters | consumption growth as m → ∞ is below one | `APFac` |
 | RIC, return impatience | Þ̊_R < 1 | the parameters | the MPC as m → ∞ is 1 − Þ̊_R > 0 | `RPFac` |
-| WRIC, weak return impatience | `p_worst`^(1/ρ) Þ̊_R < 1 | `p_worst`, the mass at the worst income | stands in for the RIC for existence; the MPC at the lower limit of m is 1 − `p_worst`^(1/ρ) Þ̊_R | `WRPFac` |
+| WRIC, weak return impatience | `p_worst`^(1/ϱ) Þ̊_R < 1 | `p_worst`, the mass at the worst income | stands in for the RIC for existence; the MPC at the lower limit of m is 1 − `p_worst`^(1/ϱ) Þ̊_R | `WRPFac` |
 | FHWC, finite human wealth | 𝒢/R < 1 | the parameters | human wealth is finite | `FHWFac` |
-| PF-FVAC, perfect-foresight finite value of autarky | β̊ 𝒢^(1−ρ) < 1 | the parameters | the perfect-foresight value of autarky is finite | `PFVAFac` |
-| FVAC, finite value of autarky | β̊ 𝒢^(1−ρ) E[ψ^(1−ρ)] < 1 | E[ψ^(1−ρ)] | the value of autarky is finite | `VAFac` |
+| PF-FVAC, perfect-foresight finite value of autarky | β̊ 𝒢^(1−ϱ) < 1 | the parameters | the perfect-foresight value of autarky is finite | `PFVAFac` |
+| FVAC, finite value of autarky | β̊ 𝒢^(1−ϱ) E[ψ^(1−ϱ)] < 1 | E[ψ^(1−ϱ)] | the value of autarky is finite | `VAFac` |
 | GIC, growth impatience | Þ̊_𝒢 < 1 | the parameters | the pseudo-target m̌ exists | `GPFacRaw` |
 | GIC-Mod, strong growth impatience | Þ̊_𝒢 E[ψ^(−1)] < 1 | E[ψ^(−1)] | the buffer stock target m̂ exists | `GPFacMod` |
 | GIC-Szeidl, log growth impatience | log Þ̊_𝒢 < E[log ψ] | E[log ψ] | with ℒ = 1, the stationary population exists under the population measure; on strict failure, households escape to infinite m | `check_GICSdl`, from `ELogPermShk` |
 | GIC-Harmenberg | Þ̊_𝒢 < exp(E[ψ log ψ]) | E[ψ log ψ] | with ℒ = 1, the stationary population exists under the income measure; weaker than the GIC, since E[ψ log ψ] ≥ 0 | `GPFacHrm` |
 | GIC-Liv, mortality-adjusted growth impatience | ℒ Þ̊_𝒢 < 1 | the parameters | aggregate balanced growth with Modigliani-style destruction of estates | `GPFacLiv` |
 | The rate condition | (R/𝒢) Þ̊_𝒢 compared with E[ψ²] | E[ψ²] | only how fast c(m) approaches its perfect-foresight bound; not a validity condition | none |
-| The welfare conditions, below | the atom case's factor below one | E[ψ^(ρ−1)] for W and F, E[ψ^ρ] for M, and `p_worst` | population welfare and marginal welfare are finite | none |
+| The welfare conditions, below | the atom case's factor below one | E[ψ^(ϱ−1)] for W and F, E[ψ^ϱ] for M, and `p_worst` | population welfare and marginal welfare are finite | none |
 
-The expectations a toolkit reports are therefore E[ψ], E[θ], E[ψ^(1−ρ)], E[ψ^(−1)], E[log ψ], E[ψ log ψ], E[ψ²],
-E[ψ^(ρ−1)], E[ψ^ρ] and `p_worst`, under its own representation of the laws, with the lowest values of ψ and of income
+The expectations a toolkit reports are therefore E[ψ], E[θ], E[ψ^(1−ϱ)], E[ψ^(−1)], E[log ψ], E[ψ log ψ], E[ψ²],
+E[ψ^(ϱ−1)], E[ψ^ϱ] and `p_worst`, under its own representation of the laws, with the lowest values of ψ and of income
 beside them.
 
 Notes:
@@ -132,7 +132,7 @@ the population's mean permanent income.
 
 Exact consequences of the parameters, which the comparison tests a results file against:
 - **The limiting MPC.** c_i′(m) → 1 − Þ̊_{R,i} as m → ∞ under the RIC, and → 0 when it fails.
-- **The MPC at the lower limit.** c_i′(m) → 1 − `p_worst`^(1/ρ) Þ̊_{R,i} as m → `a_min` from above, when the artificial
+- **The MPC at the lower limit.** c_i′(m) → 1 − `p_worst`^(1/ϱ) Þ̊_{R,i} as m → `a_min` from above, when the artificial
   constraint does not bind there.
 - **The natural borrowing constraint.** With u(0) = −∞ the household never lets the worst income force zero consumption,
   so `a_Nat` = −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) when `ψ_min` < ℛ, and no finite natural constraint when `ψ_min` ≥ ℛ;
@@ -150,15 +150,15 @@ Exact consequences of the parameters, which the comparison tests a results file 
 ## The simulation phase
 
 **Positivity.** No household, survivor or newborn, arrives at the decision perch with resources at which no positive
-consumption is feasible. Survivors satisfy it by the natural borrowing constraint, an implication of ρ > 1. Newborns
+consumption is feasible. Survivors satisfy it by the natural borrowing constraint, an implication of ϱ > 1. Newborns
 satisfy it by the family's convention: born employed, with no assets, so m = θ (1 − ℘ξ_U)/(1 − ℘) > 0 under every shock
 law; the one parameter condition this leaves, ℘ξ_U < 1, is among the validity conditions.
 
 **The welfare conditions.** Population welfare W_i = E[v_i(m)] and the mean felicity F_i = E[u(c_i(m))] are finite only
 if the stationary population puts little enough mass where v_i and u diverge, and the mean marginal utility M_i =
-E[u′(c_i(m))] needs less mass still. With ρ > 1, v_i and u behave like (m − `m_min`)^(1−ρ) near `m_min`, the lowest
-resources from which positive consumption is feasible, and u′ like (m − `m_min`)^(−ρ); so W_i and F_i are finite exactly
-when E[(m − `m_min`)^(−(ρ−1))] is under the stationary population, and M_i exactly when E[(m − `m_min`)^(−ρ)] is:
+E[u′(c_i(m))] needs less mass still. With ϱ > 1, v_i and u behave like (m − `m_min`)^(1−ϱ) near `m_min`, the lowest
+resources from which positive consumption is feasible, and u′ like (m − `m_min`)^(−ϱ); so W_i and F_i are finite exactly
+when E[(m − `m_min`)^(−(ϱ−1))] is under the stationary population, and M_i exactly when E[(m − `m_min`)^(−ϱ)] is:
 conditions on the lower tail, the mirror image of the upper-tail condition ε > 1 for the mean of m. The lower tail
 depends on the constraint and on the laws at their lowest values:
 - **A binding artificial constraint**, `a_Art` > `a_Nat`, which is the kink's existence: the rule keeps consumption
@@ -168,27 +168,27 @@ depends on the constraint and on the laws at their lowest values:
   document credited the floor; the BufferStockTheory session corrected that on 2026-10-18.
 - **The natural constraint alone, with an atom at the worst income**, BST's zero-income event with mass ℘, or more
   generally a worst income of mass `p_worst`: the mass near `m_min` comes from runs of worst-income draws. Each shrinks
-  resources above `m_min` by the factor `p_worst`^(1/ρ) Þ̊_𝒢/ψ, since the MPC at the bottom is 1 − `p_worst`^(1/ρ) Þ̊_R,
+  resources above `m_min` by the factor `p_worst`^(1/ϱ) Þ̊_𝒢/ψ, since the MPC at the bottom is 1 − `p_worst`^(1/ϱ) Þ̊_R,
   and a run continues with probability `p_worst` ℒ per period, since death ends it too. The lower tail is then a power
   law, and
 
-      E[(m − `m_min`)^(−q)] is finite exactly when  `p_worst`^(1 − q/ρ) ℒ Þ̊_{𝒢,i}^(−q) E[ψ^q] < 1.
+      E[(m − `m_min`)^(−q)] is finite exactly when  `p_worst`^(1 − q/ϱ) ℒ Þ̊_{𝒢,i}^(−q) E[ψ^q] < 1.
 
-  At q = ρ − 1 this is the condition for W_i and F_i. At q = ρ it reads ℒ Þ̊_{𝒢,i}^(−ρ) E[ψ^ρ] < 1, which the GIC defeats
-  without mortality, since E[ψ^ρ] ≥ 1: in BST's baseline the mean marginal utility under the stationary distribution is
+  At q = ϱ − 1 this is the condition for W_i and F_i. At q = ϱ it reads ℒ Þ̊_{𝒢,i}^(−ϱ) E[ψ^ϱ] < 1, which the GIC defeats
+  without mortality, since E[ψ^ϱ] ≥ 1: in BST's baseline the mean marginal utility under the stationary distribution is
   infinite for every growth-impatient household, although each household's is finite; with mortality the condition can
   hold for patient enough households. The BufferStockTheory session checked the tail exponent against an EGM solution at
-  the paper's baseline (1.974 measured, 1.977 predicted) and gave a second proof for q = ρ, from the Euler equation
-  integrated over the stationary distribution: M_i is infinite whenever Þ̊_{𝒢,i}^ρ E[ψ^(−ρ)] < 1, which with ψ degenerate
+  the paper's baseline (1.974 measured, 1.977 predicted) and gave a second proof for q = ϱ, from the Euler equation
+  integrated over the stationary distribution: M_i is infinite whenever Þ̊_{𝒢,i}^ϱ E[ψ^(−ϱ)] < 1, which with ψ degenerate
   is the GIC.
 - **The natural constraint alone, with a positive density at the floor in n of the two shocks** (a truncated lognormal,
   the uniform, or a tabulated law rising from its first point; n = 1 when the other shock has an atom at its floor, n =
   2 when both have densities and the floor income is positive): the mass that lands within a distance x of `m_min` in
-  one step is of order x^n, but the stationary tail's exponent is max(n, ρ). For ρ < n the constraint binds on a
-  neighborhood of `m_min` and the tail is the landing law's; for ρ > n the Euler equation holds there, the household
-  saves a vanishing amount, and the tail steepens to x^ρ up to a logarithmic factor. So E[(m − `m_min`)^(−q)] is finite
-  exactly when q < max(n, ρ): W_i and F_i are finite for every ρ, and M_i exactly when ρ < n, never with n = 1 and for ρ
-  < 2 with n = 2. At ρ = n the marginal mean sits on the borderline and is infinite. The regimes and the one-density
+  one step is of order x^n, but the stationary tail's exponent is max(n, ϱ). For ϱ < n the constraint binds on a
+  neighborhood of `m_min` and the tail is the landing law's; for ϱ > n the Euler equation holds there, the household
+  saves a vanishing amount, and the tail steepens to x^ϱ up to a logarithmic factor. So E[(m − `m_min`)^(−q)] is finite
+  exactly when q < max(n, ϱ): W_i and F_i are finite for every ϱ, and M_i exactly when ϱ < n, never with n = 1 and for ϱ
+  < 2 with n = 2. At ϱ = n the marginal mean sits on the borderline and is infinite. The regimes and the one-density
   numerics are the BufferStockTheory session's, which corrected an earlier statement here that the tail was x^n
   throughout; the two-density landing law is a deduction, not yet run.
 - **A density that vanishes at the floor faster than any power**, the untruncated lognormal at zero: every moment is

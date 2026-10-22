@@ -28,7 +28,7 @@ Everything in [`bst/1`'s table](../bst-1/model.md#notation) keeps its meaning. T
 | `\mathcal{G}` | 𝒢 | the group's growth factor of permanent income; the paper writes Γ_e | BST |
 | `\mathcal{G}_{t}`, `\mathcal{G}(z)` | 𝒢_t, 𝒢(z) | the growth factor applied in quarter t, and as a function of the state: 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the switch; the stage file writes `𝒢_t` | BST's 𝒢, dated |
 | `e` | e | the scale of employed income, e θ; 1 in the paper | the convention change |
-| `\xi_{\mathrm{U}}`, `\xi_{\mathrm{X}}` | ξ_U, ξ_X | income with benefits and without, as ratios to permanent income; the paper's ρ_b and ρ_nb, renamed because ρ is risk aversion | BST's ξ |
+| `\xi_{\mathrm{U}}`, `\xi_{\mathrm{X}}` | ξ_U, ξ_X | income with benefits and without, as ratios to permanent income; the paper's ρ_b and ρ_nb, written as the values of ξ they are | BST's ξ |
 | `\mathrm{sep}`, `\mathrm{find}` | `sep`, `find`; by regime, `sep_n`, `sep_r`, `find_n` and `find_r` in the stage file | the probabilities of losing a job and of finding one, each by regime; `sep` is the group's | econ-ark's notation (`\sepRte`, `\jobFindPrb`); the paper's π_eu and π_ue |
 | `p_{\mathrm{exit}}` | `p_exit` | the probability that a recession ends in a quarter; not h, which is human wealth | the paper's expected recession length |
 | `P_{\mathrm{u}}` | P_u | the switch for permanent income in a quarter of unemployment: `continues`, `grows` or `frozen` | this family |
@@ -119,7 +119,7 @@ gain is ℷ + (1 − ℷ) c̃′(m̃), and every MPC the [results](results.md) r
 
 ## Preferences and markets
 
-- Utility is u(c) = c^(1−ρ)/(1−ρ) with ρ > 1; lifetime utility is E Σ_s β̊_i^s u(𝐜_{t+s}), over the household's total
+- Utility is u(c) = c^(1−ϱ)/(1−ϱ) with ϱ > 1; lifetime utility is E Σ_s β̊_i^s u(𝐜_{t+s}), over the household's total
   consumption. Death ends utility, with no bequest motive.
 - There is no annuity market: survivors earn R, not R/ℒ.
 - The borrowing constraint in force depends on the employment state: `a_min(z)` is the fixed point given in
@@ -135,7 +135,7 @@ gain is ℷ + (1 − ℷ) c̃′(m̃), and every MPC the [results](results.md) r
 ## Parameter domains
 
 β_i > 0 (the validity conditions bound it above); shares positive and summing to one within each group and across
-groups; ρ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0 for each group; e > 0; ξ_U > 0 and ξ_X > 0; `sep` and `find` in [0, 1] for each
+groups; ϱ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0 for each group; e > 0; ξ_U > 0 and ξ_X > 0; `sep` and `find` in [0, 1] for each
 regime; `p_exit` in [0, 1]; 0 ≤ ℷ < 1; `a_Art` ≤ 0 and above the lowest `a_Nat(z)`, or `natural`; the newborn's level
 law has a positive mean and a standard deviation of the log that may be zero.
 
@@ -149,7 +149,7 @@ cases.
 - **Sets and parameters.** m ∈ ℝ; a ∈ [`a_min`, ∞) with `a_min` = max(`a_Art`, `a_Nat`), one limit for every state,
   which is exact for the file's lognormal laws, under which every state's limit is zero, while a stage file with bounded
   laws needs the per-state limits of [conditions](conditions.md); z ∈ Z = {E, U_2, U_1, X}; `reg` ∈ {normal, recession};
-  P_u ∈ {continues, grows, frozen}; the parameters β, ℒ, ρ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, e, ξ_U, ξ_X, `p_exit`,
+  P_u ∈ {continues, grows, frozen}; the parameters β, ℒ, ϱ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, e, ξ_U, ξ_X, `p_exit`,
   `sep` and `find` by regime, with the domains above. The file writes one law family, the lognormal, for ψ and θ; the
   family allows any of the shock laws, and a member with another law needs a stage file written with that law's family:
   a discrete law can be written today as a mixture of point masses, while the truncated lognormal, the uniform and the
@@ -161,7 +161,7 @@ cases.
   switch; ξ = e θ, ξ_U, ξ_U or ξ_X by the state; m = R k/(𝒢_t ψ) + ξ; the state and the regime are carried forward.
 - **Decision to continuation** (`dcsn_to_cntn`): a = m − c, with the state and the regime carried.
 - **Continuation to decision** (`cntn_to_dcsn`): V = u(c) + β̊ V[>]; dV = u′(c).
-- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{reg,z,ψ,θ}[(𝒢_t ψ)^(1−ρ) V]; dV[<] = E_{reg,z,ψ,θ}[R (𝒢_t ψ)^(−ρ)
+- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{reg,z,ψ,θ}[(𝒢_t ψ)^(1−ϱ) V]; dV[<] = E_{reg,z,ψ,θ}[R (𝒢_t ψ)^(−ϱ)
   dV], the expectation over this quarter's regime, state and shocks given last quarter's state and regime.
 - **The policy** (`policy`): c = argmax over 0 < c ≤ m − `a_min` of u(c) + β̊ V[>], written as documentation; the
   operative line is the Euler equation with its complementarity clause, u′(c) = β̊ dV[>] ⟂ m − c ≥ `a_min`. The language
@@ -171,13 +171,13 @@ cases.
 Composing the blocks across the quarter gives the recursion in the form BST writes it, for type i of a group, with the
 state (m, z, `reg`):
 
-    v_i(m, z, `reg`) = max over 0 < c ≤ m − `a_min(z)` of  u(c) + β̊_i E[(𝒢′ ψ′)^(1−ρ) v_i(m′, z′, `reg′`) | z, `reg`],
+    v_i(m, z, `reg`) = max over 0 < c ≤ m − `a_min(z)` of  u(c) + β̊_i E[(𝒢′ ψ′)^(1−ϱ) v_i(m′, z′, `reg′`) | z, `reg`],
     m′           = R (m − c)/(𝒢′ ψ′) + ξ′,
 
 whose solution is the **consumption rule** c_i(m, z, `reg`) and the value v_i(m, z, `reg`), and the **Euler equation**
 in ratio form,
 
-    u′(c_i(m, z, `reg`)) ≥ β̊_i R E[(𝒢′ ψ′)^(−ρ) u′(c_i(m′, z′, `reg′`)) | z, `reg`],
+    u′(c_i(m, z, `reg`)) ≥ β̊_i R E[(𝒢′ ψ′)^(−ϱ) u′(c_i(m′, z′, `reg′`)) | z, `reg`],
 
 with equality wherever c_i(m, z, `reg`) < m − `a_min(z)`. Since normal is absorbing, the rule in the normal regime is
 the solution of the problem with the regime removed, and the rule in the recession regime is solved given it. The
@@ -238,7 +238,7 @@ exists once for each group and type, and a method may be given for all or for on
 ## The parameter file
 
 A parameter file is YAML in the strict subset of `bst/1`. It holds the free parameters, under these names:
-- `crra` (ρ), `survival` (ℒ), `return` (R), `splurge` (ℷ), and `borrowing_constraint` (`a_Art`, a number no greater than
+- `crra` (ϱ), `survival` (ℒ), `return` (R), `splurge` (ℷ), and `borrowing_constraint` (`a_Art`, a number no greater than
   0 and above the lowest natural limit `a_Nat(z)`, or the word `natural`);
 - `shocks`, holding `permanent_shock` (the law of ψ) and `employed_shock` (the law of θ);
 - `regimes`, holding `recession: {exit_hazard}` (`p_exit`); the normal regime has no key, since it is absorbing;
