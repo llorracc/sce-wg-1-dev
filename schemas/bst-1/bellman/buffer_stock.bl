@@ -3,7 +3,7 @@
 # schemas/bst-1/model.md). Revised by hand on 2026-10-18. The family
 # requires ρ > 1, as Buffer Stock Theory does; log utility is outside it.
 # ξ is transitory income and θ the mean-one employed draw. Unemployment is a
-# Bernoulli label e, so that ξ_min = 0 needs no point mass. The constraint in
+# Bernoulli label e, so that ξ_U = 0 needs no point mass. The constraint in
 # force is a ≥ max(a_Art, a_Nat), stated in the set Xa, the feasible set and
 # the complementarity clause on the Euler equation. a_Nat is determined by the
 # laws and is supplied with the calibration. Survivors only: newborns, types
@@ -20,12 +20,12 @@ Emp := {emp, unemp}   :: ["the unemployment event: employed; unemployed"]
 ρ     : (1, inf)     :: ["coefficient of relative risk aversion, greater than one as in Buffer Stock Theory"]
 R     : ℝ₊₊          :: ["gross return on assets, earned by survivors, with no annuity market"]
 𝒢     : ℝ₊₊          :: ["growth factor of permanent income"]
-a_Art : (-inf, 0]    :: ["artificial borrowing limit a̲_Art, as a ratio to permanent income; a̲_Art ≥ a̲_Nat, which the schemas' checker enforces"]
-a_Nat : (-inf, 0]    :: ["natural borrowing limit a̲_Nat, as a ratio to permanent income, determined by the laws: 0 when any law is unbounded below; the constraint in force is a̲ = max(a̲_Art, a̲_Nat)"]
+a_Art : (-inf, 0]    :: ["artificial borrowing limit a_Art, as a ratio to permanent income; a_Art ≥ a_Nat, which the schemas' checker enforces"]
+a_Nat : (-inf, 0]    :: ["natural borrowing limit a_Nat, as a ratio to permanent income, determined by the laws: 0 when any law is unbounded below; the constraint in force is a_min = max(a_Art, a_Nat)"]
 σ_ψ   : ℝ₊₊          :: ["standard deviation of log ψ"]
 σ_θ   : ℝ₊₊          :: ["standard deviation of log θ"]
 p_zero : [0,1)       :: ["probability ℘ of unemployment"]
-ξ_min : ℝ₊           :: ["transitory income ξ̲ when unemployed, the minimum of ξ, as a ratio to permanent income; requires p_zero*ξ_min < 1"]
+ξ_U   : ℝ₊           :: ["income ξ_U while unemployed, as a ratio to permanent income; the lowest value of ξ only when no employed value is lower; requires p_zero*ξ_U < 1"]
 
 ψ : ℝ₊₊
 ψ ~ LogNormal(-(σ_ψ^2)/2, σ_ψ)   :: ["permanent shock, E[ψ] = 1"]
@@ -40,7 +40,7 @@ e ~ Bernoulli(p_zero)            :: ["unemployment event: unemp with probability
 𝒞(x : Xm) := (0, x - max(a_Art, a_Nat)]   :: [id=feasible]
 
 [id=arvl_to_dcsn, (k : Xa, ψ, θ, e) : !arvl -> (m : Xm) : !dcsn] {
-    ξ = (θ*(1 - p_zero*ξ_min)/(1 - p_zero), ξ_min)[e]   :: [id=transitory_income, "ξ = ξ_min when unemployed, else θ(1 - ℘ξ_min)/(1 - ℘), so E[ξ] = 1"]
+    ξ = (θ*(1 - p_zero*ξ_U)/(1 - p_zero), ξ_U)[e]   :: [id=transitory_income, "ξ = ξ_U when unemployed, else θ(1 - ℘ξ_U)/(1 - ℘), so E[ξ] = 1"]
     m = R*k/(𝒢*ψ) + ξ                                   :: [id=market_resources, "a survivor's resources; k is last period's a"]
 }
 

@@ -29,7 +29,7 @@ What a stage file cannot carry, found by the bellman session and by Matsya's rea
   many periods;
 - the shock laws outside Bellman's seven families: the truncated lognormal, the uniform and the tabulated law have no
   counterpart, and no family's mean is checked;
-- a parameter the laws determine, such as a̲_Nat, which Bellman takes as a calibration entry;
+- a parameter the laws determine, such as `a_Nat`, which Bellman takes as a calibration entry;
 - a piecewise utility, which `bst/1` sidesteps by requiring ρ > 1, as BST does;
 - the conditions and implications, beyond conditions attached to a parameter's declaration, which the language records and
   calibration may or may not decide.
@@ -54,7 +54,7 @@ adds nothing the file does not say; layers 2 to 5 stay as they are.
 
 | the schema's file | Bellman's | what the converter does | what is lost |
 |---|---|---|---|
-| parameter file | the calibration mapping | writes each parameter under the stage's name; computes a̲_Nat from the laws and writes it; writes one calibration per type | the types' shares, the laws' families, the population layer |
+| parameter file | the calibration mapping | writes each parameter under the stage's name; computes `a_Nat` from the laws and writes it; writes one calibration per type | the types' shares, the laws' families, the population layer |
 | method file | the stage's methods file | maps each address to an `on:` target | parts with no target: the population's distribution, the diagnostics' expectation |
 | settings file | the settings file | copies | nothing; Bellman keeps settings no method reads |
 | suite file | fill slots and variants | expands into one fill per element | the named levels, the element hashes |
@@ -72,7 +72,7 @@ method on a kind, such as every expectation, maps to Bellman's operator-name tar
 2. Replace the addressable parts' names with the stage files' ids, in the model document and in `numerics.md`, keeping
    `population.distribution` and `diagnostics.expectation`.
 3. State in `shock-laws.md`, for each law, its Bellman family or its absence.
-4. Write the converter from a parameter file to Bellman's calibration, in the checker, with a̲_Nat computed.
+4. Write the converter from a parameter file to Bellman's calibration, in the checker, with `a_Nat` computed.
 5. For `bst-markov_ui-and-agg/1`, write the stage file first, with its chain as named states, and the prose from it.
 6. Run one Matsya job on the finished `bst/1` model document as the completeness test, once, as decided.
 
@@ -97,7 +97,7 @@ What the families need the language to gain, for its maintainers to weigh, in th
    stated rather than set for mean one.
 2. A population construct: types with shares, survival as an event with replacement, and the newborn's placement.
 3. A statement of infinite-horizon stationarity, the fixed point the stage file does not impose.
-4. A derived parameter in the calibration, so that a̲_Nat is computed from the laws rather than written by hand.
+4. A derived parameter in the calibration, so that `a_Nat` is computed from the laws rather than written by hand.
 5. A results or solution format, so that a solver bound to a stage can return what the results schema asks.
 6. The documentation defect the bellman session found: the constraints page's example of a clause on the candidate line,
    which the elaborator now refuses.
