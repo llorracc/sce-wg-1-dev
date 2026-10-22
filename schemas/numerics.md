@@ -2,40 +2,41 @@
 
 Draft; see the [README](README.md).
 
-A parameter file states a model and holds nothing numerical. A toolkit's numerics go in three other kinds of file, each with
-its own schema. The split exists so that one method can be fixed and run under many settings. For instance, a whole set of grid
-sizes and grid placements can run in parallel, and the suite of results then shows how each reported quantity depends on each
-numerical choice.
+A parameter file states a model and holds nothing numerical. A toolkit's numerics go in three other kinds of file, each
+with its own schema. The split exists so that one method can be fixed and run under many settings. For instance, a whole
+set of grid sizes and grid placements can run in parallel, and the suite of results then shows how each reported
+quantity depends on each numerical choice.
 
 ## What the schemas prescribe, and what they do not
 
 The schemas state the problem and nothing about how it is solved. A method file and a settings file are a toolkit's own
 record of what it did, stated so that a results file can be identified and so that a suite can show how each quantity
-converges; nothing in them is prescribed by the schemas, neither a discretization of a law, nor a grid, nor a quadrature,
-nor a form for any of them. What a toolkit must do is solve the problem it is handed and report, in the results file, what
-it solved: the expectations the family names, evaluated under its own approximation of the laws; every condition of the
-family's table, decided on that approximation; and the derived parameters it used. That approximation is the toolkit's
-**effective member** ([`effective-member.md`](effective-member.md)); the schemas never see its representation.
+converges; nothing in them is prescribed by the schemas, neither a discretization of a law, nor a grid, nor a
+quadrature, nor a form for any of them. What a toolkit must do is solve the problem it is handed and report, in the
+results file, what it solved: the expectations the family names, evaluated under its own approximation of the laws;
+every condition of the family's table, decided on that approximation; and the derived parameters it used. That
+approximation is the toolkit's **effective member** ([`effective-member.md`](effective-member.md)); the schemas never
+see its representation.
 
 Two kinds of setting, as descriptions and not as requirements. A **model-changing** setting alters the effective member:
 the number and placement of a shock's nodes, a truncation, the discretization of a level law. A **method-only** setting
-alters only how the effective member's solution is approximated: the asset grid, the interpolation, the solver's tolerance,
-the histogram of the stationary population, a simulation's sample size. Along a ladder the first kind converges in the
-reported expectations and the second in the solution, and a suite's report reads the two separately. The method on
-`diagnostics.expectation` states its own precision in the results file, since the diagnostics are computed against the
-stated member's law.
+alters only how the effective member's solution is approximated: the asset grid, the interpolation, the solver's
+tolerance, the histogram of the stationary population, a simulation's sample size. Along a ladder the first kind
+converges in the reported expectations and the second in the solution, and a suite's report reads the two separately.
+The method on `diagnostics.expectation` states its own precision in the results file, since the diagnostics are computed
+against the stated member's law.
 
 ## Method file
 
 A method file chooses, for each part of the model, the algorithm that computes it. A part is named by the family's stage
 file's own target, as Bellman's methods files name it: a block's id such as `policy`, a block's line such as
-`dcsn_to_arvl.value`, or an operator's name such as `E_{ψ,θ,e}`, which covers every occurrence. The family's model schema
-lists its targets with a comment on each ([`bst/1`](bst-1/model.md#method-targets)); two parts the stage cannot name, the
-stationary population and the diagnostics' expectation, keep names of the schema's own. An entry for a line overrides one
-for its block, and a block's entry overrides an operator name's.
+`dcsn_to_arvl.value`, or an operator's name such as `E_{ψ,θ,z}`, which covers every occurrence. The family's model
+schema lists its targets with a comment on each ([`bst/1`](bst-1/model.md#method-targets)); two parts the stage cannot
+name, the stationary population and the diagnostics' expectation, keep names of the schema's own. An entry for a line
+overrides one for its block, and a block's entry overrides an operator name's.
 
-The file holds **no values**. Each method it names is defined in a **method registry**. The registry declares the method's
-contract and **the settings it reads**: each setting's name, type, allowed range and meaning.
+The file holds **no values**. Each method it names is defined in a **method registry**. The registry declares the
+method's contract and **the settings it reads**: each setting's name, type, allowed range and meaning.
 
 ```yaml
 methods:
@@ -53,14 +54,14 @@ methods:
     method: gauss-legendre-on-support
 ```
 
-**The value and welfare.** Population welfare needs the value function v, which a method such as the endogenous grid method
-does not produce by itself. The target `cntn_to_dcsn.value` names how it is obtained: `value-function`, the solver's own v, which
-the family's recursion defines; or `simulated-utility`, the discounted sum of
+**The value and welfare.** Population welfare needs the value function v, which a method such as the endogenous grid
+method does not produce by itself. The target `cntn_to_dcsn.value` names how it is obtained: `value-function`, the
+solver's own v, which the family's recursion defines; or `simulated-utility`, the discounted sum of
 utility along simulated paths, which reads the simulation's agent count, periods and seed and carries a standard error.
 
-**Covering several parts.** A method that does several parts at once, such as one that fuses the quadrature of a shock with
-the expectation step, is one method. Its contract lists the parts it covers. The method file names it once and the registry
-declares every setting those parts read.
+**Covering several parts.** A method that does several parts at once, such as one that fuses the quadrature of a shock
+with the expectation step, is one method. Its contract lists the parts it covers. The method file names it once and the
+registry declares every setting those parts read.
 
 **Shared and toolkit-specific names.** The registry has two parts:
 - a shared part, whose names mean the same in every toolkit;
@@ -68,13 +69,13 @@ declares every setting those parts read.
 
 ## Settings file
 
-A settings file gives a value to every setting that the method file's methods declare, and to nothing else. Examples are the
-number and placement of grid points, the nodes per shock, the tolerances, the number of simulated agents and periods, the seed,
-and the histogram grid. A validator built from the method file and the registry checks it.
+A settings file gives a value to every setting that the method file's methods declare, and to nothing else. Examples are
+the number and placement of grid points, the nodes per shock, the tolerances, the number of simulated agents and
+periods, the seed, and the histogram grid. A validator built from the method file and the registry checks it.
 
-**Every setting is a plain number, string or list of them.** No setting is an expression in a parameter or in another setting.
-Then the hash of a settings element identifies it completely. A value that a toolkit derives from the model is recorded in the
-results file with its derivation; an example is a grid's upper bound stated as a multiple of the target.
+**Every setting is a plain number, string or list of them.** No setting is an expression in a parameter or in another
+setting. Then the hash of a settings element identifies it completely. A value that a toolkit derives from the model is
+recorded in the results file with its derivation; an example is a grid's upper bound stated as a multiple of the target.
 
 ```yaml
 settings:
@@ -88,8 +89,8 @@ settings:
 
 ## Suite file
 
-A suite file names one method file and a set of settings elements, as an explicit list or as the product of value lists over
-named settings. The other settings take one shared value.
+A suite file names one method file and a set of settings elements, as an explicit list or as the product of value lists
+over named settings. The other settings take one shared value.
 
 ```yaml
 method_file: methods.yaml
@@ -115,14 +116,16 @@ A results file records:
 - the settings element's hash;
 - the request file's hash (the comparison points).
 
-Results from one suite share the first two hashes and differ in the third. Gathering them shows how each quantity converges
-with each setting. A comparison of two toolkits takes its tolerances from that measured convergence, not from fixed numbers.
+Results from one suite share the first two hashes and differ in the third. Gathering them shows how each quantity
+converges with each setting. A comparison of two toolkits takes its tolerances from that measured convergence, not from
+fixed numbers.
 
-Each hash is the SHA-256 of a canonical JSON serialization of the parsed file: keys sorted, no white space, and every number
-written as the shortest decimal that reads back to the same double. So `0.10` and `0.1` hash alike, as do `1` and `1.0`,
-while any change of value changes the hash. The files are written in a strict YAML subset, with no anchors, aliases, tags,
-merge keys, repeated keys, booleans or infinities, so that the parsed values are unambiguous.
+Each hash is the SHA-256 of a canonical JSON serialization of the parsed file: keys sorted, no white space, and every
+number written as the shortest decimal that reads back to the same double. So `0.10` and `0.1` hash alike, as do `1` and
+`1.0`, while any change of value changes the hash. The files are written in a strict YAML subset, with no anchors,
+aliases, tags, merge keys, repeated keys, booleans or infinities, so that the parsed values are unambiguous.
 
 ## Open points
 
-- **The registry.** The shared registry is not written: which methods it holds, their contracts and their declared settings.
+- **The registry.** The shared registry is not written: which methods it holds, their contracts and their declared
+  settings.

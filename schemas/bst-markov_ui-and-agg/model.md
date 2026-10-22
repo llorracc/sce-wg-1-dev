@@ -4,17 +4,18 @@ Draft, 2026-10-18; see the [README](../README.md) and the design note
 [Describing HAFiscal's household models](../hafiscal-models-and-test-suite.md), whose decisions this document states.
 
 This document states the family `bst-markov_ui-and-agg/1`: buffer-stock theory with Markov employment and
-unemployment-insurance states and an aggregate regime, the household problem of HAFiscal (Carroll, Crawley, Du, Frankovic
-and Tretvoll, *Welfare and Spending Effects of Consumption Stimulus Policies*). It is [`bst/1`](../bst-1/model.md) with five
-additions and one convention change: employment as a Markov chain with a benefit countdown and exhaustion; groups of types;
-a level law for the newborn's permanent income; the splurge, as an observation map on the standard rule; the aggregate
-regime, normal or recession, as a Markov state; and employed income e θ with the scale e a parameter. Its notation is BST's,
-with SolvingMicroDSOPs' where BST is silent. The household's problem is stated in Bellman-SYM, in
-[`bellman/bst_markov_ui.bl`](bellman/bst_markov_ui.bl); that stage file is the foundation of the statement, and this document
-adds what the language does not state: the groups and types, the newborn, the splurge, the stationary population, the shock
-laws outside Bellman's families, and the conditions. A parameter file names one member by giving every free parameter. The
-family's [conditions](conditions.md) and [results schema](results.md) are companion documents; the
-[shock laws](../shock-laws.md) and the treatment of [numerical methods](../numerics.md) are shared with other families.
+unemployment-insurance states and an aggregate regime, the household problem of HAFiscal (Carroll, Crawley, Du,
+Frankovic and Tretvoll, *Welfare and Spending Effects of Consumption Stimulus Policies*). It is
+[`bst/1`](../bst-1/model.md) with five additions and one convention change: employment as a Markov chain with a benefit
+countdown and exhaustion; groups of types; a level law for the newborn's permanent income; the splurge, as an
+observation map on the standard rule; the aggregate regime, normal or recession, as a Markov state; and employed income
+e θ with the scale e a parameter. Its notation is BST's, with SolvingMicroDSOPs' where BST is silent. The household's
+problem is stated in Bellman-SYM, in [`bellman/bst_markov_ui.bl`](bellman/bst_markov_ui.bl); that stage file is the
+foundation of the statement, and this document adds what the language does not state: the groups and types, the newborn,
+the splurge, the stationary population, the shock laws outside Bellman's families, and the conditions. A parameter file
+names one member by giving every free parameter. The family's [conditions](conditions.md) and [results
+schema](results.md) are companion documents; the [shock laws](../shock-laws.md) and the treatment of [numerical
+methods](../numerics.md) are shared with other families.
 
 ## Notation
 
@@ -25,7 +26,7 @@ Everything in [`bst/1`'s table](../bst-1/model.md#notation) keeps its meaning. T
 | `z` | z | the employment state, in Z = {E, U_2, U_1, X}: employed; unemployed with two quarters of benefits left, this one included; unemployed with one quarter left; unemployed without benefits | the paper's chain, named as the stage file names it |
 | `\mathrm{reg}` | `reg` | the regime, normal or recession; not r, which is the interest rate in econ-ark's notation | the paper |
 | `\mathcal{G}` | 𝒢 | the group's growth factor of permanent income; the paper writes Γ_e | BST |
-| `\mathcal{G}_{t}`, `\mathcal{G}(z)` | 𝒢_t, 𝒢(z) | the growth factor applied in quarter t, and as a function of the state: 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the switch; the stage file writes `𝒢_t` | BST's 𝒢, dated; not Γ, which econ-ark's notation keeps for the growth factor itself |
+| `\mathcal{G}_{t}`, `\mathcal{G}(z)` | 𝒢_t, 𝒢(z) | the growth factor applied in quarter t, and as a function of the state: 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the switch; the stage file writes `𝒢_t` | BST's 𝒢, dated |
 | `e` | e | the scale of employed income, e θ; 1 in the paper | the convention change |
 | `\xi_{\mathrm{U}}`, `\xi_{\mathrm{X}}` | ξ_U, ξ_X | income with benefits and without, as ratios to permanent income; the paper's ρ_b and ρ_nb, renamed because ρ is risk aversion | BST's ξ |
 | `\mathrm{sep}`, `\mathrm{find}` | `sep`, `find`; by regime, `sep_n`, `sep_r`, `find_n` and `find_r` in the stage file | the probabilities of losing a job and of finding one, each by regime; `sep` is the group's | econ-ark's notation (`\sepRte`, `\jobFindPrb`); the paper's π_eu and π_ue |
@@ -40,11 +41,11 @@ The two spellings follow [`bst/1`'s rule](../bst-1/model.md#notation).
 
 ## Population
 
-- Groups, each with a population share, a growth factor 𝒢, a job-loss probability by regime, a level law for the newborn's
-  permanent income, and a list of types. The paper's groups are dropout, high school and college. A group is referred to by
-  its name, never by an index.
-- Within a group, K types with shares and discount factors β_i; a type's weight in the population is its group's share times
-  its share within the group. Every other primitive is common.
+- Groups, each with a population share, a growth factor 𝒢, a job-loss probability by regime, a level law for the
+  newborn's permanent income, and a list of types. The paper's groups are dropout, high school and college. A group is
+  referred to by its name, never by an index.
+- Within a group, K types with shares and discount factors β_i; a type's weight in the population is its group's share
+  times its share within the group. Every other primitive is common.
 - Perpetual youth: survival into the next quarter with probability ℒ, 0 < ℒ ≤ 1, independent of everything else, with no
   maximum age. A dead household is replaced at once by a newborn of its group and type.
 
@@ -63,8 +64,8 @@ Two Markov states are drawn each quarter, the regime first.
   - from U_1: to E with probability `find`(`reg_t`), else X;
   - from X: to E with probability `find`(`reg_t`), else X.
 
-  So a spell of unemployment pays benefits for two quarters, the quarter of job loss included, and then nothing until a job
-  is found. The stage file states this two-quarter chain; a member with another number of benefit quarters is of the
+  So a spell of unemployment pays benefits for two quarters, the quarter of job loss included, and then nothing until a
+  job is found. The stage file states this two-quarter chain; a member with another number of benefit quarters is of the
   family but has no stage file until one is written for its chain, with its states named the same way.
 - The regime is one for the whole economy; the employment draws are independent across households given the regime.
 
@@ -82,20 +83,22 @@ Two Markov states are drawn each quarter, the regime first.
 - **Transitory income** is ξ_t 𝐩_t with ξ_t set by the state: e θ_t when employed, ξ_U in U_2 and U_1, ξ_X in X, where θ
   is a positive shock with E[θ] = 1. So E[ξ | employed] = e, and employed income is not rescaled for the unemployment
   probability, as it is in `bst/1`.
-- ψ and θ are independent of each other, of the chains, over time and across households; θ is drawn every quarter and used
-  only when employed. Their laws are parameters, each one of the [shock laws](../shock-laws.md), common to all groups; the
-  paper's are untruncated lognormals, and the truncated lognormal is the recommended variant.
+- ψ and θ are independent of each other, of the chains, over time and across households; θ is drawn every quarter and
+  used only when employed. Their laws are parameters, each one of the [shock laws](../shock-laws.md), common to all
+  groups; the paper's are untruncated lognormals, and the truncated lognormal is the recommended variant.
 
 ## Events within a quarter, in order
 
 1. Survival is drawn.
 2. The regime `reg_t` is drawn, then the employment state z_t.
-3. A survivor draws ψ_t and θ_t. Then 𝐩_t = 𝒢_t ψ_t 𝐩_{t−1}, bank balances are b_t = R k_t/(𝒢_t ψ_t) with k_t = a_{t−1}, and
-   market resources are m_t = b_t + ξ_t.
+3. A survivor draws ψ_t and θ_t. Then 𝐩_t = 𝒢_t ψ_t 𝐩_{t−1}, bank balances are b_t = R k_t/(𝒢_t ψ_t) with k_t = a_{t−1},
+   and market resources are m_t = b_t + ξ_t.
 4. A newborn is **born employed**, as in `bst/1`: z_t = E, k_t = 0, no ψ in its first quarter, and its first transitory
-   draw is the employed branch, e θ_t; its permanent income 𝐩_t is drawn from its group's level law. So its market resources
-   are m_t = e θ_t, in levels e θ_t 𝐩_t: a newborn holds no assets and its resources are its first income draw.
-5. The household consumes c_t and ends the quarter with a_t = m_t − c_t ≥ `a_min(z_t)`, the constraint in force in its state, through the observation map below.
+   draw is the employed branch, e θ_t; its permanent income 𝐩_t is drawn from its group's level law. So its market
+   resources are m_t = e θ_t, in levels e θ_t 𝐩_t: a newborn holds no assets and its resources are its first income
+   draw.
+5. The household consumes c_t and ends the quarter with a_t = m_t − c_t ≥ `a_min(z_t)`, the constraint in force in its
+   state, through the observation map below.
 
 In ratios to permanent income, a survivor's resources evolve as
 
@@ -116,34 +119,36 @@ gain is ℷ + (1 − ℷ) c̃′(m̃), and every MPC the [results](results.md) r
 
 ## Preferences and markets
 
-- Utility is u(c) = c^(1−ρ)/(1−ρ) with ρ > 1; lifetime utility is E Σ_s (β_i ℒ)^s u(𝐜_{t+s}), over the household's total
+- Utility is u(c) = c^(1−ρ)/(1−ρ) with ρ > 1; lifetime utility is E Σ_s β̊_i^s u(𝐜_{t+s}), over the household's total
   consumption. Death ends utility, with no bequest motive.
 - There is no annuity market: survivors earn R, not R/ℒ.
 - The borrowing constraint in force depends on the employment state: `a_min(z)` is the fixed point given in
-  [conditions](conditions.md), with the artificial limit `a_Art` inside the recursion, since a state's limit must keep feasible
-  the constraint in force in every state that can follow. The artificial limit `a_Art` ≤ 0 is a parameter; the natural limits
-  `a_Nat(z)`, the same recursion without it, are implications of the laws and the chain. With lognormal laws the employed
-  state's lowest income is zero, since employed income e θ 𝐩 has infimum zero, and that state can follow every state, so
-  every state's limit is zero; with truncated laws the limits are negative, can differ by state, and depend on the switch.
+  [conditions](conditions.md), with the artificial limit `a_Art` inside the recursion, since a state's limit must keep
+  feasible the constraint in force in every state that can follow. The artificial limit `a_Art` ≤ 0 is a parameter; the
+  natural limits `a_Nat(z)`, the same recursion without it, are implications of the laws and the chain. With lognormal
+  laws the employed state's lowest income is zero, since employed income e θ 𝐩 has infimum zero, and that state can
+  follow every state, so every state's limit is zero; with truncated laws the limits are negative, can differ by state,
+  and depend on the switch.
 - For one written form, a parameter file writes `a_Art` above the lowest of the natural limits `a_Nat(z)`, or the word
   `natural`: an artificial limit at or below the lowest natural limit binds in no state.
 
 ## Parameter domains
 
-β_i > 0 (the validity conditions bound it above); shares positive and summing to one within each group and across groups;
-ρ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0 for each group; e > 0; ξ_U > 0 and ξ_X > 0; `sep` and `find` in [0, 1] for each regime;
-`p_exit` in [0, 1]; 0 ≤ ℷ < 1; `a_Art` ≤ 0 and above the lowest `a_Nat(z)`, or `natural`; the newborn's level law has a
-positive mean and a standard deviation of the log that may be zero.
+β_i > 0 (the validity conditions bound it above); shares positive and summing to one within each group and across
+groups; ρ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0 for each group; e > 0; ξ_U > 0 and ξ_X > 0; `sep` and `find` in [0, 1] for each
+regime; `p_exit` in [0, 1]; 0 ≤ ℷ < 1; `a_Art` ≤ 0 and above the lowest `a_Nat(z)`, or `natural`; the newborn's level
+law has a positive mean and a standard deviation of the log that may be zero.
 
 ## The household's problem, as the stage file states it
 
 The stage file [`bellman/bst_markov_ui.bl`](bellman/bst_markov_ui.bl) states one type's problem, for one group, in the
-optimizer's units, in five blocks, read here in BST's notation. k is last quarter's a, the arrival state; `[>]` marks next
-quarter's value and `[<]` this quarter's arrival value. A selector `(…)[z]` or `(…)[P_u]` in the file is read as cases.
+optimizer's units, in five blocks, read here in BST's notation. k is last quarter's a, the arrival state; `[>]` marks
+next quarter's value and `[<]` this quarter's arrival value. A selector `(…)[z]` or `(…)[P_u]` in the file is read as
+cases.
 
-- **Sets and parameters.** m ∈ ℝ; a ∈ [`a_min`, ∞) with `a_min` = max(`a_Art`, `a_Nat`), one limit for every state, which is exact for the file's lognormal
-  laws, under which every state's limit is zero, while a stage file with bounded laws needs the per-state limits of
-  [conditions](conditions.md); z ∈ Z = {E, U_2, U_1, X}; `reg` ∈ {normal, recession};
+- **Sets and parameters.** m ∈ ℝ; a ∈ [`a_min`, ∞) with `a_min` = max(`a_Art`, `a_Nat`), one limit for every state,
+  which is exact for the file's lognormal laws, under which every state's limit is zero, while a stage file with bounded
+  laws needs the per-state limits of [conditions](conditions.md); z ∈ Z = {E, U_2, U_1, X}; `reg` ∈ {normal, recession};
   P_u ∈ {continues, grows, frozen}; the parameters β, ℒ, ρ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, e, ξ_U, ξ_X, `p_exit`,
   `sep` and `find` by regime, with the domains above. The file writes one law family, the lognormal, for ψ and θ; the
   family allows any of the shock laws, and a member with another law needs a stage file written with that law's family:
@@ -152,26 +157,27 @@ quarter's value and `[<]` this quarter's arrival value. A selector `(…)[z]` or
 - **Shocks.** `reg` ~ Categorical over the row of `reg_prev`; z ~ Categorical over the row of z_prev with the
   probabilities of `reg`; ψ ~ LogNormal(−σ²/2, σ) with σ = σ_ψ when employed, and in a quarter of unemployment σ_ψ under
   `continues` and 0 otherwise; θ ~ LogNormal(−σ_θ²/2, σ_θ), drawn but unused when unemployed.
-- **Arrival to decision** (`arvl_to_dcsn`): 𝒢_t = 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the switch;
-  ξ = e θ, ξ_U, ξ_U or ξ_X by the state; m = R k/(𝒢_t ψ) + ξ; the state and the regime are carried forward.
+- **Arrival to decision** (`arvl_to_dcsn`): 𝒢_t = 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the
+  switch; ξ = e θ, ξ_U, ξ_U or ξ_X by the state; m = R k/(𝒢_t ψ) + ξ; the state and the regime are carried forward.
 - **Decision to continuation** (`dcsn_to_cntn`): a = m − c, with the state and the regime carried.
-- **Continuation to decision** (`cntn_to_dcsn`): V = u(c) + β ℒ V[>]; dV = u′(c).
+- **Continuation to decision** (`cntn_to_dcsn`): V = u(c) + β̊ V[>]; dV = u′(c).
 - **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{reg,z,ψ,θ}[(𝒢_t ψ)^(1−ρ) V]; dV[<] = E_{reg,z,ψ,θ}[R (𝒢_t ψ)^(−ρ)
   dV], the expectation over this quarter's regime, state and shocks given last quarter's state and regime.
-- **The policy** (`policy`): c = argmax over 0 < c ≤ m − `a_min` of u(c) + β ℒ V[>], written as documentation; the operative line
-  is the Euler equation with its complementarity clause, u′(c) = β ℒ dV[>] ⟂ m − c ≥ `a_min`. The language records `max` as a
-  callable the solver supplies, as it does `log`, so a solver bound to the stage must honor the constraint in force.
+- **The policy** (`policy`): c = argmax over 0 < c ≤ m − `a_min` of u(c) + β̊ V[>], written as documentation; the
+  operative line is the Euler equation with its complementarity clause, u′(c) = β̊ dV[>] ⟂ m − c ≥ `a_min`. The language
+  records `max` as a callable the solver supplies, as it does `log`, so a solver bound to the stage must honor the
+  constraint in force.
 
 Composing the blocks across the quarter gives the recursion in the form BST writes it, for type i of a group, with the
 state (m, z, `reg`):
 
-    v_i(m, z, `reg`) = max over 0 < c ≤ m − `a_min(z)` of  u(c) + β_i ℒ E[(𝒢′ ψ′)^(1−ρ) v_i(m′, z′, `reg′`) | z, `reg`],
+    v_i(m, z, `reg`) = max over 0 < c ≤ m − `a_min(z)` of  u(c) + β̊_i E[(𝒢′ ψ′)^(1−ρ) v_i(m′, z′, `reg′`) | z, `reg`],
     m′           = R (m − c)/(𝒢′ ψ′) + ξ′,
 
 whose solution is the **consumption rule** c_i(m, z, `reg`) and the value v_i(m, z, `reg`), and the **Euler equation**
 in ratio form,
 
-    u′(c_i(m, z, `reg`)) ≥ β_i ℒ R E[(𝒢′ ψ′)^(−ρ) u′(c_i(m′, z′, `reg′`)) | z, `reg`],
+    u′(c_i(m, z, `reg`)) ≥ β̊_i R E[(𝒢′ ψ′)^(−ρ) u′(c_i(m′, z′, `reg′`)) | z, `reg`],
 
 with equality wherever c_i(m, z, `reg`) < m − `a_min(z)`. Since normal is absorbing, the rule in the normal regime is
 the solution of the problem with the regime removed, and the rule in the recession regime is solved given it. The
@@ -180,8 +186,9 @@ it states one quarter, and the family states the fixed point.
 
 ## The stationary population
 
-For each group and type, the stationary population is the joint distribution of (m, z) in the normal regime that the events
-above leave unchanged; equivalently, the distribution of (a, z) at the end of the quarter. It is counted under two measures:
+For each group and type, the stationary population is the joint distribution of (m, z) in the normal regime that the
+events above leave unchanged; equivalently, the distribution of (a, z) at the end of the quarter. It is counted under
+two measures:
 - the **population measure**, which gives each household weight one;
 - the **income measure**, which weights each household by its permanent income 𝐩 and is normalized to total weight one,
   Harmenberg's permanent-income-neutral measure. Under `continues`, 𝐩 is independent of z, so the income measure's
@@ -189,20 +196,20 @@ above leave unchanged; equivalently, the distribution of (a, z) at the end of th
   law of (m, z, 𝐩).
 
 Statistics in levels, such as the wealth Lorenz curve the paper's estimation targets and the means test of the paper's
-stimulus check, need the distribution of 𝐩 itself, which depends on the group's growth, the newborn's level law and survival;
-the [results](results.md) say what is reported in levels.
+stimulus check, need the distribution of 𝐩 itself, which depends on the group's growth, the newborn's level law and
+survival; the [results](results.md) say what is reported in levels.
 
 **Population welfare** of a type is W_i = E[v_i(m, z, normal)] under its stationary population, with the value of the
-household's total consumption, splurge included; pooled welfare weights types by their population weights. The results also
-report the mean felicity and the mean marginal utility; [conditions](conditions.md) says when each is finite.
+household's total consumption, splurge included; pooled welfare weights types by their population weights. The results
+also report the mean felicity and the mean marginal utility; [conditions](conditions.md) says when each is finite.
 
 ## Derived parameters
 
-As in [`bst/1`](../bst-1/model.md#derived-parameters), computed for the stated member by the checker and used by a toolkit
-from its own effective member, which it reports: the worst income by state, `ξ_min(z)` `ψ_min(z)`, and its probability from each
-state; the constraint in force by state, the fixed point stated in [conditions](conditions.md) with the artificial limit
-inside the recursion; and the natural limits by state, the same recursion without it. The employed-income scale e is a parameter of this family, not a
-derived one.
+As in [`bst/1`](../bst-1/model.md#derived-parameters), computed for the stated member by the checker and used by a
+toolkit from its own effective member, which it reports: the worst income by state, `ξ_min(z)` `ψ_min(z)`, and its
+probability from each state; the constraint in force by state, the fixed point stated in [conditions](conditions.md)
+with the artificial limit inside the recursion; and the natural limits by state, the same recursion without it. The
+employed-income scale e is a parameter of this family, not a derived one.
 
 ## What the family fixes, so that no parameter file can state it
 
@@ -239,8 +246,8 @@ A parameter file is YAML in the strict subset of `bst/1`. It holds the free para
   by regime), `income_employed` (e), `income_with_benefits` (ξ_U), `income_without_benefits` (ξ_X) and
   `unemployed_permanent_income` (P_u, one of `continues`, `grows` and `frozen`; never omitted);
 - `groups`, a list, each with `name`, `share`, `growth` (𝒢), `job_loss: {normal, recession}` (`sep` by regime),
-  `newborn_income: {mean, sd_log}` (the level law, a lognormal in the levels of the period's units) and `types`, a list of
-  `{beta, share}` in increasing order of `beta` with no repeat.
+  `newborn_income: {mean, sd_log}` (the level law, a lognormal in the levels of the period's units) and `types`, a list
+  of `{beta, share}` in increasing order of `beta` with no repeat.
 
 Every free parameter appears, and nothing is left to a toolkit's defaults. The paper's normal-times calibration in the
 family's standard world, with the laws the published code discretized:

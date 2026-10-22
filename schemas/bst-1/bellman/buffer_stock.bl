@@ -3,7 +3,7 @@
 # schemas/bst-1/model.md). Revised by hand on 2026-10-18. The family
 # requires ρ > 1, as Buffer Stock Theory does; log utility is outside it.
 # ξ is transitory income and θ the mean-one employed draw. Unemployment is a
-# Bernoulli label e, so that ξ_U = 0 needs no point mass. The constraint in
+# Bernoulli label z, the employment state, so that ξ_U = 0 needs no point mass. The constraint in
 # force is a ≥ max(a_Art, a_Nat), stated in the set Xa, the feasible set and
 # the complementarity clause on the Euler equation. a_Nat is determined by the
 # laws and is supplied with the calibration. Survivors only: newborns, types
@@ -31,16 +31,16 @@ p_zero : [0,1)       :: ["probability ℘ of unemployment"]
 ψ ~ LogNormal(-(σ_ψ^2)/2, σ_ψ)   :: ["permanent shock, E[ψ] = 1"]
 θ : ℝ₊₊
 θ ~ LogNormal(-(σ_θ^2)/2, σ_θ)   :: ["employed transitory draw, E[θ] = 1; drawn but unused when unemployed"]
-e : Emp
-e ~ Bernoulli(p_zero)            :: ["unemployment event: unemp with probability p_zero, independent of ψ and θ"]
+z : Emp
+z ~ Bernoulli(p_zero)            :: ["unemployment event: unemp with probability p_zero, independent of ψ and θ"]
 
 𝑢(c : ℝ₊₊) := c^(1-ρ)/(1-ρ)       :: [id=util]
 𝑑𝑢(c : ℝ₊₊) := c^(-ρ)             :: [id=marg_util]
 𝑑𝑢𝑖𝑛𝑣(x : ℝ₊₊) := x^(-1/ρ)        :: [id=inv_marg_util]
 𝒞(x : Xm) := (0, x - max(a_Art, a_Nat)]   :: [id=feasible]
 
-[id=arvl_to_dcsn, (k : Xa, ψ, θ, e) : !arvl -> (m : Xm) : !dcsn] {
-    ξ = (θ*(1 - p_zero*ξ_U)/(1 - p_zero), ξ_U)[e]   :: [id=transitory_income, "ξ = ξ_U when unemployed, else θ(1 - ℘ξ_U)/(1 - ℘), so E[ξ] = 1"]
+[id=arvl_to_dcsn, (k : Xa, ψ, θ, z) : !arvl -> (m : Xm) : !dcsn] {
+    ξ = (θ*(1 - p_zero*ξ_U)/(1 - p_zero), ξ_U)[z]   :: [id=transitory_income, "ξ = ξ_U when unemployed, else θ(1 - ℘ξ_U)/(1 - ℘), so E[ξ] = 1"]
     m = R*k/(𝒢*ψ) + ξ                                   :: [id=market_resources, "a survivor's resources; k is last period's a"]
 }
 
@@ -54,8 +54,8 @@ e ~ Bernoulli(p_zero)            :: ["unemployment event: unemp with probability
 }
 
 [id=dcsn_to_arvl, (V, dV) : !dcsn -> (V[<] : ℝ @ !vlu, dV[<] : ℝ₊₊ @ !mrgnvl) : !arvl] {
-    V[<]  = E_{ψ,θ,e}((𝒢*ψ)^(1-ρ) * V)         :: [id=value]
-    dV[<] = E_{ψ,θ,e}(R * (𝒢*ψ)^(-ρ) * dV)     :: [id=marginal]
+    V[<]  = E_{ψ,θ,z}((𝒢*ψ)^(1-ρ) * V)         :: [id=value]
+    dV[<] = E_{ψ,θ,z}(R * (𝒢*ψ)^(-ρ) * dV)     :: [id=marginal]
 }
 
 [id=policy, (V[>] : ℝ @ !vlu, dV[>] : ℝ₊₊ @ !mrgnvl) : !cntn -> (c : ℝ₊₊ @ !ctrl) : !dcsn] {

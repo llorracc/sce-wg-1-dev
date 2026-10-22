@@ -167,7 +167,7 @@ model itself.
 
 **Euler residuals, at each comparison point and for each type.** Let
 
-    ĉ(m) = (u′)^(−1)( β_i ℒ R E[(𝒢 ψ′)^(−ρ) u′(c(m′))] ),   m′ = R (m − c(m))/(𝒢 ψ′) + ξ′.
+    ĉ(m) = (u′)^(−1)( β̊_i R E[(𝒢 ψ′)^(−ρ) u′(c(m′))] ),   m′ = R (m − c(m))/(𝒢 ψ′) + ξ′.
 
 The residual is
 
