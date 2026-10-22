@@ -1,8 +1,10 @@
 # QuantEcon's JAX code: a Rosetta Stone for bst/1, as cards in the field names of Project Bellman's Rosetta stone.
 # Draft, 2026-10-21. The toolkit's side only: the operator's side is Bellman's to fill. The recasting, the lexicon, the
-# reasons and the sources are in quantecon-jax.md. Values such as "!egm" are Bellman's method tags, quoted so that YAML
-# does not read them as tags; "on" is quoted because YAML 1.1 reads a bare on as true. The settings' shared names follow
-# numerics.md where it has them, and are provisional until the method registry is written.
+# reasons and the sources are in quantecon-jax.md. Values such as "!quadrature" are Bellman's method tags, quoted so
+# that YAML does not read them as tags; "on" is quoted because YAML 1.1 reads a bare on as true. A method entry lists
+# only the settings its tag names, unless it names a handler that reads the rest. Revised on 2026-10-22 for the schemas'
+# rules of attachment. The settings' shared names follow numerics.md where it has them, and are provisional until the
+# method registry is written.
 
 toolkit:
   package: "QuantEcon lecture code: The Income Fluctuation Problem V, Stochastic Returns on Assets"
@@ -16,7 +18,7 @@ handlers:
       - "jax.config.update('jax_enable_x64', True), before any array"
       - "create_ifp(...), or an IFP built directly with the recast values"
       - "solve_model(ifp, c_init, a_init)"
-    target: policy
+    target: policy.euler.solve
     scope: whole stage
     transition_alignment: model_locked      # a' = R'(a - c) + Y' is built into K
     single_step: needs_wrapper              # solve_model iterates K to convergence
@@ -35,8 +37,8 @@ handlers:
       create_ifp: {grid_max: grid_max, grid_points: grid_size}
       solve_model: {solution_tolerance: tol, max_iterations: max_iter}
     interior_policy:                        # what this whole-stage handler does with each part it covers
-      evaluate: {status: fixed, reason: "jnp.interp, which holds c constant above the grid"}
-      dcsn_to_arvl: {status: requires_own_handler, reason: "an equal-weight mean over Monte Carlo draws; the member's nodes, unequally weighted after the tilt, need two weight vectors"}
+      policy: {status: fixed, reason: "jnp.interp, which holds c constant above the grid"}
+      E_ψ_θ_j: {status: requires_own_handler, reason: "the lecture's own is \"!monte-carlo\", an equal-weight mean over draws; the member's nodes, unequally weighted after the tilt, need two weight vectors"}
       cntn_to_dcsn.value: {status: absent}
     s_transformations:
       tilt-psi:
@@ -68,9 +70,9 @@ handlers:
         shock_draw_size: {semantics: "the number of Monte Carlo draws of each innovation, as written; replaced by the member's nodes under the extension"}
 
 methods:
-  - {"on": policy, method: time iteration by the endogenous grid method, method_tag: "!egm", settings: [solution_tolerance, max_iterations], handler: ifp_advanced.solve_model}
-  - {"on": evaluate, method: linear interpolation, settings: [grid_max, grid_points]}
-  - {"on": dcsn_to_arvl, method: "a sum over the member's nodes with their weights, by the extension", method_tag: "!sum", settings: [nodes_per_shock], handler: adapter}
+  - {"on": policy.euler.solve, method: "time iteration, by the endogenous grid method at each step", method_tag: "!time-iteration", settings: [solution_tolerance, max_iterations, grid_max, grid_points], handler: ifp_advanced.solve_model}
+  - {"on": policy, method: "linear interpolation, by jnp.interp", method_tag: "!Linear"}
+  - {"on": E_ψ_θ_j, method: "a quadrature of the stated laws: the member's nodes with their weights, by the extension", method_tag: "!quadrature", settings: [nodes_per_shock], handler: adapter}
   - {"on": cntn_to_dcsn.value, method: "policy evaluation, by the adapter", handler: adapter}
   - {"on": arvl_to_dcsn, method: "the adapter's own lottery, with the untilted laws", method_tag: "!histogram", settings: [histogram_points], handler: adapter}
   - {"on": population.distribution, method: "the adapter's own fixed point", handler: adapter}

@@ -177,20 +177,28 @@ the admitted laws, the truncation point, or zero for a law unbounded below ([con
 ## Method targets
 
 A method file ([numerical methods](../numerics.md)) says how a toolkit computes each part of the model. It names the
-part by the stage file's own target, as Bellman's methods files do: a block's id, a block's line, or an operator's name,
-which covers every occurrence. Two parts have no target in the stage, since it states one period and no population; they
-keep names of the schema's own. Each part exists once for each type, and a method may be given for all types or for one.
+part by the stage file's own target, as Bellman's methods files do: a block's id, a line's id, or an operator's name,
+which covers every occurrence. A method attaches only where the stage gives the computation a place of its own:
+- an expectation's method goes on its operator, never on the block or the line that holds it;
+- the policy's solution goes on the operator that solves the Euler line, and the rule's interpolation on the policy
+  block;
+- where the computation has a tag, such as `!quadrature`, the method is that tag. A toolkit's own routine is
+  named as the entry's handler, and a setting the tag does not name is read by a handler, or stays in the toolkit's own
+  map;
+- each target takes one method.
+
+Two parts have no target in the stage, since it states one period and no population; they keep names of the schema's
+own. Each part exists once for each type, and a method may be given for all types or for one.
 
 | Target | What it computes | Comment |
 |---|---|---|
-| `policy` | the choice of c: the root of the Euler line, or the maximization | the endogenous grid method, time iteration or value iteration attach here |
-| `evaluate` | the rule c_i(m) between the points where it was computed | linear, cubic Hermite or spline interpolation; Bellman's name for the policy's evaluation |
-| `dcsn_to_arvl` | the expectation over ψ′, θ′ and the unemployment event in the value and marginal-value lines | the quadrature of each shock is a setting of this one part, since the stage writes one joint expectation; `dcsn_to_arvl.value` and `dcsn_to_arvl.marginal` name the two lines separately |
-| `E_{ψ,θ,j}` | every occurrence of the joint expectation | the operator-name form, which covers both lines at once |
+| `policy.euler.solve` | the choice of c: the root of the Euler line, iterated to the stationary rule | `!time-iteration` or `!root-find`. The stage writes the Euler equation, not a method's steps, so a toolkit's endogenous grid method is named as the handler: `!egm` attaches only to a stage that writes the method's own lines, the inverted Euler equation and the endogenous grid |
+| `policy` | the rule c_i(m) between the points where it was computed | the rule's interpolation, such as `!Linear`. A cubic Hermite whose slopes are the solution's own MPCs, as HARK's is, has no tag and is named as the handler |
+| `E_ψ_θ_j` | the expectation E_{ψ,θ,j} over ψ′, θ′ and the unemployment event, in the value and the marginal-value lines | the operator's name, which covers both lines: `!quadrature` for nodes that approximate the laws, `!monte-carlo` for a mean over draws, and `!sum` only where every law has finitely many outcomes. The block `dcsn_to_arvl` and its lines take no method |
 | `cntn_to_dcsn.value` | the value V, and hence population welfare | `value-function` keeps it; a method that drops it reports welfare from simulated utility instead |
-| `arvl_to_dcsn` | the population's transition: how ψ, θ and the event move the forward measure | the forward builder's method, for a toolkit that pushes a distribution rather than agents |
+| `arvl_to_dcsn` | the population's transition: how ψ, θ and the event move the forward measure | the forward builder's method, such as `!histogram`, for a toolkit that pushes a distribution rather than agents |
 | `population.distribution` | the stationary population, the fixed point of the forward map | no stage target: Monte Carlo, a histogram, or the eigenvector of a transition matrix |
-| `diagnostics.expectation` | the expectation in the Euler residuals of the [results](results.md) | no stage target; its method must differ from the one on `dcsn_to_arvl` |
+| `diagnostics.expectation` | the expectation in the Euler residuals of the [results](results.md) | no stage target; its method must differ from the one on `E_ψ_θ_j` |
 
 ## The parameter file
 

@@ -29,23 +29,26 @@ against the stated member's law.
 ## Method file
 
 A method file chooses, for each part of the model, the algorithm that computes it. A part is named by the family's stage
-file's own target, as Bellman's methods files name it: a block's id such as `policy`, a block's line such as
-`dcsn_to_arvl.value`, or an operator's name such as `E_{ψ,θ,j}`, which covers every occurrence. The family's model
+file's own target, as Bellman's methods files name it: a block's id such as `policy`, a line's id such as
+`cntn_to_dcsn.value`, or an operator's name such as `E_ψ_θ_j`, which covers every occurrence. A method attaches only
+where the stage gives the computation a place of its own: an expectation's method goes on its operator, not on the block
+or the line that holds it. Each target takes one method, and two entries on one target are an error. The family's model
 schema lists its targets with a comment on each ([`bst/1`](bst-1/model.md#method-targets)); two parts the stage cannot
-name, the stationary population and the diagnostics' expectation, keep names of the schema's own. An entry for a line
-overrides one for its block, and a block's entry overrides an operator name's.
+name, the stationary population and the diagnostics' expectation, keep names of the schema's own.
 
 The file holds **no values**. Each method it names is defined in a **method registry**. The registry declares the
 method's contract and **the settings it reads**: each setting's name, type, allowed range and meaning.
 
 ```yaml
 methods:
-  - on: policy                    # the choice of c
-    method: endogenous-grid
-  - on: evaluate                  # the rule between the points where it was computed
-    method: linear-interpolation
-  - on: dcsn_to_arvl              # the joint expectation over the shocks and the unemployment event
-    method: equiprobable-quantile-nodes
+  - on: policy.euler.solve        # the choice of c: the root of the Euler line
+    method: "!time-iteration"
+    handler: endogenous-grid      # the step that solves it, which the stage does not write
+  - on: policy                    # the rule between the points where it was computed
+    method: "!Linear"
+  - on: E_ψ_θ_j                   # the joint expectation over the shocks and the unemployment event, in both lines
+    method: "!quadrature"
+    handler: equiprobable-quantile-nodes   # where the nodes go, which the tag leaves open
   - on: cntn_to_dcsn.value        # the value, kept for population welfare
     method: value-function
   - on: population.distribution   # the stationary population; no stage target
@@ -66,6 +69,14 @@ registry declares every setting those parts read.
 **Shared and toolkit-specific names.** The registry has two parts:
 - a shared part, whose names mean the same in every toolkit;
 - names under a toolkit's prefix, such as `hark:`, which identify a method but promise no comparability.
+
+**Tags and handlers.** Where a computation has a method tag, as Project Bellman's methods files write them, the method
+of an entry on a stage target is that tag, quoted so that YAML does not read it as a tag of its own:
+`"!time-iteration"`, `"!Linear"`, `"!quadrature"`, `"!monte-carlo"`, `"!histogram"`. A registry's name then goes in the
+entry's `handler`, where it says what the tag leaves open: the endogenous grid step under time iteration, or the
+placement of the nodes under a quadrature. A setting that the tag does not name is read through the handler. Where no
+tag fits, as for keeping the value function and for the two parts with no stage target, the registry's name is the
+method.
 
 ## Settings file
 

@@ -221,19 +221,19 @@ employed-income scale e is a parameter of this family, not a derived one.
 
 ## Method targets
 
-A method file ([numerical methods](../numerics.md)) names the part it computes by the stage file's own target. Each part
-exists once for each group and type, and a method may be given for all or for one.
+A method file ([numerical methods](../numerics.md)) names the part it computes by the stage file's own target, under the
+rules of attachment of [`bst/1`](../bst-1/model.md#method-targets). Each part exists once for each group and type, and a
+method may be given for all or for one.
 
 | Target | What it computes | Comment |
 |---|---|---|
-| `policy` | the choice of c for each (m, j, `reg`): the root of the Euler line, or the maximization | the endogenous grid method in a Markov solver, time iteration or value iteration attach here |
-| `evaluate` | the rule c_i(m, j, `reg`) between the points where it was computed | interpolation in m, state by state |
-| `dcsn_to_arvl` | the expectation over `reg′`, j′, ψ′ and θ′ in the value and marginal-value lines | the quadrature of each shock and the summation over the chains are settings of this one part; `.value` and `.marginal` name the two lines |
-| `E_{reg,j,ψ,θ}` | every occurrence of the joint expectation | the operator-name form |
+| `policy.euler.solve` | the choice of c for each (m, j, `reg`): the root of the Euler line, iterated to the stationary rule | `!time-iteration` or `!root-find`, with a Markov solver's endogenous grid method named as the handler |
+| `policy` | the rule c_i(m, j, `reg`) between the points where it was computed | interpolation in m, state by state, such as `!Linear` |
+| `E_reg_j_ψ_θ` | the expectation E_{reg,j,ψ,θ} over `reg′`, j′, ψ′ and θ′, in the value and the marginal-value lines | the operator's name, which covers both lines. One operator takes one method, so the chains' `!exact-markov` and the shocks' `!quadrature` cannot both be written on it; the stage file would have to split it, an open question. The block `dcsn_to_arvl` and its lines take no method |
 | `cntn_to_dcsn.value` | the value V, and hence population welfare | `value-function` keeps it; a method that drops it reports welfare from simulated utility |
 | `arvl_to_dcsn` | the population's transition: how the chains and the shocks move the forward measure | the forward builder's method |
 | `population.distribution` | the stationary population over (m, j), the fixed point of the forward map | no stage target: Monte Carlo, a histogram, or the eigenvector of a transition matrix |
-| `diagnostics.expectation` | the expectation in the Euler residuals of the [results](results.md) | no stage target; its method must differ from the one on `dcsn_to_arvl` |
+| `diagnostics.expectation` | the expectation in the Euler residuals of the [results](results.md) | no stage target; its method must differ from the one on `E_reg_j_ψ_θ` |
 
 ## The parameter file
 

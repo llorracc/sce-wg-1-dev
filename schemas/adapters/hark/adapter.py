@@ -132,7 +132,7 @@ def file_hash(canonical, path):
 def dump_strict_yaml(data, path):
     """Write a mapping in the strict subset (plain scalars, flow lists; no booleans, tags, anchors)."""
     import yaml
-    open(path, "w", encoding="utf-8").write(yaml.safe_dump(data, sort_keys=False, default_flow_style=None, width=120))
+    open(path, "w", encoding="utf-8").write(yaml.safe_dump(data, sort_keys=False, default_flow_style=None, width=120, allow_unicode=True))
 
 
 # ------------------------------------------------------------------------------------------------ the laws, discretized
@@ -830,12 +830,14 @@ def generate_request(member, report, nodes, Pt, PSIt, XIt, nb, a_lo, natural, pa
 
 
 # ------------------------------------------------------------------------------------------------ the whole file
+# Each entry on a stage target carries its method's tag where there is one, and names the adapter's routine as its handler
+# (numerics.md, "Tags and handlers"); HARK's cubic, whose slopes are the solution's MPCs, has no tag.
 METHODS = [
-    {"on": "policy", "method": "endogenous-grid"},
-    {"on": "evaluate", "method": "hark:cubic-hermite"},
-    {"on": "dcsn_to_arvl", "method": "hark:equiprobable-exact-mean-nodes-by-employment-state"},
+    {"on": "policy.euler.solve", "method": "!time-iteration", "handler": "endogenous-grid"},
+    {"on": "policy", "handler": "hark:cubic-hermite"},
+    {"on": "E_ψ_θ_j", "method": "!quadrature", "handler": "hark:equiprobable-exact-mean-nodes-by-employment-state"},
     {"on": "cntn_to_dcsn.value", "method": "value-function"},
-    {"on": "arvl_to_dcsn", "method": "hark:equiprobable-exact-mean-nodes-by-employment-state"},
+    {"on": "arvl_to_dcsn", "method": "!histogram", "handler": "hark:equiprobable-exact-mean-nodes-by-employment-state"},
     {"on": "population.distribution", "method": "hark:lottery-histogram-linear-solve"},
     {"on": "diagnostics.expectation", "method": "hark:gauss-legendre-log-support-split-at-kink"},
 ]
