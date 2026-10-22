@@ -80,3 +80,9 @@ next:
 
 **What it does not:** a measured error at the fourth level, which the extrapolation only estimates; and any comparison
 with a second toolkit.
+
+**Added on 2026-10-22.** The HAFiscal-Latest session reports the checker's verdict on the toy's levels 3 and 4, run against
+the schemas and checker at `4f99d01`, the ones the ladder was written against: each validates, and its report is
+consistent with the member. It re-ran them that day after taking the machine's name and operating system out of the files,
+on the owner's word, and every number was unchanged. The files still carry the quantiles at probability 1 and the run
+time, which the schema has since dropped (#3, #5); the emitter's next ladder will not.

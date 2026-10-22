@@ -1,6 +1,6 @@
 ---
 name: feedback_notation-and-foundation
-description: "The schemas use Buffer Stock Theory's notation, SolvingMicroDSOPs' where BST is silent, with the BST paper the authority and econ-ark's notation registry beside it; symbols have a typeset and a plain-text spelling; ξ_U is the income while unemployed; the Bellman-SYM stage file is the foundation (rulings of 2026-10-18 and 2026-10-21)"
+description: "The schemas use Buffer Stock Theory's notation with econ-ark's notation registry as the authority beside the BST paper; two spellings of each symbol; the symbols in force (Þ̊, β̊, ϱ, ε, ξ_u, ξ_x, j); the Bellman-SYM stage file is the foundation (rulings of 2026-10-18, 2026-10-21 and 2026-10-22)"
 metadata:
   type: feedback
 ---
@@ -12,32 +12,36 @@ description of its true model. The baseline model is BST's version, not the Trac
 **Why:** the schemas are read beside those two documents, and the working group's formal language is Bellman-SYM; private
 names and a prose-first design cut both links.
 
-On 2026-10-21 he ruled that the BST paper is the authority on notation: ξ is the full transitory shock, the unemployment
-event included, and θ the transitory shock of the employed. He then approved two spellings of every symbol:
-- **Typeset** (LaTeX, MathJax, MyST, the paper), BST's own: an underline marks a minimum, as in `\underline{\xi}`, the minimum
-  of ξ; and a subscript that is a word is set upright, `\underline{a}_{\mathrm{Art}}`, never `a_{Art}`.
-- **Plain text** (Markdown prose, the terminal, stage-file identifiers, code), names in code font: `ξ_min`, `ψ_min`,
-  `θ_min`, `a_Art`, `a_Nat`, `a_min`, `m_min` and `p_worst`. They are never pasted into LaTeX as they stand, where `min`
-  would read as a product.
-- **ξ_U** (`\xi_{\mathrm{U}}`) is the income while unemployed, ruled at 19:25 on 2026-10-21. μ, approved that
-  morning, was withdrawn for its competing uses: marginal utility, a measure, and the registry's log excess resources.
-  ξ_U is not underlined, since it need not be ξ's lowest value; in BST, where it is 0, it is.
+On 2026-10-21 he ruled that the BST paper is the authority on notation, and approved two spellings of every symbol:
+- **Typeset** (LaTeX, MathJax, MyST, the paper), BST's own: an underline marks a minimum, as in `\underline{\xi}`; a
+  subscript that is a word is set upright, `\underline{a}_{\mathrm{Art}}`, never `a_{Art}`.
+- **Plain text** (Markdown prose, the terminal, stage-file identifiers, code): a minimum, and a symbol whose subscript is a
+  word, are names in code font (`ξ_min`, `ψ_min`, `θ_min`, `a_Art`, `a_Nat`, `a_min`, `m_min`, `p_worst`), never pasted into
+  LaTeX as they stand. Marks above a letter (a hat, a check, a tilde, the ring) stay, since terminals draw them on their
+  letters; the combining underline does not, and a standing check refuses it.
 
-Each family's `model.md` carries a table of the two spellings with the meaning in words. A standing check refuses the
-combining underline and bare multi-letter LaTeX subscripts, and wants a row for every parameter of a stage file. The
-documents' other combining marks, a bar, a tilde, a hat and a caron, await the owner's decision. Until the notation pull
-request (#7) merges, the documents on the schemas' branch still carry the underlines.
+Econ-ark's notation registry (`@resources/notation/notation.yml` in econ-ark-tools) is in force beside BST, and the owner
+rules on it there; the schemas take each version by pull request (#7 for 1.0.0, #9 for 5.0.0 and 6.0.0). In force:
+- the targets: `\hat{m}` the buffer stock target, `\check{m}` the pseudo-target;
+- 𝒢 the growth factor, 𝒢_t and 𝒢(z) the Markov family's in a quarter; R typeset `\mathsf{R}`, levels bold italic
+  (`\pLvl`), k "kapital";
+- ξ the transitory shock including the unemployment event, θ the employed draw;
+- **survival-inclusive symbols take the ring:** β̊ = β ℒ and Þ̊ = (R β̊)^(1/ϱ), with Þ̊_R and Þ̊_𝒢 (`\DiscFacEff`,
+  `\APFacEff`, `\RPFacEff`, `\GPFacEff`); the GIC-Liv is ℒ Þ̊_𝒢 < 1, HARK's and the registry's `GPFacLiv`;
+- **ϱ** is relative risk aversion (`\CRRA`, since 6.0.0); **ε** the tail (Pareto) exponent, ζ being the leisure share;
+- `κ_min` (`\underline{\kappa}`) the limiting MPC, max(0, 1 − Þ̊_R); ℛ = R/𝒢;
+- ℘ the probability of unemployment whatever the income then; `p_worst` the probability of the worst income;
+- **the incomes while unemployed are ξ_u, with benefits, and ξ_x, after they expire** (ruled 2026-10-22, registry 8.0.0,
+  `\IncUnemp` and `\IncUnempNoBen`), superseding the ξ_U and ξ_X of 2026-10-21; neither is underlined, since neither need
+  be ξ's lowest value;
+- **j is the employment state** (ruled 2026-10-22), `bst/1`'s unemployment-event label included; z is the registry's
+  matching elasticity only;
+- in the Markov family `sep`, `find`, `p_exit`, `reg` and ℷ.
 
-Econ-ark's notation registry, `@resources/notation/notation.yml` in econ-ark-tools, version 1.0.0 on its master since
-2026-10-21, is in force beside BST, and the schemas follow it (#7):
-- the buffer stock target is `\hat{m}` (`\mTrgNrm`) and the pseudo-target `\check{m}` (`\mBalLvl`);
-- the growth factor is 𝒢. Γ is the registry's dialect for that same factor, so the Markov family writes its growth
-  factor in a quarter 𝒢_t, and 𝒢(z) as a function of the state;
-- ξ includes the zero-income event, and θ is the employed shock;
-- the patience factors take a bold capital thorn, `\textbf{Þ}`.
+The ξ_u, ξ_x and j of 2026-10-22 are made by the pull request after the memorial of that day.
 
-**How to apply:** look a symbol up in BST's macros or SolvingMicroDSOPs' `Notation.md` before writing it (ψ, ξ, θ, ℘, ξ_U, ℒ,
-𝒢, R, β, ρ, m, c, a, k, b), and check econ-ark's registry; write a minimum with BST's underline when typeset and with `_min` in plain text; never use a
-combining underline, which terminals draw unreliably, and add no other combining mark; propose a symbol only where both are silent and say so.
-Start a family from its stage file; the prose states what the language cannot, and names a method's target by the stage
-file's own ids. See [[feedback_iterate-and-propose]].
+**How to apply:** look a symbol up in the registry, then BST's macros or SolvingMicroDSOPs' `Notation.md`, before writing it;
+write a minimum with BST's underline when typeset and with `_min` in plain text; never use a combining underline; propose a
+symbol only where all are silent, and say so. Python normalizes identifiers (NFKC), under which ϱ becomes ρ and ℒ becomes L:
+keep such names as strings. Start a family from its stage file; the prose states what the language cannot, and names a
+method's target by the stage file's own ids. See [[feedback_iterate-and-propose]].

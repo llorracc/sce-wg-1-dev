@@ -134,3 +134,7 @@ After the memorial:
   - The ontology's namespace is `sce`, at w3id.org. Its registration, and the change of the namespace with a new version
     of the ontology and of #2's copy of its table, are to follow; the source keeps its provisional namespace until then.
   - The records are brought up to date, committed and pushed.
+- **About 23:14** (question tool):
+  - Registering `w3id.org/sce` waits; the ontology keeps its provisional namespace.
+  - dolo's adapter is written fresh from the schemas; the benchmark's dolo dry runs are not its basis.
+  - What goes to the working group's repository, and when, is not yet decided; it is taken up once the adapters exist.

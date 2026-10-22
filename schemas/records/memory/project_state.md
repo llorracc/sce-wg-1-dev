@@ -1,11 +1,11 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the fourth memorial of 2026-10-21, after the fork's seven pull requests merged"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 2026-10-22, after the fork's nine pull requests merged"
 metadata:
   type: project
 ---
 
-**On the schemas' branch** (`buffer-stock-schema-work_CDC`, pushed). It holds the merged work of the fork's seven pull
+**On the schemas' branch** (`buffer-stock-schema-work_CDC`, pushed). It holds the merged work of the fork's nine pull
 requests and `main`'s ontology. Nothing has been proposed to the working group's repository yet.
 - **Shared:**
   - `shock-laws.md` with its validator;
@@ -14,7 +14,8 @@ requests and `main`'s ontology. Nothing has been proposed to the working group's
   - the design note `hafiscal-models-and-test-suite.md`;
   - the plan `existing-syntax.md`, executed for the distribution class;
   - `conventions.md`, with its standing check;
-  - `rosetta/`: the Rosetta Stones for HARK and QuantEcon's JAX code, with their cards.
+  - `rosetta/`: the Rosetta Stones for HARK and QuantEcon's JAX code, with their cards;
+  - `adapters/`: HARK's adapter for `bst/1` (`adapters/hark/`), with its tests (5) and its gate.
 - **`ontologies/probability-distributions/`:** the ontology of probability distributions, version 0.1.0-draft.1, rows
   `PD_0000001` to `PD_0000063`, its namespace provisional until `w3id.org/sce` is registered; 12 tests. The checker holds
   a pinned copy of its table.
@@ -36,7 +37,7 @@ requests and `main`'s ontology. Nothing has been proposed to the working group's
   - the verification of a results file's report on the effective member;
   - the shock laws' cross-test against the ontology, the notation check, and the Rosetta Stones' check.
 
-**The fork's pull requests, all merged on 2026-10-21** (llorracc/sce-wg-1-dev), each with a merge commit:
+**The fork's pull requests, all merged** (llorracc/sce-wg-1-dev), each with a merge commit:
 
 | # | what it held | merged |
 |---|---|---|
@@ -47,6 +48,8 @@ requests and `main`'s ontology. Nothing has been proposed to the working group's
 | 4 | how far the stationary distribution's representation reaches | 23:09, `c389b73` |
 | 5 | no run time in a results file | 23:09, `36f8071` |
 | 6 | the Rosetta Stones for HARK and QuantEcon's JAX code | 23:10, `a955677` |
+| 8 | HARK's adapter for `bst/1`, on HARK's Markov consumer | 2026-10-22 12:56, `0cfe05c`, by the owner |
+| 9 | econ-ark's notation registry v5.0.0 and v6.0.0, and the HAFiscal design note's symbols | 2026-10-22 12:58, `673405f` |
 
 The branches are kept. With everything merged, the checker's 150 tests and the ontology's 12 pass.
 
@@ -97,22 +100,15 @@ The branches are kept. With everything merged, the checker's 150 tests and the o
 - **No timings in public** (2026-10-21): no run time in the records or a results file (#5).
 - **The Rosetta Stones** (2026-10-21) live in this repository's schemas, in Bellman's card fields, and cite only checkable
   sources. The plan of 11:59 for a QuantEcon adapter is superseded by the adapters of 20:41.
-- **Notation** (2026-10-21): the BST paper is the authority.
-  - Typeset, an underline marks a minimum (`\underline{\xi}`), and a word subscript is upright.
-  - In plain text, names are in code font: `ξ_min`, `ψ_min`, `θ_min`, `a_Art`, `a_Nat`, `a_min`, `m_min`, `p_worst`.
-  - ξ_U is the income while unemployed (19:25), after μ was withdrawn for its competing uses. `bst/1` allows the lowest
-    employed income below it.
-  - Econ-ark's notation registry, version 1.0.0 in econ-ark-tools, is in force beside BST: the target `\hat{m}`, the
-    pseudo-target `\check{m}`, 𝒢 for the growth factor (so 𝒢_t for the Markov family's factor in a quarter), and a bold
-    thorn for the patience factors.
-  - The batch of 20:43: the natural limit −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) without κ; R(1 − `κ_min`) for the old
-    min(Þ, R); `sep`, `find`, `p_exit`, `reg` and ℷ in the Markov family, Ω in the HAFiscal design note; plain-text names
-    for minima and word subscripts only, marks above a letter kept.
-  - All of it merged with #7; the registry's version 2.1.0 carries rows for the schemas' own symbols.
+- **Notation**: the BST paper and econ-ark's registry; the symbols in force are listed in
+  [the notation memory](feedback_notation-and-foundation.md). Merged with #7 (2026-10-21) and #9 (2026-10-22). The
+  registry's v8.0.0 rulings of 2026-10-22 (ξ_u and ξ_x, j for the employment state, ℘'s gloss, the design note's
+  replacement rates) are made by the next pull request.
 - **Adapters** (20:41): a toolkit's adapter reads a parameter file, solves, and writes a results file; adapters live in
   `schemas/adapters/`. HARK's comes first, then dolo's; no QuantEcon module is published. HARK's is built on its Markov
   consumer with `bst/1` as the nonpersistent chain, starts from the benchmark's emitter with its private material taken
-  out, pins HARK pull request #1858's commit, and writes no operating-system string in a results file's provenance.
+  out, pins HARK pull request #1858's commit, and records neither the machine's name nor its operating system. Merged
+  as #8 after passing its gate (the findings on HARK's Markov consumer).
 
 **The emitter** (the HAFiscal-Latest session).
 - Its ladder of 2026-10-20 and the rerun of the toy's fourth level on 2026-10-21 wrote eight results files. All of them
@@ -121,37 +117,33 @@ The branches are kept. With everything merged, the checker's 150 tests and the o
 - Its version 0.7 writes the run time only where the schema it validates against has the field.
 
 **The Rosetta Stones** (#6, merged).
-- HARK's stone describes the standard consumer; it is to be revised for the Markov adapter.
+- HARK's stone still describes the standard consumer; it is to be revised for the adapter.
 - Matsya's third session, on HARK's source, waits for the owner's word in the bellman session.
 
 **Open with the owner:**
-- registering `w3id.org/sce`, a pull request to w3id.org's public repository, and then the ontology's namespace with a new
-  version and the checker's copy of its table;
-- making the dolo dry runs' model files, which are the benchmark's and private, the public basis of dolo's adapter;
+- in the HARK session: a tag on HARK's fork at the adapter's pinned commit, which he asked for, and #1858, which stays a
+  draft;
+- registering `w3id.org/sce`, then the ontology's namespace with a new version and the checker's copy of its table;
 - what goes to the working group's repository, and when;
-- in the bellman session: the uniform for Bellman's comparator, Bellman's draft for the truncated lognormal, and Matsya's
-  third session;
-- filing Bellman's parameter-condition defect;
-- in the HARK session: #1858, which stays a draft for now.
+- in the bellman session: the uniform for Bellman's comparator, Bellman's draft for the truncated lognormal, Matsya's third
+  session, and filing Bellman's parameter-condition defect.
 
 **Next work:**
-- HARK's adapter in `schemas/adapters/hark/`, with the gate in the findings of 2026-10-21 on HARK's Markov consumer; then
-  HARK's stone revised for it;
-- dolo's adapter;
-- the comparison of results files, and the validators for the method, settings and request files;
-- the remaining notation differences, as econ-ark-tools' reconciliation reaches them;
-- the survey's other classes;
-- the rest of the prose of `bst-markov_ui-and-agg/1`.
+- the pull request of registry v8.0.0's rulings (ξ_u, ξ_x, j, the design note, ℘'s gloss), approved at 14:35:13;
+- HARK's Rosetta Stone revised for the adapter;
+- dolo's adapter, written from the schemas, and the first comparison of two toolkits' results files;
+- the Markov family's results document, validator and members, with HARK's adapter extended to its chains;
+- the validators for the method, settings and request files; the survey's other classes;
+- the toy's level-4 gate run for the adapter.
 
 See [`../deferred.md`](../deferred.md).
 
 **Elsewhere:**
-- **The econ-ark-tools session** keeps econ-ark's notation registry (version 3.0.0 on its master, which frees ζ for the
-  Pareto exponent; 4.0.0 waits as its #48). **The NARK session** keeps econ-ark's naming conventions.
+- **The econ-ark-tools session** keeps econ-ark's notation registry (version 8.0.0 on its master since 2026-10-22). **The NARK session** keeps econ-ark's naming conventions.
 - **The bellman session** holds Bellman's draft pull requests for the truncated lognormal and the uniform, and runs
   Matsya.
 - **The community-library session** stopped the QuantEcon module on the evening of 2026-10-21; its branches stay local.
-- **The HAFiscal-Latest session** runs the emitter, version 0.7, the basis of HARK's adapter.
+- **The HAFiscal-Latest session** runs the emitter (version 0.8, unpushed on 2026-10-22), the basis of HARK's adapter.
 - **As recorded on 2026-10-19:**
   - the HARK session holds the bounds-fix branch and the newborn flag;
   - the BufferStockTheory session recorded the lower-tail finding on two branches.

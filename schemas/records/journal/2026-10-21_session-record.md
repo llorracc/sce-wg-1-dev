@@ -202,3 +202,12 @@ Times are EDT, from the clock or an event's own stamp. The first hours of the da
 - **Next:** HARK's adapter, with the gate.
 - **Open:** registering `w3id.org/sce`; the dolo dry runs' files as dolo's adapter's public basis; what goes to the
   working group's repository; the bellman session's items; HARK's #1858, kept in draft.
+
+## After the fourth memorial, to the morning of 2026-10-22
+
+- **About 23:15–23:24.** On the owner's word to start, HARK's adapter is built on branch `hark-adapter`: the emitter's code ported
+  with its private material taken out, the solve on HARK's Markov consumer at #1858's commit, and a test file, a gate
+  script and READMEs. The toy's level 1 passes the gate and the checker.
+- **23:24 to 03:17 on 2026-10-22.** The gate over the rest of the ladder: every run passes (see the findings).
+- **About 03:18.** The branch is pushed and opened as draft pull request #8, as the owner approved when he said to start. The
+  HAFiscal-Latest and HARK sessions are told.

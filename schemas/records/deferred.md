@@ -18,14 +18,15 @@ What was put off, with what brings each back. Nothing here is lost by being defe
 | A prose-only completeness job on `bst/1`, with the restatement removed from the inputs | 2026-10-18 | the owner at 21:08: not now, until there is further clarity |
 | The existence theorem for unbounded shock laws | 2026-10-18 | a family needs an untruncated law to be more than a limit case; under the effective-member proposal every member a toolkit solves has bounded support and sits inside BST's theorem, so the untruncated exact member is the limit case |
 | A coverage statistic comparable across toolkits, such as the mass above the request file's comparison points, which HARK suggested as one point shared by every toolkit; the draft coverage check (#4) leaves the points to each toolkit, as the owner ruled on 2026-10-21 | 2026-10-21 | a second toolkit's results are compared with the emitter's, or the owner asks |
-| dolo's adapter in `schemas/adapters/dolo/`, from the benchmark's two dolo dry runs of 2026-10-11 and 2026-10-12, whose model files are the benchmark's and private | 2026-10-21 | HARK's adapter passes its gate, and the owner agrees to make those files public |
-| HARK's #1858 out of draft, for HARK's maintainers; the adapter pins its commit meanwhile and re-pins to the first release that includes it | 2026-10-21 | the owner's word in the HARK session |
+| dolo's adapter in `schemas/adapters/dolo/`, written fresh from the schemas, as the owner ruled: the benchmark's dolo dry runs are not its basis | 2026-10-21 | next after HARK's stone is revised; HARK's adapter passed its gate on 2026-10-22 |
+| HARK's #1858 out of draft, for HARK's maintainers; the adapter pins its commit meanwhile and re-pins to the first release that includes it | 2026-10-21 | the owner's word in the HARK session. The pinned commit `03a2c7a1` can stop resolving if the branch is rebased; the HARK session will warn first, and a tag on the fork at that commit would remove the risk (the owner's word in the HARK session) |
 | The comparison of two toolkits' results files, at a request file's points, by the Rosetta Stones' rules | 2026-10-21 | two toolkits' results files exist for one member |
 | The Markov family's results document and validator carrying its effective-member report: the expectations conditional on the next state, the chain's rows, the lowest values by state | 2026-10-18 | when that family's results document is written |
 | The checker's verification of the Markov family's reports, with the dominant eigenvalues as arithmetic on the reported conditional expectations | 2026-10-18 | with that family's checker |
 | The joint lognormal law with a covariance matrix | 2026-10-18 | a family has correlated shocks |
 | The experiments layer, with a policy conditional on an aggregate the closure determines | 2026-10-18 | the stationary suite runs |
 | The method registry and the validators for method, settings, suite and request files | 2026-10-18 | the second toolkit's adapter, which the Rosetta Stones of 2026-10-21 now plan |
+| What goes to the working group's repository, econ-ark/sce-wg-1, and when: nothing has been proposed there | 2026-10-21 | the adapters exist, and the owner decides |
 | A levels Lorenz curve as an optional statistic | 2026-10-17 | superseded by the generalized Lorenz ordinates unless the owner asks |
 | The letter to dolo's author about the benchmark's dry runs | before 2026-10-17 | the benchmark's owner decides; the draft's public copy omits the dry-run results meanwhile |
 

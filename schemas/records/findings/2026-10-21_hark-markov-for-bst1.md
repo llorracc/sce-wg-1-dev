@@ -60,3 +60,23 @@ A difference near a level's convergence size is then a failure to explain, not a
 
 **What it does not establish:** the adapter itself, the gate's outcome, and anything about the Markov family's own
 chains.
+
+## The gate's outcome (night of 2026-10-21 to 2026-10-22)
+
+HARK's adapter, at HARK's #1858 (`03a2c7a1`), over the benchmark's ladder of 2026-10-20 (emitter files made on HARK
+`a0fe5740`, each run with its member's level-1 request file):
+
+| member | level | Markov vs standard rule | against the emitter's file, relative / absolute | the checker |
+|---|---|---|---|---|
+| toy | 1 | 1.2e-15 | 1.5e-13 / 1.2e-13 | passes |
+| library | 1 | 8.7e-16 | 9.0e-15 / 2.1e-14 | passes |
+| toy-untruncated | 1 | 1.4e-15 | 7.5e-14 / 1.8e-13 | passes |
+| toy | 2 | 1.1e-15 | 3.4e-13 / 1.6e-13 | passes |
+| library | 2 | 2.1e-15 | 9.8e-15 / 5.3e-14 | passes |
+| toy-untruncated | 2 | 9.7e-16 | 7.0e-13 / 3.9e-13 | passes |
+| toy | 3 | 2.3e-14 | 2.2e-12 / 9.2e-13 | passes |
+
+The two employment states' rules were identical everywhere. The largest differences from the emitter's files are in the
+generalized Lorenz ordinates of marginal utility. The only paths missing from the adapter's files are the quantiles at
+probability 1, which the schema no longer has. The toy's level 4 was not run. The adapter's five tests pass. It is draft
+pull request #8.
