@@ -1,4 +1,4 @@
-# Where a method attaches, and Matsya's third session on HARK's source
+# Where a method attaches, Matsya's third session on HARK's source, and a natural constraint in HARK
 
 Found on the afternoon of 2026-10-22. The bellman session ran Bellman's own check of a methods file against the schemas'
 stage files and reported what it admits; Matsya's third session read HARK's source. Both are recorded here in substance.
@@ -75,3 +75,18 @@ Each of these agrees with HARK's Rosetta Stone as revised in #11. The answers us
 
 **What it does not establish:** anything about HARK's Markov solver, which the adapter uses at #1858's commit and which
 this session's own reading of that commit, and the adapter's gate, cover.
+
+## A natural constraint in HARK (evening)
+
+Measured on the toy member with its borrowing constraint written `natural` (stated `a_Nat` = −1.729), at level 1 (7
+nodes per shock), with HARK at the adapter's pin:
+- **HARK's own limit from the nodes** (no artificial constraint): −5.54, the closed form of the lowest nodes, which
+  HARK's iteration reached to 9·10⁻⁸. The stationary population then holds −4.82 in assets on average, below the stated
+  limit, and the Euler residuals against the stated laws are not defined at the low request points: those laws send next
+  period's resources below HARK's limit, so no valid results file is written.
+- **Zero-probability atoms at the laws' infima**, so that HARK's minimum over its atoms finds them: the value function
+  is not finite at 1,539 of 2,000 points, and the lower limit comes out at −0.513 rather than −1.729. A zero weight
+  meets an infinite value in HARK's expectation.
+
+So computing the stated limit in HARK needs its solvers to read each law's lower bound directly, not the lowest atom;
+the owner's clarification of 18:18:56 asks for that, and the HARK session is drafting it.

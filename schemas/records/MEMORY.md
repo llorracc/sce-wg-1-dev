@@ -42,7 +42,7 @@ Rulings, journal, findings:
 - [How far a representation reaches](findings/2026-10-20_coverage-of-the-representation.md) — the top node's mass at the first two levels; an upper bound on the per-period flow beyond the top; what a clipped representation misses of the mean.
 - [Econ-ark's notation sources](findings/2026-10-21_notation-sources.md) — the registry, the shortcuts and NARK; where the schemas agree with registry 1.0.0, what #7 fixed, what is undecided; the census of free letters; `\IncUnemp`.
 - [HARK's Markov consumer for bst/1](findings/2026-10-21_hark-markov-for-bst1.md) — the nonpersistent chain's mapping; HARK silently replacing a passed matrix; the per-state interpolation gap and #1858's fix; the gate for HARK's adapter.
-- [Where a method attaches, and Matsya on HARK's source](findings/2026-10-22_method-attachment.md) — what Bellman's check admits on the stage files; ϱ in Bellman; Matsya's third session on HARK's standard consumer, agreeing with the revised stone.
+- [Where a method attaches, and Matsya on HARK's source](findings/2026-10-22_method-attachment.md) — what Bellman's check admits on the stage files; ϱ in Bellman; Matsya's third session on HARK's standard consumer, agreeing with the revised stone; a natural constraint in HARK, from the nodes and with zero-probability atoms.
 - [Deferred follow-ups](deferred.md) — what was put off, and what brings each item back.
 - [Defects](defects.md) — faults found and their status.
 

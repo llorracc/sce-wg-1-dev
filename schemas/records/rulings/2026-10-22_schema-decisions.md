@@ -54,10 +54,10 @@ the stated laws' natural limit (the defects); no member states `natural` yet.
 
 **After the second memorial:**
 - **18:06:54.** Four answers:
-  - **A `natural` constraint is the toolkit's own:** the toolkit computes the natural borrowing constraint of its
-    effective member itself, so `natural` asks for no artificial constraint, rather than the stated laws' limit passed
-    in as one. The change reaches the checker's verification and `model.md`'s definition of `natural` as well as HARK's
-    adapter.
+  - **A `natural` constraint is the toolkit's own:** the toolkit computes the natural borrowing constraint itself,
+    rather than receiving the stated laws' limit as an artificial one. This session first read it as each toolkit's
+    limit from its own nodes, a change to the checker and `model.md`; the clarification of 18:18:56 below supersedes
+    that reading.
   - **The tag:** HARK's fork is tagged at the adapter's pinned commit. Made at 18:07 as `sce-adapter/2026-10-22`,
     through GitHub's interface, and confirmed by the HARK session, which keeps it.
   - **Registering `w3id.org/sce` waits** until the plans mature. It is not to be raised again before a pull request from
@@ -67,3 +67,9 @@ the stated laws' natural limit (the defects); no member states `natural` yet.
 - **18:07:14.** The merged branches and their worktrees are deleted: the eleven pull requests' branches, on GitHub and
   here. The five branches in the fork from the working group's repository, by its co-chairs, are not this project's and
   were left.
+- **18:18:56** (question tool). The clarification: HARK computes the natural borrowing constraint from the lower of the
+  unemployment income and the transitory shocks' infimum, with the permanent shock's infimum entering as in the closed
+  form, −`ξ_min` `ψ_min`/(ℛ − `ψ_min`). That is the stated member's `a_Nat`, so `natural` keeps meaning `a_Art` =
+  `a_Nat`, and the checker and `model.md` do not change. The change is HARK's: its solvers are to read each shock law's
+  lower bound, not the lowest discretized node; asked of the HARK session to draft. Until it lands, the adapter keeps
+  passing the stated limit, and no member states `natural` (the findings).

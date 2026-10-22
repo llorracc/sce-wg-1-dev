@@ -67,3 +67,7 @@ Times are EDT, from the clock or an event's own stamp. The night's gate run for 
   worktrees are deleted, and the tag `sce-adapter/2026-10-22` is made on HARK's fork at `03a2c7a1`; the HARK session
   confirms it at 18:08. The memory on `w3id.org/sce` is written, and the change for a `natural` constraint is begun as a
   draft pull request.
+- **18:08 to 18:30.** A first change for `natural`, each toolkit's limit from its own nodes, fails its test run on the
+  toy, and so does a second, zero-probability atoms at the infima (the findings); neither is committed. The owner's
+  clarification at 18:18:56 makes it a change to HARK's solvers, asked of the HARK session. The records commit `f41668c`
+  is pushed.

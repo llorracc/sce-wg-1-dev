@@ -133,8 +133,9 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
 - what goes to the working group's repository, and when;
 - in the bellman session: the uniform for Bellman's comparator, Bellman's draft for the truncated lognormal, and filing
   Bellman's parameter-condition defect;
-- the change for a `natural` constraint, ruled at 18:06:54 on 2026-10-22: the toolkit computes its own natural limit.
-  It touches the checker and `model.md` as well as the adapter, and goes to the owner as a draft pull request.
+- a `natural` constraint (ruled 18:06:54 and 18:18:56 on 2026-10-22): HARK computes the natural limit from the laws'
+  infima, the stated `a_Nat`, through a change to its solvers that the HARK session is asked to draft; the
+  adapter then passes no artificial constraint and re-pins. Until then it passes the stated limit.
 
 Registering `w3id.org/sce` is not raised before a pull request from this fork is merged into econ-ark/sce-wg-1
 ([[feedback_w3id-not-yet]]).
