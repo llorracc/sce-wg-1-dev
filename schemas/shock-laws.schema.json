@@ -13,7 +13,8 @@
         { "$ref": "#/$defs/TruncatedLogNormal" },
         { "$ref": "#/$defs/Uniform" },
         { "$ref": "#/$defs/Discrete" },
-        { "$ref": "#/$defs/NormalMixture" },
+        { "$ref": "#/$defs/LogNormalMixture" },
+        { "$ref": "#/$defs/TruncatedLogNormalMixture" },
         { "$ref": "#/$defs/Tabulated" }
       ]
     },
@@ -21,8 +22,8 @@
     "PositiveNumber": { "type": "number", "exclusiveMinimum": 0 },
     "Probability": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
     "TruncationBound": {
-      "type": "number",
-      "description": "A truncation bound in standard deviations of the normal before truncation. Leave it out for an infinite bound."
+      "type": ["number", "null"],
+      "description": "A truncation bound in standard deviations of the normal before truncation. Left out, it is three standard deviations (-3 below, 3 above); null means no bound on that side."
     },
 
     "Degenerate": {
@@ -52,7 +53,7 @@
 
     "TruncatedLogNormal": {
       "description": "ln psi = mu + s * Z, with Z standard normal conditioned on bot <= Z <= top. sd_log is the standard deviation of ln psi after truncation, so s = sd_log / sqrt(Var(Z | bot <= Z <= top)); mu is set so that E[psi] = 1 after truncation.",
-      "$comment": "At least one bound is required; with neither, the law is LogNormal. The checker requires bot < top.",
+      "$comment": "An omitted bound is three standard deviations; null is no bound. The checker refuses null on both sides, which is LogNormal, and requires bot < top. The ontology's chart: PD_0000032.",
       "type": "object",
       "required": ["TruncatedLogNormal"],
       "additionalProperties": false,
@@ -60,7 +61,6 @@
         "TruncatedLogNormal": {
           "type": "object",
           "required": ["sd_log"],
-          "anyOf": [{ "required": ["bot"] }, { "required": ["top"] }],
           "additionalProperties": false,
           "properties": {
             "sd_log": { "$ref": "#/$defs/PositiveNumber" },
@@ -107,14 +107,45 @@
       }
     },
 
-    "NormalMixture": {
-      "description": "ln psi = c + X, with X drawn from normal components, each optionally truncated, each with its mean_log and sd_log stated after truncation as for TruncatedLogNormal, and one common shift c making E[psi] = 1.",
-      "$comment": "The checker requires weights summing to one, the weighted mean of mean_log equal to zero, and components in increasing order of mean_log, then of sd_log.",
+    "LogNormalMixture": {
+      "description": "ln psi = c + X, with X drawn from normal components, component j with probability weight_j, mean mean_log_j and standard deviation sd_log_j, and one common shift c making E[psi] = 1.",
+      "$comment": "The checker requires weights summing to one, the weighted mean of mean_log equal to zero, and components in increasing order of mean_log, then of sd_log. The ontology's chart: PD_0000054.",
       "type": "object",
-      "required": ["NormalMixture"],
+      "required": ["LogNormalMixture"],
       "additionalProperties": false,
       "properties": {
-        "NormalMixture": {
+        "LogNormalMixture": {
+          "type": "object",
+          "required": ["components"],
+          "additionalProperties": false,
+          "properties": {
+            "components": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "required": ["weight", "mean_log", "sd_log"],
+                "additionalProperties": false,
+                "properties": {
+                  "weight": { "$ref": "#/$defs/Probability" },
+                  "mean_log": { "type": "number" },
+                  "sd_log": { "$ref": "#/$defs/PositiveNumber" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "TruncatedLogNormalMixture": {
+      "description": "ln psi = c + X, with X drawn from truncated normal components, each with its mean_log and sd_log stated after truncation and its bounds in standard deviations of its normal before truncation, as for TruncatedLogNormal, and one common shift c making E[psi] = 1.",
+      "$comment": "An omitted bound is three standard deviations; null is no bound. The checker requires weights summing to one, the weighted mean of mean_log equal to zero, components in increasing order of mean_log, then sd_log, bot and top, bot < top in each, and some component truncated: with none, the law is LogNormalMixture. The ontology's chart: PD_0000058.",
+      "type": "object",
+      "required": ["TruncatedLogNormalMixture"],
+      "additionalProperties": false,
+      "properties": {
+        "TruncatedLogNormalMixture": {
           "type": "object",
           "required": ["components"],
           "additionalProperties": false,

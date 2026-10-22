@@ -12,11 +12,14 @@ model's hash.
 cd schemas/checker
 uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml
 uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/library.yaml --bellman-calibration 0
-uv run --with jsonschema --with pyyaml --with scipy --with pytest pytest -q
+uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml --bellman-laws
+uv run --with jsonschema --with pyyaml --with scipy --with numpy --with pytest pytest -q
 ```
 
 The second command writes the member's one-type calibration for the stage file `bst-1/bellman/buffer_stock.bl`, in the
-stage's names, with `a_Nat` computed from the laws; it refuses a member whose laws have no Bellman-SYM family.
+stage's names, with `a_Nat` computed from the laws; it refuses a member whose laws are not the lognormals that stage file
+writes. The third prints each shock law as the Bellman-SYM call that states it, the converter's output, by the ontology's
+conversions.
 
 - [`canonical.py`](canonical.py): the strict YAML loader, the canonical serialization and the hash.
 - [`laws.py`](laws.py): the shock laws, their rules and their closed-form moments.
@@ -28,13 +31,26 @@ stage's names, with `a_Nat` computed from the laws; it refuses a member whose la
   a row in the notation tables for every parameter a stage file declares, and every word in a typeset subscript upright.
 - [`test_results_schema.py`](test_results_schema.py): a results file in the shape of `results.md` against
   [`results.schema.json`](../bst-1/results.schema.json), and the rejections.
+- [`test_laws_against_ontology.py`](test_laws_against_ontology.py): every law read through the ontology's table alone,
+  its mean, moments and support against the closed forms here, and the converter's Bellman-SYM calls against the
+  ontology's coordinates of the same laws.
+- [`test_conventions.py`](test_conventions.py): the standing check that every name of the shock-law validator has its
+  row in [`conventions.md`](../conventions.md).
+- [`ontology/`](ontology/): copies of the table and the formula evaluator of a release of the
+  [ontology of probability distributions](../../ontologies/probability-distributions/), which the cross-test reads. They
+  are replaced together from a release and never edited here; the test pins the release's version and source digest.
 
 ## The canonical form and the hash
 
 The hash is the SHA-256 of a canonical JSON serialization of the parsed file: keys sorted, no white space, every number
 written as the shortest decimal that reads back to the same double. So `0.10` and `0.1` hash alike, as do `1` and `1.0`,
 while any change of value changes the hash. The strict subset keeps the parsed values unambiguous: no anchors, aliases,
-tags or merge keys, no repeated keys, no booleans, no infinities.
+tags or merge keys, no repeated keys, no booleans, no infinities. Null appears only where a validator admits it: a
+truncation bound's "no bound".
+
+The hash is taken over the filled form: every truncation bound the file leaves out is written in, at three standard
+deviations, before the serialization, so a law written with its defaults and the same law written without them are one
+model. A `null` bound stays `null`. The three members write their bounds, so the rule changed none of their hashes.
 
 ## Rules of a `bst/1` member that the validator cannot express
 

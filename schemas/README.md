@@ -9,6 +9,8 @@ tolerances and simulation sizes stay each toolkit's own choice.
 
 ## Vocabulary
 
+The names the validators fix, and the conventions they follow, are registered in [`conventions.md`](conventions.md).
+
 - **Family:** a versioned template of models with named parameters, such as `bst/1` ("buffer-stock theory, version 1").
 - **Member:** one complete parameterization of a family.
 - **Stated member:** the member a parameter file names, with its laws as stated. In general what can be computed about it
@@ -58,6 +60,9 @@ tolerances and simulation sizes stay each toolkit's own choice.
 Shared by every family:
 - [`shock-laws.md`](shock-laws.md): the shock laws a parameter file can use, and the two reserved for later.
 - [`shock-laws.schema.json`](shock-laws.schema.json): their validator.
+- [`conventions.md`](conventions.md): the registry of the names the validators fix, with the ontology chart each writes
+  and the convention it follows or the reason it departs; the laws are charts of the
+  [ontology of probability distributions](../ontologies/probability-distributions/).
 - [`numerics.md`](numerics.md): method files, settings files and suites.
 
 The family `bst/1`:
