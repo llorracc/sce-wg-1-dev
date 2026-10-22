@@ -61,3 +61,9 @@ Times are EDT, from the clock or an event's own stamp. The night's gate run for 
 - **Open:** whether HARK's adapter should keep passing a `natural` constraint as the stated laws' limit; the tag on
   HARK's fork, with the owner in the HARK session; the bellman session's items; registering `w3id.org/sce`; what goes to
   the working group's repository.
+
+**After the second memorial** (`564041d`, pushed).
+- **18:06:54 to 18:08.** The owner answers the four open items (the rulings). At 18:07 the merged branches and their
+  worktrees are deleted, and the tag `sce-adapter/2026-10-22` is made on HARK's fork at `03a2c7a1`; the HARK session
+  confirms it at 18:08. The memory on `w3id.org/sce` is written, and the change for a `natural` constraint is begun as a
+  draft pull request.

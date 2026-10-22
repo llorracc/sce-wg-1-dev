@@ -51,3 +51,19 @@ The owner's decisions, in substance and by time (EDT). His words are kept outsid
 
 Open with him from the afternoon: whether HARK's adapter should keep passing a member's `natural` constraint to HARK as
 the stated laws' natural limit (the defects); no member states `natural` yet.
+
+**After the second memorial:**
+- **18:06:54.** Four answers:
+  - **A `natural` constraint is the toolkit's own:** the toolkit computes the natural borrowing constraint of its
+    effective member itself, so `natural` asks for no artificial constraint, rather than the stated laws' limit passed
+    in as one. The change reaches the checker's verification and `model.md`'s definition of `natural` as well as HARK's
+    adapter.
+  - **The tag:** HARK's fork is tagged at the adapter's pinned commit. Made at 18:07 as `sce-adapter/2026-10-22`,
+    through GitHub's interface, and confirmed by the HARK session, which keeps it.
+  - **Registering `w3id.org/sce` waits** until the plans mature. It is not to be raised again before a pull request from
+    this fork has been merged into econ-ark/sce-wg-1, and even then he expects the answer to be that it is much too
+    early ([the memory](../memory/feedback_w3id-not-yet.md)).
+  - **What goes to the working group's repository:** he asked for the question to be set out in full.
+- **18:07:14.** The merged branches and their worktrees are deleted: the eleven pull requests' branches, on GitHub and
+  here. The five branches in the fork from the working group's repository, by its co-chairs, are not this project's and
+  were left.

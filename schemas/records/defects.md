@@ -133,5 +133,6 @@ Faults found in this project's own work, with their status.
   checker resolves a member's `natural` to the stated laws' natural limit. The adapter's effective member then has that
   limit as an artificial constraint, above its nodes' own natural limit, where HARK's Rosetta Stone said that no adapter
   does this. Found on 2026-10-22 while revising the stone. **Status:** the stone corrected in #11 to say what the
-  adapter does; whether the adapter should instead solve its nodes' own natural limit is open with the owner. No member
-  states `natural` yet.
+  adapter does. Ruled at 18:06:54 on 2026-10-22: the toolkit computes its own natural limit, so `natural` means no
+  artificial constraint; the change to the adapter, the checker and `model.md` goes to the owner as a draft pull
+  request. No member states `natural` yet.

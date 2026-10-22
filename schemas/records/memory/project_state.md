@@ -55,7 +55,8 @@ requests and `main`'s ontology. Nothing has been proposed to the working group's
 | 10 | registry v8.0.0: ξ_u and ξ_x, j for the employment state, ℘'s gloss, the design note's replacement rates | 2026-10-22 16:02:08, `613a9fb` |
 | 11 | each method where the stage gives it a place; HARK's Rosetta Stone for its Markov adapter | 2026-10-22 16:02:43, `a3f897a` |
 
-The branches are kept. With everything merged, the checker's 150 tests and the ontology's 12 pass.
+The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. With everything merged, the checker's
+150 tests and the ontology's 12 pass.
 
 **Settled** (see the rulings):
 - **Notation and the model:**
@@ -127,14 +128,16 @@ The branches are kept. With everything merged, the checker's 150 tests and the o
 - Matsya's third session, on HARK's source, ran on 2026-10-22 and agrees with the stone (the findings of that day).
 
 **Open with the owner:**
-- in the HARK session: a tag on HARK's fork at the adapter's pinned commit, which he asked for, and #1858, which stays a
-  draft;
-- registering `w3id.org/sce`, then the ontology's namespace with a new version and the checker's copy of its table;
+- in the HARK session: #1858, which stays a draft; the tag on HARK's fork at the adapter's pinned commit,
+  `sce-adapter/2026-10-22`, was made at 18:07 on 2026-10-22;
 - what goes to the working group's repository, and when;
 - in the bellman session: the uniform for Bellman's comparator, Bellman's draft for the truncated lognormal, and filing
   Bellman's parameter-condition defect;
-- whether HARK's adapter should keep passing a member's `natural` constraint as the stated laws' natural limit (the
-  defects).
+- the change for a `natural` constraint, ruled at 18:06:54 on 2026-10-22: the toolkit computes its own natural limit.
+  It touches the checker and `model.md` as well as the adapter, and goes to the owner as a draft pull request.
+
+Registering `w3id.org/sce` is not raised before a pull request from this fork is merged into econ-ark/sce-wg-1
+([[feedback_w3id-not-yet]]).
 
 **Next work:**
 - dolo's adapter, written from the schemas, and the first comparison of two toolkits' results files;

@@ -8,6 +8,7 @@ Standing rules and state:
 - [Project state](memory/project_state.md) — what exists in `schemas/`, the eleven pull requests, all merged; HARK's adapter; what is settled, what is open, as of the second memorial of 2026-10-22.
 - [Notation and foundation](memory/feedback_notation-and-foundation.md) — BST's notation with econ-ark's registry as the authority beside it; two spellings of each symbol; the symbols in force (Þ̊, β̊, ϱ, ε, ξ_u, ξ_x, j); the Bellman-SYM stage file is the foundation.
 - [Method attachment](memory/feedback_method-attachment.md) — an expectation's method on its operator, the solution on `policy.euler.solve`, the interpolation on `policy`; tags as methods, routines as handlers; `bst/1` free of any method's lines (#11).
+- [Not yet: w3id.org/sce](memory/feedback_w3id-not-yet.md) — never raise registering the namespace before a pull request from this fork is merged into econ-ark/sce-wg-1; even then, much too early.
 - [Iterate and propose](memory/feedback_iterate-and-propose.md) — a schema changes only after the proposed change and its downstream consequences have been put to the owner.
 - [One written form](memory/feedback_one-written-form.md) — a model has one spelling in a parameter file, because the hash is its identity.
 - [Matsya's answers are weighed](memory/feedback_matsya-answers-are-weighed.md) — judged against this project's needs and pushed back on where they do not fit.
