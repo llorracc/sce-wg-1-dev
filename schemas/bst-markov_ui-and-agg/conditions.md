@@ -15,14 +15,15 @@ named.
 ## Notation
 
 For one group and its type i:
-- P is the normal regime's chain over Z = {E, U_2, U_1, X}, with π_eu and π_ue the normal-times probabilities, and π its
-  stationary distribution. With π_eu > 0 and π_ue > 0 the chain is irreducible and aperiodic.
+- P is the normal regime's chain over Z = {E, U_2, U_1, X}, with `sep` and `find` the normal-times probabilities, and π
+  its stationary distribution. With `sep` > 0 and `find` > 0 the chain is irreducible and aperiodic.
 - 𝒢(z) and the law of ψ given z are the model schema's: 𝒢(E) = 𝒢 with ψ drawn from its law; in a quarter of
   unemployment, 𝒢(z) = 𝒢 with ψ drawn under `continues`, 𝒢(z) = 𝒢 with ψ = 1 under `grows`, and 𝒢(z) = 1 with ψ = 1 under
   `frozen`.
 - `ξ_min(z)` is the lowest income in state z: e `θ_min` in E, ξ_U in U_2 and U_1, ξ_X in X; and `ψ_min(z)` is the lowest value of ψ in z, the
   law's lowest value where ψ is drawn and 1 where it is fixed.
-- Þ_i = (R β_i ℒ)^(1/ρ) is the absolute patience factor, and Þ̄_i = min(Þ_i, R), as in `bst/1`.
+- Þ_i = (R β_i ℒ)^(1/ρ) is the absolute patience factor, and `κ_min` = max(0, 1 − Þ_i/R) is its limiting MPC as m → ∞,
+  as in `bst/1`.
 - For a function f of next quarter's state and shock, M_f is the matrix with entries M_f[z, z′] = P[z, z′] E[f(z′, ψ′) | z′],
   and λ(M_f) is its dominant eigenvalue, which exists and is positive since the entries are. Under `continues`, f depends on
   z′ only through 𝒢(z′) = 𝒢 and the law of ψ is the same in every state, so M_f = E[f] P and λ(M_f) = E[f]: every condition
@@ -40,9 +41,9 @@ a fixed point that a few iterations from zero reach, each bracket being nonposit
 recursion: a state's natural bound comes from the next states' lowest resources, which already carry the artificial limit.
 The **natural limits** `a_Nat(z)` are the same recursion without `a_Art`: the constraint in force of a member written with
 `borrowing_constraint: natural`. In `bst/1`, one state, the recursion gives `a_min` = max(`a_Art`, `a_Nat`) with
-`a_Nat` = −`ξ_min` κ/(1 − κ) and κ = `ψ_min` 𝒢/R. In the chain the artificial limit has to sit inside the recursion: taking
-max(`a_Art`, `a_Nat(z)`) after the fact understates the limit of a state that can be followed by one in which the artificial
-limit binds, since the first must leave room for the second. Consequences:
+`a_Nat` = −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) and ℛ = R/𝒢. In the chain the artificial limit has to sit inside the recursion:
+taking max(`a_Art`, `a_Nat(z)`) after the fact understates the limit of a state that can be followed by one in which the
+artificial limit binds, since the first must leave room for the second. Consequences:
 - With lognormal laws, `θ_min` = 0 and `ψ_min` = 0 in the employed state, which can follow every state, so its term is zero, every
   other term is negative, and `a_min(z)` = max(`a_Art`, 0) = 0 in every state and under every value of the switch. The stage
   file's single limit, with `a_Nat: 0.0`, is therefore exact for every member it states.
@@ -83,27 +84,28 @@ which is `bst/1`'s with the group's 𝒢.
 | FHWC | λ(M_f) < 1 with f = 𝒢(z′) ψ′/R | 𝒢/R < 1 |
 | PF-FVAC | λ(M_f) < 1 with f = β ℒ 𝒢(z′)^(1−ρ) | β ℒ 𝒢^(1−ρ) < 1 |
 | FVAC | λ(M_f) < 1 with f = β ℒ (𝒢(z′) ψ′)^(1−ρ) | β ℒ 𝒢^(1−ρ) E[ψ^(1−ρ)] < 1 |
-| GIC, by state | Þ̄ < E[𝒢(z′) ψ′ \| z] | Þ̄/𝒢 < 1 |
-| GIC-Mod, by state | Þ̄ E[1/(𝒢(z′) ψ′) \| z] < 1 | Þ̄ E[ψ^(−1)]/𝒢 < 1 |
-| GIC-Szeidl | with ℒ = 1: log Þ̄ < Σ_z π(z) (log 𝒢(z) + E[log ψ \| z]) | log(Þ̄/𝒢) < E[log ψ] |
-| GIC-Harmenberg | with ℒ = 1: the same under the income measure's chain and E[ψ log ψ \| z] | Þ̄/𝒢 < exp(E[ψ log ψ]) |
-| GIC-Liv | ℒ λ(M_f) < 1 with f = Þ̄/𝒢(z′) | ℒ Þ̄/𝒢 < 1 |
+| GIC, by state | R (1 − `κ_min`) < E[𝒢(z′) ψ′ \| z] | ℛ (1 − `κ_min`) < 1 |
+| GIC-Mod, by state | R (1 − `κ_min`) E[1/(𝒢(z′) ψ′) \| z] < 1 | ℛ (1 − `κ_min`) E[ψ^(−1)] < 1 |
+| GIC-Szeidl | with ℒ = 1: log(R (1 − `κ_min`)) < Σ_z π(z) (log 𝒢(z) + E[log ψ \| z]) | log(ℛ (1 − `κ_min`)) < E[log ψ] |
+| GIC-Harmenberg | with ℒ = 1: the same under the income measure's chain and E[ψ log ψ \| z] | ℛ (1 − `κ_min`) < exp(E[ψ log ψ]) |
+| GIC-Liv | ℒ λ(M_f) < 1 with f = R (1 − `κ_min`)/𝒢(z′) | ℒ ℛ (1 − `κ_min`) < 1 |
 
 The worst-income probability `p_worst(z)` is the probability, from z, of reaching next quarter a state whose income floor is the
 worst reachable one and of drawing that floor there: zero unless both the state's income is an atom and ψ there is fixed or
 has mass at its floor. Under `grows` and `frozen` the unemployed states' income is an atom and ψ there is fixed, so from U_1
-and X the probability of the exhaustion income ξ_X next quarter is 1 − π_ue; whether that is the worst income from those
-states depends on whether ξ_X lies below the employed floor e `θ_min` `ψ_min`, which for the paper's calibration it does not under
-truncated laws and cannot under lognormal ones, where the employed floor is zero and has no mass.
+and X the probability of the exhaustion income ξ_X next quarter is 1 − `find`; whether that is the worst income from
+those states depends on whether ξ_X lies below the employed floor e `θ_min` `ψ_min`, which for the paper's calibration
+it does not under truncated laws and cannot under lognormal ones, where the employed floor is zero and has no mass.
 
 ## Domain rules
 
 A quantity a member does not define is reported as `undefined`.
 
 The special points of the rule, in each state z:
-- **The buffer stock target m̂_i(z)**, where E[m′ | m, z] = m for a survivor, needs the GIC-Mod of state z with Þ̄.
+- **The buffer stock target m̂_i(z)**, where E[m′ | m, z] = m for a survivor, needs the GIC-Mod of state z, as the table
+  writes it.
 - **The pseudo-target m̌_i(z)**, where E[𝐦′ | z]/𝐦 equals the expected growth of permanent income from z, E[𝒢(z′) ψ′ | z],
-  needs the GIC of state z with Þ̄.
+  needs the GIC of state z, as the table writes it.
 - **The kink m*_i(z)** needs the artificial limit to be the constraint in force in that state and to lie strictly above
   the limit the following states impose: `a_min(z)` = `a_Art` > max over successors z′ of (𝒢(z′) `ψ_min(z′)`/R)(`a_min(z′)` − `ξ_min(z′)`).
 
@@ -113,12 +115,12 @@ The stationary population over (m, z), for each group and type:
 - **Population measure.** It exists for every valid member: a mixture over ages with geometric weights, the fixed point of a
   map that contracts at rate ℒ, as in `bst/1`, the chain adding a finite state.
 - **Its moments.** The moment of order j of m is finite exactly when j < ζ, where ζ > 0 solves ℒ λ(M_f) = 1 with
-  f = (Þ̄/(𝒢(z′) ψ′))^ζ; when no root exists every moment is finite. Under `continues` this is `bst/1`'s root
-  ℒ E[(Þ̄/(𝒢 ψ))^ζ] = 1.
+  f = (R (1 − `κ_min`)/(𝒢(z′) ψ′))^ζ; when no root exists every moment is finite. Under `continues` this is `bst/1`'s
+  root ℒ E[(ℛ (1 − `κ_min`)/ψ)^ζ] = 1.
 - **Income measure.** It exists when ℒ λ(M_f) < 1 with f = 𝒢(z′) ψ′, which is ℒ 𝒢 < 1 under `continues`. Its moment of order
-  j is finite exactly when ℒ λ(M_f) < 1 with f = (Þ̄/(𝒢(z′) ψ′))^j 𝒢(z′) ψ′, which under `continues` is
-  ℒ 𝒢 (Þ̄/𝒢)^j E[ψ^(1−j)] < 1. Under `continues` the measure's transition factorizes, permanent income being independent of
-  the state; under `grows` and `frozen` it is computed on the joint law of (m, z, 𝐩).
+  j is finite exactly when ℒ λ(M_f) < 1 with f = (R (1 − `κ_min`)/(𝒢(z′) ψ′))^j 𝒢(z′) ψ′, which under `continues` is
+  ℒ 𝒢 (ℛ (1 − `κ_min`))^j E[ψ^(1−j)] < 1. Under `continues` the measure's transition factorizes, permanent income being
+  independent of the state; under `grows` and `frozen` it is computed on the joint law of (m, z, 𝐩).
 
 **With ℒ = 1:** the population measure needs the GIC-Szeidl and the income measure the GIC-Harmenberg, in the forms of the
 table, with the moments' roots as above without the factor ℒ.

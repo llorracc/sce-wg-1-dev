@@ -21,8 +21,9 @@ Each symbol has two spellings.
 - **Typeset,** in LaTeX, MathJax or MyST, a symbol is written as BST writes it. A minimum is underlined, as in
   `\underline{\psi}`, and a subscript that is a word is set upright, as in `\underline{a}_{\mathrm{Art}}`, never `a_{Art}`. A
   level is bold, as in `\mathbf{p}`.
-- **In plain text,** in these documents' prose, the stage file's identifiers and code, a symbol with a mark is a name in
-  code font: `ψ_min`, `a_Art`.
+- **In plain text,** in these documents' prose, the stage file's identifiers and code, a minimum, underlined when
+  typeset, is a name in code font, as `ψ_min` is; so is a symbol whose subscript is a word, as `a_Art` is. Marks above a
+  letter, a hat, a check or a tilde, stay as they are, since terminals draw them on their letters.
 
 A plain-text name is never pasted into LaTeX as it stands: `ξ_min` is `\underline{\xi}`, or `\xi_{\min}`, when typeset.
 
@@ -44,6 +45,8 @@ A plain-text name is never pasted into LaTeX as it stands: `ξ_min` is `\underli
 | `k`, `b` | k, b | beginning-of-period capital (last period's a) and bank balances b = R k/(𝒢ψ) | BST |
 | `\underline{a}_{\mathrm{Art}}`, `\underline{a}_{\mathrm{Nat}}`, `\underline{a}` | `a_Art`, `a_Nat`, `a_min` | the artificial borrowing constraint, the natural one, and the one in force, max(`a_Art`, `a_Nat`) | SolvingMicroDSOPs' `\underline{a}`; HARK's names |
 | `\textbf{Þ}` | Þ | the absolute patience factor (R β ℒ)^(1/ρ) | BST |
+| `\underline{\kappa}` | `κ_min` | the limiting MPC as m → ∞, max(0, 1 − Þ/R); the saving share a/m tends to 1 − `κ_min` | BST; econ-ark's `\MPCmin` |
+| `\mathcal{R}` | ℛ | R/𝒢, the return factor normalized by growth | BST; econ-ark's `\RNrmByG` |
 
 ## Population
 
@@ -87,8 +90,9 @@ In ratios to permanent income, a survivor's resources evolve as
   problem.
 - The borrowing constraint in force is `a_min` = max(`a_Art`, `a_Nat`). The artificial constraint `a_Art` ≤ 0 is a parameter; the natural
   constraint `a_Nat` is an implication of the model, given in [conditions](conditions.md): with u(0) = −∞ the household never
-  lets next period's worst income force zero consumption, so `a_Nat` = −`ξ_min` κ/(1 − κ) with κ = `ψ_min` 𝒢/R, where `ξ_min` and `ψ_min`
-  are the lowest values of ξ and ψ. With BST's zero-income event, or with any law unbounded below, `a_Nat` = 0.
+  lets next period's worst income force zero consumption, so `a_Nat` = −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) with ℛ = R/𝒢,
+  where `ξ_min` and `ψ_min` are the lowest values of ξ and ψ. With BST's zero-income event, or with any law unbounded
+  below, `a_Nat` = 0.
 - For one written form, a parameter file writes `a_Art` no lower than `a_Nat`: a looser artificial constraint never binds and would
   describe the same model.
 
@@ -156,7 +160,7 @@ effective member's own values and reports them ([results](results.md), [`effecti
 | the employed-income scale | (1 − ℘ξ_U)/(1 − ℘) | ℘, ξ_U | the income map, so that E[ξ] = 1; fixed by the family and the same under every representation |
 | the worst income | `ξ_min` `ψ_min`, with `ξ_min` the lowest value of ξ and `ψ_min` of ψ | the laws' lowest values | the natural limit; the lower tail of the stationary population |
 | its probability `p_worst` | the mass at the worst income | the laws' masses at their lowest values | the WRIC; the MPC at the lower limit; the atom case of the welfare conditions |
-| the natural borrowing limit `a_Nat` | −`ξ_min` κ/(1 − κ) with κ = `ψ_min` 𝒢/R; none when κ ≥ 1 | `ξ_min`, `ψ_min`, 𝒢, R | the constraint in force |
+| the natural borrowing limit `a_Nat` | −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) with ℛ = R/𝒢; none when `ψ_min` ≥ ℛ | `ξ_min`, `ψ_min`, 𝒢, R | the constraint in force |
 | the constraint in force `a_min` | max(`a_Art`, `a_Nat`) | `a_Art`, `a_Nat` | the budget; the kink's existence |
 
 A law's lowest value is defined as the limit of a representation's bottommost point as its number of points grows: for the

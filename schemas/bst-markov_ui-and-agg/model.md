@@ -23,15 +23,15 @@ Everything in [`bst/1`'s table](../bst-1/model.md#notation) keeps its meaning. T
 | typeset | plain text | meaning | source |
 |---|---|---|---|
 | `z` | z | the employment state, in Z = {E, U_2, U_1, X}: employed; unemployed with two quarters of benefits left, this one included; unemployed with one quarter left; unemployed without benefits | the paper's chain, named as the stage file names it |
-| `r` | r | the regime, normal or recession | the paper |
+| `\mathrm{reg}` | `reg` | the regime, normal or recession; not r, which is the interest rate in econ-ark's notation | the paper |
 | `\mathcal{G}` | 𝒢 | the group's growth factor of permanent income; the paper writes Γ_e | BST |
 | `\mathcal{G}_{t}`, `\mathcal{G}(z)` | 𝒢_t, 𝒢(z) | the growth factor applied in quarter t, and as a function of the state: 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the switch; the stage file writes `𝒢_t` | BST's 𝒢, dated; not Γ, which econ-ark's notation keeps for the growth factor itself |
 | `e` | e | the scale of employed income, e θ; 1 in the paper | the convention change |
 | `\xi_{\mathrm{U}}`, `\xi_{\mathrm{X}}` | ξ_U, ξ_X | income with benefits and without, as ratios to permanent income; the paper's ρ_b and ρ_nb, renamed because ρ is risk aversion | BST's ξ |
-| `\pi_{\mathrm{eu}}`, `\pi_{\mathrm{ue}}` | π_eu, π_ue; by regime, `π_eu_n`, `π_eu_r`, `π_ue_n` and `π_ue_r` in the stage file | the probabilities of losing a job and of finding one, each by regime; π_eu is the group's | the paper |
-| `h_{\mathrm{x}}` | h_x | the probability that a recession ends in a quarter | the paper's expected recession length |
+| `\mathrm{sep}`, `\mathrm{find}` | `sep`, `find`; by regime, `sep_n`, `sep_r`, `find_n` and `find_r` in the stage file | the probabilities of losing a job and of finding one, each by regime; `sep` is the group's | econ-ark's notation (`\sepRte`, `\jobFindPrb`); the paper's π_eu and π_ue |
+| `p_{\mathrm{exit}}` | `p_exit` | the probability that a recession ends in a quarter; not h, which is human wealth | the paper's expected recession length |
 | `P_{\mathrm{u}}` | P_u | the switch for permanent income in a quarter of unemployment: `continues`, `grows` or `frozen` | this family |
-| `\varsigma` | ς | the splurge, the share of income consumed before the choice | the paper |
+| `\gimel` | ℷ | the splurge, the share of income consumed before the choice | econ-ark's notation (`\splurge`); the paper writes ς |
 | `\underline{\xi}(z)`, `\underline{\psi}(z)` | `ξ_min(z)`, `ψ_min(z)` | the lowest income and the lowest permanent shock in state z | BST's minima, by state |
 | `\underline{a}(z)`, `\underline{a}_{\mathrm{Nat}}(z)`, `\underline{m}(z)` | `a_min(z)`, `a_Nat(z)`, `m_min(z)` | the constraint in force in state z, the natural limit in state z, and the lowest market resources in state z | this family |
 | `p_{\mathrm{worst}}(z)` | `p_worst(z)` | the probability of the worst income in state z | this family |
@@ -52,15 +52,16 @@ The two spellings follow [`bst/1`'s rule](../bst-1/model.md#notation).
 
 Two Markov states are drawn each quarter, the regime first.
 
-- **The regime** r_t is drawn from the row of r_{t−1}: from normal, normal with probability one; from recession, normal with
-  probability h_x and recession otherwise. Normal is absorbing: a recession never begins inside the household's problem.
-  The onset of a recession is an event of the experiments layer, which moves the population into the recession regime at a
-  date; the household then knows the hazard h_x of its ending.
-- **The employment state** z_t is drawn from the row of z_{t−1}, with the probabilities of this quarter's regime r_t:
-  - from E: to U_2 with probability π_eu(r_t), else E;
-  - from U_2: to E with probability π_ue(r_t), else U_1;
-  - from U_1: to E with probability π_ue(r_t), else X;
-  - from X: to E with probability π_ue(r_t), else X.
+- **The regime** `reg_t` is drawn from the row of `reg_{t−1}`: from normal, normal with probability one; from recession,
+  normal with probability `p_exit` and recession otherwise. Normal is absorbing: a recession never begins inside the
+  household's problem. The onset of a recession is an event of the experiments layer, which moves the population into
+  the recession regime at a date; the household then knows the hazard `p_exit` of its ending.
+- **The employment state** z_t is drawn from the row of z_{t−1}, with the probabilities of this quarter's regime
+  `reg_t`:
+  - from E: to U_2 with probability `sep`(`reg_t`), else E;
+  - from U_2: to E with probability `find`(`reg_t`), else U_1;
+  - from U_1: to E with probability `find`(`reg_t`), else X;
+  - from X: to E with probability `find`(`reg_t`), else X.
 
   So a spell of unemployment pays benefits for two quarters, the quarter of job loss included, and then nothing until a job
   is found. The stage file states this two-quarter chain; a member with another number of benefit quarters is of the
@@ -88,7 +89,7 @@ Two Markov states are drawn each quarter, the regime first.
 ## Events within a quarter, in order
 
 1. Survival is drawn.
-2. The regime r_t is drawn, then the employment state z_t.
+2. The regime `reg_t` is drawn, then the employment state z_t.
 3. A survivor draws ψ_t and θ_t. Then 𝐩_t = 𝒢_t ψ_t 𝐩_{t−1}, bank balances are b_t = R k_t/(𝒢_t ψ_t) with k_t = a_{t−1}, and
    market resources are m_t = b_t + ξ_t.
 4. A newborn is **born employed**, as in `bst/1`: z_t = E, k_t = 0, no ψ in its first quarter, and its first transitory
@@ -102,16 +103,16 @@ In ratios to permanent income, a survivor's resources evolve as
 
 ## The splurge, as an observation map
 
-The paper's household consumes a share ς of its income mechanically, before any choice, and chooses the rest. By
-homotheticity this is the standard problem rescaled: the optimizer receives the share 1 − ς of income and solves the
-problem the stage file states, in units of (1 − ς) 𝐩. With m the household's resources and ξ its income, both as ratios to
-𝐩, and c̃ the stage file's rule,
+The paper's household consumes a share ℷ of its income mechanically, before any choice, and chooses the rest. By
+homotheticity this is the standard problem rescaled: the optimizer receives the share 1 − ℷ of income and solves the
+problem the stage file states, in units of (1 − ℷ) 𝐩. With m the household's resources and ξ its income, both as ratios
+to 𝐩, and c̃ the stage file's rule,
 
-    m̃ = (m − ξ)/(1 − ς) + ξ,      c = (1 − ς) c̃(m̃) + ς ξ,      a = (1 − ς)(m̃ − c̃(m̃)).
+    m̃ = (m − ξ)/(1 − ℷ) + ξ,      c = (1 − ℷ) c̃(m̃) + ℷ ξ,      a = (1 − ℷ)(m̃ − c̃(m̃)).
 
-The household's borrowing constraint a ≥ `a_min` is the optimizer's constraint m̃ − c̃ ≥ `a_min`/(1 − ς); the parameter file states `a_Art`
-in the household's units. With ς = 0 the map is the identity. The MPC out of a transitory income gain is ς + (1 − ς) c̃′(m̃),
-and every MPC the [results](results.md) report says which definition it uses.
+The household's borrowing constraint a ≥ `a_min` is the optimizer's constraint m̃ − c̃ ≥ `a_min`/(1 − ℷ); the parameter
+file states `a_Art` in the household's units. With ℷ = 0 the map is the identity. The MPC out of a transitory income
+gain is ℷ + (1 − ℷ) c̃′(m̃), and every MPC the [results](results.md) report says which definition it uses.
 
 ## Preferences and markets
 
@@ -130,9 +131,9 @@ and every MPC the [results](results.md) report says which definition it uses.
 ## Parameter domains
 
 β_i > 0 (the validity conditions bound it above); shares positive and summing to one within each group and across groups;
-ρ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0 for each group; e > 0; ξ_U > 0 and ξ_X > 0; π_eu and π_ue in [0, 1] for each regime; h_x
-in [0, 1]; 0 ≤ ς < 1; `a_Art` ≤ 0 and above the lowest `a_Nat(z)`, or `natural`; the newborn's level law has a positive
-mean and a standard deviation of the log that may be zero.
+ρ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0 for each group; e > 0; ξ_U > 0 and ξ_X > 0; `sep` and `find` in [0, 1] for each regime;
+`p_exit` in [0, 1]; 0 ≤ ℷ < 1; `a_Art` ≤ 0 and above the lowest `a_Nat(z)`, or `natural`; the newborn's level law has a
+positive mean and a standard deviation of the log that may be zero.
 
 ## The household's problem, as the stage file states it
 
@@ -142,39 +143,40 @@ quarter's value and `[<]` this quarter's arrival value. A selector `(…)[z]` or
 
 - **Sets and parameters.** m ∈ ℝ; a ∈ [`a_min`, ∞) with `a_min` = max(`a_Art`, `a_Nat`), one limit for every state, which is exact for the file's lognormal
   laws, under which every state's limit is zero, while a stage file with bounded laws needs the per-state limits of
-  [conditions](conditions.md); z ∈ Z = {E, U_2, U_1, X}; r ∈ {normal, recession};
-  P_u ∈ {continues, grows, frozen}; the parameters β, ℒ, ρ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, e, ξ_U, ξ_X, h_x, π_eu and
-  π_ue by regime, with the domains above. The file writes one law family, the lognormal, for ψ and θ; the family allows
-  any of the shock laws, and a member with another law needs a stage file written with that law's family: a discrete law
-  can be written today as a mixture of point masses, while the truncated lognormal, the uniform and the tabulated law
-  have no family in Bellman-SYM yet, the truncated lognormal's being planned.
-- **Shocks.** r ~ Categorical over the row of r_prev; z ~ Categorical over the row of z_prev with the probabilities of r;
-  ψ ~ LogNormal(−σ²/2, σ) with σ = σ_ψ when employed, and in a quarter of unemployment σ_ψ under `continues` and 0 otherwise;
-  θ ~ LogNormal(−σ_θ²/2, σ_θ), drawn but unused when unemployed.
+  [conditions](conditions.md); z ∈ Z = {E, U_2, U_1, X}; `reg` ∈ {normal, recession};
+  P_u ∈ {continues, grows, frozen}; the parameters β, ℒ, ρ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, e, ξ_U, ξ_X, `p_exit`,
+  `sep` and `find` by regime, with the domains above. The file writes one law family, the lognormal, for ψ and θ; the
+  family allows any of the shock laws, and a member with another law needs a stage file written with that law's family:
+  a discrete law can be written today as a mixture of point masses, while the truncated lognormal, the uniform and the
+  tabulated law have no family in Bellman-SYM yet, the truncated lognormal's being planned.
+- **Shocks.** `reg` ~ Categorical over the row of `reg_prev`; z ~ Categorical over the row of z_prev with the
+  probabilities of `reg`; ψ ~ LogNormal(−σ²/2, σ) with σ = σ_ψ when employed, and in a quarter of unemployment σ_ψ under
+  `continues` and 0 otherwise; θ ~ LogNormal(−σ_θ²/2, σ_θ), drawn but unused when unemployed.
 - **Arrival to decision** (`arvl_to_dcsn`): 𝒢_t = 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the switch;
   ξ = e θ, ξ_U, ξ_U or ξ_X by the state; m = R k/(𝒢_t ψ) + ξ; the state and the regime are carried forward.
 - **Decision to continuation** (`dcsn_to_cntn`): a = m − c, with the state and the regime carried.
 - **Continuation to decision** (`cntn_to_dcsn`): V = u(c) + β ℒ V[>]; dV = u′(c).
-- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{r,z,ψ,θ}[(𝒢_t ψ)^(1−ρ) V]; dV[<] = E_{r,z,ψ,θ}[R (𝒢_t ψ)^(−ρ) dV], the
-  expectation over this quarter's regime, state and shocks given last quarter's state and regime.
+- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{reg,z,ψ,θ}[(𝒢_t ψ)^(1−ρ) V]; dV[<] = E_{reg,z,ψ,θ}[R (𝒢_t ψ)^(−ρ)
+  dV], the expectation over this quarter's regime, state and shocks given last quarter's state and regime.
 - **The policy** (`policy`): c = argmax over 0 < c ≤ m − `a_min` of u(c) + β ℒ V[>], written as documentation; the operative line
   is the Euler equation with its complementarity clause, u′(c) = β ℒ dV[>] ⟂ m − c ≥ `a_min`. The language records `max` as a
   callable the solver supplies, as it does `log`, so a solver bound to the stage must honor the constraint in force.
 
 Composing the blocks across the quarter gives the recursion in the form BST writes it, for type i of a group, with the
-state (m, z, r):
+state (m, z, `reg`):
 
-    v_i(m, z, r) = max over 0 < c ≤ m − `a_min(z)` of  u(c) + β_i ℒ E[(𝒢′ ψ′)^(1−ρ) v_i(m′, z′, r′) | z, r],
+    v_i(m, z, `reg`) = max over 0 < c ≤ m − `a_min(z)` of  u(c) + β_i ℒ E[(𝒢′ ψ′)^(1−ρ) v_i(m′, z′, `reg′`) | z, `reg`],
     m′           = R (m − c)/(𝒢′ ψ′) + ξ′,
 
-whose solution is the **consumption rule** c_i(m, z, r) and the value v_i(m, z, r), and the **Euler equation** in ratio form,
+whose solution is the **consumption rule** c_i(m, z, `reg`) and the value v_i(m, z, `reg`), and the **Euler equation**
+in ratio form,
 
-    u′(c_i(m, z, r)) ≥ β_i ℒ R E[(𝒢′ ψ′)^(−ρ) u′(c_i(m′, z′, r′)) | z, r],
+    u′(c_i(m, z, `reg`)) ≥ β_i ℒ R E[(𝒢′ ψ′)^(−ρ) u′(c_i(m′, z′, `reg′`)) | z, `reg`],
 
-with equality wherever c_i(m, z, r) < m − `a_min(z)`. Since normal is absorbing, the rule in the normal regime is the solution of the
-problem with the regime removed, and the rule in the recession regime is solved given it. The identification of V[>] with
-next quarter's V[<], and the stationarity of v_i, are what the stage file does not impose: it states one quarter, and the
-family states the fixed point.
+with equality wherever c_i(m, z, `reg`) < m − `a_min(z)`. Since normal is absorbing, the rule in the normal regime is
+the solution of the problem with the regime removed, and the rule in the recession regime is solved given it. The
+identification of V[>] with next quarter's V[<], and the stationarity of v_i, are what the stage file does not impose:
+it states one quarter, and the family states the fixed point.
 
 ## The stationary population
 
@@ -217,10 +219,10 @@ exists once for each group and type, and a method may be given for all or for on
 
 | Target | What it computes | Comment |
 |---|---|---|
-| `policy` | the choice of c for each (m, z, r): the root of the Euler line, or the maximization | the endogenous grid method in a Markov solver, time iteration or value iteration attach here |
-| `evaluate` | the rule c_i(m, z, r) between the points where it was computed | interpolation in m, state by state |
-| `dcsn_to_arvl` | the expectation over r′, z′, ψ′ and θ′ in the value and marginal-value lines | the quadrature of each shock and the summation over the chains are settings of this one part; `.value` and `.marginal` name the two lines |
-| `E_{r,z,ψ,θ}` | every occurrence of the joint expectation | the operator-name form |
+| `policy` | the choice of c for each (m, z, `reg`): the root of the Euler line, or the maximization | the endogenous grid method in a Markov solver, time iteration or value iteration attach here |
+| `evaluate` | the rule c_i(m, z, `reg`) between the points where it was computed | interpolation in m, state by state |
+| `dcsn_to_arvl` | the expectation over `reg′`, z′, ψ′ and θ′ in the value and marginal-value lines | the quadrature of each shock and the summation over the chains are settings of this one part; `.value` and `.marginal` name the two lines |
+| `E_{reg,z,ψ,θ}` | every occurrence of the joint expectation | the operator-name form |
 | `cntn_to_dcsn.value` | the value V, and hence population welfare | `value-function` keeps it; a method that drops it reports welfare from simulated utility |
 | `arvl_to_dcsn` | the population's transition: how the chains and the shocks move the forward measure | the forward builder's method |
 | `population.distribution` | the stationary population over (m, z), the fixed point of the forward map | no stage target: Monte Carlo, a histogram, or the eigenvector of a transition matrix |
@@ -229,14 +231,14 @@ exists once for each group and type, and a method may be given for all or for on
 ## The parameter file
 
 A parameter file is YAML in the strict subset of `bst/1`. It holds the free parameters, under these names:
-- `crra` (ρ), `survival` (ℒ), `return` (R), `splurge` (ς), and `borrowing_constraint` (`a_Art`, a number no greater than 0 and
-  above the lowest natural limit `a_Nat(z)`, or the word `natural`);
+- `crra` (ρ), `survival` (ℒ), `return` (R), `splurge` (ℷ), and `borrowing_constraint` (`a_Art`, a number no greater than
+  0 and above the lowest natural limit `a_Nat(z)`, or the word `natural`);
 - `shocks`, holding `permanent_shock` (the law of ψ) and `employed_shock` (the law of θ);
-- `regimes`, holding `recession: {exit_hazard}` (h_x); the normal regime has no key, since it is absorbing;
-- `employment`, holding `benefit_quarters` (two for the stage file's chain), `job_finding: {normal, recession}` (π_ue by
-  regime), `income_employed` (e), `income_with_benefits` (ξ_U), `income_without_benefits` (ξ_X) and
+- `regimes`, holding `recession: {exit_hazard}` (`p_exit`); the normal regime has no key, since it is absorbing;
+- `employment`, holding `benefit_quarters` (two for the stage file's chain), `job_finding: {normal, recession}` (`find`
+  by regime), `income_employed` (e), `income_with_benefits` (ξ_U), `income_without_benefits` (ξ_X) and
   `unemployed_permanent_income` (P_u, one of `continues`, `grows` and `frozen`; never omitted);
-- `groups`, a list, each with `name`, `share`, `growth` (𝒢), `job_loss: {normal, recession}` (π_eu by regime),
+- `groups`, a list, each with `name`, `share`, `growth` (𝒢), `job_loss: {normal, recession}` (`sep` by regime),
   `newborn_income: {mean, sd_log}` (the level law, a lognormal in the levels of the period's units) and `types`, a list of
   `{beta, share}` in increasing order of `beta` with no repeat.
 

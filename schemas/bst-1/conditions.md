@@ -25,10 +25,11 @@ solves with its own approximation of the laws, and reports the expectations, the
 For type i:
 - the absolute patience factor is Þ_i = (R β_i ℒ)^(1/ρ);
 - the return patience factor is Þ_i/R, and the growth patience factor is Þ_i/𝒢;
-- Þ̄_i = min(Þ_i, R).
+- type i's limiting MPC as m → ∞ is `κ_min` = max(0, 1 − Þ_i/R), typeset `\underline{\kappa}`;
+- ℛ = R/𝒢 is the return factor normalized by growth.
 
-As m → ∞, the saving share a/m of the rule tends to Þ̄/R. When the RIC holds, the MPC tends to 1 − Þ/R and Þ̄ = Þ. When it
-fails, the MPC tends to zero and Þ̄ = R. For large m, then, m′ ≈ (Þ̄/(𝒢 ψ′)) m.
+As m → ∞, the MPC of the rule tends to `κ_min` and its saving share a/m to 1 − `κ_min`: `κ_min` = 1 − Þ/R when the RIC
+holds, and 0 when it fails. For large m, then, m′ ≈ (ℛ (1 − `κ_min`)/ψ′) m.
 
 The moments of the permanent shock that the conditions use are E[ψ^k] for real k, E[log ψ] and E[ψ log ψ], with `ψ_min`, the
 lowest value of its support, and the mass there.
@@ -86,32 +87,33 @@ These decide whether a member defines each reported quantity. A quantity a membe
 `undefined` ([results](results.md)).
 
 The special points of the rule:
-- **The buffer stock target m̂_i** needs Þ̄ E[ψ^(−1)]/𝒢 < 1.
-- **The pseudo-target m̌_i** needs Þ̄/𝒢 < 1.
+- **The buffer stock target m̂_i** needs ℛ (1 − `κ_min`) E[ψ^(−1)] < 1.
+- **The pseudo-target m̌_i** needs ℛ (1 − `κ_min`) < 1.
 - **The kink m*_i** needs the artificial constraint to bind somewhere: `a_Art` > `a_Nat`. It is absent, for example, when
   ξ_U = 0 and `a_Art` = 0.
 
 When the RIC holds these are the GIC-Mod and the GIC. When it fails, the slope argument above replaces Þ by R. That is a
 deduction, not yet checked against a published result. Both targets are defined conditional on survival, with ℒ entering only
 through Þ. Their existence also uses three properties of the rule: it exists, it crosses each locus once (as a concave rule
-does), and it is asymptotically linear with saving share Þ̄/R.
+does), and it is asymptotically linear with saving share 1 − `κ_min`.
 
 The stationary population, for each type:
 
 **With ℒ < 1:**
 - **Population measure.** The distribution exists for every valid member. It is a mixture over ages with geometric weights
   (1 − ℒ) ℒ^s, the unique fixed point of a map that contracts at rate ℒ.
-- **Its moments.** The moment of order j is finite exactly when ζ > j, where ζ > 0 solves ℒ E[(Þ̄/(𝒢 ψ))^ζ] = 1. When no
-  root exists, which happens when Þ̄/𝒢 is at most `ψ_min`, every moment is finite. In particular, the mean is finite exactly when
-  ℒ Þ̄ E[ψ^(−1)]/𝒢 < 1.
-- **Income measure.** It is defined when ℒ 𝒢 < 1. Its moment of order j is finite exactly when ℒ 𝒢 (Þ̄/𝒢)^j E[ψ^(1−j)] < 1,
-  so its mean is finite exactly when ℒ Þ̄ < 1. When ℒ 𝒢 ≥ 1 it is `undefined` for `bst/1`.
+- **Its moments.** The moment of order j is finite exactly when ζ > j, where ζ > 0 solves ℒ E[(ℛ (1 − `κ_min`)/ψ)^ζ] =
+  1. When no root exists, which happens when ℛ (1 − `κ_min`) is at most `ψ_min`, every moment is finite. In particular,
+     the mean is finite exactly when
+  ℒ ℛ (1 − `κ_min`) E[ψ^(−1)] < 1.
+- **Income measure.** It is defined when ℒ 𝒢 < 1. Its moment of order j is finite exactly when ℒ 𝒢 (ℛ (1 − `κ_min`))^j
+  E[ψ^(1−j)] < 1, so its mean is finite exactly when ℒ R (1 − `κ_min`) < 1. When ℒ 𝒢 ≥ 1 it is `undefined` for `bst/1`.
 
 **With ℒ = 1:**
 - The population measure needs the GIC-Szeidl. Its moment of order j is finite exactly when j < ζ, where
-  E[(Þ̄/(𝒢 ψ))^ζ] = 1, so its mean is finite exactly when Þ̄ E[ψ^(−1)]/𝒢 < 1.
-- The income measure needs the GIC-Harmenberg. Its moment of order j is finite exactly when (Þ̄/𝒢)^j E[ψ^(1−j)] < 1, so its
-  mean is finite exactly when Þ̄/𝒢 < 1.
+  E[(ℛ (1 − `κ_min`)/ψ)^ζ] = 1, so its mean is finite exactly when ℛ (1 − `κ_min`) E[ψ^(−1)] < 1.
+- The income measure needs the GIC-Harmenberg. Its moment of order j is finite exactly when (ℛ (1 − `κ_min`))^j
+  E[ψ^(1−j)] < 1, so its mean is finite exactly when ℛ (1 − `κ_min`) < 1.
 
 Statistics that need less:
 - The generalized Lorenz ordinates GL(p) = ∫₀^p Q(u) du are finite for p < 1 whenever the distribution exists. Only GL(1), the
@@ -132,9 +134,9 @@ Exact consequences of the parameters, which the comparison tests a results file 
 - **The MPC at the lower limit.** c_i′(m) → 1 − `p_worst`^(1/ρ) Þ_i/R as m → `a_min` from above, when the artificial constraint does not
   bind there.
 - **The natural borrowing constraint.** With u(0) = −∞ the household never lets the worst income force zero consumption, so
-  `a_Nat` = −`ξ_min` κ/(1 − κ) with κ = `ψ_min` 𝒢/R when κ < 1, and no finite natural constraint when κ ≥ 1; `a_Nat` = 0 whenever a law
-  is unbounded below or ξ_U = 0 with ℘ > 0. The constraint in force is `a_min` = max(`a_Art`, `a_Nat`); the rule
-  satisfies c(m) < m − `a_min` wherever the artificial constraint does not bind.
+  `a_Nat` = −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) when `ψ_min` < ℛ, and no finite natural constraint when `ψ_min` ≥ ℛ; `a_Nat`
+  = 0 whenever a law is unbounded below or ξ_U = 0 with ℘ > 0. The constraint in force is `a_min` = max(`a_Art`,
+  `a_Nat`); the rule satisfies c(m) < m − `a_min` wherever the artificial constraint does not bind.
 - **The worst-income probability `p_worst`**, as defined above; with it, the natural constraint and the MPC bounds.
 - **The newborn's lowest resources.** A newborn's m is at least `θ_min` (1 − ℘ξ_U)/(1 − ℘), and exactly that when θ has
   mass at its lowest value.
@@ -233,9 +235,9 @@ above is defined for both, and is decided for each by the same arithmetic on its
 
 ## Open points
 
-- **A proof of the tail conditions.** The upper-tail conditions follow from the asymptotic recurrence m′ ≈ (Þ̄/(𝒢 ψ′)) m, and
-  the welfare condition from the behavior of the rule at the bottom. A proof would need a Kesten–Goldie-type result for a
-  multiplicative process killed at rate 1 − ℒ. None is cited yet.
+- **A proof of the tail conditions.** The upper-tail conditions follow from the asymptotic recurrence m′ ≈ (ℛ (1 −
+  `κ_min`)/ψ′) m, and the welfare condition from the behavior of the rule at the bottom. A proof would need a
+  Kesten–Goldie-type result for a multiplicative process killed at rate 1 − ℒ. None is cited yet.
 - **The income measure when ℒ < 1 and ℒ 𝒢 ≥ 1.** The cross-section normalized by aggregate permanent income may still
   converge, to the stationary law of the income-weighted chain, when the GIC-Harmenberg holds. That is unverified.
 - **The boundary cases.** Equality in any condition is left open.
