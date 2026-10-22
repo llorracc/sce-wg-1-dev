@@ -542,9 +542,9 @@ suite/
 
 - An **adapter** loads and validates the three files and hashes each; turns them into a toolkit's objects; solves, recording
   whether the solve converged and how; computes the stationary distribution; evaluates the results-schema quantities; and
-  writes the file with the hashes, the toolkit's version and commit, the hardware, the threads and the wall time. The
-  benchmark's `make_reference.py` and `ergodic.py` are the first adapter's seed; HAFiscal's `AggFiscalType` the second's;
-  HARK's agent classes the third's.
+  writes the file with the hashes, the toolkit's version and commit, the hardware and the threads. The benchmark's
+  `make_reference.py` and `ergodic.py` are the first adapter's seed; HAFiscal's `AggFiscalType` the second's; HARK's agent
+  classes the third's.
 - **The quantities, in a HARK adapter:** the rule at the request points from the interpolant; the MPC as the interpolant's
   derivative (piecewise constant for a linear rule, so the schema must say which side at a knot); the kink by bisection on
   m − c(m); the targets by solving their defining equations on the rule with the checker's exact moments, with HARK's own

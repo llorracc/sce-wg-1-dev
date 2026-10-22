@@ -15,7 +15,8 @@ toolkit's grid, histogram or interpolant. Every value is a ratio to permanent in
 - The hash of the method file and of the settings element ([numerical methods](../numerics.md)).
 - The hash of the request file, which holds the comparison points.
 - The toolkit and its version.
-- The hardware, the threads and the wall time.
+- The hardware and the threads, which account for differences in the last digits. No run time: a results file describes a
+  solution, and the files of different toolkits are read side by side.
 - Optional: the numerical environment, a free-form object of library versions; the driver, the program that assembled the
   file when the toolkit has more than one; and the parameter file's path. The hash, not the path, identifies the member.
 
