@@ -199,7 +199,7 @@
     },
 
     "Probabilities": {
-      "description": "The standard probabilities, as the keys of a GL or quantile map.",
+      "description": "The standard probabilities, as the keys of a GL map; a quantile map has all but 1.",
       "enum": ["0.01", "0.05", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "0.95", "0.99", "0.999", "1"]
     },
     "ProbabilityMap": {
@@ -207,6 +207,14 @@
       "required": ["0.01", "0.05", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "0.95", "0.99", "0.999", "1"],
       "additionalProperties": false,
       "propertyNames": { "$ref": "#/$defs/Probabilities" },
+      "patternProperties": { "^.*$": { "$ref": "#/$defs/NumberOrNull" } }
+    },
+    "QuantileMap": {
+      "description": "The quantiles at the standard probabilities below 1. Q(1), the top of the support, is left out: it is infinite whenever the upper tail is unbounded, and a computed Q(1) is the largest point with any mass at all, which grows with the representation's top and, read through a running total of the masses, turns on round-off; it says nothing about the solution.",
+      "type": "object",
+      "required": ["0.01", "0.05", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "0.95", "0.99", "0.999"],
+      "additionalProperties": false,
+      "propertyNames": { "$ref": "#/$defs/Probabilities", "not": { "const": "1" } },
       "patternProperties": { "^.*$": { "$ref": "#/$defs/NumberOrNull" } }
     },
 
@@ -217,7 +225,7 @@
       "additionalProperties": false,
       "properties": {
         "gl": { "$ref": "#/$defs/ProbabilityMap" },
-        "quantiles": { "$ref": "#/$defs/ProbabilityMap" },
+        "quantiles": { "$ref": "#/$defs/QuantileMap" },
         "undefined": { "$ref": "#/$defs/KeyList" },
         "not_computed": { "$ref": "#/$defs/KeyList" }
       }
