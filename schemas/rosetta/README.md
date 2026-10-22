@@ -71,7 +71,7 @@ reviews of this draft.
   their expectations, their lowest values, the derived parameters and every condition's factor and verdict.
   - Two toolkits whose effective members fall on opposite sides of a condition report a difference of regime, not of
     values.
-  - The gap between the two toolkits' expectations, such as E[ψ^(−ρ)], is the first source of a gap in the rule, and
+  - The gap between the two toolkits' expectations, such as E[ψ^(−ϱ)], is the first source of a gap in the rule, and
     is reported beside it.
 - **The rule is compared at the request file's points,** which removes both grids. A distribution is compared only through
   statistics that both methods define alike.

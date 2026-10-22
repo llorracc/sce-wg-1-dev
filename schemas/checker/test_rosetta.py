@@ -22,7 +22,7 @@ STONES = ["hark", "quantecon-jax"]
 
 # The stage file's parameters, by the symbol the lexicons write them in, the plain text of model.md's notation. A law's
 # spread is found under its shock.
-SYMBOLS = {"β": "β", "ℒ": "ℒ", "ρ": "ρ", "R": "R", "𝒢": "𝒢", "a_Art": "a_Art", "a_Nat": "a_Nat",
+SYMBOLS = {"β": "β", "ℒ": "ℒ", "ϱ": "ϱ", "R": "R", "𝒢": "𝒢", "a_Art": "a_Art", "a_Nat": "a_Nat",
            "σ_ψ": "ψ", "σ_θ": "θ", "p_zero": "℘", "ξ_U": "ξ_U"}
 # Keys that identify a file rather than state a number of the model.
 NOT_PARAMETERS = {"family", "period"}

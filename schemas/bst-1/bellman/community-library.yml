@@ -1,7 +1,7 @@
 # bst/1 member: the community library's buffer-stock model (annual period),
 # in the names of buffer_stock.bl.
 calibration:
-  ρ: 2.0
+  ϱ: 2.0
   β: 0.96
   ℒ: 1.0
   R: 1.04

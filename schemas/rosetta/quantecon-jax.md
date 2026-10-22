@@ -3,15 +3,15 @@
 Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md).
 - **The toolkit** is the code of QuantEcon's lecture *The Income Fluctuation Problem V: Stochastic Returns on Assets*:
   `lectures/ifp_advanced.md` of QuantEcon/lecture-python.myst, read at commit `96ede2993` of 2026-08-12. It has a model
-  container `IFP` with its constructor `create_ifp`, the time-iteration operator `K`, which uses the endogenous grid method,
-  and the solver `solve_model`, all in JAX.
+  container `IFP` with its constructor `create_ifp`, the time-iteration operator `K`, which uses the endogenous grid
+  method, and the solver `solve_model`, all in JAX.
 - **The cards** are in [`quantecon-jax.cards.yaml`](quantecon-jax.cards.yaml).
 
 ## The lecture's model
 
 - **Wealth.** It moves as a′ = R′(a − c) + Y′, with 0 ≤ c ≤ a. The lecture's a is cash on hand.
-- **Return and income.** The return is R′ = exp(a_r ζ′ + b_r), and income is Y′ = exp(a_y η′ + z′ b_y). Their innovations
-  are IID and independent of each other. z is a Markov state, which the return ignores.
+- **Return and income.** The return is R′ = exp(a_r ζ′ + b_r), and income is Y′ = exp(a_y η′ + z′ b_y). Their
+  innovations are IID and independent of each other. z is a Markov state, which the return ignores.
 - **Preferences.** The discount factor β is a constant, and utility is CRRA with coefficient γ.
 - **The expectation** is an average over Monte Carlo draws of ζ and η.
 - **The Euler equation:** (u′∘σ)(a, z) = max{β E_z R̂ (u′∘σ)[R̂(a − σ(a, z)) + Ŷ, Ẑ], u′(a)}.
@@ -20,37 +20,37 @@ Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md).
 ## The recasting: `bst/1`'s household in the lecture's form
 
 `bst/1`'s normalized household has a law of the right form, m′ = (R/(𝒢ψ′))a + ξ′. But its continuation is
-βℒE[(𝒢ψ′)^(1−ρ)v(m′)], with a factor that a constant β cannot carry. Tilting ψ's law by ψ^(1−ρ) removes it. With the
+β̊E[(𝒢ψ′)^(1−ϱ)v(m′)], with a factor that a constant β cannot carry. Tilting ψ's law by ψ^(1−ϱ) removes it. With the
 member's nodes ψᵢ and weights wᵢ:
-- the weights become w̃ᵢ = wᵢψᵢ^(1−ρ) / Σⱼ wⱼψⱼ^(1−ρ);
-- the discount factor is β̃ = βℒ𝒢^(1−ρ) Σᵢ wᵢψᵢ^(1−ρ);
+- the weights become w̃ᵢ = wᵢψᵢ^(1−ϱ) / Σⱼ wⱼψⱼ^(1−ϱ);
+- the discount factor is β̃ = β̊𝒢^(1−ϱ) Σᵢ wᵢψᵢ^(1−ϱ);
 - the returns are R̂ᵢ = R/(𝒢ψᵢ), with the tilted weights;
 - ξ's nodes and weights are unchanged, since ξ is independent of ψ.
 
 Then v(m) = max_c {u(c) + β̃ Ẽ[v(m′)]}, the lecture's form, holds exactly. So does the Euler equation:
-β̃Ẽ[R̂u′(c′)] = βℒR𝒢^(−ρ)E[ψ^(−ρ)u′(c′)]. The household's problem was solved both ways for one calibration, with HARK's code at `4c285e86`, on the
-same nodes and the same grid: HARK's defaults with ξ_U = 0 and the natural limit, on 200 grid points up to 40, not a `bst/1` member. The rules
-agree to 1.3·10⁻¹⁵ and the values to 1.2·10⁻¹³.
+β̃Ẽ[R̂u′(c′)] = β̊R𝒢^(−ϱ)E[ψ^(−ϱ)u′(c′)]. The household's problem was solved both ways for one calibration, with HARK's
+code at `4c285e86`, on the same nodes and the same grid: HARK's defaults with ξ_U = 0 and the natural limit, on 200 grid
+points up to 40, not a `bst/1` member. The rules agree to 1.3·10⁻¹⁵ and the values to 1.2·10⁻¹³.
 
 **An equivalent change of the code.** Keep the untilted law and R̂ = R/(𝒢ψ′). In `K`'s integrand,
-return R̂^ρ·u′(c′) in place of R̂·u′(c′), and replace β by βℒR^(1−ρ). This is the same Euler equation, since
-R̂(𝒢ψ′)^(1−ρ) = R^(1−ρ)R̂^ρ. The tilt is preferred: it leaves the lecture's operator as written, and needs only the weighted
-nodes that the unemployment node needs anyway.
+return R̂^ϱ·u′(c′) in place of R̂·u′(c′), and replace β by β̊R^(1−ϱ). This is the same Euler equation, since
+R̂(𝒢ψ′)^(1−ϱ) = R^(1−ϱ)R̂^ϱ. The tilt is preferred: it leaves the lecture's operator as written, and needs only the
+weighted nodes that the unemployment node needs anyway.
 
 Three cautions:
 - **Tilt the member's nodes; don't discretize a tilted law.** Then the two toolkits' effective members have the same
   nodes.
-  - For an untruncated lognormal ψ, the tilted law is a lognormal whose log-mean moves by (1 − ρ)σ². That gives a_r = σ
-    and b_r = log R − log 𝒢 + σ²/2 − (1 − ρ)σ².
+  - For an untruncated lognormal ψ, the tilted law is a lognormal whose log-mean moves by (1 − ϱ)σ². That gives a_r = σ
+    and b_r = log R − log 𝒢 + σ²/2 − (1 − ϱ)σ².
   - The lecture's R is never truncated, so the toy needs nodes.
-- **Only the household's problem is tilted.** Anything that is an expectation of m′ uses the untilted law: the target, the
-  balanced-growth point and the growth patience factors.
+- **Only the household's problem is tilted.** Anything that is an expectation of m′ uses the untilted law: the target,
+  the balanced-growth point and the growth patience factors.
   - With HARK's rule for that calibration, the target is 2.138153 under the true law and 2.213246 under the tilted one.
-  - The households' stationary measure uses ψ's law as given. The income measure tilts by ψ, not by ψ^(1−ρ).
-- **β̃ < 1 is the FVAC.** The lecture's check, β E R < 1, becomes βℒR𝒢^(−ρ)E[ψ^(−ρ)] < 1.
-  - That is sufficient for the lecture's argument, and stricter than the GIC-Mod for ρ ≥ 1.
-  - A `bst/1` member that satisfies the RIC and the FVAC but fails that check still has a solution. So the adapter reports
-    the check's value and does not stop on it.
+  - The households' stationary measure uses ψ's law as given. The income measure tilts by ψ, not by ψ^(1−ϱ).
+- **β̃ < 1 is the FVAC.** The lecture's check, β E R < 1, becomes β̊R𝒢^(−ϱ)E[ψ^(−ϱ)] < 1.
+  - That is sufficient for the lecture's argument, and stricter than the GIC-Mod for ϱ ≥ 1.
+  - A `bst/1` member that satisfies the RIC and the FVAC but fails that check still has a solution. So the adapter
+    reports the check's value and does not stop on it.
 
 ## The lexicon
 
@@ -58,7 +58,7 @@ Three cautions:
 |---|---|---|
 | m | `a`, cash on hand | — |
 | a = m − c | `s`, savings | — |
-| ρ, `crra` | `γ` | — |
+| ϱ, `crra` | `γ` | — |
 | β, `types[].beta`, with the shares, `types[].share`; ℒ, `survival`; 𝒢, `income.growth`; the law of ψ, `income.permanent_shock` | `β`, as β̃ | the recasting, with one solution per type; the adapter pools the types with the shares |
 | R, `return`, with ψ and 𝒢 | `R`, as R̂ᵢ = R/(𝒢ψᵢ) with the tilted weights | `R = exp(a_r ζ + b_r)` is an untruncated lognormal, so the adapter passes nodes |
 | ξ, from θ (`income.employed_shock`), ℘ (`income.unemployment.prob`) and ξ_U (`income.unemployment.income`) | `Y` | `Y = exp(a_y η + z b_y)` cannot hold the unemployment node, and with one state its mean is exp(a_y²/2), not one. The adapter passes ξ's nodes and weights |
@@ -71,29 +71,29 @@ Three cautions:
 
 Each was read in the lecture's code at `96ede2993` and checked against its source.
 1. **Weighted nodes.** `K` averages with `jnp.mean` over the product of 100 draws of η and 100 of ζ. Equal-weight draws
-   from the tilted law could carry the tilt, but equal weights cannot carry the member's own nodes once the tilt has made
-   their weights unequal, nor in general the unemployment node's ℘. Two weight vectors replace the mean.
-2. **Double precision.** The lecture never enables 64-bit floats, so it runs in single precision, about 10⁻⁷. The adapter
-   enables them before any array is made.
+   from the tilted law could carry the tilt, but equal weights cannot carry the member's own nodes once the tilt has
+   made their weights unequal, nor in general the unemployment node's ℘. Two weight vectors replace the mean.
+2. **Double precision.** The lecture never enables 64-bit floats, so it runs in single precision, about 10⁻⁷. The
+   adapter enables them before any array is made.
 3. **The kink.**
    - After the endogenous-grid step, `K` sets the first pair to (0, 0), on `s_grid = linspace(0, grid_max, grid_size)`.
      By default that is 100 points up to 100.
-   - This replaces the point where the constraint starts to bind with a chord from the origin, which undershoots c = m near
-     it.
+   - This replaces the point where the constraint starts to bind with a chord from the origin, which undershoots c = m
+     near it.
    - The adapter keeps the kink's point, prepends (0, 0), and nests the grid toward the constraint.
 4. **Above the grid.** `jnp.interp` holds c constant beyond the last point, so savings rise one for one there.
    - That changes the rule near the top, and the distribution's upper tail, for the patient types.
    - Linear extrapolation is the least fix. Better is the approach to the limiting linear function, as HARK does.
 5. **The value.** An evaluation step for v, for the welfare blocks, in pseudo-inverse form to avoid −∞ at the limit.
-   Discounted utility along simulated paths, which the method target `cntn_to_dcsn.value` also allows, carries a standard
-   error, and so compares only at that error.
+   Discounted utility along simulated paths, which the method target `cntn_to_dcsn.value` also allows, carries a
+   standard error, and so compares only at that error.
 6. **The population:** deaths at 1 − ℒ, `bst/1`'s newborns, the two measures, and the coverage of the representation.
    - The adapter's own lottery does all of these.
    - By simulation instead, the lecture's code would need three things. A household dies with probability 1 − ℒ, and is
      replaced by a newborn whose m is an employed draw. Permanent income p is tracked, since the income measure weights
      households by p. And the run lasts until the stationarity residual is small, not a fixed T.
-7. **The MPC.** A linear interpolant's MPC is piecewise constant, so the MPC is compared at the request points, or by one
-   common finite difference.
+7. **The MPC.** A linear interpolant's MPC is piecewise constant, so the MPC is compared at the request points, or by
+   one common finite difference.
 8. **Convergence.** `solve_model` returns the rule alone, with no iteration count or last change, so a run stopped by
    `max_iter` looks converged. The adapter takes one more step of `K` and checks its largest change in c against `tol`.
 
@@ -109,10 +109,10 @@ cover that member, although the algorithm still runs on nodes.
 - **The adapter** is not written yet. Its legs:
   - *encode*, from a member and the settings to an `IFP` with β̃, the R̂ᵢ with the tilted weights, and ξ's nodes;
   - the call, `solve_model`;
-  - *decode*, from the rule σ to the results file. The adapter computes the population, the value and the conditions from
-    the untilted laws.
-- **The evidence.** The recasting, checked on one calibration, HARK's defaults with ξ_U = 0, against BST's form and HARK's
-  solution. No adapter run yet.
+  - *decode*, from the rule σ to the results file. The adapter computes the population, the value and the conditions
+    from the untilted laws.
+- **The evidence.** The recasting, checked on one calibration, HARK's defaults with ξ_U = 0, against BST's form and
+  HARK's solution. No adapter run yet.
 
 ## Sources
 

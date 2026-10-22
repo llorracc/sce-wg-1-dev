@@ -528,7 +528,7 @@ class Member:
         if math.isinf(a_nat):
             a_nat = self.a_art  # no finite natural constraint; the artificial one is the constraint in force
         return {
-            "β": self.types[type_index]["beta"], "ℒ": self.L, "ρ": self.rho, "R": self.R, "𝒢": self.G,
+            "β": self.types[type_index]["beta"], "ℒ": self.L, "ϱ": self.rho, "R": self.R, "𝒢": self.G,
             "a_Art": self.a_art, "a_Nat": a_nat,
             "σ_ψ": self.psi.params["sd_log"], "σ_θ": self.theta.params["sd_log"],
             "p_zero": self.wp, "ξ_U": self.xi_U,
