@@ -86,9 +86,13 @@ Times are EDT, from the clock or an event's own stamp. The night's gate run for 
   on the owner's word.
 
 **State at the third memorial.**
-- The fork's pull requests #1 to #11 are merged; #12 is a draft, in the worktree `.worktrees/natural-limit`.
+- The fork's pull requests #1 to #11 are merged; #12 is a draft, in the worktree `.worktrees/natural-limit` (merged at
+  21:32, below).
 - **HARK:** #1858 and #1862 are drafts on the owner's fork's branches; the tags `sce-adapter/2026-10-22` and
   `sce-adapter/2026-10-22.2` keep the two pins reachable.
 - **Next:** #12's merge; dolo's adapter; the Markov family's results document, validator and members; the validators for
   the method, settings and request files; the toy's level-4 gate run.
 - **Open:** what goes to the working group's repository; the bellman session's items.
+- **21:32.** #12 is merged (`d240a48`), its branch and worktree deleted, and the main checkout brought up to the merge;
+  the checker's 150 tests pass there. Only the main checkout remains, and the fork's branches are the schemas' branch,
+  `main`, and the five from the working group's repository.

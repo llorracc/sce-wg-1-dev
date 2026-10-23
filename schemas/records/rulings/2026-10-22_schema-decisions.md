@@ -82,3 +82,6 @@ the stated laws' natural limit (the defects); no member states `natural` yet.
 - **19:17:15.** The records correction `5efba47` is pushed.
 - **21:16:42.** HARK's adapter under `natural` is committed and pushed as a draft pull request: #12, opened at 21:17:05.
 - **21:21:24.** This memorial.
+- **21:22:11 to 21:32:01.** Asked why #12's work sat in a second worktree, and whether it could merge: the memorial
+  pushed, then #12 taken out of draft and merged at 21:32:14 (`d240a48`), its branch and worktree deleted.
+- **21:32:50 and 21:33:11.** Nothing was left to push; this memorial of the merge, and its push.
