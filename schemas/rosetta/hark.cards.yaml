@@ -11,7 +11,7 @@ toolkit:
   package: HARK
   repository: "https://github.com/econ-ark/HARK"
   import_root: HARK
-  read_at: {repository: "https://github.com/llorracc/HARK", branch: markov-exact-expectations, commit: 03a2c7a1, pull_request: "econ-ark/HARK#1858, a draft"}
+  read_at: {repository: "https://github.com/llorracc/HARK", branch: natural-limit-infimum, commit: 11852805, pull_request: "econ-ark/HARK#1862, a draft", stacked_on: "03a2c7a1, the head of econ-ark/HARK#1858, a draft"}
   also_read: {branch: main, commit: 4c285e86, date: "2026-10-07", for: "IndShockConsumerType, against which the adapter's gate measures the Markov rule"}
 
 handlers:
@@ -30,7 +30,7 @@ handlers:
       "survival": "LivPrb, a list per period of one value per state, the same in both"
       "return": "Rfree, likewise"
       "income.growth": "PermGroFac, likewise"
-      "borrowing_constraint": "BoroCnstArt: a_Art, with natural resolved by the checker to the stated member's natural limit"
+      "borrowing_constraint": "BoroCnstArt: a_Art, or None for natural, when HARK computes the natural limit from the laws' infima recorded on IncShkDstn"
       "income.unemployment.prob": "MrkvArray, a list per period of the chain's matrix, both rows (1 - p_zero, p_zero)"
       "income.permanent_shock": "PermShk in both states' IncShkDstn: the adapter's nodes"
       "income.employed_shock": "TranShk in the employed state's IncShkDstn: the adapter's nodes, scaled by (1 - p_zero xi_u)/(1 - p_zero)"
@@ -55,7 +55,7 @@ handlers:
           representation: "the nonpersistent chain: two states, employed and unemployed, both rows (1 - p_zero, p_zero)"
           scope: "built by the adapter; HARK's constructor for it is switched off, since HARK otherwise replaces it with its defaults at construction"
         IncShkDstn:
-          representation: "one DiscreteDistributionLabeled over PermShk and TranShk per state: employed, the product of psi's nodes and the scaled employed nodes; unemployed, psi's nodes with TranShk = xi_u"
+          representation: "one DiscreteDistributionLabeled over PermShk and TranShk per state: employed, the product of psi's nodes and the scaled employed nodes; unemployed, psi's nodes with TranShk = xi_u; each with the laws' infima and suprema as its limit, which HARK reads for the natural limit"
           scope: "built by the adapter from the member's laws; HARK's constructor for it is switched off, since HARK otherwise rebuilds it on any update"
         LivPrb:
           scope: "applied inside the solver, in the effective discount factor DiscFac * LivPrb; the adapter does not apply it again"

@@ -5,10 +5,12 @@ is its standing check and [`gate.py`](gate.py) the check a version passes before
 
 ## Running it
 
-HARK is pinned to the commit of HARK's pull request #1858, from the fork that opened it:
+HARK is pinned to a commit of the fork `llorracc/HARK`, on its branch `natural-limit-infimum`, which is stacked on
+HARK's pull request #1858: the head of HARK's draft pull request #1862. The fork's tag `sce-adapter/2026-10-22.2` keeps
+the commit reachable:
 
 ```sh
-PIN="econ-ark @ git+https://github.com/llorracc/HARK.git@03a2c7a11ebd430e0c54eaa2da7f0eb5ab3d7483"
+PIN="econ-ark @ git+https://github.com/llorracc/HARK.git@1185280590b21fe2ddac80cadcfea66476e45380"
 uv run --with "$PIN" --with sympy --with jsonschema --with pyyaml --with scipy --with referencing \
     python schemas/adapters/hark/adapter.py schemas/bst-1/members/toy.yaml --out out --level 1
 uv run --with jsonschema --with pyyaml --with scipy --with referencing \
@@ -41,10 +43,13 @@ The adapter asserts three things after each solve:
 The same machinery then solves the Markov family, whose chains differ only in the matrix and the incomes.
 
 **Why the pin.** Released HARK interpolates each next state's expected marginal value on a grid starting at that state's
-own natural limit and evaluates it on the current state's grid. When the states' worst incomes differ, as here, that adds an
-interpolation error to the rule and a larger one to the value function. Pull request #1858 evaluates each next state's
-expectation at the current state's points, as HARK's standard solver does. With it, the Markov rule equals the standard
-consumer's on the same nodes to about 1e-15. The adapter re-pins to the first HARK release that includes it.
+own natural limit and evaluates it on the current state's grid. When the states' worst incomes differ, as here, that
+adds an interpolation error to the rule and a larger one to the value function. Pull request #1858 evaluates each next
+state's expectation at the current state's points, as HARK's standard solver does. With it, the Markov rule equals the
+standard consumer's on the same nodes to about 1e-15. The branch above it computes the natural borrowing constraint from
+the laws' infima, which the adapter records on each distribution it gives HARK, rather than from the lowest nodes. A
+member that states `natural` is then solved under the stated laws' own limit, the same at every number of nodes, and the
+adapter passes no artificial constraint for it. The adapter re-pins to the first HARK release that includes both.
 
 **What the adapter computes itself:**
 - the conditions and statuses, through the checker's arithmetic on the effective member's expectations. HARK has no

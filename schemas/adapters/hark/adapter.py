@@ -26,8 +26,11 @@ How the member is solved.
      residuals against a Gauss-Legendre quadrature in the logs split at the kink, with that quadrature's precision and the
      same residual under the adapter's own nodes, and the stationarity residual.
 
-HARK is pinned to the commit of its pull request #1858, whose Markov solver evaluates each next state's expectation at the
-current state's points, as the standard solver does; released HARK interpolates it on each state's own grid instead.
+HARK is pinned to a commit on its branch natural-limit-infimum, stacked on its pull request #1858. #1858's Markov solver
+evaluates each next state's expectation at the current state's points, as the standard solver does; released HARK
+interpolates it on each state's own grid instead. The branch computes the natural borrowing constraint from the infima
+of the laws, which the adapter records on each distribution, rather than from the lowest nodes, so a member that states
+natural is solved under the stated laws' limit at every number of nodes.
 
 Usage, with HARK at the pin (see README.md):
     python adapter.py <member.yaml> --out <dir> [--level 1|2|3|4|low|medium|high] [--request <request.yaml>] [--nodes N]
@@ -351,10 +354,32 @@ def own_domain(bst1, member, beta, conds, E, derived, p_psi, psi):
 
 
 # ------------------------------------------------------------------------------------------------ the solution (HARK)
-def _labeled(P, PSI, XI, name):
+def _labeled(P, PSI, XI, name, bounds):
+    """HARK's joint distribution of the permanent and transitory shocks, with the laws' own bounds, ((psi_inf, xi_inf),
+    (psi_sup, xi_sup)), recorded as its limit: HARK reads the infima for the natural borrowing constraint."""
     from HARK.distributions import DiscreteDistribution, DiscreteDistributionLabeled
+    limit = {"infimum": np.array(bounds[0], float), "supremum": np.array(bounds[1], float)}
     return DiscreteDistributionLabeled.from_unlabeled(
-        DiscreteDistribution(P, np.vstack([PSI, XI]), seed=0), name=name, var_names=["PermShk", "TranShk"])
+        DiscreteDistribution(P, np.vstack([PSI, XI]), seed=0, limit=limit), name=name, var_names=["PermShk", "TranShk"])
+
+
+def shock_bounds(member):
+    """The stated laws' bounds for each distribution HARK is given, as ((psi_inf, xi_inf), (psi_sup, xi_sup)): employed,
+    psi and the scaled employed draw; unemployed, psi and xi_u; and the joint law, psi and the lower and upper of the
+    two."""
+    scale = employed_scale(member)
+    psi = (float(member.psi.infimum), float(member.psi.supremum))
+    emp = (scale * float(member.theta.infimum), scale * float(member.theta.supremum))
+    xi_u = float(member.xi_u)
+    joint = (min(emp[0], xi_u), max(emp[1], xi_u)) if member.wp > 0 else emp
+    return {state: ((psi[0], xi[0]), (psi[1], xi[1]))
+            for state, xi in (("employed", emp), ("unemployed", (xi_u, xi_u)), ("joint", joint))}
+
+
+def boro_cnst_art(member):
+    """HARK's artificial constraint: a_Art, or none for a member that states natural, whose limit HARK computes itself from
+    the infima recorded on its distributions."""
+    return None if member.natural else float(member.a_art)
 
 
 def _grid(lev):
@@ -372,12 +397,14 @@ def solve_type(member, beta, nodes, lev):
     from HARK.ConsumptionSaving.ConsMarkovModel import MarkovConsumerType, init_indshk_markov
     R, G, L, wp = member.R, member.G, member.L, float(member.wp)
     states = state_shocks(member, *nodes)
+    bounds = shock_bounds(member)
     chain = np.array([[1.0 - wp, wp], [1.0 - wp, wp]])
     constructors = dict(init_indshk_markov["constructors"], MrkvArray=None, IncShkDstn=None)
     p = dict(CRRA=member.rho, Rfree=[np.array([R, R])], PermGroFac=[np.array([G, G])], LivPrb=[np.array([L, L])],
-             DiscFac=beta, BoroCnstArt=float(member.a_art), cycles=0, T_cycle=1, vFuncBool=True, CubicBool=True,
+             DiscFac=beta, BoroCnstArt=boro_cnst_art(member), cycles=0, T_cycle=1, vFuncBool=True, CubicBool=True,
              MrkvArray=[chain], MrkvPrbsInit=np.array([1.0, 0.0]), NewbornTransShk=True,
-             IncShkDstn=[[_labeled(*states[0], "employed"), _labeled(*states[1], "unemployed")]],
+             IncShkDstn=[[_labeled(*states[0], "employed", bounds["employed"]),
+                          _labeled(*states[1], "unemployed", bounds["unemployed"])]],
              PermShkStd=np.array([[0.1, 0.1]]), TranShkStd=np.array([[0.1, 0.1]]), PermShkCount=3, TranShkCount=3,
              UnempPrb=np.array([0.0, 0.0]), IncUnemp=np.array([0.0, 0.0]), UnempPrbRet=None, IncUnempRet=None,
              T_retire=0, T_age=None, AgentCount=1, constructors=constructors, **_grid(lev))
@@ -403,11 +430,11 @@ def solve_standard(member, beta, P, PSI, XI, lev):
     measures the Markov solution against (README.md)."""
     from HARK.ConsumptionSaving.ConsIndShockModel import IndShockConsumerType
     p = dict(CRRA=member.rho, Rfree=[member.R], PermGroFac=[member.G], LivPrb=[member.L], DiscFac=beta,
-             BoroCnstArt=float(member.a_art), cycles=0, T_cycle=1, vFuncBool=True, CubicBool=True,
+             BoroCnstArt=boro_cnst_art(member), cycles=0, T_cycle=1, vFuncBool=True, CubicBool=True,
              PermShkStd=[0.1], TranShkStd=[0.1], PermShkCount=3, TranShkCount=3,
              UnempPrb=0.0, IncUnemp=0.0, UnempPrbRet=0.0, IncUnempRet=0.0, T_retire=0, T_age=None, AgentCount=1, **_grid(lev))
     agent = IndShockConsumerType(**p, verbose=False)
-    agent.IncShkDstn = [_labeled(P, PSI, XI, "income")]
+    agent.IncShkDstn = [_labeled(P, PSI, XI, "income", shock_bounds(member)["joint"])]
     agent.solve()
     d = agent.IncShkDstn[0]
     assert np.array_equal(np.asarray(d.pmv), P) and np.array_equal(np.asarray(d.atoms[1]), XI), "HARK rebuilt the income process"
@@ -739,10 +766,11 @@ def special_point(cf, f, lo, hi):
 
 
 # ------------------------------------------------------------------------------------------------ the diagnostics
-def exact_expected_marginal_value(cf, member, a, m_kink, n=DIAG_NODES):
+def exact_expected_marginal_value(cf, member, a, m_kink, n=DIAG_NODES, m_floor=-math.inf):
     """E[(G psi)^(-rho) u'(c(m'))] at one a by the diagnostics' expectation: Gauss-Legendre in the log of each lognormal law,
     the transitory law's support split where m' crosses the rule's kink (the integrand's own kink), for each permanent node;
-    the unemployment state exact."""
+    the unemployment state exact. m' is kept at or above m_floor, the rule's lower limit: under natural the stated laws'
+    worst draw from the limit lands on it up to rounding, and HARK's rule is not defined below it."""
     R, G, rho = member.R, member.G, member.rho
     scale = employed_scale(member)
     p_psi, psi = law_quadrature(member.psi, n)
@@ -751,21 +779,21 @@ def exact_expected_marginal_value(cf, member, a, m_kink, n=DIAG_NODES):
         base = R * a / (G * ps)
         split = (m_kink - base) / scale if m_kink is not None else None
         p_th, th = law_quadrature(member.theta, n, split_at=split)
-        emp = float(np.dot(p_th, np.asarray(cf(base + scale * th), float) ** (-rho)))
+        emp = float(np.dot(p_th, np.asarray(cf(np.maximum(base + scale * th, m_floor)), float) ** (-rho)))
         if member.wp > 0:
-            emp = member.wp * float(cf(base + member.xi_u)) ** (-rho) + (1.0 - member.wp) * emp
+            emp = member.wp * float(cf(max(base + member.xi_u, m_floor))) ** (-rho) + (1.0 - member.wp) * emp
         total += pp * (G * ps) ** (-rho) * emp
     return total
 
 
-def euler_residuals(cf, member, beta, a_lo, points, m_kink, n=DIAG_NODES):
+def euler_residuals(cf, member, beta, a_lo, points, m_kink, n=DIAG_NODES, m_floor=-math.inf):
     """r(m) = min(c_hat - c, m - a_lo - c)/c at the comparison points, c_hat from the diagnostics' expectation (results.md)."""
     out = []
     for m in points:
         c = float(cf(m))
         if c <= 0.0:
             raise ValueError(f"no Euler residual at m = {m}: the rule consumes nothing there (fix the request file)")
-        E = exact_expected_marginal_value(cf, member, m - c, m_kink, n=n)
+        E = exact_expected_marginal_value(cf, member, m - c, m_kink, n=n, m_floor=m_floor)
         c_hat = inverse_marginal_utility(beta * member.L * member.R * E, member.rho)
         out.append(float(min(c_hat - c, m - a_lo - c) / c))
     return out, float(max(abs(r) for r in out))
@@ -926,7 +954,14 @@ def main(argv=None):
         differs = [k for k in status_keys if bool(stated.get(k)) != bool(dom.get(k))]
         sol = solve_type(member, beta, nodes, lev).solution[0]
         cf, vf = sol.cFunc, sol.vFunc
-        assert abs(float(sol.mNrmMin) - a_lo) < 1e-9, (sol.mNrmMin, a_lo)   # HARK's constraint in force is the effective one
+        # HARK's constraint in force is the effective one. An artificial one is exact. Under natural HARK reaches the
+        # laws' limit by iterating its recursion, which stops on the rule's convergence a little above the limit (4e-9
+        # on the toy at level 1), so it is held below the population grid's first node, 1e-6 above.
+        if member.natural:
+            assert -1e-9 < float(sol.mNrmMin) - a_lo < 1e-6, (sol.mNrmMin, a_lo)
+        else:
+            assert abs(float(sol.mNrmMin) - a_lo) < 1e-9, (sol.mNrmMin, a_lo)
+        m_floor = float(sol.mNrmMin)
         pts = points_by_beta[beta]
         agrid = make_agrid(lev["dist_points"], lev["dist_top"], a_lo, natural)
         pop = Population(cf, agrid, Pt, PSIt, XIt, R, G, a_lo, L, nbt[0], nbt[1], False)
@@ -949,8 +984,8 @@ def main(argv=None):
                   if dom["pseudo_target"] else {"status": "undefined"})
         m_dense = np.unique(np.concatenate([np.geomspace(max(float(pop.m.min()), 1e-6), hi, 400),
                                             [kink["m"]] if kink["status"] == "value" else []]))
-        r, r_max = euler_residuals(cf, member, beta, a_lo, pts, kink.get("m"))
-        r_fine, _ = euler_residuals(cf, member, beta, a_lo, pts, kink.get("m"), n=2 * DIAG_NODES)
+        r, r_max = euler_residuals(cf, member, beta, a_lo, pts, kink.get("m"), m_floor=m_floor)
+        r_fine, _ = euler_residuals(cf, member, beta, a_lo, pts, kink.get("m"), n=2 * DIAG_NODES, m_floor=m_floor)
         precision = float(max(abs(x - y) for x, y in zip(r, r_fine)))     # the diagnostic's own error: doubling its nodes
         r_eff, r_eff_max = euler_residuals_effective(cf, member, beta, a_lo, pts, P, PSI, XI)
         stationarity = {"population": pop.stationarity_residual(),

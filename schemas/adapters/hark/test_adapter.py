@@ -1,11 +1,12 @@
 """The standing check of HARK's adapter, with HARK at the adapter's pin (README.md):
 
-    uv run --with "econ-ark @ git+https://github.com/llorracc/HARK.git@03a2c7a11ebd430e0c54eaa2da7f0eb5ab3d7483" \
+    uv run --with "econ-ark @ git+https://github.com/llorracc/HARK.git@1185280590b21fe2ddac80cadcfea66476e45380" \
         --with sympy --with jsonschema --with pyyaml --with scipy --with referencing --with pytest pytest -q schemas/adapters/hark
 
-The Markov solution on the nonpersistent chain must give the same rule in both employment states and the standard consumer's
-rule on the same nodes, the adapter's results file must validate and pass the checker's verification, and its method file
-must name only the family's method targets, each once.
+The Markov solution on the nonpersistent chain must give the same rule in both employment states and the standard
+consumer's rule on the same nodes, the adapter's results file must validate and pass the checker's verification, a
+member that states natural must be solved under the stated laws' limit, and the method file must name only the family's
+method targets, each once.
 """
 import pathlib
 import subprocess
@@ -49,6 +50,27 @@ def test_the_results_file_passes_the_checker(name, tmp_path):
     check = subprocess.run([sys.executable, str(adapter.SCHEMAS / "checker" / "check.py"), str(MEMBERS / f"{name}.yaml"),
                             "--verify-results", results], capture_output=True, text=True)
     assert check.returncode == 0, check.stdout + check.stderr
+
+
+def test_a_natural_member_is_solved_under_the_stated_limit(tmp_path):
+    # Under natural HARK computes the natural limit from the infima the adapter records, so the constraint in force is
+    # the stated laws' a_Nat, whatever the nodes; and the results file passes the checker.
+    import json
+    data = (MEMBERS / "toy.yaml").read_text().replace("borrowing_constraint: 0.0", "borrowing_constraint: natural")
+    member_file = tmp_path / "toy-natural.yaml"
+    member_file.write_text(data)
+    member = adapter.load_checker(str(adapter.SCHEMAS))[0].load_member(member_file)
+    a_nat = member.natural_borrowing_constraint()
+    for n in (5, 9):                 # HARK's iteration stops a little above the limit; the nodes do not move it
+        nodes, *_ = adapter.shocks(member, n)
+        lo = adapter.solve_type(member, float(member.types[0]["beta"]), nodes, LEVEL).solution[0].mNrmMin
+        assert -1e-9 < lo - a_nat < 1e-6, (n, lo, a_nat)
+    results = adapter.main([str(member_file), "--out", str(tmp_path / "out"), "--level", "1"])
+    check = subprocess.run([sys.executable, str(adapter.SCHEMAS / "checker" / "check.py"), str(member_file),
+                            "--verify-results", results], capture_output=True, text=True)
+    assert check.returncode == 0, check.stdout + check.stderr
+    derived = json.load(open(results))["effective_member"]["derived"]
+    assert derived["constraint_in_force"] == pytest.approx(member.natural_borrowing_constraint(), abs=1e-12)
 
 
 def test_the_method_file_names_only_the_family_s_targets():

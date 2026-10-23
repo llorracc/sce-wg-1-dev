@@ -4,9 +4,10 @@ Draft, begun on 2026-10-21 and revised on 2026-10-22; see the [Rosetta Stones](R
 `MarkovConsumerType`, as [HARK's adapter](../adapters/hark/README.md) uses it: on the nonpersistent chain, which writes
 a `bst/1` member as a member of the [Markov family](../bst-markov_ui-and-agg/model.md).
 - **Where it was read.** The Markov solver was read at the commit of HARK's draft pull request #1858, `03a2c7a1` on the
-  fork `llorracc/HARK`, the adapter's pin. HARK's standard consumer, `IndShockConsumerType`, which the Markov consumer
-  extends and against which the adapter's gate measures it, was read on HARK's main branch at `4c285e86`, of 2026-10-07.
-  The figures for HARK's defaults were computed with that code.
+  fork `llorracc/HARK`. The adapter's pin is `11852805`, the head of draft econ-ark/HARK#1862, stacked on it,
+  which computes the natural borrowing constraint from the laws' infima. HARK's standard consumer,
+  `IndShockConsumerType`, which the Markov consumer extends and against which the adapter's gate measures it, was read
+  on HARK's main branch at `4c285e86`, of 2026-10-07. The figures for HARK's defaults were computed with that code.
 - **The cards** are in [`hark.cards.yaml`](hark.cards.yaml).
 
 ## The lexicon
@@ -31,8 +32,8 @@ a `bst/1` member as a member of the [Markov family](../bst-markov_ui-and-agg/mod
 | ℘, `income.unemployment.prob` | `MrkvArray`, a list per period of the chain's matrix | row i gives the probabilities of next period's states from state i | both rows are (1 − ℘, ℘): unemployment with probability ℘ whatever the previous state, which is `bst/1`'s ξ. HARK's constructor for `MrkvArray` is switched off, since it would replace the adapter's matrix with its defaults, [[0.9, 0.1], [0.6, 0.4]], at construction. `UnempPrb`, the standard consumer's way, is left at zero |
 | ξ_u, `income.unemployment.income` | `TranShk` in the unemployed state's distribution | a ratio to permanent income | ξ_u at every node of ψ, since ψ is drawn in both states. `IncUnemp` is left at zero |
 | ψ and ξ jointly | `IncShkDstn`, a list per period of one distribution per state | in each state the independent product of ψ's nodes and that state's ξ | weighted by the chain's row, the two states' distributions are `bst/1`'s joint law of ψ and ξ |
-| `a_Art`, `borrowing_constraint` | `BoroCnstArt` | a bound on end-of-period a. The constraint in force in each state is the larger of the natural limit and `BoroCnstArt` | the adapter passes `a_Art`. A member's `natural` is resolved by the checker to the stated laws' natural limit, so the effective member then has that limit as an artificial constraint, above its nodes' own natural limit; no member states `natural` yet |
-| `a_Nat` | none stored; the solver's `mNrmMin`, one per state, is the constraint in force | from the lowest nodes, not from the laws' infima | the adapter computes the effective member's natural limit itself, from the nodes' lowest values: −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) with ℛ = R/𝒢, as `model.md` writes it. Here `ξ_min` is the lowest node of ξ, the worst income, which is the lower of ξ_u and the lowest employed node, and `ψ_min` is the lowest node of ψ. On the toy's seven equiprobable nodes the lowest employed node is 0.558, below ξ_u = 0.7. The results file reports it (`effective_member.derived.natural_limit`), with the constraint in force the larger of `a_Art` and it. The adapter asserts that both states' `mNrmMin` equal that constraint. The laws' own limit is tighter whenever ξ_u > 0, since the laws reach below their lowest nodes in both ψ and θ: it is 0 when either law is untruncated, and set by the truncation bounds when both are truncated. Draft pull request econ-ark/HARK#1861 records a discretized law's true bounds with its nodes; nothing reads them yet |
+| `a_Art`, `borrowing_constraint` | `BoroCnstArt` | a bound on end-of-period a. The constraint in force in each state is the larger of the natural limit and `BoroCnstArt` | the adapter passes `a_Art`, or none for a member that states `natural`. HARK then computes the natural limit itself from the laws' infima, which the adapter records as each distribution's `limit` (`BoroCnstInfimum`, on by default at the pin); it is the stated laws' limit, the same at every number of nodes |
+| `a_Nat` | none stored; the solver's `mNrmMin`, one per state, is the constraint in force | at the pin, the larger of the limit from the laws' recorded infima and the one from the lowest nodes; released HARK has only the second | the adapter computes the effective member's natural limit itself, from the nodes' lowest values: −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) with ℛ = R/𝒢, as `model.md` writes it. Here `ξ_min` is the lowest node of ξ, the worst income, which is the lower of ξ_u and the lowest employed node, and `ψ_min` is the lowest node of ψ. On the toy's seven equiprobable nodes the lowest employed node is 0.558, below ξ_u = 0.7. The results file reports it (`effective_member.derived.natural_limit`), with the constraint in force the larger of `a_Art` and it. The adapter asserts that both states' `mNrmMin` equal that constraint. The laws' own limit is tighter whenever ξ_u > 0, since the laws reach below their lowest nodes in both ψ and θ: it is 0 when either law is untruncated, and set by the truncation bounds when both are truncated. Under `natural` it is the constraint in force, and it binds in the effective member, whose nodes never reach it. Draft pull request econ-ark/HARK#1861 records the true bounds of HARK's own discretized laws |
 | the newborn: employed, P = 1, no assets, θ an employed draw | `MrkvPrbsInit`, `NewbornTransShk`; `kLogInitMean`, `kLogInitStd` and `kNrmInitCount`; `pLogInitMean`, `pLogInitStd` and `pLvlInitCount` | in HARK's simulation, a newborn's state is drawn from `MrkvPrbsInit`, and with `NewbornTransShk` its first income from that state's distribution | the adapter sets `MrkvPrbsInit = [1, 0]` and `NewbornTransShk = True`, so that a newborn is employed with an employed draw; P = 1 would also need the `NewbornPermShk = False` of draft econ-ark/HARK#1860. HARK's simulation is not used: the adapter builds the population, newborns included, itself. k = 0 would need a very negative `kLogInitMean`; the default, −12, gives k ≈ 6·10⁻⁶ |
 
 ## Where the results file's quantities come from
@@ -64,8 +65,8 @@ a `bst/1` member as a member of the [Markov family](../bst-markov_ui-and-agg/mod
     defaults and its default tolerance of 10⁻⁶, `hNrm` is 44.99 against its limit of 50.50, and c above the grid is off
     by 0.0115 at m = 60 and 0.035 at m = 100, against less than 4·10⁻⁵ within the grid. `bst/1`'s population grids reach
     60, 120 and 240, so the adapter's levels set 10⁻⁸ and tighter.
-  - The stage's `max(a_Art, a_Nat)` is HARK's own: the larger of `BoroCnstArt` and the natural limit it computes from
-    the nodes, in each state.
+  - The stage's `max(a_Art, a_Nat)` is HARK's own: the larger of `BoroCnstArt` and the natural limit it computes, in
+    each state. At the pin that limit comes from the laws' recorded infima, so it is the stated member's `a_Nat`.
 - **The grid:** `aXtraGrid`, end-of-period assets above the natural limit, nested multi-exponentially. Its settings are
   `aXtraMin` (by default 0.001), `aXtraMax` (20), `aXtraCount` (48), `aXtraNestFac` (3) and `aXtraExtra`.
 - **The interpolation** (`policy`): linear, `!Linear`, or with `CubicBool` a cubic Hermite whose slopes are the
@@ -147,7 +148,8 @@ Markov rule. Read at `4c285e86`:
 
 ## Sources
 
-- **HARK itself:** the commit `03a2c7a1` of draft econ-ark/HARK#1858, on the fork `llorracc/HARK`; its main branch at
+- **HARK itself:** the commit `03a2c7a1` of draft econ-ark/HARK#1858, on the fork `llorracc/HARK`, and `11852805` on
+  that fork's branch `natural-limit-infimum`, stacked on it; its main branch at
   `4c285e86`; and the drafts econ-ark/HARK#1859, #1860 and #1861.
 - **HARK's names:** NARK (econ-ark/NARK), the naming conventions that left HARK's repository in 2024. It maps HARK's
   code names to LaTeX macros.
