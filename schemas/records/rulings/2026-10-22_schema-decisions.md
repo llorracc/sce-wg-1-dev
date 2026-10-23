@@ -85,3 +85,18 @@ the stated laws' natural limit (the defects); no member states `natural` yet.
 - **21:22:11 to 21:32:01.** Asked why #12's work sat in a second worktree, and whether it could merge: the memorial
   pushed, then #12 taken out of draft and merged at 21:32:14 (`d240a48`), its branch and worktree deleted.
 - **21:32:50 and 21:33:11.** Nothing was left to push; this memorial of the merge, and its push.
+- **21:42:05** (question tool, on his "ask me the open questions" of 21:40:05). Four answers: the fork's work goes to
+  the working group's repository after dolo's adapter and the first comparison of two toolkits, by an issue to the
+  co-chairs proposing a series that starts with the ontology; the next work is the Markov family's results document,
+  validator and members, with HARK's adapter extended to its chains; the bellman session is asked to move Bellman's
+  truncated-lognormal draft, with the uniform folded in, toward merging and to file the parameter-condition defect, each
+  on his word in its window; HARK's #1858 and #1862 stay drafts.
+- **About 21:49, in the bellman session** (reported there and here): Bellman's truncated-lognormal draft marked ready
+  and merged, which it was at 21:56 with the uniform comparator folded in; and the parameter-condition defect filed as
+  an issue in Bellman's repository.
+- **21:46:59.** The Markov family's work goes on in collaboration with the HARK and HAFiscal sessions.
+- **22:04:28.** The artificial borrowing constraint: the requirement is not that `a_Art` lie strictly above the natural
+  limit, but that a relevant artificial constraint, where one exists, does; one no tighter than the natural constraint
+  has no effect, so a written `a_Art` equal to the natural limit, such as HAFiscal's 0.0 under lognormal laws, is valid
+  and means the natural-constraint member ([the memory](../memory/feedback_artificial-constraint-relevance.md)). This
+  memorial follows.

@@ -96,3 +96,15 @@ Times are EDT, from the clock or an event's own stamp. The night's gate run for 
 - **21:32.** #12 is merged (`d240a48`), its branch and worktree deleted, and the main checkout brought up to the merge;
   the checker's 150 tests pass there. Only the main checkout remains, and the fork's branches are the schemas' branch,
   `main`, and the five from the working group's repository.
+
+**The Markov family begun.**
+- **21:40 to 21:42.** The owner answers the open questions (the rulings).
+- **21:43 to 21:56.** The bellman session confirms in its window and merges Bellman's truncated-lognormal draft at
+  21:56, with the uniform comparator, and files the parameter-condition defect. It reports that the Markov family's
+  three calibrations still carry the five keys #7 renamed, so Bellman refuses them (the defects).
+- **21:44 to 22:04.** A survey of the family lists what exists and what is missing (the results document, both
+  validators, the members) and sixteen open decisions. The HAFiscal and HARK sessions are asked their views. HARK's
+  reply of 21:55 settles the solver's side (the findings); HAFiscal's is awaited. On branch `markov-family`,
+  uncommitted: the calibrations' keys renamed, with a standing check of every filed calibration against its stage file,
+  and the checker's module for the family's stated member, `markov.py`, with its tests; the checker's 164 tests pass.
+- **22:04.** The owner's ruling on artificial constraints (the rulings), and this memorial.

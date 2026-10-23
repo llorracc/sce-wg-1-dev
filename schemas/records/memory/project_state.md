@@ -133,15 +133,17 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
 - in the HARK session: #1858 and #1862, which stay drafts; the tags on HARK's fork at the adapter's two pins,
   `sce-adapter/2026-10-22` and `sce-adapter/2026-10-22.2`, were made on 2026-10-22;
 - what goes to the working group's repository, and when;
-- in the bellman session: the uniform for Bellman's comparator, Bellman's draft for the truncated lognormal, and filing
-  Bellman's parameter-condition defect;
+- in the bellman session: nothing pending from the owner; Bellman's truncated lognormal and the uniform comparator merged
+  on 2026-10-22, and the parameter-condition defect is filed;
 
 Registering `w3id.org/sce` is not raised before a pull request from this fork is merged into econ-ark/sce-wg-1
 ([[feedback_w3id-not-yet]]).
 
 **Next work:**
+- the Markov family (ruled 21:42:05 on 2026-10-22), in collaboration with the HARK and HAFiscal sessions: its parameter
+  validator, members and checker first (begun on branch `markov-family`: the calibrations' keys and `markov.py`), then
+  its results document, validator and verification, then HARK's adapter for its chains;
 - dolo's adapter, written from the schemas, and the first comparison of two toolkits' results files;
-- the Markov family's results document, validator and members, with HARK's adapter extended to its chains;
 - the validators for the method, settings and request files; the survey's other classes;
 - the toy's level-4 gate run for the adapter.
 

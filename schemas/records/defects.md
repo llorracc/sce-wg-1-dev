@@ -137,3 +137,9 @@ Faults found in this project's own work, with their status.
   constraint itself, from the laws' infima, which gives the stated `a_Nat`; a change to HARK's solvers, asked of the
   HARK session. Until it lands the adapter keeps passing the stated limit. No member states `natural` yet. HARK's draft
   #1862 makes the change, and the adapter uses it since #12, merged at 21:32:14 on 2026-10-22.
+- **The Markov family's calibrations left on the old names.** #7 renamed the stage file's `h_x`, `π_eu_n`, `π_eu_r`,
+  `π_ue_n` and `π_ue_r` to `p_exit`, `sep_n`, `sep_r`, `find_n` and `find_r` (2026-10-21), but the three calibration
+  files for the dropout group's middle type kept the old keys, so Bellman refuses all three; with the five keys renamed,
+  all three calibrate. No test compared the family's calibration keys with its stage file's parameters. Found by the
+  bellman session on 2026-10-22. **Status:** fixed on the branch `markov-family`, with a standing check that each
+  calibration's keys are the stage file's parameters, for the family's first pull request.
