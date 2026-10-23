@@ -129,15 +129,18 @@ gain is ℷ + (1 − ℷ) c̃′(m̃), and every MPC the [results](results.md) r
   laws the employed state's lowest income is zero, since employed income e θ 𝐩 has infimum zero, and that state can
   follow every state, so every state's limit is zero; with truncated laws the limits are negative, can differ by state,
   and depend on the switch.
-- For one written form, a parameter file writes `a_Art` above the lowest of the natural limits `a_Nat(j)`, or the word
-  `natural`: an artificial limit at or below the lowest natural limit binds in no state.
+- For one written form, a parameter file writes `a_Art` no lower than the lowest of the natural limits `a_Nat(j)`, or
+  the word `natural`: an artificial limit below the lowest natural limit binds in no state. An artificial limit has an
+  effect only where it is relevant, strictly above the natural limit; one at the lowest natural limit, such as the
+  paper's 0 under lognormal laws, where every state's natural limit is 0, is valid and states the natural-constraint
+  member.
 
 ## Parameter domains
 
 β_i > 0 (the validity conditions bound it above); shares positive and summing to one within each group and across
 groups; ϱ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0 for each group; e > 0; ξ_u > 0 and ξ_x > 0; `sep` and `find` in [0, 1] for each
-regime; `p_exit` in [0, 1]; 0 ≤ ℷ < 1; `a_Art` ≤ 0 and above the lowest `a_Nat(j)`, or `natural`; the newborn's level
-law has a positive mean and a standard deviation of the log that may be zero.
+regime; `p_exit` in [0, 1]; 0 ≤ ℷ < 1; `a_Art` ≤ 0 and no lower than the lowest `a_Nat(j)`, or `natural`; the newborn's
+level law has a positive median and a standard deviation of the log that may be zero.
 
 ## The household's problem, as the stage file states it
 
@@ -239,34 +242,36 @@ method may be given for all or for one.
 
 A parameter file is YAML in the strict subset of `bst/1`. It holds the free parameters, under these names:
 - `crra` (ϱ), `survival` (ℒ), `return` (R), `splurge` (ℷ), and `borrowing_constraint` (`a_Art`, a number no greater than
-  0 and above the lowest natural limit `a_Nat(j)`, or the word `natural`);
+  0 and no lower than the lowest natural limit `a_Nat(j)`, or the word `natural`);
 - `shocks`, holding `permanent_shock` (the law of ψ) and `employed_shock` (the law of θ);
 - `regimes`, holding `recession: {exit_hazard}` (`p_exit`); the normal regime has no key, since it is absorbing;
 - `employment`, holding `benefit_quarters` (two for the stage file's chain), `job_finding: {normal, recession}` (`find`
   by regime), `income_employed` (e), `income_with_benefits` (ξ_u), `income_without_benefits` (ξ_x) and
   `unemployed_permanent_income` (P_u, one of `continues`, `grows` and `frozen`; never omitted);
 - `groups`, a list, each with `name`, `share`, `growth` (𝒢), `job_loss: {normal, recession}` (`sep` by regime),
-  `newborn_income: {mean, sd_log}` (the level law, a lognormal in the levels of the period's units) and `types`, a list
-  of `{beta, share}` in increasing order of `beta` with no repeat.
+  `newborn_income: {median, sd_log}` (the level law, a lognormal in the levels of the period's units, by its median and
+  the standard deviation of its log: HARK's exp(`pLogInitMean`) and `pLogInitStd`) and `types`, a list of `{beta,
+  share}` in increasing order of `beta` with no repeat.
 
 Every free parameter appears, and nothing is left to a toolkit's defaults. The paper's normal-times calibration in the
-family's standard world, with the laws the published code discretized:
+family's standard world, with the laws the published code discretized, the paper's estimated discount factors and the
+exact values of its published replication package (llorracc/HAFiscal-QE):
 
     family: bst-markov_ui-and-agg/1
     period: quarter
     crra: 2.0
-    splurge: 0.246
+    splurge: 0.24611389063967778
     survival: 0.99375
     return: 1.01
     borrowing_constraint: 0.0
     shocks:
-      permanent_shock: {LogNormal: {sd_log: 0.0548}}
-      employed_shock:  {LogNormal: {sd_log: 0.346}}
+      permanent_shock: {LogNormal: {sd_log: 0.05477225575051661}}
+      employed_shock: {LogNormal: {sd_log: 0.34641016151377546}}
     regimes:
-      recession: {exit_hazard: 0.1666666666666667}
+      recession: {exit_hazard: 0.16666666666666666}
     employment:
       benefit_quarters: 2
-      job_finding: {normal: 0.6666666666666667, recession: 0.25}
+      job_finding: {normal: 0.6666666666666666, recession: 0.25}
       income_employed: 1.0
       income_with_benefits: 0.7
       income_without_benefits: 0.5
@@ -274,31 +279,46 @@ family's standard world, with the laws the published code discretized:
     groups:
       - name: dropout
         share: 0.093
-        growth: 1.0036
-        job_loss: {normal: 0.062, recession: 0.051}
-        newborn_income: {mean: 6200.0, sd_log: 0.32}
+        growth: 1.0035525
+        job_loss: {normal: 0.061930783242258654, recession: 0.05120481927710843}
+        newborn_income: {median: 6.2, sd_log: 0.32}
         types:
-          - {beta: 0.943271, share: 0.142857142857142857}
-          - {beta: 0.950414, share: 0.142857142857142857}
-          - {beta: 0.957557, share: 0.142857142857142857}
-          - {beta: 0.964700, share: 0.142857142857142857}
-          - {beta: 0.971843, share: 0.142857142857142857}
-          - {beta: 0.978986, share: 0.142857142857142857}
-          - {beta: 0.986129, share: 0.142857142857142857}
+          - {beta: 0.44653399855870946, share: 0.14285714285714285}
+          - {beta: 0.537294922767899, share: 0.14285714285714285}
+          - {beta: 0.6280558469770885, share: 0.14285714285714285}
+          - {beta: 0.7188167711862781, share: 0.14285714285714285}
+          - {beta: 0.8095776953954676, share: 0.14285714285714285}
+          - {beta: 0.9003386196046571, share: 0.14285714285714285}
+          - {beta: 0.9910995438138467, share: 0.14285714285714285}
       - name: highschool
         share: 0.527
-        growth: 1.0045
-        job_loss: {normal: 0.031, recession: 0.024}
-        newborn_income: {mean: 11100.0, sd_log: 0.42}
-        types: [the seven points of 0.98051 ± 0.01676]
+        growth: 1.00453
+        job_loss: {normal: 0.030683403068340307, recession: 0.02412280701754386}
+        newborn_income: {median: 11.1, sd_log: 0.42}
+        types:
+          - {beta: 0.8676124136540987, share: 0.14285714285714285}
+          - {beta: 0.8880854923148899, share: 0.14285714285714285}
+          - {beta: 0.9085585709756809, share: 0.14285714285714285}
+          - {beta: 0.9290316496364721, share: 0.14285714285714285}
+          - {beta: 0.9495047282972633, share: 0.14285714285714285}
+          - {beta: 0.9699778069580544, share: 0.14285714285714285}
+          - {beta: 0.9904508856188455, share: 0.14285714285714285}
       - name: college
-        share: 0.380
-        growth: 1.0049
-        job_loss: {normal: 0.018, recession: 0.014}
-        newborn_income: {mean: 14500.0, sd_log: 0.53}
-        types: [the seven points of 0.99160 ± 0.00480]
+        share: 0.38
+        growth: 1.004895
+        job_loss: {normal: 0.018499486125385406, recession: 0.01427061310782241}
+        newborn_income: {median: 14.5, sd_log: 0.53}
+        types:
+          - {beta: 0.9705373193269193, share: 0.14285714285714285}
+          - {beta: 0.9745270936697294, share: 0.14285714285714285}
+          - {beta: 0.9785168680125396, share: 0.14285714285714285}
+          - {beta: 0.9825066423553497, share: 0.14285714285714285}
+          - {beta: 0.9864964166981598, share: 0.14285714285714285}
+          - {beta: 0.9904861910409699, share: 0.14285714285714285}
+          - {beta: 0.99447596538378, share: 0.14285714285714285}
 
-The same file with `unemployed_permanent_income: frozen` is the member that reproduces the published numbers; with
+The same file with `unemployed_permanent_income: frozen` is the member that reproduces the published numbers,
+[`members/paper-published.yaml`](members/paper-published.yaml); with
 `TruncatedLogNormal` laws at ±3 it is the truncated variant the shock-law document recommends. The recession's job-loss
 probabilities are below the normal ones, which is consistent: with job finding falling from two thirds to a quarter, the
 dropout group's steady-state unemployment rate roughly doubles, as the paper states.
@@ -308,7 +328,8 @@ dropout group's steady-state unemployment rate roughly doubles, as the paper sta
 One group with the `bst/1` types and `growth` = 𝒢; `job_loss` = ℘ and `job_finding` = 1 − ℘ in both regimes, so that the
 chain is unemployment with probability ℘ every quarter whatever the previous state; `income_with_benefits` =
 `income_without_benefits` = the `bst/1` member's ξ_u; `income_employed` = (1 − ℘ξ_u)/(1 − ℘); `splurge` 0;
-`unemployed_permanent_income` `continues`; any `benefit_quarters`; `newborn_income: {mean: 1.0, sd_log: 0.0}`; and the
-recession's exit hazard irrelevant, since its parameters equal the normal ones. The two families then produce the same
-rule and the same stationary population exactly, the newborn convention being the same. That cross-family consistency
-test belongs in the suite.
+`unemployed_permanent_income` `continues`; `benefit_quarters` 2; `newborn_income: {median: 1.0, sd_log: 0.0}`; and the
+recession's parameters equal to the normal ones, with an exit hazard of 1, so that the reduction has one written form
+and the recession changes nothing. [`members/toy-as-hafiscal.yaml`](members/toy-as-hafiscal.yaml) is `bst/1`'s toy
+written this way. The two families then produce the same rule and the same stationary population exactly, the newborn
+convention being the same. That cross-family consistency test belongs in the suite.

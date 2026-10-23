@@ -1,0 +1,35 @@
+# paper-published's high-school group alone, the paper's largest group: one group of seven types, HAFiscal's own member
+# for quick development. Its values are paper-published's.
+family: bst-markov_ui-and-agg/1
+period: quarter
+crra: 2.0
+splurge: 0.24611389063967778
+survival: 0.99375
+return: 1.01
+borrowing_constraint: 0.0
+shocks:
+  permanent_shock: {LogNormal: {sd_log: 0.05477225575051661}}
+  employed_shock: {LogNormal: {sd_log: 0.34641016151377546}}
+regimes:
+  recession: {exit_hazard: 0.16666666666666666}
+employment:
+  benefit_quarters: 2
+  job_finding: {normal: 0.6666666666666666, recession: 0.25}
+  income_employed: 1.0
+  income_with_benefits: 0.7
+  income_without_benefits: 0.5
+  unemployed_permanent_income: frozen
+groups:
+  - name: highschool
+    share: 1.0
+    growth: 1.00453
+    job_loss: {normal: 0.030683403068340307, recession: 0.02412280701754386}
+    newborn_income: {median: 11.1, sd_log: 0.42}
+    types:
+      - {beta: 0.8676124136540987, share: 0.14285714285714285}
+      - {beta: 0.8880854923148899, share: 0.14285714285714285}
+      - {beta: 0.9085585709756809, share: 0.14285714285714285}
+      - {beta: 0.9290316496364721, share: 0.14285714285714285}
+      - {beta: 0.9495047282972633, share: 0.14285714285714285}
+      - {beta: 0.9699778069580544, share: 0.14285714285714285}
+      - {beta: 0.9904508856188455, share: 0.14285714285714285}

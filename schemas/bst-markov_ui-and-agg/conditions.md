@@ -65,8 +65,10 @@ in which the artificial limit binds, since the first must leave room for the sec
 A member that fails any of these is rejected:
 - the parameter domains of the [model schema](model.md) and the rules of the [shock laws](../shock-laws.md); the shares
   summing to one within each group and across groups;
-- `a_Art` ≤ 0 and, for one written form, above the lowest of the natural limits `a_Nat(j)`, since an artificial limit at
-  or below it binds in no state and describes the same model as `natural`; or `natural`, for no artificial limit;
+- `a_Art` ≤ 0 and, for one written form, no lower than the lowest of the natural limits `a_Nat(j)`, since an artificial
+  limit below it binds in no state and describes the same model as `natural`; or `natural`, for no artificial limit. An
+  artificial limit is relevant only where it lies strictly above the natural limit; one at the lowest natural limit,
+  such as the paper's 0 under lognormal laws, is valid and has no effect;
 - for every group and type, the FVAC and the RIC or the WRIC of the table below.
 
 BST's existence theorem is for independent income with bounded support and ϱ > 1. For the chain the family requires the

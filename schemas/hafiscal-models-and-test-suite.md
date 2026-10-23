@@ -27,24 +27,30 @@ for each of 21 types: three education groups times seven discount-factor atoms.
 **Population.**
 - Three education groups: dropout, high school and college, with population shares 9.3, 52.7 and 38.0 percent (SCF 2004).
 - Within each group, seven discount-factor types with equal shares, the equiprobable points of a uniform distribution on
-  [β − ∇, β + ∇], the group's own center and half-width: β + ∇ (2i − 6)/7 for i = 0, …, 6. The published estimates are 0.9647 ± 0.025 (dropout),
-  0.98051 ± 0.01676 (high school) and 0.99160 ± 0.00480 (college), in the public code's `EstimParameters.py`.
+  [β − ∇, β + ∇], the group's own center and half-width: β + ∇ (2i − 6)/7 for i = 0, …, 6. The paper's estimates, (β,
+  ∇), are (0.7188167711862781, 0.3176632347321634) for dropouts, (0.9290316496364721, 0.07165577531276898) for high
+  school and (0.9825066423553497, 0.013964210199835361) for college, in the published package's
+  `Results/DiscFacEstim_CRRA_2.0_R_1.01.txt`, which its `Parameters.py` reads. The values in its `EstimParameters.py`,
+  0.9647 ± 0.025, 0.98051 ± 0.01676 and 0.99160 ± 0.00480, are defaults carried over from the Pandemic paper's code,
+  which an earlier draft of this note took for the estimates (corrected 2026-10-22, on the HAFiscal-Latest session's
+  reading).
 - Perpetual youth: a quarterly survival probability ℒ = 1 − 1/160, the same for every household; no annuities; no
   bequest motive. A dead household is replaced by a newborn of the same group and type.
-- A newborn starts with no assets and draws its permanent income level from a lognormal whose mean and log standard
-  deviation depend on its group: quarterly means of $6,200, $11,100 and $14,500, with log standard deviations 0.32, 0.42
-  and 0.53. In ratios to permanent income this draw is invisible; it matters for every statistic in levels, such as the
-  wealth Lorenz curve the estimation targets, and for the means-tested check.
+- A newborn starts with no assets and draws its permanent income level from a lognormal whose median and log standard
+  deviation depend on its group: quarterly medians of $6,200, $11,100 and $14,500, with log standard deviations 0.32,
+  0.42 and 0.53. The published code sets HARK's mean of log permanent income to the logs of these values, so they are
+  medians, though the paper's text calls them averages. In ratios to permanent income this draw is invisible; it matters
+  for every statistic in levels, such as the wealth Lorenz curve the estimation targets, and for the means-tested check.
 
 **The order of events in a quarter**, for a household of one group:
 1. The employment state j is drawn from the group's chain.
-2. The permanent shock: 𝐩 = 𝒢 ψ 𝐩_{−1}, with 𝒢 the group's growth factor, 1.0036, 1.0045 and 1.0049 by group, and ψ
-   mean-one lognormal with σ_ψ = 0.0548.
-3. Income: 𝐲 = θ 𝐩 if employed, with θ mean-one lognormal and σ_θ = 0.346, drawn only in that state; ξ_u 𝐩 = 0.7 𝐩 with
+2. The permanent shock: 𝐩 = 𝒢 ψ 𝐩_{−1}, with 𝒢 the group's growth factor, 1 + g/4 with g = 0.01421, 0.01812 and
+   0.01958, that is 1.0035525, 1.00453 and 1.004895 by group, and ψ mean-one lognormal with σ_ψ = √0.003.
+3. Income: 𝐲 = θ 𝐩 if employed, with θ mean-one lognormal and σ_θ = √0.12, drawn only in that state; ξ_u 𝐩 = 0.7 𝐩 with
    benefits; ξ_x 𝐩 = 0.5 𝐩 after they expire. Employed income is not rescaled, so the unconditional mean of income
    relative to 𝐩 is below one.
 4. Market resources 𝐦 = R 𝐚_{−1} + 𝐲, with R = 1.01.
-5. The splurge: 𝐜_sp = ℷ 𝐲 is consumed mechanically, with ℷ about a quarter (0.246 in the paper's text).
+5. The splurge: 𝐜_sp = ℷ 𝐲 is consumed mechanically, with ℷ = 0.24611389063967778, estimated in the paper's first step.
 6. The household chooses 𝐜_opt, whose utility is CRRA with ϱ = 2.
 7. End-of-period assets 𝐚 = 𝐦 − 𝐜_sp − 𝐜_opt ≥ 0: no borrowing.
 8. Death with probability 1 − ℒ; replacement by a newborn.
@@ -242,60 +248,14 @@ exactly (below).
 - Survival is a constant ℒ at every age, in the solution and in the simulation: perpetual youth with no maximum age. A
   toolkit's maximum-age setting (HARK's `T_age`) must be off.
 
-**A parameter file**, with the paper's normal-times calibration and the laws as the published code discretized them:
+**A parameter file** with the paper's normal-times calibration is in the family's model schema,
+[`bst-markov_ui-and-agg/model.md`](bst-markov_ui-and-agg/model.md), "The parameter file", and the member that reproduces
+the published numbers is [`paper-published`](bst-markov_ui-and-agg/members/paper-published.yaml).
 
-```yaml
-family: bst-markov_ui-and-agg/1
-period: quarter
-crra: 2.0
-splurge: 0.246
-survival: 0.99375
-return: 1.01
-borrowing_constraint: 0.0
-shocks:
-  permanent_shock: {LogNormal: {sd_log: 0.0548}}
-  employed_shock:  {LogNormal: {sd_log: 0.346}}
-regimes:
-  recession: {exit_hazard: 0.1666666666666667}
-employment:
-  benefit_quarters: 2
-  job_finding: {normal: 0.6666666666666667, recession: 0.25}
-  income_employed: 1.0
-  income_with_benefits: 0.7
-  income_without_benefits: 0.5
-  unemployed_permanent_income: continues
-groups:
-  - name: dropout
-    share: 0.093
-    growth: 1.0036
-    job_loss: {normal: 0.062, recession: 0.051}
-    newborn_income: {mean: 6200.0, sd_log: 0.32}
-    types:
-      - {beta: 0.943271, share: 0.142857142857142857}
-      - {beta: 0.950414, share: 0.142857142857142857}
-      - {beta: 0.957557, share: 0.142857142857142857}
-      - {beta: 0.964700, share: 0.142857142857142857}
-      - {beta: 0.971843, share: 0.142857142857142857}
-      - {beta: 0.978986, share: 0.142857142857142857}
-      - {beta: 0.986129, share: 0.142857142857142857}
-  - name: highschool
-    share: 0.527
-    growth: 1.0045
-    job_loss: {normal: 0.031, recession: 0.024}
-    newborn_income: {mean: 11100.0, sd_log: 0.42}
-    types: [the seven points of 0.98051 ± 0.01676]
-  - name: college
-    share: 0.380
-    growth: 1.0049
-    job_loss: {normal: 0.018, recession: 0.014}
-    newborn_income: {mean: 14500.0, sd_log: 0.53}
-    types: [the seven points of 0.99160 ± 0.00480]
-```
-
-Shares within a group sum to one, and group shares sum to one. The file lists the β values as numbers: how they were chosen is
-estimation, the group's layer, not the family's. The member above, solved with 7 nodes per shock, is the paper's calibration in the family's standard world, and with the
-switch at `frozen` it is the member that reproduces the published numbers; the
-same file with `TruncatedLogNormal` laws at ±3 is the truncated variant the shock-law spec recommends.
+Shares within a group sum to one, and group shares sum to one. The file lists the β values as numbers: how they were
+chosen is estimation, the group's layer, not the family's. That calibration, solved with 7 nodes per shock, is the
+paper's in the family's standard world, and with the switch at `frozen` it is the member that reproduces the published
+numbers; the same file with `TruncatedLogNormal` laws at ±3 is the truncated variant the shock-law spec recommends.
 
 **A `bst/1` member as a `bst-markov_ui-and-agg/1` member.** One group with the `bst/1` types; `growth` = 𝒢; `job_loss` =
 ℘ and `job_finding` = 1 − ℘, so that the chain is i.i.d. with unemployment probability ℘ every quarter;

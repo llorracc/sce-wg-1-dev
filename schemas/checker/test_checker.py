@@ -327,6 +327,24 @@ def test_natural_keyword_resolves_to_the_natural_constraint():
     assert not member.report()["types"][0]["domain"]["kink"]
 
 
+@pytest.mark.parametrize("family, stage", [("bst-1", "buffer_stock.bl"), ("bst-markov_ui-and-agg", "bst_markov_ui.bl")])
+def test_every_filed_calibration_names_its_stage_file_s_parameters(family, stage):
+    # A calibration binds the stage file's parameters by name, so a renamed parameter must be renamed in every
+    # calibration filed beside it; the declarations are the lines `name : domain :: [...]`, not the sets or the
+    # functions.
+    import re
+    import yaml
+
+    folder = MEMBERS.parent.parent / family / "bellman"
+    text = (folder / stage).read_text(encoding="utf-8")
+    parameters = {m.group(1) for m in re.finditer(r"^([^\s(]+)\s+:\s[^=\n][^\n]*::\s*\[", text, re.M)}
+    files = sorted(folder.glob("*.yml"))
+    assert files, folder
+    for f in files:
+        keys = set(yaml.safe_load(f.read_text(encoding="utf-8"))["calibration"])
+        assert keys == parameters, (f.name, sorted(keys - parameters), sorted(parameters - keys))
+
+
 def test_bellman_calibration_matches_the_filed_one():
     import yaml
 
