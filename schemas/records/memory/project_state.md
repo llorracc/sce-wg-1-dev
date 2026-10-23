@@ -1,12 +1,12 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the fourth memorial of 2026-10-22, after the fork's twelve pull requests merged"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 22:45 on 2026-10-22, after the fork's thirteen pull requests merged"
 metadata:
   type: project
 ---
 
-**On the schemas' branch** (`buffer-stock-schema-work_CDC`, pushed). It holds the merged work of the fork's twelve pull
-requests and `main`'s ontology. Nothing has been proposed to the working group's repository yet.
+**On the schemas' branch** (`buffer-stock-schema-work_CDC`, pushed). It holds the merged work of the fork's thirteen
+pull requests and `main`'s ontology. Nothing has been proposed to the working group's repository yet.
 - **Shared:**
   - `shock-laws.md` with its validator;
   - `numerics.md` (method, settings and suite files, with the stage file's targets as a method file's addresses, under
@@ -28,9 +28,10 @@ requests and `main`'s ontology. Nothing has been proposed to the working group's
   - `parameters.schema.json`;
   - the members `library`, `toy` and `toy-untruncated`;
   - `bellman/buffer_stock.bl`, with the community library's calibration.
-- **`bst-markov_ui-and-agg/1`:** its stage file, and its model and conditions documents. Its results, validator and members
-  are not written.
-- **`checker/`:** 150 tests. It holds:
+- **`bst-markov_ui-and-agg/1`:** its stage file with three calibrations, its model and conditions documents, its
+  parameter validator, the members `toy-as-hafiscal`, `paper-one-group` and `paper-published` at the paper's published
+  values, and the checker's module `markov.py` for its stated member (#13). Its results document is not written.
+- **`checker/`:** 175 tests. It holds:
   - the strict loader and the hash;
   - the laws' closed forms in log space;
   - the member checker, with the four lower-tail cases;
@@ -55,6 +56,7 @@ requests and `main`'s ontology. Nothing has been proposed to the working group's
 | 10 | registry v8.0.0: ξ_u and ξ_x, j for the employment state, ℘'s gloss, the design note's replacement rates | 2026-10-22 16:02:08, `613a9fb` |
 | 11 | each method where the stage gives it a place; HARK's Rosetta Stone for its Markov adapter | 2026-10-22 16:02:43, `a3f897a` |
 | 12 | HARK's adapter under `natural`, pinned to HARK's draft #1862 | 2026-10-22 21:32:14, `d240a48` |
+| 13 | the Markov family's parameter validator, first members and checker, at the paper's published values | 2026-10-22 22:44:03, `2910efe` |
 
 The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. With everything merged, the checker's
 150 tests and the ontology's 12 pass.
@@ -140,9 +142,9 @@ Registering `w3id.org/sce` is not raised before a pull request from this fork is
 ([[feedback_w3id-not-yet]]).
 
 **Next work:**
-- the Markov family (ruled 21:42:05 on 2026-10-22), in collaboration with the HARK and HAFiscal sessions: its parameter
-  validator, members and checker first (begun on branch `markov-family`: the calibrations' keys and `markov.py`), then
-  its results document, validator and verification, then HARK's adapter for its chains;
+- the Markov family (ruled 21:42:05 on 2026-10-22), in collaboration with the HARK and HAFiscal sessions: its results
+  document, validator and verification next, to the scope of 22:11:25, then HARK's adapter for its chains; its
+  parameter validator, first members and checker are merged (#13);
 - dolo's adapter, written from the schemas, and the first comparison of two toolkits' results files;
 - the validators for the method, settings and request files; the survey's other classes;
 - the toy's level-4 gate run for the adapter.

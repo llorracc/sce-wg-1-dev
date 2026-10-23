@@ -30,6 +30,9 @@ metadata:
 - HARK pull request econ-ark/HARK#1855 (draft): the survival probability in the risk-modified finite-value-of-autarky factor.
 - HARK, local branches held by the HARK session, unpushed: the distribution-bounds fixes, and a `NewbornPermShk` flag so that
   a newborn's permanent income is its initial draw, bst/1's convention.
+- HAFiscal's published replication package, llorracc/HAFiscal-QE (public): `Results/DiscFacEstim_CRRA_2.0_R_1.01.txt`
+  for the estimated discount factors, `EstimParameters.py` for the defaults the schemas had mistaken for them,
+  `Parameters.py` for how the types are built. The Markov family's members take their values from it (#13).
 - The community library's buffer-stock model: QuantEcon community-library pull request 5, the `library` member of bst/1.
   Its HARK implementation now lives at `solutions/buffer-stock/001-hark-egm/` in QuantEcon/community-library, moved there
   by a later pull request of the library; it uses HARK alone.

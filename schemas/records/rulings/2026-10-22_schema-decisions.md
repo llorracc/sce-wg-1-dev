@@ -100,3 +100,17 @@ the stated laws' natural limit (the defects); no member states `natural` yet.
   has no effect, so a written `a_Art` equal to the natural limit, such as HAFiscal's 0.0 under lognormal laws, is valid
   and means the natural-constraint member ([the memory](../memory/feedback_artificial-constraint-relevance.md)). This
   memorial follows.
+
+**The Markov family's first pull request:**
+- **22:11:25** (question tool, on the proposal after HAFiscal's answers). The family's documents, calibrations and
+  members take the paper's published estimates and the exact values of its public replication package, in place of the
+  Pandemic paper's defaults; the first results document carries what the paper uses (the wealth statistics by group and
+  pooled, the paper's lottery-year MPC, the rule and limits by state, the employment shares and the effective member),
+  the targets, W, F, M and the recession's rule waiting; the first members are `toy-as-hafiscal`, `paper-one-group` and
+  `paper-published`. Asked how the newborn's income should be stated, he asked what HARK does.
+- **22:12:16** (question tool). HARK draws the newborn's permanent income as a lognormal with mean of log
+  `pLogInitMean`, so the file states it by its median and the standard deviation of its log, `{median, sd_log}`.
+- **22:25:50.** The pull request committed and pushed as a draft: #13, opened at 22:26:18.
+- **22:43:40 and 22:43:48.** #13 merged, at 22:44:03 (`2910efe`), and the memorial pushed, after it was replayed on the
+  merge (`873fd49`); #13's branch and worktree deleted, as for #12.
+- **22:44:50.** This memorial, and its push.

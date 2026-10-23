@@ -108,3 +108,18 @@ Times are EDT, from the clock or an event's own stamp. The night's gate run for 
   uncommitted: the calibrations' keys renamed, with a standing check of every filed calibration against its stage file,
   and the checker's module for the family's stated member, `markov.py`, with its tests; the checker's 164 tests pass.
 - **22:04.** The owner's ruling on artificial constraints (the rulings), and this memorial.
+- **22:07.** The HAFiscal session answers (the findings): the documents' discount factors are the Pandemic paper's
+  defaults, not the paper's estimates; the newborn's "mean" is a median; what the paper's estimation uses; the paper's
+  MPC moment; the splurge's reading; welfare simulated in the experiments.
+- **22:11 to 22:25.** The owner's answers (the rulings). The parameter validator, the three members and the corrected
+  values are written; the checker's 175 tests pass; at 22:19 the bellman session confirms that Bellman calibrates the
+  three corrected calibrations and methodizes `!exact-markov` on `E_reg_j_ψ_θ`.
+- **22:26 to 22:44.** #13 opens as a draft and is merged; the memorial `873fd49` is pushed; the HARK and HAFiscal
+  sessions are told.
+
+**State at the memorial of 22:45.**
+- The fork's pull requests #1 to #13 are merged; none is open, and only the main checkout remains.
+- **Next:** the Markov family's results document, to the scope ruled at 22:11:25, its draft to the HAFiscal session
+  first; then HARK's adapter for its chains, its plan to the HARK session first.
+- **Open:** what goes to the working group's repository, after dolo's adapter; the design note's member table, which
+  still names the family `hafiscal/1`, and its "Conditions" paragraph, each for a proposal.

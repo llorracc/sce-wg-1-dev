@@ -141,5 +141,10 @@ Faults found in this project's own work, with their status.
   `π_ue_n` and `π_ue_r` to `p_exit`, `sep_n`, `sep_r`, `find_n` and `find_r` (2026-10-21), but the three calibration
   files for the dropout group's middle type kept the old keys, so Bellman refuses all three; with the five keys renamed,
   all three calibrate. No test compared the family's calibration keys with its stage file's parameters. Found by the
-  bellman session on 2026-10-22. **Status:** fixed on the branch `markov-family`, with a standing check that each
-  calibration's keys are the stage file's parameters, for the family's first pull request.
+  bellman session on 2026-10-22. **Status:** fixed in #13, merged at 22:44:03 on 2026-10-22, with a standing check that
+  each calibration's keys are the stage file's parameters.
+- **The Pandemic paper's defaults taken for the paper's estimates.** The design note, the model schema's example file
+  and the three calibrations carried the discount factors 0.9647 ± 0.025, 0.98051 ± 0.01676 and 0.99160 ± 0.00480, read
+  from `EstimParameters.py`, as the paper's estimates, and rounded growth rates, spreads, splurge and job-loss rates.
+  Found by the HAFiscal session on 2026-10-22. **Status:** fixed in #13, merged at 22:44:03 on 2026-10-22, with the
+  published values; the calibration names' defect was fixed in the same pull request.
