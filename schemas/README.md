@@ -99,8 +99,12 @@ The family `bst-markov_ui-and-agg/1`, HAFiscal's household problem, begun stage-
 - [`bst-markov_ui-and-agg/parameters.schema.json`](bst-markov_ui-and-agg/parameters.schema.json): the parameter file's
   validator, with the members under [`bst-markov_ui-and-agg/members/`](bst-markov_ui-and-agg/members/): `bst/1`'s toy
   written in the family, the paper's high-school group alone, and the paper's published calibration. The checker's
-  module for the family, `checker/markov.py`, computes the stated member's conditions, limits and implications. Its
-  results schema is not yet written; the design is in the note below.
+  module for the family, `checker/markov.py`, computes the stated member's conditions, limits and implications, and
+  verifies a results file.
+- [`bst-markov_ui-and-agg/results.md`](bst-markov_ui-and-agg/results.md): the results schema's first version, with what
+  the paper uses: the rule and the constraint in force by state, the employment shares, household wealth by group and
+  pooled, in ratios and in levels, and the paper's MPC;
+  [`results.schema.json`](bst-markov_ui-and-agg/results.schema.json) is its validator.
 
 Design notes:
 - [`foundation.md`](foundation.md): the plan for making the Bellman-SYM stage file the foundation of a family's statement,

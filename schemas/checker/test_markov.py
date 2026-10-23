@@ -2,8 +2,8 @@
 
     uv run --with jsonschema --with pyyaml --with scipy --with numpy --with pytest pytest -q schemas/checker
 
-A bst/1 member written as the Markov family's model schema describes ("A bst/1 member as a member of this family") solves
-the same problem, so its conditions, its limits and its tail exponents must be bst/1's.
+A bst/1 member written as the Markov family's model schema describes ("A bst/1 member as a member of this family")
+solves the same problem, so its conditions, its limits and its tail exponents must be bst/1's.
 """
 
 from __future__ import annotations
@@ -158,7 +158,8 @@ def test_toy_as_hafiscal_is_the_toy_written_in_the_family():
     numbers, words = leaves(filed), leaves(written)
     assert {k: v for k, v in numbers.items() if isinstance(v, float)} == pytest.approx(
         {k: v for k, v in words.items() if isinstance(v, float)}, abs=1e-15)
-    assert {k: v for k, v in numbers.items() if isinstance(v, str)} == {k: v for k, v in words.items() if isinstance(v, str)}
+    assert ({k: v for k, v in numbers.items() if isinstance(v, str)}
+            == {k: v for k, v in words.items() if isinstance(v, str)})
 
 
 def leaves(data, prefix=""):
@@ -193,8 +194,9 @@ def test_the_dropout_calibrations_are_paper_published_s_middle_type(world):
     # The Bellman calibrations state one type of one group in the stage file's names; their numbers must be the member's
     import yaml
 
-    calibration = yaml.safe_load((SCHEMAS / "bst-markov_ui-and-agg" / "bellman"
-                                  / f"hafiscal-dropout-middle-type-{world}.yml").read_text(encoding="utf-8"))["calibration"]
+    folder = SCHEMAS / "bst-markov_ui-and-agg" / "bellman"
+    text = (folder / f"hafiscal-dropout-middle-type-{world}.yml").read_text(encoding="utf-8")
+    calibration = yaml.safe_load(text)["calibration"]
     data = load_strict((FAMILY_MEMBERS / "paper-published.yaml").read_text())
     group = next(g for g in data["groups"] if g["name"] == "dropout")
     employment, laws = data["employment"], data["shocks"]
@@ -207,3 +209,107 @@ def test_the_dropout_calibrations_are_paper_published_s_middle_type(world):
                 "sep_r": group["job_loss"]["recession"], "find_n": employment["job_finding"]["normal"],
                 "find_r": employment["job_finding"]["recession"]}
     assert calibration == expected
+
+
+def consistent_results(member: markov.MarkovMember) -> dict:
+    """A results file whose effective member is the stated member: the stated values, reported as a toolkit would report
+    its own, with made-up but coherent statistics for the rest."""
+    probs = ["0.01", "0.05", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "0.95", "0.99", "0.999",
+             "1"]
+    points = [0.5, 1.0, 2.0]
+    x = 0.2                                             # a made-up mean MPC, and the paper's MPC of a population at it
+    mpc = {"mean": float(markov.paper_mpc(x, member.splurge)), "mean_mpc": x}
+    groups = []
+    for g in member.groups:
+        E = g.expectations()
+        natural, in_force = g.limits(None), g.limits(member.a_art_value())
+        by_state = {s: {k: float(E[k][j]) for k in markov.STATE_KEYS} for j, s in enumerate(markov.STATES)}
+        types = []
+        for t in g.types:
+            conditions = {}
+            for c in member.factors(g, t["beta"]):
+                if c["name"] == "GIC-Harmenberg":
+                    conditions[c["name"]] = {"status": "not computed"}
+                elif "by_state" in c:
+                    conditions[c["name"]] = {"by_state": {e["state"]: {k: e[k] for k in ("factor", "bound", "holds")}
+                                                          for e in c["by_state"]}}
+                else:
+                    conditions[c["name"]] = {k: c[k] for k in ("factor", "bound", "holds")}
+            mu = g.employment_marginal()
+            types.append({
+                "beta": t["beta"], "share": t["share"], "conditions": conditions, "comparison_points": points,
+                "rule": {s: {"m": points + [0.1], "c": [0.4, 0.7, 1.1, 0.1], "mpc": [0.5, 0.3, 0.2, 1.0]}
+                         for s in markov.STATES},
+                "exported_rule": {s: {"m": [0.1, 1.0], "c": [0.1, 0.7], "range": [0.1, 1.0]} for s in markov.STATES},
+                "employment_shares": {s: float(mu[j]) for j, s in enumerate(markov.STATES)},
+                "wealth": {"gl": {p: 0.1 * float(p) for p in probs}, "median": 0.4},
+                "paper_mpc": mpc,
+                "euler_residuals": {"by_state": {s: {"r": [1e-6, -1e-6, 0.0], "max_abs": 1e-6} for s in markov.STATES},
+                                    "max_abs": 1e-6, "expectation_method": "gauss-legendre", "expectation_precision": 1e-9},
+                "stationarity_residual": 1e-9})
+        groups.append({
+            "name": g.name,
+            "effective_member": {
+                "chain": {"normal": g.P.tolist(),
+                          "recession": markov.chain(g.sep["recession"], member.find["recession"]).tolist()},
+                "by_state": by_state, "theta_mean": float(member.theta.moment(1.0)),
+                "derived": {"natural_limit": {s: (None if math.isinf(natural[j]) else float(natural[j]))
+                                              for j, s in enumerate(markov.STATES)},
+                            "constraint_in_force": {s: float(in_force[j]) for j, s in enumerate(markov.STATES)},
+                            "worst_income": {s: float(E["psi_lowest"][j] * E["income_lowest"][j])
+                                             for j, s in enumerate(markov.STATES)}}},
+            "types": types,
+            "levels": {"gl": {"0.2": 0.1, "0.4": 0.8, "0.6": 2.5, "0.8": 6.0, "1": 14.0}, "median_ratio": 0.4,
+                       "paper_mpc": mpc}})
+    return {"family": "bst-markov_ui-and-agg/1", "parameter_file_sha256": member.hash, "method_file_sha256": "0" * 64,
+            "settings_sha256": "0" * 64, "request_file_sha256": "0" * 64,
+            "toolkit": {"name": "test", "version": "0"}, "provenance": {"hardware": "test", "threads": 1},
+            "groups": groups,
+            "pooled": {"levels": {"gl": {"0.25": 0.2, "0.5": 1.5, "0.75": 4.0, "1": 14.0}, "paper_mpc": mpc,
+                                  "paper_mpc_by_quartile": [mpc, mpc, mpc, mpc]}}}
+
+
+@pytest.mark.parametrize("name", ["toy-as-hafiscal", "paper-one-group", "paper-published"])
+def test_a_consistent_report_validates_and_verifies(name):
+    member = markov.load_member(FAMILY_MEMBERS / f"{name}.yaml")
+    results = consistent_results(member)
+    assert markov.validate_results(results) == []
+    assert member.verify_results(results) == []
+
+
+def _first_type(d):
+    return d["groups"][0]["types"][0]
+
+
+@pytest.mark.parametrize("change, problem", [
+    (lambda d: d.update(parameter_file_sha256="1" * 64), "parameter_file_sha256"),
+    (lambda d: d["groups"][0]["effective_member"]["chain"]["normal"][0].__setitem__(0, 0.5), "chain/normal"),
+    (lambda d: d["groups"][0]["effective_member"]["derived"]["constraint_in_force"].update(E=-1.0),
+     "constraint_in_force/E"),
+    (lambda d: _first_type(d)["conditions"]["FVAC"].update(factor=0.5), "FVAC/factor"),
+    (lambda d: _first_type(d)["conditions"]["GIC-Mod"]["by_state"]["X"].update(holds=False), "GIC-Mod/X/holds"),
+    (lambda d: _first_type(d)["employment_shares"].update(E=0.9), "employment_shares/E"),
+    (lambda d: _first_type(d)["paper_mpc"].update(mean=0.99), "paper_mpc/mean"),
+    (lambda d: _first_type(d)["rule"]["U_1"].update(m=[9.0, 9.1, 9.2, 9.3]), "rule/U_1/m"),
+    (lambda d: d["groups"][0]["levels"]["gl"].update({"1": None}), "levels/gl/1"),
+])
+def test_an_inconsistent_report_is_caught(change, problem):
+    member = markov.load_member(FAMILY_MEMBERS / "paper-one-group.yaml")
+    results = consistent_results(member)
+    change(results)
+    assert markov.validate_results(results) == []
+    found = member.verify_results(results)
+    assert any(problem in p for p in found), found
+
+
+def test_a_representation_s_bottom_nodes_are_not_its_lowest_values():
+    # A toolkit that reports its lowest nodes, above the truncated laws' infima, in place of the infima its
+    # representation carries, is caught: its natural limits would then move with the number of nodes
+    member = markov.load_member(FAMILY_MEMBERS / "toy-as-hafiscal.yaml")
+    results = consistent_results(member)
+    eff = results["groups"][0]["effective_member"]
+    for s in markov.STATES:
+        eff["by_state"][s]["psi_lowest"] *= 1.05
+    found = member.verify_results(results)
+    assert any("psi_lowest" in p and "laws'" in p for p in found), found
+    assert any("natural_limit" in p for p in found), found

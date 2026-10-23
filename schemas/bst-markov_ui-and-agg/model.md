@@ -203,8 +203,9 @@ stimulus check, need the distribution of 𝐩 itself, which depends on the group
 survival; the [results](results.md) say what is reported in levels.
 
 **Population welfare** of a type is W_i = E[v_i(m, j, normal)] under its stationary population, with the value of the
-household's total consumption, splurge included; pooled welfare weights types by their population weights. The results
-also report the mean felicity and the mean marginal utility; [conditions](conditions.md) says when each is finite.
+household's total consumption, splurge included; pooled welfare weights types by their population weights. It, the
+mean felicity and the mean marginal utility are for a later version of the [results](results.md), whose first carries
+what the paper uses; [conditions](conditions.md) says when each is finite.
 
 ## Derived parameters
 
@@ -317,8 +318,9 @@ exact values of its published replication package (llorracc/HAFiscal-QE):
           - {beta: 0.9904861910409699, share: 0.14285714285714285}
           - {beta: 0.99447596538378, share: 0.14285714285714285}
 
-The same file with `unemployed_permanent_income: frozen` is the member that reproduces the published numbers,
-[`members/paper-published.yaml`](members/paper-published.yaml); with
+The same file with `unemployed_permanent_income: frozen` is the member in the world of the published numbers,
+[`members/paper-published.yaml`](members/paper-published.yaml), which reproduces them up to the published estimation's
+finite simulation from newborns and its own newborn convention (the member's description); with
 `TruncatedLogNormal` laws at ±3 it is the truncated variant the shock-law document recommends. The recession's job-loss
 probabilities are below the normal ones, which is consistent: with job finding falling from two thirds to a quarter, the
 dropout group's steady-state unemployment rate roughly doubles, as the paper states.
