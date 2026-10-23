@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "bst-markov_ui-and-agg/1 parameter file",
+  "description": "One member of the family bst-markov_ui-and-agg/1, HAFiscal's household problem, as model.md names its free parameters, in BST's notation. Draft.",
+  "$comment": "This validator checks names, types and ranges. The checker (markov.py) checks the rest: the shares summing to one within each group and across groups, the types in increasing order of beta with no repeat, the artificial borrowing constraint no lower than the lowest natural limit, two quarters of benefits, each shock law's own rules, and the validity conditions of conditions.md for every group and type.",
+  "type": "object",
+  "required": ["family", "period", "crra", "splurge", "survival", "return", "borrowing_constraint", "shocks", "regimes",
+               "employment", "groups"],
+  "additionalProperties": false,
+  "properties": {
+    "family": { "const": "bst-markov_ui-and-agg/1" },
+    "period": {
+      "description": "The length of a period, as a label. Every rate and probability in the file is per period.",
+      "enum": ["year", "quarter", "month"]
+    },
+    "crra": {
+      "description": "rho, the coefficient of relative risk aversion, greater than 1 as in BST.",
+      "type": "number", "exclusiveMinimum": 1
+    },
+    "splurge": {
+      "description": "The splurge, the share of income consumed before the choice; 0 for none (model.md, 'The splurge, as an observation map').",
+      "type": "number", "minimum": 0, "exclusiveMaximum": 1
+    },
+    "survival": {
+      "description": "The survival probability (BST's script L); 1 switches mortality off.",
+      "type": "number", "exclusiveMinimum": 0, "maximum": 1
+    },
+    "return": {
+      "description": "R, the gross return on assets, earned by survivors.",
+      "type": "number", "exclusiveMinimum": 0
+    },
+    "borrowing_constraint": {
+      "description": "The artificial borrowing constraint a_Art, the lowest permitted end-of-period assets as a ratio to permanent income, in the household's units: a number no greater than 0 and no lower than the lowest natural limit a_Nat(j), or the word natural for none. One equal to the natural limit has no effect.",
+      "oneOf": [
+        { "type": "number", "maximum": 0 },
+        { "const": "natural" }
+      ]
+    },
+    "shocks": {
+      "type": "object",
+      "required": ["permanent_shock", "employed_shock"],
+      "additionalProperties": false,
+      "properties": {
+        "permanent_shock": { "description": "The law of psi.", "$ref": "../shock-laws.schema.json" },
+        "employed_shock": { "description": "The law of theta, the employed draw, scaled by income_employed.", "$ref": "../shock-laws.schema.json" }
+      }
+    },
+    "regimes": {
+      "description": "The aggregate regimes. The normal regime has no key, since it is absorbing.",
+      "type": "object",
+      "required": ["recession"],
+      "additionalProperties": false,
+      "properties": {
+        "recession": {
+          "type": "object",
+          "required": ["exit_hazard"],
+          "additionalProperties": false,
+          "properties": {
+            "exit_hazard": { "description": "p_exit, the probability that a recession ends in a period.", "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        }
+      }
+    },
+    "employment": {
+      "type": "object",
+      "required": ["benefit_quarters", "job_finding", "income_employed", "income_with_benefits", "income_without_benefits",
+                   "unemployed_permanent_income"],
+      "additionalProperties": false,
+      "properties": {
+        "benefit_quarters": { "description": "The periods of benefits; 2 for the stage file's chain.", "type": "integer", "minimum": 1 },
+        "job_finding": {
+          "description": "find, the probability of finding a job in a period, by regime; positive, so that unemployment is not absorbing.",
+          "type": "object",
+          "required": ["normal", "recession"],
+          "additionalProperties": false,
+          "properties": {
+            "normal": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+            "recession": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+          }
+        },
+        "income_employed": { "description": "e, the scale of employed income e theta.", "type": "number", "exclusiveMinimum": 0 },
+        "income_with_benefits": { "description": "xi_u, income with benefits, as a ratio to permanent income.", "type": "number", "exclusiveMinimum": 0 },
+        "income_without_benefits": { "description": "xi_x, income after benefits expire, as a ratio to permanent income.", "type": "number", "exclusiveMinimum": 0 },
+        "unemployed_permanent_income": {
+          "description": "P_u, permanent income in a period of unemployment: continues (G psi applies), grows (G applies and psi = 1) or frozen (unchanged). Never omitted.",
+          "enum": ["continues", "grows", "frozen"]
+        }
+      }
+    },
+    "groups": {
+      "description": "The groups, each with its own growth, job loss, newborn law and discount-factor types; shares summing to one.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "share", "growth", "job_loss", "newborn_income", "types"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "share": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+          "growth": { "description": "The group's growth factor of permanent income (BST's script G).", "type": "number", "exclusiveMinimum": 0 },
+          "job_loss": {
+            "description": "sep, the probability of losing a job in a period, by regime.",
+            "type": "object",
+            "required": ["normal", "recession"],
+            "additionalProperties": false,
+            "properties": {
+              "normal": { "type": "number", "minimum": 0, "maximum": 1 },
+              "recession": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          },
+          "newborn_income": {
+            "description": "The newborn's permanent income, a lognormal in the levels of the period's units, by its median and the standard deviation of its log: HARK's exp(pLogInitMean) and pLogInitStd.",
+            "type": "object",
+            "required": ["median", "sd_log"],
+            "additionalProperties": false,
+            "properties": {
+              "median": { "type": "number", "exclusiveMinimum": 0 },
+              "sd_log": { "type": "number", "minimum": 0 }
+            }
+          },
+          "types": {
+            "description": "The discount-factor types, in increasing order of beta, with shares summing to one within the group.",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["beta", "share"],
+              "additionalProperties": false,
+              "properties": {
+                "beta": { "type": "number", "exclusiveMinimum": 0 },
+                "share": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

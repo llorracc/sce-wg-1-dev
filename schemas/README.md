@@ -95,8 +95,12 @@ The family `bst-markov_ui-and-agg/1`, HAFiscal's household problem, begun stage-
   `bst/1`.
 - [`bst-markov_ui-and-agg/conditions.md`](bst-markov_ui-and-agg/conditions.md): `bst/1`'s conditions carried over to the
   chain, each as a condition on a matrix over the states that reduces to `bst/1`'s under `continues`; the natural borrowing
-  constraint by state; the levels' tail exponent; the employment marginal that born-employed newborns imply. Its results
-  schema, parameter validator and members are not yet written; the design is in the note below.
+  constraint by state; the levels' tail exponent; the employment marginal that born-employed newborns imply.
+- [`bst-markov_ui-and-agg/parameters.schema.json`](bst-markov_ui-and-agg/parameters.schema.json): the parameter file's
+  validator, with the members under [`bst-markov_ui-and-agg/members/`](bst-markov_ui-and-agg/members/): `bst/1`'s toy
+  written in the family, the paper's high-school group alone, and the paper's published calibration. The checker's
+  module for the family, `checker/markov.py`, computes the stated member's conditions, limits and implications. Its
+  results schema is not yet written; the design is in the note below.
 
 Design notes:
 - [`foundation.md`](foundation.md): the plan for making the Bellman-SYM stage file the foundation of a family's statement,

@@ -1,0 +1,22 @@
+# bst-markov_ui-and-agg/1: the paper's normal-times calibration for the dropout group's middle discount-factor type, at
+# the paper's estimate and the exact values of its published replication package (members/paper-published.yaml), with
+# P_u continues, in the names of bst_markov_ui.bl.
+calibration:
+  β: 0.7188167711862781
+  ℒ: 0.99375
+  ϱ: 2.0
+  R: 1.01
+  𝒢: 1.0035525
+  a_Art: 0.0
+  a_Nat: 0.0
+  σ_ψ: 0.05477225575051661
+  σ_θ: 0.34641016151377546
+  e: 1.0
+  ξ_u: 0.7
+  ξ_x: 0.5
+  P_u: continues
+  p_exit: 0.16666666666666666
+  sep_n: 0.061930783242258654
+  sep_r: 0.05120481927710843
+  find_n: 0.6666666666666666
+  find_r: 0.25

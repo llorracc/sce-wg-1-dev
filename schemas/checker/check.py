@@ -1,5 +1,6 @@
 """Check a bst/1 parameter file: validate it, hash it, and report its conditions, domain rules and implications; or verify a
-results file against it.
+results file against it. A bst-markov_ui-and-agg/1 file is checked by markov.py, for its stated member only: its results
+schema is not yet written.
 
     uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml [--json out.json]
     uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml --verify-results r.json
@@ -19,8 +20,9 @@ import math
 import sys
 from pathlib import Path
 
+import markov
 from bst1 import MemberError, load_member, validate_results
-from canonical import StrictYAMLError
+from canonical import StrictYAMLError, load_strict
 
 
 def _fmt(x) -> str:
@@ -58,6 +60,24 @@ def print_report(report: dict) -> None:
     print("\npooled: " + ", ".join(f"{k} {_fmt(v)}" for k, v in report["pooled_domain"].items()))
 
 
+def print_markov_report(member: "markov.MarkovMember") -> None:
+    """The stated member of the Markov family: by group and type, the conditions that fail or are undecided, the constraint
+    in force and the employment shares."""
+    print(f"family   {member.data['family']}")
+    print(f"hash     {member.hash}")
+    for g in member.report()["groups"]:
+        print(f"group    {g['name']} (share {g['share']})")
+        for t in g["types"]:
+            flagged = [c["name"] for c in t["conditions"]
+                       if c.get("verdict") not in ("holds", None, "not computed") and "by_state" not in c]
+            flagged += [f"{c['name']}({e['state']})" for c in t["conditions"] if "by_state" in c
+                        for e in c["by_state"] if e["verdict"] != "holds"]
+            imp = t["implications"]
+            limits = ", ".join(f"{s} {_fmt(v)}" for s, v in imp["constraint_in_force"].items())
+            shares = ", ".join(f"{s} {_fmt(v)}" for s, v in imp["employment_marginal"].items())
+            print(f"  beta {t['beta']}: not holding: {', '.join(flagged) or 'none'}; limits {limits}; shares {shares}")
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("member", type=Path)
@@ -69,6 +89,25 @@ def main(argv=None) -> int:
     parser.add_argument("--verify-results", type=Path, metavar="RESULTS",
                         help="validate this results file and verify its report against the member, instead of the report")
     args = parser.parse_args(argv)
+    try:
+        family = load_strict(args.member.read_text()).get("family")
+    except StrictYAMLError as error:
+        print(f"{args.member}: not a valid parameter file\n  {error}", file=sys.stderr)
+        return 1
+    if family == "bst-markov_ui-and-agg/1":
+        if args.verify_results or args.bellman_laws or args.bellman_calibration is not None:
+            print(f"{args.member}: the family's results schema and Bellman converter are not yet written",
+                  file=sys.stderr)
+            return 1
+        try:
+            member = markov.load_member(args.member)
+        except markov.MarkovMemberError as error:
+            print(f"{args.member}: not a valid {family} member\n  {error}", file=sys.stderr)
+            return 1
+        print_markov_report(member)
+        if args.json:
+            args.json.write_text(json.dumps(member.report(), indent=2, allow_nan=True))
+        return 0
     try:
         member = load_member(args.member)
     except (StrictYAMLError, MemberError) as error:

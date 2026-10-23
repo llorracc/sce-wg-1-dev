@@ -1,0 +1,38 @@
+# The bst/1 toy written as a member of this family (model.md, "A bst/1 member as a member of this family"): one group, the
+# chain unemployment with probability 0.044 every quarter whatever the previous state, both incomes while unemployed the
+# toy's 0.7, the employed scale bst/1's (1 - wp xi_u)/(1 - wp), no splurge, permanent income continuing in unemployment,
+# and a newborn at permanent income 1. The recession repeats the normal regime and ends at once, so nothing depends on it.
+# Every statistic must equal the toy's.
+family: bst-markov_ui-and-agg/1
+period: quarter
+crra: 2.0
+splurge: 0.0
+survival: 0.99375
+return: 1.01
+borrowing_constraint: 0.0
+shocks:
+  permanent_shock: {TruncatedLogNormal: {sd_log: 0.05477225575051661, bot: -3.0, top: 3.0}}
+  employed_shock: {TruncatedLogNormal: {sd_log: 0.34641016151377546, bot: -3.0, top: 3.0}}
+regimes:
+  recession: {exit_hazard: 1.0}
+employment:
+  benefit_quarters: 2
+  job_finding: {normal: 0.956, recession: 0.956}
+  income_employed: 1.013807531380753
+  income_with_benefits: 0.7
+  income_without_benefits: 0.7
+  unemployed_permanent_income: continues
+groups:
+  - name: toy
+    share: 1.0
+    growth: 1.0019026
+    job_loss: {normal: 0.044, recession: 0.044}
+    newborn_income: {median: 1.0, sd_log: 0.0}
+    types:
+      - {beta: 0.822, share: 0.14285714285714285}
+      - {beta: 0.850, share: 0.14285714285714285}
+      - {beta: 0.878, share: 0.14285714285714285}
+      - {beta: 0.906, share: 0.14285714285714285}
+      - {beta: 0.934, share: 0.14285714285714285}
+      - {beta: 0.962, share: 0.14285714285714285}
+      - {beta: 0.990, share: 0.14285714285714285}
