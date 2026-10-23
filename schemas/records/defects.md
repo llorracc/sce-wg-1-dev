@@ -135,4 +135,5 @@ Faults found in this project's own work, with their status.
   does this. Found on 2026-10-22 while revising the stone. **Status:** the stone corrected in #11 to say what the
   adapter does. Ruled at 18:06:54 on 2026-10-22, and clarified at 18:18:56: HARK computes the natural borrowing
   constraint itself, from the laws' infima, which gives the stated `a_Nat`; a change to HARK's solvers, asked of the
-  HARK session. Until it lands the adapter keeps passing the stated limit. No member states `natural` yet.
+  HARK session. Until it lands the adapter keeps passing the stated limit. No member states `natural` yet. HARK's draft
+  #1862 makes the change, and the adapter's draft #12 uses it (2026-10-22, evening).

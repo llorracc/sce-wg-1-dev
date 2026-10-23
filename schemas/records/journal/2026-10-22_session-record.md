@@ -71,3 +71,24 @@ Times are EDT, from the clock or an event's own stamp. The night's gate run for 
   toy, and so does a second, zero-probability atoms at the infima (the findings); neither is committed. The owner's
   clarification at 18:18:56 makes it a change to HARK's solvers, asked of the HARK session. The records commit `f41668c`
   is pushed.
+
+**After the third stretch.**
+- **18:32.** The owner asks where the HARK session runs: jhu-dell, a Warp tab, terminal pts/4, in HARK's repository.
+- **18:48 to 20:18.** The HARK session drafts the limit from the laws' infima (`111a17e7`), makes it HARK's default on
+  the owner's word in its window (`11852805`), pushes the branch, tags it `sce-adapter/2026-10-22.2`, and opens it as
+  draft #1862, stacked on #1858. Its tests: the limit is the same at every number of nodes, and HARK's 914 tests pass,
+  #1858's 909 and five new ones. At 21:09 the branch gains a commit that only links the pull request in HARK's changelog
+  (`5763dd75`); the adapter pins the tagged `11852805`.
+- **19:17.** `5efba47` is pushed.
+- **20:20 to 21:17.** The adapter's side is written on branch `natural-limit` and tested at the new pin: the toy, stated
+  `natural`, is solved under the stated limit; the toy and the library member as filed give results identical, number
+  for number, to the old pin's; the adapter's seven tests and the checker's 150 pass. It opens as draft #12 at 21:17:05,
+  on the owner's word.
+
+**State at the third memorial.**
+- The fork's pull requests #1 to #11 are merged; #12 is a draft, in the worktree `.worktrees/natural-limit`.
+- **HARK:** #1858 and #1862 are drafts on the owner's fork's branches; the tags `sce-adapter/2026-10-22` and
+  `sce-adapter/2026-10-22.2` keep the two pins reachable.
+- **Next:** #12's merge; dolo's adapter; the Markov family's results document, validator and members; the validators for
+  the method, settings and request files; the toy's level-4 gate run.
+- **Open:** what goes to the working group's repository; the bellman session's items.

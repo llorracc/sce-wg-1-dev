@@ -54,6 +54,7 @@ requests and `main`'s ontology. Nothing has been proposed to the working group's
 | 9 | econ-ark's notation registry v5.0.0 and v6.0.0, and the HAFiscal design note's symbols | 2026-10-22 12:58, `673405f` |
 | 10 | registry v8.0.0: ξ_u and ξ_x, j for the employment state, ℘'s gloss, the design note's replacement rates | 2026-10-22 16:02:08, `613a9fb` |
 | 11 | each method where the stage gives it a place; HARK's Rosetta Stone for its Markov adapter | 2026-10-22 16:02:43, `a3f897a` |
+| 12 | HARK's adapter under `natural`, pinned to HARK's draft #1862 | a draft, opened 2026-10-22 21:17:05 |
 
 The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. With everything merged, the checker's
 150 tests and the ontology's 12 pass.
@@ -128,14 +129,14 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
 - Matsya's third session, on HARK's source, ran on 2026-10-22 and agrees with the stone (the findings of that day).
 
 **Open with the owner:**
-- in the HARK session: #1858, which stays a draft; the tag on HARK's fork at the adapter's pinned commit,
-  `sce-adapter/2026-10-22`, was made at 18:07 on 2026-10-22;
+- in the HARK session: #1858 and #1862, which stay drafts; the tags on HARK's fork at the adapter's two pins,
+  `sce-adapter/2026-10-22` and `sce-adapter/2026-10-22.2`, were made on 2026-10-22;
 - what goes to the working group's repository, and when;
 - in the bellman session: the uniform for Bellman's comparator, Bellman's draft for the truncated lognormal, and filing
   Bellman's parameter-condition defect;
-- a `natural` constraint (ruled 18:06:54 and 18:18:56 on 2026-10-22): HARK computes the natural limit from the laws'
-  infima, the stated `a_Nat`, through a change to its solvers that the HARK session is asked to draft; the
-  adapter then passes no artificial constraint and re-pins. Until then it passes the stated limit.
+- the merge of #12, HARK's adapter under `natural` (ruled 18:06:54 and 18:18:56 on 2026-10-22): HARK computes the
+  natural limit from the laws' infima, the stated `a_Nat`, at HARK's draft #1862, which #12 pins; the adapter passes
+  no artificial constraint for it. Until #12 merges, the adapter passes the stated limit.
 
 Registering `w3id.org/sce` is not raised before a pull request from this fork is merged into econ-ark/sce-wg-1
 ([[feedback_w3id-not-yet]]).

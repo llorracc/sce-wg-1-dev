@@ -73,3 +73,12 @@ the stated laws' natural limit (the defects); no member states `natural` yet.
   `a_Nat`, and the checker and `model.md` do not change. The change is HARK's: its solvers are to read each shock law's
   lower bound, not the lowest discretized node; asked of the HARK session to draft. Until it lands, the adapter keeps
   passing the stated limit, and no member states `natural` (the findings).
+
+**In the evening:**
+- **In HARK's window** (reported here by the HARK session): the reading of 18:18:56 confirmed, with the limit from the
+  infima HARK's default (reported 19:25:38); "push" for the branch `natural-limit-infimum` (reported 19:47:50); "add a
+  tag", `sce-adapter/2026-10-22.2` at its head `11852805` (reported 19:53:34); and "open", HARK's draft pull request
+  #1862, opened at 20:18:00.
+- **19:17:15.** The records correction `5efba47` is pushed.
+- **21:16:42.** HARK's adapter under `natural` is committed and pushed as a draft pull request: #12, opened at 21:17:05.
+- **21:21:24.** This memorial.

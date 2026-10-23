@@ -90,3 +90,15 @@ nodes per shock), with HARK at the adapter's pin:
 
 So computing the stated limit in HARK needs its solvers to read each law's lower bound directly, not the lowest atom;
 the owner's clarification of 18:18:56 asks for that, and the HARK session is drafting it.
+
+**HARK's own change** (draft econ-ark/HARK#1862, `11852805`): its standard and Markov solvers take the natural limit
+from each distribution's recorded infima by default. On HARK's defaults with both laws truncated at three standard
+deviations, the limit is −0.782670 at 5, 7, 15, 40 and 200 nodes, where the nodes alone give −1.706, −1.524, −1.255,
+−1.052 and −0.880; with the option on, the solution equals one with that limit as an artificial constraint to about
+10⁻¹⁵.
+
+**The adapter at that commit** (#12): the toy stated `natural` is solved under −1.729 at 5 and 9 nodes per shock, HARK's
+iteration stopping 4·10⁻⁹ above it at level 1, and its results file passes the checker. The limit binds in the effective
+member, whose nodes would allow −5.54, and the Euler residuals against the stated laws are large near it, where those
+laws' worst draws leave nothing to consume. The toy and the library member as filed give results identical to the old
+pin's.
