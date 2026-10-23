@@ -128,6 +128,7 @@ class Member:
         if self.wp * self.xi_u < 1:
             self.employed_scale = (1 - self.wp * self.xi_u) / (1 - self.wp)
         self.a_art = data["borrowing_constraint"]
+        self.natural = self.a_art == "natural"   # the file's word, before it resolves to a_Nat
         problems = self._check()
         if problems:
             raise MemberError("; ".join(problems))

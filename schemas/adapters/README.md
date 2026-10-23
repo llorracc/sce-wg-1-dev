@@ -11,5 +11,5 @@ It reports every condition and status on that member by its own verdicts, and it
 
 | adapter | toolkit | family | status |
 |---|---|---|---|
-| [`hark/`](hark/) | HARK's `MarkovConsumerType`, at the commit of HARK's pull request #1858 | `bst/1` | first version |
+| [`hark/`](hark/) | HARK's `MarkovConsumerType`, at the head of HARK's draft pull request #1862, stacked on #1858 | `bst/1` | first version |
 | `dolo/` | dolo | `bst/1` | planned, written from the schemas |
