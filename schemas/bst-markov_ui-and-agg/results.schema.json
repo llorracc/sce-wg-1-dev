@@ -1,0 +1,1105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "bst-markov_ui-and-agg/1 results file",
+  "description": "What a toolkit reports for one member of the family, as results.md defines it; its first version, with what the paper's estimation and its other moments use. Draft.",
+  "type": "object",
+  "required": [
+    "family",
+    "parameter_file_sha256",
+    "method_file_sha256",
+    "settings_sha256",
+    "request_file_sha256",
+    "toolkit",
+    "provenance",
+    "groups",
+    "pooled"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "family": {
+      "const": "bst-markov_ui-and-agg/1"
+    },
+    "parameter_file_sha256": {
+      "$ref": "#/$defs/Sha256"
+    },
+    "method_file_sha256": {
+      "$ref": "#/$defs/Sha256"
+    },
+    "settings_sha256": {
+      "$ref": "#/$defs/Sha256"
+    },
+    "request_file_sha256": {
+      "$ref": "#/$defs/Sha256"
+    },
+    "toolkit": {
+      "type": "object",
+      "required": [
+        "name",
+        "version"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commit": {
+          "type": "string"
+        },
+        "driver": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The program that assembled the file, when the toolkit has more than one emitter."
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Where the file was computed. No run time: a results file describes a solution, and the files of different toolkits are read side by side.",
+      "required": [
+        "hardware",
+        "threads"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "hardware": {
+          "type": "string"
+        },
+        "threads": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "method_file": {
+          "type": "string",
+          "description": "The path of the method file whose hash is recorded."
+        },
+        "settings_file": {
+          "type": "string"
+        },
+        "request_file": {
+          "type": "string"
+        },
+        "parameter_file": {
+          "type": "string",
+          "description": "The parameter file's path, for the reader; its hash identifies the member."
+        },
+        "solver": {
+          "type": "object",
+          "description": "How the solve ended, as the toolkit reports it.",
+          "additionalProperties": true
+        },
+        "environment": {
+          "type": "object",
+          "description": "The numerical environment: library versions, BLAS and the like, free-form.",
+          "additionalProperties": true
+        }
+      }
+    },
+    "groups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/GroupResults"
+      }
+    },
+    "pooled": {
+      "$ref": "#/$defs/PooledResults"
+    },
+    "errors": {
+      "type": "object",
+      "description": "Optional error estimates, in a tree that mirrors the value tree: errors.types[i].population.m.gl and so on.",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "Sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "Status": {
+      "enum": [
+        "value",
+        "undefined",
+        "not computed"
+      ]
+    },
+    "NumberOrNull": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "NumberArray": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "KeyList": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "Quantity": {
+      "description": "One number that a domain rule can switch off.",
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/Status"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "if": {
+        "properties": {
+          "status": {
+            "const": "value"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "value"
+        ]
+      }
+    },
+    "Probabilities": {
+      "description": "The standard probabilities, as the keys of a GL map; a quantile map has all but 1.",
+      "enum": [
+        "0.01",
+        "0.05",
+        "0.1",
+        "0.2",
+        "0.3",
+        "0.4",
+        "0.5",
+        "0.6",
+        "0.7",
+        "0.8",
+        "0.9",
+        "0.95",
+        "0.99",
+        "0.999",
+        "1"
+      ]
+    },
+    "ProbabilityMap": {
+      "type": "object",
+      "required": [
+        "0.01",
+        "0.05",
+        "0.1",
+        "0.2",
+        "0.3",
+        "0.4",
+        "0.5",
+        "0.6",
+        "0.7",
+        "0.8",
+        "0.9",
+        "0.95",
+        "0.99",
+        "0.999",
+        "1"
+      ],
+      "additionalProperties": false,
+      "propertyNames": {
+        "$ref": "#/$defs/Probabilities"
+      },
+      "patternProperties": {
+        "^.*$": {
+          "$ref": "#/$defs/NumberOrNull"
+        }
+      }
+    },
+    "Condition": {
+      "description": "One condition decided on the effective member: the factor the toolkit computed, the bound it is compared with, and the verdict.",
+      "type": "object",
+      "required": [
+        "factor",
+        "bound",
+        "holds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "factor": {
+          "type": "number"
+        },
+        "bound": {
+          "type": "number"
+        },
+        "holds": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ExportedRule": {
+      "description": "The rule at dense points of the toolkit's choosing, the kink included, with the range stated.",
+      "type": "object",
+      "required": [
+        "m",
+        "c",
+        "range"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "m": {
+          "$ref": "#/$defs/NumberArray"
+        },
+        "c": {
+          "$ref": "#/$defs/NumberArray"
+        },
+        "range": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "Simulation": {
+      "description": "Present when the stationary population was simulated.",
+      "type": "object",
+      "required": [
+        "agents",
+        "periods",
+        "seed"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "agents": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "periods": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "burn_in": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "StateExpectations": {
+      "description": "The expectations the conditions name, conditional on this state as next quarter's, under the toolkit's own approximation of the laws; with the lowest values in the state and the probability of next quarter's worst income from it.",
+      "type": "object",
+      "required": [
+        "growth",
+        "growth_pow_1_minus_rho",
+        "growth_inverse",
+        "psi_log",
+        "psi_log_psi",
+        "psi_lowest",
+        "income_lowest",
+        "worst_income_probability"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "growth": {
+          "type": "number",
+          "description": "E[G(j') psi' | j']"
+        },
+        "growth_pow_1_minus_rho": {
+          "type": "number",
+          "description": "E[(G(j') psi')^(1 - rho) | j']"
+        },
+        "growth_inverse": {
+          "type": "number",
+          "description": "E[(G(j') psi')^(-1) | j']"
+        },
+        "psi_log": {
+          "type": "number",
+          "description": "E[log psi' | j']"
+        },
+        "psi_log_psi": {
+          "type": "number",
+          "description": "E[psi' log psi' | j']"
+        },
+        "psi_lowest": {
+          "type": "number",
+          "minimum": 0,
+          "description": "psi_min(j), the lowest value of psi in the state"
+        },
+        "income_lowest": {
+          "type": "number",
+          "minimum": 0,
+          "description": "xi_min(j), the lowest income in the state"
+        },
+        "worst_income_probability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "p_worst(j), the probability from j of next quarter's worst income"
+        }
+      }
+    },
+    "Representation": {
+      "description": "A representation of the laws: the chain, the expectations and the lowest values by state, and the employed draw's mean.",
+      "type": "object",
+      "required": [
+        "by_state",
+        "theta_mean"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "by_state": {
+          "description": "One entry for each employment state.",
+          "type": "object",
+          "required": [
+            "E",
+            "U_2",
+            "U_1",
+            "X"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "E": {
+              "$ref": "#/$defs/StateExpectations"
+            },
+            "U_2": {
+              "$ref": "#/$defs/StateExpectations"
+            },
+            "U_1": {
+              "$ref": "#/$defs/StateExpectations"
+            },
+            "X": {
+              "$ref": "#/$defs/StateExpectations"
+            }
+          }
+        },
+        "theta_mean": {
+          "type": "number"
+        }
+      }
+    },
+    "EffectiveMember": {
+      "description": "What the toolkit solved for this group (effective-member.md): its chain, its representation's expectations and lowest values by state, the derived parameters by state, and optionally the population's representation.",
+      "type": "object",
+      "required": [
+        "chain",
+        "by_state",
+        "theta_mean",
+        "derived"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "chain": {
+          "type": "object",
+          "required": [
+            "normal",
+            "recession"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "normal": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "items": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              }
+            },
+            "recession": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "items": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              }
+            }
+          }
+        },
+        "by_state": {
+          "description": "One entry for each employment state.",
+          "type": "object",
+          "required": [
+            "E",
+            "U_2",
+            "U_1",
+            "X"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "E": {
+              "$ref": "#/$defs/StateExpectations"
+            },
+            "U_2": {
+              "$ref": "#/$defs/StateExpectations"
+            },
+            "U_1": {
+              "$ref": "#/$defs/StateExpectations"
+            },
+            "X": {
+              "$ref": "#/$defs/StateExpectations"
+            }
+          }
+        },
+        "theta_mean": {
+          "type": "number"
+        },
+        "derived": {
+          "type": "object",
+          "required": [
+            "natural_limit",
+            "constraint_in_force",
+            "worst_income"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "natural_limit": {
+              "description": "a_Nat(j), in the household's units; null where the recursion has no finite fixed point.",
+              "type": "object",
+              "required": [
+                "E",
+                "U_2",
+                "U_1",
+                "X"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "E": {
+                  "$ref": "#/$defs/NumberOrNull"
+                },
+                "U_2": {
+                  "$ref": "#/$defs/NumberOrNull"
+                },
+                "U_1": {
+                  "$ref": "#/$defs/NumberOrNull"
+                },
+                "X": {
+                  "$ref": "#/$defs/NumberOrNull"
+                }
+              }
+            },
+            "constraint_in_force": {
+              "description": "a_min(j), in the household's units.",
+              "type": "object",
+              "required": [
+                "E",
+                "U_2",
+                "U_1",
+                "X"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "E": {
+                  "type": "number"
+                },
+                "U_2": {
+                  "type": "number"
+                },
+                "U_1": {
+                  "type": "number"
+                },
+                "X": {
+                  "type": "number"
+                }
+              }
+            },
+            "worst_income": {
+              "description": "xi_min(j) psi_min(j).",
+              "type": "object",
+              "required": [
+                "E",
+                "U_2",
+                "U_1",
+                "X"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "E": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "U_2": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "U_1": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "X": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        },
+        "population": {
+          "$ref": "#/$defs/Representation"
+        }
+      }
+    },
+    "NotComputed": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "const": "not computed"
+        }
+      }
+    },
+    "StateConditions": {
+      "type": "object",
+      "required": [
+        "by_state"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "by_state": {
+          "description": "The condition in each state.",
+          "type": "object",
+          "required": [
+            "E",
+            "U_2",
+            "U_1",
+            "X"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "E": {
+              "$ref": "#/$defs/Condition"
+            },
+            "U_2": {
+              "$ref": "#/$defs/Condition"
+            },
+            "U_1": {
+              "$ref": "#/$defs/Condition"
+            },
+            "X": {
+              "$ref": "#/$defs/Condition"
+            }
+          }
+        }
+      }
+    },
+    "Conditions": {
+      "description": "Every condition of conditions.md, decided by the toolkit on its effective member for this type; a condition by state has one entry for each state. GIC-Harmenberg is not computed until its chain with L = 1 is stated.",
+      "type": "object",
+      "required": [
+        "AIC",
+        "RIC",
+        "WRIC",
+        "FHWC",
+        "PF-FVAC",
+        "FVAC",
+        "GIC",
+        "GIC-Mod",
+        "GIC-Szeidl",
+        "GIC-Harmenberg",
+        "GIC-Liv"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "AIC": {
+          "$ref": "#/$defs/Condition"
+        },
+        "RIC": {
+          "$ref": "#/$defs/Condition"
+        },
+        "WRIC": {
+          "$ref": "#/$defs/StateConditions"
+        },
+        "FHWC": {
+          "$ref": "#/$defs/Condition"
+        },
+        "PF-FVAC": {
+          "$ref": "#/$defs/Condition"
+        },
+        "FVAC": {
+          "$ref": "#/$defs/Condition"
+        },
+        "GIC": {
+          "$ref": "#/$defs/StateConditions"
+        },
+        "GIC-Mod": {
+          "$ref": "#/$defs/StateConditions"
+        },
+        "GIC-Szeidl": {
+          "$ref": "#/$defs/Condition"
+        },
+        "GIC-Harmenberg": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Condition"
+            },
+            {
+              "$ref": "#/$defs/NotComputed"
+            }
+          ]
+        },
+        "GIC-Liv": {
+          "$ref": "#/$defs/Condition"
+        }
+      }
+    },
+    "StateRule": {
+      "description": "The optimizer's rule in one state at that state's points, the comparison points with its lower end, in the request file's order.",
+      "type": "object",
+      "required": [
+        "m",
+        "c",
+        "mpc"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "m": {
+          "$ref": "#/$defs/NumberArray"
+        },
+        "c": {
+          "$ref": "#/$defs/NumberArray"
+        },
+        "mpc": {
+          "$ref": "#/$defs/NumberArray"
+        }
+      }
+    },
+    "PaperMPC": {
+      "description": "The paper's MPC, the mean of 1 - (1 - splurge) (1/4) sum_{n=1..4} (1 - c')^n, with the mean of the optimizer's MPC c' beside it.",
+      "type": "object",
+      "required": [
+        "mean",
+        "mean_mpc"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "mean": {
+          "type": "number"
+        },
+        "mean_mpc": {
+          "type": "number"
+        }
+      }
+    },
+    "Wealth": {
+      "description": "Household wealth relative to permanent income, (1 - splurge) a: its GL ordinates and its median.",
+      "type": "object",
+      "required": [
+        "gl",
+        "median"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "gl": {
+          "$ref": "#/$defs/ProbabilityMap"
+        },
+        "median": {
+          "type": "number"
+        },
+        "undefined": {
+          "$ref": "#/$defs/KeyList"
+        }
+      }
+    },
+    "EulerResiduals": {
+      "description": "Against the stated member's laws, by a method other than the household's own, with its precision stated, for each state.",
+      "type": "object",
+      "required": [
+        "by_state",
+        "max_abs",
+        "expectation_method",
+        "expectation_precision"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "by_state": {
+          "description": "The residuals in each state.",
+          "type": "object",
+          "required": [
+            "E",
+            "U_2",
+            "U_1",
+            "X"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "E": {
+              "type": "object",
+              "required": [
+                "r",
+                "max_abs"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "r": {
+                  "$ref": "#/$defs/NumberArray"
+                },
+                "max_abs": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            },
+            "U_2": {
+              "type": "object",
+              "required": [
+                "r",
+                "max_abs"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "r": {
+                  "$ref": "#/$defs/NumberArray"
+                },
+                "max_abs": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            },
+            "U_1": {
+              "type": "object",
+              "required": [
+                "r",
+                "max_abs"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "r": {
+                  "$ref": "#/$defs/NumberArray"
+                },
+                "max_abs": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            },
+            "X": {
+              "type": "object",
+              "required": [
+                "r",
+                "max_abs"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "r": {
+                  "$ref": "#/$defs/NumberArray"
+                },
+                "max_abs": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        },
+        "max_abs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "expectation_method": {
+          "type": "string"
+        },
+        "expectation_precision": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "TypeResults": {
+      "type": "object",
+      "required": [
+        "beta",
+        "share",
+        "conditions",
+        "comparison_points",
+        "rule",
+        "exported_rule",
+        "employment_shares",
+        "wealth",
+        "paper_mpc",
+        "euler_residuals",
+        "stationarity_residual"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "beta": {
+          "type": "number"
+        },
+        "share": {
+          "type": "number"
+        },
+        "conditions": {
+          "$ref": "#/$defs/Conditions"
+        },
+        "comparison_points": {
+          "$ref": "#/$defs/NumberArray"
+        },
+        "rule": {
+          "description": "The rule in each state.",
+          "type": "object",
+          "required": [
+            "E",
+            "U_2",
+            "U_1",
+            "X"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "E": {
+              "$ref": "#/$defs/StateRule"
+            },
+            "U_2": {
+              "$ref": "#/$defs/StateRule"
+            },
+            "U_1": {
+              "$ref": "#/$defs/StateRule"
+            },
+            "X": {
+              "$ref": "#/$defs/StateRule"
+            }
+          }
+        },
+        "exported_rule": {
+          "description": "Each state's rule at dense points.",
+          "type": "object",
+          "required": [
+            "E",
+            "U_2",
+            "U_1",
+            "X"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "E": {
+              "$ref": "#/$defs/ExportedRule"
+            },
+            "U_2": {
+              "$ref": "#/$defs/ExportedRule"
+            },
+            "U_1": {
+              "$ref": "#/$defs/ExportedRule"
+            },
+            "X": {
+              "$ref": "#/$defs/ExportedRule"
+            }
+          }
+        },
+        "employment_shares": {
+          "description": "The stationary population's distribution over the states.",
+          "type": "object",
+          "required": [
+            "E",
+            "U_2",
+            "U_1",
+            "X"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "E": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "U_2": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "U_1": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "X": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "wealth": {
+          "$ref": "#/$defs/Wealth"
+        },
+        "paper_mpc": {
+          "$ref": "#/$defs/PaperMPC"
+        },
+        "euler_residuals": {
+          "$ref": "#/$defs/EulerResiduals"
+        },
+        "stationarity_residual": {
+          "type": "number",
+          "minimum": 0
+        },
+        "simulation": {
+          "$ref": "#/$defs/Simulation"
+        }
+      }
+    },
+    "GroupLevels": {
+      "description": "A group's statistics in levels, over its types weighted by their shares.",
+      "type": "object",
+      "required": [
+        "gl",
+        "median_ratio",
+        "paper_mpc"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "gl": {
+          "description": "GL ordinates of household wealth in levels, A = (1 - splurge) a p; GL(1) is null when the mean of A is not finite.",
+          "type": "object",
+          "required": [
+            "0.2",
+            "0.4",
+            "0.6",
+            "0.8",
+            "1"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "0.2": {
+              "$ref": "#/$defs/NumberOrNull"
+            },
+            "0.4": {
+              "$ref": "#/$defs/NumberOrNull"
+            },
+            "0.6": {
+              "$ref": "#/$defs/NumberOrNull"
+            },
+            "0.8": {
+              "$ref": "#/$defs/NumberOrNull"
+            },
+            "1": {
+              "$ref": "#/$defs/NumberOrNull"
+            }
+          }
+        },
+        "median_ratio": {
+          "type": "number",
+          "description": "The median of (1 - splurge) a over the group."
+        },
+        "paper_mpc": {
+          "$ref": "#/$defs/PaperMPC"
+        },
+        "undefined": {
+          "$ref": "#/$defs/KeyList"
+        }
+      }
+    },
+    "GroupResults": {
+      "type": "object",
+      "required": [
+        "name",
+        "effective_member",
+        "types",
+        "levels"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "effective_member": {
+          "$ref": "#/$defs/EffectiveMember"
+        },
+        "types": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/TypeResults"
+          }
+        },
+        "levels": {
+          "$ref": "#/$defs/GroupLevels"
+        }
+      }
+    },
+    "PooledResults": {
+      "type": "object",
+      "required": [
+        "levels"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "levels": {
+          "type": "object",
+          "required": [
+            "gl",
+            "paper_mpc",
+            "paper_mpc_by_quartile"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "gl": {
+              "description": "GL ordinates of A pooled over groups by their shares.",
+              "type": "object",
+              "required": [
+                "0.25",
+                "0.5",
+                "0.75",
+                "1"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "0.25": {
+                  "$ref": "#/$defs/NumberOrNull"
+                },
+                "0.5": {
+                  "$ref": "#/$defs/NumberOrNull"
+                },
+                "0.75": {
+                  "$ref": "#/$defs/NumberOrNull"
+                },
+                "1": {
+                  "$ref": "#/$defs/NumberOrNull"
+                }
+              }
+            },
+            "paper_mpc": {
+              "$ref": "#/$defs/PaperMPC"
+            },
+            "paper_mpc_by_quartile": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": {
+                "$ref": "#/$defs/PaperMPC"
+              },
+              "description": "Within each quartile of A pooled over groups, lowest first."
+            },
+            "undefined": {
+              "$ref": "#/$defs/KeyList"
+            }
+          }
+        }
+      }
+    }
+  }
+}

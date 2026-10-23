@@ -1,6 +1,6 @@
 """Check a bst/1 parameter file: validate it, hash it, and report its conditions, domain rules and implications; or verify a
-results file against it. A bst-markov_ui-and-agg/1 file is checked by markov.py, for its stated member only: its results
-schema is not yet written.
+results file against it. A bst-markov_ui-and-agg/1 file is checked by markov.py, its stated member and a results file
+against it; it has no Bellman converter yet.
 
     uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml [--json out.json]
     uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml --verify-results r.json
@@ -95,15 +95,24 @@ def main(argv=None) -> int:
         print(f"{args.member}: not a valid parameter file\n  {error}", file=sys.stderr)
         return 1
     if family == "bst-markov_ui-and-agg/1":
-        if args.verify_results or args.bellman_laws or args.bellman_calibration is not None:
-            print(f"{args.member}: the family's results schema and Bellman converter are not yet written",
-                  file=sys.stderr)
+        if args.bellman_laws or args.bellman_calibration is not None:
+            print(f"{args.member}: the family's Bellman converter is not yet written", file=sys.stderr)
             return 1
         try:
             member = markov.load_member(args.member)
         except markov.MarkovMemberError as error:
             print(f"{args.member}: not a valid {family} member\n  {error}", file=sys.stderr)
             return 1
+        if args.verify_results is not None:
+            results = json.loads(args.verify_results.read_text())
+            problems = markov.validate_results(results) or member.verify_results(results)
+            if problems:
+                print(f"{args.verify_results}: {len(problems)} problem(s)")
+                for p in problems:
+                    print(f"  {p}")
+                return 1
+            print(f"{args.verify_results}: validates, and its report is consistent with the member {member.hash[:12]}…")
+            return 0
         print_markov_report(member)
         if args.json:
             args.json.write_text(json.dumps(member.report(), indent=2, allow_nan=True))

@@ -1,10 +1,15 @@
 # HAFiscal's normal-times calibration, with the paper's estimated discount factors and the exact values of its published
-# replication package (llorracc/HAFiscal-QE): lognormal laws, as the published code discretizes them, and permanent income
-# frozen in unemployment, the world that reproduces the published numbers (model.md). Each group's seven betas are the
-# equiprobable points of the uniform law on [beta - nabla, beta + nabla] around its estimate; the job-loss probabilities are
-# u (1/D)/(1 - u), with the unemployment rate u and the spell's length D of each regime, the job-finding probability 2/3
-# and the recession's exit hazard 1/6, each written as the double nearest its exact value. Newborn income is in thousands of
-# dollars a quarter, by its median.
+# replication package (llorracc/HAFiscal-QE): lognormal laws, as the published code discretizes them, and permanent
+# income frozen in unemployment, the world of the published numbers (model.md). Each group's seven betas are the
+# equiprobable points of the uniform law on [beta - nabla, beta + nabla] around its estimate; the job-loss probabilities
+# are u (1/D)/(1 - u), with the unemployment rate u and the spell's length D of each regime, the job-finding probability
+# 2/3 and the recession's exit hazard 1/6, each written as the double nearest its exact value. Newborn income is in
+# thousands of dollars a quarter, by its median. Its statistics are the stationary population's, so they will not equal
+# the published ones beyond sampling error: the published estimation simulates 400 quarters from a population of
+# newborns, so nobody is older, while in a stationary population a share of about 0.081 is, and those households carry
+# permanent income's Pareto tail, which moves the statistics in levels; and its newborns take one step of the chain and
+# a permanent shock in their first quarter, which moves the employment shares slightly. The median ratio, being
+# normalized, moves far less.
 family: bst-markov_ui-and-agg/1
 period: quarter
 crra: 2.0
