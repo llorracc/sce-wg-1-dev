@@ -55,6 +55,12 @@ The names the validators fix, and the conventions they follow, are registered in
 - **Regime:** an aggregate Markov state of the household's chain, such as normal times or a recession.
 - **The floor of a law:** how a law behaves at the lowest value of its support, an atom, a positive density or a thin density,
   which decides the lower tail of the stationary distribution and whether welfare means are finite.
+- **Semantic ontology:** in the working group's Project A, a model's meaning stated apart from any code: what exists
+  (the ontology), what stands for what (the denotation), and what is written down (the syntax), with when the reading
+  holds. The schemas are the syntax of the [ontology of buffer-stock models](../ontologies/buffer-stock-models/), which
+  states the model class the families write.
+- **Model class:** a class of models defined by membership axioms, such as `buffer-stock-model`; a family writes members
+  of one or more classes.
 - **Records:** the project's own memory, rulings, journal, findings, deferred follow-ups and defects, under
   [`records/`](records/MEMORY.md), written for publication.
 

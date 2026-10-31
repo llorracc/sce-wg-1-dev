@@ -1,0 +1,3978 @@
+{
+ "ontology": {
+  "title": "Buffer-stock models",
+  "version": "0.1.0-draft.1",
+  "namespace": "https://example.org/provisional/ontologies/buffer-stock-models/",
+  "prefix": "bsm",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "imports": {
+   "pd": "https://example.org/provisional/ontologies/probability-distributions/"
+  },
+  "sources": {
+   "bst": {
+    "citation": "Carroll, C. D., and A. Shanker. Theoretical Foundations of Buffer Stock Saving. The published page, read on 2026-10-31.",
+    "url": "https://llorracc.github.io/BufferStockTheory/"
+   },
+   "registry": {
+    "citation": "econ-ark's notation registry, version 8.0.0, @resources/notation/notation.yml in econ-ark/econ-ark-tools.",
+    "url": "https://github.com/econ-ark/econ-ark-tools"
+   },
+   "hark": {
+    "citation": "HARK, main branch at commit 4c285e86 (2026-10-07).",
+    "url": "https://github.com/econ-ark/HARK/tree/4c285e86"
+   },
+   "hafiscal-qe": {
+    "citation": "Carroll, Crawley, Du, Frankovic and Tretvoll, Welfare and Spending Effects of Consumption Stimulus Policies: the public replication package, at commit 1afdf80 (2026-06-12).",
+    "url": "https://github.com/llorracc/HAFiscal-QE/tree/1afdf80de4325e436a0c1c20895f754aefefd38c"
+   }
+  },
+  "formats": {
+   "bst": "the paper's notation, as the LaTeX macro its source writes",
+   "registry": "econ-ark's notation registry, by its semantic key",
+   "parameter-file": "a key of a bst/1 parameter file, as a path",
+   "bellman-sym": "an identifier of bst/1's Bellman-SYM stage file",
+   "hark": "a HARK attribute, factor or method, at the commit above"
+  },
+  "source_digest": "sha256:9dbe059743fc49d1c2cef4f4d1e62c4583087c63780f3f9f67120d7eaf868ab8"
+ },
+ "kinds": {
+  "model-class": "A class of models, defined by axioms. A model is a member when it satisfies every membership axiom.",
+  "axiom": "A statement a model must satisfy to be a member of a class (membership), or one a class's results assume (hypothesis).",
+  "object": "An economic or mathematical entity of the model, independent of any written form.",
+  "quantity": "A number the model's primitives determine, stated by a formula in the ontology's formula syntax.",
+  "moment": "An expectation under the law of one shock, a quantity the conditions rest on.",
+  "condition": "An inequality on quantities, which holds or fails for a model.",
+  "property": "A statement about a model's solution or population, which its conditions can guarantee.",
+  "result": "A proposition relating conditions and properties, with the source that proves, cites or rules it.",
+  "identity": "A criterion for when two models, or two statements of one model, are the same.",
+  "family": "A written family of the working group's schemas, and the class of models it writes.",
+  "divergence": "A place where a toolkit, a paper or a schema uses a term of this ontology in another sense."
+ },
+ "categories": {
+  "agent": "who chooses",
+  "population": "a collection of agents",
+  "time": "the clock",
+  "state": "a variable the choice is conditioned on",
+  "control": "a variable the agent chooses",
+  "shock": "a random variable drawn by nature",
+  "event": "a random outcome with two values",
+  "primitive": "a parameter, given to the model from outside",
+  "bound": "the lowest value of a law's support, or a probability there",
+  "function": "a map the model defines or its solution yields",
+  "operator": "a map between functions, or an expectation",
+  "constraint": "a restriction on the choice or the states",
+  "measure": "a weighting of a population"
+ },
+ "retired": [
+  "BSM_0000151"
+ ],
+ "rows": [
+  {
+   "id": "BSM_0000001",
+   "kind": "model-class",
+   "name": "buffer-stock-model",
+   "label": "buffer-stock model",
+   "definition": "A consumption-saving problem of one agent, with CRRA utility and relative risk aversion above one, assets that earn a return, and risky noncapital income that is permanent income times a transitory shock, permanent income growing by a factor and a mean-one permanent shock; borrowing limited by the natural constraint or a tighter artificial one; and, where the natural constraint is the one in force, an atom at the lowest transitory shock. Whether a member exhibits buffer-stock saving is a property of its solution, not of its membership.",
+   "axioms": [
+    {
+     "name": "one-agent-saving",
+     "id": "BSM_0000010"
+    },
+    {
+     "name": "crra-above-one",
+     "id": "BSM_0000011"
+    },
+    {
+     "name": "friedman-muth-income",
+     "id": "BSM_0000012"
+    },
+    {
+     "name": "income-risk",
+     "id": "BSM_0000148"
+    },
+    {
+     "name": "asset-return",
+     "id": "BSM_0000013"
+    },
+    {
+     "name": "constraint-in-force",
+     "id": "BSM_0000014"
+    },
+    {
+     "name": "point-mass-at-worst-transitory",
+     "id": "BSM_0000015"
+    }
+   ],
+   "sources": {
+    "bst": [
+     "sec-intro",
+     "subsec-setup",
+     "ass-shocks"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-intro",
+    "https://llorracc.github.io/BufferStockTheory/#subsec-setup",
+    "https://llorracc.github.io/BufferStockTheory/#ass-shocks"
+   ]
+  },
+  {
+   "id": "BSM_0000002",
+   "kind": "model-class",
+   "name": "bst-model",
+   "label": "Buffer Stock Theory's model, as the paper states it",
+   "definition": "The buffer-stock models whose shocks are iid with bounded support, whose transitory shock has a zero-income event of positive probability, with no artificial constraint, infinite lives and one type: the class to which the paper's theorems apply.",
+   "subclass_of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "axioms": [
+    {
+     "name": "iid-shocks",
+     "id": "BSM_0000016"
+    },
+    {
+     "name": "bounded-support",
+     "id": "BSM_0000017"
+    },
+    {
+     "name": "zero-income-event",
+     "id": "BSM_0000018"
+    },
+    {
+     "name": "riskless-constant-return",
+     "id": "BSM_0000149"
+    },
+    {
+     "name": "no-artificial-constraint",
+     "id": "BSM_0000019"
+    },
+    {
+     "name": "infinite-lives",
+     "id": "BSM_0000020"
+    },
+    {
+     "name": "one-type",
+     "id": "BSM_0000021"
+    }
+   ],
+   "sources": {
+    "bst": [
+     "ass-shocks",
+     "bounded-support",
+     "eq-transhkdef"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-shocks",
+    "https://llorracc.github.io/BufferStockTheory/#bounded-support",
+    "https://llorracc.github.io/BufferStockTheory/#eq-transhkdef"
+   ]
+  },
+  {
+   "id": "BSM_0000003",
+   "kind": "model-class",
+   "name": "perfect-foresight-benchmark",
+   "label": "the perfect-foresight benchmark",
+   "definition": "The models with no shocks: ψ = θ = 1 and no unemployment. They fail the axiom of income risk and so are not buffer-stock models; they are the class's limit as the shocks vanish, and the paper's benchmark for the patience conditions.",
+   "benchmark_of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "axioms": [
+    {
+     "name": "no-shocks",
+     "id": "BSM_0000022"
+    }
+   ],
+   "sources": {
+    "bst": [
+     "ass-pfincome",
+     "subsec-pfbbenchmark"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-pfincome",
+    "https://llorracc.github.io/BufferStockTheory/#subsec-pfbbenchmark"
+   ]
+  },
+  {
+   "id": "BSM_0000004",
+   "kind": "model-class",
+   "name": "with-survival",
+   "label": "buffer-stock model with perpetual youth",
+   "definition": "A buffer-stock model in which an agent survives each period with probability ℒ ≤ 1 and is replaced at death by a newborn; there is no annuity, so survivors earn R and the assets of the dead leave the economy: the paper's Modigliani scheme of estates.",
+   "subclass_of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "reduces_to": {
+    "class": {
+     "name": "bst-model",
+     "id": "BSM_0000002"
+    },
+    "when": "L == 1"
+   },
+   "sources": {
+    "bst": [
+     "sec-mortality",
+     "modigliani-lives"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-mortality",
+    "https://llorracc.github.io/BufferStockTheory/#modigliani-lives"
+   ]
+  },
+  {
+   "id": "BSM_0000005",
+   "kind": "model-class",
+   "name": "with-blanchard-annuities",
+   "label": "buffer-stock model with Blanchard's annuities",
+   "definition": "A buffer-stock model with perpetual youth in which the estates of the dead are paid to survivors in proportion to their wealth, so that survivors earn R/ℒ and the absolute patience factor is the same as with infinite lives.",
+   "subclass_of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "reduces_to": {
+    "class": {
+     "name": "bst-model",
+     "id": "BSM_0000002"
+    },
+    "when": "L == 1"
+   },
+   "written_as": {
+    "hark": "AggShockConsumerType"
+   },
+   "sources": {
+    "bst": [
+     "sec-mortality"
+    ],
+    "hark": [
+     "HARK/ConsumptionSaving/ConsAggShockModel.py:269"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-mortality",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsAggShockModel.py#L269"
+   ]
+  },
+  {
+   "id": "BSM_0000006",
+   "kind": "model-class",
+   "name": "with-positive-benefit",
+   "label": "buffer-stock model with a positive unemployment benefit",
+   "definition": "A buffer-stock model whose unemployment event pays ξ_u > 0 of permanent income in place of BST's zero-income event.",
+   "subclass_of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "reduces_to": {
+    "class": {
+     "name": "bst-model",
+     "id": "BSM_0000002"
+    },
+    "when": "xi_u == 0"
+   },
+   "sources": {
+    "bst": [
+     "pdv"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#pdv"
+   ]
+  },
+  {
+   "id": "BSM_0000007",
+   "kind": "model-class",
+   "name": "with-artificial-constraint",
+   "label": "buffer-stock model with an artificial borrowing constraint",
+   "definition": "A buffer-stock model with an artificial borrowing constraint a_Art strictly above the natural one. A constraint no tighter than the natural one has no effect, and describes the model without it.",
+   "subclass_of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "reduces_to": {
+    "class": {
+     "name": "bst-model",
+     "id": "BSM_0000002"
+    },
+    "when": "a_Art <= a_Nat"
+   },
+   "sources": {
+    "bst": [
+     "subsubsec-deatonislimit",
+     "sec-liqconstraslimit"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#subsubsec-deatonislimit",
+    "https://llorracc.github.io/BufferStockTheory/#sec-liqconstraslimit"
+   ]
+  },
+  {
+   "id": "BSM_0000008",
+   "kind": "model-class",
+   "name": "with-types",
+   "label": "buffer-stock population of permanent types",
+   "definition": "A population of K permanent types with shares ω_i, each a buffer-stock model differing from the others in its discount factor β_i alone. The types are solved separately; the population is their mixture.",
+   "subclass_of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "reduces_to": {
+    "class": {
+     "name": "bst-model",
+     "id": "BSM_0000002"
+    },
+    "when": "K == 1"
+   },
+   "sources": {
+    "hafiscal-qe": [
+     "Subfiles/Parameterization.tex:48"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Subfiles/Parameterization.tex#L48"
+   ]
+  },
+  {
+   "id": "BSM_0000009",
+   "kind": "model-class",
+   "name": "with-markov-states",
+   "label": "buffer-stock model with Markov employment and an aggregate regime",
+   "definition": "A buffer-stock model whose transitory income depends on a Markov employment state, with benefits that expire, and on an aggregate regime that is itself a Markov state; HAFiscal's household. The paper remarks that persistent but mean-reverting transitory shocks would change none of its key results; the conditions become conditions on matrices over the states.",
+   "subclass_of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "reduces_to": {
+    "class": {
+     "name": "bst-model",
+     "id": "BSM_0000002"
+    },
+    "when": "the chain has one state"
+   },
+   "sources": {
+    "bst": [
+     "pdv"
+    ],
+    "hafiscal-qe": [
+     "Subfiles/Parameterization.tex:124"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#pdv",
+    "https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Subfiles/Parameterization.tex#L124"
+   ]
+  },
+  {
+   "id": "BSM_0000145",
+   "kind": "model-class",
+   "name": "with-kinked-return",
+   "label": "buffer-stock model with a higher rate on borrowing",
+   "definition": "A buffer-stock model in which negative assets pay a return factor above the one positive assets earn; HARK's KinkedRconsumerType.",
+   "subclass_of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "reduces_to": {
+    "class": {
+     "name": "bst-model",
+     "id": "BSM_0000002"
+    },
+    "when": "R_boro == R"
+   },
+   "written_as": {
+    "hark": "KinkedRconsumerType"
+   }
+  },
+  {
+   "id": "BSM_0000146",
+   "kind": "model-class",
+   "name": "with-risky-asset",
+   "label": "buffer-stock model with a risky asset",
+   "definition": "A buffer-stock model in which assets, or a share of them the agent chooses, earn a random return. The owner ruled on 2026-10-27 that such a model has a target; its conditions are not yet stated, and this ontology states none.",
+   "subclass_of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "reduces_to": {
+    "class": {
+     "name": "bst-model",
+     "id": "BSM_0000002"
+    },
+    "when": "the return is riskless"
+   },
+   "written_as": {
+    "hark": "PortfolioConsumerType"
+   }
+  },
+  {
+   "id": "BSM_0000147",
+   "kind": "model-class",
+   "name": "life-cycle",
+   "label": "life-cycle buffer-stock model",
+   "definition": "A buffer-stock model with a finite horizon whose primitives may vary with age. A primitive indexed by period t governs the move from t to t+1: the income laws, the survival probability, the return on end-of-period assets and the growth factor of permanent income, as HARK's solvers read them. The paper's limiting solution is the limit of such problems with constant primitives as the horizon recedes.",
+   "subclass_of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "reduces_to": {
+    "class": {
+     "name": "bst-model",
+     "id": "BSM_0000002"
+    },
+    "when": "constant primitives, in the limit of an infinite horizon"
+   },
+   "sources": {
+    "bst": [
+     "sec-theory"
+    ],
+    "hark": [
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:650-662"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-theory",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L650-L662"
+   ]
+  },
+  {
+   "id": "BSM_0000010",
+   "kind": "axiom",
+   "name": "one-agent-saving",
+   "label": "one agent's consumption-saving problem",
+   "of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "tier": "membership",
+   "status": "bst",
+   "statement": "Each period one agent splits market resources m between consumption c > 0 and end-of-period assets a = m − c, maximizing expected discounted utility; resources next period are R a/(𝒢ψ′) + ξ′ in ratios to permanent income.",
+   "sources": {
+    "bst": [
+     "eq-levelrecproblem",
+     "eq-dbcparts",
+     "eq-veqnnrmrecbellman"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-levelrecproblem",
+    "https://llorracc.github.io/BufferStockTheory/#eq-dbcparts",
+    "https://llorracc.github.io/BufferStockTheory/#eq-veqnnrmrecbellman"
+   ]
+  },
+  {
+   "id": "BSM_0000011",
+   "kind": "axiom",
+   "name": "crra-above-one",
+   "label": "CRRA utility with relative risk aversion above one",
+   "of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "tier": "membership",
+   "status": "bst",
+   "statement": "u(c) = c^(1−ϱ)/(1−ϱ) with ϱ > 1, so that u(0⁺) = −∞.",
+   "check": "rho > 1",
+   "sources": {
+    "bst": [
+     "subsec-setup"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000037"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#subsec-setup"
+   ]
+  },
+  {
+   "id": "BSM_0000012",
+   "kind": "axiom",
+   "name": "friedman-muth-income",
+   "label": "the Friedman–Muth income process",
+   "of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "tier": "membership",
+   "status": "bst",
+   "statement": "Noncapital income is 𝐩 ξ, with permanent income 𝐩′ = 𝒢 ψ′ 𝐩; the permanent shock ψ is positive with E[ψ] = 1, and the transitory shock ξ is nonnegative with a finite positive mean.",
+   "sources": {
+    "bst": [
+     "ass-shocks",
+     "eq-dbcparts"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-shocks",
+    "https://llorracc.github.io/BufferStockTheory/#eq-dbcparts"
+   ]
+  },
+  {
+   "id": "BSM_0000013",
+   "kind": "axiom",
+   "name": "asset-return",
+   "label": "assets earn a return",
+   "of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "tier": "membership",
+   "status": "proposed",
+   "statement": "End-of-period assets earn a gross return factor R > 0 into next period. In the paper's model it is riskless and constant; a risky return or a higher rate on borrowing makes an extension.",
+   "check": "R > 0",
+   "sources": {
+    "bst": [
+     "eq-dbcparts"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000040"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-dbcparts"
+   ]
+  },
+  {
+   "id": "BSM_0000014",
+   "kind": "axiom",
+   "name": "constraint-in-force",
+   "label": "the borrowing constraint in force",
+   "of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "tier": "membership",
+   "status": "bst",
+   "statement": "End-of-period assets satisfy a ≥ a_min = max(a_Art, a_Nat): the natural constraint, which u(0⁺) = −∞ and the worst income impose, or a tighter artificial one.",
+   "sources": {
+    "bst": [
+     "pdv",
+     "borocnstnat"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#pdv",
+    "https://llorracc.github.io/BufferStockTheory/#borocnstnat"
+   ]
+  },
+  {
+   "id": "BSM_0000015",
+   "kind": "axiom",
+   "name": "point-mass-at-worst-transitory",
+   "label": "an atom at the worst transitory shock where the natural constraint is in force",
+   "of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "tier": "membership",
+   "status": "ruling",
+   "ruled": "2026-10-31",
+   "statement": "Where the natural constraint is as tight as or tighter than every artificial constraint (a_min = a_Nat, the edge a_Art = a_Nat included), the lowest value of the transitory shock carries positive probability under the true law: P(ξ = inf supp ξ) > 0. The condition is on the transitory shock alone, not on income ψξ. The paper calls such an atom inessential to its proofs; the owner's ruling makes it part of the class's definition.",
+   "check": "a_min > a_Nat or xi_atom > 0",
+   "sources": {
+    "bst": [
+     "pdv"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000048",
+    "BSM_0000057",
+    "BSM_0000058"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#pdv"
+   ]
+  },
+  {
+   "id": "BSM_0000016",
+   "kind": "axiom",
+   "name": "iid-shocks",
+   "label": "iid shocks",
+   "of": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "tier": "hypothesis",
+   "status": "bst",
+   "statement": "ψ and ξ are independent of each other and over time, and identically distributed.",
+   "sources": {
+    "bst": [
+     "ass-shocks"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-shocks"
+   ]
+  },
+  {
+   "id": "BSM_0000017",
+   "kind": "axiom",
+   "name": "bounded-support",
+   "label": "bounded support",
+   "of": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "tier": "hypothesis",
+   "status": "bst",
+   "statement": "ψ ∈ [ψ_min, ψ_max] with 0 < ψ_min ≤ 1 ≤ ψ_max < ∞, and the employed draw θ ∈ [θ_min, θ_max] with 0 < θ_min ≤ 1 ≤ θ_max < ∞. This excludes the untruncated lognormal, and admits every discretization of it.",
+   "sources": {
+    "bst": [
+     "ass-shocks",
+     "bounded-support"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-shocks",
+    "https://llorracc.github.io/BufferStockTheory/#bounded-support"
+   ]
+  },
+  {
+   "id": "BSM_0000018",
+   "kind": "axiom",
+   "name": "zero-income-event",
+   "label": "the zero-income event",
+   "of": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "tier": "hypothesis",
+   "status": "bst",
+   "statement": "ξ = 0 with probability ℘ > 0, and ξ = θ/(1 − ℘) otherwise, with E[θ] = 1.",
+   "check": "wp > 0 and xi_u == 0",
+   "sources": {
+    "bst": [
+     "eq-transhkdef"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000042",
+    "BSM_0000043"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-transhkdef"
+   ]
+  },
+  {
+   "id": "BSM_0000019",
+   "kind": "axiom",
+   "name": "no-artificial-constraint",
+   "label": "no artificial constraint",
+   "of": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "tier": "hypothesis",
+   "status": "bst",
+   "statement": "There is no artificial borrowing constraint; the natural constraint is the one in force.",
+   "check": "a_min == a_Nat",
+   "sources": {
+    "bst": [
+     "sec-intro"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000057",
+    "BSM_0000058"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-intro"
+   ]
+  },
+  {
+   "id": "BSM_0000020",
+   "kind": "axiom",
+   "name": "infinite-lives",
+   "label": "infinite lives",
+   "of": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "tier": "hypothesis",
+   "status": "bst",
+   "statement": "ℒ = 1; the object of study is the limit of the finite-horizon solutions as the horizon recedes.",
+   "check": "L == 1",
+   "sources": {
+    "bst": [
+     "def-nondegeneracy"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000039"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#def-nondegeneracy"
+   ]
+  },
+  {
+   "id": "BSM_0000021",
+   "kind": "axiom",
+   "name": "one-type",
+   "label": "one type",
+   "of": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "tier": "hypothesis",
+   "status": "bst",
+   "statement": "Every agent has the same primitives.",
+   "sources": {
+    "bst": [
+     "subsec-setup"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#subsec-setup"
+   ]
+  },
+  {
+   "id": "BSM_0000022",
+   "kind": "axiom",
+   "name": "no-shocks",
+   "label": "no shocks",
+   "of": {
+    "name": "perfect-foresight-benchmark",
+    "id": "BSM_0000003"
+   },
+   "tier": "membership",
+   "status": "bst",
+   "statement": "℘ = 0 and ψ = θ = 1 with probability one.",
+   "check": "wp == 0",
+   "sources": {
+    "bst": [
+     "ass-pfincome"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000042"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-pfincome"
+   ]
+  },
+  {
+   "id": "BSM_0000148",
+   "kind": "axiom",
+   "name": "income-risk",
+   "label": "income risk",
+   "of": {
+    "name": "buffer-stock-model",
+    "id": "BSM_0000001"
+   },
+   "tier": "membership",
+   "status": "proposed",
+   "statement": "At least one of the permanent and the transitory shock is not degenerate. A model without income risk has no precautionary motive and is the perfect-foresight benchmark, not a buffer-stock model.",
+   "sources": {
+    "bst": [
+     "sec-intro",
+     "ass-pfincome"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-intro",
+    "https://llorracc.github.io/BufferStockTheory/#ass-pfincome"
+   ]
+  },
+  {
+   "id": "BSM_0000149",
+   "kind": "axiom",
+   "name": "riskless-constant-return",
+   "label": "a riskless, constant return",
+   "of": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "tier": "hypothesis",
+   "status": "bst",
+   "statement": "The return factor R is known and the same in every period, for positive and negative assets alike.",
+   "sources": {
+    "bst": [
+     "eq-dbcparts"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-dbcparts"
+   ]
+  },
+  {
+   "id": "BSM_0000023",
+   "kind": "object",
+   "name": "agent",
+   "label": "agent",
+   "category": "agent",
+   "definition": "The consumer whose problem the model states."
+  },
+  {
+   "id": "BSM_0000024",
+   "kind": "object",
+   "name": "population",
+   "label": "population",
+   "category": "population",
+   "definition": "A continuum of agents of unit mass, each following the model's rule.",
+   "sources": {
+    "bst": [
+     "the-aggregate-and-idiosyncratic-relationship-between-consumption-growth-and-income-growth"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#the-aggregate-and-idiosyncratic-relationship-between-consumption-growth-and-income-growth"
+   ]
+  },
+  {
+   "id": "BSM_0000025",
+   "kind": "object",
+   "name": "period",
+   "label": "period",
+   "category": "time",
+   "definition": "The time index t; finite-horizon problems run to a terminal period T.",
+   "written_as": {
+    "registry": "period-now"
+   },
+   "sources": {
+    "bst": [
+     "subsec-setup"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#subsec-setup"
+   ]
+  },
+  {
+   "id": "BSM_0000026",
+   "kind": "object",
+   "name": "market-resources",
+   "label": "market resources",
+   "category": "state",
+   "symbol": "m",
+   "definition": "Bank balances plus noncapital income, as a ratio to permanent income; the state of the normalized problem.",
+   "written_as": {
+    "bst": "\\mNrm",
+    "registry": "resources-now",
+    "bellman-sym": "m",
+    "hark": "mNrm"
+   },
+   "sources": {
+    "bst": [
+     "eq-dbcparts",
+     "subsubsec-ratio"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-dbcparts",
+    "https://llorracc.github.io/BufferStockTheory/#subsubsec-ratio"
+   ]
+  },
+  {
+   "id": "BSM_0000027",
+   "kind": "object",
+   "name": "permanent-income",
+   "label": "permanent income",
+   "category": "state",
+   "definition": "The level 𝐩 by which the problem is normalized; 𝐩′ = 𝒢 ψ′ 𝐩.",
+   "written_as": {
+    "bst": "\\pLvl",
+    "hark": "pLvl"
+   },
+   "sources": {
+    "bst": [
+     "eq-dbcparts"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-dbcparts"
+   ]
+  },
+  {
+   "id": "BSM_0000028",
+   "kind": "object",
+   "name": "kapital",
+   "label": "kapital",
+   "category": "state",
+   "definition": "Beginning-of-period capital, last period's end-of-period assets.",
+   "written_as": {
+    "registry": "kapital-now",
+    "bellman-sym": "k"
+   },
+   "sources": {
+    "bst": [
+     "eq-dbcparts"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-dbcparts"
+   ]
+  },
+  {
+   "id": "BSM_0000029",
+   "kind": "object",
+   "name": "bank-balances",
+   "label": "bank balances",
+   "category": "state",
+   "definition": "b = R k/(𝒢 ψ), kapital with its return, as a ratio to this period's permanent income.",
+   "written_as": {
+    "bst": "\\bNrm",
+    "registry": "bank-balances",
+    "hark": "bNrm"
+   },
+   "sources": {
+    "bst": [
+     "eq-dbcparts",
+     "eq-veqnnrmrecbellman"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-dbcparts",
+    "https://llorracc.github.io/BufferStockTheory/#eq-veqnnrmrecbellman"
+   ]
+  },
+  {
+   "id": "BSM_0000030",
+   "kind": "object",
+   "name": "end-of-period-assets",
+   "label": "end-of-period assets",
+   "category": "state",
+   "definition": "a = m − c, as a ratio to permanent income.",
+   "written_as": {
+    "registry": "assets-now",
+    "bellman-sym": "a",
+    "hark": "aNrm"
+   },
+   "sources": {
+    "bst": [
+     "eq-veqnnrmrecbellman"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-veqnnrmrecbellman"
+   ]
+  },
+  {
+   "id": "BSM_0000031",
+   "kind": "object",
+   "name": "consumption",
+   "label": "consumption",
+   "category": "control",
+   "definition": "c, as a ratio to permanent income; the agent's one choice.",
+   "written_as": {
+    "registry": "consumption-now",
+    "bellman-sym": "c",
+    "hark": "cNrm"
+   },
+   "sources": {
+    "bst": [
+     "eq-veqnnrmrecbellman"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-veqnnrmrecbellman"
+   ]
+  },
+  {
+   "id": "BSM_0000032",
+   "kind": "object",
+   "name": "permanent-shock",
+   "label": "permanent shock",
+   "category": "shock",
+   "definition": "ψ, the mean-one shock to permanent income; its law is a mean-one law of the ontology of probability distributions.",
+   "law": {
+    "pd": [
+     "PD_0000012",
+     "PD_0000018",
+     "PD_0000031"
+    ]
+   },
+   "written_as": {
+    "bst": "\\permShk",
+    "registry": "permanent-shock",
+    "parameter-file": "income.permanent_shock",
+    "bellman-sym": "ψ",
+    "hark": "PermShk"
+   },
+   "sources": {
+    "bst": [
+     "ass-shocks"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-shocks"
+   ]
+  },
+  {
+   "id": "BSM_0000033",
+   "kind": "object",
+   "name": "transitory-shock",
+   "label": "transitory shock",
+   "category": "shock",
+   "definition": "ξ, transitory income as a ratio to permanent income, the unemployment event included: ξ_u with probability ℘, else the scaled employed draw.",
+   "written_as": {
+    "bst": "\\tranShkAll",
+    "registry": "transitory-shock-all",
+    "bellman-sym": "ξ",
+    "hark": "TranShk"
+   },
+   "sources": {
+    "bst": [
+     "ass-shocks",
+     "eq-transhkdef"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-shocks",
+    "https://llorracc.github.io/BufferStockTheory/#eq-transhkdef"
+   ]
+  },
+  {
+   "id": "BSM_0000034",
+   "kind": "object",
+   "name": "transitory-shock-employed",
+   "label": "employed transitory draw",
+   "category": "shock",
+   "definition": "θ, the mean-one draw of transitory income while employed.",
+   "law": {
+    "pd": [
+     "PD_0000012",
+     "PD_0000018",
+     "PD_0000031"
+    ]
+   },
+   "written_as": {
+    "bst": "\\tranShkEmp",
+    "registry": "transitory-shock-employed",
+    "parameter-file": "income.employed_shock",
+    "bellman-sym": "θ"
+   },
+   "sources": {
+    "bst": [
+     "ass-shocks"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-shocks"
+   ]
+  },
+  {
+   "id": "BSM_0000035",
+   "kind": "object",
+   "name": "unemployment-event",
+   "label": "unemployment event",
+   "category": "event",
+   "definition": "The event in which transitory income is ξ_u; BST's zero-income event when ξ_u = 0.",
+   "written_as": {
+    "bellman-sym": "j"
+   },
+   "sources": {
+    "bst": [
+     "eq-transhkdef"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-transhkdef"
+   ]
+  },
+  {
+   "id": "BSM_0000036",
+   "kind": "object",
+   "name": "survival-event",
+   "label": "survival event",
+   "category": "event",
+   "definition": "The event, of probability ℒ, that an agent alive this period is alive the next.",
+   "sources": {
+    "bst": [
+     "sec-mortality"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-mortality"
+   ]
+  },
+  {
+   "id": "BSM_0000037",
+   "kind": "object",
+   "name": "crra",
+   "label": "relative risk aversion",
+   "category": "primitive",
+   "symbol": "rho",
+   "definition": "ϱ, the coefficient of relative risk aversion of the CRRA utility function.",
+   "written_as": {
+    "bst": "\\CRRA",
+    "registry": "crra",
+    "parameter-file": "crra",
+    "bellman-sym": "ϱ",
+    "hark": "CRRA"
+   },
+   "sources": {
+    "bst": [
+     "subsec-setup"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#subsec-setup"
+   ]
+  },
+  {
+   "id": "BSM_0000038",
+   "kind": "object",
+   "name": "discount-factor",
+   "label": "discount factor",
+   "category": "primitive",
+   "symbol": "beta",
+   "definition": "β, the pure time-preference factor of one type.",
+   "written_as": {
+    "bst": "\\DiscFac",
+    "registry": "discount-factor",
+    "parameter-file": "types[].beta",
+    "bellman-sym": "β",
+    "hark": "DiscFac"
+   },
+   "sources": {
+    "bst": [
+     "subsec-setup"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#subsec-setup"
+   ]
+  },
+  {
+   "id": "BSM_0000039",
+   "kind": "object",
+   "name": "survival-prob",
+   "label": "survival probability",
+   "category": "primitive",
+   "symbol": "L",
+   "definition": "ℒ, the probability of surviving into the next period.",
+   "written_as": {
+    "bst": "\\Alive",
+    "registry": "survival-prob",
+    "parameter-file": "survival",
+    "bellman-sym": "ℒ",
+    "hark": "LivPrb"
+   },
+   "sources": {
+    "bst": [
+     "sec-mortality"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-mortality"
+   ]
+  },
+  {
+   "id": "BSM_0000040",
+   "kind": "object",
+   "name": "return-factor",
+   "label": "return factor",
+   "category": "primitive",
+   "symbol": "R",
+   "definition": "R, the gross return on the riskless asset.",
+   "written_as": {
+    "bst": "\\Rfree",
+    "registry": "return-factor",
+    "parameter-file": "return",
+    "bellman-sym": "R",
+    "hark": "Rfree"
+   },
+   "sources": {
+    "bst": [
+     "eq-dbcparts"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-dbcparts"
+   ]
+  },
+  {
+   "id": "BSM_0000041",
+   "kind": "object",
+   "name": "growth-factor",
+   "label": "growth factor of permanent income",
+   "category": "primitive",
+   "symbol": "G",
+   "definition": "𝒢, the expected growth factor of permanent income.",
+   "written_as": {
+    "bst": "\\PermGroFac",
+    "registry": "growth-factor",
+    "parameter-file": "income.growth",
+    "bellman-sym": "𝒢",
+    "hark": "PermGroFac"
+   },
+   "sources": {
+    "bst": [
+     "eq-dbcparts"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-dbcparts"
+   ]
+  },
+  {
+   "id": "BSM_0000042",
+   "kind": "object",
+   "name": "unemployment-prob",
+   "label": "probability of unemployment",
+   "category": "primitive",
+   "symbol": "wp",
+   "definition": "℘, the probability of the unemployment event, whatever ξ_u is.",
+   "written_as": {
+    "bst": "\\pZero",
+    "registry": "unemployment-prob",
+    "parameter-file": "income.unemployment.prob",
+    "bellman-sym": "p_zero",
+    "hark": "UnempPrb"
+   },
+   "sources": {
+    "bst": [
+     "eq-transhkdef"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-transhkdef"
+   ]
+  },
+  {
+   "id": "BSM_0000043",
+   "kind": "object",
+   "name": "income-unemployed",
+   "label": "income while unemployed",
+   "category": "primitive",
+   "symbol": "xi_u",
+   "definition": "ξ_u ≥ 0, transitory income in the unemployment event, as a ratio to permanent income.",
+   "written_as": {
+    "bst": "\\IncUnemp",
+    "registry": "income-unemployed",
+    "parameter-file": "income.unemployment.income",
+    "bellman-sym": "ξ_u",
+    "hark": "IncUnemp"
+   },
+   "sources": {
+    "bst": [
+     "pdv"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#pdv"
+   ]
+  },
+  {
+   "id": "BSM_0000044",
+   "kind": "object",
+   "name": "borrowing-limit-artificial",
+   "label": "artificial borrowing constraint",
+   "category": "primitive",
+   "symbol": "a_Art",
+   "definition": "a_Art ≤ 0, a lower bound on end-of-period assets imposed from outside the household's problem.",
+   "written_as": {
+    "bst": "\\BoroCnstArt",
+    "registry": "borrowing-limit-artificial",
+    "parameter-file": "borrowing_constraint",
+    "bellman-sym": "a_Art",
+    "hark": "BoroCnstArt"
+   },
+   "sources": {
+    "bst": [
+     "subsubsec-deatonislimit"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#subsubsec-deatonislimit"
+   ]
+  },
+  {
+   "id": "BSM_0000150",
+   "kind": "object",
+   "name": "return-borrowing",
+   "label": "return factor on borrowing",
+   "category": "primitive",
+   "symbol": "R_boro",
+   "definition": "The gross return factor negative assets pay, in the extension with a higher rate on borrowing.",
+   "written_as": {
+    "registry": "return-borrowing",
+    "hark": "Rboro"
+   }
+  },
+  {
+   "id": "BSM_0000045",
+   "kind": "object",
+   "name": "type-share",
+   "label": "share of a type",
+   "category": "primitive",
+   "definition": "ω_i, the share of type i in the population.",
+   "written_as": {
+    "registry": "weight",
+    "parameter-file": "types[].share"
+   }
+  },
+  {
+   "id": "BSM_0000046",
+   "kind": "object",
+   "name": "permanent-shock-min",
+   "label": "lowest permanent shock",
+   "category": "bound",
+   "symbol": "psi_min",
+   "definition": "ψ_min, the infimum of the permanent shock's support under the true law; zero for a law unbounded below.",
+   "written_as": {
+    "bst": "\\permShkIndMin",
+    "registry": "permanent-shock-min"
+   },
+   "sources": {
+    "bst": [
+     "ass-shocks"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-shocks"
+   ]
+  },
+  {
+   "id": "BSM_0000047",
+   "kind": "object",
+   "name": "transitory-shock-min",
+   "label": "lowest transitory shock",
+   "category": "bound",
+   "symbol": "xi_min",
+   "definition": "ξ_min, the infimum of the transitory shock's support under the true law: the lower of ξ_u (when ℘ > 0) and the lowest scaled employed draw.",
+   "written_as": {
+    "bst": "\\tranShkMin",
+    "registry": "transitory-shock-min"
+   },
+   "sources": {
+    "bst": [
+     "ass-shocks"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-shocks"
+   ]
+  },
+  {
+   "id": "BSM_0000048",
+   "kind": "object",
+   "name": "transitory-atom-prob",
+   "label": "probability of the lowest transitory shock",
+   "category": "bound",
+   "symbol": "xi_atom",
+   "definition": "P(ξ = ξ_min), the mass the true law of the transitory shock puts at its infimum.",
+   "sources": {
+    "bst": [
+     "pdv"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#pdv"
+   ]
+  },
+  {
+   "id": "BSM_0000049",
+   "kind": "object",
+   "name": "worst-income-prob",
+   "label": "probability of the worst income",
+   "category": "bound",
+   "symbol": "p_worst",
+   "definition": "The probability that income ψξ takes its lowest value: ℘ when the unemployment event pays nothing, otherwise the product of the two laws' masses at their infima.",
+   "written_as": {
+    "registry": "worst-income-prob",
+    "hark": "WorstIncPrb"
+   },
+   "sources": {
+    "bst": [
+     "wric"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#wric"
+   ]
+  },
+  {
+   "id": "BSM_0000050",
+   "kind": "object",
+   "name": "utility-function",
+   "label": "utility function",
+   "category": "function",
+   "definition": "u(c) = c^(1−ϱ)/(1−ϱ).",
+   "written_as": {
+    "bst": "\\uFunc",
+    "registry": "utility-function",
+    "bellman-sym": "𝑢"
+   },
+   "sources": {
+    "bst": [
+     "subsec-setup"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#subsec-setup"
+   ]
+  },
+  {
+   "id": "BSM_0000051",
+   "kind": "object",
+   "name": "value-function",
+   "label": "value function",
+   "category": "function",
+   "definition": "v_t(m), the normalized value of the finite-horizon problem, value in levels divided by 𝐩^(1−ϱ); its limit as the horizon recedes is the limiting value function v.",
+   "written_as": {
+    "bst": "\\vFunc",
+    "bellman-sym": "V"
+   },
+   "sources": {
+    "bst": [
+     "eq-veqnnrmrecbellman",
+     "def-nondegeneracy"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-veqnnrmrecbellman",
+    "https://llorracc.github.io/BufferStockTheory/#def-nondegeneracy"
+   ]
+  },
+  {
+   "id": "BSM_0000052",
+   "kind": "object",
+   "name": "consumption-function",
+   "label": "consumption function",
+   "category": "function",
+   "definition": "c_t(m), the optimal consumption of the finite-horizon problem; its limit as the horizon recedes is the limiting consumption function c, the rule a population follows.",
+   "written_as": {
+    "bst": "\\cFunc",
+    "registry": "consumption-function",
+    "hark": "cFunc"
+   },
+   "sources": {
+    "bst": [
+     "eq-cfunceq1",
+     "def-nondegeneracy"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-cfunceq1",
+    "https://llorracc.github.io/BufferStockTheory/#def-nondegeneracy"
+   ]
+  },
+  {
+   "id": "BSM_0000053",
+   "kind": "object",
+   "name": "bellman-operator",
+   "label": "stationary Bellman operator",
+   "category": "operator",
+   "definition": "T, the map from next period's normalized value function to this period's, over consumption in (0, m).",
+   "written_as": {
+    "bst": "\\TMap"
+   },
+   "sources": {
+    "bst": [
+     "stationary-bellman-operator",
+     "eq-maintmap"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#stationary-bellman-operator",
+    "https://llorracc.github.io/BufferStockTheory/#eq-maintmap"
+   ]
+  },
+  {
+   "id": "BSM_0000054",
+   "kind": "object",
+   "name": "euler-equation",
+   "label": "Euler equation",
+   "category": "operator",
+   "definition": "u′(c_t) = R β E_t[(𝒢ψ′)^(−ϱ) u′(c_{t+1})] in the normalized problem, with survival β̊ in place of β; with a binding artificial constraint, an inequality with complementary slackness.",
+   "written_as": {
+    "bellman-sym": "policy.euler"
+   },
+   "sources": {
+    "bst": [
+     "eq-scaledeuler"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-scaledeuler"
+   ]
+  },
+  {
+   "id": "BSM_0000055",
+   "kind": "object",
+   "name": "expectation",
+   "label": "expectation over beliefs",
+   "category": "operator",
+   "definition": "E_t, the expectation over next period's shocks, for one agent's beliefs.",
+   "written_as": {
+    "bst": "\\Ex",
+    "registry": "expectation",
+    "bellman-sym": "E_{ψ,θ,j}"
+   },
+   "sources": {
+    "bst": [
+     "eq-levelrecproblem"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-levelrecproblem"
+   ]
+  },
+  {
+   "id": "BSM_0000056",
+   "kind": "object",
+   "name": "cross-sectional-mean",
+   "label": "cross-sectional mean",
+   "category": "operator",
+   "definition": "𝕄, the mean of a variable across the population's empirical distribution, as distinct from the expectation over one agent's beliefs.",
+   "written_as": {
+    "bst": "\\Mean"
+   },
+   "sources": {
+    "bst": [
+     "subsec-cgroeqpermgrofacq"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#subsec-cgroeqpermgrofacq"
+   ]
+  },
+  {
+   "id": "BSM_0000057",
+   "kind": "object",
+   "name": "borrowing-limit-natural",
+   "label": "natural borrowing constraint",
+   "category": "constraint",
+   "symbol": "a_Nat",
+   "definition": "a_Nat, the lowest end-of-period assets from which the worst income next period still allows positive consumption forever: minus the present value of the worst income, capitalized at ℛ.",
+   "written_as": {
+    "bst": "\\BoroCnstNat",
+    "registry": "borrowing-limit-natural",
+    "bellman-sym": "a_Nat",
+    "hark": "BoroCnstNat"
+   },
+   "sources": {
+    "bst": [
+     "borocnstnat",
+     "pdv"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#borocnstnat",
+    "https://llorracc.github.io/BufferStockTheory/#pdv"
+   ]
+  },
+  {
+   "id": "BSM_0000058",
+   "kind": "object",
+   "name": "borrowing-limit",
+   "label": "constraint in force",
+   "category": "constraint",
+   "symbol": "a_min",
+   "definition": "a_min = max(a_Art, a_Nat), the borrowing constraint the agent faces.",
+   "written_as": {
+    "registry": "borrowing-limit"
+   },
+   "sources": {
+    "bst": [
+     "pdv"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#pdv"
+   ]
+  },
+  {
+   "id": "BSM_0000059",
+   "kind": "object",
+   "name": "dynamic-budget-constraint",
+   "label": "dynamic budget constraint",
+   "category": "constraint",
+   "definition": "a = m − c; k′ = a; 𝐩′ = 𝒢ψ′𝐩; m′ = R k′/(𝒢ψ′) + ξ′.",
+   "written_as": {
+    "bellman-sym": "arvl_to_dcsn.market_resources"
+   },
+   "sources": {
+    "bst": [
+     "eq-dbcparts"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-dbcparts"
+   ]
+  },
+  {
+   "id": "BSM_0000060",
+   "kind": "object",
+   "name": "population-measure",
+   "label": "population measure",
+   "category": "measure",
+   "definition": "The measure that gives each agent of the population weight one.",
+   "sources": {
+    "bst": [
+     "gicsdl"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#gicsdl"
+   ]
+  },
+  {
+   "id": "BSM_0000061",
+   "kind": "object",
+   "name": "income-measure",
+   "label": "income measure",
+   "category": "measure",
+   "definition": "The measure that weights each agent by its permanent income, normalized to total weight one: Harmenberg's permanent-income-neutral measure.",
+   "sources": {
+    "bst": [
+     "eq-harmcdf"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-harmcdf"
+   ]
+  },
+  {
+   "id": "BSM_0000062",
+   "kind": "moment",
+   "name": "e-psi-inv",
+   "label": "E[ψ⁻¹]",
+   "of": {
+    "name": "permanent-shock",
+    "id": "BSM_0000032"
+   },
+   "symbol": "E_psi_inv",
+   "formula": "E(X**-1)",
+   "written_as": {
+    "bst": "\\EPermShkInv",
+    "registry": "e-perm-shk-inv"
+   },
+   "sources": {
+    "bst": [
+     "eq-gpfacmod"
+    ]
+   },
+   "depends_on": [],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-gpfacmod"
+   ]
+  },
+  {
+   "id": "BSM_0000063",
+   "kind": "moment",
+   "name": "e-psi-pow-1-minus-rho",
+   "label": "E[ψ^(1−ϱ)]",
+   "of": {
+    "name": "permanent-shock",
+    "id": "BSM_0000032"
+   },
+   "symbol": "E_psi_1mrho",
+   "formula": "E(X**(1 - rho))",
+   "sources": {
+    "bst": [
+     "fvac"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000037"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#fvac"
+   ]
+  },
+  {
+   "id": "BSM_0000064",
+   "kind": "moment",
+   "name": "e-log-psi",
+   "label": "E[log ψ]",
+   "of": {
+    "name": "permanent-shock",
+    "id": "BSM_0000032"
+   },
+   "symbol": "E_log_psi",
+   "formula": "E(log(X))",
+   "sources": {
+    "bst": [
+     "gicsdl"
+    ]
+   },
+   "depends_on": [],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#gicsdl"
+   ]
+  },
+  {
+   "id": "BSM_0000065",
+   "kind": "moment",
+   "name": "e-psi-log-psi",
+   "label": "E[ψ log ψ]",
+   "of": {
+    "name": "permanent-shock",
+    "id": "BSM_0000032"
+   },
+   "symbol": "E_psi_log_psi",
+   "formula": "E(X*log(X))",
+   "sources": {
+    "bst": [
+     "growth-impatience-implies-harmenberg-impatience"
+    ]
+   },
+   "depends_on": [],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#growth-impatience-implies-harmenberg-impatience"
+   ]
+  },
+  {
+   "id": "BSM_0000066",
+   "kind": "quantity",
+   "name": "discount-factor-liv",
+   "label": "discount factor with survival",
+   "symbol": "beta_eff",
+   "formula": "beta*L",
+   "definition": "β̊ = β ℒ, the factor by which the household discounts next period's value when there is no annuity.",
+   "written_as": {
+    "registry": "discount-factor-liv",
+    "hark": "DiscFacEff"
+   },
+   "sources": {
+    "bst": [
+     "sec-mortality"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000038",
+    "BSM_0000039"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-mortality"
+   ]
+  },
+  {
+   "id": "BSM_0000067",
+   "kind": "quantity",
+   "name": "patience-abs",
+   "label": "absolute patience factor",
+   "symbol": "thorn_raw",
+   "formula": "(R*beta)**(1/rho)",
+   "definition": "Þ = (R β)^(1/ϱ), the growth factor of consumption under perfect foresight with infinite lives.",
+   "written_as": {
+    "bst": "\\APFac",
+    "registry": "patience-abs"
+   },
+   "sources": {
+    "bst": [
+     "apfac"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000037",
+    "BSM_0000038",
+    "BSM_0000040"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#apfac"
+   ]
+  },
+  {
+   "id": "BSM_0000068",
+   "kind": "quantity",
+   "name": "patience-abs-liv",
+   "label": "absolute patience factor with survival",
+   "symbol": "thorn",
+   "formula": "(R*beta*L)**(1/rho)",
+   "definition": "Þ̊ = (R β̊)^(1/ϱ), the absolute patience factor with survival and no annuity; Þ when ℒ = 1.",
+   "written_as": {
+    "registry": "patience-abs-liv",
+    "hark": "APFac"
+   },
+   "sources": {
+    "bst": [
+     "apfac",
+     "sec-mortality"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000037",
+    "BSM_0000038",
+    "BSM_0000039",
+    "BSM_0000040"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#apfac",
+    "https://llorracc.github.io/BufferStockTheory/#sec-mortality"
+   ]
+  },
+  {
+   "id": "BSM_0000069",
+   "kind": "quantity",
+   "name": "patience-return-liv",
+   "label": "return patience factor",
+   "symbol": "thorn_R",
+   "formula": "thorn/R",
+   "definition": "Þ̊_R = Þ̊/R.",
+   "written_as": {
+    "bst": "\\RPFac",
+    "registry": "patience-return-liv",
+    "hark": "RPFac"
+   },
+   "sources": {
+    "bst": [
+     "ric"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000040",
+    "BSM_0000068"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ric"
+   ]
+  },
+  {
+   "id": "BSM_0000070",
+   "kind": "quantity",
+   "name": "patience-growth-liv",
+   "label": "growth patience factor",
+   "symbol": "thorn_G",
+   "formula": "thorn/G",
+   "definition": "Þ̊_𝒢 = Þ̊/𝒢.",
+   "written_as": {
+    "bst": "\\GPFacRaw",
+    "registry": "patience-growth-liv",
+    "hark": "GPFacRaw"
+   },
+   "sources": {
+    "bst": [
+     "eq-gpfacraw"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000041",
+    "BSM_0000068"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-gpfacraw"
+   ]
+  },
+  {
+   "id": "BSM_0000071",
+   "kind": "quantity",
+   "name": "patience-growth-mod",
+   "label": "risk-modified growth patience factor",
+   "symbol": "thorn_G_mod",
+   "formula": "thorn_G*E_psi_inv",
+   "definition": "Þ̊_𝒢 E[ψ⁻¹], the expectation of the ratio of the absolute patience factor to the stochastic growth factor.",
+   "written_as": {
+    "bst": "\\GPFacMod",
+    "registry": "patience-growth-mod",
+    "hark": "GPFacMod"
+   },
+   "sources": {
+    "bst": [
+     "eq-gpfacmod"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000062",
+    "BSM_0000070"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-gpfacmod"
+   ]
+  },
+  {
+   "id": "BSM_0000072",
+   "kind": "quantity",
+   "name": "patience-growth-mortality-adj",
+   "label": "mortality-adjusted growth patience factor",
+   "symbol": "thorn_G_liv",
+   "formula": "L*thorn_G",
+   "definition": "ℒ Þ̊_𝒢, the growth patience factor of a cohort whose members die at rate 1 − ℒ.",
+   "written_as": {
+    "registry": "patience-growth-mortality-adj",
+    "hark": "GPFacLiv"
+   },
+   "sources": {
+    "bst": [
+     "giclivmoddefn"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000039",
+    "BSM_0000070"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#giclivmoddefn"
+   ]
+  },
+  {
+   "id": "BSM_0000073",
+   "kind": "quantity",
+   "name": "return-growth-ratio",
+   "label": "return factor normalized by growth",
+   "symbol": "R_by_G",
+   "formula": "R/G",
+   "definition": "ℛ = R/𝒢.",
+   "written_as": {
+    "bst": "\\RNrmByG",
+    "registry": "return-growth-ratio"
+   },
+   "sources": {
+    "bst": [
+     "eq-veqnnrmrecbellman"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000040",
+    "BSM_0000041"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-veqnnrmrecbellman"
+   ]
+  },
+  {
+   "id": "BSM_0000074",
+   "kind": "quantity",
+   "name": "human-wealth-factor",
+   "label": "finite human wealth factor",
+   "symbol": "fhw",
+   "formula": "G/R",
+   "definition": "𝒢/R, the factor by which the present value of noncapital income is discounted each period.",
+   "written_as": {
+    "hark": "FHWFac"
+   },
+   "sources": {
+    "bst": [
+     "ass-fhwc"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000040",
+    "BSM_0000041"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-fhwc"
+   ]
+  },
+  {
+   "id": "BSM_0000075",
+   "kind": "quantity",
+   "name": "human-wealth",
+   "label": "human wealth",
+   "symbol": "h",
+   "formula": "1/(1 - G/R)",
+   "domain": {
+    "name": "fhwc",
+    "id": "BSM_0000085"
+   },
+   "definition": "h, the present value of noncapital income as a ratio to permanent income, including this period's, in the limit of an infinite horizon; finite exactly when the FHWC holds.",
+   "written_as": {
+    "bst": "\\hNrm",
+    "registry": "human-wealth",
+    "hark": "hNrm"
+   },
+   "sources": {
+    "bst": [
+     "eq-hdef"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000040",
+    "BSM_0000041"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-hdef"
+   ]
+  },
+  {
+   "id": "BSM_0000076",
+   "kind": "quantity",
+   "name": "pf-value-of-autarky-factor",
+   "label": "perfect-foresight value-of-autarky factor",
+   "symbol": "pf_vaf",
+   "formula": "beta*L*G**(1 - rho)",
+   "definition": "β̊ 𝒢^(1−ϱ), the factor of the value of consuming permanent income forever under perfect foresight.",
+   "written_as": {
+    "hark": "PFVAFac"
+   },
+   "sources": {
+    "bst": [
+     "pffvac"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000037",
+    "BSM_0000038",
+    "BSM_0000039",
+    "BSM_0000041"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#pffvac"
+   ]
+  },
+  {
+   "id": "BSM_0000077",
+   "kind": "quantity",
+   "name": "value-of-autarky-factor",
+   "label": "value-of-autarky factor",
+   "symbol": "vaf",
+   "formula": "beta*L*G**(1 - rho)*E_psi_1mrho",
+   "definition": "β̊ 𝒢^(1−ϱ) E[ψ^(1−ϱ)], the factor of the value of consuming permanent income forever.",
+   "written_as": {
+    "hark": "VAFac"
+   },
+   "sources": {
+    "bst": [
+     "fvac"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000037",
+    "BSM_0000038",
+    "BSM_0000039",
+    "BSM_0000041",
+    "BSM_0000063"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#fvac"
+   ]
+  },
+  {
+   "id": "BSM_0000078",
+   "kind": "quantity",
+   "name": "weak-return-patience-factor",
+   "label": "weak return patience factor",
+   "symbol": "wrp",
+   "formula": "p_worst**(1/rho)*thorn_R",
+   "definition": "p_worst^(1/ϱ) Þ̊_R, the return patience factor scaled by the probability of the worst income.",
+   "written_as": {
+    "hark": "WRPFac"
+   },
+   "sources": {
+    "bst": [
+     "wric"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000037",
+    "BSM_0000049",
+    "BSM_0000069"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#wric"
+   ]
+  },
+  {
+   "id": "BSM_0000079",
+   "kind": "quantity",
+   "name": "mpc-min",
+   "label": "limiting MPC as resources grow",
+   "symbol": "mpc_min",
+   "formula": "max([0, 1 - thorn_R])",
+   "definition": "κ_min = max(0, 1 − Þ̊_R), the limit of the MPC as m → ∞.",
+   "written_as": {
+    "bst": "\\MPCmin",
+    "registry": "mpc-min",
+    "hark": "MPCmin"
+   },
+   "sources": {
+    "bst": [
+     "mpcmindefn"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000069"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#mpcmindefn"
+   ]
+  },
+  {
+   "id": "BSM_0000080",
+   "kind": "quantity",
+   "name": "mpc-max",
+   "label": "limiting MPC as resources fall to their lowest",
+   "symbol": "mpc_max",
+   "formula": "1 - p_worst**(1/rho)*thorn_R",
+   "definition": "κ_max = 1 − p_worst^(1/ϱ) Þ̊_R, the limit of the MPC as m falls to its lowest value.",
+   "written_as": {
+    "bst": "\\MPCmax",
+    "registry": "mpc-max",
+    "hark": "MPCmax"
+   },
+   "sources": {
+    "bst": [
+     "eq-mpcmaxdefn"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000037",
+    "BSM_0000049",
+    "BSM_0000069"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-mpcmaxdefn"
+   ]
+  },
+  {
+   "id": "BSM_0000081",
+   "kind": "quantity",
+   "name": "natural-limit",
+   "label": "natural borrowing limit, computed",
+   "symbol": "a_Nat_value",
+   "formula": "-xi_min*psi_min/(R/G - psi_min)",
+   "domain_note": "when ψ_min < ℛ; otherwise there is no natural limit",
+   "definition": "The value of a_Nat: −ξ_min ψ_min/(ℛ − ψ_min), which is zero when the worst transitory income is zero or the permanent shock's law is unbounded below.",
+   "sources": {
+    "bst": [
+     "borocnstnat"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000040",
+    "BSM_0000041",
+    "BSM_0000046",
+    "BSM_0000047"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#borocnstnat"
+   ]
+  },
+  {
+   "id": "BSM_0000082",
+   "kind": "condition",
+   "name": "aic",
+   "label": "absolute impatience",
+   "short": "AIC",
+   "factor": {
+    "name": "patience-abs-liv",
+    "id": "BSM_0000068"
+   },
+   "holds": "thorn < 1",
+   "written_as": {
+    "hark": "check_AIC"
+   },
+   "sources": {
+    "bst": [
+     "aic"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000068"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#aic"
+   ]
+  },
+  {
+   "id": "BSM_0000083",
+   "kind": "condition",
+   "name": "ric",
+   "label": "return impatience",
+   "short": "RIC",
+   "factor": {
+    "name": "patience-return-liv",
+    "id": "BSM_0000069"
+   },
+   "holds": "thorn_R < 1",
+   "written_as": {
+    "hark": "check_RIC"
+   },
+   "sources": {
+    "bst": [
+     "ric",
+     "ass-ric"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000069"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ric",
+    "https://llorracc.github.io/BufferStockTheory/#ass-ric"
+   ]
+  },
+  {
+   "id": "BSM_0000084",
+   "kind": "condition",
+   "name": "wric",
+   "label": "weak return impatience",
+   "short": "WRIC",
+   "factor": {
+    "name": "weak-return-patience-factor",
+    "id": "BSM_0000078"
+   },
+   "holds": "wrp < 1",
+   "written_as": {
+    "hark": "check_WRIC"
+   },
+   "sources": {
+    "bst": [
+     "wric"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000078"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#wric"
+   ]
+  },
+  {
+   "id": "BSM_0000085",
+   "kind": "condition",
+   "name": "fhwc",
+   "label": "finite human wealth",
+   "short": "FHWC",
+   "factor": {
+    "name": "human-wealth-factor",
+    "id": "BSM_0000074"
+   },
+   "holds": "fhw < 1",
+   "written_as": {
+    "hark": "check_FHWC"
+   },
+   "sources": {
+    "bst": [
+     "ass-fhwc",
+     "eq-fhwc2"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000074"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#ass-fhwc",
+    "https://llorracc.github.io/BufferStockTheory/#eq-fhwc2"
+   ]
+  },
+  {
+   "id": "BSM_0000086",
+   "kind": "condition",
+   "name": "pf-fvac",
+   "label": "perfect-foresight finite value of autarky",
+   "short": "PF-FVAC",
+   "factor": {
+    "name": "pf-value-of-autarky-factor",
+    "id": "BSM_0000076"
+   },
+   "holds": "pf_vaf < 1",
+   "written_as": {
+    "hark": "PerfForesightConsumerType.check_FVAC"
+   },
+   "sources": {
+    "bst": [
+     "pffvac"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000076"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#pffvac"
+   ]
+  },
+  {
+   "id": "BSM_0000087",
+   "kind": "condition",
+   "name": "fvac",
+   "label": "finite value of autarky",
+   "short": "FVAC",
+   "factor": {
+    "name": "value-of-autarky-factor",
+    "id": "BSM_0000077"
+   },
+   "holds": "vaf < 1",
+   "written_as": {
+    "hark": "IndShockConsumerType.check_FVAC"
+   },
+   "sources": {
+    "bst": [
+     "fvac"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000077"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#fvac"
+   ]
+  },
+  {
+   "id": "BSM_0000088",
+   "kind": "condition",
+   "name": "gic",
+   "label": "growth impatience",
+   "short": "GIC",
+   "factor": {
+    "name": "patience-growth-liv",
+    "id": "BSM_0000070"
+   },
+   "holds": "thorn_G < 1",
+   "written_as": {
+    "hark": "check_GICRaw"
+   },
+   "sources": {
+    "bst": [
+     "gicraw"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000070"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#gicraw"
+   ]
+  },
+  {
+   "id": "BSM_0000089",
+   "kind": "condition",
+   "name": "gic-mod",
+   "label": "strong growth impatience",
+   "short": "GIC-Mod",
+   "factor": {
+    "name": "patience-growth-mod",
+    "id": "BSM_0000071"
+   },
+   "holds": "thorn_G_mod < 1",
+   "written_as": {
+    "hark": "check_GICMod"
+   },
+   "sources": {
+    "bst": [
+     "gicmod"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000071"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#gicmod"
+   ]
+  },
+  {
+   "id": "BSM_0000090",
+   "kind": "condition",
+   "name": "gic-szeidl",
+   "label": "log growth impatience",
+   "short": "GIC-Szeidl",
+   "factor": {
+    "name": "patience-growth-liv",
+    "id": "BSM_0000070"
+   },
+   "holds": "log(thorn_G) < E_log_psi",
+   "written_as": {
+    "hark": "check_GICSdl"
+   },
+   "sources": {
+    "bst": [
+     "gicsdl"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000064",
+    "BSM_0000070"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#gicsdl"
+   ]
+  },
+  {
+   "id": "BSM_0000091",
+   "kind": "condition",
+   "name": "gic-harmenberg",
+   "label": "Harmenberg growth impatience",
+   "short": "GIC-Harmenberg",
+   "factor": {
+    "name": "patience-growth-liv",
+    "id": "BSM_0000070"
+   },
+   "holds": "thorn_G < exp(E_psi_log_psi)",
+   "written_as": {
+    "hark": "check_GICHrm"
+   },
+   "sources": {
+    "bst": [
+     "growth-impatience-implies-harmenberg-impatience"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000065",
+    "BSM_0000070"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#growth-impatience-implies-harmenberg-impatience"
+   ]
+  },
+  {
+   "id": "BSM_0000092",
+   "kind": "condition",
+   "name": "gic-liv",
+   "label": "mortality-adjusted growth impatience",
+   "short": "GIC-Liv",
+   "factor": {
+    "name": "patience-growth-mortality-adj",
+    "id": "BSM_0000072"
+   },
+   "holds": "thorn_G_liv < 1",
+   "written_as": {
+    "hark": "check_GICLiv"
+   },
+   "note": "The paper writes ℒ Þ_𝒢 < 1 without saying whether Þ carries survival. The owner ruled on 2026-10-22, in econ-ark's notation registry, that the condition is ℒ Þ̊_𝒢 < 1, HARK's GPFacLiv: a survivor discounts by βℒ, so its wealth grows at Þ̊, and the cohort shrinks at ℒ. It assumes, as the paper does, that newborns' permanent income grows with aggregate productivity.",
+   "sources": {
+    "bst": [
+     "giclivmoddefn"
+    ]
+   },
+   "depends_on": [
+    "BSM_0000072"
+   ],
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#giclivmoddefn"
+   ]
+  },
+  {
+   "id": "BSM_0000093",
+   "kind": "property",
+   "name": "nondegenerate-limiting-solution",
+   "label": "a non-degenerate limiting solution",
+   "definition": "The finite-horizon consumption and value functions converge, as the horizon recedes, to a consumption function that is positive and finite for every m > 0 and a real-valued value function.",
+   "sources": {
+    "bst": [
+     "def-nondegeneracy"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#def-nondegeneracy"
+   ]
+  },
+  {
+   "id": "BSM_0000094",
+   "kind": "property",
+   "name": "consumption-falls-at-high-wealth",
+   "label": "consumption growth below one as resources grow",
+   "definition": "As m → ∞, the growth factor of consumption approaches the absolute patience factor, which is below one.",
+   "sources": {
+    "bst": [
+     "aic"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#aic"
+   ]
+  },
+  {
+   "id": "BSM_0000095",
+   "kind": "property",
+   "name": "positive-limiting-mpc",
+   "label": "a positive MPC as resources grow",
+   "definition": "The MPC of the limiting consumption function tends to 1 − Þ̊_R > 0 as m → ∞.",
+   "sources": {
+    "bst": [
+     "lemma-mpcboundsconvg"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#lemma-mpcboundsconvg"
+   ]
+  },
+  {
+   "id": "BSM_0000096",
+   "kind": "property",
+   "name": "finite-human-wealth",
+   "label": "finite human wealth",
+   "definition": "The present value of noncapital income is finite in the limit of an infinite horizon.",
+   "sources": {
+    "bst": [
+     "eq-hdef"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-hdef"
+   ]
+  },
+  {
+   "id": "BSM_0000097",
+   "kind": "property",
+   "name": "target-exists",
+   "label": "an individual buffer-stock target",
+   "symbol": "m̂",
+   "definition": "There is a unique m̂ > 0 with E_t[m_{t+1}] = m_t at m_t = m̂, below which expected m rises and above which it falls.",
+   "written_as": {
+    "bst": "\\mTrgNrm",
+    "registry": "target",
+    "hark": "mNrmTrg"
+   },
+   "sources": {
+    "bst": [
+     "thm-target",
+     "eq-mtarget"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#thm-target",
+    "https://llorracc.github.io/BufferStockTheory/#eq-mtarget"
+   ]
+  },
+  {
+   "id": "BSM_0000098",
+   "kind": "property",
+   "name": "pseudo-target-exists",
+   "label": "a pseudo-target",
+   "symbol": "m̌",
+   "definition": "There is a unique m̌ > 0 at which the expected growth factor of the level of market resources equals 𝒢, below which it is higher and above which it is lower.",
+   "written_as": {
+    "bst": "\\mBalLvl",
+    "registry": "pseudo-target",
+    "hark": "mNrmStE"
+   },
+   "sources": {
+    "bst": [
+     "thm-mssbalexists",
+     "eq-mballvl"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#thm-mssbalexists",
+    "https://llorracc.github.io/BufferStockTheory/#eq-mballvl"
+   ]
+  },
+  {
+   "id": "BSM_0000099",
+   "kind": "property",
+   "name": "log-target-exists",
+   "label": "a log target",
+   "symbol": "m̃",
+   "definition": "There is an m̃ at which E_t[log 𝐦_{t+1}] = log 𝒢 𝐦_t; the paper states its existence under log growth impatience in a footnote, without proof.",
+   "written_as": {
+    "bst": "\\mBalLog"
+   },
+   "sources": {
+    "bst": [
+     "collective-stability"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#collective-stability"
+   ]
+  },
+  {
+   "id": "BSM_0000100",
+   "kind": "property",
+   "name": "invariant-population-distribution",
+   "label": "an invariant distribution under the population measure",
+   "definition": "A population following the limiting rule has invariant distributions of m, c and a, each agent weighted equally.",
+   "sources": {
+    "bst": [
+     "gicsdl"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#gicsdl"
+   ]
+  },
+  {
+   "id": "BSM_0000101",
+   "kind": "property",
+   "name": "invariant-income-distribution",
+   "label": "an invariant distribution under the income measure",
+   "definition": "A population following the limiting rule has invariant distributions of m and c weighted by permanent income.",
+   "sources": {
+    "bst": [
+     "growth-rates-of-aggregate-income-and-consumption",
+     "eq-harmcdf"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#growth-rates-of-aggregate-income-and-consumption",
+    "https://llorracc.github.io/BufferStockTheory/#eq-harmcdf"
+   ]
+  },
+  {
+   "id": "BSM_0000102",
+   "kind": "property",
+   "name": "aggregate-balanced-growth",
+   "label": "aggregate balanced growth",
+   "definition": "Aggregate consumption, market resources and assets grow in the long run at the growth factor of aggregate permanent income.",
+   "sources": {
+    "bst": [
+     "growth-rates-of-aggregate-income-and-consumption",
+     "subsec-cgroeqpermgrofacq"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#growth-rates-of-aggregate-income-and-consumption",
+    "https://llorracc.github.io/BufferStockTheory/#subsec-cgroeqpermgrofacq"
+   ]
+  },
+  {
+   "id": "BSM_0000103",
+   "kind": "property",
+   "name": "constraint-relevant",
+   "label": "the artificial constraint is relevant",
+   "definition": "Under perfect foresight, a constraint a ≥ 0 binds at some m.",
+   "sources": {
+    "bst": [
+     "eq-liqconstrbinds"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-liqconstrbinds"
+   ]
+  },
+  {
+   "id": "BSM_0000104",
+   "kind": "property",
+   "name": "buffer-stock-saving",
+   "label": "buffer-stock saving",
+   "definition": "A member exhibits buffer-stock saving when it has a non-degenerate limiting solution and an individual buffer-stock target. This draft takes the individual target, as the paper's introduction does; whether the pseudo-target suffices is left to the owner.",
+   "sources": {
+    "bst": [
+     "sec-intro",
+     "patience-requirements-and-the-existence-of-buffer-stock-targets"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-intro",
+    "https://llorracc.github.io/BufferStockTheory/#patience-requirements-and-the-existence-of-buffer-stock-targets"
+   ]
+  },
+  {
+   "id": "BSM_0000105",
+   "kind": "result",
+   "name": "existence",
+   "label": "existence of a non-degenerate solution",
+   "result_kind": "theorem",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "wric",
+     "id": "BSM_0000084",
+     "holds": true
+    },
+    {
+     "literal": "fvac",
+     "id": "BSM_0000087",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "concludes": [
+    {
+     "literal": "nondegenerate-limiting-solution",
+     "id": "BSM_0000093",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "sufficient-conditions-for-non-degenerate-solution"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sufficient-conditions-for-non-degenerate-solution"
+   ]
+  },
+  {
+   "id": "BSM_0000106",
+   "kind": "result",
+   "name": "contraction",
+   "label": "contraction under consumption bounds",
+   "result_kind": "theorem",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "wric",
+     "id": "BSM_0000084",
+     "holds": true
+    },
+    {
+     "literal": "fvac",
+     "id": "BSM_0000087",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "concludes": [],
+   "note": "The MPC-bounded Bellman operator is eventually a contraction on a weighted-norm space.",
+   "sources": {
+    "bst": [
+     "thm-cmap"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#thm-cmap"
+   ]
+  },
+  {
+   "id": "BSM_0000107",
+   "kind": "result",
+   "name": "limiting-mpcs",
+   "label": "the limiting MPCs",
+   "result_kind": "lemma",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "wric",
+     "id": "BSM_0000084",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "concludes": [],
+   "note": "The maximal MPC converges to κ_max > 0; under the RIC the minimal MPC converges to 1 − Þ_R > 0.",
+   "sources": {
+    "bst": [
+     "limiting-mpcs",
+     "cfuncbounds"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#limiting-mpcs",
+    "https://llorracc.github.io/BufferStockTheory/#cfuncbounds"
+   ]
+  },
+  {
+   "id": "BSM_0000108",
+   "kind": "result",
+   "name": "mpc-bounds-of-the-limit",
+   "label": "the limiting rule's MPC bounds",
+   "result_kind": "lemma",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "wric",
+     "id": "BSM_0000084",
+     "holds": true
+    },
+    {
+     "literal": "ric",
+     "id": "BSM_0000083",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "concludes": [
+    {
+     "literal": "positive-limiting-mpc",
+     "id": "BSM_0000095",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "lemma-mpcboundsconvg"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#lemma-mpcboundsconvg"
+   ]
+  },
+  {
+   "id": "BSM_0000109",
+   "kind": "result",
+   "name": "target",
+   "label": "the buffer-stock target",
+   "result_kind": "theorem",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "wric",
+     "id": "BSM_0000084",
+     "holds": true
+    },
+    {
+     "literal": "fvac",
+     "id": "BSM_0000087",
+     "holds": true
+    },
+    {
+     "literal": "gic-mod",
+     "id": "BSM_0000089",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "concludes": [
+    {
+     "literal": "target-exists",
+     "id": "BSM_0000097",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "thm-target"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#thm-target"
+   ]
+  },
+  {
+   "id": "BSM_0000110",
+   "kind": "result",
+   "name": "pseudo-target",
+   "label": "the pseudo-target",
+   "result_kind": "theorem",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "wric",
+     "id": "BSM_0000084",
+     "holds": true
+    },
+    {
+     "literal": "fvac",
+     "id": "BSM_0000087",
+     "holds": true
+    },
+    {
+     "literal": "gic",
+     "id": "BSM_0000088",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "concludes": [
+    {
+     "literal": "pseudo-target-exists",
+     "id": "BSM_0000098",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "thm-mssbalexists"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#thm-mssbalexists"
+   ]
+  },
+  {
+   "id": "BSM_0000111",
+   "kind": "result",
+   "name": "log-target",
+   "label": "the log target",
+   "result_kind": "remark",
+   "status": "stated",
+   "assumes": [
+    {
+     "literal": "gic-szeidl",
+     "id": "BSM_0000090",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "concludes": [
+    {
+     "literal": "log-target-exists",
+     "id": "BSM_0000099",
+     "holds": true
+    }
+   ],
+   "note": "Stated in a footnote, without proof; the three points are ordered m̌ < m̃ < m̂ where they exist.",
+   "sources": {
+    "bst": [
+     "collective-stability"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#collective-stability"
+   ]
+  },
+  {
+   "id": "BSM_0000112",
+   "kind": "result",
+   "name": "szeidl",
+   "label": "Szeidl's invariance theorem",
+   "result_kind": "theorem",
+   "status": "cited",
+   "assumes": [
+    {
+     "literal": "gic-szeidl",
+     "id": "BSM_0000090",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "concludes": [
+    {
+     "literal": "invariant-population-distribution",
+     "id": "BSM_0000100",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "gicsdl"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#gicsdl"
+   ]
+  },
+  {
+   "id": "BSM_0000113",
+   "kind": "result",
+   "name": "harmenberg",
+   "label": "Harmenberg's invariance theorem",
+   "result_kind": "theorem",
+   "status": "cited",
+   "assumes": [
+    {
+     "literal": "gic",
+     "id": "BSM_0000088",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "concludes": [
+    {
+     "literal": "invariant-income-distribution",
+     "id": "BSM_0000101",
+     "holds": true
+    },
+    {
+     "literal": "aggregate-balanced-growth",
+     "id": "BSM_0000102",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "growth-rates-of-aggregate-income-and-consumption"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#growth-rates-of-aggregate-income-and-consumption"
+   ]
+  },
+  {
+   "id": "BSM_0000114",
+   "kind": "result",
+   "name": "mortality-balanced-growth",
+   "label": "balanced growth with estates destroyed",
+   "result_kind": "remark",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "gic-liv",
+     "id": "BSM_0000092",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "with-survival",
+    "id": "BSM_0000004"
+   },
+   "concludes": [
+    {
+     "literal": "aggregate-balanced-growth",
+     "id": "BSM_0000102",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "giclivmoddefn"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#giclivmoddefn"
+   ]
+  },
+  {
+   "id": "BSM_0000115",
+   "kind": "result",
+   "name": "pf-unconstrained",
+   "label": "the unconstrained perfect-foresight solution",
+   "result_kind": "proposition",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "fhwc",
+     "id": "BSM_0000085",
+     "holds": true
+    },
+    {
+     "literal": "ric",
+     "id": "BSM_0000083",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "perfect-foresight-benchmark",
+    "id": "BSM_0000003"
+   },
+   "concludes": [
+    {
+     "literal": "nondegenerate-limiting-solution",
+     "id": "BSM_0000093",
+     "holds": true
+    }
+   ],
+   "note": "If and only if.",
+   "sources": {
+    "bst": [
+     "prop-pfucfhwc"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#prop-pfucfhwc"
+   ]
+  },
+  {
+   "id": "BSM_0000116",
+   "kind": "result",
+   "name": "pf-constrained",
+   "label": "the constrained perfect-foresight solution",
+   "result_kind": "proposition",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "ric",
+     "id": "BSM_0000083",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "perfect-foresight-benchmark",
+    "id": "BSM_0000003"
+   },
+   "concludes": [
+    {
+     "literal": "nondegenerate-limiting-solution",
+     "id": "BSM_0000093",
+     "holds": true
+    }
+   ],
+   "note": "With a constraint a ≥ 0; when the RIC fails, a non-degenerate solution exists if and only if the GIC holds.",
+   "sources": {
+    "bst": [
+     "prop-pfcexist"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#prop-pfcexist"
+   ]
+  },
+  {
+   "id": "BSM_0000117",
+   "kind": "result",
+   "name": "pf-constraint-relevance",
+   "label": "when the constraint binds under perfect foresight",
+   "result_kind": "remark",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "gic",
+     "id": "BSM_0000088",
+     "holds": true
+    }
+   ],
+   "within": {
+    "name": "perfect-foresight-benchmark",
+    "id": "BSM_0000003"
+   },
+   "concludes": [
+    {
+     "literal": "constraint-relevant",
+     "id": "BSM_0000103",
+     "holds": true
+    }
+   ],
+   "note": "If and only if.",
+   "sources": {
+    "bst": [
+     "eq-liqconstrbinds"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-liqconstrbinds"
+   ]
+  },
+  {
+   "id": "BSM_0000118",
+   "kind": "result",
+   "name": "liquidity-constrained-limit",
+   "label": "the constrained solution as a limit",
+   "result_kind": "theorem",
+   "status": "bst",
+   "assumes": [],
+   "within": {
+    "name": "bst-model",
+    "id": "BSM_0000002"
+   },
+   "concludes": [],
+   "note": "As ℘ → 0, the solution with the zero-income event converges to the solution with ℘ = 0 and the artificial constraint a ≥ 0.",
+   "sources": {
+    "bst": [
+     "subsubsec-deatonislimit",
+     "sec-liqconstraslimit"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#subsubsec-deatonislimit",
+    "https://llorracc.github.io/BufferStockTheory/#sec-liqconstraslimit"
+   ]
+  },
+  {
+   "id": "BSM_0000119",
+   "kind": "result",
+   "name": "no-ric-no-gic",
+   "label": "return and growth patience together rule out a finite value of autarky",
+   "result_kind": "property",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "not ric",
+     "id": "BSM_0000083",
+     "holds": false
+    },
+    {
+     "literal": "not gic",
+     "id": "BSM_0000088",
+     "holds": false
+    }
+   ],
+   "concludes": [
+    {
+     "literal": "not fvac",
+     "id": "BSM_0000087",
+     "holds": false
+    }
+   ],
+   "sources": {
+    "bst": [
+     "vafacdefn"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#vafacdefn"
+   ]
+  },
+  {
+   "id": "BSM_0000120",
+   "kind": "result",
+   "name": "pf-gic-implies-pf-fvac",
+   "label": "growth impatience and finite human wealth give the perfect-foresight finite value of autarky",
+   "result_kind": "property",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "fhwc",
+     "id": "BSM_0000085",
+     "holds": true
+    },
+    {
+     "literal": "gic",
+     "id": "BSM_0000088",
+     "holds": true
+    }
+   ],
+   "concludes": [
+    {
+     "literal": "pf-fvac",
+     "id": "BSM_0000086",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "claim-pfconspc"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#claim-pfconspc"
+   ]
+  },
+  {
+   "id": "BSM_0000121",
+   "kind": "result",
+   "name": "pf-fvac-implies-ric",
+   "label": "the perfect-foresight finite value of autarky and finite human wealth give return impatience",
+   "result_kind": "property",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "fhwc",
+     "id": "BSM_0000085",
+     "holds": true
+    },
+    {
+     "literal": "pf-fvac",
+     "id": "BSM_0000086",
+     "holds": true
+    }
+   ],
+   "concludes": [
+    {
+     "literal": "ric",
+     "id": "BSM_0000083",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "claim-pfconspc"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#claim-pfconspc"
+   ]
+  },
+  {
+   "id": "BSM_0000122",
+   "kind": "result",
+   "name": "gic-without-ric",
+   "label": "growth impatience without return impatience means infinite human wealth",
+   "result_kind": "remark",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "gic",
+     "id": "BSM_0000088",
+     "holds": true
+    },
+    {
+     "literal": "not ric",
+     "id": "BSM_0000083",
+     "holds": false
+    }
+   ],
+   "concludes": [
+    {
+     "literal": "not fhwc",
+     "id": "BSM_0000085",
+     "holds": false
+    }
+   ],
+   "sources": {
+    "bst": [
+     "prop-pfcexist"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#prop-pfcexist"
+   ]
+  },
+  {
+   "id": "BSM_0000123",
+   "kind": "result",
+   "name": "fvac-implies-pf-fvac",
+   "label": "the finite value of autarky implies its perfect-foresight version",
+   "result_kind": "remark",
+   "status": "deduced",
+   "assumes": [
+    {
+     "literal": "fvac",
+     "id": "BSM_0000087",
+     "holds": true
+    }
+   ],
+   "concludes": [
+    {
+     "literal": "pf-fvac",
+     "id": "BSM_0000086",
+     "holds": true
+    }
+   ],
+   "note": "Jensen's inequality, with ϱ > 1 and E[ψ] = 1, gives E[ψ^(1−ϱ)] ≥ 1.",
+   "sources": {
+    "bst": [
+     "vafacdefn"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#vafacdefn"
+   ]
+  },
+  {
+   "id": "BSM_0000124",
+   "kind": "result",
+   "name": "ric-implies-wric",
+   "label": "return impatience implies weak return impatience",
+   "result_kind": "remark",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "ric",
+     "id": "BSM_0000083",
+     "holds": true
+    }
+   ],
+   "concludes": [
+    {
+     "literal": "wric",
+     "id": "BSM_0000084",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "wric"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#wric"
+   ]
+  },
+  {
+   "id": "BSM_0000125",
+   "kind": "result",
+   "name": "gic-mod-implies-gic-szeidl",
+   "label": "strong growth impatience implies log growth impatience",
+   "result_kind": "remark",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "gic-mod",
+     "id": "BSM_0000089",
+     "holds": true
+    }
+   ],
+   "concludes": [
+    {
+     "literal": "gic-szeidl",
+     "id": "BSM_0000090",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "gicsdl"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#gicsdl"
+   ]
+  },
+  {
+   "id": "BSM_0000126",
+   "kind": "result",
+   "name": "gic-szeidl-implies-gic",
+   "label": "log growth impatience implies growth impatience",
+   "result_kind": "remark",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "gic-szeidl",
+     "id": "BSM_0000090",
+     "holds": true
+    }
+   ],
+   "concludes": [
+    {
+     "literal": "gic",
+     "id": "BSM_0000088",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "gicsdl"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#gicsdl"
+   ]
+  },
+  {
+   "id": "BSM_0000127",
+   "kind": "result",
+   "name": "gic-implies-gic-harmenberg",
+   "label": "growth impatience implies Harmenberg's condition",
+   "result_kind": "property",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "gic",
+     "id": "BSM_0000088",
+     "holds": true
+    }
+   ],
+   "concludes": [
+    {
+     "literal": "gic-harmenberg",
+     "id": "BSM_0000091",
+     "holds": true
+    }
+   ],
+   "sources": {
+    "bst": [
+     "growth-impatience-implies-harmenberg-impatience",
+     "claim-gicimpliesharmimp"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#growth-impatience-implies-harmenberg-impatience",
+    "https://llorracc.github.io/BufferStockTheory/#claim-gicimpliesharmimp"
+   ]
+  },
+  {
+   "id": "BSM_0000128",
+   "kind": "result",
+   "name": "gic-implies-gic-liv",
+   "label": "growth impatience implies its mortality-adjusted version",
+   "result_kind": "remark",
+   "status": "bst",
+   "assumes": [
+    {
+     "literal": "gic",
+     "id": "BSM_0000088",
+     "holds": true
+    }
+   ],
+   "concludes": [
+    {
+     "literal": "gic-liv",
+     "id": "BSM_0000092",
+     "holds": true
+    }
+   ],
+   "note": "The mortality-adjusted condition is looser, since ℒ ≤ 1.",
+   "sources": {
+    "bst": [
+     "giclivmoddefn"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#giclivmoddefn"
+   ]
+  },
+  {
+   "id": "BSM_0000153",
+   "kind": "result",
+   "name": "fvac-without-ric",
+   "label": "with a finite value of autarky, return patience means infinite human wealth",
+   "result_kind": "remark",
+   "status": "deduced",
+   "assumes": [
+    {
+     "literal": "fvac",
+     "id": "BSM_0000087",
+     "holds": true
+    },
+    {
+     "literal": "not ric",
+     "id": "BSM_0000083",
+     "holds": false
+    }
+   ],
+   "concludes": [
+    {
+     "literal": "not fhwc",
+     "id": "BSM_0000085",
+     "holds": false
+    }
+   ],
+   "note": "From no-ric-no-gic, the FVAC with the RIC failing gives the GIC; from gic-without-ric, the GIC with the RIC failing gives infinite human wealth. Uses ϱ > 1.",
+   "sources": {
+    "bst": [
+     "vafacdefn",
+     "prop-pfcexist"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#vafacdefn",
+    "https://llorracc.github.io/BufferStockTheory/#prop-pfcexist"
+   ]
+  },
+  {
+   "id": "BSM_0000129",
+   "kind": "identity",
+   "name": "levels-and-ratios",
+   "label": "the problem in levels and in ratios",
+   "identity_kind": "equivalence",
+   "definition": "The problem in levels, in (𝐦, 𝐩), and the normalized problem, in m = 𝐦/𝐩, are one model: 𝐜(𝐦, 𝐩) = 𝐩 c(𝐦/𝐩) and 𝐯(𝐦, 𝐩) = 𝐩^(1−ϱ) v(𝐦/𝐩).",
+   "sources": {
+    "bst": [
+     "subsubsec-ratio",
+     "sec-recoverlevels"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#subsubsec-ratio",
+    "https://llorracc.github.io/BufferStockTheory/#sec-recoverlevels"
+   ]
+  },
+  {
+   "id": "BSM_0000130",
+   "kind": "identity",
+   "name": "limit-and-fixed-point",
+   "label": "the limiting solution and the stationary fixed point",
+   "identity_kind": "equivalence",
+   "definition": "A non-degenerate limiting solution, the limit of the finite-horizon solutions, is a fixed point of the stationary Bellman operator, and so the solution of the infinite-horizon problem.",
+   "sources": {
+    "bst": [
+     "sec-theory",
+     "eq-stationarybellman"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-theory",
+    "https://llorracc.github.io/BufferStockTheory/#eq-stationarybellman"
+   ]
+  },
+  {
+   "id": "BSM_0000131",
+   "kind": "identity",
+   "name": "decision-problem-through-beta-eff",
+   "label": "the decision problem depends on β and ℒ through β̊",
+   "identity_kind": "equivalence",
+   "definition": "Without an annuity, the household's problem, and so its rule, depends on β and ℒ only through β̊ = β ℒ; the population does not, since ℒ also sets the rate of death and replacement. Two members with the same β̊ and different ℒ have one rule and two populations. Where survival depends on the current Markov state s, as HARK's Markov solver allows, the rule depends on them only through β ℒ(s), state by state. With Blanchard's annuity, as in HARK's AggShockConsumerType, ℒ also enters the return R/ℒ that the budget carries, and the identity fails.",
+   "sources": {
+    "bst": [
+     "sec-mortality"
+    ],
+    "hark": [
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:376",
+     "HARK/ConsumptionSaving/ConsMarkovModel.py:429",
+     "HARK/ConsumptionSaving/ConsMarkovModel.py:583-588"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-mortality",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L376",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsMarkovModel.py#L429",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsMarkovModel.py#L583-L588"
+   ]
+  },
+  {
+   "id": "BSM_0000132",
+   "kind": "identity",
+   "name": "loose-artificial-constraint",
+   "label": "an artificial constraint no tighter than the natural one",
+   "identity_kind": "reduction",
+   "definition": "A model with a_Art ≤ a_Nat is the model without an artificial constraint: the natural constraint is in force, and a looser one never binds.",
+   "sources": {
+    "bst": [
+     "pdv"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#pdv"
+   ]
+  },
+  {
+   "id": "BSM_0000133",
+   "kind": "identity",
+   "name": "unemployment-benefit-without-unemployment",
+   "label": "a benefit with no unemployment",
+   "identity_kind": "reduction",
+   "definition": "With ℘ = 0, ξ_u never pays, and models differing only in ξ_u are one model.",
+   "sources": {
+    "bst": [
+     "eq-transhkdef"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#eq-transhkdef"
+   ]
+  },
+  {
+   "id": "BSM_0000134",
+   "kind": "identity",
+   "name": "same-laws",
+   "label": "two written laws of one shock",
+   "identity_kind": "equivalence",
+   "definition": "Two written laws of a shock are the same law when the ontology of probability distributions' identity rule says so; two models differing only in the spelling of their laws are one model.",
+   "sources": {},
+   "source_urls": []
+  },
+  {
+   "id": "BSM_0000135",
+   "kind": "identity",
+   "name": "blanchard-patience",
+   "label": "Blanchard's annuity leaves patience unchanged",
+   "identity_kind": "equivalence",
+   "definition": "With Blanchard's annuity, β̊ R/ℒ = β R, so the absolute patience factor is the one with infinite lives; only the quantities in which R enters apart from Þ change, the return patience factor becoming Þ/(R/ℒ).",
+   "sources": {
+    "bst": [
+     "sec-mortality"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#sec-mortality"
+   ]
+  },
+  {
+   "id": "BSM_0000136",
+   "kind": "family",
+   "name": "bst-1",
+   "label": "the schemas' family bst/1",
+   "writes": [
+    {
+     "name": "with-survival",
+     "id": "BSM_0000004"
+    },
+    {
+     "name": "with-positive-benefit",
+     "id": "BSM_0000006"
+    },
+    {
+     "name": "with-artificial-constraint",
+     "id": "BSM_0000007"
+    },
+    {
+     "name": "with-types",
+     "id": "BSM_0000008"
+    }
+   ],
+   "definition": "The working group's written family bst/1: its parameter file and its stage file write buffer-stock models with perpetual youth and no annuity, a benefit ξ_u ≥ 0, an artificial constraint at or above the natural one, and permanent types differing in β, with mean-one laws of ψ and θ from the ontology of probability distributions.",
+   "schema": "../../schemas/bst-1/model.md"
+  },
+  {
+   "id": "BSM_0000137",
+   "kind": "family",
+   "name": "bst-markov-ui-and-agg-1",
+   "label": "the schemas' family bst-markov_ui-and-agg/1",
+   "writes": [
+    {
+     "name": "with-survival",
+     "id": "BSM_0000004"
+    },
+    {
+     "name": "with-positive-benefit",
+     "id": "BSM_0000006"
+    },
+    {
+     "name": "with-artificial-constraint",
+     "id": "BSM_0000007"
+    },
+    {
+     "name": "with-types",
+     "id": "BSM_0000008"
+    },
+    {
+     "name": "with-markov-states",
+     "id": "BSM_0000009"
+    }
+   ],
+   "definition": "The working group's written family for HAFiscal's household: bst/1 with Markov employment and benefit expiry, an aggregate regime, groups of types, a level law for the newborn and the splurge as an observation map.",
+   "schema": "../../schemas/bst-markov_ui-and-agg/model.md"
+  },
+  {
+   "id": "BSM_0000138",
+   "kind": "divergence",
+   "name": "hark-vafac-without-survival",
+   "term": {
+    "name": "value-of-autarky-factor",
+    "id": "BSM_0000077"
+   },
+   "where": "hark",
+   "statement": "HARK's VAFac leaves out the survival probability ℒ that β̊ carries; draft pull request econ-ark/HARK#1855 adds it.",
+   "sources": {
+    "hark": [
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:2553"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2553"
+   ]
+  },
+  {
+   "id": "BSM_0000139",
+   "kind": "divergence",
+   "name": "hark-gpfaclivmod-survival-twice",
+   "term": {
+    "name": "patience-growth-mortality-adj",
+    "id": "BSM_0000072"
+   },
+   "where": "hark",
+   "statement": "HARK has two mortality-adjusted factors. GPFacLiv, ℒ times GPFacRaw, with ℒ already in APFac, is ℒ Þ̊_𝒢, the GIC-Liv as the owner ruled it on 2026-10-22, and HARK's check_GICLiv uses it. GPFacLivMod, named for the Modigliani scheme, multiplies by ℒ again; no HARK check uses it.",
+   "sources": {
+    "hark": [
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:2542-2543"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2542-L2543"
+   ]
+  },
+  {
+   "id": "BSM_0000140",
+   "kind": "divergence",
+   "name": "hark-no-log-target",
+   "term": {
+    "name": "log-target-exists",
+    "id": "BSM_0000099"
+   },
+   "where": "hark",
+   "statement": "The paper says Econ-ARK computes the log target m̃ as mBalLog; HARK's main branch computes no such value.",
+   "sources": {
+    "bst": [
+     "collective-stability"
+    ],
+    "hark": [
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:1975-1998"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#collective-stability",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L1975-L1998"
+   ]
+  },
+  {
+   "id": "BSM_0000141",
+   "kind": "divergence",
+   "name": "hafiscal-xi-is-theta",
+   "term": {
+    "name": "transitory-shock-employed",
+    "id": "BSM_0000034"
+   },
+   "where": "hafiscal-qe",
+   "statement": "The published HAFiscal paper writes ξ for the employed transitory shock, which is BST's θ; BST's ξ is transitory income with the unemployment event included.",
+   "sources": {
+    "hafiscal-qe": [
+     "Subfiles/Model.tex:129"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Subfiles/Model.tex#L129"
+   ]
+  },
+  {
+   "id": "BSM_0000142",
+   "kind": "divergence",
+   "name": "hafiscal-target-is-a-moment",
+   "term": {
+    "name": "target-exists",
+    "id": "BSM_0000097"
+   },
+   "where": "hafiscal-qe",
+   "statement": "In the HAFiscal paper and code a \"target\" is mostly an estimation target, a data moment matched, not BST's target ratio of market resources.",
+   "sources": {
+    "hafiscal-qe": [
+     "Subfiles/Parameterization.tex:20-23"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Subfiles/Parameterization.tex#L20-L23"
+   ]
+  },
+  {
+   "id": "BSM_0000143",
+   "kind": "divergence",
+   "name": "hafiscal-mpc-is-a-lottery-mpc",
+   "term": {
+    "name": "mpc-min",
+    "id": "BSM_0000079"
+   },
+   "where": "hafiscal-qe",
+   "statement": "HAFiscal's MPC is the share of a windfall spent over the following four quarters, not the derivative c′(m) whose limits this ontology names.",
+   "sources": {
+    "hafiscal-qe": [
+     "Subfiles/Parameterization.tex:20"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Subfiles/Parameterization.tex#L20"
+   ]
+  },
+  {
+   "id": "BSM_0000144",
+   "kind": "divergence",
+   "name": "natural-limit-from-atoms",
+   "term": {
+    "name": "borrowing-limit-natural",
+    "id": "BSM_0000057"
+   },
+   "where": "hark",
+   "statement": "HARK's classic solvers compute the natural limit from the lowest atoms of the discretized laws; the paper and this ontology take it from the true laws' infima. HARK's draft pull request econ-ark/HARK#1862 computes it from the infima.",
+   "sources": {
+    "bst": [
+     "borocnstnat"
+    ],
+    "hark": [
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:493",
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:511"
+    ]
+   },
+   "source_urls": [
+    "https://llorracc.github.io/BufferStockTheory/#borocnstnat",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L493",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L511"
+   ]
+  },
+  {
+   "id": "BSM_0000152",
+   "kind": "divergence",
+   "name": "hafiscal-gic-cap",
+   "term": {
+    "name": "gic",
+    "id": "BSM_0000088"
+   },
+   "where": "hafiscal-qe",
+   "statement": "HAFiscal's code caps each type's discount factor so that ℒ (Rβ)^(1/ϱ) E[ψ⁻¹]/𝒢, which its comments call the growth patience factor and the GIC-Mod with survival, is at most a margin below one. Survival there multiplies the patience factor without entering it. This ontology's GIC-Mod is Þ̊_𝒢 E[ψ⁻¹] with Þ̊ = (Rβℒ)^(1/ϱ), and HARK's GPFacLiv is ℒ Þ̊_𝒢: three placements of ℒ in one condition. The cap replaced an earlier (1 − ℒ) + 𝒢^ϱ/R.",
+   "sources": {
+    "hafiscal-qe": [
+     "Code/HA-Models/FromPandemicCode/EstimParameters.py:398-418",
+     "Code/HA-Models/FromPandemicCode/EstimParameters.py:430-437"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Code/HA-Models/FromPandemicCode/EstimParameters.py#L398-L418",
+    "https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Code/HA-Models/FromPandemicCode/EstimParameters.py#L430-L437"
+   ]
+  },
+  {
+   "id": "BSM_0000154",
+   "kind": "divergence",
+   "name": "hark-pffvac-message",
+   "term": {
+    "name": "pf-fvac",
+    "id": "BSM_0000086"
+   },
+   "where": "hark",
+   "statement": "HARK's perfect-foresight value-of-autarky factor is computed as β ℒ 𝒢^(1−ϱ), with survival, but its message states the condition as β𝒢^(1−ϱ) < 1; its risk-modified VAFac leaves survival out.",
+   "sources": {
+    "hark": [
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:1796",
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:1716-1719"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L1796",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L1716-L1719"
+   ]
+  },
+  {
+   "id": "BSM_0000155",
+   "kind": "divergence",
+   "name": "hark-wric-message",
+   "term": {
+    "name": "wric",
+    "id": "BSM_0000084"
+   },
+   "where": "hark",
+   "statement": "HARK computes the weak return patience factor as p_worst^(1/ϱ) Þ/R, as the paper states it, but its message writes the condition as ℘ Þ/R < 1, without the power 1/ϱ.",
+   "sources": {
+    "hark": [
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:2581",
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:2697-2700"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2581",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2697-L2700"
+   ]
+  },
+  {
+   "id": "BSM_0000156",
+   "kind": "divergence",
+   "name": "hark-worst-income-prob-from-atoms",
+   "term": {
+    "name": "worst-income-prob",
+    "id": "BSM_0000049"
+   },
+   "where": "hark",
+   "statement": "HARK's WorstPrb is the probability of the smallest product of the discretized laws' atoms. It is the paper's ℘ when the unemployment event pays nothing; with a positive benefit and a continuous permanent shock it is ℘ divided by the number of permanent-shock atoms, where the true law gives zero.",
+   "sources": {
+    "hark": [
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:2570-2578"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2570-L2578"
+   ]
+  },
+  {
+   "id": "BSM_0000157",
+   "kind": "divergence",
+   "name": "hark-two-human-wealths",
+   "term": {
+    "name": "human-wealth",
+    "id": "BSM_0000075"
+   },
+   "where": "hark",
+   "statement": "HARK names two objects hNrm. The one its condition report computes includes this period's income, the paper's h; the one each period's solution carries excludes it, so its limit is h − 1.",
+   "sources": {
+    "hark": [
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:2585",
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:296"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2585",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L296"
+   ]
+  },
+  {
+   "id": "BSM_0000158",
+   "kind": "divergence",
+   "name": "hark-ric-failure-message",
+   "term": {
+    "name": "fvac-without-ric",
+    "id": "BSM_0000153"
+   },
+   "where": "hark",
+   "statement": "When the RIC fails, HARK's consumer with shocks reports that the FHWC fails too. Within the class, where ϱ > 1, that follows only when the FVAC holds: with Jensen's inequality the FVAC gives β̊ < 𝒢^(ϱ−1), the failing RIC gives β̊ ≥ R^(ϱ−1), and so R < 𝒢. HARK prints it unconditionally, and also for ϱ < 1, outside the class, where even the FVAC does not make it true. It also calls the consumer impatient where its perfect-foresight report calls the same failure patience.",
+   "sources": {
+    "hark": [
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:2769",
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:1897"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2769",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L1897"
+   ]
+  },
+  {
+   "id": "BSM_0000159",
+   "kind": "divergence",
+   "name": "hark-cyclical-index-solver-and-simulation",
+   "term": {
+    "name": "period",
+    "id": "BSM_0000025"
+   },
+   "where": "hark",
+   "statement": "In every HARK model the solution for period t takes the expectation over the shocks of the move from t to t+1, with the rule of period t+1. What differs is which entry of the time-varying parameter lists holds that move's laws. A life-cycle model's solver passes entry t, so entry k is the move out of k. A cyclical model's (cycles = 0 with several periods in the cycle, or cycles > 1) passes entry t+1, so entry k is the move into k. The simulation reads entry s − 1 on the move into period s for every value of cycles: the income shocks, growth and the return. Where parameters vary within a cycle, they reach the simulation of a cyclical model a period after its solution expected them; HARK's four-period example has such growth. The cyclical order came with HARK's commit 54083db5 of 2021-07-09 (issue econ-ark/HARK#1022, pull request #1039), whose title gives its aim as entries that correspond to t. That commit moved the simulation of death to match and rotated the example's growth by one, so the example's solution stayed the same. It left the simulation's shocks, growth and return reading entry s − 1, and so moved the example's simulated growth by a period. The Markov consumer's simulation of death reads entry s − 1 for every value of cycles. Which convention HARK should follow is not settled.",
+   "sources": {
+    "hark": [
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:650-662",
+     "HARK/core.py:2457",
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:2275-2277",
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:1531-1533",
+     "HARK/ConsumptionSaving/ConsIndShockModel.py:3143-3145",
+     "HARK/ConsumptionSaving/ConsMarkovModel.py:987-989"
+    ]
+   },
+   "source_urls": [
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L650-L662",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/core.py#L2457",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2275-L2277",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L1531-L1533",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L3143-L3145",
+    "https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsMarkovModel.py#L987-L989"
+   ]
+  }
+ ]
+}

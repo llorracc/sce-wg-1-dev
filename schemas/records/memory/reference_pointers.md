@@ -48,3 +48,14 @@ metadata:
   they say.
 - The buffer-stock benchmark `bst_bench` lives in HAFiscal-Latest, destined for its own econ-ark repository; its emitter of
   results files in this schema's form is the HAFiscal-Latest session's.
+- The ontology of buffer-stock models' sources, pinned on 2026-10-31:
+  - BST's published page, https://llorracc.github.io/BufferStockTheory/, an older build than the paper's working copy;
+    its anchors are in `ontologies/buffer-stock-models/bst-anchors.txt`;
+  - econ-ark's notation registry 8.0.0, at econ-ark-tools commit `9d3d108a`;
+  - HAFiscal-QE's public head, `1afdf80` (2026-06-12);
+  - HARK main at `4c285e86`.
+- HARK's commit `54083db5` (2021-07-09; issue econ-ark/HARK#1022, merged in #1039): the cyclical solve order, under which
+  entry k of a time-varying list is the move into k. Its simulation of shocks, growth and the return was left reading
+  entry s − 1.
+- HARK's draft econ-ark/HARK#1869: the continuous path, expectations by quadrature over the true truncated laws. HARK's
+  kink-split page, https://econ-ark.github.io/HARK-dev/kink-split-quadrature/, is public; the HARK-dev repository is not.

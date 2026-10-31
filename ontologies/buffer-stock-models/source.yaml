@@ -1,0 +1,1063 @@
+# The semantic ontology of buffer-stock models: its one source.
+#
+# Everything else in this folder that describes a term is generated from this file by generate.py:
+# buffer-stock-models.ttl (OWL 2, Turtle) and buffer-stock-models.json (a flat table of rows). The README explains the
+# kinds, the axioms, the identity criteria and the denotation; source.schema.json validates this file.
+#
+# Identifiers are opaque and permanent: a row keeps its identifier for life, and an identifier that leaves the ontology is
+# listed under `retired` and never used again. References between rows are by name.
+#
+# Sources are cited so that a reader can check them. `bst` is an anchor of the published paper's page,
+# https://llorracc.github.io/BufferStockTheory/#<anchor>, pinned in bst-anchors.txt; `hark` is a file and line of HARK's
+# main branch at the commit named below; `hafiscal-qe` is a file and line of the public replication package.
+
+ontology:
+  title: Buffer-stock models
+  version: 0.1.0-draft.1
+  # Provisional, as the ontology of probability distributions' is, until a namespace is registered.
+  namespace: https://example.org/provisional/ontologies/buffer-stock-models/
+  prefix: bsm
+  license: https://creativecommons.org/licenses/by/4.0/
+  imports:
+    pd: https://example.org/provisional/ontologies/probability-distributions/
+  sources:
+    bst:
+      citation: >-
+        Carroll, C. D., and A. Shanker. Theoretical Foundations of Buffer Stock Saving. The published page, read on
+        2026-10-31.
+      url: https://llorracc.github.io/BufferStockTheory/
+    registry:
+      citation: econ-ark's notation registry, version 8.0.0, @resources/notation/notation.yml in econ-ark/econ-ark-tools.
+      url: https://github.com/econ-ark/econ-ark-tools
+    hark:
+      citation: HARK, main branch at commit 4c285e86 (2026-10-07).
+      url: https://github.com/econ-ark/HARK/tree/4c285e86
+    hafiscal-qe:
+      citation: >-
+        Carroll, Crawley, Du, Frankovic and Tretvoll, Welfare and Spending Effects of Consumption Stimulus Policies:
+        the public replication package, at commit 1afdf80 (2026-06-12).
+      url: https://github.com/llorracc/HAFiscal-QE/tree/1afdf80de4325e436a0c1c20895f754aefefd38c
+  # The written forms a term is denoted by: the codomains of the denotation.
+  formats:
+    bst: the paper's notation, as the LaTeX macro its source writes
+    registry: econ-ark's notation registry, by its semantic key
+    parameter-file: a key of a bst/1 parameter file, as a path
+    bellman-sym: an identifier of bst/1's Bellman-SYM stage file
+    hark: a HARK attribute, factor or method, at the commit above
+
+retired:
+  # A divergence in HARK's simulation of death, withdrawn on checking: the simulation of death follows the solver.
+  - BSM_0000151
+
+# The kinds. Every row below is of one of them; the generator writes each kind as an OWL class.
+kinds:
+  model-class: A class of models, defined by axioms. A model is a member when it satisfies every membership axiom.
+  axiom: A statement a model must satisfy to be a member of a class (membership), or one a class's results assume
+    (hypothesis).
+  object: An economic or mathematical entity of the model, independent of any written form.
+  quantity: A number the model's primitives determine, stated by a formula in the ontology's formula syntax.
+  moment: An expectation under the law of one shock, a quantity the conditions rest on.
+  condition: An inequality on quantities, which holds or fails for a model.
+  property: A statement about a model's solution or population, which its conditions can guarantee.
+  result: A proposition relating conditions and properties, with the source that proves, cites or rules it.
+  identity: A criterion for when two models, or two statements of one model, are the same.
+  family: A written family of the working group's schemas, and the class of models it writes.
+  divergence: A place where a toolkit, a paper or a schema uses a term of this ontology in another sense.
+
+# Object categories, each a subclass of `object`.
+categories:
+  agent: who chooses
+  population: a collection of agents
+  time: the clock
+  state: a variable the choice is conditioned on
+  control: a variable the agent chooses
+  shock: a random variable drawn by nature
+  event: a random outcome with two values
+  primitive: a parameter, given to the model from outside
+  bound: the lowest value of a law's support, or a probability there
+  function: a map the model defines or its solution yields
+  operator: a map between functions, or an expectation
+  constraint: a restriction on the choice or the states
+  measure: a weighting of a population
+
+model-classes:
+  - id: BSM_0000001
+    name: buffer-stock-model
+    label: buffer-stock model
+    definition: >-
+      A consumption-saving problem of one agent, with CRRA utility and relative risk aversion above one, assets that
+      earn a return, and risky noncapital income that is permanent income times a transitory shock, permanent income growing by a
+      factor and a mean-one permanent shock; borrowing limited by the natural constraint or a tighter artificial one;
+      and, where the natural constraint is the one in force, an atom at the lowest transitory shock. Whether a member
+      exhibits buffer-stock saving is a property of its solution, not of its membership.
+    axioms: [one-agent-saving, crra-above-one, friedman-muth-income, income-risk, asset-return, constraint-in-force, point-mass-at-worst-transitory]
+    sources: {bst: [sec-intro, subsec-setup, ass-shocks]}
+  - id: BSM_0000002
+    name: bst-model
+    label: Buffer Stock Theory's model, as the paper states it
+    definition: >-
+      The buffer-stock models whose shocks are iid with bounded support, whose transitory shock has a zero-income event
+      of positive probability, with no artificial constraint, infinite lives and one type: the class to which the
+      paper's theorems apply.
+    subclass_of: buffer-stock-model
+    axioms: [iid-shocks, bounded-support, zero-income-event, riskless-constant-return, no-artificial-constraint, infinite-lives, one-type]
+    sources: {bst: [ass-shocks, bounded-support, eq-transhkdef]}
+  - id: BSM_0000003
+    name: perfect-foresight-benchmark
+    label: the perfect-foresight benchmark
+    definition: >-
+      The models with no shocks: ψ = θ = 1 and no unemployment. They fail the axiom of income risk and so are not
+      buffer-stock models; they are the class's limit as the shocks vanish, and the paper's benchmark for the patience
+      conditions.
+    benchmark_of: buffer-stock-model
+    axioms: [no-shocks]
+    sources: {bst: [ass-pfincome, subsec-pfbbenchmark]}
+  - id: BSM_0000004
+    name: with-survival
+    label: buffer-stock model with perpetual youth
+    definition: >-
+      A buffer-stock model in which an agent survives each period with probability ℒ ≤ 1 and is replaced at death by a
+      newborn; there is no annuity, so survivors earn R and the assets of the dead leave the economy: the paper's
+      Modigliani scheme of estates.
+    subclass_of: buffer-stock-model
+    reduces_to: {class: bst-model, when: "L == 1"}
+    sources: {bst: [sec-mortality, modigliani-lives]}
+  - id: BSM_0000005
+    name: with-blanchard-annuities
+    label: buffer-stock model with Blanchard's annuities
+    definition: >-
+      A buffer-stock model with perpetual youth in which the estates of the dead are paid to survivors in proportion to
+      their wealth, so that survivors earn R/ℒ and the absolute patience factor is the same as with infinite lives.
+    subclass_of: buffer-stock-model
+    reduces_to: {class: bst-model, when: "L == 1"}
+    written_as: {hark: AggShockConsumerType}
+    sources: {bst: [sec-mortality], hark: ["HARK/ConsumptionSaving/ConsAggShockModel.py:269"]}
+  - id: BSM_0000006
+    name: with-positive-benefit
+    label: buffer-stock model with a positive unemployment benefit
+    definition: >-
+      A buffer-stock model whose unemployment event pays ξ_u > 0 of permanent income in place of BST's zero-income event.
+    subclass_of: buffer-stock-model
+    reduces_to: {class: bst-model, when: "xi_u == 0"}
+    sources: {bst: [pdv]}
+  - id: BSM_0000007
+    name: with-artificial-constraint
+    label: buffer-stock model with an artificial borrowing constraint
+    definition: >-
+      A buffer-stock model with an artificial borrowing constraint a_Art strictly above the natural one. A constraint no
+      tighter than the natural one has no effect, and describes the model without it.
+    subclass_of: buffer-stock-model
+    reduces_to: {class: bst-model, when: "a_Art <= a_Nat"}
+    sources: {bst: [subsubsec-deatonislimit, sec-liqconstraslimit]}
+  - id: BSM_0000008
+    name: with-types
+    label: buffer-stock population of permanent types
+    definition: >-
+      A population of K permanent types with shares ω_i, each a buffer-stock model differing from the others in its
+      discount factor β_i alone. The types are solved separately; the population is their mixture.
+    subclass_of: buffer-stock-model
+    reduces_to: {class: bst-model, when: "K == 1"}
+    sources: {hafiscal-qe: ["Subfiles/Parameterization.tex:48"]}
+  - id: BSM_0000009
+    name: with-markov-states
+    label: buffer-stock model with Markov employment and an aggregate regime
+    definition: >-
+      A buffer-stock model whose transitory income depends on a Markov employment state, with benefits that expire,
+      and on an aggregate regime that is itself a Markov state; HAFiscal's household. The paper remarks that persistent
+      but mean-reverting transitory shocks would change none of its key results; the conditions become conditions on
+      matrices over the states.
+    subclass_of: buffer-stock-model
+    reduces_to: {class: bst-model, when: "the chain has one state"}
+    sources: {bst: [pdv], hafiscal-qe: ["Subfiles/Parameterization.tex:124"]}
+  - id: BSM_0000145
+    name: with-kinked-return
+    label: buffer-stock model with a higher rate on borrowing
+    definition: >-
+      A buffer-stock model in which negative assets pay a return factor above the one positive assets earn; HARK's
+      KinkedRconsumerType.
+    subclass_of: buffer-stock-model
+    reduces_to: {class: bst-model, when: "R_boro == R"}
+    written_as: {hark: KinkedRconsumerType}
+  - id: BSM_0000146
+    name: with-risky-asset
+    label: buffer-stock model with a risky asset
+    definition: >-
+      A buffer-stock model in which assets, or a share of them the agent chooses, earn a random return. The owner ruled
+      on 2026-10-27 that such a model has a target; its conditions are not yet stated, and this ontology states none.
+    subclass_of: buffer-stock-model
+    reduces_to: {class: bst-model, when: "the return is riskless"}
+    written_as: {hark: PortfolioConsumerType}
+  - id: BSM_0000147
+    name: life-cycle
+    label: life-cycle buffer-stock model
+    definition: >-
+      A buffer-stock model with a finite horizon whose primitives may vary with age. A primitive indexed by period t
+      governs the move from t to t+1: the income laws, the survival probability, the return on end-of-period assets
+      and the growth factor of permanent income, as HARK's solvers read them. The paper's limiting solution is the
+      limit of such problems with constant primitives as the horizon recedes.
+    subclass_of: buffer-stock-model
+    reduces_to: {class: bst-model, when: "constant primitives, in the limit of an infinite horizon"}
+    sources: {bst: [sec-theory], hark: ["HARK/ConsumptionSaving/ConsIndShockModel.py:650-662"]}
+
+axioms:
+  # Membership: what makes a model a buffer-stock model.
+  - id: BSM_0000010
+    name: one-agent-saving
+    label: one agent's consumption-saving problem
+    of: buffer-stock-model
+    tier: membership
+    status: bst
+    statement: >-
+      Each period one agent splits market resources m between consumption c > 0 and end-of-period assets a = m − c,
+      maximizing expected discounted utility; resources next period are R a/(𝒢ψ′) + ξ′ in ratios to permanent income.
+    sources: {bst: [eq-levelrecproblem, eq-dbcparts, eq-veqnnrmrecbellman]}
+  - id: BSM_0000011
+    name: crra-above-one
+    label: CRRA utility with relative risk aversion above one
+    of: buffer-stock-model
+    tier: membership
+    status: bst
+    statement: u(c) = c^(1−ϱ)/(1−ϱ) with ϱ > 1, so that u(0⁺) = −∞.
+    check: "rho > 1"
+    sources: {bst: [subsec-setup]}
+  - id: BSM_0000012
+    name: friedman-muth-income
+    label: the Friedman–Muth income process
+    of: buffer-stock-model
+    tier: membership
+    status: bst
+    statement: >-
+      Noncapital income is 𝐩 ξ, with permanent income 𝐩′ = 𝒢 ψ′ 𝐩; the permanent shock ψ is positive with E[ψ] = 1, and
+      the transitory shock ξ is nonnegative with a finite positive mean.
+    sources: {bst: [ass-shocks, eq-dbcparts]}
+  - id: BSM_0000013
+    name: asset-return
+    label: assets earn a return
+    of: buffer-stock-model
+    tier: membership
+    status: proposed
+    statement: >-
+      End-of-period assets earn a gross return factor R > 0 into next period. In the paper's model it is riskless and
+      constant; a risky return or a higher rate on borrowing makes an extension.
+    check: "R > 0"
+    sources: {bst: [eq-dbcparts]}
+  - id: BSM_0000014
+    name: constraint-in-force
+    label: the borrowing constraint in force
+    of: buffer-stock-model
+    tier: membership
+    status: bst
+    statement: >-
+      End-of-period assets satisfy a ≥ a_min = max(a_Art, a_Nat): the natural constraint, which u(0⁺) = −∞ and the
+      worst income impose, or a tighter artificial one.
+    sources: {bst: [pdv, borocnstnat]}
+  - id: BSM_0000015
+    name: point-mass-at-worst-transitory
+    label: an atom at the worst transitory shock where the natural constraint is in force
+    of: buffer-stock-model
+    tier: membership
+    status: ruling
+    ruled: "2026-10-31"
+    statement: >-
+      Where the natural constraint is as tight as or tighter than every artificial constraint (a_min = a_Nat, the edge
+      a_Art = a_Nat included), the lowest value of the transitory shock carries positive probability under the true law:
+      P(ξ = inf supp ξ) > 0. The condition is on the transitory shock alone, not on income ψξ. The paper calls such an
+      atom inessential to its proofs; the owner's ruling makes it part of the class's definition.
+    check: "a_min > a_Nat or xi_atom > 0"
+    sources: {bst: [pdv]}
+  # Hypotheses: what the paper's theorems assume beyond membership.
+  - id: BSM_0000016
+    name: iid-shocks
+    label: iid shocks
+    of: bst-model
+    tier: hypothesis
+    status: bst
+    statement: ψ and ξ are independent of each other and over time, and identically distributed.
+    sources: {bst: [ass-shocks]}
+  - id: BSM_0000017
+    name: bounded-support
+    label: bounded support
+    of: bst-model
+    tier: hypothesis
+    status: bst
+    statement: >-
+      ψ ∈ [ψ_min, ψ_max] with 0 < ψ_min ≤ 1 ≤ ψ_max < ∞, and the employed draw θ ∈ [θ_min, θ_max] with
+      0 < θ_min ≤ 1 ≤ θ_max < ∞. This excludes the untruncated lognormal, and admits every discretization of it.
+    sources: {bst: [ass-shocks, bounded-support]}
+  - id: BSM_0000018
+    name: zero-income-event
+    label: the zero-income event
+    of: bst-model
+    tier: hypothesis
+    status: bst
+    statement: ξ = 0 with probability ℘ > 0, and ξ = θ/(1 − ℘) otherwise, with E[θ] = 1.
+    check: "wp > 0 and xi_u == 0"
+    sources: {bst: [eq-transhkdef]}
+  - id: BSM_0000019
+    name: no-artificial-constraint
+    label: no artificial constraint
+    of: bst-model
+    tier: hypothesis
+    status: bst
+    statement: There is no artificial borrowing constraint; the natural constraint is the one in force.
+    check: "a_min == a_Nat"
+    sources: {bst: [sec-intro]}
+  - id: BSM_0000020
+    name: infinite-lives
+    label: infinite lives
+    of: bst-model
+    tier: hypothesis
+    status: bst
+    statement: ℒ = 1; the object of study is the limit of the finite-horizon solutions as the horizon recedes.
+    check: "L == 1"
+    sources: {bst: [def-nondegeneracy]}
+  - id: BSM_0000021
+    name: one-type
+    label: one type
+    of: bst-model
+    tier: hypothesis
+    status: bst
+    statement: Every agent has the same primitives.
+    sources: {bst: [subsec-setup]}
+  - id: BSM_0000022
+    name: no-shocks
+    label: no shocks
+    of: perfect-foresight-benchmark
+    tier: membership
+    status: bst
+    statement: ℘ = 0 and ψ = θ = 1 with probability one.
+    check: "wp == 0"
+    sources: {bst: [ass-pfincome]}
+  - id: BSM_0000148
+    name: income-risk
+    label: income risk
+    of: buffer-stock-model
+    tier: membership
+    status: proposed
+    statement: >-
+      At least one of the permanent and the transitory shock is not degenerate. A model without income risk has no
+      precautionary motive and is the perfect-foresight benchmark, not a buffer-stock model.
+    sources: {bst: [sec-intro, ass-pfincome]}
+  - id: BSM_0000149
+    name: riskless-constant-return
+    label: a riskless, constant return
+    of: bst-model
+    tier: hypothesis
+    status: bst
+    statement: The return factor R is known and the same in every period, for positive and negative assets alike.
+    sources: {bst: [eq-dbcparts]}
+
+objects:
+  - {id: BSM_0000023, name: agent, label: agent, category: agent, definition: The consumer whose problem the model states.}
+  - id: BSM_0000024
+    name: population
+    label: population
+    category: population
+    definition: A continuum of agents of unit mass, each following the model's rule.
+    sources: {bst: [the-aggregate-and-idiosyncratic-relationship-between-consumption-growth-and-income-growth]}
+  - id: BSM_0000025
+    name: period
+    label: period
+    category: time
+    definition: The time index t; finite-horizon problems run to a terminal period T.
+    written_as: {registry: period-now}
+    sources: {bst: [subsec-setup]}
+  - id: BSM_0000026
+    name: market-resources
+    label: market resources
+    category: state
+    symbol: m
+    definition: Bank balances plus noncapital income, as a ratio to permanent income; the state of the normalized problem.
+    written_as: {bst: '\mNrm', registry: resources-now, bellman-sym: m, hark: mNrm}
+    sources: {bst: [eq-dbcparts, subsubsec-ratio]}
+  - id: BSM_0000027
+    name: permanent-income
+    label: permanent income
+    category: state
+    definition: The level 𝐩 by which the problem is normalized; 𝐩′ = 𝒢 ψ′ 𝐩.
+    written_as: {bst: '\pLvl', hark: pLvl}
+    sources: {bst: [eq-dbcparts]}
+  - id: BSM_0000028
+    name: kapital
+    label: kapital
+    category: state
+    definition: Beginning-of-period capital, last period's end-of-period assets.
+    written_as: {registry: kapital-now, bellman-sym: k}
+    sources: {bst: [eq-dbcparts]}
+  - id: BSM_0000029
+    name: bank-balances
+    label: bank balances
+    category: state
+    definition: b = R k/(𝒢 ψ), kapital with its return, as a ratio to this period's permanent income.
+    written_as: {bst: '\bNrm', registry: bank-balances, hark: bNrm}
+    sources: {bst: [eq-dbcparts, eq-veqnnrmrecbellman]}
+  - id: BSM_0000030
+    name: end-of-period-assets
+    label: end-of-period assets
+    category: state
+    definition: a = m − c, as a ratio to permanent income.
+    written_as: {registry: assets-now, bellman-sym: a, hark: aNrm}
+    sources: {bst: [eq-veqnnrmrecbellman]}
+  - id: BSM_0000031
+    name: consumption
+    label: consumption
+    category: control
+    definition: c, as a ratio to permanent income; the agent's one choice.
+    written_as: {registry: consumption-now, bellman-sym: c, hark: cNrm}
+    sources: {bst: [eq-veqnnrmrecbellman]}
+  - id: BSM_0000032
+    name: permanent-shock
+    label: permanent shock
+    category: shock
+    definition: ψ, the mean-one shock to permanent income; its law is a mean-one law of the ontology of probability distributions.
+    law: {pd: [PD_0000012, PD_0000018, PD_0000031]}
+    written_as: {bst: '\permShk', registry: permanent-shock, parameter-file: income.permanent_shock, bellman-sym: ψ, hark: PermShk}
+    sources: {bst: [ass-shocks]}
+  - id: BSM_0000033
+    name: transitory-shock
+    label: transitory shock
+    category: shock
+    definition: >-
+      ξ, transitory income as a ratio to permanent income, the unemployment event included: ξ_u with probability ℘,
+      else the scaled employed draw.
+    written_as: {bst: '\tranShkAll', registry: transitory-shock-all, bellman-sym: ξ, hark: TranShk}
+    sources: {bst: [ass-shocks, eq-transhkdef]}
+  - id: BSM_0000034
+    name: transitory-shock-employed
+    label: employed transitory draw
+    category: shock
+    definition: θ, the mean-one draw of transitory income while employed.
+    law: {pd: [PD_0000012, PD_0000018, PD_0000031]}
+    written_as: {bst: '\tranShkEmp', registry: transitory-shock-employed, parameter-file: income.employed_shock, bellman-sym: θ}
+    sources: {bst: [ass-shocks]}
+  - id: BSM_0000035
+    name: unemployment-event
+    label: unemployment event
+    category: event
+    definition: >-
+      The event in which transitory income is ξ_u; BST's zero-income event when ξ_u = 0.
+    written_as: {bellman-sym: j}
+    sources: {bst: [eq-transhkdef]}
+  - id: BSM_0000036
+    name: survival-event
+    label: survival event
+    category: event
+    definition: The event, of probability ℒ, that an agent alive this period is alive the next.
+    sources: {bst: [sec-mortality]}
+  - id: BSM_0000037
+    name: crra
+    label: relative risk aversion
+    category: primitive
+    symbol: rho
+    definition: ϱ, the coefficient of relative risk aversion of the CRRA utility function.
+    written_as: {bst: '\CRRA', registry: crra, parameter-file: crra, bellman-sym: ϱ, hark: CRRA}
+    sources: {bst: [subsec-setup]}
+  - id: BSM_0000038
+    name: discount-factor
+    label: discount factor
+    category: primitive
+    symbol: beta
+    definition: β, the pure time-preference factor of one type.
+    written_as: {bst: '\DiscFac', registry: discount-factor, parameter-file: "types[].beta", bellman-sym: β, hark: DiscFac}
+    sources: {bst: [subsec-setup]}
+  - id: BSM_0000039
+    name: survival-prob
+    label: survival probability
+    category: primitive
+    symbol: L
+    definition: ℒ, the probability of surviving into the next period.
+    written_as: {bst: '\Alive', registry: survival-prob, parameter-file: survival, bellman-sym: ℒ, hark: LivPrb}
+    sources: {bst: [sec-mortality]}
+  - id: BSM_0000040
+    name: return-factor
+    label: return factor
+    category: primitive
+    symbol: R
+    definition: R, the gross return on the riskless asset.
+    written_as: {bst: '\Rfree', registry: return-factor, parameter-file: return, bellman-sym: R, hark: Rfree}
+    sources: {bst: [eq-dbcparts]}
+  - id: BSM_0000041
+    name: growth-factor
+    label: growth factor of permanent income
+    category: primitive
+    symbol: G
+    definition: 𝒢, the expected growth factor of permanent income.
+    written_as: {bst: '\PermGroFac', registry: growth-factor, parameter-file: income.growth, bellman-sym: 𝒢, hark: PermGroFac}
+    sources: {bst: [eq-dbcparts]}
+  - id: BSM_0000042
+    name: unemployment-prob
+    label: probability of unemployment
+    category: primitive
+    symbol: wp
+    definition: ℘, the probability of the unemployment event, whatever ξ_u is.
+    written_as: {bst: '\pZero', registry: unemployment-prob, parameter-file: income.unemployment.prob, bellman-sym: p_zero, hark: UnempPrb}
+    sources: {bst: [eq-transhkdef]}
+  - id: BSM_0000043
+    name: income-unemployed
+    label: income while unemployed
+    category: primitive
+    symbol: xi_u
+    definition: ξ_u ≥ 0, transitory income in the unemployment event, as a ratio to permanent income.
+    written_as: {bst: '\IncUnemp', registry: income-unemployed, parameter-file: income.unemployment.income, bellman-sym: ξ_u, hark: IncUnemp}
+    sources: {bst: [pdv]}
+  - id: BSM_0000044
+    name: borrowing-limit-artificial
+    label: artificial borrowing constraint
+    category: primitive
+    symbol: a_Art
+    definition: a_Art ≤ 0, a lower bound on end-of-period assets imposed from outside the household's problem.
+    written_as: {bst: '\BoroCnstArt', registry: borrowing-limit-artificial, parameter-file: borrowing_constraint, bellman-sym: a_Art, hark: BoroCnstArt}
+    sources: {bst: [subsubsec-deatonislimit]}
+  - id: BSM_0000150
+    name: return-borrowing
+    label: return factor on borrowing
+    category: primitive
+    symbol: R_boro
+    definition: The gross return factor negative assets pay, in the extension with a higher rate on borrowing.
+    written_as: {registry: return-borrowing, hark: Rboro}
+  - id: BSM_0000045
+    name: type-share
+    label: share of a type
+    category: primitive
+    definition: ω_i, the share of type i in the population.
+    written_as: {registry: weight, parameter-file: "types[].share"}
+  - id: BSM_0000046
+    name: permanent-shock-min
+    label: lowest permanent shock
+    category: bound
+    symbol: psi_min
+    definition: ψ_min, the infimum of the permanent shock's support under the true law; zero for a law unbounded below.
+    written_as: {bst: '\permShkIndMin', registry: permanent-shock-min}
+    sources: {bst: [ass-shocks]}
+  - id: BSM_0000047
+    name: transitory-shock-min
+    label: lowest transitory shock
+    category: bound
+    symbol: xi_min
+    definition: >-
+      ξ_min, the infimum of the transitory shock's support under the true law: the lower of ξ_u (when ℘ > 0) and the
+      lowest scaled employed draw.
+    written_as: {bst: '\tranShkMin', registry: transitory-shock-min}
+    sources: {bst: [ass-shocks]}
+  - id: BSM_0000048
+    name: transitory-atom-prob
+    label: probability of the lowest transitory shock
+    category: bound
+    symbol: xi_atom
+    definition: P(ξ = ξ_min), the mass the true law of the transitory shock puts at its infimum.
+    sources: {bst: [pdv]}
+  - id: BSM_0000049
+    name: worst-income-prob
+    label: probability of the worst income
+    category: bound
+    symbol: p_worst
+    definition: >-
+      The probability that income ψξ takes its lowest value: ℘ when the unemployment event pays nothing, otherwise the
+      product of the two laws' masses at their infima.
+    written_as: {registry: worst-income-prob, hark: WorstIncPrb}
+    sources: {bst: [wric]}
+  - id: BSM_0000050
+    name: utility-function
+    label: utility function
+    category: function
+    definition: u(c) = c^(1−ϱ)/(1−ϱ).
+    written_as: {bst: '\uFunc', registry: utility-function, bellman-sym: 𝑢}
+    sources: {bst: [subsec-setup]}
+  - id: BSM_0000051
+    name: value-function
+    label: value function
+    category: function
+    definition: >-
+      v_t(m), the normalized value of the finite-horizon problem, value in levels divided by 𝐩^(1−ϱ); its limit as the
+      horizon recedes is the limiting value function v.
+    written_as: {bst: '\vFunc', bellman-sym: V}
+    sources: {bst: [eq-veqnnrmrecbellman, def-nondegeneracy]}
+  - id: BSM_0000052
+    name: consumption-function
+    label: consumption function
+    category: function
+    definition: >-
+      c_t(m), the optimal consumption of the finite-horizon problem; its limit as the horizon recedes is the limiting
+      consumption function c, the rule a population follows.
+    written_as: {bst: '\cFunc', registry: consumption-function, hark: cFunc}
+    sources: {bst: [eq-cfunceq1, def-nondegeneracy]}
+  - id: BSM_0000053
+    name: bellman-operator
+    label: stationary Bellman operator
+    category: operator
+    definition: T, the map from next period's normalized value function to this period's, over consumption in (0, m).
+    written_as: {bst: '\TMap'}
+    sources: {bst: [stationary-bellman-operator, eq-maintmap]}
+  - id: BSM_0000054
+    name: euler-equation
+    label: Euler equation
+    category: operator
+    definition: >-
+      u′(c_t) = R β E_t[(𝒢ψ′)^(−ϱ) u′(c_{t+1})] in the normalized problem, with survival β̊ in place of β; with a binding
+      artificial constraint, an inequality with complementary slackness.
+    written_as: {bellman-sym: policy.euler}
+    sources: {bst: [eq-scaledeuler]}
+  - id: BSM_0000055
+    name: expectation
+    label: expectation over beliefs
+    category: operator
+    definition: E_t, the expectation over next period's shocks, for one agent's beliefs.
+    written_as: {bst: '\Ex', registry: expectation, bellman-sym: "E_{ψ,θ,j}"}
+    sources: {bst: [eq-levelrecproblem]}
+  - id: BSM_0000056
+    name: cross-sectional-mean
+    label: cross-sectional mean
+    category: operator
+    definition: >-
+      𝕄, the mean of a variable across the population's empirical distribution, as distinct from the expectation over
+      one agent's beliefs.
+    written_as: {bst: '\Mean'}
+    sources: {bst: [subsec-cgroeqpermgrofacq]}
+  - id: BSM_0000057
+    name: borrowing-limit-natural
+    label: natural borrowing constraint
+    category: constraint
+    symbol: a_Nat
+    definition: >-
+      a_Nat, the lowest end-of-period assets from which the worst income next period still allows positive consumption
+      forever: minus the present value of the worst income, capitalized at ℛ.
+    written_as: {bst: '\BoroCnstNat', registry: borrowing-limit-natural, bellman-sym: a_Nat, hark: BoroCnstNat}
+    sources: {bst: [borocnstnat, pdv]}
+  - id: BSM_0000058
+    name: borrowing-limit
+    label: constraint in force
+    category: constraint
+    symbol: a_min
+    definition: a_min = max(a_Art, a_Nat), the borrowing constraint the agent faces.
+    written_as: {registry: borrowing-limit}
+    sources: {bst: [pdv]}
+  - id: BSM_0000059
+    name: dynamic-budget-constraint
+    label: dynamic budget constraint
+    category: constraint
+    definition: a = m − c; k′ = a; 𝐩′ = 𝒢ψ′𝐩; m′ = R k′/(𝒢ψ′) + ξ′.
+    written_as: {bellman-sym: arvl_to_dcsn.market_resources}
+    sources: {bst: [eq-dbcparts]}
+  - id: BSM_0000060
+    name: population-measure
+    label: population measure
+    category: measure
+    definition: The measure that gives each agent of the population weight one.
+    sources: {bst: [gicsdl]}
+  - id: BSM_0000061
+    name: income-measure
+    label: income measure
+    category: measure
+    definition: >-
+      The measure that weights each agent by its permanent income, normalized to total weight one: Harmenberg's
+      permanent-income-neutral measure.
+    sources: {bst: [eq-harmcdf]}
+
+moments:
+  - {id: BSM_0000062, name: e-psi-inv, label: "E[ψ⁻¹]", of: permanent-shock, symbol: E_psi_inv, formula: "E(X**-1)", written_as: {bst: '\EPermShkInv', registry: e-perm-shk-inv}, sources: {bst: [eq-gpfacmod]}}
+  - {id: BSM_0000063, name: e-psi-pow-1-minus-rho, label: "E[ψ^(1−ϱ)]", of: permanent-shock, symbol: E_psi_1mrho, formula: "E(X**(1 - rho))", sources: {bst: [fvac]}}
+  - {id: BSM_0000064, name: e-log-psi, label: "E[log ψ]", of: permanent-shock, symbol: E_log_psi, formula: "E(log(X))", sources: {bst: [gicsdl]}}
+  - {id: BSM_0000065, name: e-psi-log-psi, label: "E[ψ log ψ]", of: permanent-shock, symbol: E_psi_log_psi, formula: "E(X*log(X))", sources: {bst: [growth-impatience-implies-harmenberg-impatience]}}
+
+quantities:
+  - id: BSM_0000066
+    name: discount-factor-liv
+    label: discount factor with survival
+    symbol: beta_eff
+    formula: "beta*L"
+    definition: β̊ = β ℒ, the factor by which the household discounts next period's value when there is no annuity.
+    written_as: {registry: discount-factor-liv, hark: DiscFacEff}
+    sources: {bst: [sec-mortality]}
+  - id: BSM_0000067
+    name: patience-abs
+    label: absolute patience factor
+    symbol: thorn_raw
+    formula: "(R*beta)**(1/rho)"
+    definition: Þ = (R β)^(1/ϱ), the growth factor of consumption under perfect foresight with infinite lives.
+    written_as: {bst: '\APFac', registry: patience-abs}
+    sources: {bst: [apfac]}
+  - id: BSM_0000068
+    name: patience-abs-liv
+    label: absolute patience factor with survival
+    symbol: thorn
+    formula: "(R*beta*L)**(1/rho)"
+    definition: Þ̊ = (R β̊)^(1/ϱ), the absolute patience factor with survival and no annuity; Þ when ℒ = 1.
+    written_as: {registry: patience-abs-liv, hark: APFac}
+    sources: {bst: [apfac, sec-mortality]}
+  - id: BSM_0000069
+    name: patience-return-liv
+    label: return patience factor
+    symbol: thorn_R
+    formula: "thorn/R"
+    definition: Þ̊_R = Þ̊/R.
+    written_as: {bst: '\RPFac', registry: patience-return-liv, hark: RPFac}
+    sources: {bst: [ric]}
+  - id: BSM_0000070
+    name: patience-growth-liv
+    label: growth patience factor
+    symbol: thorn_G
+    formula: "thorn/G"
+    definition: Þ̊_𝒢 = Þ̊/𝒢.
+    written_as: {bst: '\GPFacRaw', registry: patience-growth-liv, hark: GPFacRaw}
+    sources: {bst: [eq-gpfacraw]}
+  - id: BSM_0000071
+    name: patience-growth-mod
+    label: risk-modified growth patience factor
+    symbol: thorn_G_mod
+    formula: "thorn_G*E_psi_inv"
+    definition: Þ̊_𝒢 E[ψ⁻¹], the expectation of the ratio of the absolute patience factor to the stochastic growth factor.
+    written_as: {bst: '\GPFacMod', registry: patience-growth-mod, hark: GPFacMod}
+    sources: {bst: [eq-gpfacmod]}
+  - id: BSM_0000072
+    name: patience-growth-mortality-adj
+    label: mortality-adjusted growth patience factor
+    symbol: thorn_G_liv
+    formula: "L*thorn_G"
+    definition: ℒ Þ̊_𝒢, the growth patience factor of a cohort whose members die at rate 1 − ℒ.
+    written_as: {registry: patience-growth-mortality-adj, hark: GPFacLiv}
+    sources: {bst: [giclivmoddefn]}
+  - id: BSM_0000073
+    name: return-growth-ratio
+    label: return factor normalized by growth
+    symbol: R_by_G
+    formula: "R/G"
+    definition: ℛ = R/𝒢.
+    written_as: {bst: '\RNrmByG', registry: return-growth-ratio}
+    sources: {bst: [eq-veqnnrmrecbellman]}
+  - id: BSM_0000074
+    name: human-wealth-factor
+    label: finite human wealth factor
+    symbol: fhw
+    formula: "G/R"
+    definition: 𝒢/R, the factor by which the present value of noncapital income is discounted each period.
+    written_as: {hark: FHWFac}
+    sources: {bst: [ass-fhwc]}
+  - id: BSM_0000075
+    name: human-wealth
+    label: human wealth
+    symbol: h
+    formula: "1/(1 - G/R)"
+    domain: fhwc
+    definition: >-
+      h, the present value of noncapital income as a ratio to permanent income, including this period's, in the limit
+      of an infinite horizon; finite exactly when the FHWC holds.
+    written_as: {bst: '\hNrm', registry: human-wealth, hark: hNrm}
+    sources: {bst: [eq-hdef]}
+  - id: BSM_0000076
+    name: pf-value-of-autarky-factor
+    label: perfect-foresight value-of-autarky factor
+    symbol: pf_vaf
+    formula: "beta*L*G**(1 - rho)"
+    definition: β̊ 𝒢^(1−ϱ), the factor of the value of consuming permanent income forever under perfect foresight.
+    written_as: {hark: PFVAFac}
+    sources: {bst: [pffvac]}
+  - id: BSM_0000077
+    name: value-of-autarky-factor
+    label: value-of-autarky factor
+    symbol: vaf
+    formula: "beta*L*G**(1 - rho)*E_psi_1mrho"
+    definition: β̊ 𝒢^(1−ϱ) E[ψ^(1−ϱ)], the factor of the value of consuming permanent income forever.
+    written_as: {hark: VAFac}
+    sources: {bst: [fvac]}
+  - id: BSM_0000078
+    name: weak-return-patience-factor
+    label: weak return patience factor
+    symbol: wrp
+    formula: "p_worst**(1/rho)*thorn_R"
+    definition: p_worst^(1/ϱ) Þ̊_R, the return patience factor scaled by the probability of the worst income.
+    written_as: {hark: WRPFac}
+    sources: {bst: [wric]}
+  - id: BSM_0000079
+    name: mpc-min
+    label: limiting MPC as resources grow
+    symbol: mpc_min
+    formula: "max([0, 1 - thorn_R])"
+    definition: κ_min = max(0, 1 − Þ̊_R), the limit of the MPC as m → ∞.
+    written_as: {bst: '\MPCmin', registry: mpc-min, hark: MPCmin}
+    sources: {bst: [mpcmindefn]}
+  - id: BSM_0000080
+    name: mpc-max
+    label: limiting MPC as resources fall to their lowest
+    symbol: mpc_max
+    formula: "1 - p_worst**(1/rho)*thorn_R"
+    definition: κ_max = 1 − p_worst^(1/ϱ) Þ̊_R, the limit of the MPC as m falls to its lowest value.
+    written_as: {bst: '\MPCmax', registry: mpc-max, hark: MPCmax}
+    sources: {bst: [eq-mpcmaxdefn]}
+  - id: BSM_0000081
+    name: natural-limit
+    label: natural borrowing limit, computed
+    symbol: a_Nat_value
+    formula: "-xi_min*psi_min/(R/G - psi_min)"
+    domain_note: when ψ_min < ℛ; otherwise there is no natural limit
+    definition: >-
+      The value of a_Nat: −ξ_min ψ_min/(ℛ − ψ_min), which is zero when the worst transitory income is zero or the
+      permanent shock's law is unbounded below.
+    sources: {bst: [borocnstnat]}
+
+conditions:
+  - {id: BSM_0000082, name: aic, label: absolute impatience, short: AIC, factor: patience-abs-liv, holds: "thorn < 1", written_as: {hark: check_AIC}, sources: {bst: [aic]}}
+  - {id: BSM_0000083, name: ric, label: return impatience, short: RIC, factor: patience-return-liv, holds: "thorn_R < 1", written_as: {hark: check_RIC}, sources: {bst: [ric, ass-ric]}}
+  - {id: BSM_0000084, name: wric, label: weak return impatience, short: WRIC, factor: weak-return-patience-factor, holds: "wrp < 1", written_as: {hark: check_WRIC}, sources: {bst: [wric]}}
+  - {id: BSM_0000085, name: fhwc, label: finite human wealth, short: FHWC, factor: human-wealth-factor, holds: "fhw < 1", written_as: {hark: check_FHWC}, sources: {bst: [ass-fhwc, eq-fhwc2]}}
+  - {id: BSM_0000086, name: pf-fvac, label: perfect-foresight finite value of autarky, short: PF-FVAC, factor: pf-value-of-autarky-factor, holds: "pf_vaf < 1", written_as: {hark: "PerfForesightConsumerType.check_FVAC"}, sources: {bst: [pffvac]}}
+  - {id: BSM_0000087, name: fvac, label: finite value of autarky, short: FVAC, factor: value-of-autarky-factor, holds: "vaf < 1", written_as: {hark: "IndShockConsumerType.check_FVAC"}, sources: {bst: [fvac]}}
+  - {id: BSM_0000088, name: gic, label: growth impatience, short: GIC, factor: patience-growth-liv, holds: "thorn_G < 1", written_as: {hark: check_GICRaw}, sources: {bst: [gicraw]}}
+  - {id: BSM_0000089, name: gic-mod, label: strong growth impatience, short: GIC-Mod, factor: patience-growth-mod, holds: "thorn_G_mod < 1", written_as: {hark: check_GICMod}, sources: {bst: [gicmod]}}
+  - {id: BSM_0000090, name: gic-szeidl, label: log growth impatience, short: GIC-Szeidl, factor: patience-growth-liv, holds: "log(thorn_G) < E_log_psi", written_as: {hark: check_GICSdl}, sources: {bst: [gicsdl]}}
+  - {id: BSM_0000091, name: gic-harmenberg, label: Harmenberg growth impatience, short: GIC-Harmenberg, factor: patience-growth-liv, holds: "thorn_G < exp(E_psi_log_psi)", written_as: {hark: check_GICHrm}, sources: {bst: [growth-impatience-implies-harmenberg-impatience]}}
+  - {id: BSM_0000092, name: gic-liv, label: mortality-adjusted growth impatience, short: GIC-Liv, factor: patience-growth-mortality-adj, holds: "thorn_G_liv < 1", written_as: {hark: check_GICLiv}, note: "The paper writes ℒ Þ_𝒢 < 1 without saying whether Þ carries survival. The owner ruled on 2026-10-22, in econ-ark's notation registry, that the condition is ℒ Þ̊_𝒢 < 1, HARK's GPFacLiv: a survivor discounts by βℒ, so its wealth grows at Þ̊, and the cohort shrinks at ℒ. It assumes, as the paper does, that newborns' permanent income grows with aggregate productivity.", sources: {bst: [giclivmoddefn]}}
+
+properties:
+  - {id: BSM_0000093, name: nondegenerate-limiting-solution, label: a non-degenerate limiting solution, definition: "The finite-horizon consumption and value functions converge, as the horizon recedes, to a consumption function that is positive and finite for every m > 0 and a real-valued value function.", sources: {bst: [def-nondegeneracy]}}
+  - {id: BSM_0000094, name: consumption-falls-at-high-wealth, label: consumption growth below one as resources grow, definition: "As m → ∞, the growth factor of consumption approaches the absolute patience factor, which is below one.", sources: {bst: [aic]}}
+  - {id: BSM_0000095, name: positive-limiting-mpc, label: a positive MPC as resources grow, definition: "The MPC of the limiting consumption function tends to 1 − Þ̊_R > 0 as m → ∞.", sources: {bst: [lemma-mpcboundsconvg]}}
+  - {id: BSM_0000096, name: finite-human-wealth, label: finite human wealth, definition: "The present value of noncapital income is finite in the limit of an infinite horizon.", sources: {bst: [eq-hdef]}}
+  - {id: BSM_0000097, name: target-exists, label: an individual buffer-stock target, symbol: m̂, definition: "There is a unique m̂ > 0 with E_t[m_{t+1}] = m_t at m_t = m̂, below which expected m rises and above which it falls.", written_as: {bst: '\mTrgNrm', registry: target, hark: mNrmTrg}, sources: {bst: [thm-target, eq-mtarget]}}
+  - {id: BSM_0000098, name: pseudo-target-exists, label: a pseudo-target, symbol: m̌, definition: "There is a unique m̌ > 0 at which the expected growth factor of the level of market resources equals 𝒢, below which it is higher and above which it is lower.", written_as: {bst: '\mBalLvl', registry: pseudo-target, hark: mNrmStE}, sources: {bst: [thm-mssbalexists, eq-mballvl]}}
+  - {id: BSM_0000099, name: log-target-exists, label: a log target, symbol: m̃, definition: "There is an m̃ at which E_t[log 𝐦_{t+1}] = log 𝒢 𝐦_t; the paper states its existence under log growth impatience in a footnote, without proof.", written_as: {bst: '\mBalLog'}, sources: {bst: [collective-stability]}}
+  - {id: BSM_0000100, name: invariant-population-distribution, label: an invariant distribution under the population measure, definition: "A population following the limiting rule has invariant distributions of m, c and a, each agent weighted equally.", sources: {bst: [gicsdl]}}
+  - {id: BSM_0000101, name: invariant-income-distribution, label: an invariant distribution under the income measure, definition: "A population following the limiting rule has invariant distributions of m and c weighted by permanent income.", sources: {bst: [growth-rates-of-aggregate-income-and-consumption, eq-harmcdf]}}
+  - {id: BSM_0000102, name: aggregate-balanced-growth, label: aggregate balanced growth, definition: "Aggregate consumption, market resources and assets grow in the long run at the growth factor of aggregate permanent income.", sources: {bst: [growth-rates-of-aggregate-income-and-consumption, subsec-cgroeqpermgrofacq]}}
+  - {id: BSM_0000103, name: constraint-relevant, label: the artificial constraint is relevant, definition: "Under perfect foresight, a constraint a ≥ 0 binds at some m.", sources: {bst: [eq-liqconstrbinds]}}
+  - id: BSM_0000104
+    name: buffer-stock-saving
+    label: buffer-stock saving
+    definition: >-
+      A member exhibits buffer-stock saving when it has a non-degenerate limiting solution and an individual buffer-stock
+      target. This draft takes the individual target, as the paper's introduction does; whether the pseudo-target
+      suffices is left to the owner.
+    sources: {bst: [sec-intro, patience-requirements-and-the-existence-of-buffer-stock-targets]}
+
+results:
+  - {id: BSM_0000105, name: existence, label: existence of a non-degenerate solution, kind: theorem, status: bst, assumes: [wric, fvac], within: bst-model, concludes: [nondegenerate-limiting-solution], sources: {bst: [sufficient-conditions-for-non-degenerate-solution]}}
+  - {id: BSM_0000106, name: contraction, label: contraction under consumption bounds, kind: theorem, status: bst, assumes: [wric, fvac], within: bst-model, concludes: [], note: "The MPC-bounded Bellman operator is eventually a contraction on a weighted-norm space.", sources: {bst: [thm-cmap]}}
+  - {id: BSM_0000107, name: limiting-mpcs, label: the limiting MPCs, kind: lemma, status: bst, assumes: [wric], within: bst-model, concludes: [], note: "The maximal MPC converges to κ_max > 0; under the RIC the minimal MPC converges to 1 − Þ_R > 0.", sources: {bst: [limiting-mpcs, cfuncbounds]}}
+  - {id: BSM_0000108, name: mpc-bounds-of-the-limit, label: the limiting rule's MPC bounds, kind: lemma, status: bst, assumes: [wric, ric], within: bst-model, concludes: [positive-limiting-mpc], sources: {bst: [lemma-mpcboundsconvg]}}
+  - {id: BSM_0000109, name: target, label: the buffer-stock target, kind: theorem, status: bst, assumes: [wric, fvac, gic-mod], within: bst-model, concludes: [target-exists], sources: {bst: [thm-target]}}
+  - {id: BSM_0000110, name: pseudo-target, label: the pseudo-target, kind: theorem, status: bst, assumes: [wric, fvac, gic], within: bst-model, concludes: [pseudo-target-exists], sources: {bst: [thm-mssbalexists]}}
+  - {id: BSM_0000111, name: log-target, label: the log target, kind: remark, status: stated, assumes: [gic-szeidl], within: bst-model, concludes: [log-target-exists], note: "Stated in a footnote, without proof; the three points are ordered m̌ < m̃ < m̂ where they exist.", sources: {bst: [collective-stability]}}
+  - {id: BSM_0000112, name: szeidl, label: Szeidl's invariance theorem, kind: theorem, status: cited, assumes: [gic-szeidl], within: bst-model, concludes: [invariant-population-distribution], sources: {bst: [gicsdl]}}
+  - {id: BSM_0000113, name: harmenberg, label: Harmenberg's invariance theorem, kind: theorem, status: cited, assumes: [gic], within: bst-model, concludes: [invariant-income-distribution, aggregate-balanced-growth], sources: {bst: [growth-rates-of-aggregate-income-and-consumption]}}
+  - {id: BSM_0000114, name: mortality-balanced-growth, label: balanced growth with estates destroyed, kind: remark, status: bst, assumes: [gic-liv], within: with-survival, concludes: [aggregate-balanced-growth], sources: {bst: [giclivmoddefn]}}
+  - {id: BSM_0000115, name: pf-unconstrained, label: the unconstrained perfect-foresight solution, kind: proposition, status: bst, assumes: [fhwc, ric], within: perfect-foresight-benchmark, concludes: [nondegenerate-limiting-solution], note: "If and only if.", sources: {bst: [prop-pfucfhwc]}}
+  - {id: BSM_0000116, name: pf-constrained, label: the constrained perfect-foresight solution, kind: proposition, status: bst, assumes: [ric], within: perfect-foresight-benchmark, concludes: [nondegenerate-limiting-solution], note: "With a constraint a ≥ 0; when the RIC fails, a non-degenerate solution exists if and only if the GIC holds.", sources: {bst: [prop-pfcexist]}}
+  - {id: BSM_0000117, name: pf-constraint-relevance, label: when the constraint binds under perfect foresight, kind: remark, status: bst, assumes: [gic], within: perfect-foresight-benchmark, concludes: [constraint-relevant], note: "If and only if.", sources: {bst: [eq-liqconstrbinds]}}
+  - {id: BSM_0000118, name: liquidity-constrained-limit, label: the constrained solution as a limit, kind: theorem, status: bst, assumes: [], within: bst-model, concludes: [], note: "As ℘ → 0, the solution with the zero-income event converges to the solution with ℘ = 0 and the artificial constraint a ≥ 0.", sources: {bst: [subsubsec-deatonislimit, sec-liqconstraslimit]}}
+  # Implications among the conditions alone, which the tests check on sampled members.
+  - {id: BSM_0000119, name: no-ric-no-gic, label: return and growth patience together rule out a finite value of autarky, kind: property, status: bst, assumes: [not ric, not gic], concludes: [not fvac], sources: {bst: [vafacdefn]}}
+  - {id: BSM_0000120, name: pf-gic-implies-pf-fvac, label: growth impatience and finite human wealth give the perfect-foresight finite value of autarky, kind: property, status: bst, assumes: [fhwc, gic], concludes: [pf-fvac], sources: {bst: [claim-pfconspc]}}
+  - {id: BSM_0000121, name: pf-fvac-implies-ric, label: the perfect-foresight finite value of autarky and finite human wealth give return impatience, kind: property, status: bst, assumes: [fhwc, pf-fvac], concludes: [ric], sources: {bst: [claim-pfconspc]}}
+  - {id: BSM_0000122, name: gic-without-ric, label: growth impatience without return impatience means infinite human wealth, kind: remark, status: bst, assumes: [gic, not ric], concludes: [not fhwc], sources: {bst: [prop-pfcexist]}}
+  - {id: BSM_0000123, name: fvac-implies-pf-fvac, label: the finite value of autarky implies its perfect-foresight version, kind: remark, status: deduced, assumes: [fvac], concludes: [pf-fvac], note: "Jensen's inequality, with ϱ > 1 and E[ψ] = 1, gives E[ψ^(1−ϱ)] ≥ 1.", sources: {bst: [vafacdefn]}}
+  - {id: BSM_0000124, name: ric-implies-wric, label: return impatience implies weak return impatience, kind: remark, status: bst, assumes: [ric], concludes: [wric], sources: {bst: [wric]}}
+  - {id: BSM_0000125, name: gic-mod-implies-gic-szeidl, label: strong growth impatience implies log growth impatience, kind: remark, status: bst, assumes: [gic-mod], concludes: [gic-szeidl], sources: {bst: [gicsdl]}}
+  - {id: BSM_0000126, name: gic-szeidl-implies-gic, label: log growth impatience implies growth impatience, kind: remark, status: bst, assumes: [gic-szeidl], concludes: [gic], sources: {bst: [gicsdl]}}
+  - {id: BSM_0000127, name: gic-implies-gic-harmenberg, label: growth impatience implies Harmenberg's condition, kind: property, status: bst, assumes: [gic], concludes: [gic-harmenberg], sources: {bst: [growth-impatience-implies-harmenberg-impatience, claim-gicimpliesharmimp]}}
+  - {id: BSM_0000128, name: gic-implies-gic-liv, label: growth impatience implies its mortality-adjusted version, kind: remark, status: bst, assumes: [gic], concludes: [gic-liv], note: "The mortality-adjusted condition is looser, since ℒ ≤ 1.", sources: {bst: [giclivmoddefn]}}
+  - {id: BSM_0000153, name: fvac-without-ric, label: "with a finite value of autarky, return patience means infinite human wealth", kind: remark, status: deduced, assumes: [fvac, not ric], concludes: [not fhwc], note: "From no-ric-no-gic, the FVAC with the RIC failing gives the GIC; from gic-without-ric, the GIC with the RIC failing gives infinite human wealth. Uses ϱ > 1.", sources: {bst: [vafacdefn, prop-pfcexist]}}
+
+identities:
+  - id: BSM_0000129
+    name: levels-and-ratios
+    label: the problem in levels and in ratios
+    kind: equivalence
+    definition: >-
+      The problem in levels, in (𝐦, 𝐩), and the normalized problem, in m = 𝐦/𝐩, are one model: 𝐜(𝐦, 𝐩) = 𝐩 c(𝐦/𝐩) and
+      𝐯(𝐦, 𝐩) = 𝐩^(1−ϱ) v(𝐦/𝐩).
+    sources: {bst: [subsubsec-ratio, sec-recoverlevels]}
+  - id: BSM_0000130
+    name: limit-and-fixed-point
+    label: the limiting solution and the stationary fixed point
+    kind: equivalence
+    definition: >-
+      A non-degenerate limiting solution, the limit of the finite-horizon solutions, is a fixed point of the stationary
+      Bellman operator, and so the solution of the infinite-horizon problem.
+    sources: {bst: [sec-theory, eq-stationarybellman]}
+  - id: BSM_0000131
+    name: decision-problem-through-beta-eff
+    label: the decision problem depends on β and ℒ through β̊
+    kind: equivalence
+    definition: >-
+      Without an annuity, the household's problem, and so its rule, depends on β and ℒ only through β̊ = β ℒ; the
+      population does not, since ℒ also sets the rate of death and replacement. Two members with the same β̊ and
+      different ℒ have one rule and two populations. Where survival depends on the current Markov state s, as HARK's
+      Markov solver allows, the rule depends on them only through β ℒ(s), state by state. With Blanchard's annuity, as
+      in HARK's AggShockConsumerType, ℒ also enters the return R/ℒ that the budget carries, and the identity fails.
+    sources: {bst: [sec-mortality], hark: ["HARK/ConsumptionSaving/ConsIndShockModel.py:376", "HARK/ConsumptionSaving/ConsMarkovModel.py:429", "HARK/ConsumptionSaving/ConsMarkovModel.py:583-588"]}
+  - id: BSM_0000132
+    name: loose-artificial-constraint
+    label: an artificial constraint no tighter than the natural one
+    kind: reduction
+    definition: >-
+      A model with a_Art ≤ a_Nat is the model without an artificial constraint: the natural constraint is in force, and
+      a looser one never binds.
+    sources: {bst: [pdv]}
+  - id: BSM_0000133
+    name: unemployment-benefit-without-unemployment
+    label: a benefit with no unemployment
+    kind: reduction
+    definition: With ℘ = 0, ξ_u never pays, and models differing only in ξ_u are one model.
+    sources: {bst: [eq-transhkdef]}
+  - id: BSM_0000134
+    name: same-laws
+    label: two written laws of one shock
+    kind: equivalence
+    definition: >-
+      Two written laws of a shock are the same law when the ontology of probability distributions' identity rule says
+      so; two models differing only in the spelling of their laws are one model.
+    sources: {}
+  - id: BSM_0000135
+    name: blanchard-patience
+    label: Blanchard's annuity leaves patience unchanged
+    kind: equivalence
+    definition: >-
+      With Blanchard's annuity, β̊ R/ℒ = β R, so the absolute patience factor is the one with infinite lives; only the
+      quantities in which R enters apart from Þ change, the return patience factor becoming Þ/(R/ℒ).
+    sources: {bst: [sec-mortality]}
+
+families:
+  - id: BSM_0000136
+    name: bst-1
+    label: "the schemas' family bst/1"
+    writes: [with-survival, with-positive-benefit, with-artificial-constraint, with-types]
+    definition: >-
+      The working group's written family bst/1: its parameter file and its stage file write buffer-stock models with
+      perpetual youth and no annuity, a benefit ξ_u ≥ 0, an artificial constraint at or above the natural one, and
+      permanent types differing in β, with mean-one laws of ψ and θ from the ontology of probability distributions.
+    schema: ../../schemas/bst-1/model.md
+  - id: BSM_0000137
+    name: bst-markov-ui-and-agg-1
+    label: "the schemas' family bst-markov_ui-and-agg/1"
+    writes: [with-survival, with-positive-benefit, with-artificial-constraint, with-types, with-markov-states]
+    definition: >-
+      The working group's written family for HAFiscal's household: bst/1 with Markov employment and benefit expiry, an
+      aggregate regime, groups of types, a level law for the newborn and the splurge as an observation map.
+    schema: ../../schemas/bst-markov_ui-and-agg/model.md
+
+divergences:
+  - id: BSM_0000138
+    name: hark-vafac-without-survival
+    term: value-of-autarky-factor
+    where: hark
+    statement: HARK's VAFac leaves out the survival probability ℒ that β̊ carries; draft pull request econ-ark/HARK#1855 adds it.
+    sources: {hark: ["HARK/ConsumptionSaving/ConsIndShockModel.py:2553"]}
+  - id: BSM_0000139
+    name: hark-gpfaclivmod-survival-twice
+    term: patience-growth-mortality-adj
+    where: hark
+    statement: >-
+      HARK has two mortality-adjusted factors. GPFacLiv, ℒ times GPFacRaw, with ℒ already in APFac, is ℒ Þ̊_𝒢, the
+      GIC-Liv as the owner ruled it on 2026-10-22, and HARK's check_GICLiv uses it. GPFacLivMod, named for the
+      Modigliani scheme, multiplies by ℒ again; no HARK check uses it.
+    sources: {hark: ["HARK/ConsumptionSaving/ConsIndShockModel.py:2542-2543"]}
+  - id: BSM_0000140
+    name: hark-no-log-target
+    term: log-target-exists
+    where: hark
+    statement: The paper says Econ-ARK computes the log target m̃ as mBalLog; HARK's main branch computes no such value.
+    sources: {bst: [collective-stability], hark: ["HARK/ConsumptionSaving/ConsIndShockModel.py:1975-1998"]}
+  - id: BSM_0000141
+    name: hafiscal-xi-is-theta
+    term: transitory-shock-employed
+    where: hafiscal-qe
+    statement: >-
+      The published HAFiscal paper writes ξ for the employed transitory shock, which is BST's θ; BST's ξ is transitory
+      income with the unemployment event included.
+    sources: {hafiscal-qe: ["Subfiles/Model.tex:129"]}
+  - id: BSM_0000142
+    name: hafiscal-target-is-a-moment
+    term: target-exists
+    where: hafiscal-qe
+    statement: >-
+      In the HAFiscal paper and code a "target" is mostly an estimation target, a data moment matched, not BST's target
+      ratio of market resources.
+    sources: {hafiscal-qe: ["Subfiles/Parameterization.tex:20-23"]}
+  - id: BSM_0000143
+    name: hafiscal-mpc-is-a-lottery-mpc
+    term: mpc-min
+    where: hafiscal-qe
+    statement: >-
+      HAFiscal's MPC is the share of a windfall spent over the following four quarters, not the derivative c′(m) whose
+      limits this ontology names.
+    sources: {hafiscal-qe: ["Subfiles/Parameterization.tex:20"]}
+  - id: BSM_0000144
+    name: natural-limit-from-atoms
+    term: borrowing-limit-natural
+    where: hark
+    statement: >-
+      HARK's classic solvers compute the natural limit from the lowest atoms of the discretized laws; the paper and this
+      ontology take it from the true laws' infima. HARK's draft pull request econ-ark/HARK#1862 computes it from the
+      infima.
+    sources: {bst: [borocnstnat], hark: ["HARK/ConsumptionSaving/ConsIndShockModel.py:493", "HARK/ConsumptionSaving/ConsIndShockModel.py:511"]}
+  - id: BSM_0000152
+    name: hafiscal-gic-cap
+    term: gic
+    where: hafiscal-qe
+    statement: >-
+      HAFiscal's code caps each type's discount factor so that ℒ (Rβ)^(1/ϱ) E[ψ⁻¹]/𝒢, which its comments call the
+      growth patience factor and the GIC-Mod with survival, is at most a margin below one. Survival there multiplies
+      the patience factor without entering it. This ontology's GIC-Mod is Þ̊_𝒢 E[ψ⁻¹] with Þ̊ = (Rβℒ)^(1/ϱ), and HARK's
+      GPFacLiv is ℒ Þ̊_𝒢: three placements of ℒ in one condition. The cap replaced an earlier (1 − ℒ) + 𝒢^ϱ/R.
+    sources: {hafiscal-qe: ["Code/HA-Models/FromPandemicCode/EstimParameters.py:398-418", "Code/HA-Models/FromPandemicCode/EstimParameters.py:430-437"]}
+  - id: BSM_0000154
+    name: hark-pffvac-message
+    term: pf-fvac
+    where: hark
+    statement: >-
+      HARK's perfect-foresight value-of-autarky factor is computed as β ℒ 𝒢^(1−ϱ), with survival, but its message
+      states the condition as β𝒢^(1−ϱ) < 1; its risk-modified VAFac leaves survival out.
+    sources: {hark: ["HARK/ConsumptionSaving/ConsIndShockModel.py:1796", "HARK/ConsumptionSaving/ConsIndShockModel.py:1716-1719"]}
+  - id: BSM_0000155
+    name: hark-wric-message
+    term: wric
+    where: hark
+    statement: >-
+      HARK computes the weak return patience factor as p_worst^(1/ϱ) Þ/R, as the paper states it, but its message
+      writes the condition as ℘ Þ/R < 1, without the power 1/ϱ.
+    sources: {hark: ["HARK/ConsumptionSaving/ConsIndShockModel.py:2581", "HARK/ConsumptionSaving/ConsIndShockModel.py:2697-2700"]}
+  - id: BSM_0000156
+    name: hark-worst-income-prob-from-atoms
+    term: worst-income-prob
+    where: hark
+    statement: >-
+      HARK's WorstPrb is the probability of the smallest product of the discretized laws' atoms. It is the paper's ℘
+      when the unemployment event pays nothing; with a positive benefit and a continuous permanent shock it is ℘
+      divided by the number of permanent-shock atoms, where the true law gives zero.
+    sources: {hark: ["HARK/ConsumptionSaving/ConsIndShockModel.py:2570-2578"]}
+  - id: BSM_0000157
+    name: hark-two-human-wealths
+    term: human-wealth
+    where: hark
+    statement: >-
+      HARK names two objects hNrm. The one its condition report computes includes this period's income, the paper's
+      h; the one each period's solution carries excludes it, so its limit is h − 1.
+    sources: {hark: ["HARK/ConsumptionSaving/ConsIndShockModel.py:2585", "HARK/ConsumptionSaving/ConsIndShockModel.py:296"]}
+  - id: BSM_0000158
+    name: hark-ric-failure-message
+    term: fvac-without-ric
+    where: hark
+    statement: >-
+      When the RIC fails, HARK's consumer with shocks reports that the FHWC fails too. Within the class, where ϱ > 1,
+      that follows only when the FVAC holds: with Jensen's inequality the FVAC gives β̊ < 𝒢^(ϱ−1), the failing RIC
+      gives β̊ ≥ R^(ϱ−1), and so R < 𝒢. HARK prints it unconditionally, and also for ϱ < 1, outside the class, where
+      even the FVAC does not make it true. It also calls the consumer impatient where its perfect-foresight report
+      calls the same failure patience.
+    sources: {hark: ["HARK/ConsumptionSaving/ConsIndShockModel.py:2769", "HARK/ConsumptionSaving/ConsIndShockModel.py:1897"]}
+  - id: BSM_0000159
+    name: hark-cyclical-index-solver-and-simulation
+    term: period
+    where: hark
+    statement: >-
+      In every HARK model the solution for period t takes the expectation over the shocks of the move from t to t+1,
+      with the rule of period t+1. What differs is which entry of the time-varying parameter lists holds that move's
+      laws. A life-cycle model's solver passes entry t, so entry k is the move out of k. A cyclical model's (cycles = 0
+      with several periods in the cycle, or cycles > 1) passes entry t+1, so entry k is the move into k. The simulation
+      reads entry s − 1 on the move into period s for every value of cycles: the income shocks, growth and the return. Where parameters vary within a cycle, they reach
+      the simulation of a cyclical model a period after its solution expected them; HARK's four-period example has
+      such growth. The cyclical order came with HARK's commit 54083db5 of 2021-07-09 (issue econ-ark/HARK#1022, pull
+      request #1039), whose title gives its aim as entries that correspond to t. That commit moved the simulation of
+      death to match and rotated the example's growth by one, so the example's solution stayed the same. It left the
+      simulation's shocks, growth and return reading entry s − 1, and so moved the example's simulated growth by a
+      period. The Markov consumer's simulation of death reads entry s − 1 for every value of cycles. Which convention
+      HARK should follow is not settled.
+    sources: {hark: ["HARK/ConsumptionSaving/ConsIndShockModel.py:650-662", "HARK/core.py:2457", "HARK/ConsumptionSaving/ConsIndShockModel.py:2275-2277", "HARK/ConsumptionSaving/ConsIndShockModel.py:1531-1533", "HARK/ConsumptionSaving/ConsIndShockModel.py:3143-3145", "HARK/ConsumptionSaving/ConsMarkovModel.py:987-989"]}

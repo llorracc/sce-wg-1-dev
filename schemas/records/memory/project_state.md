@@ -1,9 +1,17 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 22:45 on 2026-10-22, after the fork's thirteen pull requests merged"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 17:48 on 2026-10-31: the fork's thirteen pull requests merged, and the ontology of buffer-stock models drafted on its own branch"
 metadata:
   type: project
 ---
+
+**On branch `buffer-stock-ontology`** (2026-10-31, from the schemas' branch; committed, not pushed, no pull request):
+`ontologies/buffer-stock-models/`, the semantic ontology of buffer-stock models, version 0.1.0-draft.1, rows
+`BSM_0000001` to `BSM_0000159` with `BSM_0000151` retired; 36 tests. It states what makes a model a buffer-stock model
+(membership axioms, the owner's atom rule of 2026-10-31 among them), BST's hypotheses as a second tier, the classes and
+extensions, the conditions with their implications, the identities, each term's written forms in five formats, and the
+divergences in HARK and HAFiscal. The schemas are its syntax; it changes no schema. Its open questions are the owner's
+([the rulings](../rulings/2026-10-31_ontology-decisions.md), [the findings](../findings/2026-10-31_buffer-stock-ontology.md)).
 
 **On the schemas' branch** (`buffer-stock-schema-work_CDC`, pushed). It holds the merged work of the fork's thirteen
 pull requests and `main`'s ontology. Nothing has been proposed to the working group's repository yet.
@@ -132,6 +140,9 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
 - Matsya's third session, on HARK's source, ran on 2026-10-22 and agrees with the stone (the findings of that day).
 
 **Open with the owner:**
+- the ontology's open questions: the two tiers, what buffer-stock saving means, the perfect-foresight and risky-asset
+  classes, the ontology's identifiers on the schemas' keys, the atom axiom as a bst/1 validity condition, and HARK's
+  cyclical index convention;
 - in the HARK session: #1858 and #1862, which stay drafts; the tags on HARK's fork at the adapter's two pins,
   `sce-adapter/2026-10-22` and `sce-adapter/2026-10-22.2`, were made on 2026-10-22;
 - what goes to the working group's repository, and when;

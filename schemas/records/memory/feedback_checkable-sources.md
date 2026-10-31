@@ -25,3 +25,8 @@ what, and when, in the journal and the findings. See [[feedback_no-timings]].
 private). A rule learned from Bellman, such as where a method attaches, is therefore stated in a public document as the
 schemas' own, and no Bellman page is cited for it; the findings record where it came from
 ([[feedback_method-attachment]]).
+
+**Cite the public commit, not a checkout** (2026-10-31). A local clone can sit on a commit no remote has: the
+HAFiscal-Latest session's first line citations came from such a checkout of HAFiscal-QE, and at the public head the
+lines, and the formula they cited, had changed. Check each cited line at the public commit before it goes into a public
+document, and pin that commit.
