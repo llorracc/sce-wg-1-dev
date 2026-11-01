@@ -80,4 +80,11 @@ metadata:
   `Code/HA-Models/Target_AggMPCX_LiquWealth/Estimation_BetaNablaSplurge.py` (`lorenz_target`, `Agg_MPCX_target`,
   `KY_target`), the Lorenz data in `Code/Empirical/make_liquid_wealth.py`, the discount factors of record in
   `Code/HA-Models/Results/attribution/DiscFacEstim_preOptionD.txt`.
-
+- DolARK, EconForge/dolark.py at `b0eef38` (2023-04-12), and econ-ark/DARKolo at `8e428de` (2021-11-16): read for the
+  Jacobian interface's design, which takes DolARK's split of the agent into a backward and a forward operator.
+- HARK's sequence-space Jacobians: `AgentType.make_basic_SSJ` in `HARK/core.py` and `HARK/SSJutils.py` on main at
+  `4c285e86`; the open pull requests that bear on the interface, econ-ark/HARK#1823 (an unperturbed baseline for
+  patient households), #1826 (the direct column's dating), #1828 (the income mass's response), #1835 (aggregating types,
+  a flow-budget check), #1842 (the economy's trend), #1860 (`NewbornPermShk`), #1863 (the truncated lognormal).
+- HAFiscal's household Jacobians in its published package, llorracc/HAFiscal-QE,
+  `Code/HA-Models/FromPandemicCode/HA-Fiscal-HANK-SAM.py` and `HA-Fiscal-HANK-SAM-to-python.py`.

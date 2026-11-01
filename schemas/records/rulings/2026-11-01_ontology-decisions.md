@@ -130,10 +130,24 @@ saving time ended at 02:00 that morning). His words are kept outside this public
 - **16:17:30 and 16:17:44, no version with zero unemployment income was asked for.** This session had offered a natural
   counterpart of `iid-ui-artificial` paying zero; none is built.
 - **16:33:50, "memorialize".**
+- **16:37:49, the Jacobian interface to be drafted with the toolkits,** looking at DolARK, HARK and HAFiscal.
+- **17:05:24, its design decided** (`jacobians.md`): the Jacobians with their metadata required and the fake-news
+  ingredients optional, as data; all three inputs as proposed, the income scale moving all non-capital income and the
+  transfer proportional to permanent income, reaching newborns; the outputs and the file format left to this session,
+  which chose C, A and Y and `.npy`; one distribution grid for every toolkit; the finite-prize iMPC omitted; a
+  steady-state tolerance of 10⁻¹⁰. Asked why the QuantEcon module would be restarted: it would not; under the ruling of
+  20:36:49 on 2026-10-21 the next toolkit is dolo.
+- **17:09:41, the toy's prize: the four random sizes.** The toy-hafiscal estimation draws each winner's prize from
+  Fagereng, Holm and Natvik's four sizes, with equal probability, as the paper describes. It supersedes the single prize
+  of 15:57:06.
+- **17:12:52, the prize's units, "b, I guess?":** each prize a level, equal to its fraction of the population's mean
+  quarterly income, about 1.434 newborn units in the toy, rather than of a newborn's permanent income or of each winner's
+  own. Given tentatively, so open to change.
+- **17:21:37, "go ahead; memorialize":** the Jacobians' results-schema block to be drafted, and a memorial. Drafted as
+  `bst/jacobians.schema.json`, outside `results.schema.json` until he approves it.
 
 **What stays open:**
-- what a toolkit exposes for its Jacobians in the toy-hafiscal suite, to be drawn up with the toolkits and put to the
-  owner; where the target 6.60 is computed; the estimation itself, which HAFiscal's tools do on the owner's word in that
+- the Jacobians' results-schema block, drafted, for the owner's approval; where the target 6.60 is computed; the estimation itself, which HAFiscal's tools do on the owner's word in that
   session;
 - whether the suite's smallest ℘ should be smaller: at 0.00005 the largest gap to the restrained rule is still 0.027;
 - members for HAFiscal's model as its current code solves it, and calibrations for the artificial stage file: their

@@ -183,4 +183,13 @@ Faults found in this project's own work, with their status.
   mass at both ξ's and ψ's floors; a state with ξ = 0 has zero income whatever ψ is, so under `continues` its chance came
   out zero. It could not arise while the schema required ξ_x > 0. **Status:** fixed 2026-11-01 with that requirement's
   removal: such a state's mass is ξ's alone.
-
+- **Time labels inferred, in messages and the journal.** This session told four sessions that the owner's request was at
+  16:41; it was at 16:37:49, as HARK-dev noticed. Three journal stamps that afternoon were also written ahead of the
+  clock. **Status:** corrected on 2026-11-01 from the transcript's stamps and the clock; both HARK sessions corrected
+  their records ([[feedback_stamps-from-the-clock]]).
+- **A survey's reading taken for a measurement.** The draft said HARK's older Jacobian route dates R one period
+  differently, from a read-only survey of the code; the HARK sessions measured R and income dated alike, and the discount
+  factor one period later. **Status:** corrected the same afternoon.
+- **Mean income taken as one.** The draft and the toy's prize units took mean non-capital income per unit of aggregate
+  permanent income as one; with born-employed newborns it is ℒ𝒢 + (1 − ℒ𝒢)κ, 1.000115 for `iid-ui-artificial`
+  (HAFiscal-Latest). **Status:** corrected the same afternoon, with ρ written R ℒ and the output Y renamed Y_hh.

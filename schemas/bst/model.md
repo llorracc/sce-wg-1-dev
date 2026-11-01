@@ -356,11 +356,20 @@ which has one population and a one-quarter unemployment event):
 - **The objective:** the sum of squared gaps over the five years of the profile and over the four Lorenz points, with
   equal weights, plus ((K/Y − 6.60)/6.60)², as the package writes that block. The published objective's fourth block,
   on the year-0 share by wealth quartile, is left out.
-- **The prize:** one prize for every winner, as the published code has it: 7,129 USD, which the code converts to 0.9602
-  of quarterly permanent income. The paper describes prizes drawn across Fagereng, Holm and Natvik's sizes; the code's
-  switch for that never runs.
+- **The prize:** drawn for each winner from Fagereng, Holm and Natvik's four sizes, with equal probability, as the
+  paper describes: 1,625, 3,374, 7,129 and 40,000 USD, which the package's conversion (1,000 NOK = 110 USD, quarterly
+  after-tax income of 270,000/4 NOK) makes 0.219, 0.454, 0.960 and 5.387 of average quarterly income
+  (`lottery_size_USD`). Each winner's response is the share of their own prize spent, and the profile is the mean over
+  winners. The published code's switch for this never ran, so its estimates gave every winner 7,129 USD.
+- **The prize's units:** a level, the same for every winner of a size, equal to those fractions of the steady state's
+  mean quarterly income per capita. That is the population's mean permanent income, (1 − ℒ)/(1 − ℒ𝒢) ≈ 1.4337 in the
+  family's units, where a newborn's permanent income is 1, times mean non-capital income per unit of it,
+  ℒ𝒢 + (1 − ℒ𝒢)κ ≈ 1.000115, slightly above one since newborns draw the employed branch: about 1.4339 in all. A winner's normalized
+  prize is the level over their own permanent income. This keeps the data's conversion, a prize over average income; in
+  HAFiscal's first step, where 𝒢 = 1, the population's mean is a newborn's and the two readings coincide (the owner's
+  choice, 17:12:52, given tentatively).
 
-These choices are the owner's, of 2026-11-01.
+These choices are the owner's, of 2026-11-01; the prize's law was changed from one prize to the four sizes at 17:09:41.
 
 **The newborn.** The member states the family's newborn: born employed, at permanent income 1 with no assets, with the
 employed branch of ξ. The published estimation code leaves HARK's newborn settings at their defaults: its newborns draw

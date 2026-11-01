@@ -1,6 +1,6 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 16:34 on 2026-11-01: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two test suites; the ontology at draft.2, naming no toolkit"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 17:24 on 2026-11-01: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two test suites; the Jacobian interface designed and its block drafted; the ontology at draft.2, naming no toolkit"
 metadata:
   type: project
 ---
@@ -47,6 +47,13 @@ model is a calibration of the buffer-stock families, and a Markov state only a w
 - the toy-hafiscal suite, specified: three types, a center and a spread, estimated by HARK's and HAFiscal's tools to
   HAFiscal's Lorenz points, the iMPC profile and the wealth-to-income ratio, with one prize; every toolkit solves and
   simulates the steady state and exposes what its Jacobians need.
+
+**The Jacobian interface** for the toy-hafiscal suite (`jacobians.md`): designed with the HARK, HARK-dev,
+HAFiscal-Latest and QuantEcon sessions and DolARK's design, and approved at 17:05:24 on 2026-11-01. The Jacobians with
+their metadata are required in a results file, as `.npy` matrices; the fake-news ingredients are optional, as data. The
+inputs are the return, a scale on all non-capital income and a transfer proportional to permanent income; the outputs
+C, A and Y_hh; one distribution grid for every toolkit; a steady state to 10⁻¹⁰. The results-schema block is drafted as
+`bst/jacobians.schema.json`, outside the results schema until approved.
 
 The checker's 169 tests, the adapter's 8 and the ontology's 67 pass.
 
@@ -192,7 +199,7 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
   refused as an external write;
 - `library` against the community library's published v0.1, whose laws are untruncated: a v0.2 of the description
   (recommended), a renamed member, or a note;
-- what a toolkit exposes for its Jacobians in the toy-hafiscal suite, to be drawn up with the toolkits first;
+- approving the Jacobians' results-schema block;
 - the estimation of the toy-hafiscal member, HAFiscal's to do on the owner's word in that session;
 - HARK's cyclical index: ruled on 2026-10-31 that solver and simulation be consistent, the simulation side to be fixed,
   made clear on 2026-11-01 not to find the solver right; the fix is the HARK-dev session's;
@@ -207,7 +214,8 @@ Registering `w3id.org/sce` is not raised before a pull request from this fork is
 ([[feedback_w3id-not-yet]]).
 
 **Next work:**
-- the Jacobian interface for the toy-hafiscal suite, with the HARK, HARK-dev and QuantEcon sessions;
+- once the block is approved: the results schema's reference to it, the checker's verifications of the Jacobians, and
+  HARK's adapter writing them, from a branch carrying #1863;
 - the Markov family (ruled 21:42:05 on 2026-10-22), in collaboration with the HARK and HAFiscal sessions: its results
   document, validator and verification next, to the scope of 22:11:25, then HARK's adapter for its chains; its
   parameter validator, first members and checker are merged (#13);

@@ -224,3 +224,79 @@ its memorial).
   HAFiscal's on the owner's word, its fit to be checked on the delivered member with the family's newborn.
 - The checker's 169 tests, the ontology's 67 and the adapter's 8 pass.
 - Open with the owner: the Jacobian interface; the smallest ℘ of the first suite; `library` against v0.1; the push.
+
+- **16:37:49.** The owner: draft the Jacobian interface with the toolkits, looking at DolARK, HARK and HAFiscal.
+- **16:38–16:40.** The HARK, HARK-dev, HAFiscal-Latest and QuantEcon (community library) sessions are consulted with the
+  same questions: what each computes now, whether to expose the Jacobians or the ingredients of a shared computation,
+  the first inputs and outputs, and the checks. Three read-only surveys:
+  - HARK's main branch: `make_basic_SSJ`, the fake-news algorithm on any scalar parameter, T × T, per type;
+  - HAFiscal's published package: its own fake-news code on HARK, 8 inputs, the sequence_jacobian package for the
+    general equilibrium only, the iMPC by simulation;
+  - DolARK (EconForge/dolark.py) and DARKolo: no sequence-space Jacobians, but the backward and forward operators and the
+    projection of aggregates into the agent's problem.
+- **By 16:45.** The QuantEcon session answers: no machinery yet; the Jacobians in a results file as the canonical form,
+  the two steps optional for Python toolkits; the conventions to pin; its module stopped since 2026-10-21.
+- **By 16:45:27.** The draft written, `schemas/jacobians.md`, as a proposal: the Jacobians required in results, the
+  household's two steps optional, the conventions, the checks the checker can make without solving, the decisions for the
+  owner. It waits for the HARK, HARK-dev and HAFiscal-Latest sessions' answers.
+- **By 16:52.** HAFiscal-Latest answers from its published package: its own fake-news code, the inputs in levels, a
+  transfer that does not reach newborns, the splurge added afterwards, the general-equilibrium layer taking only the
+  matrices; its advice to require the matrices, report both iMPCs, and leave the UI inputs for later. Folded into the
+  draft, with three decisions added: the third input, whether a transfer reaches newborns, and the finite-prize iMPC. It
+  also reports that the owner has asked it to make Step 1's prize random, as the paper describes, which bears on the
+  toy's single prize of 15:57:06.
+- **By 16:58.** The HARK and HARK-dev sessions answer, each with measurements on HARK's main branch at `4c285e86`: the
+  two routes, dating as a flag the caller sets, the open pull requests that bear on it (#1823, #1826, #1828, #1835,
+  #1842, #1860, #1863); the Jacobians required with their metadata, and the ingredients as data rather than a callable;
+  the transfer proportional to permanent income; Y as an output; the flow budget, which closed to about 10⁻¹² and caught
+  a one-row shift in R by 0.53. The draft's proposal half rewritten from all four answers; two items HARK-dev marked
+  private are left out. HARK-dev notes that the stamp this session sent, 16:41, was inferred; the request was at
+  16:37:49, and both sessions are told.
+- **By 17:04.** The HARK session corrects its stamp to 16:37:49, checked in this session's transcript, and one number:
+  HARK's two routes agree to within about half a percent once newborns start from the same wealth; the gap it had first
+  measured came from its own setup. The draft's sentence that the older route dates R one period differently, taken from
+  this session's reading of the code, is corrected to the sessions' measurement: R and income dated alike, the discount
+  factor one period later.
+- **17:05:24.** The owner decides the eight points (rulings). Written into `jacobians.md`, now marked as an approved
+  design: the outputs C, A and Y; the matrices as `.npy` files beside the results file, listed with their hashes; the
+  shared grid on end-of-period assets under the neutral measure, a_j = 500 (j/999)³ for 1000 nodes, with Young's lottery;
+  the finite-prize iMPC dropped; the tolerance of 10⁻¹⁰; the QuantEcon item answered from the ruling of 2026-10-21.
+- **17:09:41.** The owner: the toy uses the four random prize sizes. The sizes and their equal probabilities are read in
+  the published package's `lottery_size_USD` and written into the suite's section, superseding the single prize of
+  15:57:06.
+- **By 17:12.** HAFiscal-Latest confirms the four-prize rule matches its fix, and asks what "of quarterly permanent
+  income" means for the toy, whose population's mean permanent income is about 1.43 newborn units; put to the owner, with
+  the prize as a level scaled to the population's mean income recommended. HARK-dev confirms HARK can follow the shared
+  grid exactly and write the format, with three tasks for an adapter and HARK's memory at T = 300; written into the
+  design.
+- **17:12:52.** The owner chooses, tentatively, the prize as a level scaled to the population's mean quarterly income.
+  Written into the suite's section, with the toy's mean permanent income, (1 − ℒ)/(1 − ℒ𝒢) ≈ 1.434.
+- **By 17:13.** The HARK session confirms that HARK main can follow the grid and the format. Its one blocker for the
+  suite is the truncated lognormal, which is in open draft #1863, not on main; the rest is adapter code. Its polynomial
+  grid differs from the formula by up to four units in the last place, so the design now defines the nodes by correctly
+  rounded operations, x = j/999, a_j = 500((x·x)·x), with the checker stating their hash; and sparse arrays sorted with
+  zeros dropped, so that two files of one matrix are identical. HAFiscal-Latest confirms that the prize's units under the
+  owner's choice are one line in the toy's parameter block, scaling its levels by about 1.434.
+- **By 17:20.** HAFiscal-Latest confirms that HAFiscal can follow the design for the toy, with plumbing to do, and makes
+  three corrections, all applied: mean non-capital income per unit of aggregate permanent income is ℒ𝒢 + (1 − ℒ𝒢)κ, not
+  one, since newborns draw the employed branch (1.000115 for `iid-ui-artificial`), which also corrects the prize's units
+  to about 1.4339; ρ is written R ℒ, so that the member's growth is not taken for the newborns' inherited trend; and the
+  output Y is renamed Y_hh, so as not to collide with a general-equilibrium layer's Y. With all three toolkits'
+  confirmations in, the results-schema block can be drafted.
+- **17:19:01.** The owner asks for HARK's draft pull request #1863, the truncated lognormal, to be opened in the browser;
+  opened.
+- **17:21:37.** "go ahead; memorialize".
+- **17:21–17:23.** The block drafted: `bst/jacobians.schema.json`, a JSON Schema of draft 2020-12 for an optional key
+  `jacobians` of a results file, and a section of `jacobians.md` with the request's keys and the shared grid's SHA-256,
+  `e8817602…`. In a scratch run the draft is a valid schema, an example with 36 matrices validates, and four deliberate
+  breaks are refused.
+
+**State at the memorial (17:24):**
+- Everything since `d04e35d` is in this memorial's commit, on `buffer-stock-ontology`, unpushed.
+- The Jacobian interface: design approved at 17:05:24; the results-schema block drafted, outside the results schema,
+  for the owner's approval. HARK, HARK-dev and HAFiscal-Latest confirm they can follow the grid and the format; HARK's
+  one blocker is the truncated lognormal of #1863.
+- The toy-hafiscal suite: four random prizes, as levels scaled to the population's mean income; its estimation waits
+  for the owner's word in HAFiscal's session.
+- The checker's 169 tests, the ontology's 67 and the adapter's 8 pass.
+- Open with the owner: approving the block; the smallest ℘ of the first suite; `library` against v0.1; the push.
