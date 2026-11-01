@@ -2,8 +2,8 @@
 
 Draft, 2026-10-18; see the [README](../README.md) and the [model schema](model.md).
 
-This document carries [the buffer-stock families' conditions](../bst/conditions.md) over to the Markov family's two
-versions, artificial and zero-infima, with the employment chain. It keeps that document's four kinds of statement,
+This document carries [the buffer-stock families' conditions](../bst/conditions.md) over to the Markov family,
+`bst-markov_ui-and-agg-artificial/1`, with the employment chain. It keeps that document's four kinds of statement,
 validity conditions, domain rules, implications and the simulation phase, all computed exactly by the checker from the
 parameter file, the chain and the [shock laws'](../shock-laws.md) closed-form moments. What changes: the household's
 state carries the employment state j; the growth factor and the law of the permanent shock vary with j under `grows` and
@@ -46,11 +46,7 @@ state, the recursion gives `a_min` = max(`a_Art`, `a_Nat`) with `a_Nat` = −`ξ
 the chain the artificial limit has to sit inside the recursion: taking max(`a_Art`, `a_Nat(j)`) after the fact
 understates the limit of a state that can be followed by one in which the artificial limit binds, since the first must
 leave room for the second. Consequences:
-- With lognormal laws, `θ_min` = 0 and `ψ_min` = 0 in the employed state, which can follow every state, so its term is
-  zero, every other term is negative, and `a_min(j)` = max(`a_Art`, 0) = 0 in every state and under every value of the
-  switch. The zero-infima version's stage file states a ≥ 0 directly, which is therefore exact for every member it
-  states.
-- With truncated laws the limits are negative and can differ by state. They are the same in every state when the
+- With laws of positive floors, truncated or discrete, the limits are negative and can differ by state. They are the same in every state when the
   employed state's term, a candidate everywhere, is the largest, as at the paper's calibration under `continues`. They
   differ when a state's own worst income is low enough for its term to be the larger, as for the paper's low-benefits
   member, whose exhaustion income lies below the employed floor; and an artificial limit above the lowest natural limit
@@ -67,10 +63,10 @@ leave room for the second. Consequences:
 A member that fails any of these is rejected:
 - the parameter domains of the [model schema](model.md) and the rules of the [shock laws](../shock-laws.md); the shares
   summing to one within each group and across groups;
-- the version's scenario ([`constraint-scenarios.md`](../constraint-scenarios.md)): in the artificial version, ψ and θ
-  with strictly positive floors, and `a_Art` ≤ 0 strictly above the lowest of the natural limits `a_Nat(j)`; in the
-  zero-infima version, the infimum of ψ or of θ zero, so that every limit is 0, and E[θ^(−ϱ)] finite, with E[ψ^(−ϱ)]
-  finite when ψ's infimum is zero;
+- the artificial scenario ([`constraint-scenarios.md`](../constraint-scenarios.md)): ψ and θ with strictly positive
+  floors, and `a_Art` ≤ 0 strictly above the lowest of the natural limits `a_Nat(j)`. A law with a zero floor, such as
+  the untruncated lognormal the paper's text states, is refused: HAFiscal's code solves on atoms, whose floors are
+  positive;
 - for every group and type, the FVAC and the RIC or the WRIC of the table below.
 
 BST's existence theorem is for independent income with bounded support and ϱ > 1. For the chain the family requires the
@@ -100,8 +96,13 @@ floor is the worst reachable one and of drawing that floor there: zero unless bo
 there is fixed or has mass at its floor. Under `grows` and `frozen` the unemployed states' income is an atom and ψ there
 is fixed, so from U_1 and X the probability of the exhaustion income ξ_x next quarter is 1 − `find`; whether that is the
 worst income from those states depends on whether ξ_x lies below the employed floor e `θ_min` `ψ_min`, which for the
-paper's calibration it does not under truncated laws and cannot under lognormal ones, where the employed floor is zero
-and has no mass.
+paper's calibration it does not, under the published atoms or under truncated laws.
+
+**A zero-income disaster.** With ξ_x = 0, X's income is zero whatever ψ is, so it is an atom at zero under every switch:
+the worst income from U_1 and X is zero, with probability 1 − `find`, and their natural limits are 0. The limits of E
+and U_2, from which X is not reached next quarter, stay below zero, so an artificial limit `a_Art` = 0 is valid and
+binds in E and U_2. In U_1 and X the limit of 0 is the natural one, which, the worst income being a point mass, the
+household never reaches: there the rule has no kink, as in `bst-natural/1`.
 
 ## Domain rules
 
@@ -151,7 +152,7 @@ exists and the welfare conditions of the simulation phase hold.
 Exact consequences of the parameters, which the comparison tests a results file against:
 - **The limiting MPC.** In every state, c_i′(m, j) → 1 − Þ̊_{R,i} as m → ∞ under the RIC, and → 0 when it fails.
 - **The constraint in force by state**, from the fixed point above, and the natural limits by state; zero in every state
-  under lognormal laws.
+  at the paper's `a_Art` = 0.
 - **The worst income by state**, `ξ_min(j)` `ψ_min(j)`, and the probability `p_worst(j)`.
 - **The newborn's lowest resources.** A newborn's m is at least e `θ_min`, and exactly that when θ has mass at its
   floor.
@@ -177,12 +178,7 @@ satisfy it by the family's convention: born employed with no assets, so m = e θ
 families', taken state by state:
 - Where the artificial limit is the constraint in force and lies strictly above the limit the following states impose,
   the rule keeps consumption above a positive value in that state.
-  With truncated laws and the paper's `a_Art` = 0 this is every state, and all three means are finite.
-- With lognormal laws, the zero-infima version, every state's limit is zero, and a ≥ 0 binds: E[θ^(−ϱ)] and E[ψ^(−ϱ)]
-  are finite, so the expected marginal value of ending a quarter at a = 0 is finite, and a household ends one there
-  for m below a kink, at every ϱ. This corrects the reading before 2026-11-01, under which a limit of zero bound nowhere
-  (the BST and HARK-dev sessions, on the Euler equation at a = 0; not yet run). All three means are finite, as in the
-  binding case.
+  With the paper's `a_Art` = 0, on its atoms or on truncated laws, this is every state, and all three means are finite.
 - A member with an atom at the worst income and no binding constraint, such as `income_without_benefits` below the
   employed floor under truncated laws and with no artificial limit, would fall under the buffer-stock families' atom
   case; the family has no natural version yet, so this is for when it does, with the
@@ -190,8 +186,8 @@ families', taken state by state:
   ψ′/Þ̊_i)^q on the states where the atom is the worst income, at q = ϱ − 1 for W_i and F_i and q = ϱ for M_i. That form
   is a deduction from the buffer-stock families', not yet checked.
 
-So every member of the paper's calibration, in any of the three worlds and with either family of laws, defines W, F and
-M; the checker reports the case it falls under.
+So every member of the paper's calibration, in any of the three worlds, defines W, F and M; the checker reports the case
+it falls under.
 
 ## The stated member and the effective member
 
@@ -210,7 +206,10 @@ member's regime, carry over unchanged.
   behind the tail exponents with a Markov-modulated factor, are not cited; the forms above are the natural
   generalizations and reduce to the buffer-stock families', which were checked numerically for the atom case.
 - **The per-state limits in a stage file with bounded laws**: four calibrated limits selected by j, which the language
-  can state (tested 2026-10-19); they wait for the truncated lognormal's family in Bellman-SYM.
+  can state (tested 2026-10-19). The stage file writes `a ≥ a_Art`, one limit, which is exact whenever `a_Art` lies above
+  every state's natural limit.
+- **A stage file for the published atoms.** The published package's `Discrete` laws have no stage file; `artificial.bl`
+  writes truncated lognormals.
 - **The targets by state** are defined by analogy and have not been checked against a solution.
 - **The income measure's chain** for the GIC-Harmenberg with ℒ = 1 is stated in words only.
 - **The boundary cases.** Equality in any condition is left open.

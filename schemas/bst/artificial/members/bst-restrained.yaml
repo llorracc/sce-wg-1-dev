@@ -1,0 +1,22 @@
+# Buffer Stock Theory's calibration (Carroll and Shanker, Theoretical Foundations of Buffer Stock Saving, table
+# "Microeconomic Model Calibration", https://llorracc.github.io/BufferStockTheory/): annual, Gamma 1.03, R 1.04,
+# beta 0.96, rho 2, sigma_psi 0.1 and sigma_theta 0.1, infinite lives, with the laws truncated at three standard
+# deviations, the stated standard deviation kept after truncation, the laws of the ladder in bst-natural/1.
+# BST's restrained consumer, the limit of its experiment "The Liquidity Constrained Solution as a Limit": no zero-income
+# event (prob 0; the income stated with it is never paid) and c <= m, that is a >= 0. The laws' floors are positive, so
+# the natural constraint lies below zero and a >= 0 is an artificial one. The members bst-p-zero-0.005, -0.0005 and
+# -0.00005 in bst-natural/1 are the same model with the zero-income event at those probabilities and no artificial
+# constraint; their consumption rules converge to this one's as the probability falls to zero.
+family: bst-artificial/1
+period: year
+crra: 2.0
+types:
+  - {beta: 0.96, share: 1.0}
+survival: 1.0
+return: 1.04
+borrowing_constraint: 0.0
+income:
+  growth: 1.03
+  permanent_shock: {TruncatedLogNormal: {sd_log: 0.1, bot: -3.0, top: 3.0}}
+  unemployment: {prob: 0.0, income: 0.0}
+  employed_shock: {TruncatedLogNormal: {sd_log: 0.1, bot: -3.0, top: 3.0}}

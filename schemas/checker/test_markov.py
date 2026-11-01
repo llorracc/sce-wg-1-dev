@@ -1,4 +1,4 @@
-"""The checker's tests for the Markov family's versions (markov.py), against the buffer-stock families' where it reduces to them:
+"""The checker's tests for the Markov family (markov.py), against the buffer-stock families' where it reduces to them:
 
     uv run --with jsonschema --with pyyaml --with scipy --with numpy --with pytest pytest -q schemas/checker
 
@@ -22,13 +22,14 @@ from canonical import load_strict
 SCHEMAS = Path(__file__).resolve().parent.parent
 BST = SCHEMAS / "bst"
 MEMBERS = {"toy": BST / "artificial" / "members" / "toy.yaml",
-           "toy-untruncated": BST / "zero-infima" / "members" / "toy-untruncated.yaml"}
+           "toy-untruncated": BST / "other" / "zero-infima" / "members" / "toy-untruncated.yaml"}
 FAMILY = SCHEMAS / "bst-markov_ui-and-agg"
-FAMILY_MEMBERS = {"toy-as-hafiscal": FAMILY / "artificial" / "members" / "toy-as-hafiscal.yaml",
-                  "paper-one-group": FAMILY / "zero-infima" / "members" / "paper-one-group.yaml",
-                  "paper-published": FAMILY / "zero-infima" / "members" / "paper-published.yaml"}
-# The Markov family's version that each buffer-stock family reduces from.
-VERSION = {"bst-artificial/1": "bst-markov_ui-and-agg-artificial/1", "bst-zero-infima/1": "bst-markov_ui-and-agg-zero-infima/1"}
+FAMILY_MEMBERS = {"iid-ui-artificial": FAMILY / "artificial" / "members" / "iid-ui-artificial.yaml",
+                  "paper-one-group": FAMILY / "artificial" / "members" / "paper-one-group.yaml",
+                  "paper-published": FAMILY / "artificial" / "members" / "paper-published.yaml"}
+# The Markov family's version that each buffer-stock family reduces from: only the artificial one, since the family has
+# no other.
+VERSION = {"bst-artificial/1": "bst-markov_ui-and-agg-artificial/1"}
 
 
 def as_markov(member: dict) -> dict:
@@ -56,9 +57,9 @@ def _toy() -> dict:
     return load_strict(MEMBERS["toy"].read_text())
 
 
-@pytest.mark.parametrize("name", ["toy", "toy-untruncated"])
+@pytest.mark.parametrize("name", ["toy", "iid-ui"])
 def test_the_reduction_to_bst1_gives_bst1_s_conditions(name):
-    data = load_strict(MEMBERS[name].read_text())
+    data = iid_ui_counterpart() if name == "iid-ui" else load_strict(MEMBERS[name].read_text())
     stated, family = bst1.Member(data), markov.MarkovMember(as_markov(data))
     group = family.groups[0]
     for t in data["types"]:
@@ -71,9 +72,9 @@ def test_the_reduction_to_bst1_gives_bst1_s_conditions(name):
                 assert entry["margin"] == pytest.approx(mine[c]["margin"], abs=1e-14), (c, entry["state"], t["beta"])
 
 
-@pytest.mark.parametrize("name", ["toy", "toy-untruncated"])
+@pytest.mark.parametrize("name", ["toy", "iid-ui"])
 def test_the_reduction_to_bst1_gives_bst1_s_limits_and_tail(name):
-    data = load_strict(MEMBERS[name].read_text())
+    data = iid_ui_counterpart() if name == "iid-ui" else load_strict(MEMBERS[name].read_text())
     stated, family = bst1.Member(data), markov.MarkovMember(as_markov(data))
     group = family.groups[0]
     beta = data["types"][len(data["types"]) // 2]["beta"]
@@ -86,12 +87,17 @@ def test_the_reduction_to_bst1_gives_bst1_s_limits_and_tail(name):
     assert sum(imp["employment_marginal"].values()) == pytest.approx(1.0, abs=1e-12)
 
 
-def test_lognormal_laws_give_a_zero_limit_in_every_state():
-    data = as_markov(load_strict(MEMBERS["toy-untruncated"].read_text()))
-    for switch in markov.SWITCHES:
-        data["employment"]["unemployed_permanent_income"] = switch
-        family = markov.MarkovMember(data)
-        assert np.all(family.groups[0].limits(None) == 0.0), switch
+def test_laws_with_a_zero_floor_are_refused():
+    # The family is the artificial scenario, HAFiscal's code's: untruncated lognormals, whose floor is zero, are not what
+    # it solves, and the zero-infima version that took them is retired.
+    data = as_markov(_toy())
+    data["shocks"] = load_strict(MEMBERS["toy-untruncated"].read_text())["income"]
+    data["shocks"] = {k: data["shocks"][k] for k in ("permanent_shock", "employed_shock")}
+    with pytest.raises(markov.MarkovMemberError, match="strictly positive floors"):
+        markov.MarkovMember(data)
+    data["family"] = "bst-markov_ui-and-agg-zero-infima/1"
+    with pytest.raises(markov.MarkovMemberError, match="are retired"):
+        markov.MarkovMember(data)
 
 
 def test_the_artificial_limit_sits_inside_the_recursion():
@@ -152,7 +158,7 @@ def test_the_employment_marginal_is_the_chain_s_with_newborns_employed():
     assert not math.isclose(mu[0], markov.stationary(P)[0], abs_tol=1e-6)
 
 
-@pytest.mark.parametrize("name", ["toy-as-hafiscal", "paper-one-group", "paper-published"])
+@pytest.mark.parametrize("name", ["iid-ui-artificial", "paper-one-group", "paper-published"])
 def test_the_filed_members_are_valid(name):
     member = markov.load_member(FAMILY_MEMBERS[name])
     assert len(member.hash) == 64
@@ -160,10 +166,18 @@ def test_the_filed_members_are_valid(name):
         assert np.all(g.limits(member.a_art_value()) == 0.0), g.name   # a_Art = 0 under lognormal laws: no effect
 
 
-def test_toy_as_hafiscal_is_the_toy_written_in_the_family():
-    filed = load_strict(FAMILY_MEMBERS["toy-as-hafiscal"].read_text())
-    written = as_markov(_toy())
-    written["groups"][0]["name"] = "toy"
+def iid_ui_counterpart() -> dict:
+    """iid-ui-artificial's bst-artificial/1 counterpart: the toy with unemployment probability 0.05 and benefit 0.5."""
+    data = _toy()
+    data["income"]["unemployment"] = {"prob": 0.05, "income": 0.5}
+    return data
+
+
+def test_iid_ui_artificial_is_its_buffer_stock_counterpart_written_in_the_family():
+    bst1.Member(iid_ui_counterpart())  # a valid bst-artificial/1 member
+    filed = load_strict(FAMILY_MEMBERS["iid-ui-artificial"].read_text())
+    written = as_markov(iid_ui_counterpart())
+    written["groups"][0]["name"] = "iid-ui"
     numbers, words = leaves(filed), leaves(written)
     assert {k: v for k, v in numbers.items() if isinstance(v, float)} == pytest.approx(
         {k: v for k, v in words.items() if isinstance(v, float)}, abs=1e-15)
@@ -197,22 +211,31 @@ def test_the_validator_refuses(change, problem):
         markov.MarkovMember(data)
 
 
-@pytest.mark.parametrize("world", markov.SWITCHES)
-def test_the_dropout_calibrations_are_paper_published_s_middle_type(world):
-    # The Bellman calibrations state one type of one group in the stage file's names; their numbers must be the member's
-    import yaml
+def test_the_published_members_state_the_code_s_atoms():
+    # The published package solves on 7 equiprobable atoms of each mean-one lognormal, with no unemployment atom, under
+    # a >= 0: Discrete laws with positive floors, so every state's natural limit is below zero and a >= 0 is artificial.
+    for name in ("paper-published", "paper-one-group"):
+        member = markov.load_member(FAMILY_MEMBERS[name])
+        data = load_strict(FAMILY_MEMBERS[name].read_text())
+        for shock in ("permanent_shock", "employed_shock"):
+            assert len(data["shocks"][shock]["Discrete"]["values"]) == 7
+        assert member.a_art == 0.0 and member.psi.infimum > 0 and member.theta.infimum > 0
+        assert all(np.all(g.limits(None) < 0) for g in member.groups)
 
-    calibration = yaml.safe_load((FAMILY / "zero-infima" / "bellman"
-                                  / f"hafiscal-dropout-middle-type-{world}.yml").read_text(encoding="utf-8"))["calibration"]
-    data = load_strict(FAMILY_MEMBERS["paper-published"].read_text())
-    group = next(g for g in data["groups"] if g["name"] == "dropout")
-    employment, laws = data["employment"], data["shocks"]
-    expected = {"β": group["types"][3]["beta"], "ℒ": data["survival"], "ϱ": data["crra"], "R": data["return"],
-                "𝒢": group["growth"],
-                "σ_ψ": laws["permanent_shock"]["LogNormal"]["sd_log"], "σ_θ": laws["employed_shock"]["LogNormal"]["sd_log"],
-                "e": employment["income_employed"], "ξ_u": employment["income_with_benefits"],
-                "ξ_x": employment["income_without_benefits"], "P_u": world,
-                "p_exit": data["regimes"]["recession"]["exit_hazard"], "sep_n": group["job_loss"]["normal"],
-                "sep_r": group["job_loss"]["recession"], "find_n": employment["job_finding"]["normal"],
-                "find_r": employment["job_finding"]["recession"]}
-    assert calibration == expected
+
+def test_a_zero_income_disaster_state_is_allowed():
+    # xi_x = 0 makes exhaustion a zero-income disaster: its income is zero whatever psi is, so U_1 and X, from which it
+    # can follow, have natural limit 0, with the disaster's probability 1 - find as p_worst; E and U_2 stay below zero,
+    # so a >= 0 is a valid artificial constraint, binding in E and U_2 and never reached in U_1 and X.
+    data = load_strict(FAMILY_MEMBERS["iid-ui-artificial"].read_text())
+    data["employment"]["income_without_benefits"] = 0.0
+    for switch in markov.SWITCHES:
+        data["employment"]["unemployed_permanent_income"] = switch
+        member = markov.MarkovMember(data)
+        g = member.groups[0]
+        natural = g.limits(None)
+        assert natural[2] == 0.0 and natural[3] == 0.0 and natural[0] < 0 and natural[1] < 0, switch
+        find = data["employment"]["job_finding"]["normal"]
+        assert g.worst_income_probability()[2:] == pytest.approx([1 - find, 1 - find], abs=1e-15), switch
+        imp = member.implications(g, data["groups"][0]["types"][0]["beta"])
+        assert imp["kink"] == {"E": True, "U_2": True, "U_1": False, "X": False}, switch

@@ -73,6 +73,10 @@ retired:
   - BSM_0000136
   - BSM_0000137
   - BSM_0000179
+  # The family row of bst-markov_ui-and-agg-zero-infima/1, retired on 2026-11-01: HAFiscal's code never solved the
+  # zero-infima scenario. Its published package solves on lognormals' atoms, whose floors are positive, under a >= 0,
+  # which is the artificial scenario.
+  - BSM_0000229
   # Divergences of a toolkit from the ontology's terms, moved on 2026-11-01 to that toolkit's Rosetta Stone, since the
   # ontology names no toolkit.
   - BSM_0000138
@@ -1657,7 +1661,7 @@ families:
     definition: >-
       The schemas' family for the natural scenario without a point mass, with truncated lognormals; its stage file
       writes the natural limit out from the laws' bounds and carries the complementarity clause.
-    schema: ../../schemas/bst/natural-no-point-mass/parameters.schema.json
+    schema: ../../schemas/bst/other/natural-no-point-mass/parameters.schema.json
   - id: BSM_0000226
     name: bst-artificial-1
     label: "the schemas' family bst-artificial/1"
@@ -1673,23 +1677,16 @@ families:
     definition: >-
       The schemas' family for the zero-infima scenario, with lognormals and no stated artificial constraint, since a ≥ 0
       is the natural one.
-    schema: ../../schemas/bst/zero-infima/parameters.schema.json
+    schema: ../../schemas/bst/other/zero-infima/parameters.schema.json
   - id: BSM_0000228
     name: bst-markov-ui-and-agg-artificial-1
     label: "the schemas' family bst-markov_ui-and-agg-artificial/1"
     writes: [with-markov-states, with-artificial-constraint, liquidity-constrained, with-survival, with-positive-benefit, with-types]
     definition: >-
-      The Markov family's artificial version, HAFiscal's household with laws truncated to positive floors: Markov
+      The Markov family, HAFiscal's household as its code solves it, with laws of strictly positive floors and a ≥ 0: Markov
       employment and benefit expiry, an aggregate regime, groups of types, a level law for the newborn and the splurge
       as an observation map.
     schema: ../../schemas/bst-markov_ui-and-agg/artificial/parameters.schema.json
-  - id: BSM_0000229
-    name: bst-markov-ui-and-agg-zero-infima-1
-    label: "the schemas' family bst-markov_ui-and-agg-zero-infima/1"
-    writes: [with-markov-states, zero-infima, liquidity-constrained, with-survival, with-positive-benefit, with-types]
-    definition: >-
-      The Markov family's zero-infima version, HAFiscal's household with its published lognormal laws.
-    schema: ../../schemas/bst-markov_ui-and-agg/zero-infima/parameters.schema.json
 
 divergences:
   - id: BSM_0000141

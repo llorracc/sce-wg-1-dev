@@ -7,6 +7,16 @@ schemas and the ontology to state every configuration of a valid buffer-stock mo
 each. This proposal is drawn up with the BST, HARK, HARK-dev and HAFiscal sessions, and their answers are attributed
 below. Its decisions are listed at the end.
 
+**Since 2026-11-01, 13:38 EST, two scenarios are principal:** the natural one with a point mass and the artificial one.
+Their folders stay where they were; the other two scenarios' folders in `bst/` moved to `other/` (the owner's ruling, in
+[`bst/model.md`](bst/model.md)). Every buffer-stock family, stage file and check below still stands.
+
+**Since later that afternoon, the Markov family has one version, the artificial one.** HAFiscal's code never solved the
+zero-infima scenario: its published package solves on atoms with positive floors under a ≥ 0. The zero-infima version, its
+stage file and calibrations are retired, and `paper-published` and `paper-one-group` state the code's atoms in the
+artificial version (the owner's ruling; [`bst-markov_ui-and-agg/model.md`](bst-markov_ui-and-agg/model.md)). What the
+HAFiscal paragraph below says of the paper's members is superseded.
+
 ## What separates the scenarios
 
 Two facts about the true laws decide where a member falls, never facts about a discretization:
@@ -44,7 +54,7 @@ reaches its limit, and one with k = 2 does only when 1 < ϱ < 2.
 | a mass at the floor | none | none when ϱ > k | if the binding region reaches the lowest attainable m (a matter of calibration) | yes |
 | the Euler equation | equality everywhere | Kuhn–Tucker | Kuhn–Tucker | Kuhn–Tucker |
 | existence | BST's theorem for its own case (℘ > 0, ξ_u = 0): WRIC and FVAC. Otherwise conjectured, not proved: FVAC, the WRIC with p_worst, and 𝒢ψ_min < R | no theorem | at a_Art = 0: Ma, Stachurski and Toda, FVAC and MST-βR; between −h_min and 0, none stated | Ma, Stachurski and Toda: FVAC, MST-βR and E[ξ^(−ϱ)] < ∞; exact in their framework for a finite-valued ψ, unchecked for a continuous one |
-| examples | BST's own model, with h_min = 0; a positive benefit with a discrete ψ; all-discrete laws | a positive benefit with continuous truncated laws and no artificial constraint | `toy`; HAFiscal with laws truncated as `toy-as-hafiscal` has them | Ma, Stachurski and Toda's and QuantEcon's lognormal model with a ≥ 0; `toy-untruncated`; HAFiscal's published model, by its stated laws |
+| examples | BST's own model, with h_min = 0; a positive benefit with a discrete ψ; all-discrete laws | a positive benefit with continuous truncated laws and no artificial constraint | `toy`; HAFiscal with laws truncated as `iid-ui-artificial` has them | Ma, Stachurski and Toda's and QuantEcon's lognormal model with a ≥ 0; `toy-untruncated`; HAFiscal's published model, by its stated laws |
 
 Sources: BST's assumption on the shocks and its existence theorem; Ma, Stachurski and Toda (2020), Theorem 2.2 and Lemma
 C.2. The thresholds in k come from the BST session's derivation of 2026-10-18, run for one density and not for two. The

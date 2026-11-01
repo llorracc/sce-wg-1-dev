@@ -28,8 +28,12 @@ BST = SCHEMAS / "bst"
 # The four families, each a borrowing-constraint scenario with its own folder, parameter schema and stage file.
 FAMILIES = {"bst-natural/1": "natural", "bst-natural-no-point-mass/1": "natural-no-point-mass",
             "bst-artificial/1": "artificial", "bst-zero-infima/1": "zero-infima"}
-PARAMETER_SCHEMAS = {family: BST / scenario / "parameters.schema.json" for family, scenario in FAMILIES.items()}
-STAGE_FILES = {family: BST / scenario / "bellman" / f"{scenario}.bl" for family, scenario in FAMILIES.items()}
+# The two principal scenarios have their folders in bst/; the other two are in bst/other/ (bst/model.md, "Families").
+PRINCIPAL = ("natural", "artificial")
+FOLDERS = {family: BST / scenario if scenario in PRINCIPAL else BST / "other" / scenario
+           for family, scenario in FAMILIES.items()}
+PARAMETER_SCHEMAS = {family: FOLDERS[family] / "parameters.schema.json" for family in FAMILIES}
+STAGE_FILES = {family: FOLDERS[family] / "bellman" / f"{scenario}.bl" for family, scenario in FAMILIES.items()}
 COMMON_SCHEMA = BST / "parameters.common.schema.json"
 RESULTS_SCHEMA = BST / "results.schema.json"
 SHOCK_LAW_SCHEMA = SCHEMAS / "shock-laws.schema.json"

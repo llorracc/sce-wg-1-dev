@@ -21,9 +21,9 @@ import adapter  # noqa: E402
 
 BST = adapter.SCHEMAS / "bst"
 MEMBER = {"library": BST / "natural" / "members" / "library.yaml",
-          "toy-natural": BST / "natural-no-point-mass" / "members" / "toy-natural.yaml",
+          "toy-natural": BST / "other" / "natural-no-point-mass" / "members" / "toy-natural.yaml",
           "toy": BST / "artificial" / "members" / "toy.yaml",
-          "toy-untruncated": BST / "zero-infima" / "members" / "toy-untruncated.yaml"}
+          "toy-untruncated": BST / "other" / "zero-infima" / "members" / "toy-untruncated.yaml"}
 SAME_AS_STANDARD = 1e-12      # the largest relative difference from the standard consumer's rule
 LEVEL = adapter.LEVELS[1]
 
@@ -90,3 +90,21 @@ def test_the_provenance_does_not_name_the_machine(tmp_path):
     results = adapter.main([str(MEMBER["library"]), "--out", str(tmp_path), "--level", "1"])
     text = json.dumps(json.load(open(results))["provenance"])
     assert platform.node() not in text and platform.platform() not in text
+
+
+def test_the_restrained_limit_suite_converges():
+    # BST's experiment "The Liquidity Constrained Solution as a Limit" (bst/model.md, "The restrained-limit suite"): as the probability
+    # of the zero-income event falls, the natural member's rule comes closer to the restrained consumer's, on a common
+    # grid of m. At level 1 on 2026-11-01 the largest gaps were 0.138, 0.061 and 0.027.
+    m = np.concatenate([np.linspace(1e-4, 1.0, 400), np.linspace(1.0, 10.0, 400)[1:]])
+    lev = adapter.LEVELS[1]
+
+    def rule(path):
+        member = adapter.load_checker(str(adapter.SCHEMAS))[0].load_member(path)
+        nodes = adapter.shocks(member, lev["nodes"])[0]
+        return np.asarray(adapter.solve_type(member, member.types[0]["beta"], nodes, lev).solution[0].cFunc(m), float)
+
+    restrained = rule(BST / "artificial" / "members" / "bst-restrained.yaml")
+    gaps = [float(np.max(np.abs(rule(BST / "natural" / "members" / f"bst-p-zero-{wp}.yaml") - restrained)))
+            for wp in ("0.005", "0.0005", "0.00005")]
+    assert gaps[0] > gaps[1] > gaps[2] > 0, gaps

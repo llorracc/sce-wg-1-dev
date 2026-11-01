@@ -125,9 +125,9 @@
           "exclusiveMinimum": 0
         },
         "income_without_benefits": {
-          "description": "xi_x, income after benefits expire, as a ratio to permanent income.",
+          "description": "xi_x, income after benefits expire, as a ratio to permanent income; 0 makes the state a zero-income disaster.",
           "type": "number",
-          "exclusiveMinimum": 0
+          "minimum": 0
         },
         "unemployed_permanent_income": {
           "description": "P_u, permanent income in a period of unemployment: continues (G psi applies), grows (G applies and psi = 1) or frozen (unchanged). Never omitted.",

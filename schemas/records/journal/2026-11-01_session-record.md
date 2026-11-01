@@ -95,3 +95,103 @@ its memorial).
   request wait for the owner's permission.
 - #15 stays open.
 - Open with the owner: `library` against the community library's v0.1.
+
+- **By 13:39:27.** The community library's session relays the owner's ruling, typed there at 13:38:32: two principal
+  families, natural and artificial, and the others in `other/`. It is checked against that session's transcript as typed
+  by the owner, in reply to the report on `library` against v0.1. The session's reading had the Markov family with only
+  a zero-infima version; it has an artificial version too, which that session corrected by 13:40.
+- **By 13:40:52.** The same session relays an instruction of the owner's to the HAFiscal-Latest session, typed there at
+  13:39:43, about HAFiscal's laws; checked the same way, and kept outside this repository.
+- **13:40–13:43.** Applied. The natural scenario without a point mass and the zero-infima scenario move to `bst/other/`,
+  and the Markov family's zero-infima version to `bst-markov_ui-and-agg/other/`, with `git mv`. The moved parameter
+  schemas' references to the shared definitions go up one more level. The checker and the Markov checker resolve each
+  family's folder from the list of principal scenarios. The tests, the ontology's family entries and the documents name
+  the new folders. Family keys, file contents and hashes are unchanged. The checker's 194 tests and the ontology's 52
+  pass, and its generated files are current; the adapter's 7 pass at its pinned HARK, the moved members among them.
+- **By 13:43:46.** The same session relays the owner's answer to it, typed there at 13:43:31, on the same subject;
+  checked the same way, and kept outside this repository.
+- **After 13:44.** The HAFiscal-Latest session asks that `paper-published` and `paper-one-group` stay where they are
+  until the owner answers its question; they stay. The Markov model's sentence on HAFiscal's plans is taken out.
+- **By 13:46:49.** The community library's session relays the owner's ruling, typed there at 13:46:13 and checked: the
+  Markov family is to correspond to what HAFiscal does, which has no zero infima. HAFiscal-Latest is asked for its
+  values and which of them are unpublished; the revision is put to the owner as a proposal.
+- **By 13:47:31.** The same session relays the owner's ruling, typed there at 13:47:07 and checked, that the published
+  paper's results are not redone; at most, documents or comments point to later developments.
+- **13:49:47.** The owner types "No; we need", which arrives cut off; he is asked to finish it.
+- **13:51:57.** The owner, in this session: HAFiscal never used the zero-infima version, which is to be replaced with
+  artifacts that follow what HAFiscal does. HAFiscal-Latest is asked for the atoms its published code solves on and for
+  its current values.
+- **13:52–13:58.** The Markov checker is reduced to the artificial version: a law with a zero floor is refused, and so
+  is the retired version's key. Its tests lose the cases that wrote the untruncated buffer-stock toy in the family and
+  test both refusals instead. The ontology's family row for the zero-infima version is retired.
+- **13:59:03.** HAFiscal-Latest answers: the published code builds each shock as 7 equiprobable atoms of the mean-one
+  lognormal (HARK's `construct_lognormal_income_process_unemployment`, no unemployment atom, HARK 0.14.1 for the
+  estimates of record) and imposes `BoroCnstArt` = 0 in every state. `paper-published`'s discount factors and splurge are
+  the estimates of record, in HAFiscal-QE's `Code/HA-Models/Results/attribution/DiscFacEstim_preOptionD.txt`; the
+  published simulations also cap age at 200 quarters, and newborns start with assets of 1e-5. Its current model's values
+  are unpublished. It reports that the owner settled in its session at 13:49:54 that nothing in HAFiscal changes.
+- **14:00–14:04.** Applied. `paper-published` and `paper-one-group` move to `artificial/members/` with the atoms as
+  `Discrete` laws and `borrowing_constraint: 0.0`; their hashes change. The zero-infima version's stage file, schema and
+  three calibrations are removed. The Markov checker's search for the tail exponent stops where its function leaves the
+  floating range, which bounded laws reach for the impatient types, instead of failing. The Markov model and conditions,
+  the READMEs, the scenarios proposal, the design note and the ontology are rewritten for the one version.
+- **14:42:57.** The owner on what the Markov family is for, and on BST's experiment as a test comparison (rulings). BST's
+  subsection "The Liquidity Constrained Solution as a Limit" is read in BufferStockTheory's public source: the
+  natural-constraint rule converges, as ℘ ↓ 0, to that of the "restrained" consumer, with ℘ = 0 and c ≤ m. Put to him:
+  the experiment's members in the buffer-stock families, a natural version of the Markov family, and what becomes of the
+  paper's members.
+- **14:49:50.** The owner corrects the reading: one unemployment state, the disaster, with ξ_x = 0, not persistent. Put
+  to him: retiring the four-state family and treating the device as method (recommended), rebuilding it as the device,
+  or keeping it.
+- **14:50:39.** The owner: the schema is not to require ξ_x > 0. Applied by 14:52: the parameter schema allows 0, the
+  stage file's ξ_x is in ℝ₊, and the checker's chance of the worst income takes a zero-income state's mass from ξ alone,
+  since its income is zero whatever ψ is. A new test puts ξ_x = 0 in `toy-as-hafiscal`: U_1 and X get natural limit 0
+  with chance 1 − `find`, E and U_2 stay below zero, and a ≥ 0 has a kink in E and U_2 only. The checker's 189 tests and
+  the ontology's 52 pass, and the stage file elaborates.
+- **14:55:52.** The owner asks what `toy-as-hafiscal` does, and wants it renamed as the artificial version of the
+  Markov model, with unemployment probability 0.05 and benefit 0.5. Told: it was the toy written in the family, already
+  non-persistent, since its job finding was one minus its job loss and its three unemployment states paid the same.
+- **14:56–14:57.** Applied as `iid-ui-artificial` (`git mv`), with job loss 0.05, job finding 0.95, both benefits 0.5
+  and employed income scaled to mean one; its hash changes. The consistency test now checks it against its
+  buffer-stock counterpart, the toy with ℘ = 0.05 and ξ_u = 0.5, which is a valid `bst-artificial/1` member, and the
+  reduction tests run on that counterpart too. The checker's 191 tests and the ontology's 52 pass.
+- **14:59:32.** The owner: the natural version's calibration straight from BST, with three values of ℘, to show the
+  convergence to the artificial version. BST's table "Microeconomic Model Calibration" is read in its public source:
+  𝒢 1.03, R 1.04, β 0.96, ϱ 2, ℘ 0.005, σ_ψ and σ_θ 0.1, which is `library`'s. The limit is BST's restrained consumer,
+  with ℘ = 0 and c ≤ m, not `iid-ui-artificial`.
+- **15:00–15:02.** The four members are written; the checker accepts them, the first rung with `library`'s hash. The
+  HARK adapter turns out to solve every buffer-stock member with HARK's Markov consumer on a two-state chain that is not
+  persistent, the device the owner described at 14:42:57.
+- **15:01:21.** The owner: these four are one suite of tests for every toolkit's BST solution.
+- **15:02–15:03.** The four solved with the adapter's route at level 1: the largest gap to the restrained rule over m
+  in (0, 10] is 0.138, 0.061 and 0.027, largest at m ≈ 0.98, the restrained rule's kink. The suite is written into
+  `bst/model.md` with that result; a checker test confirms that the four differ only in ℘ and the constraint, and the
+  ontology's test classifies them. The checker's 192 tests and the ontology's 64 pass. The adapter gains a test that each
+  rung's gap is smaller than the last, and its 8 tests pass at its pinned HARK.
+- **15:06:08.** The owner specifies a toy-hafiscal suite (rulings) and asks for it to be explained back. Explained, with
+  four questions: what the Jacobians need beyond a steady state, how the types are set, which targets, which
+  unemployment calibration.
+- **15:09:16.** The owner answers all four (rulings). The suite is written into `bst/model.md`; the section of the
+  first suite is renamed "The restrained-limit suite", since parts get names. HAFiscal-Latest is asked for the targets,
+  their sources and weights, and whether its estimation code can run the model, and told not to start on this
+  session's word.
+- **By 15:20.** HAFiscal-Latest answers from the published package: the Lorenz points of liquid wealth from the 2004
+  SCF, the iMPC profile of Fagereng, Holm and Natvik, the mapping from quarters to years, and the objectives. Its
+  estimation code is the model class of its first step and would need the toy's parameters, three types, a choice of
+  objective blocks and the toy's laws. It flags two points to the owner: the paper's wording on ranking (by income,
+  where the code ranks by liquid wealth) and a switch for a random prize that never runs. The public facts are written
+  into `bst/model.md`; the toy's prize law and whether it targets the wealth-to-income ratio are put to the owner.
+- **15:57:06.** The owner: include the wealth-to-income ratio, use the single prize, memorialize. Both written into the
+  suite's section; the memorial follows.
+
+**State at the memorial (15:59):**
+- Everything since `4f20864` is uncommitted until this memorial's commit, which holds it all, on `buffer-stock-ontology`,
+  unpushed. The push and the draft pull request still wait for the owner.
+- Two buffer-stock families principal, `bst-natural/1` and `bst-artificial/1`; the other two in `bst/other/`. The Markov
+  family has one version, `bst-markov_ui-and-agg-artificial/1`, with `paper-published`, `paper-one-group` and
+  `iid-ui-artificial`, and allows ξ_x = 0.
+- Two suites: the restrained-limit suite, written and tested; the toy-hafiscal suite, specified, its estimation
+  HAFiscal's to do on the owner's word.
+- The checker's 192 tests, the ontology's 64 and the adapter's 8 pass; every stage file elaborates.
+- Open with the owner: the four-state Markov family's fate; the Jacobian interface; the smallest ℘ of the first suite;
+  `library` against v0.1; the push.

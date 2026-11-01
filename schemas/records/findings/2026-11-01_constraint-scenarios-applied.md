@@ -2,6 +2,9 @@
 
 2026-11-01, from 12:51 EST, on the owner's rulings of 12:50:56 ([`constraint-scenarios.md`](../../constraint-scenarios.md)).
 
+Since 13:43 the natural scenario without a point mass and the zero-infima scenario are in `other/` in both families
+(the owner's ruling of 13:38:32). The paths below are as they were when this was written.
+
 ## What was built
 
 - **Six families, each with its own stage file:**

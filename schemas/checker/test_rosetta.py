@@ -25,8 +25,10 @@ STONES = ["hark", "quantecon-jax"]
 SYMBOLS = {"β": "β", "ℒ": "ℒ", "ϱ": "ϱ", "R": "R", "𝒢": "𝒢", "a_Art": "a_Art",
            "σ_ψ": "ψ", "σ_θ": "θ", "p_zero": "℘", "ξ_u": "ξ_u",
            "μ_ψ": "ψ", "s_ψ": "ψ", "ψ_min": "ψ", "ψ_max": "ψ", "μ_θ": "θ", "s_θ": "θ", "θ_min": "θ", "θ_max": "θ"}
-# The buffer-stock families' folders, one for each borrowing-constraint scenario.
+# The buffer-stock families' folders, one for each borrowing-constraint scenario: the principal two in bst/, the others
+# in bst/other/.
 SCENARIOS = ("natural", "natural-no-point-mass", "artificial", "zero-infima")
+FOLDER = {s: SCHEMAS / "bst" / (s if s in ("natural", "artificial") else f"other/{s}") for s in SCENARIOS}
 # Keys that identify a file rather than state a number of the model.
 NOT_PARAMETERS = {"family", "period"}
 # The verdicts of a whole-stage handler on the parts it covers, in Bellman's tokens.
@@ -37,7 +39,7 @@ def stage_parameters() -> set[str]:
     """The names the four stage files declare with a domain and a gloss, `name : domain :: [...]`; not their functions."""
     names = set()
     for s in SCENARIOS:
-        text = (SCHEMAS / "bst" / s / "bellman" / f"{s}.bl").read_text(encoding="utf-8")
+        text = (FOLDER[s] / "bellman" / f"{s}.bl").read_text(encoding="utf-8")
         names |= {m.group(1) for m in re.finditer(r"^([^\s(]+)\s+:\s[^=\n][^\n]*::\s*\[", text, re.M)}
     return names
 
@@ -50,7 +52,7 @@ def parameter_keys() -> set[str]:
 
     def resolve(spec: dict) -> dict:
         ref = spec.get("$ref", "")
-        return common[ref.rsplit("/", 1)[1]] if ref.startswith("../parameters.common.schema.json#") else spec
+        return common[ref.rsplit("/", 1)[1]] if "parameters.common.schema.json#" in ref else spec
 
     def walk(node: dict, prefix: str) -> None:
         for name, spec in node.get("properties", {}).items():
@@ -64,7 +66,7 @@ def parameter_keys() -> set[str]:
                 keys.add(path)
 
     for s in SCENARIOS:
-        walk(json.loads((SCHEMAS / "bst" / s / "parameters.schema.json").read_text(encoding="utf-8")), "")
+        walk(json.loads((FOLDER[s] / "parameters.schema.json").read_text(encoding="utf-8")), "")
     return keys - NOT_PARAMETERS
 
 

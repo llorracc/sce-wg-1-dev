@@ -65,8 +65,77 @@ saving time ended at 02:00 that morning). His words are kept outside this public
   - `a_Art` left out of the zero-infima scenario;
   - PF-FVAC renamed FVAC-PF in the schemas.
 - **13:32:13, "memorialize".**
+- **13:38:32, two principal families,** typed in the community library's session, in reply to its report that the
+  truncated `library` no longer matches the library's published description; relayed here and checked against that
+  session's transcript. The schemas are to have two principal versions, under the natural constraint and under a
+  binding artificial one. In practice the model is solved numerically under an artificial constraint, and the natural
+  scenario without a point mass is of more theoretical than practical interest. The other scenarios' folders go into a
+  subdirectory `other/`. Applied to both families: `bst/other/` holds `natural-no-point-mass/` and `zero-infima/`, and
+  `bst-markov_ui-and-agg/other/` holds `zero-infima/`. The families, their keys and their members' hashes are unchanged.
+  It supersedes nothing; all six families stand.
+- **13:39:43 and 13:43:31, two instructions on HAFiscal's laws,** typed in the same session and addressed to the
+  HAFiscal-Latest session; they concern HAFiscal's own work, and are kept outside this public repository. By that
+  session's report, the owner settled there at 13:49:54 that nothing in HAFiscal changes.
+- **13:46:13, the Markov family to correspond to what HAFiscal does,** typed in the same session and checked the same
+  way: `bst-markov_ui-and-agg/` is to be revised to correspond to HAFiscal, which does not have zero infima.
+- **13:47:07, the published paper's results are not redone,** typed in the same session and checked the same way. At
+  most, new documents or comments point from them to later developments.
+- **13:51:57, the Markov zero-infima version replaced,** typed in this session. HAFiscal never used the zero-infima
+  version; what was recorded for it is to be replaced with artifacts that follow what HAFiscal does, in the appropriate
+  place. Applied: the version `bst-markov_ui-and-agg-zero-infima/1`, its stage file, its parameter schema and its three
+  calibrations are retired, and `paper-published` and `paper-one-group` are members of
+  `bst-markov_ui-and-agg-artificial/1` with the laws the published code solves on, 7 equiprobable atoms of each
+  lognormal, under its a ≥ 0. Their other values are unchanged, so they reproduce the published numbers and nothing is
+  redone. It supersedes this session's move of that version to `other/` at 13:43, and the reading of the 2026-11-01
+  scenarios proposal that put the paper's members in the zero-infima scenario by the paper's stated laws.
+- **14:42:57, what the Markov family is for.** It is not meant as a full statement of HAFiscal's Markov structure, whose
+  benefits can run longer. It gives the worst, "disaster", state a parameter of its own, and it is not a model distinct
+  from the natural or the artificial case: it implements either without rewriting a toolkit's i.i.d. solver. A test
+  comparison the owner wants among candidate buffer-stock models is BST's own experiment, "The Liquidity Constrained
+  Solution as a Limit": a natural constraint at 0 from a very small point mass of zero income, against an artificial
+  constraint at 0.
+- **14:49:50, the device is one disaster state, not persistent.** There is one unemployment state, the disaster, with
+  ξ_x = 0, and being in it this period does not make it likelier next period. It corrects this session's reading at
+  14:43, which took the family's four-state, persistent chain as the device.
+- **14:50:39, the schema is not to require ξ_x > 0.** Applied: `income_without_benefits` may be 0 in the Markov
+  family's parameter schema and stage file, and the checker counts the chance of a zero-income state from ξ's mass
+  alone.
+- **14:55:52, `toy-as-hafiscal` renamed and recalibrated:** it is to be the artificial version of the Markov model, with
+  unemployment probability 0.05 and benefit 0.5. Applied as `iid-ui-artificial`: job loss 0.05 and job finding 0.95 in
+  both regimes, so the one unemployment state does not persist; both benefits 0.5; a ≥ 0; employed income scaled to
+  mean one, (1 − 0.05·0.5)/0.95, as in the buffer-stock families; the toy's other values. Its counterpart is the toy
+  with ℘ = 0.05 and ξ_u = 0.5.
+- **14:59:32, the natural version's calibration straight from BST,** with three values of ℘, to show the convergence to
+  the artificial version as ℘ falls.
+- **15:01:21, a suite of tests for every toolkit's BST solution:** the three natural members and the one artificial.
+  Applied: `bst-p-zero-0.005`, `-0.0005` and `-0.00005` in `bst-natural/1`, BST's calibration with ξ_u = 0, and
+  `bst-restrained` in `bst-artificial/1`, the same with no zero-income event and a ≥ 0, BST's restrained consumer
+  (`bst/model.md`, "A test suite"). The first rung is the same model as `library`.
+
+- **15:06:08, a toy-hafiscal suite.** A suite of solutions of the artificial version, "toy-hafiscal": HARK's and
+  HAFiscal's machinery estimates three discount-factor types to match the Lorenz curve's moments and the iMPC, with no
+  splurge. The resulting calibration goes to every toolkit, which solves and simulates the steady state, so that the
+  SSJ exercise can be done on each. The estimation is not asked of the other toolkits.
+- **15:09:16, its details.** The toolkits are to expose whatever is needed to compute their Jacobians. The types are a
+  center and a spread; the targets are HAFiscal's Lorenz targets and the iMPC's whole profile; every value but the
+  discount factors is `iid-ui-artificial`'s (`bst/model.md`, "The toy-hafiscal suite").
+- **15:57:06, the toy-hafiscal targets completed, and "memorialize".** The toy also targets the ratio of liquid wealth
+  to quarterly income, 6.60, with the published objective's block for it; the wealth-quartile block is left out. Every
+  winner gets the same prize, as the published code has it. Then a memorial.
 
 **What stays open:**
+- what a toolkit exposes for its Jacobians in the toy-hafiscal suite, to be drawn up with the toolkits and put to the
+  owner; where the target 6.60 is computed; the estimation itself, which HAFiscal's tools do on the owner's word in that
+  session;
+- whether the suite's smallest ℘ should be smaller: at 0.00005 the largest gap to the restrained rule is still 0.027;
+- what becomes of the Markov family as built, with four persistent employment states, the regime, groups and the
+  splurge, now that the device is one non-persistent disaster state: retired, with the device recorded as a way to
+  implement buffer-stock members; rebuilt as the two-state device; or kept beside it. The members for BST's experiment,
+  a `bst-natural/1` ladder with ξ_u = 0 and ℘ shrinking against a restrained `bst-artificial/1` member, wait on the
+  ladder's values;
+- members for HAFiscal's model as its current code solves it, and calibrations for the artificial stage file: their
+  values are unpublished, and wait for the owner's word that they may go into this public repository. The published
+  package's atoms have no stage file;
 - `library` against the community library's published description, v0.1, with untruncated laws: a v0.2 of the
   description with truncated laws, which is the community library's session's to write in `llorracc/community-library`;
   a renamed member; or a note;

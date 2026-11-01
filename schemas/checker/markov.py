@@ -1,4 +1,4 @@
-"""The checker for a parameter file of the Markov family's versions, artificial and zero-infima, for the STATED member: the employment chain, the constraint in
+"""The checker for a parameter file of the Markov family, bst-markov_ui-and-agg-artificial/1, for the STATED member: the employment chain, the constraint in
 force by state, the conditions as dominant eigenvalues over the chain, the domain rules and the implications.
 
 The statements follow bst-markov_ui-and-agg/conditions.md, in BST's notation: psi the permanent shock, theta the employed
@@ -25,9 +25,11 @@ from laws import TOLERANCE, filled, law_from_mapping
 
 SCHEMAS = Path(__file__).resolve().parent.parent
 FAMILY_DIR = SCHEMAS / "bst-markov_ui-and-agg"
-# The family's two versions, each a borrowing-constraint scenario with its own folder, parameter schema and stage file.
-FAMILIES = {"bst-markov_ui-and-agg-artificial/1": "artificial", "bst-markov_ui-and-agg-zero-infima/1": "zero-infima"}
-PARAMETER_SCHEMAS = {family: FAMILY_DIR / scenario / "parameters.schema.json" for family, scenario in FAMILIES.items()}
+# The family's one version, the artificial scenario, which is what HAFiscal's code computes: its laws, as solved, have
+# strictly positive floors, and it imposes a >= 0 (bst-markov_ui-and-agg/model.md). The zero-infima version is retired.
+FAMILIES = {"bst-markov_ui-and-agg-artificial/1": "artificial"}
+FOLDERS = {family: FAMILY_DIR / scenario for family, scenario in FAMILIES.items()}
+PARAMETER_SCHEMAS = {family: FOLDERS[family] / "parameters.schema.json" for family in FAMILIES}
 COMMON_SCHEMA = FAMILY_DIR / "parameters.common.schema.json"
 SHOCK_LAW_SCHEMA = SCHEMAS / "shock-laws.schema.json"
 
@@ -65,7 +67,8 @@ def validate(data) -> list[str]:
     family = data.get("family") if isinstance(data, dict) else None
     if family not in FAMILIES:
         return [f"family: {family!r} is not one of the Markov family's versions {sorted(FAMILIES)}; "
-                "bst-markov_ui-and-agg/1 is retired, its members split by borrowing-constraint scenario"]
+                "bst-markov_ui-and-agg/1 and bst-markov_ui-and-agg-zero-infima/1 are retired, since HAFiscal's code "
+                "computes the artificial scenario"]
     return [f"{'/'.join(str(p) for p in e.absolute_path) or '/'}: {e.message}"
             for e in sorted(_validator(family).iter_errors(data), key=lambda e: list(e.absolute_path))]
 
@@ -168,9 +171,12 @@ class Group:
 
     def worst_income_probability(self) -> np.ndarray:
         """p_worst(j): the probability, from j, of reaching next quarter a state whose income floor xi_min psi_min is the
-        worst reachable one and of drawing that floor there; zero unless the floor is an atom of both laws there."""
+        worst reachable one and of drawing that floor there; zero unless the floor is an atom of both laws there. A state
+        whose income floor is an atom at zero, such as exhaustion with xi_x = 0, has zero income whatever psi is, so its
+        mass is xi's alone."""
         floor = self.xi_min() * self.psi_min()
-        mass = self.xi_min_mass() * self.psi_min_mass()
+        xi_mass = self.xi_min_mass()
+        mass = np.where(self.xi_min() == 0, xi_mass, xi_mass * self.psi_min_mass())
         out = np.zeros(4)
         for j in range(4):
             reach = self.P[j] > 0
@@ -204,8 +210,7 @@ class MarkovMember:
         self.splurge = data["splurge"]
         self.family = data["family"]
         self.scenario = FAMILIES[self.family]
-        # a_Art in the artificial version; 0 in the zero-infima version, where a >= 0 is the natural constraint and binds
-        self.a_art = data["borrowing_constraint"] if self.scenario == "artificial" else 0.0
+        self.a_art = data["borrowing_constraint"]
         self.natural = False
         self.psi = law_from_mapping(data["shocks"]["permanent_shock"])
         self.theta = law_from_mapping(data["shocks"]["employed_shock"])
@@ -240,21 +245,13 @@ class MarkovMember:
         if problems:
             return problems
         lowest = min(float(np.min(g.limits(None))) for g in self.groups)
-        if self.scenario == "artificial":
-            if not (self.psi.infimum > 0 and self.theta.infimum > 0):
-                problems.append("shocks: the artificial version needs psi and theta with strictly positive floors, so that "
-                                "every state's natural limit lies below zero; with a zero floor the member is the "
-                                "zero-infima version's")
-            elif lowest > -math.inf and not self.a_art > lowest + TOLERANCE:
-                problems.append(f"borrowing_constraint {self.a_art!r} is not above the lowest natural limit {lowest!r}; "
-                                "an artificial limit no tighter binds in no state")
-        else:
-            if not (self.psi.infimum == 0 or self.theta.infimum == 0):
-                problems.append("shocks: the zero-infima version needs the infimum of psi or of theta to be zero")
-            for name, law, needed in (("employed_shock", self.theta, True),
-                                      ("permanent_shock", self.psi, self.psi.infimum == 0)):
-                if needed and not _finite_moment(law, -self.rho):
-                    problems.append(f"shocks/{name}: E[x^(-rho)] is infinite, so a >= 0 is never reached")
+        if not (self.psi.infimum > 0 and self.theta.infimum > 0):
+            problems.append("shocks: the family needs psi and theta with strictly positive floors, so that every state's "
+                            "natural limit lies below zero; a law with a zero floor, such as an untruncated lognormal, is "
+                            "not what HAFiscal's code solves: write its atoms (Discrete) or a truncated law")
+        elif lowest > -math.inf and not self.a_art > lowest + TOLERANCE:
+            problems.append(f"borrowing_constraint {self.a_art!r} is not above the lowest natural limit {lowest!r}; "
+                            "an artificial limit no tighter binds in no state")
         for g in self.groups:
             for t in g.types:
                 c = {x["name"]: x for x in self.factors(g, t["beta"])}
@@ -310,16 +307,28 @@ class MarkovMember:
         ]
 
     def _root(self, phi, start: float = 0.0) -> float | None:
-        """The smallest z > start with phi(z) = 1, given phi increasing through one, or None when phi stays below one."""
-        log_phi = lambda z: math.log(phi(z))   # noqa: E731
+        """The smallest z > start with phi(z) = 1, given phi increasing through one, or None when phi stays below one.
+
+        With bounded laws phi can instead fall towards zero, as for an impatient type whose patience factor is below every
+        state's floor of growth: log phi is convex in z, with slope tending to the log of that ratio, so phi stays below
+        one. The search stops, with None, where phi underflows or a moment overflows, past which no root is representable."""
+        def log_phi(z):
+            try:
+                v = phi(z)
+            except OverflowError:
+                return None
+            return math.log(v) if v > 0 else None
         z = start if start > 0 else 1e-6
-        if log_phi(z) >= 0:
+        if (here := log_phi(z)) is not None and here >= 0:
             return z if start > 0 else None
         step = 1e-6
-        while log_phi(z + step) < 0:
-            step *= 2
-            if z + step > 1e6:
+        while True:
+            there = log_phi(z + step)
+            if there is None or z + step > 1e6:
                 return None
+            if there >= 0:
+                break
+            step *= 2
         return brentq(log_phi, z, z + step, xtol=1e-12)
 
     def implications(self, g: Group, beta: float) -> dict:
@@ -333,7 +342,7 @@ class MarkovMember:
         pop = self._root(lambda z: L * dominant_eigenvalue(g.M(thorn_bar ** z * g.growth_moment(-z)))) if L < 1 else None
         levels = self._root(lambda z: L * dominant_eigenvalue(g.M(g.growth_moment(z)))) if L < 1 else None
         income_measure = L * dominant_eigenvalue(g.M(g.growth_moment(1.0)))
-        kink = [bool(self.scenario == "zero-infima") or bool(not self.natural and limits[j] == self.a_art_value()
+        kink = [bool(not self.natural and limits[j] == self.a_art_value()
                      and self.a_art_value() > max((g.growth * g.psi_min() / R * (limits - g.xi_min()))[g.P[j] > 0]) + TOLERANCE)
                 for j in range(4)]
         return {
@@ -358,15 +367,6 @@ class MarkovMember:
                             "types": [{"beta": t["beta"], "share": t["share"], "conditions": self.factors(g, t["beta"]),
                                        "implications": self.implications(g, t["beta"])} for t in g.types]}
                            for g in self.groups]}
-
-
-def _finite_moment(law, k: float) -> bool:
-    """Whether E[x^k] of a law is finite."""
-    try:
-        value = law.moment(k)
-    except (OverflowError, ValueError, ZeroDivisionError):
-        return False
-    return value is not None and math.isfinite(value)
 
 
 def load_member(path: Path) -> MarkovMember:

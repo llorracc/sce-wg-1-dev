@@ -169,4 +169,18 @@ Faults found in this project's own work, with their status.
 - **A reflow that merged code.** While the documents were rewrapped for the families, a script joined indented and fenced
   code into paragraphs in two files. **Status:** caught before any commit by comparing the files with their committed
   versions; both were restored and edited again by hand, and the script now leaves code alone.
+- **HAFiscal's model read from its paper's text, not its code.** The scenarios of 2026-11-01 put the paper's members in
+  a zero-infima version of the Markov family, by the untruncated lognormals the paper states. HAFiscal's code never
+  solved that scenario: its published package solves on 7 equiprobable atoms of each law, with positive floors, under
+  a ≥ 0, which is the artificial one. **Status:** corrected on the owner's ruling of 13:51:57 that afternoon: the
+  version retired, the members written with the code's atoms in the artificial version
+  ([[feedback_classify-by-what-the-code-solves]]).
+- **The Markov checker's tail exponent failing on bounded laws.** Its search for the population's tail exponent took
+  the log of a function that, under bounded laws, falls towards zero for an impatient type and underflows, or whose
+  moment overflows; `paper-published` with its atoms raised a domain error. **Status:** fixed 2026-11-01: the search
+  stops, with no exponent, where the function leaves the floating range.
+- **A zero-income state's chance counted from both laws.** The Markov checker's chance of the worst income asked for
+  mass at both ξ's and ψ's floors; a state with ξ = 0 has zero income whatever ψ is, so under `continues` its chance came
+  out zero. It could not arise while the schema required ξ_x > 0. **Status:** fixed 2026-11-01 with that requirement's
+  removal: such a state's mass is ξ's alone.
 

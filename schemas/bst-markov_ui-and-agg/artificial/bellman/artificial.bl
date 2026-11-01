@@ -1,6 +1,6 @@
-# bst-markov_ui-and-agg-artificial/1, the Markov family's artificial version (schemas/constraint-scenarios.md), one stage
-# for one type of one group: HAFiscal's household with laws truncated to strictly positive floors, so that every state's
-# natural limit lies below zero, and an artificial constraint a ≥ a_Art tighter than the lowest of them. The agent ends a
+# bst-markov_ui-and-agg-artificial/1, the Markov family, in the artificial scenario (schemas/constraint-scenarios.md), one
+# stage for one type of one group: HAFiscal's household with laws truncated to strictly positive floors, so that every
+# state's natural limit lies below zero, and an artificial constraint a ≥ a_Art tighter than the lowest of them. The agent ends a
 # quarter at a_Art for m below a kink, so the Euler equation carries its complementarity clause; the natural limits are
 # irrelevant to the model. In the notation of Buffer Stock Theory (schemas/hafiscal-models-and-test-suite.md, "The
 # paper's model as a family"). Derived on 2026-11-01 from the family's stage file of 2026-10-18.
@@ -37,7 +37,7 @@ s_θ   : ℝ₊₊          :: ["scale of log θ before truncation"]
 θ_max  : ℝ₊₊          :: ["the upper bound of θ"]
 e     : ℝ₊₊          :: ["scale of employed income, e θ; 1 in the paper"]
 ξ_u   : ℝ₊₊          :: ["income with benefits, as a ratio to permanent income (the paper's ρ_b)"]
-ξ_x   : ℝ₊₊          :: ["income without benefits, as a ratio to permanent income (the paper's ρ_nb)"]
+ξ_x   : ℝ₊           :: ["income without benefits, as a ratio to permanent income (the paper's ρ_nb); 0 makes the state a zero-income disaster"]
 P_u   : Pu           :: ["the family's switch unemployed_permanent_income"]
 p_exit : [0,1]       :: ["probability that a recession ends in a quarter (exit_hazard)"]
 sep_n  : [0,1]       :: ["probability of losing a job in a normal quarter, for the group (job_loss.normal)"]

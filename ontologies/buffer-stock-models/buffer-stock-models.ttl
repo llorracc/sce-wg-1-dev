@@ -20,7 +20,7 @@
     dcterms:source <https://arxiv.org/abs/1905.13045v3> ;
     dcterms:source <https://arxiv.org/abs/2012.00219v2> ;
     dcterms:source <https://github.com/llorracc/HAFiscal-QE/tree/1afdf80de4325e436a0c1c20895f754aefefd38c> ;
-    bsm:sourceDigest "sha256:503867522ff14e6eb7d0c0d19577ed5143ed1fc01fd201579f39fb6ceb175256" .
+    bsm:sourceDigest "sha256:85c579940afc4d23578060289862af67f88ebcd365ff82c500f591bcd98bb6aa" .
 
 skos:definition a owl:AnnotationProperty .
 skos:notation a owl:AnnotationProperty .
@@ -2603,7 +2603,7 @@ bsm:BSM_0000225
     rdfs:label "the schemas' family bst-natural-no-point-mass/1"@en ;
     skos:notation "bst-natural-no-point-mass-1" ;
     skos:definition "The schemas' family for the natural scenario without a point mass, with truncated lognormals; its stage file writes the natural limit out from the laws' bounds and carries the complementarity clause."@en ;
-    bsm:schemaDocument "../../schemas/bst/natural-no-point-mass/parameters.schema.json" ;
+    bsm:schemaDocument "../../schemas/bst/other/natural-no-point-mass/parameters.schema.json" ;
     bsm:writes bsm:BSM_0000211 ;
     bsm:writes bsm:BSM_0000004 ;
     bsm:writes bsm:BSM_0000006 ;
@@ -2626,7 +2626,7 @@ bsm:BSM_0000227
     rdfs:label "the schemas' family bst-zero-infima/1"@en ;
     skos:notation "bst-zero-infima-1" ;
     skos:definition "The schemas' family for the zero-infima scenario, with lognormals and no stated artificial constraint, since a ≥ 0 is the natural one."@en ;
-    bsm:schemaDocument "../../schemas/bst/zero-infima/parameters.schema.json" ;
+    bsm:schemaDocument "../../schemas/bst/other/zero-infima/parameters.schema.json" ;
     bsm:writes bsm:BSM_0000212 ;
     bsm:writes bsm:BSM_0000200 ;
     bsm:writes bsm:BSM_0000004 ;
@@ -2637,23 +2637,10 @@ bsm:BSM_0000228
     a owl:NamedIndividual, bsm:Family ;
     rdfs:label "the schemas' family bst-markov_ui-and-agg-artificial/1"@en ;
     skos:notation "bst-markov-ui-and-agg-artificial-1" ;
-    skos:definition "The Markov family's artificial version, HAFiscal's household with laws truncated to positive floors: Markov employment and benefit expiry, an aggregate regime, groups of types, a level law for the newborn and the splurge as an observation map."@en ;
+    skos:definition "The Markov family, HAFiscal's household as its code solves it, with laws of strictly positive floors and a ≥ 0: Markov employment and benefit expiry, an aggregate regime, groups of types, a level law for the newborn and the splurge as an observation map."@en ;
     bsm:schemaDocument "../../schemas/bst-markov_ui-and-agg/artificial/parameters.schema.json" ;
     bsm:writes bsm:BSM_0000009 ;
     bsm:writes bsm:BSM_0000007 ;
-    bsm:writes bsm:BSM_0000200 ;
-    bsm:writes bsm:BSM_0000004 ;
-    bsm:writes bsm:BSM_0000006 ;
-    bsm:writes bsm:BSM_0000008 .
-
-bsm:BSM_0000229
-    a owl:NamedIndividual, bsm:Family ;
-    rdfs:label "the schemas' family bst-markov_ui-and-agg-zero-infima/1"@en ;
-    skos:notation "bst-markov-ui-and-agg-zero-infima-1" ;
-    skos:definition "The Markov family's zero-infima version, HAFiscal's household with its published lognormal laws."@en ;
-    bsm:schemaDocument "../../schemas/bst-markov_ui-and-agg/zero-infima/parameters.schema.json" ;
-    bsm:writes bsm:BSM_0000009 ;
-    bsm:writes bsm:BSM_0000212 ;
     bsm:writes bsm:BSM_0000200 ;
     bsm:writes bsm:BSM_0000004 ;
     bsm:writes bsm:BSM_0000006 ;

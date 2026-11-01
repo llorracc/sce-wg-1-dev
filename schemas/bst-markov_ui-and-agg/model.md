@@ -3,18 +3,16 @@
 Draft, 2026-10-18; see the [README](../README.md) and the design note
 [Describing HAFiscal's household models](../hafiscal-models-and-test-suite.md), whose decisions this document states.
 
-This document states the Markov family, in its two versions, `bst-markov_ui-and-agg-artificial/1` and
-`bst-markov_ui-and-agg-zero-infima/1`, one for each borrowing-constraint scenario its members fall in
-([`constraint-scenarios.md`](../constraint-scenarios.md)): buffer-stock theory with Markov employment and
+This document states the Markov family, `bst-markov_ui-and-agg-artificial/1`, in the artificial borrowing-constraint
+scenario, which is what HAFiscal's code solves ([`constraint-scenarios.md`](../constraint-scenarios.md)): buffer-stock theory with Markov employment and
 unemployment-insurance states and an aggregate regime, the household problem of HAFiscal (Carroll, Crawley, Du,
 Frankovic and Tretvoll, *Welfare and Spending Effects of Consumption Stimulus Policies*). It is the buffer-stock
 families' model ([`../bst/model.md`](../bst/model.md)) with five additions and one convention change: employment as a
 Markov chain with a benefit countdown and exhaustion; groups of types; a level law for the newborn's permanent income;
 the splurge, as an observation map on the standard rule; the aggregate regime, normal or recession, as a Markov state;
 and employed income e θ with the scale e a parameter. Its notation is BST's, with SolvingMicroDSOPs' where BST is
-silent. The household's problem is stated in Bellman-SYM, in one stage file for each version,
-[`artificial/bellman/artificial.bl`](artificial/bellman/artificial.bl) and
-[`zero-infima/bellman/zero-infima.bl`](zero-infima/bellman/zero-infima.bl); the stage file is the foundation of the
+silent. The household's problem is stated in Bellman-SYM, in the stage file
+[`artificial/bellman/artificial.bl`](artificial/bellman/artificial.bl); the stage file is the foundation of the
 statement, and this document adds what the language does not state: the groups and types, the newborn, the splurge, the
 stationary population, the shock laws outside Bellman's families, and the conditions. A parameter file names one member
 by giving every free parameter. The family's [conditions](conditions.md) and [results schema](results.md) are companion
@@ -89,7 +87,8 @@ Two Markov states are drawn each quarter, the regime first.
   probability, as it is in the buffer-stock families.
 - ψ and θ are independent of each other, of the chains, over time and across households; θ is drawn every quarter and
   used only when employed. Their laws are parameters, each one of the [shock laws](../shock-laws.md), common to all
-  groups; the paper's are untruncated lognormals, and the truncated lognormal is the recommended variant.
+  groups. The paper's text states untruncated lognormals; its published code solves on 7 equiprobable atoms of each,
+  which are `Discrete` laws with positive floors, and the truncated lognormal is the recommended continuous variant.
 
 ## Events within a quarter, in order
 
@@ -129,46 +128,40 @@ gain is ℷ + (1 − ℷ) c̃′(m̃), and every MPC the [results](results.md) r
 - The borrowing constraint in force depends on the employment state: `a_min(j)` is the fixed point given in
   [conditions](conditions.md), with the artificial limit `a_Art` inside the recursion, since a state's limit must keep
   feasible the constraint in force in every state that can follow. The artificial limit `a_Art` ≤ 0 is a parameter; the
-  natural limits `a_Nat(j)`, the same recursion without it, are implications of the laws and the chain. With lognormal
-  laws the employed state's lowest income is zero, since employed income e θ 𝐩 has infimum zero, and that state can
-  follow every state, so every state's limit is zero; with truncated laws the limits are negative, can differ by state,
-  and depend on the switch.
-- The two versions: in **`bst-markov_ui-and-agg-artificial/1`**, ψ and θ have strictly positive floors, every state's
-  natural limit lies below zero, and the parameter file states `a_Art`, strictly above the lowest of them; in
-  **`bst-markov_ui-and-agg-zero-infima/1`**, the infimum of ψ or of θ is zero, every state's natural limit is 0, a ≥ 0
-  is the constraint in force and binds, and the parameter file states no artificial limit. The stage file states a ≥ 0
-  itself, and a toolkit imposes it: one that took the limits from a discretization's lowest values would find them below
-  zero and let its agents borrow, which the published model, stating a ≥ 0 as its no-borrowing constraint, never allows.
-  The paper's published
-  calibration, with lognormal laws, is the zero-infima version's; a member with truncated laws, such as the toy written
-  in the family, is the artificial version's.
+  natural limits `a_Nat(j)`, the same recursion without it, are implications of the laws and the chain.
+- **The family is the artificial scenario.** ψ and θ have strictly positive floors, so every state's natural limit lies
+  below zero and can differ by state and with the switch, and the parameter file states `a_Art`, strictly above the
+  lowest of them. HAFiscal's code imposes a ≥ 0 in every state (`a_Art` = 0) on laws with positive floors: its
+  published package solves on lognormals' atoms. Until 2026-11-01 the family also had a zero-infima version, which read
+  the paper's text's untruncated lognormals as the model; HAFiscal's code never solved that scenario, and the version is
+  retired (the owner's ruling of that day). A law with a zero floor is refused.
 
 ## Parameter domains
 
 β_i > 0 (the validity conditions bound it above); shares positive and summing to one within each group and across
-groups; ϱ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0 for each group; e > 0; ξ_u > 0 and ξ_x > 0; `sep` and `find` in [0, 1] for each
-regime; `p_exit` in [0, 1]; 0 ≤ ℷ < 1; in the artificial version, `a_Art` ≤ 0 and strictly above the lowest
+groups; ϱ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0 for each group; e > 0; ξ_u > 0 and ξ_x ≥ 0, with ξ_x = 0 a zero-income disaster; `sep` and `find` in [0, 1] for each
+regime; `p_exit` in [0, 1]; 0 ≤ ℷ < 1; `a_Art` ≤ 0 and strictly above the lowest
 `a_Nat(j)`; the newborn's
 level law has a positive median and a standard deviation of the log that may be zero.
 
 ## The household's problem, as the stage files state it
 
-Each version's stage file states one type's problem, for one group, in the
+The stage file states one type's problem, for one group, in the
 optimizer's units, in five blocks, read here in BST's notation. k is last quarter's a, the arrival state; `[>]` marks
 next quarter's value and `[<]` this quarter's arrival value. A selector `(…)[j]` or `(…)[P_u]` in the file is read as
 cases.
 
-- **Sets and parameters.** m ∈ ℝ; a ∈ [`a_min`, ∞) with `a_min` = max(`a_Art`, `a_Nat`), one limit for every state,
-  which is exact for the file's lognormal laws, under which every state's limit is zero, while a stage file with bounded
-  laws needs the per-state limits of [conditions](conditions.md); j ∈ J = {E, U_2, U_1, X}; `reg` ∈ {normal, recession};
-  P_u ∈ {continues, grows, frozen}; the parameters β, ℒ, ϱ, R, 𝒢, `a_Art`, `a_Nat`, σ_ψ, σ_θ, e, ξ_u, ξ_x, `p_exit`,
-  `sep` and `find` by regime, with the domains above. The file writes one law family, the lognormal, for ψ and θ; the
-  family allows any of the shock laws, and a member with another law needs a stage file written with that law's family:
-  a discrete law can be written today as a mixture of point masses, while the truncated lognormal, the uniform and the
-  tabulated law have no family in Bellman-SYM yet, the truncated lognormal's being planned.
+- **Sets and parameters.** m ∈ ℝ; a ∈ [`a_Art`, ∞), one limit for every state, since `a_Art` lies above every state's
+  natural limit; j ∈ J = {E, U_2, U_1, X}; `reg` ∈ {normal, recession}; P_u ∈ {continues, grows, frozen}; the
+  parameters β, ℒ, ϱ, R, 𝒢, `a_Art`, the truncated laws' locations, scales and bounds (μ_ψ, s_ψ, `ψ_min`, `ψ_max`,
+  μ_θ, s_θ, `θ_min`, `θ_max`), e, ξ_u, ξ_x, `p_exit`, `sep` and `find` by regime, with the domains above. The file
+  writes one law family, the truncated lognormal, for ψ and θ; the family allows any of the shock laws with positive
+  floors, and a member with another law, such as the published package's `Discrete` atoms, needs a stage file written
+  with that law's family, which it does not have yet.
 - **Shocks.** `reg` ~ Categorical over the row of `reg_prev`; j ~ Categorical over the row of j_prev with the
-  probabilities of `reg`; ψ ~ LogNormal(−σ²/2, σ) with σ = σ_ψ when employed, and in a quarter of unemployment σ_ψ under
-  `continues` and 0 otherwise; θ ~ LogNormal(−σ_θ²/2, σ_θ), drawn but unused when unemployed.
+  probabilities of `reg`; ψ ~ TruncatedLogNormal(μ_ψ, s_ψ, `ψ_min`, `ψ_max`) when employed, and in a quarter of
+  unemployment under `continues`, and ψ = 1 otherwise; θ ~ TruncatedLogNormal(μ_θ, s_θ, `θ_min`, `θ_max`), drawn but
+  unused when unemployed.
 - **Arrival to decision** (`arvl_to_dcsn`): 𝒢_t = 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the
   switch; ξ = e θ, ξ_u, ξ_u or ξ_x by the state; m = R k/(𝒢_t ψ) + ξ; the state and the regime are carried forward.
 - **Decision to continuation** (`dcsn_to_cntn`): a = m − c, with the state and the regime carried.
@@ -251,9 +244,9 @@ and type, and a method may be given for all or for one.
 
 A parameter file is YAML in the strict subset of the buffer-stock families'. It holds the free parameters, under these
 names:
-- `family`, one of the two versions' keys;
-- `crra` (ϱ), `survival` (ℒ), `return` (R), `splurge` (ℷ), and, in the artificial version only, `borrowing_constraint`
-  (`a_Art`, a number no greater than 0 and strictly above the lowest natural limit `a_Nat(j)`);
+- `family`, `bst-markov_ui-and-agg-artificial/1`;
+- `crra` (ϱ), `survival` (ℒ), `return` (R), `splurge` (ℷ), and `borrowing_constraint` (`a_Art`, a number no greater
+  than 0 and strictly above the lowest natural limit `a_Nat(j)`);
 - `shocks`, holding `permanent_shock` (the law of ψ) and `employed_shock` (the law of θ);
 - `regimes`, holding `recession: {exit_hazard}` (`p_exit`); the normal regime has no key, since it is absorbing;
 - `employment`, holding `benefit_quarters` (two for the stage file's chain), `job_finding: {normal, recession}` (`find`
@@ -265,19 +258,26 @@ names:
   share}` in increasing order of `beta` with no repeat.
 
 Every free parameter appears, and nothing is left to a toolkit's defaults. The paper's normal-times calibration in the
-family's standard world, with the laws the published code discretized, the paper's estimated discount factors and the
-exact values of its published replication package (llorracc/HAFiscal-QE), in the zero-infima version by its lognormal
-laws ([`zero-infima/members/paper-published.yaml`](zero-infima/members/paper-published.yaml)):
+family's standard world, with the laws its published code solves on, the 7 equiprobable atoms of each lognormal that
+HARK 0.14.1 builds, the paper's estimated discount factors of record and the exact values of its published replication
+package (llorracc/HAFiscal-QE), with its a ≥ 0:
 
-    family: bst-markov_ui-and-agg-zero-infima/1
+    family: bst-markov_ui-and-agg-artificial/1
     period: quarter
     crra: 2.0
     splurge: 0.24611389063967778
     survival: 0.99375
     return: 1.01
+    borrowing_constraint: 0.0
     shocks:
-      permanent_shock: {LogNormal: {sd_log: 0.05477225575051661}}
-      employed_shock: {LogNormal: {sd_log: 0.34641016151377546}}
+      permanent_shock:
+        Discrete:
+          values: [0.9160085323492183, 0.9557325229850224, 0.9785745991279454, 0.9985172326671555, 1.0188711215762665, 1.0432481428845448, 1.0890478484098471]
+          probs: [0.14285714285714285, 0.14285714285714285, 0.14285714285714285, 0.14285714285714285, 0.1428571428571428, 0.1428571428571429, 0.1428571428571429]
+      employed_shock:
+        Discrete:
+          values: [0.5507865075957727, 0.7147427008311089, 0.8295521166119781, 0.9423723658438596, 1.0707396723124916, 1.2439686406465549, 1.6478379961582341]
+          probs: [0.14285714285714285, 0.14285714285714285, 0.14285714285714285, 0.14285714285714285, 0.1428571428571428, 0.1428571428571429, 0.1428571428571429]
     regimes:
       recession: {exit_hazard: 0.16666666666666666}
     employment:
@@ -329,8 +329,10 @@ laws ([`zero-infima/members/paper-published.yaml`](zero-infima/members/paper-pub
           - {beta: 0.99447596538378, share: 0.14285714285714285}
 
 The same file with `unemployed_permanent_income: frozen` is the member that reproduces the published numbers,
-[`members/paper-published.yaml`](members/paper-published.yaml); with
-`TruncatedLogNormal` laws at ±3 it is the truncated variant the shock-law document recommends. The recession's job-loss
+[`artificial/members/paper-published.yaml`](artificial/members/paper-published.yaml). Two features of the published
+code's simulations are outside the file: agents die at 200 quarters (`T_age` = 200), which the solution does not depend
+on and the stationary population does, and newborns start with assets of 1e-5. With `TruncatedLogNormal` laws at ±3 it
+is the truncated variant the shock-law document recommends. The recession's job-loss
 probabilities are below the normal ones, which is consistent: with job finding falling from two thirds to a quarter, the
 dropout group's steady-state unemployment rate roughly doubles, as the paper states.
 
@@ -341,8 +343,9 @@ regimes, so that the chain is unemployment with probability ℘ every quarter wh
 `income_with_benefits` = `income_without_benefits` = the buffer-stock member's ξ_u; `income_employed` = (1 − ℘ξ_u)/(1 −
 ℘); `splurge` 0; `unemployed_permanent_income` `continues`; `benefit_quarters` 2; `newborn_income: {median: 1.0, sd_log:
 0.0}`; and the recession's parameters equal to the normal ones, with an exit hazard of 1, so that the reduction has one
-written form and the recession changes nothing. A member of `bst-artificial/1` becomes one of the artificial version,
-and one of `bst-zero-infima/1` one of the zero-infima version.
-[`artificial/members/toy-as-hafiscal.yaml`](artificial/members/toy-as-hafiscal.yaml) is `bst-artificial/1`'s toy written
-this way. The two families then produce the same rule and the same stationary population exactly, the newborn convention
+written form and the recession changes nothing. A member of `bst-artificial/1` becomes one of this family; one of the
+other buffer-stock families has no counterpart here.
+[`artificial/members/iid-ui-artificial.yaml`](artificial/members/iid-ui-artificial.yaml) is written this way: the model
+with one unemployment state that does not persist, in the artificial scenario, with unemployment probability 0.05,
+benefit 0.5 and a ≥ 0, and otherwise `bst-artificial/1`'s toy. Its counterpart is the toy with ℘ = 0.05 and ξ_u = 0.5. The two families then produce the same rule and the same stationary population exactly, the newborn convention
 being the same. That cross-family consistency test belongs in the suite.

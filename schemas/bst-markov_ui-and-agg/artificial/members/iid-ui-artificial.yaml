@@ -1,0 +1,44 @@
+# The Markov family's model with one unemployment state that does not persist, in the artificial scenario: unemployment
+# has probability 0.05 next quarter whatever the state this quarter, pays the benefit 0.5 of permanent income, and the
+# constraint is a >= 0. The family's three unemployment states pay the same benefit, so they differ only by name, and
+# the chain is i.i.d.: job loss 0.05 from employment and job finding 0.95 from every unemployed state, in both regimes.
+# Employed income is scaled to (1 - 0.05 x 0.5)/(1 - 0.05), so that mean income is one, as in the buffer-stock families.
+# The rest is the bst-artificial/1 toy's: its laws, truncated at +-3 sd, its growth, survival, return, crra and types;
+# no splurge, permanent income continuing in unemployment, and a newborn at permanent income 1. The recession repeats
+# the normal regime and ends at once, so nothing depends on it. It is the bst-artificial/1 member with the toy's laws,
+# unemployment probability 0.05 and benefit 0.5 written in this family, and every statistic must equal that member's
+# (model.md, "A buffer-stock member as a member of this family"). Until 2026-11-01 it was toy-as-hafiscal, the toy itself,
+# with probability 0.044 and benefit 0.7.
+family: bst-markov_ui-and-agg-artificial/1
+period: quarter
+crra: 2.0
+splurge: 0.0
+survival: 0.99375
+return: 1.01
+borrowing_constraint: 0.0
+shocks:
+  permanent_shock: {TruncatedLogNormal: {sd_log: 0.05477225575051661, bot: -3.0, top: 3.0}}
+  employed_shock: {TruncatedLogNormal: {sd_log: 0.34641016151377546, bot: -3.0, top: 3.0}}
+regimes:
+  recession: {exit_hazard: 1.0}
+employment:
+  benefit_quarters: 2
+  job_finding: {normal: 0.95, recession: 0.95}
+  income_employed: 1.0263157894736843
+  income_with_benefits: 0.5
+  income_without_benefits: 0.5
+  unemployed_permanent_income: continues
+groups:
+  - name: iid-ui
+    share: 1.0
+    growth: 1.0019026
+    job_loss: {normal: 0.05, recession: 0.05}
+    newborn_income: {median: 1.0, sd_log: 0.0}
+    types:
+      - {beta: 0.822, share: 0.14285714285714285}
+      - {beta: 0.850, share: 0.14285714285714285}
+      - {beta: 0.878, share: 0.14285714285714285}
+      - {beta: 0.906, share: 0.14285714285714285}
+      - {beta: 0.934, share: 0.14285714285714285}
+      - {beta: 0.962, share: 0.14285714285714285}
+      - {beta: 0.990, share: 0.14285714285714285}

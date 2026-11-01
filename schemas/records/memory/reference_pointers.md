@@ -73,4 +73,11 @@ metadata:
   its own session; a change there is that session's, and a push needs the owner's word in it.
 - HAFiscal's emitter of results files in this schema's form is `Code/HA-Models/bst_bench/schema_results.py` in
   HAFiscal-Latest; it writes the retired family key `bst/1` and reads `bst-1/` until the HAFiscal session updates it.
+- BST's public source, https://github.com/llorracc/BufferStockTheory: the table "Microeconomic Model Calibration"
+  (`Tables/Calibration.tex`), the restrained-limit suite's calibration, and the subsection "The Liquidity Constrained
+  Solution as a Limit" (`sec:deatonIsLimit`), its experiment; the published page, https://llorracc.github.io/BufferStockTheory/.
+- HAFiscal's published package, llorracc/HAFiscal-QE: the toy-hafiscal suite's targets and objective in
+  `Code/HA-Models/Target_AggMPCX_LiquWealth/Estimation_BetaNablaSplurge.py` (`lorenz_target`, `Agg_MPCX_target`,
+  `KY_target`), the Lorenz data in `Code/Empirical/make_liquid_wealth.py`, the discount factors of record in
+  `Code/HA-Models/Results/attribution/DiscFacEstim_preOptionD.txt`.
 

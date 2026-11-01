@@ -19,22 +19,22 @@
       "const": "bst-natural-no-point-mass/1"
     },
     "period": {
-      "$ref": "../parameters.common.schema.json#/$defs/period"
+      "$ref": "../../parameters.common.schema.json#/$defs/period"
     },
     "crra": {
-      "$ref": "../parameters.common.schema.json#/$defs/crra"
+      "$ref": "../../parameters.common.schema.json#/$defs/crra"
     },
     "types": {
-      "$ref": "../parameters.common.schema.json#/$defs/types"
+      "$ref": "../../parameters.common.schema.json#/$defs/types"
     },
     "survival": {
-      "$ref": "../parameters.common.schema.json#/$defs/survival"
+      "$ref": "../../parameters.common.schema.json#/$defs/survival"
     },
     "return": {
-      "$ref": "../parameters.common.schema.json#/$defs/return"
+      "$ref": "../../parameters.common.schema.json#/$defs/return"
     },
     "income": {
-      "$ref": "../parameters.common.schema.json#/$defs/income"
+      "$ref": "../../parameters.common.schema.json#/$defs/income"
     }
   }
 }

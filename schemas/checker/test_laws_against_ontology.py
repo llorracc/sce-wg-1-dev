@@ -196,7 +196,8 @@ def test_the_converter_writes_the_ontology_coordinates(mapping):
 
 
 def test_the_members_laws_agree_with_the_ontology():
-    for path in sorted((Path(__file__).resolve().parent.parent / "bst").glob("*/members/*.yaml")):
+    bst = Path(__file__).resolve().parent.parent / "bst"
+    for path in sorted([*bst.glob("*/members/*.yaml"), *bst.glob("other/*/members/*.yaml")]):
         member = load_member(path)
         for shock in ("permanent_shock", "employed_shock"):
             mapping = member.data["income"][shock]

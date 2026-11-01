@@ -90,23 +90,29 @@ The four buffer-stock families, which replaced `bst/1` on 2026-11-01, one for ea
 - [`bst/results.md`](bst/results.md): the results schema the four share, with the stationary population, welfare and
   marginal welfare, and the diagnostics; [`bst/results.schema.json`](bst/results.schema.json) is its validator.
 - [`bst/parameters.common.schema.json`](bst/parameters.common.schema.json): the parameter definitions the four share.
+- Two test suites for every toolkit's solution ([`bst/model.md`](bst/model.md)): the restrained-limit suite, BST's
+  liquidity-constrained solution as a limit, with three `bst-natural/1` members with BST's calibration and ℘ falling
+  and the restrained consumer in `bst-artificial/1`; and the toy-hafiscal suite, a `bst-artificial/1` member whose three
+  discount-factor types HARK and HAFiscal estimate, which every toolkit solves, simulates and differentiates.
 - One folder for each family, each with its parameter file's validator (`parameters.schema.json`), its stage file in
-  Bellman-SYM under `bellman/`, and its members under `members/`:
+  Bellman-SYM under `bellman/`, and its members under `members/`. The two principal families' folders are in `bst/`:
   - [`bst/natural/`](bst/natural/), `bst-natural/1`: the natural scenario with a point mass, BST's own model, with the
     community library's member and its calibration;
-  - [`bst/natural-no-point-mass/`](bst/natural-no-point-mass/), `bst-natural-no-point-mass/1`;
-  - [`bst/artificial/`](bst/artificial/), `bst-artificial/1`, with the benchmark's toy;
-  - [`bst/zero-infima/`](bst/zero-infima/), `bst-zero-infima/1`, with the untruncated toy.
+  - [`bst/artificial/`](bst/artificial/), `bst-artificial/1`, with the benchmark's toy.
+
+  The other two are in [`bst/other/`](bst/other/) (the owner's ruling of 2026-11-01, in
+  [`bst/model.md`](bst/model.md)):
+  - [`bst/other/natural-no-point-mass/`](bst/other/natural-no-point-mass/), `bst-natural-no-point-mass/1`;
+  - [`bst/other/zero-infima/`](bst/other/zero-infima/), `bst-zero-infima/1`, with the untruncated toy.
 - [`checker/`](checker/README.md): the checker, which validates and hashes a parameter file, checks its scenario's
   requirements, and evaluates the family's conditions, domain rules and implications.
 
-The Markov family, HAFiscal's household problem, begun stage-file first, in two versions since 2026-11-01:
-`bst-markov_ui-and-agg-artificial/1` and `bst-markov_ui-and-agg-zero-infima/1`, in
-[`bst-markov_ui-and-agg/`](bst-markov_ui-and-agg/):
-- each version's folder, [`artificial/`](bst-markov_ui-and-agg/artificial/) and
-  [`zero-infima/`](bst-markov_ui-and-agg/zero-infima/), holds its parameter file's validator, its stage file and its
-  members. The zero-infima version's stage file has three calibration files for the dropout group's middle type, one per
-  value of the switch for permanent income while unemployed (`continues`, the family's standard; `grows`; `frozen`);
+The Markov family, HAFiscal's household problem, begun stage-file first: `bst-markov_ui-and-agg-artificial/1`, in
+[`bst-markov_ui-and-agg/`](bst-markov_ui-and-agg/), the artificial scenario, which is what HAFiscal's code solves:
+- [`artificial/`](bst-markov_ui-and-agg/artificial/) holds its parameter file's validator, its stage file and its
+  members: `paper-published` and `paper-one-group`, the published package as its code solves it, on the atoms of its
+  laws, and `iid-ui-artificial`, one unemployment state that does not persist, with probability 0.05, benefit 0.5 and
+  a ≥ 0;
 - [`bst-markov_ui-and-agg/model.md`](bst-markov_ui-and-agg/model.md): the model schema, read from the stage files, with the
   groups, the newborn's level law, the splurge as an observation map, the regime, the parameter file and the reduction to
   the buffer-stock families;

@@ -19,11 +19,11 @@ from laws import filled, law_from_mapping
 from test_results_schema import sample as schema_sample
 
 BST = Path(__file__).resolve().parent.parent / "bst"
-# The members, by name, in the folders of their families' scenarios.
+# The members, by name, in the folders of their families' scenarios: the principal two in bst/, the others in bst/other/.
 MEMBER = {"library": BST / "natural" / "members" / "library.yaml",
-          "toy-natural": BST / "natural-no-point-mass" / "members" / "toy-natural.yaml",
+          "toy-natural": BST / "other" / "natural-no-point-mass" / "members" / "toy-natural.yaml",
           "toy": BST / "artificial" / "members" / "toy.yaml",
-          "toy-untruncated": BST / "zero-infima" / "members" / "toy-untruncated.yaml"}
+          "toy-untruncated": BST / "other" / "zero-infima" / "members" / "toy-untruncated.yaml"}
 
 
 def numerical(law, f):
@@ -363,8 +363,9 @@ def test_each_scenario_s_requirements(name, change, problem):
         Member(_with(name, change))
 
 
-@pytest.mark.parametrize("folder", sorted(p.parent for p in (Path(__file__).resolve().parent.parent).glob("*/*/bellman/*.bl")),
-                         ids=lambda p: f"{p.parent.parent.name}/{p.parent.name}")
+@pytest.mark.parametrize("folder", sorted(p.parent for pattern in ("*/*/bellman/*.bl", "*/other/*/bellman/*.bl")
+                                           for p in (Path(__file__).resolve().parent.parent).glob(pattern)),
+                         ids=lambda p: str(p.parent.relative_to(Path(__file__).resolve().parent.parent)))
 def test_every_filed_calibration_names_its_stage_file_s_parameters(folder):
     # A calibration binds the stage file's parameters by name, so a renamed parameter must be renamed in every
     # calibration filed beside it; the declarations are the lines `name : domain :: [...]`, not the sets or the
@@ -535,3 +536,27 @@ def test_welfare_condition_fails_for_an_impatient_zero_income_member():
     assert t["valid"]
     assert not t["domain"]["welfare"]
     assert not report["pooled_domain"]["welfare"]
+
+
+SUITE = {"restrained": BST / "artificial" / "members" / "bst-restrained.yaml",
+         **{wp: BST / "natural" / "members" / f"bst-p-zero-{wp}.yaml" for wp in ("0.005", "0.0005", "0.00005")}}
+
+
+def test_the_restrained_limit_suite_differs_only_in_the_zero_income_event_and_the_constraint():
+    # BST's experiment "The Liquidity Constrained Solution as a Limit" (bst/model.md, "The restrained-limit suite"): the three natural
+    # rungs are BST's calibration with the zero-income probability 0.005, 0.0005 and 0.00005 and no artificial
+    # constraint, and the restrained consumer the same with no zero-income event and a >= 0. The first rung is library.
+    files = {k: load_strict(v.read_text()) for k, v in SUITE.items()}
+    restrained = files.pop("restrained")
+    for wp, data in files.items():
+        assert data["income"]["unemployment"] == {"prob": float(wp), "income": 0.0}
+        assert "borrowing_constraint" not in data
+        member = Member(data)
+        assert member.family == "bst-natural/1" and member.natural_borrowing_constraint() == 0.0
+        expected = copy.deepcopy(data)
+        expected.update(family="bst-artificial/1", borrowing_constraint=0.0)
+        expected["income"]["unemployment"]["prob"] = 0.0
+        assert expected == restrained, wp
+    member = Member(restrained)
+    assert member.a_art == 0.0 and member.natural_borrowing_constraint() < 0.0
+    assert Member(files["0.005"]).hash == load_member(MEMBER["library"]).hash

@@ -1,14 +1,15 @@
 # paper-published's high-school group alone, the paper's largest group: one group of seven types, HAFiscal's own member
-# for quick development. Its values are paper-published's.
-family: bst-markov_ui-and-agg-zero-infima/1
+# for quick development. Its values, and its laws, the atoms the published code solves on, are paper-published's.
+family: bst-markov_ui-and-agg-artificial/1
 period: quarter
 crra: 2.0
 splurge: 0.24611389063967778
 survival: 0.99375
 return: 1.01
+borrowing_constraint: 0.0
 shocks:
-  permanent_shock: {LogNormal: {sd_log: 0.05477225575051661}}
-  employed_shock: {LogNormal: {sd_log: 0.34641016151377546}}
+  permanent_shock: {Discrete: {values: [0.9160085323492183, 0.9557325229850224, 0.9785745991279454, 0.9985172326671555, 1.0188711215762665, 1.0432481428845448, 1.0890478484098471], probs: [0.14285714285714285, 0.14285714285714285, 0.14285714285714285, 0.14285714285714285, 0.1428571428571428, 0.1428571428571429, 0.1428571428571429]}}
+  employed_shock: {Discrete: {values: [0.5507865075957727, 0.7147427008311089, 0.8295521166119781, 0.9423723658438596, 1.0707396723124916, 1.2439686406465549, 1.6478379961582341], probs: [0.14285714285714285, 0.14285714285714285, 0.14285714285714285, 0.14285714285714285, 0.1428571428571428, 0.1428571428571429, 0.1428571428571429]}}
 regimes:
   recession: {exit_hazard: 0.16666666666666666}
 employment:

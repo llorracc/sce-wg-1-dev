@@ -59,3 +59,9 @@ Settled on 2026-10-22 and removed from this list: Bellman's comparator integrati
 truncated lognormal at 21:56.
 
 | The design note's member table, which still names the family `hafiscal/1`, and its "Conditions" paragraph, which the conditions document's matrices supersede | 2026-10-22 | a proposal to the owner, under the rule that a schema document changes only after one |
+| What a toolkit exposes so that its sequence-space Jacobians can be computed in the toy-hafiscal suite, and how a results file carries it | 2026-11-01 | drawn up with the HARK, HARK-dev and QuantEcon sessions, then put to the owner; due once the toy-hafiscal member is delivered |
+| The Markov family as built, four persistent states with a regime, groups and the splurge, against the owner's device of one non-persistent disaster state: retired with the device treated as method, rebuilt as the device, or kept beside it | 2026-11-01 | the owner's answer |
+| A stage file for laws written as atoms, for the published package's `Discrete` laws | 2026-11-01 | a member with discrete laws needs a calibration or a Bellman-SYM check |
+| A smaller probability for the restrained-limit suite's last rung, whose gap to the limit is still 0.027 | 2026-11-01 | the owner asks |
+| Where HAFiscal's wealth-to-income target 6.60 is computed | 2026-11-01 | the HAFiscal-Latest session finds it |
+
