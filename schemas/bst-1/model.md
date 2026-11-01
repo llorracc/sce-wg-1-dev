@@ -121,10 +121,10 @@ arrival value.
 - **Arrival to decision** (`arvl_to_dcsn`): ξ = ξ_u in the unemployment event, else θ (1 − ℘ξ_u)/(1 − ℘); m = R k/(𝒢 ψ)
   + ξ.
 - **Decision to continuation** (`dcsn_to_cntn`): a = m − c.
-- **Continuation to decision** (`cntn_to_dcsn`): V = u(c) + β̊ V[>]; dV = u′(c).
-- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{ψ,θ,j}[(𝒢 ψ)^(1−ϱ) V]; dV[<] = E_{ψ,θ,j}[R (𝒢 ψ)^(−ϱ) dV].
+- **Continuation to decision** (`cntn_to_dcsn`): V = u(c) + β̊ V[>]; D_{m}V = u′(c), V's derivative in m.
+- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{ψ,θ,j}[(𝒢 ψ)^(1−ϱ) V]; D_{k}V[<] = E_{ψ,θ,j}[R (𝒢 ψ)^(−ϱ) D_{m}V].
 - **The policy** (`policy`): c = argmax over 0 < c ≤ m − `a_min` of u(c) + β̊ V[>], written as documentation; the
-  operative line is the Euler equation with its complementarity clause, u′(c) = β̊ dV[>] ⟂ m − c ≥ `a_min`.
+  operative line is the Euler equation with its complementarity clause, u′(c) = β̊ D_{a}V[>] ⟂ m − c ≥ `a_min`.
 
 Composing the blocks across the period gives the recursion in the form BST writes it, for type i:
 
