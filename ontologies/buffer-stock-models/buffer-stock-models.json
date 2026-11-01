@@ -56,7 +56,7 @@
     "text": "a name in bst/1's Bellman-SYM stage file as the language now writes it: a declared field, parameter, set or function, a perch mark, a derivative term, or the id of a block or line, which is the address of where a relation is written, not an object"
    }
   },
-  "source_digest": "sha256:864acb61e0d8bf3c61d445feb5fae17a923f3ba26e7db5342e4c7926254b057c"
+  "source_digest": "sha256:d1b15d569127fed780c144099704e02334665aabdc06f43622e5be3d678201b5"
  },
  "kinds": {
   "model-class": "A class of models, defined by axioms. A model is a member when it satisfies every membership axiom.",
@@ -2434,9 +2434,9 @@
   {
    "id": "BSM_0000076",
    "kind": "quantity",
-   "name": "pf-value-of-autarky-factor",
+   "name": "value-of-autarky-factor-pf",
    "label": "perfect-foresight value-of-autarky factor",
-   "symbol": "pf_vaf",
+   "symbol": "vaf_pf",
    "formula": "beta*L*G**(1 - rho)",
    "definition": "β̊ 𝒢^(1−ϱ), the factor of the value of consuming permanent income forever under perfect foresight.",
    "sources": {
@@ -2703,14 +2703,15 @@
   {
    "id": "BSM_0000086",
    "kind": "condition",
-   "name": "pf-fvac",
+   "name": "fvac-pf",
    "label": "perfect-foresight finite value of autarky",
-   "short": "PF-FVAC",
+   "short": "FVAC-PF",
    "factor": {
-    "name": "pf-value-of-autarky-factor",
+    "name": "value-of-autarky-factor-pf",
     "id": "BSM_0000076"
    },
-   "holds": "pf_vaf < 1",
+   "holds": "vaf_pf < 1",
+   "note": "A modified condition's signifier follows its base name, as in GIC-Mod and GIC-Liv; the owner, 2026-11-01. BST writes \\PFFVAC, and the schemas' checker PF-FVAC.",
    "sources": {
     "bst": [
      "pffvac"
@@ -3704,7 +3705,7 @@
   {
    "id": "BSM_0000120",
    "kind": "result",
-   "name": "pf-gic-implies-pf-fvac",
+   "name": "gic-implies-fvac-pf",
    "label": "growth impatience and finite human wealth give the perfect-foresight finite value of autarky",
    "result_kind": "property",
    "status": "bst",
@@ -3722,7 +3723,7 @@
    ],
    "concludes": [
     {
-     "literal": "pf-fvac",
+     "literal": "fvac-pf",
      "id": "BSM_0000086",
      "holds": true
     }
@@ -3739,7 +3740,7 @@
   {
    "id": "BSM_0000121",
    "kind": "result",
-   "name": "pf-fvac-implies-ric",
+   "name": "fvac-pf-implies-ric",
    "label": "the perfect-foresight finite value of autarky and finite human wealth give return impatience",
    "result_kind": "property",
    "status": "bst",
@@ -3750,7 +3751,7 @@
      "holds": true
     },
     {
-     "literal": "pf-fvac",
+     "literal": "fvac-pf",
      "id": "BSM_0000086",
      "holds": true
     }
@@ -3809,7 +3810,7 @@
   {
    "id": "BSM_0000123",
    "kind": "result",
-   "name": "fvac-implies-pf-fvac",
+   "name": "fvac-implies-fvac-pf",
    "label": "the finite value of autarky implies its perfect-foresight version",
    "result_kind": "remark",
    "status": "deduced",
@@ -3822,7 +3823,7 @@
    ],
    "concludes": [
     {
-     "literal": "pf-fvac",
+     "literal": "fvac-pf",
      "id": "BSM_0000086",
      "holds": true
     }

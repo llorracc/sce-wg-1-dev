@@ -34,9 +34,42 @@ saving time ended at 02:00 that morning). His words are kept outside this public
 - **10:18:41, "memorialize here and in HAFiscal".** The memorial in HAFiscal-Latest is that session's. It was sent both
   rulings in his words at 10:19:34, with what the public package's comments say.
 
+- **11:12:02, in the HAFiscal session, relayed and checked there: the published package corrected.** HAFiscal-QE's
+  comments on the cap are to say what it is too; done there as commit `8d8b71e`, pushed at 11:13:57.
+- **11:44:52 and 11:46:18, every configuration a schema.** The family's definition has variants that call for different
+  specifications. With the natural constraint in force, the permanent and transitory shocks need strictly positive lower
+  and finite upper bounds; with an artificial constraint binding, no such requirement holds. The ontology and the
+  schemas are to state every configuration that makes a valid buffer-stock model, and each is to be a schema with its own
+  stage file.
+- **12:19:08, the scenarios.** BST defines the model, with strictly positive bounds on both shocks. A discretized solution
+  that is not told the laws' infima takes the natural constraint from the lowest atoms, and assuming the infima are zero
+  would rule out the natural constraint ever mattering, which is not wanted. Even with an artificial constraint in
+  force, the consumption function may be computed as the min of the constraint line and the consumption that a
+  one-period relaxation toward the natural constraint gives. The BST, HARK and HARK-dev sessions are to be consulted, to
+  refine at least three scenarios, each with its stage file:
+  - the natural constraint, a > −hNrmMin, with hNrmMin strictly positive;
+  - an artificial constraint tighter than the natural one, typically a ≥ 0, with hNrmMin strictly positive;
+  - zero infima, where both constraints give a ≥ 0, after Ma, Stachurski and Toda.
+
+  He placed HAFiscal in the second, and asked what had put it outside BST's class.
+- **12:30:17, condition names.** A modified condition carries its modifier after the base name: `fvac-pf`, not `pf-fvac`
+  ([[feedback_modified-condition-names]]).
+- **12:50:56, the scenarios ruled** ([`constraint-scenarios.md`](../../constraint-scenarios.md)):
+  - the natural scenario widened to hNrmMin ≥ 0, so that BST's own model belongs to it;
+  - the natural scenario without a point mass made a scenario of its own;
+  - the point mass required at the joint worst income, in place of the worst transitory realization of the ruling of
+    2026-10-31;
+  - `library`'s laws truncated;
+  - the families' names `bst-natural/1`, `bst-natural-no-point-mass/1`, `bst-artificial/1` and `bst-zero-infima/1`,
+    with the Markov family's artificial and zero-infima versions;
+  - `a_Art` left out of the zero-infima scenario;
+  - PF-FVAC renamed FVAC-PF in the schemas.
+
 **What stays open:**
 - what belongs in a Rosetta Stone, against which the HARK section moved there is to be judged. The owner offered a fuller
   account of a stone's scope;
+- the existence of a solution in the natural scenario with a positive benefit, conjectured and not proved, and in the
+  artificial scenario with a_Art strictly between −hNrmMin and 0;
 - from the reading of Ma, Stachurski and Toda:
   - whether their results hold for a continuous permanent shock, where the normalized problem's discount factor and
     return share an innovation;

@@ -44,6 +44,8 @@ MEMBERS = sorted((SCHEMAS / "bst-1" / "members").glob("*.yaml"))
 # The checker's names for the ontology's conditions, and the conditions the checker does not compute: the condition of
 # Ma, Stachurski and Toda, which bst/1's conditions.md does not name.
 CHECKER_NAME = {c["name"]: c["short"] for c in SOURCE["conditions"]}
+# The schemas still write the perfect-foresight FVAC as PF-FVAC; the ontology, since 2026-11-01, as FVAC-PF.
+CHECKER_NAME["fvac-pf"] = "PF-FVAC"
 NOT_IN_CHECKER = {"discounted-return"}
 MARGIN = 1e-9
 

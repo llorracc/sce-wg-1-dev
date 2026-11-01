@@ -124,7 +124,7 @@ Both are the move from t to t+1.
 ## The conditions
 
 Every condition is a factor compared with a bound. The factors carry survival as bst/1 does, through β̊ = βℒ and
-Þ̊ = (Rβ̊)^(1/ϱ). They are BST's when ℒ = 1. MST-βR is Ma, Stachurski and Toda's (2020) condition G_βR < 1, read for the
+Þ̊ = (Rβ̊)^(1/ϱ). They are BST's when ℒ = 1. A modified condition's signifier follows its base name: GIC-Mod, GIC-Liv, FVAC-PF. MST-βR is Ma, Stachurski and Toda's (2020) condition G_βR < 1, read for the
 normalized problem, whose discount factor is β̊(𝒢ψ′)^(1−ϱ) and whose return is R/(𝒢ψ′).
 
 | condition | holds when | governs, by the results |
@@ -133,7 +133,7 @@ normalized problem, whose discount factor is β̊(𝒢ψ′)^(1−ϱ) and whose 
 | RIC | Þ̊_R < 1 | a positive MPC as m grows |
 | WRIC | `p_worst`^(1/ϱ) Þ̊_R < 1 | with the FVAC, a non-degenerate solution |
 | FHWC | 𝒢/R < 1 | finite human wealth |
-| PF-FVAC | β̊𝒢^(1−ϱ) < 1 | perfect foresight's finite value of autarky |
+| FVAC-PF | β̊𝒢^(1−ϱ) < 1 | perfect foresight's finite value of autarky |
 | FVAC | β̊𝒢^(1−ϱ)E[ψ^(1−ϱ)] < 1 | with the WRIC, a non-degenerate solution; with MST-βR, one in the liquidity-constrained model |
 | GIC | Þ̊_𝒢 < 1 | the pseudo-target m̌; income-weighted invariance |
 | GIC-Mod | Þ̊_𝒢 E[ψ⁻¹] < 1 | the target m̂ |
@@ -144,9 +144,9 @@ normalized problem, whose discount factor is β̊(𝒢ψ′)^(1−ϱ) and whose 
 
 The implications among the conditions alone are results of the ontology, each tested on sampled models:
 - MST-βR ⇒ GIC-Mod ⇒ GIC-Szeidl ⇒ GIC ⇒ GIC-Harmenberg, and GIC ⇒ GIC-Liv;
-- RIC ⇒ WRIC, and FVAC ⇒ PF-FVAC;
+- RIC ⇒ WRIC, and FVAC ⇒ FVAC-PF;
 - with the RIC, the failure of the GIC means finite human wealth;
-- under the FHWC, GIC ⇒ PF-FVAC ⇒ RIC;
+- under the FHWC, GIC ⇒ FVAC-PF ⇒ RIC;
 - if both the RIC and the GIC fail, so does the FVAC;
 - if the GIC holds and the RIC fails, the FHWC fails, and so it does whenever the FVAC holds and the RIC fails.
 

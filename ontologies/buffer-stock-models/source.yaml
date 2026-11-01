@@ -1045,9 +1045,9 @@ quantities:
     written_as: {bst: '\hNrm', registry: human-wealth}
     sources: {bst: [eq-hdef]}
   - id: BSM_0000076
-    name: pf-value-of-autarky-factor
+    name: value-of-autarky-factor-pf
     label: perfect-foresight value-of-autarky factor
-    symbol: pf_vaf
+    symbol: vaf_pf
     formula: "beta*L*G**(1 - rho)"
     definition: β̊ 𝒢^(1−ϱ), the factor of the value of consuming permanent income forever under perfect foresight.
     sources: {bst: [pffvac]}
@@ -1107,7 +1107,7 @@ conditions:
   - {id: BSM_0000083, name: ric, label: return impatience, short: RIC, factor: patience-return-liv, holds: "thorn_R < 1", sources: {bst: [ric, ass-ric]}}
   - {id: BSM_0000084, name: wric, label: weak return impatience, short: WRIC, factor: weak-return-patience-factor, holds: "wrp < 1", sources: {bst: [wric]}}
   - {id: BSM_0000085, name: fhwc, label: finite human wealth, short: FHWC, factor: human-wealth-factor, holds: "fhw < 1", sources: {bst: [ass-fhwc, eq-fhwc2]}}
-  - {id: BSM_0000086, name: pf-fvac, label: perfect-foresight finite value of autarky, short: PF-FVAC, factor: pf-value-of-autarky-factor, holds: "pf_vaf < 1", sources: {bst: [pffvac]}}
+  - {id: BSM_0000086, name: fvac-pf, label: perfect-foresight finite value of autarky, short: FVAC-PF, factor: value-of-autarky-factor-pf, holds: "vaf_pf < 1", note: "A modified condition's signifier follows its base name, as in GIC-Mod and GIC-Liv; the owner, 2026-11-01. BST writes \\PFFVAC, and the schemas' checker PF-FVAC.", sources: {bst: [pffvac]}}
   - {id: BSM_0000087, name: fvac, label: finite value of autarky, short: FVAC, factor: value-of-autarky-factor, holds: "vaf < 1", sources: {bst: [fvac]}}
   - {id: BSM_0000088, name: gic, label: growth impatience, short: GIC, factor: patience-growth-liv, holds: "thorn_G < 1", sources: {bst: [gicraw]}}
   - {id: BSM_0000089, name: gic-mod, label: strong growth impatience, short: GIC-Mod, factor: patience-growth-mod, holds: "thorn_G_mod < 1", sources: {bst: [gicmod]}}
@@ -1165,10 +1165,10 @@ results:
   - {id: BSM_0000118, name: liquidity-constrained-limit, label: the constrained solution as a limit, kind: theorem, status: bst, assumes: [], within: bst-model, limit_in: liquidity-constrained, concludes: [], note: "As ℘ ↓ 0, each finite-horizon consumption function c_t(m; ℘) converges to that of the liquidity-constrained problem: ℘ = 0, a positive minimum income and the constraint a ≥ 0, a member of the liquidity-constrained class. With ℘ > 0 the same constraint changes nothing (loose-artificial-constraint).", sources: {bst: [subsubsec-deatonislimit, sec-liqconstraslimit]}}
   # Implications among the conditions alone, which the tests check on sampled members.
   - {id: BSM_0000119, name: no-ric-no-gic, label: return and growth patience together rule out a finite value of autarky, kind: property, status: bst, assumes: [not ric, not gic], concludes: [not fvac], sources: {bst: [vafacdefn]}}
-  - {id: BSM_0000120, name: pf-gic-implies-pf-fvac, label: growth impatience and finite human wealth give the perfect-foresight finite value of autarky, kind: property, status: bst, assumes: [fhwc, gic], concludes: [pf-fvac], sources: {bst: [claim-pfconspc]}}
-  - {id: BSM_0000121, name: pf-fvac-implies-ric, label: the perfect-foresight finite value of autarky and finite human wealth give return impatience, kind: property, status: bst, assumes: [fhwc, pf-fvac], concludes: [ric], sources: {bst: [claim-pfconspc]}}
+  - {id: BSM_0000120, name: gic-implies-fvac-pf, label: growth impatience and finite human wealth give the perfect-foresight finite value of autarky, kind: property, status: bst, assumes: [fhwc, gic], concludes: [fvac-pf], sources: {bst: [claim-pfconspc]}}
+  - {id: BSM_0000121, name: fvac-pf-implies-ric, label: the perfect-foresight finite value of autarky and finite human wealth give return impatience, kind: property, status: bst, assumes: [fhwc, fvac-pf], concludes: [ric], sources: {bst: [claim-pfconspc]}}
   - {id: BSM_0000122, name: gic-without-ric, label: growth impatience without return impatience means infinite human wealth, kind: remark, status: bst, assumes: [gic, not ric], concludes: [not fhwc], sources: {bst: [prop-pfcexist]}}
-  - {id: BSM_0000123, name: fvac-implies-pf-fvac, label: the finite value of autarky implies its perfect-foresight version, kind: remark, status: deduced, assumes: [fvac], concludes: [pf-fvac], note: "Jensen's inequality, with ϱ > 1 and E[ψ] = 1, gives E[ψ^(1−ϱ)] ≥ 1.", sources: {bst: [vafacdefn]}}
+  - {id: BSM_0000123, name: fvac-implies-fvac-pf, label: the finite value of autarky implies its perfect-foresight version, kind: remark, status: deduced, assumes: [fvac], concludes: [fvac-pf], note: "Jensen's inequality, with ϱ > 1 and E[ψ] = 1, gives E[ψ^(1−ϱ)] ≥ 1.", sources: {bst: [vafacdefn]}}
   - {id: BSM_0000124, name: ric-implies-wric, label: return impatience implies weak return impatience, kind: remark, status: bst, assumes: [ric], concludes: [wric], sources: {bst: [wric]}}
   - {id: BSM_0000125, name: gic-mod-implies-gic-szeidl, label: strong growth impatience implies log growth impatience, kind: remark, status: bst, assumes: [gic-mod], concludes: [gic-szeidl], sources: {bst: [gicsdl]}}
   - {id: BSM_0000126, name: gic-szeidl-implies-gic, label: log growth impatience implies growth impatience, kind: remark, status: bst, assumes: [gic-szeidl], concludes: [gic], sources: {bst: [gicsdl]}}

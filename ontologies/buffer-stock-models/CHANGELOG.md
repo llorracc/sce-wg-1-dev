@@ -61,6 +61,9 @@ the owner's instruction of 2026-11-01, it names no toolkit.
 - Objects carry their perch, their state, the set a state takes values in, and Bellman-SYM's concept where it has one.
 - A result can name the class its limit lies in (`limit_in`), and a benchmark can be a subclass of another class.
 - Every divergence has a kind: meaning, notation, convention or absence.
+- The perfect-foresight FVAC is `fvac-pf`, written FVAC-PF, with its factor `value-of-autarky-factor-pf`. A modified
+  condition's signifier follows its base name, as in GIC-Mod, by the owner's rule of 2026-11-01. The three results
+  named for it are renamed to match, with their identifiers unchanged.
 - Two papers are sources, cited by their own numbering: Ma, Stachurski and Toda (2020) and (2022), in their arXiv
   versions. A condition's short name may carry Greek letters.
 

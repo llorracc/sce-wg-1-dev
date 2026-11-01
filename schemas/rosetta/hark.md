@@ -170,7 +170,7 @@ The departures keep the identifiers they had there, which the ontology now lists
 | `patience-growth-mortality-adj`, mortality-adjusted growth patience factor | quantity | `GPFacLiv` |
 | `human-wealth-factor`, finite human wealth factor | quantity | `FHWFac` |
 | `human-wealth`, human wealth | quantity | `hNrm` |
-| `pf-value-of-autarky-factor`, perfect-foresight value-of-autarky factor | quantity | `PFVAFac` |
+| `value-of-autarky-factor-pf`, perfect-foresight value-of-autarky factor | quantity | `PFVAFac` |
 | `value-of-autarky-factor`, value-of-autarky factor | quantity | `VAFac` |
 | `weak-return-patience-factor`, weak return patience factor | quantity | `WRPFac` |
 | `mpc-min`, limiting MPC as resources grow | quantity | `MPCmin` |
@@ -179,7 +179,7 @@ The departures keep the identifiers they had there, which the ontology now lists
 | `ric`, return impatience | condition | `check_RIC` |
 | `wric`, weak return impatience | condition | `check_WRIC` |
 | `fhwc`, finite human wealth | condition | `check_FHWC` |
-| `pf-fvac`, perfect-foresight finite value of autarky | condition | `PerfForesightConsumerType.check_FVAC` |
+| `fvac-pf`, perfect-foresight finite value of autarky | condition | `PerfForesightConsumerType.check_FVAC` |
 | `fvac`, finite value of autarky | condition | `IndShockConsumerType.check_FVAC` |
 | `gic`, growth impatience | condition | `check_GICRaw` |
 | `gic-mod`, strong growth impatience | condition | `check_GICMod` |
@@ -228,7 +228,7 @@ The departures keep the identifiers they had there, which the ontology now lists
   [`ConsIndShockModel.py:493`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L493),
   [`ConsIndShockModel.py:511`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L511).
   The paper: [borocnstnat](https://llorracc.github.io/BufferStockTheory/#borocnstnat).
-- **The PF-FVAC's message** (BSM_0000154, a difference of notation, in `pf-fvac`). HARK's perfect-foresight
+- **The FVAC-PF's message** (BSM_0000154, a difference of notation, in `fvac-pf`). HARK's perfect-foresight
   value-of-autarky factor is computed as β ℒ 𝒢^(1−ϱ), with survival, but its message states the condition as β𝒢^(1−ϱ) <
   1; its risk-modified VAFac leaves survival out. Sources:
   [`ConsIndShockModel.py:1796`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L1796),

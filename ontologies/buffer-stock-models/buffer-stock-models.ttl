@@ -20,7 +20,7 @@
     dcterms:source <https://arxiv.org/abs/1905.13045v3> ;
     dcterms:source <https://arxiv.org/abs/2012.00219v2> ;
     dcterms:source <https://github.com/llorracc/HAFiscal-QE/tree/1afdf80de4325e436a0c1c20895f754aefefd38c> ;
-    bsm:sourceDigest "sha256:864acb61e0d8bf3c61d445feb5fae17a923f3ba26e7db5342e4c7926254b057c" .
+    bsm:sourceDigest "sha256:d1b15d569127fed780c144099704e02334665aabdc06f43622e5be3d678201b5" .
 
 skos:definition a owl:AnnotationProperty .
 skos:notation a owl:AnnotationProperty .
@@ -1483,9 +1483,9 @@ bsm:BSM_0000075
 bsm:BSM_0000076
     a owl:NamedIndividual, bsm:Quantity ;
     rdfs:label "perfect-foresight value-of-autarky factor"@en ;
-    skos:notation "pf-value-of-autarky-factor" ;
+    skos:notation "value-of-autarky-factor-pf" ;
     skos:definition "β̊ 𝒢^(1−ϱ), the factor of the value of consuming permanent income forever under perfect foresight."@en ;
-    bsm:symbol "pf_vaf" ;
+    bsm:symbol "vaf_pf" ;
     bsm:formula "beta*L*G**(1 - rho)" ;
     bsm:dependsOn bsm:BSM_0000041 ;
     bsm:dependsOn bsm:BSM_0000039 ;
@@ -1620,9 +1620,10 @@ bsm:BSM_0000085
 bsm:BSM_0000086
     a owl:NamedIndividual, bsm:Condition ;
     rdfs:label "perfect-foresight finite value of autarky"@en ;
-    skos:notation "pf-fvac" ;
-    bsm:holdsWhen "pf_vaf < 1" ;
-    bsm:shortName "PF-FVAC" ;
+    skos:notation "fvac-pf" ;
+    skos:note "A modified condition's signifier follows its base name, as in GIC-Mod and GIC-Liv; the owner, 2026-11-01. BST writes \\PFFVAC, and the schemas' checker PF-FVAC."@en ;
+    bsm:holdsWhen "vaf_pf < 1" ;
+    bsm:shortName "FVAC-PF" ;
     bsm:hasFactor bsm:BSM_0000076 ;
     bsm:dependsOn bsm:BSM_0000076 ;
     dcterms:source <https://llorracc.github.io/BufferStockTheory/#pffvac> .
@@ -2010,7 +2011,7 @@ bsm:BSM_0000119
 bsm:BSM_0000120
     a owl:NamedIndividual, bsm:Result ;
     rdfs:label "growth impatience and finite human wealth give the perfect-foresight finite value of autarky"@en ;
-    skos:notation "pf-gic-implies-pf-fvac" ;
+    skos:notation "gic-implies-fvac-pf" ;
     bsm:status "bst" ;
     bsm:resultKind "property" ;
     bsm:assumes bsm:BSM_0000085 ;
@@ -2021,7 +2022,7 @@ bsm:BSM_0000120
 bsm:BSM_0000121
     a owl:NamedIndividual, bsm:Result ;
     rdfs:label "the perfect-foresight finite value of autarky and finite human wealth give return impatience"@en ;
-    skos:notation "pf-fvac-implies-ric" ;
+    skos:notation "fvac-pf-implies-ric" ;
     bsm:status "bst" ;
     bsm:resultKind "property" ;
     bsm:assumes bsm:BSM_0000085 ;
@@ -2043,7 +2044,7 @@ bsm:BSM_0000122
 bsm:BSM_0000123
     a owl:NamedIndividual, bsm:Result ;
     rdfs:label "the finite value of autarky implies its perfect-foresight version"@en ;
-    skos:notation "fvac-implies-pf-fvac" ;
+    skos:notation "fvac-implies-fvac-pf" ;
     skos:note "Jensen's inequality, with ϱ > 1 and E[ψ] = 1, gives E[ψ^(1−ϱ)] ≥ 1."@en ;
     bsm:status "deduced" ;
     bsm:resultKind "remark" ;
