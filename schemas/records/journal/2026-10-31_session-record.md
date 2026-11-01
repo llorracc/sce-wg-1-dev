@@ -68,3 +68,33 @@ was done in this repository between the memorial of 22:45 on 2026-10-22 and this
   schemas' branch. Nothing is pushed and no pull request is open.
 - The three peer sessions are idle, with nothing pending from this one.
 - The open decisions are listed in the rulings and the deferred follow-ups.
+
+**After the memorial:**
+- **17:55:53.** The owner asks that the ontology be made consistent with Bellman, through the bellman session and Matsya
+  (see the rulings).
+- **17:57:57.** Nine questions go to the bellman session. At 18:20:23 it reports that its Matsya session is running. At
+  19:05:17 it answers all nine with Matsya's answers and its own reading of Bellman-SYM's current main.
+- **19:08:07.** Three changes to Bellman go to the session that makes Bellman's changes. Their substance is kept outside
+  this repository, since Bellman's is private. No answer had reached this session by the next memorial.
+- **19:41:32.** The HARK-dev session relays the owner's decision of 19:38:51 on the cyclical index. Its words are found
+  where he typed them before the decision is recorded (see the rulings for what it decides).
+- **From 19:08.** Draft.2 of the ontology is written in Bellman-SYM's terms. It adds the perches, the stage values, the
+  derivative terms, the laws of motion and the connector, and the operators and operations. Two divergences are found:
+  𝕄 in two senses, and the schemas' stage files writing a role word the language retired on 2026-10-26. At 19:42:14, 44
+  tests pass.
+- **21:58:43.** The owner asks to see the ontology and the schema created or approved. A private page showing both is
+  published at 22:03:30.
+- **22:15:51.** He asks whether the check was made against a branch of Bellman, since he understood Bellman's main to
+  have dropped the marginal-value fields. It was made against main. The fields in question are the schemas' own
+  stage files'.
+- **22:17:58.** He approves the rewrite of the stage files.
+- **22:21:09.** He asks whether the ontology tells apart models bounded by an artificial constraint and models with only
+  the natural one, where the worst transitory shock must be a point mass. The answer: in membership, yes; in results,
+  not yet.
+- **22:23:51.** "yes to both". The rewrite is committed at 22:24:27 on branch `stage-derivative-terms`. Both stage files
+  elaborate on Bellman-SYM's current main, where their earlier versions are refused at the marginal-value headers, and
+  the checker's 175 tests pass. Pull request #15 opens at 22:24:43. Seventeen rows on the two constraints are then added
+  to the ontology (`BSM_0000180` to `BSM_0000196`), with 46 tests passing, and the page is republished at 22:33:03.
+
+**State at the end of the day:** draft.2 of the ontology uncommitted on `buffer-stock-ontology`; #15 open and pushed;
+the page private. The memorial of 2026-11-01 commits draft.2.

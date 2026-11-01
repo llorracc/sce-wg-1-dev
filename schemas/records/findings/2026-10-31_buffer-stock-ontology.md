@@ -2,6 +2,12 @@
 
 2026-10-31. The draft is `ontologies/buffer-stock-models/`, version 0.1.0-draft.1, on branch `buffer-stock-ontology`.
 
+**Update of 2026-11-01.** HARK's divergences below moved out of the ontology to
+[HARK's Rosetta Stone](../../rosetta/hark.md#the-ontologys-terms-in-hark), since the ontology names no toolkit. The owner's
+ruling on the cyclical index is that the solver and the simulation be consistent, not that the solver is right
+([the rulings of 2026-11-01](../rulings/2026-11-01_ontology-decisions.md)). Draft.2's findings are
+[their own](2026-11-01_ontology-draft2.md).
+
 ## What the tests establish
 
 The 36 tests run with the command in the ontology's README.

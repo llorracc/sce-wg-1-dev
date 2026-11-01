@@ -53,9 +53,18 @@ metadata:
     its anchors are in `ontologies/buffer-stock-models/bst-anchors.txt`;
   - econ-ark's notation registry 8.0.0, at econ-ark-tools commit `9d3d108a`;
   - HAFiscal-QE's public head, `1afdf80` (2026-06-12);
-  - HARK main at `4c285e86`.
+  - HARK main at `4c285e86`, now cited only by HARK's stone.
 - HARK's commit `54083db5` (2021-07-09; issue econ-ark/HARK#1022, merged in #1039): the cyclical solve order, under which
   entry k of a time-varying list is the move into k. Its simulation of shocks, growth and the return was left reading
   entry s − 1.
+- The fork's pull request #15, open: https://github.com/llorracc/sce-wg-1-dev/pull/15, the stage files' rewrite with
+  derivative terms (2026-10-31).
+- An issue in the paper's private repository (2026-11-01) asks for a proof that the WRIC is necessary without an
+  artificial constraint; this public repository gives no link to it.
+- Ma, Stachurski and Toda, read for the ontology on 2026-11-01 in their arXiv versions:
+  https://arxiv.org/abs/1905.13045v3 (the income fluctuation problem, 2020) and https://arxiv.org/abs/2012.00219v2 (the
+  Q-transform, 2022).
+- HARK's Rosetta Stone holds, since 2026-11-01, HARK's names for the ontology's terms and its departures from them:
+  `schemas/rosetta/hark.md`, section "The ontology's terms in HARK".
 - HARK's draft econ-ark/HARK#1869: the continuous path, expectations by quadrature over the true truncated laws. HARK's
   kink-split page, https://econ-ark.github.io/HARK-dev/kink-split-quadrature/, is public; the HARK-dev repository is not.

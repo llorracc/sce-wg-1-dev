@@ -41,8 +41,10 @@ SOURCE, _ = generate.load()
 BY_NAME = {row["name"]: (kind, row) for kind, row in generate.rows(SOURCE)}
 CONDITIONS = {c["name"]: c for c in SOURCE["conditions"]}
 MEMBERS = sorted((SCHEMAS / "bst-1" / "members").glob("*.yaml"))
-# The checker's names for the ontology's conditions.
+# The checker's names for the ontology's conditions, and the conditions the checker does not compute: the condition of
+# Ma, Stachurski and Toda, which bst/1's conditions.md does not name.
 CHECKER_NAME = {c["name"]: c["short"] for c in SOURCE["conditions"]}
+NOT_IN_CHECKER = {"discounted-return"}
 MARGIN = 1e-9
 
 
@@ -109,6 +111,10 @@ def test_turtle_parses_as_rdf():
     lambda s: s["model-classes"][1].update(subclass_of="no-such-class"),
     lambda s: s["objects"][7].update(law={"pd": ["PD_9999999"]}),
     lambda s: s["quantities"][0].update(formula="E(X)"),
+    lambda s: next(r for r in s["objects"] if r["name"] == "value-arrival").update(perch="perch-decision"),
+    lambda s: next(r for r in s["objects"] if r["name"] == "stage").update(bellman_concept="not-a-bellman-concept"),
+    lambda s: next(r for r in s["objects"] if r["name"] == "value-decision").update(of_state="consumption"),
+    lambda s: next(r for r in s["results"] if r["name"] == "liquidity-constrained-limit").update(limit_in="crra"),
 ])
 def test_the_generator_refuses_a_broken_source(break_it):
     broken = copy.deepcopy(SOURCE)
@@ -129,6 +135,7 @@ def test_moments_agree_with_the_lognormal_closed_forms(sigma, rho):
     assert env["E_psi_1mrho"] == pytest.approx(math.exp((1 - rho) * (-rho) * s2 / 2), rel=1e-12)
     assert env["E_log_psi"] == pytest.approx(-s2 / 2, rel=1e-12)
     assert env["E_psi_log_psi"] == pytest.approx(s2 / 2, rel=1e-10)
+    assert env["E_psi_mrho"] == pytest.approx(math.exp(rho * (rho + 1) * s2 / 2), rel=1e-10)
 
 
 def member_environment(member: bst1.Member, beta: float) -> dict:
@@ -136,7 +143,7 @@ def member_environment(member: bst1.Member, beta: float) -> dict:
     ontology's formulas under the checker's closed forms."""
     E = member.expectations()
     closed = {"E(X**-1)": E["psi_inverse"], "E(X**(1 - rho))": E["psi_pow_1_minus_rho"], "E(log(X))": E["psi_log"],
-              "E(X*log(X))": E["psi_log_psi"]}
+              "E(X*log(X))": E["psi_log_psi"], "E(X**(-rho))": member.psi.moment(-member.rho)}
     env = {"rho": member.rho, "beta": beta, "L": member.L, "R": member.R, "G": member.G, "wp": member.wp,
            "xi_u": member.xi_u, "a_Art": member.a_art, "psi_min": member.psi.infimum, "xi_min": member.xi_infimum(),
            "xi_atom": member.xi_mass_at_infimum(), "p_worst": member.worst_income_probability()}
@@ -159,7 +166,10 @@ def test_conditions_agree_with_the_checker(path):
         env = member_environment(member, t["beta"])
         ours = holds(env)
         theirs = {f["name"]: f for f in member.factors(t["beta"], member.expectations())}
+        assert {n for n in CONDITIONS if CHECKER_NAME[n] not in theirs} == NOT_IN_CHECKER
         for name, c in CONDITIONS.items():
+            if name in NOT_IN_CHECKER:
+                continue
             assert ours[name] == theirs[CHECKER_NAME[name]]["holds"], (path.stem, t["beta"], name)
             if c["name"] not in ("gic-szeidl", "gic-harmenberg"):  # the checker writes these two as log and exp
                 factor = env[BY_NAME[c["factor"]][1]["symbol"]]
@@ -270,6 +280,28 @@ def test_the_classes_form_a_tree():
     assert classes["perfect-foresight-benchmark"].get("benchmark_of") == "buffer-stock-model"
 
 
+def test_the_two_constraints_are_told_apart():
+    """The natural and the artificial constraint make different models: the atom at the worst transitory shock is
+    required only where the natural constraint is in force; the natural constraint never binds and an artificial one
+    does; the constrained perfect-foresight benchmark is the artificial class's limit as the shocks vanish, as BST's own
+    class approaches it as the zero-income event's probability vanishes."""
+    classes = {c["name"]: c for c in SOURCE["model-classes"]}
+    results = {r["name"]: r for r in SOURCE["results"]}
+    assert BY_NAME["point-mass-at-worst-transitory"][1]["check"] == "a_min > a_Nat or xi_atom > 0"
+    assert classes["with-artificial-constraint"]["reduces_to"]["when"] == "a_Art <= a_Nat"
+    assert (results["natural-constraint-never-binds"]["within"], results["natural-constraint-never-binds"]["concludes"]) \
+        == ("bst-model", ["not constraint-binds"])
+    assert (results["artificial-constraint-binds"]["within"], results["artificial-constraint-binds"]["concludes"]) \
+        == ("with-artificial-constraint", ["constraint-binds"])
+    pfc = classes["perfect-foresight-constrained"]
+    assert pfc["subclass_of"] == "perfect-foresight-benchmark" and pfc["benchmark_of"] == "liquidity-constrained"
+    assert classes["liquidity-constrained"]["subclass_of"] == "with-artificial-constraint"
+    assert results["liquidity-constrained-limit"]["limit_in"] == "liquidity-constrained"
+    for name in ("pf-constrained", "pf-constraint-relevance", "pf-constrained-without-ric", "pf-constrained-degenerate",
+                 "pf-constraint-slack", "pf-constrained-converges"):
+        assert results[name]["within"] == "perfect-foresight-constrained", name
+
+
 # The denotation: the written forms the ontology names exist in the schemas.
 
 def _schema_paths(node, prefix="") -> set[str]:
@@ -289,18 +321,91 @@ def test_parameter_file_keys_exist():
     assert named and all(p in paths for p in named), [p for p in named if p not in paths]
 
 
+# The derivative terms that Bellman-SYM's current language writes in place of the retired marginal-value fields, which
+# bst/1's stage file will carry once its proposed rewrite is made (the divergence bst1-stage-files-retired-marginal-role).
+PENDING_STAGE_SPELLINGS = {"D_{m}V", "D_{k}V[<]", "D_{a}V[>]"}
+
+
+def _in_stage(spelling: str, stage: str) -> bool:
+    parts = [spelling] if spelling.startswith(("E_", "D_")) else spelling.split(".")
+    return all(re.search(rf"id={re.escape(part)}\b", stage) or re.search(rf"(?<![\w]){re.escape(part)}(?![\w])", stage)
+               for part in parts)
+
+
 def test_stage_file_identifiers_exist():
     stage = (SCHEMAS / "bst-1" / "bellman" / "buffer_stock.bl").read_text(encoding="utf-8")
     named = [r["written_as"]["bellman-sym"] for _, r in generate.rows(SOURCE) if "bellman-sym" in r.get("written_as", {})]
-    missing = []
-    for spelling in named:
-        parts = spelling.split(".") if not spelling.startswith("E_") else [spelling]
-        for part in parts:
-            if not (re.search(rf"id={re.escape(part)}\b", stage) or re.search(rf"(?<![\w]){re.escape(part)}(?![\w])", stage)):
-                missing.append(spelling)
+    missing = [s for s in named if s not in PENDING_STAGE_SPELLINGS and not _in_stage(s, stage)]
     assert named and not missing, missing
 
 
-def test_every_condition_has_a_hark_name_or_says_why_not():
-    unnamed = [c["name"] for c in SOURCE["conditions"] if "hark" not in c.get("written_as", {})]
-    assert unnamed == [], unnamed
+def test_the_pending_spellings_are_still_pending():
+    """When the stage file is rewritten with derivative terms, this fails, and the pending list is to be emptied."""
+    stage = (SCHEMAS / "bst-1" / "bellman" / "buffer_stock.bl").read_text(encoding="utf-8")
+    named = {r["written_as"]["bellman-sym"] for _, r in generate.rows(SOURCE) if "bellman-sym" in r.get("written_as", {})}
+    assert PENDING_STAGE_SPELLINGS <= named
+    assert not any(_in_stage(s, stage) for s in PENDING_STAGE_SPELLINGS)
+    assert "!mrgnvl" in stage
+
+
+# Bellman-SYM's terms.
+
+def test_every_value_and_function_of_a_state_has_its_perch():
+    for row in SOURCE["objects"]:
+        if row["category"] == "value" or "of_state" in row:
+            assert "perch" in row and "of_state" in row, row["name"]
+
+
+def test_the_three_perches_and_their_states():
+    perches = {r["name"]: r for r in SOURCE["objects"] if r["category"] == "perch"}
+    assert set(perches) == {"perch-arrival", "perch-decision", "perch-continuation"}
+    states = {r["perch"]: r["name"] for r in SOURCE["objects"] if r["category"] == "state" and "perch" in r}
+    assert states == {"perch-arrival": "kapital", "perch-decision": "market-resources",
+                      "perch-continuation": "end-of-period-assets"}
+
+
+def test_the_formats_roles():
+    roles = {fmt: spec["role"] for fmt, spec in SOURCE["ontology"]["formats"].items()}
+    assert roles == {"bst": "notation", "registry": "notation", "parameter-file": "calibration",
+                     "bellman-sym": "notation"}
+
+
+def test_no_row_is_an_event():
+    """A two-point outcome is a shock on a two-point set, as Bellman-SYM has it; the category event is gone."""
+    assert "event" not in SOURCE["categories"]
+    assert {r["category"] for r in SOURCE["objects"]} <= set(SOURCE["categories"])
+
+
+def test_the_ontology_names_no_toolkit():
+    """The owner's instruction of 2026-11-01: the ontology names no toolkit, and nothing peculiar to how a toolkit solves
+    or simulates a model. Each toolkit's names for the terms, and its departures from them, are in its Rosetta Stone."""
+    text = (HERE / "source.yaml").read_text(encoding="utf-8")
+    assert "hark" not in SOURCE["ontology"]["sources"] and "realization" not in SOURCE["ontology"]["format_roles"]
+    for _, row in generate.rows(SOURCE):
+        assert "hark" not in row.get("written_as", {}) and "hark" not in row.get("sources", {}), row["name"]
+        assert row.get("where") != "hark", row["name"]
+    named = sorted({w for w in ("HARK", "Econ-ARK", "QuantEcon", "Dolo", "JAX") if w in text})
+    assert named == [], named
+
+
+def test_the_conditions_of_ma_stachurski_and_toda():
+    """Their discounted-return factor is E[(Þ̊_𝒢/ψ)^ϱ]; it is Þ̊_𝒢^ϱ without permanent shocks, so that their condition
+    is then the GIC; and the mean return times their s̄ = Þ̊_R is the GIC-Mod's factor, so that their stationarity
+    condition is the RIC with the GIC-Mod."""
+    rng = np.random.default_rng(20261101)
+    for _ in range(200):
+        sigma, rho = rng.uniform(0.05, 0.6), rng.uniform(1.01, 8.0)
+        primitives = {"rho": rho, "beta": rng.uniform(0.3, 1.3), "L": rng.uniform(0.9, 1.0), "R": rng.uniform(0.9, 1.2),
+                      "G": rng.uniform(0.9, 1.2), "wp": 0.0, "xi_u": 0.0, "a_Art": 0.0}
+        bounds = {"psi_min": 0.0, "xi_min": 0.5, "xi_atom": 0.0, "p_worst": 0.0}
+        E = lognormal(sigma)
+        env = environment(primitives, E, bounds)
+        assert env["g_beta_R"] == pytest.approx(E(lambda x: (env["thorn_G"] / x) ** rho), rel=1e-9)
+        assert env["thorn_R"] * (env["R"] / env["G"]) * env["E_psi_inv"] == pytest.approx(env["thorn_G_mod"], rel=1e-12)
+        sure = environment(primitives, discrete([1.0], [1.0]), bounds)
+        assert sure["g_beta_R"] == pytest.approx(sure["thorn_G"] ** rho, rel=1e-12)
+        assert (sure["g_beta_R"] < 1) == (sure["thorn_G"] < 1)
+    results = {r["name"]: r for r in SOURCE["results"]}
+    assert (results["mst-existence"]["assumes"], results["mst-existence"]["within"]) \
+        == (["fvac", "discounted-return"], "liquidity-constrained")
+    assert BY_NAME["no-borrowing"][1]["check"] == "a_Art == 0 and xi_min > 0"

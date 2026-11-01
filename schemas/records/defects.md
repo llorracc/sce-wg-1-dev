@@ -148,3 +148,12 @@ Faults found in this project's own work, with their status.
   from `EstimParameters.py`, as the paper's estimates, and rounded growth rates, spreads, splurge and job-loss rates.
   Found by the HAFiscal session on 2026-10-22. **Status:** fixed in #13, merged at 22:44:03 on 2026-10-22, with the
   published values; the calibration names' defect was fixed in the same pull request.
+- **A ruling recorded more strongly than it was given.** From 19:41 on 2026-10-31, the ontology's uncommitted draft, and
+  then HARK's stone, said that the owner had ruled the solver's cyclical convention stands and every simulation is to
+  follow it. His ruling is that the two be consistent. It finds neither one right, and he had directed only which side
+  to fix. The relayed wording was taken over without that distinction. **Status:** corrected 2026-11-01 at 10:08, before
+  anything was committed, and the HARK-dev session was told at 10:08:48.
+- **An artificial constraint's binding deduced for every a_Art.** The row `artificial-constraint-binds` took next
+  period's lowest resources to be R a_Art/(𝒢ψ_min) + ξ_min, which holds only for a borrowing limit, a_Art ≤ 0. For
+  a_Art > 0 the lowest resources come at the largest ψ. **Status:** fixed 2026-11-01, uncommitted at the time, and the
+  row now states the case a_Nat < a_Art ≤ 0.

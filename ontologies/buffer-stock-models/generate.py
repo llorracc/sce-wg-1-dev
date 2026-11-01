@@ -9,9 +9,10 @@ source always gives the same bytes.
 
 Beyond the schema, the generator refuses a source whose identifiers repeat or reuse a retired one, whose names repeat,
 whose references do not resolve, whose formulas leave the formula syntax or name a symbol not defined before them, whose
-results assume or conclude anything but a condition or a property, or whose citations are not pinned: a bst anchor not
-in bst-anchors.txt, a registry key not in registry-keys.txt, a law not a row of the ontology of probability
-distributions, a source or format the source does not declare.
+results assume or conclude anything but a condition or a property, whose perches and states do not resolve or disagree,
+or whose citations are not pinned: a bst anchor not in bst-anchors.txt, a registry key not in registry-keys.txt, a
+Bellman-SYM concept not in bellman-concepts.txt, a law or law property not a row of the ontology of probability
+distributions, a source, format or format role the source does not declare.
 
 The formula syntax is the ontology of probability distributions' (its formulas.py), shared rather than copied.
 """
@@ -38,6 +39,7 @@ TURTLE = HERE / "buffer-stock-models.ttl"
 TABLE = HERE / "buffer-stock-models.json"
 BST_ANCHORS = HERE / "bst-anchors.txt"
 REGISTRY_KEYS = HERE / "registry-keys.txt"
+BELLMAN_CONCEPTS = HERE / "bellman-concepts.txt"
 PD_TABLE = PD / "probability-distributions.json"
 
 # The source's sections, in order, with the kind each row is of.
@@ -121,10 +123,26 @@ def check(source: dict) -> None:
     if not any(c["name"] == "buffer-stock-model" and "subclass_of" not in c for c in source["model-classes"]):
         problems.append("there is no root class buffer-stock-model")
 
-    # objects, moments, quantities, conditions: the formulas
+    # objects: categories, perches and the states a value or a function is of
+    objects = {row["name"]: row for row in source["objects"]}
     for row in source["objects"]:
         if row["category"] not in source["categories"]:
             problems.append(f"{row['name']}: no category {row['category']!r}")
+        for key, category in (("perch", "perch"), ("of_state", "state")):
+            if key in row and objects.get(row[key], {}).get("category") != category:
+                problems.append(f"{row['name']}/{key}: {row[key]!r} is not an object of category {category}")
+        state = objects.get(row.get("of_state"), {})
+        if "perch" in row and "perch" in state and state["perch"] != row["perch"]:
+            problems.append(f"{row['name']}: at {row['perch']}, but its state {state['name']} is at {state['perch']}")
+    for category, concept in source["category_concepts"].items():
+        if category not in source["categories"]:
+            problems.append(f"category_concepts: no category {category!r}")
+    roles = source["ontology"]["format_roles"]
+    for fmt, spec in source["ontology"]["formats"].items():
+        if spec["role"] not in roles:
+            problems.append(f"format {fmt}: role {spec['role']!r} is not declared")
+
+    # moments, quantities, conditions: the formulas
     syms = symbols(source)
     if len(syms) != sum("symbol" in r for s in ("objects", "moments", "quantities") for r in source[s]):
         problems.append("a formula symbol is defined twice")
@@ -162,6 +180,8 @@ def check(source: dict) -> None:
             need(literal.removeprefix("not "), {"condition", "property"}, f"{row['name']}")
         if "within" in row:
             need(row["within"], {"model-class"}, f"{row['name']}/within")
+        if "limit_in" in row:
+            need(row["limit_in"], {"model-class"}, f"{row['name']}/limit_in")
     for row in source["families"]:
         for c in row["writes"]:
             need(c, {"model-class"}, f"{row['name']}/writes")
@@ -174,8 +194,11 @@ def check(source: dict) -> None:
             problems.append(f"{row['name']}: where {row['where']!r} is not a declared source")
 
     # citations and written forms
-    anchors, registry = _pinned(BST_ANCHORS), _pinned(REGISTRY_KEYS)
+    anchors, registry, concepts = _pinned(BST_ANCHORS), _pinned(REGISTRY_KEYS), _pinned(BELLMAN_CONCEPTS)
     pd_ids = {r["id"] for r in json.loads(PD_TABLE.read_text(encoding="utf-8"))["rows"]}
+    for category, concept in source["category_concepts"].items():
+        if concept not in concepts:
+            problems.append(f"category_concepts/{category}: Bellman-SYM concept {concept!r} is not pinned")
     declared_sources, formats = source["ontology"]["sources"], source["ontology"]["formats"]
     for kind, row in all_rows:
         for key, cited in row.get("sources", {}).items():
@@ -188,9 +211,11 @@ def check(source: dict) -> None:
                 problems.append(f"{row['name']}: format {fmt!r} is not declared")
             if fmt == "registry" and spelling not in registry:
                 problems.append(f"{row['name']}: registry key {spelling!r} is not pinned")
-        for pd_id in row.get("law", {}).get("pd", []):
+        for pd_id in row.get("law", {}).get("pd", []) + row.get("law_property", {}).get("pd", []):
             if pd_id not in pd_ids:
                 problems.append(f"{row['name']}: {pd_id} is not a row of the probability distributions")
+        if "bellman_concept" in row and row["bellman_concept"] not in concepts:
+            problems.append(f"{row['name']}: Bellman-SYM concept {row['bellman_concept']!r} is not pinned")
     if problems:
         raise SourceError("; ".join(problems))
 
@@ -203,7 +228,7 @@ KIND_CLASS = {
     "family": "Family", "divergence": "Divergence",
 }
 FORMAT_PROPERTY = {"bst": "inBST", "registry": "registryKey", "parameter-file": "inParameterFile",
-                   "bellman-sym": "inBellmanSym", "hark": "inHARK"}
+                   "bellman-sym": "inBellmanSym"}
 OBJECT_PROPERTIES = {
     "axiomOf": "The model class an axiom belongs to.",
     "hasAxiom": "An axiom of a model class.",
@@ -218,9 +243,13 @@ OBJECT_PROPERTIES = {
     "concludes": "A condition or property a result concludes holds.",
     "concludesFailureOf": "A condition or property a result concludes fails.",
     "within": "The model class to which a result applies.",
+    "limitIn": "The model class in which the limit a result describes lies.",
     "writes": "A model class whose members a written family writes.",
     "concerns": "The term a divergence concerns.",
     "lawIn": "A family or constraint of the ontology of probability distributions that a shock's law belongs to.",
+    "atPerch": "The perch at which a field is known, or a function's state lies.",
+    "functionOf": "The state of which a value or a function is a function.",
+    "lawProperty": "The property of a law, in the ontology of probability distributions, that a bound is.",
 }
 DATA_PROPERTIES = {
     "formula": "A formula in the ontology's formula syntax.",
@@ -239,6 +268,10 @@ DATA_PROPERTIES = {
     "note": "A note.",
     "schemaDocument": "The schema document of a written family, relative to this folder.",
     "sourceDigest": "The SHA-256 of the source this file was generated from.",
+    "bellmanConcept": "The slug of Bellman-SYM's concept this term is, its documentation not being public.",
+    "stateDomain": "The set a state or control takes its values in, as a stage file declares it.",
+    "divergenceKind": "meaning, notation, approximation, convention or absence.",
+    "formatRole": "notation, calibration or realization.",
 }
 
 
@@ -251,13 +284,21 @@ def _camel(name: str) -> str:
     return "".join(part.capitalize() for part in name.split("-"))
 
 
+# The papers the ontology cites by their own numbering.
+PAPERS = ("mst-2020", "mst-2022")
+
+
 def source_urls(source: dict, cited: dict) -> list[str]:
-    """The URLs of a row's citations: a bst anchor on the published page; a file and line at a pinned commit."""
+    """The URLs of a row's citations: a bst anchor on the published page; a file and line at a pinned commit; a paper
+    cited by its own numbering, as the paper's page."""
     base = {k: v["url"] for k, v in source["ontology"]["sources"].items()}
     out = []
     for a in cited.get("bst", []):
         out.append(f"{base['bst']}#{a}")
-    for key in ("hark", "hafiscal-qe"):
+    for key in PAPERS:
+        if cited.get(key):
+            out.append(base[key])
+    for key in ("hafiscal-qe",):
         root = base[key].replace("/tree/", "/blob/")
         for spec in cited.get(key, []):
             path, _, lines = spec.partition(":")
@@ -285,7 +326,7 @@ def table(source: dict, digest: str) -> dict:
             if key == "kind":  # a result's or an identity's own kind, kept apart from the row's kind in the ontology
                 r[f"{kind}_kind"] = value
                 continue
-            if key in ("subclass_of", "benchmark_of", "of", "factor", "within", "term", "domain"):
+            if key in ("subclass_of", "benchmark_of", "of", "factor", "within", "limit_in", "term", "domain", "perch", "of_state"):
                 value = {"name": value, "id": ident.get(value, value)}
             elif key == "axioms" or key == "writes":
                 value = [{"name": v, "id": ident[v]} for v in value]
@@ -340,15 +381,19 @@ def turtle(source: dict, digest: str) -> str:
         lines += [f"{p}:{cls} a owl:Class ;", f"    rdfs:label {_lit(kind)} ;",
                   f"    skos:definition {_lit(source['kinds'][kind])} .", ""]
     for cat, text in source["categories"].items():
-        lines += [f"{p}:{_camel(cat)} a owl:Class ;", f"    rdfs:subClassOf {p}:Object ;",
+        concept = source["category_concepts"].get(cat)
+        extra = [f"    {p}:bellmanConcept {_lit(concept, False)} ;"] if concept else []
+        lines += [f"{p}:{_camel(cat)} a owl:Class ;", f"    rdfs:subClassOf {p}:Object ;", *extra,
                   f"    rdfs:label {_lit(cat)} ;", f"    skos:definition {_lit(text)} .", ""]
     for prop, text in OBJECT_PROPERTIES.items():
         lines += [f"{p}:{prop} a owl:ObjectProperty ;", f"    skos:definition {_lit(text)} .", ""]
     for prop, text in DATA_PROPERTIES.items():
         lines += [f"{p}:{prop} a owl:DatatypeProperty ;", f"    skos:definition {_lit(text)} .", ""]
     for fmt, prop in FORMAT_PROPERTY.items():
+        spec = o["formats"][fmt]
         lines += [f"{p}:{prop} a owl:AnnotationProperty ;",
-                  f"    skos:definition {_lit('Its written form in ' + o['formats'][fmt] + '.')} .", ""]
+                  f"    skos:definition {_lit('Its written form in ' + spec['text'] + '.')} ;",
+                  f"    {p}:formatRole {_lit(spec['role'], False)} .", ""]
 
     for kind, row in rows(source):
         me = f"{p}:{row['id']}"
@@ -370,7 +415,8 @@ def turtle(source: dict, digest: str) -> str:
             triples.append(f"skos:note {_lit(row['note'])}")
         simple = {"symbol": "symbol", "formula": "formula", "holds": "holdsWhen", "check": "check", "tier": "tier",
                   "status": "status", "category": "category", "short": "shortName", "where": "where",
-                  "schema": "schemaDocument", "domain_note": "note"}
+                  "schema": "schemaDocument", "domain_note": "note", "bellman_concept": "bellmanConcept",
+                  "state_domain": "stateDomain"}
         for key, prop in simple.items():
             if key in row:
                 triples.append(f"{p}:{prop} {_lit(row[key], False)}")
@@ -380,8 +426,11 @@ def turtle(source: dict, digest: str) -> str:
             triples.append(f"{p}:resultKind {_lit(row['kind'], False)}")
         if kind == "identity":
             triples.append(f"{p}:identityKind {_lit(row['kind'], False)}")
+        if kind == "divergence":
+            triples.append(f"{p}:divergenceKind {_lit(row['kind'], False)}")
         refs = {"benchmark_of": "benchmarkOf", "of": "axiomOf" if kind == "axiom" else "momentOf",
-                "factor": "hasFactor", "within": "within", "term": "concerns", "domain": "domain"}
+                "factor": "hasFactor", "within": "within", "limit_in": "limitIn", "term": "concerns", "domain": "domain",
+                "perch": "atPerch", "of_state": "functionOf"}
         for key, prop in refs.items():
             if key in row:
                 triples.append(f"{p}:{prop} {p}:{ident[row[key]]}")
@@ -403,6 +452,8 @@ def turtle(source: dict, digest: str) -> str:
                     triples.append(f"{p}:dependsOn {p}:{ident[syms[s]]}")
         for pd_id in row.get("law", {}).get("pd", []):
             triples.append(f"{p}:lawIn pd:{pd_id}")
+        for pd_id in row.get("law_property", {}).get("pd", []):
+            triples.append(f"{p}:lawProperty pd:{pd_id}")
         for fmt, spelling in row.get("written_as", {}).items():
             triples.append(f"{p}:{FORMAT_PROPERTY[fmt]} {_lit(spelling, False)}")
         for url in source_urls(source, row.get("sources", {})):

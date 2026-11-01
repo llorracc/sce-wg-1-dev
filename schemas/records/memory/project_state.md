@@ -1,17 +1,36 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 17:48 on 2026-10-31: the fork's thirteen pull requests merged, and the ontology of buffer-stock models drafted on its own branch"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 2026-11-01: the fork's thirteen pull requests merged and #15 open; the ontology of buffer-stock models at draft.2 on its own branch, naming no toolkit"
 metadata:
   type: project
 ---
 
-**On branch `buffer-stock-ontology`** (2026-10-31, from the schemas' branch; committed, not pushed, no pull request):
-`ontologies/buffer-stock-models/`, the semantic ontology of buffer-stock models, version 0.1.0-draft.1, rows
-`BSM_0000001` to `BSM_0000159` with `BSM_0000151` retired; 36 tests. It states what makes a model a buffer-stock model
-(membership axioms, the owner's atom rule of 2026-10-31 among them), BST's hypotheses as a second tier, the classes and
-extensions, the conditions with their implications, the identities, each term's written forms in five formats, and the
-divergences in HARK and HAFiscal. The schemas are its syntax; it changes no schema. Its open questions are the owner's
-([the rulings](../rulings/2026-10-31_ontology-decisions.md), [the findings](../findings/2026-10-31_buffer-stock-ontology.md)).
+**On branch `buffer-stock-ontology`** (from the schemas' branch; committed, not pushed, no pull request):
+`ontologies/buffer-stock-models/`, the semantic ontology of buffer-stock models, version 0.1.0-draft.2, rows
+`BSM_0000001` to `BSM_0000205`, 194 in force and 11 retired; 47 tests, none of which solves a model
+([[feedback_say-what-tests-establish]]).
+- It states:
+  - what makes a model a buffer-stock model: the membership axioms, the owner's atom rule of 2026-10-31 among them;
+  - BST's hypotheses as a second tier, and the classes and extensions;
+  - the objects in Bellman-SYM's terms;
+  - the conditions with their implications, and the identities;
+  - each term's written forms in four formats: three notations and the parameter file;
+  - the divergences in other papers, a notation and the schemas.
+- Draft.2 (2026-10-31 evening and 2026-11-01) adds:
+  - Bellman-SYM's terms: perches, stage values, derivative terms, laws and connector, operators;
+  - the natural and the artificial constraint told apart in behavior, conditions and limits;
+  - Ma, Stachurski and Toda's conditions: the liquidity-constrained class and MST-βR;
+  - the WRIC's necessity, treated as true until the paper proves it.
+- It names no toolkit ([[feedback_ontology-names-no-toolkit]]): HARK's names and departures are in HARK's Rosetta Stone.
+- The schemas are its syntax. It changes no schema. Its open questions are the owner's
+  ([the rulings of 2026-10-31](../rulings/2026-10-31_ontology-decisions.md) and
+  [of 2026-11-01](../rulings/2026-11-01_ontology-decisions.md);
+  [the findings](../findings/2026-11-01_ontology-draft2.md)).
+
+**Open pull request #15** (`stage-derivative-terms`, pushed, against the schemas' branch, opened 22:24:43 on
+2026-10-31): both families' stage files rewritten with Bellman-SYM's derivative terms, as the owner approved at 22:17:58.
+Both elaborate on Bellman-SYM's current main; the checker's 175 tests pass. Unmerged; what follows its merge is in the
+deferred follow-ups.
 
 **On the schemas' branch** (`buffer-stock-schema-work_CDC`, pushed). It holds the merged work of the fork's thirteen
 pull requests and `main`'s ontology. Nothing has been proposed to the working group's repository yet.
@@ -140,9 +159,16 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
 - Matsya's third session, on HARK's source, ran on 2026-10-22 and agrees with the stone (the findings of that day).
 
 **Open with the owner:**
-- the ontology's open questions: the two tiers, what buffer-stock saving means, the perfect-foresight and risky-asset
-  classes, the ontology's identifiers on the schemas' keys, the atom axiom as a bst/1 validity condition, and HARK's
-  cyclical index convention;
+- the ontology's open questions:
+  - the two tiers, and what buffer-stock saving means;
+  - the perfect-foresight and risky-asset classes;
+  - the ontology's identifiers on the schemas' keys, and the atom axiom as a bst/1 validity condition;
+  - whether HAFiscal's cap on β is a divergence;
+  - what a Rosetta Stone holds, against which HARK's moved section is judged;
+  - three points left by Ma, Stachurski and Toda;
+- HARK's cyclical index: ruled on 2026-10-31 that solver and simulation be consistent, the simulation side to be fixed,
+  made clear on 2026-11-01 not to find the solver right; the fix is the HARK-dev session's;
+- #15, to merge;
 - in the HARK session: #1858 and #1862, which stay drafts; the tags on HARK's fork at the adapter's two pins,
   `sce-adapter/2026-10-22` and `sce-adapter/2026-10-22.2`, were made on 2026-10-22;
 - what goes to the working group's repository, and when;

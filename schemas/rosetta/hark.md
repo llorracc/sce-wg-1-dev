@@ -1,6 +1,6 @@
 # HARK's Rosetta Stone for `bst/1`
 
-Draft, begun on 2026-10-21 and revised on 2026-10-22; see the [Rosetta Stones](README.md). The toolkit is HARK's
+Draft, begun on 2026-10-21 and revised on 2026-10-22 and 2026-11-01; see the [Rosetta Stones](README.md). The toolkit is HARK's
 `MarkovConsumerType`, as [HARK's adapter](../adapters/hark/README.md) uses it: on the nonpersistent chain, which writes
 a `bst/1` member as a member of the [Markov family](../bst-markov_ui-and-agg/model.md).
 - **Where it was read.** The Markov solver was read at the commit of HARK's draft pull request #1858, `03a2c7a1` on the
@@ -128,6 +128,163 @@ Markov rule. Read at `4c285e86`:
 - **Its stationary distribution** on a grid comes through `initialize_sym()` and the simulator's transition matrices;
   Harmenberg's measure is `norm = "G"`. In HARK's own lognormal constructor, `neutral_measure` tilts ψ's weights by ψ,
   and set before the solve it changes the policy.
+
+## The ontology's terms in HARK
+
+The [ontology of buffer-stock models](../../ontologies/buffer-stock-models/README.md) names no toolkit. What it said
+about HARK until 2026-11-01 is here: HARK's names for its terms, and where HARK departs from them. Both were read on
+HARK's main branch at `4c285e86`, of 2026-10-07, which the links below cite; a term is named by its row in the ontology.
+The departures keep the identifiers they had there, which the ontology now lists as retired.
+
+### HARK's names
+
+| the ontology's term | its kind | HARK |
+|---|---|---|
+| `with-blanchard-annuities`, buffer-stock model with Blanchard's annuities | model class | `AggShockConsumerType` |
+| `with-kinked-return`, buffer-stock model with a higher rate on borrowing | model class | `KinkedRconsumerType` |
+| `with-risky-asset`, buffer-stock model with a risky asset | model class | `PortfolioConsumerType` |
+| `market-resources`, market resources | object | `mNrm` |
+| `permanent-income`, permanent income | object | `pLvl` |
+| `bank-balances`, bank balances | object | `bNrm` |
+| `end-of-period-assets`, end-of-period assets | object | `aNrm` |
+| `consumption`, consumption | object | `cNrm` |
+| `permanent-shock`, permanent shock | object | `PermShk` |
+| `transitory-shock`, transitory shock | object | `TranShk` |
+| `crra`, relative risk aversion | object | `CRRA` |
+| `discount-factor`, discount factor | object | `DiscFac` |
+| `survival-prob`, survival probability | object | `LivPrb` |
+| `return-factor`, return factor | object | `Rfree` |
+| `growth-factor`, growth factor of permanent income | object | `PermGroFac` |
+| `unemployment-prob`, probability of unemployment | object | `UnempPrb` |
+| `income-unemployed`, income while unemployed | object | `IncUnemp` |
+| `borrowing-limit-artificial`, artificial borrowing constraint | object | `BoroCnstArt` |
+| `return-borrowing`, return factor on borrowing | object | `Rboro` |
+| `worst-income-prob`, probability of the worst income | object | `WorstIncPrb` |
+| `consumption-function`, consumption function | object | `cFunc` |
+| `borrowing-limit-natural`, natural borrowing constraint | object | `BoroCnstNat` |
+| `discount-factor-liv`, discount factor with survival | quantity | `DiscFacEff` |
+| `patience-abs-liv`, absolute patience factor with survival | quantity | `APFac` |
+| `patience-return-liv`, return patience factor | quantity | `RPFac` |
+| `patience-growth-liv`, growth patience factor | quantity | `GPFacRaw` |
+| `patience-growth-mod`, risk-modified growth patience factor | quantity | `GPFacMod` |
+| `patience-growth-mortality-adj`, mortality-adjusted growth patience factor | quantity | `GPFacLiv` |
+| `human-wealth-factor`, finite human wealth factor | quantity | `FHWFac` |
+| `human-wealth`, human wealth | quantity | `hNrm` |
+| `pf-value-of-autarky-factor`, perfect-foresight value-of-autarky factor | quantity | `PFVAFac` |
+| `value-of-autarky-factor`, value-of-autarky factor | quantity | `VAFac` |
+| `weak-return-patience-factor`, weak return patience factor | quantity | `WRPFac` |
+| `mpc-min`, limiting MPC as resources grow | quantity | `MPCmin` |
+| `mpc-max`, limiting MPC as resources fall to their lowest | quantity | `MPCmax` |
+| `aic`, absolute impatience | condition | `check_AIC` |
+| `ric`, return impatience | condition | `check_RIC` |
+| `wric`, weak return impatience | condition | `check_WRIC` |
+| `fhwc`, finite human wealth | condition | `check_FHWC` |
+| `pf-fvac`, perfect-foresight finite value of autarky | condition | `PerfForesightConsumerType.check_FVAC` |
+| `fvac`, finite value of autarky | condition | `IndShockConsumerType.check_FVAC` |
+| `gic`, growth impatience | condition | `check_GICRaw` |
+| `gic-mod`, strong growth impatience | condition | `check_GICMod` |
+| `gic-szeidl`, log growth impatience | condition | `check_GICSdl` |
+| `gic-harmenberg`, Harmenberg growth impatience | condition | `check_GICHrm` |
+| `gic-liv`, mortality-adjusted growth impatience | condition | `check_GICLiv` |
+| `target-exists`, an individual buffer-stock target | property | `mNrmTrg` |
+| `pseudo-target-exists`, a pseudo-target | property | `mNrmStE` |
+
+### Time and survival
+
+- **Time-varying parameters.** In a life-cycle model, HARK's entry t of `LivPrb` is the parameter of period t, and its
+  entry t of `Rfree`, `PermGroFac` and `IncShkDstn` the parameter of period t+1: both are the move from t to t+1, as
+  HARK's solvers read them
+  ([`ConsIndShockModel.py:650-662`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L650-L662)).
+  The ontology's life-cycle class binds each primitive to the stage occurrence that reads it, as the stage file does.
+- **Survival.** HARK's standard solver discounts by `DiscFac`·`LivPrb`
+  ([`ConsIndShockModel.py:376`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L376)),
+  so its rule depends on β and ℒ only through β̊, the ontology's identity `decision-problem-through-beta-eff`. The
+  Markov solver lets survival depend on the current state
+  ([`ConsMarkovModel.py:429`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsMarkovModel.py#L429),
+  [`ConsMarkovModel.py:583-588`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsMarkovModel.py#L583-L588)),
+  and the identity then holds state by state. `AggShockConsumerType` is the ontology's class with Blanchard's annuities
+  ([`ConsAggShockModel.py:269`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsAggShockModel.py#L269)),
+  where the identity fails.
+
+### Where HARK departs from the ontology's terms
+
+- **VAFac without survival** (BSM_0000138, a difference of meaning, in `value-of-autarky-factor`). HARK's VAFac leaves
+  out the survival probability ℒ that β̊ carries; draft pull request econ-ark/HARK#1855 adds it. Sources:
+  [`ConsIndShockModel.py:2553`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2553).
+- **Survival twice in GPFacLivMod** (BSM_0000139, a difference of meaning, in `patience-growth-mortality-adj`). HARK has
+  two mortality-adjusted factors. GPFacLiv, ℒ times GPFacRaw, with ℒ already in APFac, is ℒ Þ̊_𝒢, the GIC-Liv as the
+  owner ruled it on 2026-10-22, and HARK's check_GICLiv uses it. GPFacLivMod, named for the Modigliani scheme,
+  multiplies by ℒ again; no HARK check uses it. Sources:
+  [`ConsIndShockModel.py:2542-2543`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2542-L2543).
+- **No log target** (BSM_0000140, an absence, in `log-target-exists`). The paper says Econ-ARK computes the log target
+  m̃ as mBalLog; HARK's main branch computes no such value. Sources:
+  [`ConsIndShockModel.py:1975-1998`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L1975-L1998).
+  The paper: [collective-stability](https://llorracc.github.io/BufferStockTheory/#collective-stability).
+- **The natural limit from the atoms** (BSM_0000144, an approximation, in `borrowing-limit-natural`). HARK's classic
+  solvers compute the natural limit from the lowest atoms of the discretized laws; the paper and the ontology take it
+  from the true laws' infima. That is a difference between a reference approximation (the method, with its number of
+  atoms) and its target, not a difference of meaning: the atoms move the infimum, and so the limit. HARK's draft pull
+  request econ-ark/HARK#1862 computes it from the infima. Sources:
+  [`ConsIndShockModel.py:493`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L493),
+  [`ConsIndShockModel.py:511`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L511).
+  The paper: [borocnstnat](https://llorracc.github.io/BufferStockTheory/#borocnstnat).
+- **The PF-FVAC's message** (BSM_0000154, a difference of notation, in `pf-fvac`). HARK's perfect-foresight
+  value-of-autarky factor is computed as β ℒ 𝒢^(1−ϱ), with survival, but its message states the condition as β𝒢^(1−ϱ) <
+  1; its risk-modified VAFac leaves survival out. Sources:
+  [`ConsIndShockModel.py:1796`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L1796),
+  [`ConsIndShockModel.py:1716-1719`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L1716-L1719).
+- **The WRIC's message** (BSM_0000155, a difference of notation, in `wric`). HARK computes the weak return patience
+  factor as p_worst^(1/ϱ) Þ/R, as the paper states it, but its message writes the condition as ℘ Þ/R < 1, without the
+  power 1/ϱ. Sources:
+  [`ConsIndShockModel.py:2581`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2581),
+  [`ConsIndShockModel.py:2697-2700`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2697-L2700).
+- **The worst income's probability from the atoms** (BSM_0000156, an approximation, in `worst-income-prob`). HARK's
+  WorstPrb is the probability of the smallest product of the discretized laws' atoms. It is the paper's ℘ when the
+  unemployment event pays nothing; with a positive benefit and a continuous permanent shock it is ℘ divided by the
+  number of permanent-shock atoms, where the true law gives zero: a value of the reference approximation, which differs
+  from the target's. Sources:
+  [`ConsIndShockModel.py:2570-2578`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2570-L2578).
+- **Two human wealths** (BSM_0000157, a difference of notation, in `human-wealth`). HARK names two objects hNrm. The one
+  its condition report computes includes this period's income, the paper's h; the one each period's solution carries
+  excludes it, so its limit is h − 1. Sources:
+  [`ConsIndShockModel.py:2585`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2585),
+  [`ConsIndShockModel.py:296`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L296).
+- **The message when the RIC fails** (BSM_0000158, a difference of meaning, in `fvac-without-ric`). When the RIC fails,
+  HARK's consumer with shocks reports that the FHWC fails too. Within the class, where ϱ > 1, that follows only when the
+  FVAC holds: with Jensen's inequality the FVAC gives β̊ < 𝒢^(ϱ−1), the failing RIC gives β̊ ≥ R^(ϱ−1), and so R < 𝒢.
+  HARK prints it unconditionally, and also for ϱ < 1, outside the class, where even the FVAC does not make it true. It
+  also calls the consumer impatient where its perfect-foresight report calls the same failure patience. Sources:
+  [`ConsIndShockModel.py:2769`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2769),
+  [`ConsIndShockModel.py:1897`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L1897).
+- **The cyclical index in the solver and the simulation** (BSM_0000159, a difference of convention, in `period`). In
+  every HARK model the solution for period t takes the expectation over the shocks of the move from t to t+1, with the
+  rule of period t+1. What differs is which entry of the time-varying parameter lists holds that move's laws. A
+  life-cycle model's solver passes entry t, so entry k is the move out of k. A cyclical model's (cycles = 0 with several
+  periods in the cycle, or cycles > 1) passes entry t+1, so entry k is the move into k. The simulation reads entry s − 1
+  on the move into period s for every value of cycles: the income shocks, growth and the return. Where parameters vary
+  within a cycle, the simulation of a cyclical model reads them one period apart from its solution. HARK's four-period
+  example, init_cyclical, is meant as an infinite consumer but inherits cycles = 1, a life cycle, and as exported is
+  unaffected; HARK's tests give their cyclical dictionaries cycles = 0. The Markov consumer's simulation moves its chain
+  by the matrix at entry s − 1, with a comment calling it the matrix the solver used, which holds in a life cycle and
+  not in a cyclical model; HARK's changelog records the 2021 change as input parameters for cyclical models indexed by
+  t. The cyclical order came with HARK's commit 54083db5 of 2021-07-09 (issue econ-ark/HARK#1022, pull request #1039),
+  whose title gives its aim as entries that correspond to t. That commit moved the simulation of death to match and
+  rotated the example's growth by one, so the example's solution stayed the same. It left the simulation's shocks,
+  growth and return reading entry s − 1. The Markov consumer's simulation of death reads entry s − 1 for every value of
+  cycles. The owner ruled on 2026-10-31 that the solver and the simulation are to be consistent with each other, and
+  directed that the simulation side be fixed: on entering period s, entry s − 1 in a life cycle and entry s otherwise.
+  On 2026-11-01 he made clear that the ruling is their consistency, not a finding that the solver is right: the
+  simulation may be the one that is right now, though he thinks not. Until a fix lands in HARK, the two read the lists
+  one entry apart in a cyclical model. A stage file has neither convention: it binds each primitive to the stage
+  occurrence whose block reads it. Sources:
+  [`ConsIndShockModel.py:650-662`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L650-L662),
+  [`core.py:2457`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/core.py#L2457),
+  [`ConsIndShockModel.py:2275-2277`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L2275-L2277),
+  [`ConsIndShockModel.py:1531-1533`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L1531-L1533),
+  [`ConsIndShockModel.py:3143-3150`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsIndShockModel.py#L3143-L3150),
+  [`ConsMarkovModel.py:987-989`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsMarkovModel.py#L987-L989),
+  [`ConsMarkovModel.py:1057-1062`](https://github.com/econ-ark/HARK/blob/4c285e86/HARK/ConsumptionSaving/ConsMarkovModel.py#L1057-L1062),
+  [`CHANGELOG.md:470`](https://github.com/econ-ark/HARK/blob/4c285e86/docs/CHANGELOG.md#L470).
 
 ## The evidence
 

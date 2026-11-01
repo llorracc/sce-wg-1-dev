@@ -43,4 +43,19 @@ kept outside this public repository.
 - whether the perfect-foresight model is outside the class, as drafted, and the risky-asset model inside;
 - whether the schemas' keys carry the ontology's identifiers;
 - whether the atom axiom becomes a validity condition of bst/1, which would reject `toy-untruncated`;
-- which convention HARK's time-varying lists follow in a cyclical model, where its solver and its simulation disagree.
+- which convention HARK's time-varying lists follow in a cyclical model, where its solver and its simulation disagree:
+  decided after the memorial, below.
+
+**After the memorial:**
+- **17:55:53, in this session, the ontology in Bellman's terms.** The ontology is to be consistent with Bellman's
+  assumptions, recommended practices and notation. That consistency is to be established with the bellman session,
+  and through Matsya in particular. Any change Bellman needs goes through the session that makes Bellman's changes.
+- **19:38:51, in the HARK-dev session, relayed at 19:41:32 and checked where he typed it: the cyclical index.** Fix the
+  simulation side. As he made clear on 2026-11-01 at 10:05:57
+  ([the rulings of that day](2026-11-01_ontology-decisions.md)), the ruling is that the solver and the simulation be
+  consistent with each other. It does not find the solver right, and the simulation may be the one that is right now.
+- **22:17:58, in this session, the stage files' rewrite.** Rewrite both families' stage files with Bellman-SYM's
+  derivative terms, the line that defines marginal utility as the derivative of utility included. A proposal before a
+  schema change, as [[feedback_iterate-and-propose]] requires, so this is the owner's approval of it.
+- **22:23:51, "yes to both".** Open the pull request for the rewrite, which became #15 at 22:24:43, against the schemas'
+  branch. Add to the ontology the results that tell the natural and the artificial constraint apart.
