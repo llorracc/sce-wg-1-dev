@@ -1,0 +1,3 @@
+settings: {level: 2, nodes_per_shock: 15, transition_nodes_per_shock: 15, solve_grid_points: 600, solve_grid_min: 1.0e-06,
+  solve_grid_max: 200.0, solve_grid_nesting: 3, solve_tolerance: 1.0e-10, distribution_grid_points: 8000, distribution_grid_top: 120.0,
+  diagnostics_nodes_per_piece: 32}

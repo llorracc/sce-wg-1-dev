@@ -59,10 +59,11 @@ Settled on 2026-10-22 and removed from this list: Bellman's comparator integrati
 truncated lognormal at 21:56.
 
 | The design note's member table, which still names the family `hafiscal/1`, and its "Conditions" paragraph, which the conditions document's matrices supersede | 2026-10-22 | a proposal to the owner, under the rule that a schema document changes only after one |
-| The Jacobians' results-schema block, drafted as `bst/jacobians.schema.json`, into `results.schema.json`; then the checker's verifications and HARK's adapter writing the matrices | 2026-11-01 | the owner approves the block |
+| HARK's adapter writing the Jacobians block for the toy-hafiscal member | 2026-11-01 | the member's β's are estimated, and HARK runs from a branch carrying #1863 |
 | HARK's truncated lognormal, open draft econ-ark/HARK#1863, on which HARK's run of the toy-hafiscal suite depends | 2026-11-01 | #1863 merges, or the suite is run from a branch carrying it |
 | A stage file for laws written as atoms (`Discrete`) | 2026-11-01 | a member with discrete laws needs a calibration or a Bellman-SYM check |
-| A smaller probability for the restrained-limit suite's last rung, whose gap to the limit is still 0.027 | 2026-11-01 | the owner asks |
+| A smaller probability for the restrained-limit suite's last rung, whose gap to the limit is still 0.027 at every level | 2026-11-01 | the owner asks |
+| The restrained-limit suite run by the other toolkits on its request files, and compared with HARK's | 2026-11-01 | dolo's adapter exists |
 | Where HAFiscal's wealth-to-income target 6.60 is computed | 2026-11-01 | the HAFiscal-Latest session finds it |
 | The toy-hafiscal member's fit evaluated again on the delivered member with the family's newborn, since the estimation code's newborns differ | 2026-11-01 | the member is delivered |
 

@@ -145,9 +145,16 @@ saving time ended at 02:00 that morning). His words are kept outside this public
   own. Given tentatively, so open to change.
 - **17:21:37, "go ahead; memorialize":** the Jacobians' results-schema block to be drafted, and a memorial. Drafted as
   `bst/jacobians.schema.json`, outside `results.schema.json` until he approves it.
+- **17:26:21, "approve the Jacobians block".** Applied: the block folded into `bst/results.schema.json` as its key
+  `jacobians` (`$defs/Jacobians`), the draft file removed, and the checker's verification written
+  (`checker/jacobians.py`), run by `check.py --verify-results`.
+- **17:38:08, "start":** the experiment comparing the natural and the artificial constraint, the restrained-limit suite,
+  run with HARK's adapter, as this session proposed in answer to his question of 17:27:54; at 17:53:08, to open the
+  comparison when done.
+- **18:19:16, "memorialize".**
 
 **What stays open:**
-- the Jacobians' results-schema block, drafted, for the owner's approval; where the target 6.60 is computed; the estimation itself, which HAFiscal's tools do on the owner's word in that
+- HARK's adapter writing the Jacobians, from a branch carrying #1863, once the toy-hafiscal member exists; where the target 6.60 is computed; the estimation itself, which HAFiscal's tools do on the owner's word in that
   session;
 - whether the suite's smallest ℘ should be smaller: at 0.00005 the largest gap to the restrained rule is still 0.027;
 - members for HAFiscal's model as its current code solves it, and calibrations for the artificial stage file: their

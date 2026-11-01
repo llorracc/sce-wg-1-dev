@@ -1,7 +1,8 @@
 # The household block's Jacobians: a proposed interface
 
-**Status: DESIGN APPROVED, 2026-11-01 at 17:05:24 EST,** with the owner's decisions at the end. The results-schema
-block that writes it is not yet drafted, and no schema has changed. The owner asked at 16:37:49 for the interface to be
+**Status: APPROVED, 2026-11-01:** the design at 17:05:24 EST, with the owner's decisions below, and the results-schema
+block at 17:26:21. The block is the key `jacobians` of `bst/results.schema.json` (its `$defs/Jacobians`), and the checker's
+`checker/jacobians.py` verifies it. The owner asked at 16:37:49 for the interface to be
 drafted with the toolkits, looking at DolARK, HARK and HAFiscal. The QuantEcon, HAFiscal-Latest, HARK and HARK-dev
 sessions answered, the last two with the identities below measured on HARK's main branch at `4c285e86`.
 
@@ -259,13 +260,14 @@ turn off. The family's newborn does not, so the remaining difference is stated i
    there would need it; the owner ruled on 2026-10-21 that no QuantEcon module is published and that dolo's is next. So
    the toolkits that implement the interface are HARK, HAFiscal's code and, once its adapter exists, dolo.
 
-## The proposed results-schema block (DRAFT, for the owner's approval)
+## The results-schema block
 
-Drafted after the toolkits confirmed the grid and the format. Nothing below is part of the results schema yet.
+Drafted after the toolkits confirmed the grid and the format, and approved by the owner.
 
-- **Where it goes.** An optional top-level key `jacobians` of a buffer-stock results file, required in the toy-hafiscal
-  suite. Its validator is the draft [`bst/jacobians.schema.json`](bst/jacobians.schema.json). `results.schema.json`
-  would reference it as the value of `jacobians` once approved.
+- **Where it is.** An optional top-level key `jacobians` of a buffer-stock results file, required in the toy-hafiscal
+  suite, validated by [`bst/results.schema.json`](bst/results.schema.json)'s `$defs/Jacobians`. The draft validator it
+  was drafted as, `bst/jacobians.schema.json`, is folded in, so that one file validates a results file and readers that
+  load it alone need no registry.
 - **What it holds:**
   - T, the inputs and the outputs;
   - the conventions in words: each input's dating, the units, the measure, the newborns' assets, first-period draws and
@@ -289,16 +291,18 @@ Drafted after the toolkits confirmed the grid and the format. Nothing below is p
     relative paths and hashes;
   - the checker: the matrices' shapes, the files' hashes, the grid's hash, the flow budget, the steady state's budget,
     the present value, the first-period entries, homogeneity, and the structure.
-- **Tested in a scratch run on 2026-11-01:** the draft is a valid JSON Schema of draft 2020-12. A full example with 36
-  matrices validates, and four deliberate breaks are refused: a looser tolerance, an unknown input, an absolute path,
-  missing dating.
+- **Tested:** the results schema with the block is a valid JSON Schema of draft 2020-12. `checker/test_jacobians.py` writes
+  synthetic matrices that satisfy every identity, checks that they pass and that a results file holding them validates,
+  and checks that each break is caught: the return's term one row late, a transfer that misses newborns, a wrong hash, a
+  wrong grid, weights that do not sum to one, a wrong first-period MPC, a missing matrix, a matrix saved transposed, and
+  a looser tolerance.
 
-## What follows if it is approved
+## What follows
 
-- A results-schema block for the Jacobians and their metadata, with its validator, put to the toolkits again before it is
-  written, with the grid and the format for their confirmation that they can follow them.
-- The request's keys: T, the inputs, the outputs.
-- The checker's verification of the flow budget, the steady state's budget, the present value and the first-period
-  entries.
+- Done on 2026-11-01: the block in the results schema; the checker's verification of the files, the grid, the
+  households' income responses, the flow budget, the steady state's budget, the present value and the first-period
+  entries, run by `check.py --verify-results` when a results file holds the block.
+- The request's keys, `jacobians: {T, inputs, outputs, grid}`, written into the request file's validator when that is
+  written.
 - HARK's adapter writing the Jacobians through `make_basic_SSJ`, per type and in aggregate, with the neutral measure; and,
   if the optional tier is adopted, the shared harness.

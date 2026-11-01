@@ -76,8 +76,8 @@ Shared by every family:
   [ontology of probability distributions](../ontologies/probability-distributions/).
 - [`numerics.md`](numerics.md): method files, settings files and suites.
 - [`jacobians.md`](jacobians.md): the interface every toolkit follows for its sequence-space Jacobians in the
-  toy-hafiscal suite, its design approved on 2026-11-01, and the results-schema block drafted for it,
-  [`bst/jacobians.schema.json`](bst/jacobians.schema.json).
+  toy-hafiscal suite, approved on 2026-11-01: the results schema's key `jacobians`, which `checker/jacobians.py`
+  verifies.
 - [`rosetta/`](rosetta/README.md): the Rosetta Stones, one for each toolkit, which say how the toolkit solves a family's
   members as the stage file states them; begun for the buffer-stock families with HARK and QuantEcon's JAX code.
 - [`adapters/`](adapters/README.md): the adapters, one for each toolkit, which read a parameter file, solve the member with

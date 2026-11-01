@@ -85,6 +85,9 @@ def main(argv=None) -> int:
         problems = validate_results(results)
         if not problems:
             problems = member.verify_results(results)
+        if not problems and "jacobians" in results:
+            import jacobians
+            problems = jacobians.verify(results["jacobians"], args.verify_results.parent)
         if problems:
             print(f"{args.verify_results}: {len(problems)} problem(s)")
             for p in problems:

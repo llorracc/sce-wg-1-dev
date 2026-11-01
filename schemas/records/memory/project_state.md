@@ -1,6 +1,6 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 17:24 on 2026-11-01: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two test suites; the Jacobian interface designed and its block drafted; the ontology at draft.2, naming no toolkit"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 18:20 on 2026-11-01: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two test suites; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit suite run with HARK; the ontology at draft.2, naming no toolkit"
 metadata:
   type: project
 ---
@@ -52,10 +52,15 @@ model is a calibration of the buffer-stock families, and a Markov state only a w
 HAFiscal-Latest and QuantEcon sessions and DolARK's design, and approved at 17:05:24 on 2026-11-01. The Jacobians with
 their metadata are required in a results file, as `.npy` matrices; the fake-news ingredients are optional, as data. The
 inputs are the return, a scale on all non-capital income and a transfer proportional to permanent income; the outputs
-C, A and Y_hh; one distribution grid for every toolkit; a steady state to 10⁻¹⁰. The results-schema block is drafted as
-`bst/jacobians.schema.json`, outside the results schema until approved.
+C, A and Y_hh; one distribution grid for every toolkit; a steady state to 10⁻¹⁰. The block is the key `jacobians` of
+`bst/results.schema.json` (approved 17:26:21), and `checker/jacobians.py` verifies it.
 
-The checker's 169 tests, the adapter's 8 and the ontology's 67 pass.
+**The restrained-limit suite's first run** (`bst/suites/restrained-limit/`): common request files for its four members,
+and a comparison from results files alone. HARK's adapter at levels 1 to 3 shows the natural rules converging to the
+restrained one, the largest gap 0.137, 0.061 and 0.027 at the kink
+([the findings](../findings/2026-11-01_restrained-limit-suite-hark/README.md)).
+
+The checker's 180 tests, the adapter's 8 and the ontology's 67 pass.
 
 **Open pull request #15** (`stage-derivative-terms`, pushed, against the schemas' branch, opened 22:24:43 on
 2026-10-31): both families' stage files rewritten with Bellman-SYM's derivative terms, as the owner approved at 22:17:58.
@@ -199,7 +204,6 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
   refused as an external write;
 - `library` against the community library's published v0.1, whose laws are untruncated: a v0.2 of the description
   (recommended), a renamed member, or a note;
-- approving the Jacobians' results-schema block;
 - the estimation of the toy-hafiscal member, HAFiscal's to do on the owner's word in that session;
 - HARK's cyclical index: ruled on 2026-10-31 that solver and simulation be consistent, the simulation side to be fixed,
   made clear on 2026-11-01 not to find the solver right; the fix is the HARK-dev session's;
@@ -214,8 +218,8 @@ Registering `w3id.org/sce` is not raised before a pull request from this fork is
 ([[feedback_w3id-not-yet]]).
 
 **Next work:**
-- once the block is approved: the results schema's reference to it, the checker's verifications of the Jacobians, and
-  HARK's adapter writing them, from a branch carrying #1863;
+- HARK's adapter writing the Jacobians block, from a branch carrying #1863, once the toy-hafiscal member exists;
+- the other toolkits' runs of the restrained-limit suite, dolo's first;
 - the Markov family (ruled 21:42:05 on 2026-10-22), in collaboration with the HARK and HAFiscal sessions: its results
   document, validator and verification next, to the scope of 22:11:25, then HARK's adapter for its chains; its
   parameter validator, first members and checker are merged (#13);

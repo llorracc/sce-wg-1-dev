@@ -300,3 +300,38 @@ its memorial).
   for the owner's word in HAFiscal's session.
 - The checker's 169 tests, the ontology's 67 and the adapter's 8 pass.
 - Open with the owner: approving the block; the smallest ℘ of the first suite; `library` against v0.1; the push.
+- **17:25:20.** The owner asks for the draft validator to be opened in VS Code; opened.
+- **17:26:21.** "approve the Jacobians block".
+- **17:26–17:29.** Applied:
+  - the block folded into `results.schema.json` as text, under `$defs/Jacobians` with its helpers renamed `Jac…`, the
+    file's own `Sha256` reused, and the draft file removed. One file then validates a results file, and readers that
+    load it alone, the tests and HAFiscal's emitter among them, need no registry;
+  - `checker/jacobians.py` and its eleven tests, on synthetic matrices that satisfy every identity and on a break of
+    each check; `check.py --verify-results` runs it.
+
+  The checker's 180 tests pass.
+- **17:27:54.** The owner, mid-turn: is this session now prepared to construct the experiment for the comparison of the
+  natural and the artificial constraint?
+- **17:29–17:38.** Answered: the four members and HARK's adapter exist; what is missing is common comparison points, a
+  run at several levels, and the comparison. Proposed; the owner says "start" at 17:38:08.
+- **17:38–17:39.** The suite's folder, `bst/suites/restrained-limit/`, with `make_requests.py` and four request files of
+  the same 39 points, and `compare.py`.
+- **17:39:07–17:55:30.** HARK's adapter on the four members at levels 1, 2 and 3, twelve runs in parallel; each results
+  file validates and is consistent with its member.
+- **17:53:08.** The owner asks for the comparison to be opened when done.
+- **17:55–17:58.** The comparison: the largest gap 0.137, 0.061 and 0.027, at the restrained rule's kink, the same to
+  about 10⁻³ of itself at every level, falling by about 2.3 per decade of ℘; the natural members' mean MPC rising toward
+  the restrained 0.456. The figure's restrained rule is drawn over its common points as well as its dense ones, which
+  start at its lowest income. Recorded in `findings/2026-11-01_restrained-limit-suite-hark/` with the results files, and
+  opened in VS Code.
+- **18:19:16.** "memorialize".
+
+**State at the memorial (18:20):**
+- Everything since `60f2cf2` is in this memorial's commit, on `buffer-stock-ontology`, unpushed.
+- The Jacobians block is in the results schema, and the checker verifies it; HARK's adapter writes none yet, since the
+  toy-hafiscal member is not estimated and HARK needs #1863.
+- The restrained-limit suite has its common request files and comparison, and HARK's run at levels 1 to 3 is recorded:
+  the natural rules converge to the restrained rule, by about 2.3 per decade of ℘.
+- The checker's 180 tests and the ontology's 67 pass; the adapter is unchanged since its 8 passed.
+- Open with the owner: the toy-hafiscal estimation, in HAFiscal's session; a smaller fourth rung; `library` against
+  v0.1; the push.

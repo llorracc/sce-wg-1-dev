@@ -60,7 +60,8 @@
       "type": "object",
       "description": "Optional error estimates, in a tree that mirrors the value tree: errors.types[i].population.m.gl and so on.",
       "additionalProperties": true
-    }
+    },
+    "jacobians": { "$ref": "#/$defs/Jacobians" }
   },
 
   "$defs": {
@@ -490,6 +491,519 @@
         "income_measure": { "$ref": "#/$defs/IncomeMeasureBlock" },
         "welfare": { "$ref": "#/$defs/Welfare" },
         "marginal_welfare": { "$ref": "#/$defs/MarginalWelfare" }
+      }
+    },
+
+    "Jacobians": {
+      "description": "The sequence-space Jacobians and their metadata (../jacobians.md, approved 2026-11-01): optional, required in the toy-hafiscal suite. Column s of a matrix is the date at which its input's perturbed value applies, row t the date of the outcome, with news at date 0.",
+      "type": "object",
+      "required": [
+        "T",
+        "inputs",
+        "outputs",
+        "conventions",
+        "grid",
+        "method",
+        "steady_state",
+        "weights",
+        "matrices"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "T": {
+          "description": "The horizon, in periods: every matrix is T x T.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "inputs": {
+          "description": "The inputs, each a column index s of every matrix: the date at which its perturbed value applies.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "return",
+              "income_scale",
+              "transfer"
+            ]
+          }
+        },
+        "outputs": {
+          "description": "The outputs, each a row index t: C consumption, A end-of-period assets before that period's deaths, Y_hh the households' non-capital income, transfers included.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "C",
+              "A",
+              "Y_hh"
+            ]
+          }
+        },
+        "conventions": {
+          "description": "The conventions no matrix shows, stated so that the checker and a reader can verify them.",
+          "type": "object",
+          "required": [
+            "dating",
+            "units",
+            "measure",
+            "newborns",
+            "assets_of_the_dead"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "dating": {
+              "description": "For each input, in words, the date its value applies and to what; for example, for return: 'the gross return paid at the start of s on assets carried from s - 1'.",
+              "type": "object",
+              "minProperties": 1,
+              "propertyNames": {
+                "enum": [
+                  "return",
+                  "income_scale",
+                  "transfer"
+                ]
+              },
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "units": {
+              "const": "per capita, per unit of the steady state's aggregate permanent income"
+            },
+            "measure": {
+              "description": "The measure the distribution is pushed forward under.",
+              "enum": [
+                "income-weighted",
+                "per-capita"
+              ]
+            },
+            "newborns": {
+              "type": "object",
+              "required": [
+                "assets",
+                "first_period",
+                "receive_transfer"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "assets": {
+                  "description": "A newborn's assets, in units of its permanent income.",
+                  "type": "number"
+                },
+                "first_period": {
+                  "description": "In words, what a newborn draws in its first period, for example 'the employed branch of xi, psi drawn'.",
+                  "type": "string",
+                  "minLength": 1
+                },
+                "receive_transfer": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "assets_of_the_dead": {
+              "enum": [
+                "vanish",
+                "annuitized",
+                "bequeathed"
+              ]
+            }
+          }
+        },
+        "grid": {
+          "description": "The shared distribution grid on end-of-period assets: a_j = a_max ((x x) x) with x = j/(N - 1), in IEEE double precision.",
+          "type": "object",
+          "required": [
+            "N",
+            "a_max",
+            "exponent",
+            "nodes_sha256",
+            "mass_above_a_max"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "N": {
+              "type": "integer",
+              "minimum": 2
+            },
+            "a_max": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "exponent": {
+              "const": 3
+            },
+            "nodes_sha256": {
+              "description": "The SHA-256 of the N nodes as little-endian float64, in order.",
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "mass_above_a_max": {
+              "description": "Per type and in aggregate, the mass whose end-of-period assets exceed a_max, which the lottery puts at a_max.",
+              "$ref": "#/$defs/JacByType"
+            },
+            "clipped_output_mass": {
+              "description": "For a toolkit that bins an output on a grid of its own, the mass clipped at that grid's ends, per output.",
+              "type": "object",
+              "propertyNames": {
+                "enum": [
+                  "C",
+                  "Y_hh"
+                ]
+              },
+              "additionalProperties": {
+                "$ref": "#/$defs/JacByType"
+              }
+            }
+          }
+        },
+        "method": {
+          "type": "object",
+          "required": [
+            "name",
+            "baseline"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "enum": [
+                "fake-news",
+                "direct",
+                "automatic-differentiation"
+              ]
+            },
+            "step": {
+              "description": "The finite difference's step, in the input's units; absent for automatic differentiation.",
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "scheme": {
+              "enum": [
+                "forward",
+                "central"
+              ]
+            },
+            "baseline": {
+              "description": "What the perturbed path is differenced against.",
+              "enum": [
+                "steady-state",
+                "unperturbed-finite-horizon"
+              ]
+            }
+          }
+        },
+        "steady_state": {
+          "description": "The steady state the Jacobians linearize around.",
+          "type": "object",
+          "required": [
+            "tolerance",
+            "backward_step_residual",
+            "by_type",
+            "aggregate"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "tolerance": {
+              "description": "The steady-state solve's stopping tolerance; the suite requires 1e-10 or tighter.",
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1e-10
+            },
+            "backward_step_residual": {
+              "description": "The largest change in the policy from one backward step at the steady state.",
+              "type": "number",
+              "minimum": 0
+            },
+            "by_type": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/JacSteadyState"
+              }
+            },
+            "aggregate": {
+              "$ref": "#/$defs/JacSteadyState"
+            }
+          }
+        },
+        "weights": {
+          "description": "Each type's weight in the aggregate: its share of aggregate permanent income, in the order of the parameter file's types.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "matrices": {
+          "description": "One entry per output, input and type, and per output and input for the aggregate.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "output",
+              "input",
+              "type",
+              "path",
+              "sha256"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "output": {
+                "enum": [
+                  "C",
+                  "A",
+                  "Y_hh"
+                ]
+              },
+              "input": {
+                "enum": [
+                  "return",
+                  "income_scale",
+                  "transfer"
+                ]
+              },
+              "type": {
+                "description": "The 0-based index of the type, or 'aggregate'.",
+                "oneOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  {
+                    "const": "aggregate"
+                  }
+                ]
+              },
+              "path": {
+                "$ref": "#/$defs/JacPath"
+              },
+              "sha256": {
+                "$ref": "#/$defs/Sha256"
+              }
+            }
+          }
+        },
+        "ingredients": {
+          "description": "Optional: the fake-news ingredients on the toolkit's own grid of K nodes, from which a harness rebuilds the matrices.",
+          "type": "object",
+          "required": [
+            "K",
+            "transition",
+            "distribution",
+            "output_values",
+            "news"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "K": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "transition": {
+              "description": "The steady-state transition, K x K, as COO triplets: row i the node the mass leaves, rows summing to one, next period's distribution D Lambda.",
+              "$ref": "#/$defs/JacCoo"
+            },
+            "distribution": {
+              "description": "The steady-state distribution, K, as a .npy file.",
+              "$ref": "#/$defs/JacArrayFile"
+            },
+            "output_values": {
+              "description": "Each output's values at the K nodes.",
+              "type": "object",
+              "propertyNames": {
+                "enum": [
+                  "C",
+                  "A",
+                  "Y_hh"
+                ]
+              },
+              "additionalProperties": {
+                "$ref": "#/$defs/JacArrayFile"
+              }
+            },
+            "news": {
+              "description": "For each input and type: the first-period responses of each output, dY0 (T), and of the distribution, dD1 (T x K).",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "input",
+                  "type",
+                  "dY0",
+                  "dD1"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "input": {
+                    "enum": [
+                      "return",
+                      "income_scale",
+                      "transfer"
+                    ]
+                  },
+                  "type": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "dY0": {
+                    "type": "object",
+                    "propertyNames": {
+                      "enum": [
+                        "C",
+                        "A",
+                        "Y_hh"
+                      ]
+                    },
+                    "additionalProperties": {
+                      "$ref": "#/$defs/JacArrayFile"
+                    }
+                  },
+                  "dD1": {
+                    "$ref": "#/$defs/JacArrayFile"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "JacPath": {
+      "description": "A path relative to the results file, to a .npy file: version 1.0, little-endian float64 (int64 for indices), C order.",
+      "type": "string",
+      "pattern": "^[^/].*\\.npy$"
+    },
+    "JacArrayFile": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256",
+        "shape"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/JacPath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "shape": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "JacCoo": {
+      "description": "A sparse array as three .npy files: 0-based int64 rows and columns and float64 values, in row-major order, sorted, with no pair repeated and no explicit zero.",
+      "type": "object",
+      "required": [
+        "shape",
+        "rows",
+        "cols",
+        "values"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "shape": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "rows": {
+          "$ref": "#/$defs/JacArrayFile"
+        },
+        "cols": {
+          "$ref": "#/$defs/JacArrayFile"
+        },
+        "values": {
+          "$ref": "#/$defs/JacArrayFile"
+        }
+      }
+    },
+    "JacByType": {
+      "type": "object",
+      "required": [
+        "by_type",
+        "aggregate"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "by_type": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "aggregate": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "JacSteadyState": {
+      "type": "object",
+      "required": [
+        "C",
+        "A",
+        "Y_hh",
+        "R",
+        "survival",
+        "rho",
+        "mass_at_constraint",
+        "mpc_mean_population",
+        "mpc_mean_income"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "C": {
+          "type": "number"
+        },
+        "A": {
+          "type": "number"
+        },
+        "Y_hh": {
+          "type": "number"
+        },
+        "R": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "survival": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "rho": {
+          "description": "R times survival: the factor that turns this period's A into next period's resources.",
+          "type": "number"
+        },
+        "mass_at_constraint": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "mpc_mean_population": {
+          "type": "number"
+        },
+        "mpc_mean_income": {
+          "description": "The mean MPC under the income measure, which J^{C,transfer}[0,0] equals.",
+          "type": "number"
+        }
       }
     }
   }

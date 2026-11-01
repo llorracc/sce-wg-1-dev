@@ -315,8 +315,11 @@ All four have BST's calibration (its table "Microeconomic Model Calibration"): a
 ξ_u = 0. They differ only in ℘ and the constraint, which the checker's tests confirm. A toolkit passes when each rung's
 rule is closer to the restrained rule than the rung before.
 
-Solved with the HARK adapter's own route at precision level 1, on 2026-11-01, the largest gap between a rung's rule and
-the restrained rule over m in (0, 10] is 0.138, 0.061 and 0.027 for the three rungs. It is largest at m ≈ 0.98, the
+The suite's request files, one per member with the same comparison points, and the comparison script are in
+[`suites/restrained-limit/`](suites/restrained-limit/README.md). HARK's adapter ran it at levels 1 to 3 on 2026-11-01
+([the findings](../records/findings/2026-11-01_restrained-limit-suite-hark/README.md)): the largest gap at level 3 is
+0.137, 0.061 and 0.027 for the three rungs, nearly the same at every level. Solved at level 1 over m in (0, 10], the gap
+was 0.138, 0.061 and 0.027 for the three rungs. It is largest at m ≈ 0.98, the
 restrained rule's kink, and falls by a factor of about 2.3 for each tenfold fall in ℘. That route is HARK's Markov
 consumer with two states, employed and the zero-income event, whose chain is not persistent. It implements either
 scenario without changing HARK's i.i.d. solver.
