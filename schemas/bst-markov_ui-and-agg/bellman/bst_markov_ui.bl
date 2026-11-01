@@ -2,7 +2,9 @@
 # stage for one type of one group whose laws of ψ and θ are LogNormal, in the
 # notation of Buffer Stock Theory (sce-wg-1-dev
 # schemas/hafiscal-models-and-test-suite.md, "The paper's model as a family").
-# Written by hand on 2026-10-18.
+# Written by hand on 2026-10-18; on 2026-10-31 the marginal values are read as
+# derivative terms, D_{m}V, D_{k}V[<] and D_{a}V[>], and 𝑑𝑢 as the derivative
+# of 𝑢, as Bellman-SYM writes them.
 # Two Markov states: the macro regime reg, drawn first, with normal absorbing;
 # then the employment state j, whose row the previous state selects and whose
 # probabilities the current regime selects. Employed income is e θ; the
@@ -49,7 +51,7 @@ j ~ Categorical(((1 - (sep_n, sep_r)[reg], (sep_n, sep_r)[reg], 0, 0), ((find_n,
 θ ~ LogNormal(-(σ_θ^2)/2, σ_θ)   :: ["mean-one employed draw; drawn but unused when unemployed"]
 
 𝑢(c : ℝ₊₊) := c^(1-ϱ)/(1-ϱ)       :: [id=util]
-𝑑𝑢(c : ℝ₊₊) := c^(-ϱ)             :: [id=marg_util]
+𝑑𝑢     := D_{c}(𝑢)                 :: [id=marg_util]
 𝒞(x : Xm) := (0, x - max(a_Art, a_Nat)]   :: [id=feasible]
 
 [id=arvl_to_dcsn, (k : Xa, j_prev : J, reg_prev : Reg, reg, j, ψ, θ) : !arvl -> (m : Xm, j_d : J, reg_d : Reg) : !dcsn] {
@@ -66,17 +68,17 @@ j ~ Categorical(((1 - (sep_n, sep_r)[reg], (sep_n, sep_r)[reg], 0, 0), ((find_n,
     reg_c = reg_d                     :: [id=regime]
 }
 
-[id=cntn_to_dcsn, (V[>] : ℝ @ !vlu, c) : !cntn -> (V : ℝ @ !vlu, dV : ℝ₊₊ @ !mrgnvl) : !dcsn] {
-    V  = 𝑢(c) + β*ℒ*V[>]              :: [id=value]
-    dV = 𝑑𝑢(c)                        :: [id=marginal]
+[id=cntn_to_dcsn, (V[>] : ℝ @ !vlu, c) : !cntn -> (V : ℝ @ !vlu) : !dcsn] {
+    V      = 𝑢(c) + β*ℒ*V[>]          :: [id=value]
+    D_{m}V = 𝑑𝑢(c)                    :: [id=marginal]
 }
 
-[id=dcsn_to_arvl, (V, dV) : !dcsn -> (V[<] : ℝ @ !vlu, dV[<] : ℝ₊₊ @ !mrgnvl) : !arvl] {
-    V[<]  = E_{reg,j,ψ,θ}(((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[j]*ψ)^(1-ϱ) * V)         :: [id=value]
-    dV[<] = E_{reg,j,ψ,θ}(R * ((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[j]*ψ)^(-ϱ) * dV)     :: [id=marginal]
+[id=dcsn_to_arvl, (V) : !dcsn -> (V[<] : ℝ @ !vlu) : !arvl] {
+    V[<]      = E_{reg,j,ψ,θ}(((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[j]*ψ)^(1-ϱ) * V)             :: [id=value]
+    D_{k}V[<] = E_{reg,j,ψ,θ}(R * ((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[j]*ψ)^(-ϱ) * D_{m}V)     :: [id=marginal]
 }
 
-[id=policy, (V[>] : ℝ @ !vlu, dV[>] : ℝ₊₊ @ !mrgnvl) : !cntn -> (c : ℝ₊₊ @ !ctrl) : !dcsn] {
+[id=policy, (V[>] : ℝ @ !vlu) : !cntn -> (c : ℝ₊₊ @ !ctrl) : !dcsn] {
     c     = argmax_{cp : 𝒞(m)}(𝑢(cp) + β*ℒ*V[>])   :: [id=optimality, !doc]
-    𝑑𝑢(c) = β*ℒ*dV[>] ⟂ m - c >= max(a_Art, a_Nat)   :: [id=euler]
+    𝑑𝑢(c) = β*ℒ*D_{a}V[>] ⟂ m - c >= max(a_Art, a_Nat)   :: [id=euler]
 }
