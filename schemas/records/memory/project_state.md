@@ -172,6 +172,10 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
   - the ontology's identifiers on the schemas' keys, and the atom axiom as a bst/1 validity condition;
   - what a Rosetta Stone holds, against which HARK's moved section is judged;
   - three points left by Ma, Stachurski and Toda;
+- the push of `buffer-stock-ontology` and the scenarios' draft pull request, which this session's permission check
+  refused as an external write;
+- `library` against the community library's published v0.1, whose laws are untruncated: a v0.2 of the description
+  (recommended), a renamed member, or a note;
 - HARK's cyclical index: ruled on 2026-10-31 that solver and simulation be consistent, the simulation side to be fixed,
   made clear on 2026-11-01 not to find the solver right; the fix is the HARK-dev session's;
 - #15, to merge;

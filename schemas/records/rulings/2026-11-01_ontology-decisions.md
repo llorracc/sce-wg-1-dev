@@ -64,8 +64,13 @@ saving time ended at 02:00 that morning). His words are kept outside this public
     with the Markov family's artificial and zero-infima versions;
   - `a_Art` left out of the zero-infima scenario;
   - PF-FVAC renamed FVAC-PF in the schemas.
+- **13:32:13, "memorialize".**
 
 **What stays open:**
+- `library` against the community library's published description, v0.1, with untruncated laws: a v0.2 of the
+  description with truncated laws, which is the community library's session's to write in `llorracc/community-library`;
+  a renamed member; or a note;
+- the push of `buffer-stock-ontology` and its draft pull request, refused by the session's permission check;
 - what belongs in a Rosetta Stone, against which the HARK section moved there is to be judged. The owner offered a fuller
   account of a stone's scope;
 - the existence of a solution in the natural scenario with a positive benefit, conjectured and not proved, and in the

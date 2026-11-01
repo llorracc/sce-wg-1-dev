@@ -72,16 +72,26 @@ its memorial).
 - The issue on the WRIC is open in the paper's repository.
 - The open decisions are in the rulings and the deferred follow-ups.
 
-- **After the commit.** The community library's session notes that its published model description, v0.1, states
-  untruncated laws, so the truncated `library` is no longer its model as published; put to the owner. HAFiscal-Latest
-  corrects this session's message to it: it had not advised leaving `borrowing_constraint` out of the zero-infima
-  members, which is the owner's decision, and it cautions that a solver taking the natural limit from atoms would let
-  agents borrow. The families' documents now say that the zero-infima stage files impose a ≥ 0 themselves, and that a
-  toolkit imposes it as stated. HAFiscal's emitter hardcodes the old family key and folder; that session has told the
-  owner.
+- **13:25:11.** The scenarios are committed on `buffer-stock-ontology`. The push and the draft pull request against
+  the schemas' branch are refused by the session's permission check as an external write, and wait for the owner. The
+  sessions whose work reads the families are told: HAFiscal-Latest (its emitter's family keys, FVAC-PF and the binding
+  case's wording) and the community library's (the `library` member truncated, its new path and calibration).
+- **13:26:39.** The community library's session notes that its published model description, v0.1, states untruncated
+  laws, so the truncated `library` is no longer its model as published, and its results will differ slightly from its
+  HARK solution's. Put to the owner, with three options: a v0.2 of the description with truncated laws (recommended), a
+  renamed member, or a note. Under the rulings the untruncated model, with its zero-income event, is in no scenario.
+- **13:27:45.** HAFiscal-Latest corrects this session's message to it: it had not advised leaving `borrowing_constraint`
+  out of the zero-infima members, which is the owner's decision. It cautions that a solver taking the natural limit from
+  atoms would let agents borrow. Both families' model documents now say that the zero-infima stage files impose a ≥ 0
+  themselves and that a toolkit imposes it as stated; the commit is amended at 13:28:22 as `5cdda98`. HAFiscal's emitter
+  hardcodes the old family key and folder; that session has told the owner.
+- **13:31:21.** The owner asks where a revision of the library's description to v0.2, and its push, would be done. The
+  answer: in neither this session nor the working group's, but in `llorracc/community-library`, by its own session. That
+  repository is public, so a relay can carry the commit and not the push, which needs his word in that session.
+- **13:32:13.** "memorialize".
 
-**State at the end of the afternoon:** the scenarios applied and committed on `buffer-stock-ontology`, unpushed: the push
-and the draft pull request against the schemas' branch were refused by the session's permission check as an external
-write, and wait for the owner. #15 stays open. The sessions whose work reads the families are told:
-HAFiscal-Latest (its emitter's family keys, FVAC-PF and the binding case's wording) and the community library's (the
-`library` member truncated, its new path and calibration).
+**State at the memorial (13:33):**
+- The scenarios and the memorials are committed on `buffer-stock-ontology` and unpushed; the push and the draft pull
+  request wait for the owner's permission.
+- #15 stays open.
+- Open with the owner: `library` against the community library's v0.1.

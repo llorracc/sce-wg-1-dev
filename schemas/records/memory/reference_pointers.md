@@ -68,3 +68,9 @@ metadata:
   `schemas/rosetta/hark.md`, section "The ontology's terms in HARK".
 - HARK's draft econ-ark/HARK#1869: the continuous path, expectations by quadrature over the true truncated laws. HARK's
   kink-split page, https://econ-ark.github.io/HARK-dev/kink-split-quadrature/, is public; the HARK-dev repository is not.
+- The community library's buffer-stock model description: `models/buffer-stock/model-description.md`, version 0.1, in
+  `llorracc/community-library`, a public fork of QuantEcon/community-library whose push to QuantEcon is disabled. It has
+  its own session; a change there is that session's, and a push needs the owner's word in it.
+- HAFiscal's emitter of results files in this schema's form is `Code/HA-Models/bst_bench/schema_results.py` in
+  HAFiscal-Latest; it writes the retired family key `bst/1` and reads `bst-1/` until the HAFiscal session updates it.
+
