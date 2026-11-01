@@ -2,7 +2,7 @@
 
 Draft, begun on 2026-10-21 and revised on 2026-10-22 and 2026-11-01; see the [Rosetta Stones](README.md). The toolkit is
 HARK's `MarkovConsumerType`, as [HARK's adapter](../adapters/hark/README.md) uses it: on the nonpersistent chain, which
-writes a buffer-stock member as a member of the [Markov family](../bst-markov_ui-and-agg/model.md).
+writes the buffer-stock families' unemployment event as a state.
 - **Where it was read.** The Markov solver was read at the commit of HARK's draft pull request #1858, `03a2c7a1` on the
   fork `llorracc/HARK`. The adapter's pin is `11852805`, the head of draft econ-ark/HARK#1862, stacked on it,
   which computes the natural borrowing constraint from the laws' infima. HARK's standard consumer,

@@ -325,11 +325,10 @@ scenario without changing HARK's i.i.d. solver.
 
 The second suite every toolkit's solution is to be run on is a simplified HAFiscal, `toy-hafiscal`, specified by the
 owner on 2026-11-01:
-- **The model.** `bst-artificial/1` with the values of the Markov family's `iid-ui-artificial` for everything but the
-  discount factors: quarterly; unemployment with probability 0.05 every quarter, whatever the last, paying 0.5 of
+- **The model.** `bst-artificial/1` with the values of
+  [`iid-ui-artificial`](artificial/members/iid-ui-artificial.yaml) for everything but the discount factors: quarterly; unemployment with probability 0.05 every quarter, whatever the last, paying 0.5 of
   permanent income; employed income scaled to mean one; the toy's laws, truncated at three standard deviations, and its
-  growth, survival, return and ϱ; a ≥ 0. There is one group, no splurge and no recession. Its counterpart in the Markov
-  family is `iid-ui-artificial` with the same types.
+  growth, survival, return and ϱ; a ≥ 0. There is one group, no splurge and no recession.
 - **The types.** Three discount-factor types with equal shares, set by a center β and a spread ∇: the midpoints of
   three equal parts of [β − ∇, β + ∇], that is β − 2∇/3, β and β + 2∇/3, as HAFiscal sets its seven.
 - **The calibration.** HARK's and HAFiscal's tools choose (β, ∇) to match HAFiscal's targets for the Lorenz curve of
@@ -361,7 +360,15 @@ which has one population and a one-quarter unemployment event):
   of quarterly permanent income. The paper describes prizes drawn across Fagereng, Holm and Natvik's sizes; the code's
   switch for that never runs.
 
-These choices are the owner's, of 2026-11-01. Not yet settled:
+These choices are the owner's, of 2026-11-01.
+
+**The newborn.** The member states the family's newborn: born employed, at permanent income 1 with no assets, with the
+employed branch of ξ. The published estimation code leaves HARK's newborn settings at their defaults: its newborns draw
+a first permanent shock and growth, take a transitory shock of exactly 1, and start with assets of 1e-5. A fit reported
+under that convention is for a slightly different stationary population, so the fit is to be evaluated again on the
+delivered member, as HARK's adapter solves it with the family's newborn.
+
+Not yet settled:
 - where the 6.60 is computed: the paper states it, and the package's data script does not produce it;
 - what a toolkit exposes for the Jacobians, a change to what results carry that is to be drawn up with the toolkits and
   put to the owner before it is made.

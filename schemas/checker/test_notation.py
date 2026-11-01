@@ -24,8 +24,6 @@ FAMILIES = {  # each family's stage file, and the model documents whose notation
     **{f"bst-{s}": (f"bst/{d}/bellman/{s}.bl", ["bst/model.md"])
        for s, d in (("natural", "natural"), ("natural-no-point-mass", "other/natural-no-point-mass"),
                     ("artificial", "artificial"), ("zero-infima", "other/zero-infima"))},
-    "bst-markov_ui-and-agg-artificial": ("bst-markov_ui-and-agg/artificial/bellman/artificial.bl",
-                                         ["bst/model.md", "bst-markov_ui-and-agg/model.md"]),
 }
 
 

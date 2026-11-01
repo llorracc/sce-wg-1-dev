@@ -77,7 +77,8 @@ def validate(data) -> list[str]:
     family = data.get("family") if isinstance(data, dict) else None
     if family not in FAMILIES:
         return [f"family: {family!r} is not one of the buffer-stock families {sorted(FAMILIES)}; bst/1 is retired, its "
-                "members split by borrowing-constraint scenario (constraint-scenarios.md)"]
+                "members split by borrowing-constraint scenario (constraint-scenarios.md), and the Markov family "
+                "bst-markov_ui-and-agg is retired, its one-state members being calibrations of these families"]
     problems = []
     for error in sorted(_validator(family).iter_errors(data), key=lambda e: list(e.absolute_path)):
         path = "/".join(str(p) for p in error.absolute_path) or "/"

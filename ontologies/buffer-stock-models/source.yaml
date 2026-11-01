@@ -77,6 +77,10 @@ retired:
   # zero-infima scenario. Its published package solves on lognormals' atoms, whose floors are positive, under a >= 0,
   # which is the artificial scenario.
   - BSM_0000229
+  # The family row of bst-markov_ui-and-agg-artificial/1, retired on 2026-11-01 with the Markov family: its one-state
+  # unemployment model is a calibration of the buffer-stock families, and writing unemployment as a Markov state is a
+  # way to solve it, not a model of its own.
+  - BSM_0000228
   # Divergences of a toolkit from the ontology's terms, moved on 2026-11-01 to that toolkit's Rosetta Stone, since the
   # ontology names no toolkit.
   - BSM_0000138
@@ -1678,15 +1682,6 @@ families:
       The schemas' family for the zero-infima scenario, with lognormals and no stated artificial constraint, since a ≥ 0
       is the natural one.
     schema: ../../schemas/bst/other/zero-infima/parameters.schema.json
-  - id: BSM_0000228
-    name: bst-markov-ui-and-agg-artificial-1
-    label: "the schemas' family bst-markov_ui-and-agg-artificial/1"
-    writes: [with-markov-states, with-artificial-constraint, liquidity-constrained, with-survival, with-positive-benefit, with-types]
-    definition: >-
-      The Markov family, HAFiscal's household as its code solves it, with laws of strictly positive floors and a ≥ 0: Markov
-      employment and benefit expiry, an aggregate regime, groups of types, a level law for the newborn and the splurge
-      as an observation map.
-    schema: ../../schemas/bst-markov_ui-and-agg/artificial/parameters.schema.json
 
 divergences:
   - id: BSM_0000141

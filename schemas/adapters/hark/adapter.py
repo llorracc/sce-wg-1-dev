@@ -13,8 +13,8 @@ How the member is solved.
      adapter's effective member (effective-member.md). The results file reports that member's expectations, lowest values
      and derived parameters, decides every condition of conditions.md on it, and takes every status from those verdicts.
   3. Each type is solved by HARK's MarkovConsumerType with two employment states, employed and unemployed, and identical
-     rows: unemployment with probability wp whatever the previous state, the nonpersistent chain that writes a buffer-stock member as a
-     member of the Markov family. The employed state's income is the scaled employed draw, the unemployed state's the
+     rows: unemployment with probability wp whatever the previous state, the nonpersistent chain that writes the
+     buffer-stock families' unemployment event as a state. The employed state's income is the scaled employed draw, the unemployed state's the
      income while unemployed xi_u; psi is drawn in both. The two states' rules must then be the same function of m, which
      the adapter asserts. The rule is cubic Hermite and the value function is on.
   4. The stationary population, under the population measure and, when the adapter's verdicts say it exists, the income

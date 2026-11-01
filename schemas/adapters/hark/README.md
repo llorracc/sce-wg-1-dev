@@ -24,8 +24,8 @@ HARK's release 0.17.2 does not declare its dependency on sympy, hence `--with sy
 
 ## How it solves a member
 
-HARK solves a buffer-stock household with its `MarkovConsumerType` on the nonpersistent chain, which is how the [Markov
-family](../../bst-markov_ui-and-agg/model.md) writes a buffer-stock member. The chain has two employment states,
+HARK solves a buffer-stock household with its `MarkovConsumerType` on the nonpersistent chain, which writes the
+buffer-stock families' unemployment event as a state. The chain has two employment states,
 employed and unemployed, and both rows of its matrix are (1 − ℘, ℘): unemployment with probability ℘ whatever the
 previous state.
 - **Income in each state.** Employed income is ψ times the employed draw scaled by (1 − ℘ξ_u)/(1 − ℘). Unemployed income
@@ -41,7 +41,7 @@ The adapter asserts three things after each solve:
 - The two states' rules and values agree to 1e-12 relative.
 - The two states' lower limits are equal, and equal to the effective member's constraint in force.
 
-The same machinery then solves the Markov family, whose chains differ only in the matrix and the incomes.
+The same machinery would solve a persistent chain, which would differ only in the matrix and the incomes.
 
 **Why the pin.** Released HARK interpolates each next state's expected marginal value on a grid starting at that state's
 own natural limit and evaluates it on the current state's grid. When the states' worst incomes differ, as here, that

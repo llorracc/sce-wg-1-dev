@@ -122,17 +122,20 @@ saving time ended at 02:00 that morning). His words are kept outside this public
 - **15:57:06, the toy-hafiscal targets completed, and "memorialize".** The toy also targets the ratio of liquid wealth
   to quarterly income, 6.60, with the published objective's block for it; the wealth-quartile block is left out. Every
   winner gets the same prize, as the published code has it. Then a memorial.
+- **16:10:29 and 16:16:38, the Markov family retired.** The four-state family is to be retired and replaced with the
+  one-state version, under a name distinct from HARK's tools. Asked why a new name was needed, the owner answered that
+  what he asked for is a particular calibration of the artificial-constraint model. Applied: `bst-markov_ui-and-agg`, its
+  stage file, schemas, documents, members and checker module are retired; `iid-ui-artificial` is a `bst-artificial/1`
+  member, the toy with ℘ = 0.05 and ξ_u = 0.5. It supersedes the morning's two versions and this afternoon's one.
+- **16:17:30 and 16:17:44, no version with zero unemployment income was asked for.** This session had offered a natural
+  counterpart of `iid-ui-artificial` paying zero; none is built.
+- **16:33:50, "memorialize".**
 
 **What stays open:**
 - what a toolkit exposes for its Jacobians in the toy-hafiscal suite, to be drawn up with the toolkits and put to the
   owner; where the target 6.60 is computed; the estimation itself, which HAFiscal's tools do on the owner's word in that
   session;
 - whether the suite's smallest ℘ should be smaller: at 0.00005 the largest gap to the restrained rule is still 0.027;
-- what becomes of the Markov family as built, with four persistent employment states, the regime, groups and the
-  splurge, now that the device is one non-persistent disaster state: retired, with the device recorded as a way to
-  implement buffer-stock members; rebuilt as the two-state device; or kept beside it. The members for BST's experiment,
-  a `bst-natural/1` ladder with ξ_u = 0 and ℘ shrinking against a restrained `bst-artificial/1` member, wait on the
-  ladder's values;
 - members for HAFiscal's model as its current code solves it, and calibrations for the artificial stage file: their
   values are unpublished, and wait for the owner's word that they may go into this public repository. The published
   package's atoms have no stage file;

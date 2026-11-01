@@ -107,24 +107,11 @@ The four buffer-stock families, which replaced `bst/1` on 2026-11-01, one for ea
 - [`checker/`](checker/README.md): the checker, which validates and hashes a parameter file, checks its scenario's
   requirements, and evaluates the family's conditions, domain rules and implications.
 
-The Markov family, HAFiscal's household problem, begun stage-file first: `bst-markov_ui-and-agg-artificial/1`, in
-[`bst-markov_ui-and-agg/`](bst-markov_ui-and-agg/), the artificial scenario, which is what HAFiscal's code solves:
-- [`artificial/`](bst-markov_ui-and-agg/artificial/) holds its parameter file's validator, its stage file and its
-  members: `paper-published` and `paper-one-group`, the published package as its code solves it, on the atoms of its
-  laws, and `iid-ui-artificial`, one unemployment state that does not persist, with probability 0.05, benefit 0.5 and
-  a ≥ 0;
-- [`bst-markov_ui-and-agg/model.md`](bst-markov_ui-and-agg/model.md): the model schema, read from the stage files, with the
-  groups, the newborn's level law, the splurge as an observation map, the regime, the parameter file and the reduction to
-  the buffer-stock families;
-- [`bst-markov_ui-and-agg/conditions.md`](bst-markov_ui-and-agg/conditions.md): the buffer-stock families' conditions
-  carried over to the chain, each as a condition on a matrix over the states that reduces to theirs under `continues`;
-  the natural borrowing constraint by state; the levels' tail exponent; the employment marginal that born-employed
-  newborns imply;
-- [`bst-markov_ui-and-agg/parameters.common.schema.json`](bst-markov_ui-and-agg/parameters.common.schema.json): the
-  definitions the two versions share. The members are the benchmark's toy written in the family (artificial), and the
-  paper's high-school group alone and its published calibration (zero-infima, by their stated lognormal laws). The
-  checker's module for the family, `checker/markov.py`, computes the stated member's conditions, limits and
-  implications. Its results schema is not yet written; the design is in the note below.
+The Markov family, `bst-markov_ui-and-agg`, is retired (2026-11-01). Its one-state unemployment model is a calibration
+of the buffer-stock families, such as [`bst/artificial/members/iid-ui-artificial.yaml`](bst/artificial/members/iid-ui-artificial.yaml),
+and writing unemployment as a Markov state is a way to solve it, as HARK's adapter does. Its four-state version, with
+HAFiscal's benefit countdown, regime, groups and splurge, and the paper's members written in it, are in the
+repository's history.
 
 Design notes:
 - [`constraint-scenarios.md`](constraint-scenarios.md): approved on 2026-11-01: the four borrowing-constraint scenarios,
@@ -137,7 +124,8 @@ Design notes:
   used, trusted to compute them in its own representation; the checker verifies what needs no representation and keeps
   the stated member's closed-form limits where the law admits them.
 - [`hafiscal-models-and-test-suite.md`](hafiscal-models-and-test-suite.md): how the schemas describe HAFiscal's household
-  models, the family `bst-markov_ui-and-agg/1` they need, and the test suite over members, methods and settings.
+  models, the family `bst-markov_ui-and-agg/1` it proposed (retired on 2026-11-01), and the test suite over members,
+  methods and settings.
 
 Not yet written: the validators for the method, settings, suite and request files; the method registry; and the checker's
 reading of a results file's values against the request file's points. Its reading of a results file's report on the

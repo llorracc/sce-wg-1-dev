@@ -560,3 +560,21 @@ def test_the_restrained_limit_suite_differs_only_in_the_zero_income_event_and_th
     member = Member(restrained)
     assert member.a_art == 0.0 and member.natural_borrowing_constraint() < 0.0
     assert Member(files["0.005"]).hash == load_member(MEMBER["library"]).hash
+
+
+def test_iid_ui_artificial_is_the_toy_with_its_unemployment():
+    # The one-state unemployment model of the toy-hafiscal suite (bst/model.md): the toy with unemployment of probability
+    # 0.05 paying 0.5, and a >= 0; everything else is the toy's.
+    toy = load_strict(MEMBER["toy"].read_text())
+    member = load_strict((BST / "artificial" / "members" / "iid-ui-artificial.yaml").read_text())
+    toy["income"]["unemployment"] = {"prob": 0.05, "income": 0.5}
+    assert member == toy
+    m = Member(member)
+    assert m.a_art == 0.0 and m.natural_borrowing_constraint() < 0.0
+
+
+def test_the_retired_markov_family_is_refused():
+    data = load_strict(MEMBER["toy"].read_text())
+    data["family"] = "bst-markov_ui-and-agg-artificial/1"
+    with pytest.raises(MemberError, match="Markov family"):
+        Member(data)

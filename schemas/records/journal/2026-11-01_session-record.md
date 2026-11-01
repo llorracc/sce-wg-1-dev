@@ -195,3 +195,32 @@ its memorial).
 - The checker's 192 tests, the ontology's 64 and the adapter's 8 pass; every stage file elaborates.
 - Open with the owner: the four-state Markov family's fate; the Jacobian interface; the smallest ℘ of the first suite;
   `library` against v0.1; the push.
+
+- **16:10:29.** The owner: retire the four-state Markov family, replace it with the one-state version, and propose a name
+  distinct from HARK's tools. HARK's source is searched: its tools are the `…ConsumerType` classes and `Cons…Model`
+  modules, none called "disaster". Proposed `bst-unemployment-state/1`, with the question what it states that the
+  buffer-stock families cannot.
+- **16:16:38.** The owner: why a new name, when it is a calibration of the artificial-constraint model? Agreed.
+- **16:17:30 and 16:17:44.** The owner, mid-turn: no version with zero unemployment income was asked for. Answered that
+  none is built; the members with zero unemployment income are the restrained-limit suite's rungs, BST's own, and
+  `bst-restrained`, which has no unemployment.
+- **16:17–16:20.** Applied: `iid-ui-artificial` moved to `bst/artificial/members/` (`git mv`) as the toy with ℘ = 0.05
+  and ξ_u = 0.5; the folder `bst-markov_ui-and-agg/`, `markov.py` and its tests removed; the checker's command and the
+  notation test without the family; the validator's refusal names the retirement; the ontology's family row retired; the
+  READMEs, the adapter's and the stone's descriptions, the scenarios proposal and the dated notes rewritten. The
+  checker's 169 tests and the ontology's 67 pass, the adapter's 8 pass at its pinned HARK, and no link is broken.
+- **By 16:25.** HAFiscal-Latest: its emitter never named the Markov family, and its one note that did records the
+  retirement. It adds that its estimation code's newborn differs from the family's: a first permanent shock and growth,
+  a transitory shock of 1, assets of 1e-5. Written into the toy-hafiscal suite: the delivered member states the family's
+  newborn, and its fit is to be evaluated again on it with HARK's adapter.
+- **16:33:50.** "memorialize".
+
+**State at the memorial (16:34):**
+- Everything since `d60d9d8` is in this memorial's commit, on `buffer-stock-ontology`, unpushed; the push and the draft
+  pull request still wait for the owner.
+- The buffer-stock families: `bst-natural/1` and `bst-artificial/1` principal, two in `bst/other/`. The Markov family is
+  retired; `iid-ui-artificial` is a `bst-artificial/1` member.
+- The two suites: the restrained-limit suite, written and tested; the toy-hafiscal suite, specified, its estimation
+  HAFiscal's on the owner's word, its fit to be checked on the delivered member with the family's newborn.
+- The checker's 169 tests, the ontology's 67 and the adapter's 8 pass.
+- Open with the owner: the Jacobian interface; the smallest ℘ of the first suite; `library` against v0.1; the push.

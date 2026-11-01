@@ -18,10 +18,11 @@ gives the current names, and the suite's method files will use those. The benchm
 results are left out of this copy until the benchmark has its public home.
 
 **Since 2026-11-01** the family `bst/1` this note describes is four families, one for each borrowing-constraint
-scenario, and the Markov family `bst-markov_ui-and-agg/1` is `bst-markov_ui-and-agg-artificial/1`, the artificial
-scenario that HAFiscal's code solves ([`constraint-scenarios.md`](constraint-scenarios.md)). Its `paper-published` states
-the published code's atoms, not `LogNormal` laws with 7 nodes as a setting, and `toy-as-hafiscal` is
-`iid-ui-artificial`, with unemployment probability 0.05 and benefit 0.5 in place of the toy's. The note keeps its names
+scenario ([`constraint-scenarios.md`](constraint-scenarios.md)), and the Markov family `bst-markov_ui-and-agg/1` this
+note proposes is retired. Its one-state unemployment model is a calibration of those families, and writing unemployment
+as a Markov state a way to solve it; `toy-as-hafiscal` is now `bst-artificial/1`'s `iid-ui-artificial`, with
+unemployment probability 0.05 and benefit 0.5 in place of the toy's. The four-state family and the paper's members
+written in it, with the published code's atoms, are in the repository's history. The note keeps its names
 as they were; its links point to the documents that now hold what it cites.
 
 ## What HAFiscal solves
@@ -256,8 +257,8 @@ exactly (below).
   toolkit's maximum-age setting (HARK's `T_age`) must be off.
 
 **A parameter file** with the paper's normal-times calibration is in the family's model schema,
-[`bst-markov_ui-and-agg/model.md`](bst-markov_ui-and-agg/model.md), "The parameter file", and the member that reproduces
-the published numbers is [`paper-published`](bst-markov_ui-and-agg/artificial/members/paper-published.yaml).
+`bst-markov_ui-and-agg/model.md`, "The parameter file", and the member that reproduces
+the published numbers was `paper-published`, retired with the family.
 
 Shares within a group sum to one, and group shares sum to one. The file lists the β values as numbers: how they were
 chosen is estimation, the group's layer, not the family's. That calibration, solved with 7 nodes per shock, is the

@@ -2,6 +2,9 @@
 
 2026-11-01, 13:51–14:57 EST, on the owner's rulings of 13:51:57, 14:50:39 and 14:55:52.
 
+At 16:10 the family itself was retired (the rulings of 16:10:29 and 16:16:38): what is built below is in the
+repository's history, and `iid-ui-artificial` is now a `bst-artificial/1` member.
+
 ## What was built
 
 - **One version.** `bst-markov_ui-and-agg-zero-infima/1`, its stage file, parameter schema and three calibrations are

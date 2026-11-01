@@ -56,7 +56,7 @@
     "text": "a name in the buffer-stock families' Bellman-SYM stage files as the language now writes it: a declared field, parameter, set or function, a perch mark, a derivative term, or the id of a block or line, which is the address of where a relation is written, not an object"
    }
   },
-  "source_digest": "sha256:85c579940afc4d23578060289862af67f88ebcd365ff82c500f591bcd98bb6aa"
+  "source_digest": "sha256:b9a3a549a38c175c56668cb72dbe9814512808483e26810ea64275177aebeeeb"
  },
  "kinds": {
   "model-class": "A class of models, defined by axioms. A model is a member when it satisfies every membership axiom.",
@@ -99,6 +99,7 @@
   "BSM_0000137",
   "BSM_0000179",
   "BSM_0000229",
+  "BSM_0000228",
   "BSM_0000138",
   "BSM_0000139",
   "BSM_0000140",
@@ -5320,40 +5321,6 @@
    ],
    "definition": "The schemas' family for the zero-infima scenario, with lognormals and no stated artificial constraint, since a ≥ 0 is the natural one.",
    "schema": "../../schemas/bst/other/zero-infima/parameters.schema.json"
-  },
-  {
-   "id": "BSM_0000228",
-   "kind": "family",
-   "name": "bst-markov-ui-and-agg-artificial-1",
-   "label": "the schemas' family bst-markov_ui-and-agg-artificial/1",
-   "writes": [
-    {
-     "name": "with-markov-states",
-     "id": "BSM_0000009"
-    },
-    {
-     "name": "with-artificial-constraint",
-     "id": "BSM_0000007"
-    },
-    {
-     "name": "liquidity-constrained",
-     "id": "BSM_0000200"
-    },
-    {
-     "name": "with-survival",
-     "id": "BSM_0000004"
-    },
-    {
-     "name": "with-positive-benefit",
-     "id": "BSM_0000006"
-    },
-    {
-     "name": "with-types",
-     "id": "BSM_0000008"
-    }
-   ],
-   "definition": "The Markov family, HAFiscal's household as its code solves it, with laws of strictly positive floors and a ≥ 0: Markov employment and benefit expiry, an aggregate regime, groups of types, a level law for the newborn and the splurge as an observation map.",
-   "schema": "../../schemas/bst-markov_ui-and-agg/artificial/parameters.schema.json"
   },
   {
    "id": "BSM_0000141",

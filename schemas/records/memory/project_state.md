@@ -1,6 +1,6 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 15:59 on 2026-11-01: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family's one version; two test suites; the ontology at draft.2, naming no toolkit"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 16:34 on 2026-11-01: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two test suites; the ontology at draft.2, naming no toolkit"
 metadata:
   type: project
 ---
@@ -33,12 +33,12 @@ stage file ([`constraint-scenarios.md`](../../constraint-scenarios.md),
 [the findings](../findings/2026-11-01_constraint-scenarios-applied.md)). Since 13:38 two are principal, `bst-natural/1`
 and `bst-artificial/1`, in `bst/`; `bst-natural-no-point-mass/1` and `bst-zero-infima/1` are in `bst/other/`.
 
-**The Markov family** has one version since 13:51:57, `bst-markov_ui-and-agg-artificial/1`, since HAFiscal's code never
-solved the zero-infima scenario ([[feedback_classify-by-what-the-code-solves]]). Its members: `paper-published` and
-`paper-one-group` with the published code's atoms, and `iid-ui-artificial`, one non-persistent unemployment state with
-probability 0.05 and benefit 0.5. ξ_x may be 0. The owner's device is one non-persistent disaster state, which the
-four-state family as built is not ([[feedback_markov-family-is-a-device]];
-[the findings](../findings/2026-11-01_markov-family-as-the-code-solves.md)).
+**The Markov family is retired** (16:10:29 on 2026-11-01), after its zero-infima version went at 13:51:57 since
+HAFiscal's code never solved that scenario ([[feedback_classify-by-what-the-code-solves]]). Its one-state unemployment
+model is a calibration of the buffer-stock families, and a Markov state only a way to solve it
+([[feedback_markov-family-is-a-device]]): `iid-ui-artificial`, the toy with ℘ = 0.05 and ξ_u = 0.5, is a
+`bst-artificial/1` member. The four-state family and the paper's members are in the history
+([the findings](../findings/2026-11-01_markov-family-as-the-code-solves.md)).
 
 **Two test suites for every toolkit's solution** (`bst/model.md`):
 - the restrained-limit suite, BST's experiment: `bst-p-zero-0.005`, `-0.0005` and `-0.00005` in `bst-natural/1` and
@@ -48,7 +48,7 @@ four-state family as built is not ([[feedback_markov-family-is-a-device]];
   HAFiscal's Lorenz points, the iMPC profile and the wealth-to-income ratio, with one prize; every toolkit solves and
   simulates the steady state and exposes what its Jacobians need.
 
-The checker's 192 tests, the adapter's 8 and the ontology's 64 pass.
+The checker's 169 tests, the adapter's 8 and the ontology's 67 pass.
 
 **Open pull request #15** (`stage-derivative-terms`, pushed, against the schemas' branch, opened 22:24:43 on
 2026-10-31): both families' stage files rewritten with Bellman-SYM's derivative terms, as the owner approved at 22:17:58.
@@ -192,7 +192,6 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
   refused as an external write;
 - `library` against the community library's published v0.1, whose laws are untruncated: a v0.2 of the description
   (recommended), a renamed member, or a note;
-- the four-state Markov family against the device of one non-persistent disaster state;
 - what a toolkit exposes for its Jacobians in the toy-hafiscal suite, to be drawn up with the toolkits first;
 - the estimation of the toy-hafiscal member, HAFiscal's to do on the owner's word in that session;
 - HARK's cyclical index: ruled on 2026-10-31 that solver and simulation be consistent, the simulation side to be fixed,

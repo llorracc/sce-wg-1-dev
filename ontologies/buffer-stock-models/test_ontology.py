@@ -260,6 +260,8 @@ EXPECTED = {
     **{f"bst-p-zero-{wp}": {"bounded-support": True, "natural-in-force": True, "point-mass-at-joint-worst-income": True,
                             "zero-income-event": True, "no-artificial-constraint": True, "infinite-lives": True}
        for wp in ("0.005", "0.0005", "0.00005")},
+    "iid-ui-artificial": {"bounded-support": True, "natural-in-force": False, "artificial-tighter": True,
+                          "positive-floors": True, "no-borrowing": True, "zero-income-event": False},
     "bst-restrained": {"bounded-support": True, "natural-in-force": False, "artificial-tighter": True,
                        "positive-floors": True, "no-borrowing": True, "zero-income-event": False, "infinite-lives": True},
 }

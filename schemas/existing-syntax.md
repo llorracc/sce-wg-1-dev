@@ -10,8 +10,8 @@
   - The name of the w3id.org namespace is left for later.
 
 **Since 2026-11-01** the family `bst/1` this note describes is four families, one for each borrowing-constraint
-scenario, and the Markov family `bst-markov_ui-and-agg/1` is two versions
-([`constraint-scenarios.md`](constraint-scenarios.md)). The note keeps its names as they were; its links point to the
+scenario ([`constraint-scenarios.md`](constraint-scenarios.md)), and the Markov family `bst-markov_ui-and-agg/1` is
+retired, its one-state unemployment model being a calibration of those families. The note keeps its names as they were; its links point to the
 documents that now hold what it cites.
 
   The decision on Bellman's comparator is not among his answers.

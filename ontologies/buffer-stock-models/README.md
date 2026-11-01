@@ -133,8 +133,8 @@ The four scenarios partition the class: every member is in exactly one of `natur
 `natural-without-point-mass`, `with-artificial-constraint` and `zero-infima`. The other extensions reduce to `bst-model`
 under a stated restriction, such as ℒ = 1 or ξ_u = 0. The schemas write each scenario as a family of its own, with its
 own stage file: `bst-natural/1`, `bst-natural-no-point-mass/1`, `bst-artificial/1` and `bst-zero-infima/1`, each also
-writing members of `with-survival`, `with-positive-benefit` and `with-types`; the Markov family,
-`bst-markov_ui-and-agg-artificial/1`, adds `with-markov-states`. The schemas treat two scenarios as principal, the natural one with a point
+writing members of `with-survival`, `with-positive-benefit` and `with-types`. No family writes `with-markov-states`
+since the Markov family's retirement on 2026-11-01. The schemas treat two scenarios as principal, the natural one with a point
 mass and the artificial one; that is a choice of emphasis, and the ontology's classes do not depend on it.
 
 In the life-cycle class, a primitive binds the stage occurrence of the period whose block reads it. In the families'

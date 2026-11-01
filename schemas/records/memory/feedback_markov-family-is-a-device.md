@@ -1,6 +1,6 @@
 ---
 name: feedback_markov-family-is-a-device
-description: "The Markov UI form is not a model of its own: one non-persistent unemployment state, the disaster, giving the worst state its own parameter and implementing the natural or artificial case without rewriting the i.i.d. solver"
+description: "The Markov UI form is not a model of its own: one non-persistent unemployment state, a calibration of bst-natural/1 or bst-artificial/1; a Markov state is a way to solve it. The Markov family is retired (2026-11-01)"
 metadata:
   type: feedback
 ---
@@ -15,9 +15,9 @@ own and solves either case on a toolkit's Markov machinery without rewriting its
 The schemas must not require ξ_x > 0 (14:50:39).
 
 **How to apply:**
-- A member written this way is an ordinary buffer-stock member; its tests compare it with its counterpart in
-  `bst-natural/1` or `bst-artificial/1`.
+- Such a model is a calibration of `bst-natural/1` or `bst-artificial/1`, written there with no family or name of its
+  own (16:16:38); `iid-ui-artificial` is one. The four-state family is retired (16:10:29).
 - HARK's adapter already solves every buffer-stock member on that two-state chain.
-- What becomes of the four-state family is the owner's open question (`deferred.md`).
+- Build only the calibrations asked for: no version with zero unemployment income was asked for (16:17:30).
 
 Related: [[feedback_classify-by-what-the-code-solves]], [[project_state]].

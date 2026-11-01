@@ -11,11 +11,11 @@ below. Its decisions are listed at the end.
 Their folders stay where they were; the other two scenarios' folders in `bst/` moved to `other/` (the owner's ruling, in
 [`bst/model.md`](bst/model.md)). Every buffer-stock family, stage file and check below still stands.
 
-**Since later that afternoon, the Markov family has one version, the artificial one.** HAFiscal's code never solved the
-zero-infima scenario: its published package solves on atoms with positive floors under a ≥ 0. The zero-infima version, its
-stage file and calibrations are retired, and `paper-published` and `paper-one-group` state the code's atoms in the
-artificial version (the owner's ruling; [`bst-markov_ui-and-agg/model.md`](bst-markov_ui-and-agg/model.md)). What the
-HAFiscal paragraph below says of the paper's members is superseded.
+**Since later that afternoon, the Markov family is retired.** HAFiscal's code never solved the zero-infima scenario: its
+published package solves on atoms with positive floors under a ≥ 0. The family's zero-infima version went first; then
+the whole family, since its one-state unemployment model is a calibration of the buffer-stock families and a Markov
+state only a way to solve it (the owner's rulings). What the paragraphs below say of the Markov family and the paper's
+members is superseded.
 
 ## What separates the scenarios
 

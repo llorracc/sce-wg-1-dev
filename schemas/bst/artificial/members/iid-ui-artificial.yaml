@@ -1,0 +1,26 @@
+# The toy with unemployment of probability 0.05, paying 0.5 of permanent income, in the artificial scenario with a >= 0:
+# one unemployment state that does not persist, whatever the last quarter's state. Everything else is the toy's: its
+# laws, lognormals truncated at three standard deviations with the stated standard deviation kept, its growth, survival,
+# return, crra and types. Its floors are positive, so the natural constraint lies below zero and a >= 0 is tighter. Its
+# values other than the discount factors are those of the toy-hafiscal suite (model.md). Until 2026-11-01 it was the
+# Markov family's iid-ui-artificial, and before that toy-as-hafiscal; the Markov family is retired, since this is a
+# calibration of bst-artificial/1 and writing unemployment as a Markov state is a way to solve it.
+family: bst-artificial/1
+period: quarter
+crra: 2.0
+types:
+  - {beta: 0.822, share: 0.14285714285714285}
+  - {beta: 0.850, share: 0.14285714285714285}
+  - {beta: 0.878, share: 0.14285714285714285}
+  - {beta: 0.906, share: 0.14285714285714285}
+  - {beta: 0.934, share: 0.14285714285714285}
+  - {beta: 0.962, share: 0.14285714285714285}
+  - {beta: 0.990, share: 0.14285714285714285}
+survival: 0.99375
+return: 1.01
+borrowing_constraint: 0.0
+income:
+  growth: 1.0019026
+  permanent_shock: {TruncatedLogNormal: {sd_log: 0.05477225575051661, bot: -3.0, top: 3.0}}
+  unemployment: {prob: 0.05, income: 0.5}
+  employed_shock: {TruncatedLogNormal: {sd_log: 0.34641016151377546, bot: -3.0, top: 3.0}}
