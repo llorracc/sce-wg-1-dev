@@ -88,3 +88,6 @@ metadata:
   a flow-budget check), #1842 (the economy's trend), #1860 (`NewbornPermShk`), #1863 (the truncated lognormal).
 - HAFiscal's household Jacobians in its published package, llorracc/HAFiscal-QE,
   `Code/HA-Models/FromPandemicCode/HA-Fiscal-HANK-SAM.py` and `HA-Fiscal-HANK-SAM-to-python.py`.
+- The page "The Restrained Limit", https://claude.ai/artifact/Lp8sHuCW2EoAvqDYfmBcdb: a private claude.ai page,
+  published 2026-11-01, drawing the restrained-limit suite's HARK run; its source is
+  `findings/2026-11-01_restrained-limit-suite-hark/page/`. Only the owner can open it until he shares it.

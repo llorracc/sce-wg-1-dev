@@ -335,3 +335,18 @@ its memorial).
 - The checker's 180 tests and the ontology's 67 pass; the adapter is unchanged since its 8 passed.
 - Open with the owner: the toy-hafiscal estimation, in HAFiscal's session; a smaller fourth rung; `library` against
   v0.1; the push.
+- **18:22:40.** The owner: an artifact showing the four rules graphically, since numbers are not nearly as striking as
+  the picture.
+- **18:23–18:28.** The page built from the level-3 results files: the rules with a zoom on the kink, the gaps, the MPCs,
+  the convergence and a table. The colors are one blue ramp that darkens as ℘ falls, validated as an ordinal ramp in both
+  themes. One headless screenshot found the legend's swatches inked black, an empty tooltip box, a label across the
+  kink, crowded axis titles, a gap curve extrapolated at its end and a cramped table; all were fixed in one pass, and the
+  page was published as "The Restrained Limit", a private claude.ai page.
+- **18:28:59.** The owner: add the page's source and script to the findings record, and memorialize. Added as `page/` in
+  the findings folder; rebuilt from the repository, the page is identical to the published one byte for byte.
+
+**State at the memorial (18:30):**
+- Everything since `69d6e6b` is in this memorial's commit, on `buffer-stock-ontology`, unpushed.
+- The restrained-limit suite's HARK run is recorded with its comparison, its figure, and the page's source.
+- Open with the owner: the toy-hafiscal estimation, in HAFiscal's session; a smaller fourth rung; `library` against
+  v0.1; the push; sharing the page, which is private.

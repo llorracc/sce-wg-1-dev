@@ -152,6 +152,9 @@ saving time ended at 02:00 that morning). His words are kept outside this public
   run with HARK's adapter, as this session proposed in answer to his question of 17:27:54; at 17:53:08, to open the
   comparison when done.
 - **18:19:16, "memorialize".**
+- **18:22:40, the result shown graphically:** an artifact showing the four rules, since numerical results are not nearly as
+  striking as the picture. Published as the page "The Restrained Limit".
+- **18:28:59, its source into the findings record, and "memorialize".**
 
 **What stays open:**
 - HARK's adapter writing the Jacobians, from a branch carrying #1863, once the toy-hafiscal member exists; where the target 6.60 is computed; the estimation itself, which HAFiscal's tools do on the owner's word in that

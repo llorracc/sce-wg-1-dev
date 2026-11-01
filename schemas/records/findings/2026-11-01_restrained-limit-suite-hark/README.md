@@ -56,6 +56,29 @@ The largest gap between the restrained rule and a natural member's, over the com
   The natural members never reach their limit, so they have no mass at a = 0. Their mass piles up near zero as ℘ falls,
   and their mean MPC rises toward the restrained consumer's.
 
+## The picture
+
+The owner asked for the result to be shown graphically, since the numbers are far less striking than the picture. The
+page "The Restrained Limit", published on 2026-11-01 as a private claude.ai page, draws from the level-3 results files:
+- the four consumption rules, with a zoom on the kink;
+- each natural rule's gap to the restrained one;
+- the MPCs;
+- the largest gap against ℘ on log scales, at the three levels;
+- a table of the stationary populations.
+
+Its source is in `page/`. `extract.py` reads the results files and writes `data.json` and `restrained-limit.html`, the
+page as published, from `template.html`:
+
+```sh
+uv run --with numpy python page/extract.py
+```
+
+The MPC curves are differences of each rule's dense points. At the common points they are within 0.004 of the MPCs HARK reports
+for ℘ = 0.005 and the restrained rule, 0.008 for ℘ = 0.0005, and 0.027 for ℘ = 0.00005, whose rule bends most sharply;
+the page's caption says so. The restrained rule's dense points begin at its lowest income, m ≈ 0.80. Below its kink the page draws
+it from the results file's kink record, slope 1, and its common points. The gap is drawn to m = 2.94, the end of the
+shortest rule's points.
+
 ## What it establishes, and what it does not
 
 - **The limit holds in HARK's solution, at every level.** The natural rules converge to the restrained rule as ℘ falls,

@@ -1,6 +1,6 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 18:20 on 2026-11-01: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two test suites; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit suite run with HARK; the ontology at draft.2, naming no toolkit"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 18:30 on 2026-11-01: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two test suites; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit suite run with HARK; the ontology at draft.2, naming no toolkit"
 metadata:
   type: project
 ---
@@ -58,7 +58,8 @@ C, A and Y_hh; one distribution grid for every toolkit; a steady state to 10‚Åª¬
 **The restrained-limit suite's first run** (`bst/suites/restrained-limit/`): common request files for its four members,
 and a comparison from results files alone. HARK's adapter at levels 1 to 3 shows the natural rules converging to the
 restrained one, the largest gap 0.137, 0.061 and 0.027 at the kink
-([the findings](../findings/2026-11-01_restrained-limit-suite-hark/README.md)).
+([the findings](../findings/2026-11-01_restrained-limit-suite-hark/README.md)), drawn on the private page "The
+Restrained Limit", whose source is in the findings' `page/`.
 
 The checker's 180 tests, the adapter's 8 and the ontology's 67 pass.
 

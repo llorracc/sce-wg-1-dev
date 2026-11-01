@@ -1,0 +1,339 @@
+<title>The Restrained Limit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; the four rules as the hero figure, then three supporting figures and the table. */
+:root {
+  --bg: #f4f5f6; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #7d7b75;
+  --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
+  --p1: #86b6ef; --p2: #3987e5; --p3: #184f95; --restrained: #0b0b0b; --accent: #2a78d6;
+  --display: "Literata", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1011; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #95938c;
+  --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+  --p1: #1c5cab; --p2: #3987e5; --p3: #86b6ef; --restrained: #f0efec; --accent: #3987e5; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f1011; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #95938c;
+  --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+  --p1: #1c5cab; --p2: #3987e5; --p3: #86b6ef; --restrained: #f0efec; --accent: #3987e5; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55; }
+.page { max-width: 1040px; margin: 0 auto; padding-block: 40px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 28px; }
+header { display: grid; gap: 12px; max-width: 72ch; }
+.eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); font-weight: 500; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(28px, 4.2vw, 42px); line-height: 1.12; margin: 0;
+  text-wrap: balance; letter-spacing: -0.01em; }
+h2 { font-family: var(--display); font-weight: 500; font-size: 20px; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 70ch; }
+.lede { font-size: 17px; color: var(--ink-2); }
+.prop { font-family: var(--display); font-size: 19px; padding: 10px 0 2px; }
+.prop i { font-style: italic; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px 14px; font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 18px 18px 14px;
+  display: grid; gap: 10px; min-width: 0; position: relative; }
+figure.hero { padding: 22px 22px 16px; }
+.fighead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; }
+figcaption { font-size: 13.5px; color: var(--ink-2); max-width: 78ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.legend i { display: inline-block; width: 18px; height: 0; border-top-width: 2.5px; border-top-style: solid; border-radius: 2px; }
+.seg { display: inline-flex; border: 1px solid var(--axis); border-radius: 7px; overflow: hidden; }
+.seg button { font: inherit; font-size: 12.5px; color: var(--ink-2); background: transparent; border: 0; padding: 5px 11px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.plot { position: relative; min-width: 0; }
+.plot svg { display: block; width: 100%; height: auto; overflow: visible; }
+.grid-line { stroke: var(--grid); stroke-width: 1; }
+.axis-line { stroke: var(--axis); stroke-width: 1; }
+.tick { fill: var(--muted); font-family: var(--mono); font-size: 11px; font-variant-numeric: tabular-nums; }
+.axlabel { fill: var(--ink-2); font-size: 12px; }
+.note { fill: var(--ink-2); font-size: 11.5px; }
+.diag { stroke: var(--axis); stroke-width: 1; stroke-dasharray: 4 4; fill: none; }
+.series { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.s-p1 { stroke: var(--p1); } .s-p2 { stroke: var(--p2); } .s-p3 { stroke: var(--p3); } .s-r { stroke: var(--restrained); stroke-width: 2.25; }
+.f-p1 { fill: var(--p1); } .f-p2 { fill: var(--p2); } .f-p3 { fill: var(--p3); } .f-r { fill: var(--restrained); }
+.l-p1 { border-top-color: var(--p1); } .l-p2 { border-top-color: var(--p2); } .l-p3 { border-top-color: var(--p3); } .l-r { border-top-color: var(--restrained); }
+.dot { stroke: var(--surface); stroke-width: 2; }
+.hollow { fill: var(--surface); stroke: var(--muted); stroke-width: 1.5; }
+.cross { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.kinkmark { fill: var(--surface); stroke: var(--restrained); stroke-width: 2; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--ring);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.10); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; min-width: 180px;
+  display: grid; gap: 3px; z-index: 2; }
+.tip .t { font-family: var(--mono); color: var(--ink-2); font-size: 12px; }
+.tip .r { display: grid; grid-template-columns: 10px 1fr auto; gap: 8px; align-items: center; }
+.tip .r b { font-weight: 500; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.tip .r i { width: 10px; height: 0; border-top-width: 2.5px; border-top-style: solid; }
+.tip[hidden] { display: none; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 20px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 400px; }
+th, td { text-align: right; padding: 8px 7px; border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums; }
+th { font-weight: 500; color: var(--ink-2); font-size: 12px; }
+th:first-child, td:first-child { text-align: left; }
+td .sw { display: inline-block; width: 16px; height: 0; border-top-width: 2.5px; border-top-style: solid; vertical-align: middle; margin-right: 8px; }
+td:first-child { white-space: nowrap; }
+td code { font-family: var(--mono); font-size: 12.5px; }
+footer { font-size: 12.5px; color: var(--ink-2); display: grid; gap: 6px; max-width: 90ch; }
+footer code { font-family: var(--mono); font-size: 12px; }
+@media (max-width: 520px) { figure, figure.hero { padding: 14px 12px 12px; } .lede { font-size: 16px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<main class="page">
+  <header>
+    <div class="eyebrow">Buffer Stock Theory · the liquidity-constrained solution as a limit</div>
+    <h1>As the zero-income risk vanishes, precaution turns into the liquidity constraint</h1>
+    <p class="lede">Four households with BST's calibration. Three face a natural borrowing constraint, kept in force by a small
+      probability ℘ of a quarter with no income at all; they never borrow, because a zero-income draw could leave them with
+      nothing. The fourth, the restrained consumer, has no zero-income risk and simply may not borrow: c ≤ m. As ℘ falls,
+      the first three rules close in on the fourth.</p>
+    <p class="prop">lim<sub>℘↓0</sub> c(m; ℘) = c̀(m)</p>
+    <div class="chips" aria-label="The calibration">
+      <span>𝒢 = 1.03</span><span>R = 1.04</span><span>β = 0.96</span><span>ϱ = 2</span>
+      <span>σ<sub>ψ</sub> = σ<sub>θ</sub> = 0.1, truncated at ±3σ</span><span>ℒ = 1</span><span>annual</span>
+    </div>
+  </header>
+
+  <figure class="hero" id="fig-rules">
+    <div class="fighead">
+      <h2>The four consumption rules</h2>
+      <div class="seg" role="group" aria-label="The range of m">
+        <button type="button" id="range-all" aria-pressed="true">m from 0 to 3</button>
+        <button type="button" id="range-kink" aria-pressed="false">Near the kink</button>
+      </div>
+    </div>
+    <div class="legend" id="legend-rules"></div>
+    <div class="plot" id="plot-rules"></div>
+    <figcaption>Consumption c against market resources m, both in units of permanent income. The restrained rule spends
+      everything up to its kink at m = 0.974 and then turns sharply. The natural rules round that corner, and the rounding
+      tightens as ℘ falls: precautionary saving acts as a smoothed version of the constraint. Hover for values.</figcaption>
+  </figure>
+
+  <div class="two">
+    <figure id="fig-gap">
+      <h2>How far each rule sits below the restrained one</h2>
+      <div class="legend" id="legend-gap"></div>
+      <div class="plot" id="plot-gap"></div>
+      <figcaption>c̀(m) − c(m; ℘). The gap peaks at the restrained rule's kink and shrinks with ℘; far above the kink the
+        rules nearly coincide. Drawn to m = 2.94, the end of the shortest rule's points.</figcaption>
+    </figure>
+    <figure id="fig-mpc">
+      <h2>The marginal propensity to consume</h2>
+      <div class="legend" id="legend-mpc"></div>
+      <div class="plot" id="plot-mpc"></div>
+      <figcaption>c′(m). The restrained MPC is exactly 1 below the kink and drops to 0.42 at it; the natural MPCs fall
+        smoothly, and more steeply as ℘ falls. Drawn from differences of each rule's dense points, which agree with the
+        MPCs HARK reports at the common points to within 0.03.</figcaption>
+    </figure>
+  </div>
+
+  <div class="two">
+    <figure id="fig-conv">
+      <h2>Convergence is slow</h2>
+      <div class="legend" id="legend-conv"></div>
+      <div class="plot" id="plot-conv"></div>
+      <figcaption>The largest gap against ℘, on log scales. It falls by a factor of about 2.3 for each tenfold fall in ℘,
+        at all three precision levels, which differ by under 2%: the gap is the model's, not the numerics'.</figcaption>
+    </figure>
+    <figure id="fig-table">
+      <h2>The four households in the stationary population</h2>
+      <div class="tablewrap"><table id="table"></table></div>
+      <figcaption>The natural households never reach a = 0, so none sits at the constraint; instead their poorest tenth
+        holds a shrinking share of wealth, while the restrained household has a fifth of its population at a = 0.</figcaption>
+    </figure>
+  </div>
+
+  <footer>
+    <div>Solved with HARK's adapter for the schemas, at precision level 3, HARK pinned at llorracc/HARK
+      <code>11852805</code>; every results file verified by the schemas' checker. Members <code>bst-p-zero-0.005</code>,
+      <code>-0.0005</code>, <code>-0.00005</code> (<code>bst-natural/1</code>) and <code>bst-restrained</code>
+      (<code>bst-artificial/1</code>).</div>
+    <div>Data: <code>schemas/records/findings/2026-11-01_restrained-limit-suite-hark</code> in llorracc/sce-wg-1-dev.
+      Experiment: Carroll and Shanker, <i>Theoretical Foundations of Buffer Stock Saving</i>, "The Liquidity Constrained
+      Solution as a Limit".</div>
+  </footer>
+</main>
+
+<script>
+const DATA = __DATA__;
+const NS = "http://www.w3.org/2000/svg";
+const SER = [
+  {key: "bst-p-zero-0.005", label: "natural, ℘ = 0.005", short: "℘ = 0.005", cls: "p1"},
+  {key: "bst-p-zero-0.0005", label: "natural, ℘ = 0.0005", short: "℘ = 0.0005", cls: "p2"},
+  {key: "bst-p-zero-0.00005", label: "natural, ℘ = 0.00005", short: "℘ = 0.00005", cls: "p3"},
+  {key: "bst-restrained", label: "restrained: ℘ = 0, c ≤ m", short: "restrained", cls: "r"},
+];
+const fmt = (x, d = 4) => (x === null || !isFinite(x)) ? "—" : x.toFixed(d);
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function legend(id, series) {
+  document.getElementById(id).innerHTML = series.map(s => `<span><i class="l-${s.cls}"></i>${s.label}</span>`).join("");
+}
+function interp(pts, x) {
+  if (x < pts[0][0] || x > pts[pts.length - 1][0]) return null;
+  let lo = 0, hi = pts.length - 1;
+  while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (pts[mid][0] <= x) lo = mid; else hi = mid; }
+  const [x0, y0] = pts[lo], [x1, y1] = pts[hi];
+  return x1 === x0 ? y0 : y0 + (y1 - y0) * (x - x0) / (x1 - x0);
+}
+// A line chart that redraws to its container's width, with a crosshair and a tooltip.
+function chart(host, cfg) {
+  const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true;
+  host.appendChild(tip);
+  let svg = null;
+  function draw() {
+    const W = Math.max(280, host.clientWidth);
+    const H = Math.round(Math.min(Math.max(W * cfg.aspect, 220), 520));
+    const m = {l: 60, r: 14, t: 10, b: 40};
+    const iw = W - m.l - m.r, ih = H - m.t - m.b;
+    const [x0, x1] = cfg.x(), [y0, y1] = cfg.y;
+    const tx = cfg.xlog ? Math.log10 : (v => v), ty = cfg.ylog ? Math.log10 : (v => v);
+    const sx = v => m.l + (tx(v) - tx(x0)) / (tx(x1) - tx(x0)) * iw;
+    const sy = v => m.t + ih - (ty(v) - ty(y0)) / (ty(y1) - ty(y0)) * ih;
+    if (svg) svg.remove();
+    svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": cfg.aria});
+    host.insertBefore(svg, tip);
+    const defs = el("defs", {}, svg);
+    const clip = el("clipPath", {id: cfg.id + "-clip"}, defs);
+    el("rect", {x: m.l, y: m.t - 2, width: iw, height: ih + 4}, clip);
+    for (const v of cfg.yticks) {
+      el("line", {x1: m.l, x2: m.l + iw, y1: sy(v), y2: sy(v), class: "grid-line"}, svg);
+      el("text", {x: m.l - 8, y: sy(v) + 4, "text-anchor": "end", class: "tick"}, svg).textContent = cfg.yfmt(v);
+    }
+    for (const v of cfg.xticks()) {
+      el("text", {x: sx(v), y: m.t + ih + 17, "text-anchor": "middle", class: "tick"}, svg).textContent = cfg.xfmt(v);
+      el("line", {x1: sx(v), x2: sx(v), y1: m.t + ih, y2: m.t + ih + 4, class: "axis-line"}, svg);
+    }
+    el("line", {x1: m.l, x2: m.l + iw, y1: m.t + ih, y2: m.t + ih, class: "axis-line"}, svg);
+    el("text", {x: m.l + iw, y: H - 4, "text-anchor": "end", class: "axlabel"}, svg).textContent = cfg.xlabel;
+    el("text", {x: 12, y: m.t + 2, "text-anchor": "start", class: "axlabel", transform: `rotate(-90 12 ${m.t + 2})`, dx: -ih / 2 - 30}, svg).textContent = cfg.ylabel;
+    const g = el("g", {"clip-path": `url(#${cfg.id}-clip)`}, svg);
+    if (cfg.under) cfg.under(g, sx, sy, x0, x1);
+    for (const s of cfg.series) {
+      const pts = s.pts.filter(p => p[0] >= x0 - 1e-9 && p[0] <= x1 + 1e-9);
+      if (pts.length < 2) continue;
+      el("path", {d: pts.map((p, i) => (i ? "L" : "M") + sx(p[0]).toFixed(2) + " " + sy(p[1]).toFixed(2)).join(""),
+        class: `series s-${s.cls}`}, g);
+      if (s.dots) for (const p of pts) el("circle", {cx: sx(p[0]), cy: sy(p[1]), r: 4.5, class: `dot f-${s.cls}`}, svg);
+      if (s.hollow) for (const p of pts) el("circle", {cx: sx(p[0]), cy: sy(p[1]), r: 4, class: "hollow"}, svg);
+    }
+    if (cfg.over) cfg.over(svg, sx, sy, x0, x1);
+    const cross = el("line", {y1: m.t, y2: m.t + ih, class: "cross", visibility: "hidden"}, svg);
+    const hit = el("rect", {x: m.l, y: m.t, width: iw, height: ih, fill: "transparent"}, svg);
+    function move(ev) {
+      const r = svg.getBoundingClientRect(); const px = (ev.clientX - r.left) * W / r.width;
+      let xv = cfg.xlog ? Math.pow(10, tx(x0) + (px - m.l) / iw * (tx(x1) - tx(x0))) : x0 + (px - m.l) / iw * (x1 - x0);
+      if (cfg.snap) xv = cfg.snap(xv);
+      xv = Math.min(x1, Math.max(x0, xv));
+      cross.setAttribute("x1", sx(xv)); cross.setAttribute("x2", sx(xv)); cross.setAttribute("visibility", "visible");
+      tip.innerHTML = `<div class="t">${cfg.tipHead(xv)}</div>` + cfg.tipRows(xv).map(rw =>
+        `<div class="r"><i class="l-${rw.cls}"></i><span>${rw.label}</span><b>${rw.value}</b></div>`).join("");
+      tip.hidden = false;
+      const hr = host.getBoundingClientRect();
+      const left = ev.clientX - hr.left + 14, w = tip.offsetWidth;
+      tip.style.left = (left + w > hr.width ? Math.max(0, ev.clientX - hr.left - w - 14) : left) + "px";
+      tip.style.top = Math.max(0, ev.clientY - hr.top - tip.offsetHeight - 10) + "px";
+    }
+    hit.addEventListener("pointermove", move);
+    hit.addEventListener("pointerdown", move);
+    hit.addEventListener("pointerleave", () => { tip.hidden = true; cross.setAttribute("visibility", "hidden"); });
+  }
+  new ResizeObserver(() => draw()).observe(host);
+  draw();
+  return {redraw: draw};
+}
+
+const rules = SER.map(s => ({...s, pts: DATA.rules[s.key]}));
+const K = DATA.kink.m;
+let range = "all";
+const ranges = {all: {x: [0, 3], y: [0, 1.4], yt: [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4], xt: [0, 0.5, 1, 1.5, 2, 2.5, 3]},
+                kink: {x: [0.6, 1.4], y: [0.6, 1.15], yt: [0.6, 0.7, 0.8, 0.9, 1.0, 1.1], xt: [0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4]}};
+legend("legend-rules", SER);
+const rulesChart = chart(document.getElementById("plot-rules"), {
+  id: "rules", aspect: 0.5, aria: "Consumption rules of the four households, c against m",
+  x: () => ranges[range].x, get y() { return ranges[range].y; }, get yticks() { return ranges[range].yt; },
+  xticks: () => ranges[range].xt, xfmt: v => v.toFixed(range === "all" ? 1 : 1), yfmt: v => v.toFixed(1),
+  xlabel: "market resources m", ylabel: "consumption c",
+  series: rules,
+  under: (g, sx, sy, x0, x1) => { el("line", {x1: sx(x0), y1: sy(x0), x2: sx(x1), y2: sy(x1), class: "diag"}, g); },
+  over: (svg, sx, sy, x0, x1) => {
+    el("circle", {cx: sx(K), cy: sy(K), r: 5, class: "kinkmark"}, svg);
+    const t = el("text", {x: sx(K) - 10, y: sy(K) - 10, class: "note", "text-anchor": "end"}, svg);
+    t.textContent = `kink at m = ${K.toFixed(3)}`;
+    const yl = Math.min(x1 * 0.92, ranges[range].y[1] * 0.93);
+    const lab = el("text", {x: sx(yl) - 6, y: sy(yl) - 6, class: "note", "text-anchor": "end"}, svg);
+    lab.textContent = "c = m";
+  },
+  tipHead: x => `m = ${x.toFixed(3)}`,
+  tipRows: x => rules.map(s => ({cls: s.cls, label: s.short, value: fmt(interp(s.pts, x))})),
+});
+for (const [id, r] of [["range-all", "all"], ["range-kink", "kink"]]) {
+  document.getElementById(id).addEventListener("click", () => {
+    range = r;
+    document.getElementById("range-all").setAttribute("aria-pressed", r === "all");
+    document.getElementById("range-kink").setAttribute("aria-pressed", r === "kink");
+    rulesChart.redraw();
+  });
+}
+
+const nat = SER.slice(0, 3);
+legend("legend-gap", nat);
+const gapSeries = nat.map(s => ({...s, pts: DATA.gap.m.map((m, i) => [m, DATA.gap[s.key][i]])}));
+chart(document.getElementById("plot-gap"), {
+  id: "gap", aspect: 0.62, aria: "The gap between the restrained rule and each natural rule",
+  x: () => [0, 3], y: [0, 0.15], yticks: [0, 0.03, 0.06, 0.09, 0.12, 0.15], xticks: () => [0, 0.5, 1, 1.5, 2, 2.5, 3],
+  xfmt: v => v.toFixed(1), yfmt: v => v.toFixed(2), xlabel: "market resources m", ylabel: "c̀(m) − c(m; ℘)",
+  series: gapSeries,
+  under: (g, sx, sy) => { el("line", {x1: sx(K), x2: sx(K), y1: sy(0), y2: sy(0.15), class: "diag"}, g); },
+  tipHead: x => `m = ${x.toFixed(3)}`,
+  tipRows: x => gapSeries.map(s => ({cls: s.cls, label: s.short, value: fmt(interp(s.pts, x))})),
+});
+
+legend("legend-mpc", SER);
+const mpcSeries = SER.map(s => ({...s, pts: DATA.mpc[s.key]}));
+chart(document.getElementById("plot-mpc"), {
+  id: "mpc", aspect: 0.62, aria: "Marginal propensities to consume of the four households",
+  x: () => [0, 3], y: [0, 1.05], yticks: [0, 0.2, 0.4, 0.6, 0.8, 1.0], xticks: () => [0, 0.5, 1, 1.5, 2, 2.5, 3],
+  xfmt: v => v.toFixed(1), yfmt: v => v.toFixed(1), xlabel: "market resources m", ylabel: "MPC c′(m)",
+  series: mpcSeries,
+  tipHead: x => `m = ${x.toFixed(3)}`,
+  tipRows: x => mpcSeries.map(s => ({cls: s.cls, label: s.short, value: fmt(interp(s.pts, x), 3)})),
+});
+
+const PZ = [0.005, 0.0005, 0.00005];
+document.getElementById("legend-conv").innerHTML =
+  `<span><i class="l-r"></i>level 3, the finest</span><span><i style="border:1.5px solid var(--muted);width:9px;height:9px;border-radius:50%"></i>levels 1 and 2</span>`;
+const conv3 = PZ.map((p, i) => [p, DATA.convergence["3"][i]]).reverse();
+chart(document.getElementById("plot-conv"), {
+  id: "conv", aspect: 0.62, aria: "The largest gap against the probability of the zero-income event, log scales",
+  x: () => [3e-5, 8e-3], xlog: true, y: [0.02, 0.2], ylog: true,
+  yticks: [0.02, 0.05, 0.1, 0.2], xticks: () => [5e-5, 5e-4, 5e-3],
+  xfmt: v => String(v), yfmt: v => String(v), xlabel: "probability of the zero-income event ℘", ylabel: "largest gap",
+  series: [
+    {cls: "r", pts: conv3, dots: true},
+    {cls: "r", pts: PZ.map((p, i) => [p, DATA.convergence["1"][i]]).reverse(), hollow: true, nopath: true},
+    {cls: "r", pts: PZ.map((p, i) => [p, DATA.convergence["2"][i]]).reverse(), hollow: true, nopath: true},
+  ].map(s => s.nopath ? {...s, pts: s.pts} : s),
+  snap: x => PZ.reduce((a, b) => Math.abs(Math.log10(b) - Math.log10(x)) < Math.abs(Math.log10(a) - Math.log10(x)) ? b : a),
+  tipHead: x => `℘ = ${x}`,
+  tipRows: x => { const i = PZ.indexOf(x); return [1, 2, 3].map(lv => ({cls: "r", label: `level ${lv}`, value: fmt(DATA.convergence[String(lv)][i])})); },
+});
+
+const t = document.getElementById("table");
+const pzOf = {"bst-p-zero-0.005": "0.005", "bst-p-zero-0.0005": "0.0005", "bst-p-zero-0.00005": "0.00005", "bst-restrained": "0"};
+t.innerHTML = `<thead><tr><th>household</th><th>℘</th><th>largest gap</th><th>mean MPC</th><th>mass at a = 0</th><th>bottom 10% share of a</th></tr></thead><tbody>` +
+  SER.map((s, i) => { const p = DATA.population[s.key];
+    return `<tr><td><span class="sw l-${s.cls}"></span>${i < 3 ? "natural" : "restrained"}</td><td>${pzOf[s.key]}</td>` +
+      `<td>${i < 3 ? fmt(DATA.convergence["3"][i], 3) : "—"}</td><td>${fmt(p.mean_mpc, 3)}</td>` +
+      `<td>${fmt(p.mass, 3)}</td><td>${(100 * p.bottom10).toFixed(1)}%</td></tr>`; }).join("") + `</tbody>`;
+</script>
