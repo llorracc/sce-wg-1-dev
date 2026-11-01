@@ -163,13 +163,13 @@ cases.
 - **Arrival to decision** (`arvl_to_dcsn`): 𝒢_t = 𝒢 when employed, and 𝒢, 𝒢 or 1 in a quarter of unemployment by the
   switch; ξ = e θ, ξ_u, ξ_u or ξ_x by the state; m = R k/(𝒢_t ψ) + ξ; the state and the regime are carried forward.
 - **Decision to continuation** (`dcsn_to_cntn`): a = m − c, with the state and the regime carried.
-- **Continuation to decision** (`cntn_to_dcsn`): V = u(c) + β̊ V[>]; dV = u′(c).
-- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{reg,j,ψ,θ}[(𝒢_t ψ)^(1−ϱ) V]; dV[<] = E_{reg,j,ψ,θ}[R (𝒢_t ψ)^(−ϱ)
-  dV], the expectation over this quarter's regime, state and shocks given last quarter's state and regime.
+- **Continuation to decision** (`cntn_to_dcsn`): V = u(c) + β̊ V[>]; D_{m}V = u′(c), V's derivative in m.
+- **Decision to arrival** (`dcsn_to_arvl`): V[<] = E_{reg,j,ψ,θ}[(𝒢_t ψ)^(1−ϱ) V]; D_{k}V[<] = E_{reg,j,ψ,θ}[R (𝒢_t
+  ψ)^(−ϱ) D_{m}V], the expectation over this quarter's regime, state and shocks given last quarter's state and regime.
 - **The policy** (`policy`): c = argmax over 0 < c ≤ m − `a_min` of u(c) + β̊ V[>], written as documentation; the
-  operative line is the Euler equation with its complementarity clause, u′(c) = β̊ dV[>] ⟂ m − c ≥ `a_min`. The language
-  records `max` as a callable the solver supplies, as it does `log`, so a solver bound to the stage must honor the
-  constraint in force.
+  operative line is the Euler equation with its complementarity clause, u′(c) = β̊ D_{a}V[>] ⟂ m − c ≥ `a_min`. The
+  language records `max` as a callable the solver supplies, as it does `log`, so a solver bound to the stage must honor
+  the constraint in force.
 
 Composing the blocks across the quarter gives the recursion in the form BST writes it, for type i of a group, with the
 state (m, j, `reg`):
