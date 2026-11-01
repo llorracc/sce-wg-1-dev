@@ -1,6 +1,8 @@
 # The borrowing-constraint scenarios: one schema and one stage file each
 
-**Status: APPROVED, 2026-11-01 at 12:50:56 EST, with the decisions at the end; being applied.** The owner asked for the
+**Status: APPROVED, 2026-11-01 at 12:50:56 EST, with the decisions at the end; APPLIED the same afternoon**, committed on
+the branch `buffer-stock-ontology`: the six families, their stage files, the checker, the adapter, the
+stones and the ontology ([the findings](records/findings/2026-11-01_constraint-scenarios-applied.md)). The owner asked for the
 schemas and the ontology to state every configuration of a valid buffer-stock model, with a separate stage file for
 each. This proposal is drawn up with the BST, HARK, HARK-dev and HAFiscal sessions, and their answers are attributed
 below. Its decisions are listed at the end.

@@ -8,7 +8,7 @@ form, or only labels and text.
 The ontology stated in Bellman-SYM's terms, after a consultation with the bellman session and Matsya on 2026-10-31. By
 the owner's instruction of 2026-11-01, it names no toolkit.
 
-**New terms.** Rows `BSM_0000160` to `BSM_0000205`:
+**New terms.** Rows `BSM_0000160` to `BSM_0000231`:
 - the three perches, the stage and the trellis;
 - the arrival and continuation values;
 - the three derivative terms of the values;
@@ -29,7 +29,16 @@ the owner's instruction of 2026-11-01, it names no toolkit.
   - the moment E[ψ^(−ϱ)], the discounted-return factor and their condition, MST-βR;
   - four results: existence under the FVAC and MST-βR; a stationary distribution, adding the RIC; MST-βR implying
     the GIC-Mod, tested on sampled models; and, from their 2022 paper, existence with no condition on the return when
-    there are no permanent shocks.
+    there are no permanent shocks;
+- the four borrowing-constraint scenarios, by the owner's rulings of 2026-11-01 (schemas/constraint-scenarios.md):
+  - the classes `natural-constraint`, with `natural-with-point-mass` and `natural-without-point-mass` under it, and
+    `zero-infima`; `with-artificial-constraint` is the fourth;
+  - their axioms: the natural constraint in force, the joint worst income with and without a point mass, an artificial
+    constraint tighter than the natural one, positive floors, a zero infimum, no zero-income event, finite negative
+    moments, and, for the whole class, membership in one of the four;
+  - the bounds ψ_max, θ_min and θ_max;
+  - two remarks: without a point mass, the natural limit is reached only when ϱ < k; and with zero infima, a ≥ 0 binds;
+  - six family rows, one for each family the schemas now write.
 
 **Meanings changed.**
 - The value function is the decision value, `value-decision`.
@@ -48,6 +57,13 @@ the owner's instruction of 2026-11-01, it names no toolkit.
 - The WRIC's necessity without an artificial constraint is treated as true until the paper proves it, by the owner's
   decision of 2026-11-01.
 - The deduction that an artificial constraint binds is stated for a borrowing limit, a_Art ≤ 0.
+- The point-mass axiom names the joint worst income and belongs to the natural scenario with a point mass, not to the
+  whole class; the model without one is a scenario of its own. Bounded support is a membership axiom of the natural
+  scenarios, no longer a hypothesis of BST's class. BST's class lies inside the natural scenario with a point mass.
+- The edge of the ruling of 2026-10-31, a ≥ 0 under laws with infima zero and no point mass, is a member: the zero-infima
+  scenario. `toy-untruncated` is a member.
+- The liquidity-constrained class is a ≥ 0 binding, across the artificial scenario at a_Art = 0 and the zero-infima one,
+  with no zero-income event in place of a positive lowest income.
 - HAFiscal's cap on β is no longer a divergence. By the owner's ruling of 2026-11-01 it is an implementation detail of
   HAFiscal's code, which keeps parameters away from the boundary where the solution slows drastically, and not a
   feature of the model class. `BSM_0000152` is retired.
@@ -66,8 +82,12 @@ the owner's instruction of 2026-11-01, it names no toolkit.
   named for it are renamed to match, with their identifiers unchanged.
 - Two papers are sources, cited by their own numbering: Ma, Stachurski and Toda (2020) and (2022), in their arXiv
   versions. A condition's short name may carry Greek letters.
+- The schemas' families bst/1 and bst-markov_ui-and-agg/1 gave way to six, one for each scenario the members fall in.
+  Their rows `BSM_0000136` and `BSM_0000137` are retired, as is `BSM_0000179`, the stage files' retired role word,
+  which the stage files' rewrite resolved. The natural limit and the stage have no stage-file spelling, since no stage
+  file carries the first as a parameter and each family names its own stage.
 
-47 tests.
+52 tests.
 
 ## 0.1.0-draft.1 (unreleased)
 

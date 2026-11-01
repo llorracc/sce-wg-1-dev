@@ -1,7 +1,8 @@
-# HARK's adapter for `bst/1`
+# HARK's adapter for the buffer-stock families
 
-[`adapter.py`](adapter.py) solves a `bst/1` member with HARK and writes its results file. [`test_adapter.py`](test_adapter.py)
-is its standing check and [`gate.py`](gate.py) the check a version passes before it is published.
+[`adapter.py`](adapter.py) solves a member of a buffer-stock family with HARK and writes its results file.
+[`test_adapter.py`](test_adapter.py) is its standing check and [`gate.py`](gate.py) the check a version passes before it
+is published.
 
 ## Running it
 
@@ -12,9 +13,9 @@ the commit reachable:
 ```sh
 PIN="econ-ark @ git+https://github.com/llorracc/HARK.git@1185280590b21fe2ddac80cadcfea66476e45380"
 uv run --with "$PIN" --with sympy --with jsonschema --with pyyaml --with scipy --with referencing \
-    python schemas/adapters/hark/adapter.py schemas/bst-1/members/toy.yaml --out out --level 1
+    python schemas/adapters/hark/adapter.py schemas/bst/artificial/members/toy.yaml --out out --level 1
 uv run --with jsonschema --with pyyaml --with scipy --with referencing \
-    python schemas/checker/check.py schemas/bst-1/members/toy.yaml --verify-results out/results.json
+    python schemas/checker/check.py schemas/bst/artificial/members/toy.yaml --verify-results out/results.json
 ```
 
 `--level` is one of the precision levels 1 to 4 (`low`, `medium`, `high` for 1 to 3). `--request` uses a given request
@@ -23,16 +24,16 @@ HARK's release 0.17.2 does not declare its dependency on sympy, hence `--with sy
 
 ## How it solves a member
 
-HARK solves a `bst/1` household with its `MarkovConsumerType` on the nonpersistent chain, which is how the
-[Markov family](../../bst-markov_ui-and-agg/model.md) writes a `bst/1` member. The chain has two employment states,
-employed and unemployed, and both rows of its matrix are (1 − ℘, ℘): unemployment with probability ℘ whatever the previous
-state.
+HARK solves a buffer-stock household with its `MarkovConsumerType` on the nonpersistent chain, which is how the [Markov
+family](../../bst-markov_ui-and-agg/model.md) writes a buffer-stock member. The chain has two employment states,
+employed and unemployed, and both rows of its matrix are (1 − ℘, ℘): unemployment with probability ℘ whatever the
+previous state.
 - **Income in each state.** Employed income is ψ times the employed draw scaled by (1 − ℘ξ_u)/(1 − ℘). Unemployed income
   is ψ times ξ_u, since ψ is drawn in both states.
 - **The rest is common.** Return, growth and survival are the same in both states, and newborns start employed.
 - **The nodes.** The laws are discretized by the adapter: equiprobable bins, each node the bin's exact conditional mean.
-- **The same rule in both states.** The end-of-period value does not depend on the current state, so the two states' rules
-  and values are the same function of m.
+- **The same rule in both states.** The end-of-period value does not depend on the current state, so the two states'
+  rules and values are the same function of m.
 
 The adapter asserts three things after each solve:
 - HARK solved with the adapter's chain and income process. HARK's constructors for both are switched off, since HARK
@@ -48,8 +49,10 @@ adds an interpolation error to the rule and a larger one to the value function. 
 state's expectation at the current state's points, as HARK's standard solver does. With it, the Markov rule equals the
 standard consumer's on the same nodes to about 1e-15. The branch above it computes the natural borrowing constraint from
 the laws' infima, which the adapter records on each distribution it gives HARK, rather than from the lowest nodes. A
-member that states `natural` is then solved under the stated laws' own limit, the same at every number of nodes, and the
-adapter passes no artificial constraint for it. The adapter re-pins to the first HARK release that includes both.
+member of a natural family is then solved under the stated laws' own limit, the same at every number of nodes, and the
+adapter passes no artificial constraint for it. A member of `bst-zero-infima/1` is passed `BoroCnstArt = 0.0`, its a ≥
+0, which main would otherwise miss, taking a negative limit from the lowest nodes. The adapter re-pins to the first HARK
+release that includes both.
 
 **What the adapter computes itself:**
 - the conditions and statuses, through the checker's arithmetic on the effective member's expectations. HARK has no
@@ -62,8 +65,8 @@ adapter passes no artificial constraint for it. The adapter re-pins to the first
 ## The gate
 
 `gate.py` runs one member at one level and reports:
-1. for each type, the largest relative difference between the Markov rule and HARK's standard consumer's on the same nodes,
-   and between the two employment states' rules;
+1. for each type, the largest relative difference between the Markov rule and HARK's standard consumer's on the same
+   nodes, and between the two employment states' rules;
 2. given a reference results file, the largest difference from it, number by number. It uses relative differences for
    numbers of size one or more and absolute ones for smaller numbers, by part of the file;
 3. the checker's verdict on the adapter's file.
@@ -75,5 +78,5 @@ Steps 1 and 3 need no reference.
 ## Provenance
 
 A results file's provenance carries the hardware as the architecture and the number of logical cores, the thread count,
-the files' names, and the numerical libraries' versions. It carries no machine name, no operating-system string and no run
-time.
+the files' names, and the numerical libraries' versions. It carries no machine name, no operating-system string and no
+run time.

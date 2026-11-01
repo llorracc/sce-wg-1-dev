@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "bst-markov_ui-and-agg-artificial/1 parameter file",
+  "description": "One member of the Markov family's artificial version (constraint-scenarios.md): the laws' floors strictly positive, so that every state's natural limit lies below zero, and an artificial constraint tighter than the lowest of them. Draft.",
+  "$comment": "This validator checks names, types and ranges. The checker checks the rest: the shared rules (shares, the order of the types, two quarters of benefits, each law's own rules, the validity conditions of conditions.md) and the version's: psi and theta with strictly positive floors, and a_Art strictly above the lowest natural limit.",
+  "type": "object",
+  "required": [
+    "family",
+    "period",
+    "crra",
+    "splurge",
+    "survival",
+    "return",
+    "borrowing_constraint",
+    "shocks",
+    "regimes",
+    "employment",
+    "groups"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "family": {
+      "const": "bst-markov_ui-and-agg-artificial/1"
+    },
+    "period": {
+      "$ref": "../parameters.common.schema.json#/$defs/period"
+    },
+    "crra": {
+      "$ref": "../parameters.common.schema.json#/$defs/crra"
+    },
+    "splurge": {
+      "$ref": "../parameters.common.schema.json#/$defs/splurge"
+    },
+    "survival": {
+      "$ref": "../parameters.common.schema.json#/$defs/survival"
+    },
+    "return": {
+      "$ref": "../parameters.common.schema.json#/$defs/return"
+    },
+    "borrowing_constraint": {
+      "$ref": "../parameters.common.schema.json#/$defs/artificial_constraint"
+    },
+    "shocks": {
+      "$ref": "../parameters.common.schema.json#/$defs/shocks"
+    },
+    "regimes": {
+      "$ref": "../parameters.common.schema.json#/$defs/regimes"
+    },
+    "employment": {
+      "$ref": "../parameters.common.schema.json#/$defs/employment"
+    },
+    "groups": {
+      "$ref": "../parameters.common.schema.json#/$defs/groups"
+    }
+  }
+}

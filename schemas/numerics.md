@@ -33,7 +33,7 @@ file's own target, as Bellman's methods files name it: a block's id such as `pol
 `cntn_to_dcsn.value`, or an operator's name such as `E_ψ_θ_j`, which covers every occurrence. A method attaches only
 where the stage gives the computation a place of its own: an expectation's method goes on its operator, not on the block
 or the line that holds it. Each target takes one method, and two entries on one target are an error. The family's model
-schema lists its targets with a comment on each ([`bst/1`](bst-1/model.md#method-targets)); two parts the stage cannot
+schema lists its targets with a comment on each ([`bst/1`](bst/model.md#method-targets)); two parts the stage cannot
 name, the stationary population and the diagnostics' expectation, keep names of the schema's own.
 
 The file holds **no values**. Each method it names is defined in a **method registry**. The registry declares the

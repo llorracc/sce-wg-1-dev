@@ -9,6 +9,11 @@ toolkit's own, not the schemas' to prescribe; and a toolkit is not to be made to
 schemas' choosing, which would be a protocol that shuts out other representations and is not needed. The owner then set the
 interface: not moments, but the expectations the conditions are defined by.
 
+**Since 2026-11-01** the family `bst/1` this note describes is four families, one for each borrowing-constraint
+scenario, and the Markov family `bst-markov_ui-and-agg/1` is two versions
+([`constraint-scenarios.md`](constraint-scenarios.md)). The note keeps its names as they were; its links point to the
+documents that now hold what it cites.
+
 ## The principle
 
 The schemas state a problem in a rigorous mathematical way and say nothing about how it is solved. A toolkit, handed the
@@ -135,7 +140,7 @@ Given the parameter file, a method file and a settings file, a toolkit reports, 
    integrands; the conditions decided by the toolkit on its effective member and reported; the stated member's verdicts as
    limits, decided in closed form only where the law admits it; a section on regimes differing between effective members
    and in the lower tail, where a finite representation puts an atom at its minimum.
-5. [`bst-1/results.md`](bst-1/results.md) and its validator: the required block of the named expectations, the factors and
+5. [`bst-1/results.md`](bst/results.md) and its validator: the required block of the named expectations, the factors and
    verdicts, the used derived parameters with the lowest values, the statuses as the toolkit's own, the diagnostics'
    precision stated.
 6. The checker: the representation-free verifications above; the closed-form evaluation of stated members kept as the

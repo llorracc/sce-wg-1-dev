@@ -1,7 +1,8 @@
-"""The checker for a bst/1 parameter file: validation, the laws' moments, the conditions, the domain rules, the implications;
-and the verification of a results file against the member it reports on.
+"""The checker for a parameter file of the four buffer-stock families, one for each borrowing-constraint scenario
+(constraint-scenarios.md): validation, the scenario's requirements, the laws' moments, the conditions, the domain rules, the
+implications; and the verification of a results file against the member it reports on.
 
-The statements follow bst-1/conditions.md, in BST's notation: psi the permanent shock, xi the transitory shock, theta the
+The statements follow bst/conditions.md, in BST's notation: psi the permanent shock, xi the transitory shock, theta the
 employed draw, wp the unemployment probability, xi_u the unemployment income, L survival, G growth, a_Art and a_Nat the
 artificial and natural borrowing constraints. What is computed here is computed for the STATED member, the one the parameter
 file names, from the laws' closed-form moments; it is the limit that a toolkit's effective member approaches, and nothing
@@ -23,8 +24,14 @@ from canonical import load_strict, model_hash
 from laws import FLOOR_ATOM, FLOOR_DENSITY, FLOOR_THIN, TOLERANCE, filled, law_from_mapping
 
 SCHEMAS = Path(__file__).resolve().parent.parent
-PARAMETER_SCHEMA = SCHEMAS / "bst-1" / "parameters.schema.json"
-RESULTS_SCHEMA = SCHEMAS / "bst-1" / "results.schema.json"
+BST = SCHEMAS / "bst"
+# The four families, each a borrowing-constraint scenario with its own folder, parameter schema and stage file.
+FAMILIES = {"bst-natural/1": "natural", "bst-natural-no-point-mass/1": "natural-no-point-mass",
+            "bst-artificial/1": "artificial", "bst-zero-infima/1": "zero-infima"}
+PARAMETER_SCHEMAS = {family: BST / scenario / "parameters.schema.json" for family, scenario in FAMILIES.items()}
+STAGE_FILES = {family: BST / scenario / "bellman" / f"{scenario}.bl" for family, scenario in FAMILIES.items()}
+COMMON_SCHEMA = BST / "parameters.common.schema.json"
+RESULTS_SCHEMA = BST / "results.schema.json"
 SHOCK_LAW_SCHEMA = SCHEMAS / "shock-laws.schema.json"
 
 # The precision of a closed-form evaluation; a condition whose margin lies within it is undecided for the stated member.
@@ -32,40 +39,43 @@ STATED_PRECISION = 1e-12
 # The agreement asked of a toolkit's arithmetic: a reported factor against the one recomputed from its own expectations.
 ARITHMETIC_TOLERANCE = 1e-9
 
-CONDITION_NAMES = ["AIC", "RIC", "WRIC", "FHWC", "PF-FVAC", "FVAC", "GIC", "GIC-Mod", "GIC-Szeidl", "GIC-Harmenberg",
+CONDITION_NAMES = ["AIC", "RIC", "WRIC", "FHWC", "FVAC-PF", "FVAC", "GIC", "GIC-Mod", "GIC-Szeidl", "GIC-Harmenberg",
                    "GIC-Liv"]
 EXPECTATION_NAMES = ["psi_mean", "theta_mean", "psi_pow_1_minus_rho", "psi_inverse", "psi_log", "psi_log_psi",
                      "psi_squared", "psi_pow_rho_minus_1", "psi_pow_rho", "worst_income_mass"]
-CASE_BINDING = "the artificial constraint binds"
+CASE_BINDING = "the constraint binds"
 CASE_ATOM = "an atom at the worst income"
 
 
 class MemberError(ValueError):
-    """The file is not a valid bst/1 member; the message lists every problem found."""
+    """The file is not a valid member of a buffer-stock family; the message lists every problem found."""
 
 
-def _validator():
-    shock_uri = SHOCK_LAW_SCHEMA.as_uri()
-    parameter_schema = json.loads(PARAMETER_SCHEMA.read_text())
-    shock_schema = json.loads(SHOCK_LAW_SCHEMA.read_text())
+def _resource(path: Path) -> dict:
+    """A schema with its file's URI as its $id, so that its relative references resolve against its own place."""
+    data = json.loads(path.read_text())
+    data["$id"] = path.resolve().as_uri()
+    return data
 
-    def absolute(node):
-        if isinstance(node, dict):
-            return {key: (shock_uri if key == "$ref" and value == "../shock-laws.schema.json" else absolute(value))
-                    for key, value in node.items()}
-        if isinstance(node, list):
-            return [absolute(item) for item in node]
-        return node
 
-    registry = Registry().with_resource(shock_uri, Resource.from_contents(shock_schema))
-    return jsonschema.Draft202012Validator(absolute(parameter_schema), registry=registry,
+def _validator(family: str):
+    registry = Registry()
+    for path in (SHOCK_LAW_SCHEMA, COMMON_SCHEMA):
+        resource = _resource(path)
+        registry = registry.with_resource(resource["$id"], Resource.from_contents(resource))
+    return jsonschema.Draft202012Validator(_resource(PARAMETER_SCHEMAS[family]), registry=registry,
                                            format_checker=jsonschema.FormatChecker())
 
 
 def validate(data) -> list[str]:
-    """The parameter validator's complaints, as sentences with the path of each."""
+    """The parameter validator's complaints, as sentences with the path of each, against the schema of the family the file
+    names."""
+    family = data.get("family") if isinstance(data, dict) else None
+    if family not in FAMILIES:
+        return [f"family: {family!r} is not one of the buffer-stock families {sorted(FAMILIES)}; bst/1 is retired, its "
+                "members split by borrowing-constraint scenario (constraint-scenarios.md)"]
     problems = []
-    for error in sorted(_validator().iter_errors(data), key=lambda e: list(e.absolute_path)):
+    for error in sorted(_validator(family).iter_errors(data), key=lambda e: list(e.absolute_path)):
         path = "/".join(str(p) for p in error.absolute_path) or "/"
         problems.append(f"{path}: {error.message}")
     return problems
@@ -105,7 +115,8 @@ def natural_limit_from(lowest_psi: float, lowest_income: float, G: float, R: flo
 
 
 class Member:
-    """A valid bst/1 member with its laws, the moments of its shocks, and its conditions: the stated member."""
+    """A valid member of a buffer-stock family with its laws, the moments of its shocks, and its conditions: the stated
+    member."""
 
     def __init__(self, data: dict):
         self.data = data
@@ -127,8 +138,13 @@ class Member:
         self.employed_scale = None
         if self.wp * self.xi_u < 1:
             self.employed_scale = (1 - self.wp * self.xi_u) / (1 - self.wp)
-        self.a_art = data["borrowing_constraint"]
-        self.natural = self.a_art == "natural"   # the file's word, before it resolves to a_Nat
+        self.family = data["family"]
+        self.scenario = FAMILIES[self.family]
+        # The constraint in force: a_Art in the artificial scenario; the natural constraint a_Nat in the natural ones, and 0
+        # in the zero-infima scenario, resolved once the laws are checked. natural: no artificial constraint is stated and
+        # the natural one is not the binding kind (in the zero-infima scenario it binds, as an artificial one at 0 would).
+        self.a_art = data.get("borrowing_constraint")
+        self.natural = self.scenario in ("natural", "natural-no-point-mass")
         problems = self._check()
         if problems:
             raise MemberError("; ".join(problems))
@@ -154,15 +170,49 @@ class Member:
             problems += [f"income/{name}: {p}" for p in law.check()]
         if problems:
             return problems
+        return problems + self._scenario_problems()
+
+    def _scenario_problems(self) -> list[str]:
+        """What the family's scenario requires of the laws and the constraint (constraint-scenarios.md)."""
+        problems = []
         a_nat = self.natural_borrowing_constraint()
-        if self.a_art == "natural":
+        s = self.scenario
+        if s in ("natural", "natural-no-point-mass"):
+            for name, law in (("permanent_shock", self.psi), ("employed_shock", self.theta)):
+                if not (law.infimum > 0 and not math.isinf(law.supremum)):
+                    problems.append(f"income/{name}: the natural scenarios need a law with a strictly positive lower and a "
+                                    f"finite upper bound; {law.name} spans [{law.infimum!r}, {law.supremum!r}]")
             if math.isinf(a_nat):
-                problems.append("borrowing_constraint: 'natural' names no finite constraint, since psi_min >= R/G")
-            else:
+                problems.append("income: G psi_min >= R, so h_min is infinite and there is no finite natural constraint")
+            p_worst = self.worst_income_probability()
+            if s == "natural" and not p_worst > 0:
+                problems.append("income: the joint worst income, the worst transitory income with psi at its floor, has "
+                                "probability zero, so the member is bst-natural-no-point-mass/1")
+            if s == "natural-no-point-mass" and p_worst > 0:
+                problems.append(f"income: the joint worst income is a point mass, with probability {p_worst!r}, so the "
+                                "member is bst-natural/1")
+            if not problems:
                 self.a_art = a_nat
-        elif a_nat > -math.inf and self.a_art < a_nat - TOLERANCE:
-            problems.append(f"borrowing_constraint {self.a_art!r} is below the natural constraint {a_nat!r}; "
-                            "a looser artificial constraint never binds, so write the natural one or 'natural'")
+        elif s == "artificial":
+            if not (self.psi.infimum > 0 and self.xi_infimum() > 0):
+                problems.append("income: the artificial scenario needs the floors of psi and of transitory income strictly "
+                                "positive, so that h_min > 0; with a zero floor the member is bst-zero-infima/1, or "
+                                "bst-natural/1 when the zero is a zero-income event")
+            elif not math.isinf(a_nat) and not self.a_art > a_nat + TOLERANCE:
+                problems.append(f"borrowing_constraint {self.a_art!r} is not above the natural constraint {a_nat!r}; an "
+                                "artificial constraint no tighter has no effect, so the member is a natural one")
+        elif s == "zero-infima":
+            if not (self.psi.infimum == 0 or self.theta.infimum == 0):
+                problems.append("income: the zero-infima scenario needs the infimum of psi or of theta to be zero")
+            if self.wp > 0 and self.xi_u == 0:
+                problems.append("income/unemployment: a zero-income event makes E[xi^(-rho)] infinite, so a >= 0 is never "
+                                "reached; with bounded laws the member is bst-natural/1")
+            for name, law, needed in (("employed_shock", self.theta, True),
+                                      ("permanent_shock", self.psi, self.psi.infimum == 0)):
+                if needed and not _finite_moment(law, -self.rho):
+                    problems.append(f"income/{name}: E[x^(-rho)] is infinite, so a >= 0 is never reached")
+            if not problems:
+                self.a_art = 0.0
         return problems
 
     # The transitory shock xi: xi_u with probability wp, else the scaled employed draw.
@@ -246,7 +296,7 @@ class Member:
         its artificial constraint does not bind.
         """
         a_nat = self.natural_borrowing_constraint()
-        if math.isinf(a_nat) or self.a_art > a_nat + TOLERANCE:
+        if self.scenario == "zero-infima" or math.isinf(a_nat) or self.a_art > a_nat + TOLERANCE:
             return {"finite": True, "factor": None, "case": CASE_BINDING}
         if q <= 0:
             return {"finite": True, "factor": None, "case": "no negative moment needed"}
@@ -280,7 +330,7 @@ class Member:
             factor("RIC", thorn / R, governs="the limiting MPC is positive"),
             factor("WRIC", p_min ** (1 / rho) * thorn / R, governs="existence in place of the RIC"),
             factor("FHWC", G / R, governs="finite human wealth"),
-            factor("PF-FVAC", beta * L * G ** (1 - rho), governs="finite perfect-foresight value of autarky"),
+            factor("FVAC-PF", beta * L * G ** (1 - rho), governs="finite perfect-foresight value of autarky"),
             factor("FVAC", beta * L * G ** (1 - rho) * E["psi_pow_1_minus_rho"], governs="finite value of autarky"),
             factor("GIC", thorn / G, governs="the pseudo-target exists"),
             factor("GIC-Mod", thorn * E["psi_inverse"] / G, governs="the buffer stock target exists"),
@@ -343,7 +393,7 @@ class Member:
         d = {}
         d["buffer_stock_target"] = growth * psi.moment(-1.0) < 1
         d["pseudo_target"] = growth < 1
-        d["kink"] = True if math.isinf(a_nat) else self.a_art > a_nat + TOLERANCE
+        d["kink"] = self.scenario == "zero-infima" or math.isinf(a_nat) or self.a_art > a_nat + TOLERANCE
         log_growth = math.log(growth)
         if L < 1:
             # Mortality: a mixture over ages with weights (1 - L) L^s, and the income measure's weight L G per age. The
@@ -484,10 +534,10 @@ class Member:
                 w = reported[key]
                 if kink:
                     if w["case"] != CASE_BINDING:
-                        problems.append(f"{where}/conditions/{key}/case: the artificial constraint binds in the "
+                        problems.append(f"{where}/conditions/{key}/case: the constraint binds in the "
                                         f"effective member, so the case is {CASE_BINDING!r}, not {w['case']!r}")
                     if not w["holds"]:
-                        problems.append(f"{where}/conditions/{key}/holds: a binding artificial constraint makes every "
+                        problems.append(f"{where}/conditions/{key}/holds: a binding constraint makes every "
                                         "welfare mean finite")
                 elif w["case"] == CASE_ATOM:
                     expected = atom_factor(E_pop["worst_income_mass"], q, rho, L, G, thorn, moment)
@@ -516,30 +566,41 @@ class Member:
         return problems
 
     def bellman_calibration(self, type_index: int = 0) -> dict:
-        """The calibration mapping of bellman/buffer_stock.bl for one type, in the stage file's names.
+        """The calibration mapping of the family's stage file for one type, in the stage file's names.
 
-        Bellman has no derived parameters, so a_Nat is computed here and written beside a_Art. The stage file writes the
-        lognormal family for both shocks; a member with another law has no stage file yet (see shock-laws.md, "Bellman-SYM
-        counterparts"), and the converter says so.
+        Each stage file writes its laws' family: TruncatedLogNormal in the natural and artificial scenarios, LogNormal in the
+        zero-infima scenario; a member with another law has no stage file yet, and the converter says so. Bellman-SYM has no
+        derived parameters, so the stage files write the natural limit out from the laws' bounds, which come from here.
         """
+        want = "LogNormal" if self.scenario == "zero-infima" else "TruncatedLogNormal"
         for name, law in (("permanent_shock", self.psi), ("employed_shock", self.theta)):
-            if law.name != "LogNormal":
-                raise ValueError(f"{name} is {law.name}, which has no Bellman-SYM family; the stage file writes LogNormal")
-        a_nat = self.natural_borrowing_constraint()
-        if math.isinf(a_nat):
-            a_nat = self.a_art  # no finite natural constraint; the artificial one is the constraint in force
-        return {
-            "β": self.types[type_index]["beta"], "ℒ": self.L, "ϱ": self.rho, "R": self.R, "𝒢": self.G,
-            "a_Art": self.a_art, "a_Nat": a_nat,
-            "σ_ψ": self.psi.params["sd_log"], "σ_θ": self.theta.params["sd_log"],
-            "p_zero": self.wp, "ξ_u": self.xi_u,
-        }
+            if law.name != want:
+                raise ValueError(f"{name} is {law.name}; the stage file of {self.family} writes {want}")
+        cal = {"β": self.types[type_index]["beta"], "ℒ": self.L, "ϱ": self.rho, "R": self.R, "𝒢": self.G}
+        if self.scenario == "artificial":
+            cal["a_Art"] = self.a_art
+        if want == "TruncatedLogNormal":
+            for sym, law in (("ψ", self.psi), ("θ", self.theta)):
+                cal.update({f"μ_{sym}": law.normal.location, f"s_{sym}": law.normal.scale,
+                            f"{sym}_min": law.infimum, f"{sym}_max": law.supremum})
+        else:
+            cal.update({"σ_ψ": self.psi.params["sd_log"], "σ_θ": self.theta.params["sd_log"]})
+        cal["p_zero"] = self.wp
+        if self.scenario != "natural":
+            # With p_zero = 0 the unemployment income is never paid; the natural limit's worst transitory income is then
+            # the employed floor, which the stage file reads as min(ξ_u, the scaled employed floor).
+            xi_u = self.xi_u
+            if self.wp == 0 and self.scenario == "natural-no-point-mass":
+                xi_u = self.employed_scale * self.theta.infimum
+            cal["ξ_u"] = xi_u
+        return cal
 
     def bellman_calibration_yaml(self, type_index: int = 0) -> str:
         import yaml
 
-        header = (f"# bst/1 member {self.hash[:12]}…, type {type_index} (β = {self.types[type_index]['beta']}): the "
-                  "calibration of bellman/buffer_stock.bl, written by the checker.\n")
+        stage = STAGE_FILES[self.family].relative_to(SCHEMAS)
+        header = (f"# {self.family} member {self.hash[:12]}…, type {type_index} (β = {self.types[type_index]['beta']}): "
+                  f"the calibration of {stage}, written by the checker.\n")
         body = yaml.safe_dump({"calibration": self.bellman_calibration(type_index)}, allow_unicode=True,
                               sort_keys=False, default_flow_style=False)
         return header + body
@@ -583,6 +644,15 @@ class Member:
 def atom_factor(p_min: float, q: float, rho: float, L: float, G: float, thorn: float, E_psi_q: float) -> float:
     """The factor of the atom case: E[(m - m_min)^(-q)] is finite exactly when it is below one."""
     return p_min ** (1 - q / rho) * L * (G / thorn) ** q * E_psi_q
+
+
+def _finite_moment(law, k: float) -> bool:
+    """Whether E[x^k] of a law is finite."""
+    try:
+        value = law.moment(k)
+    except (OverflowError, ValueError, ZeroDivisionError):
+        return False
+    return value is not None and math.isfinite(value)
 
 
 def load_member(path: Path) -> Member:

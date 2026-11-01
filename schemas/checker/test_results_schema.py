@@ -9,7 +9,7 @@ from pathlib import Path
 import jsonschema
 import pytest
 
-SCHEMA = json.loads((Path(__file__).resolve().parent.parent / "bst-1" / "results.schema.json").read_text())
+SCHEMA = json.loads((Path(__file__).resolve().parent.parent / "bst" / "results.schema.json").read_text())
 PROBS = ["0.01", "0.05", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "0.95", "0.99", "0.999", "1"]
 QUANTILE_PROBS = PROBS[:-1]
 
@@ -43,7 +43,7 @@ def conditions():
         return {"factor": factor, "bound": bound, "holds": factor < bound}
 
     return {
-        "AIC": c(0.99), "RIC": c(0.95), "WRIC": c(0.5), "FHWC": c(0.99), "PF-FVAC": c(0.93), "FVAC": c(0.94),
+        "AIC": c(0.99), "RIC": c(0.95), "WRIC": c(0.5), "FHWC": c(0.99), "FVAC-PF": c(0.93), "FVAC": c(0.94),
         "GIC": c(0.96), "GIC-Mod": c(0.97), "GIC-Szeidl": c(-0.04, -0.005), "GIC-Harmenberg": c(0.96, 1.005),
         "GIC-Liv": c(0.96),
         "welfare": {"case": "an atom at the worst income", "factor": 0.07, "holds": True},
@@ -86,7 +86,7 @@ def sample():
         "stationarity_residual": {"population": 3e-5, "income": 4e-5},
     }
     return {
-        "family": "bst/1", "parameter_file_sha256": h, "method_file_sha256": h, "settings_sha256": h,
+        "family": "bst-natural/1", "parameter_file_sha256": h, "method_file_sha256": h, "settings_sha256": h,
         "request_file_sha256": h,
         "effective_member": effective_member(),
         "toolkit": {"name": "bst_bench", "version": "0.3"},
@@ -122,7 +122,7 @@ def test_optional_provenance_keys_validate():
     data = sample()
     data["toolkit"]["driver"] = "bst_bench/schema_results.py 0.1"
     data["provenance"]["environment"] = {"python": "3.12.3", "numpy": "2.5.0", "blas": "openblas"}
-    data["provenance"]["parameter_file"] = "schemas/bst-1/members/toy.yaml"
+    data["provenance"]["parameter_file"] = "schemas/bst/artificial/members/toy.yaml"
     jsonschema.Draft202012Validator(SCHEMA).validate(data)
 
 

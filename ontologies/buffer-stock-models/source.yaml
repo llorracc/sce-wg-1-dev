@@ -59,8 +59,8 @@ ontology:
   formats:
     bst: {role: notation, text: "the paper's notation, as the LaTeX macro its source writes"}
     registry: {role: notation, text: "econ-ark's notation registry, by its semantic key"}
-    parameter-file: {role: calibration, text: "a key of a bst/1 parameter file, as a path"}
-    bellman-sym: {role: notation, text: "a name in bst/1's Bellman-SYM stage file as the language now writes it: a declared field, parameter, set or function, a perch mark, a derivative term, or the id of a block or line, which is the address of where a relation is written, not an object"}
+    parameter-file: {role: calibration, text: "a key of a buffer-stock family's parameter file, as a path"}
+    bellman-sym: {role: notation, text: "a name in the buffer-stock families' Bellman-SYM stage files as the language now writes it: a declared field, parameter, set or function, a perch mark, a derivative term, or the id of a block or line, which is the address of where a relation is written, not an object"}
 
 retired:
   # A divergence withdrawn on checking.
@@ -68,6 +68,11 @@ retired:
   # HAFiscal's cap on β, removed on 2026-11-01: by the owner's ruling, an implementation detail of HAFiscal's code that
   # cuts off parameters too near the boundary, where the solution slows drastically; no feature of the model class.
   - BSM_0000152
+  # The family rows of the retired families bst/1 and bst-markov_ui-and-agg/1, retired on 2026-11-01 when the families split by
+  # borrowing-constraint scenario; and the divergence of the stage files' retired role word, resolved by their rewrite.
+  - BSM_0000136
+  - BSM_0000137
+  - BSM_0000179
   # Divergences of a toolkit from the ontology's terms, moved on 2026-11-01 to that toolkit's Rosetta Stone, since the
   # ontology names no toolkit.
   - BSM_0000138
@@ -136,10 +141,11 @@ model-classes:
     definition: >-
       A consumption-saving problem of one agent, with CRRA utility and relative risk aversion above one, assets that
       earn a return, and risky noncapital income that is permanent income times a transitory shock, permanent income growing by a
-      factor and a mean-one permanent shock; borrowing limited by the natural constraint or a tighter artificial one;
-      and, where the natural constraint is the one in force, an atom at the lowest transitory shock. Whether a member
-      exhibits buffer-stock saving is a property of its solution, not of its membership.
-    axioms: [one-agent-saving, crra-above-one, friedman-muth-income, income-risk, asset-return, constraint-in-force, point-mass-at-worst-transitory]
+      factor and a mean-one permanent shock; and borrowing in one of the four borrowing-constraint scenarios: the natural
+      constraint in force with a point mass at the joint worst income, or without one, an artificial constraint tighter
+      than the natural one, or zero infima. Whether a member exhibits buffer-stock saving is a property of its solution,
+      not of its membership.
+    axioms: [one-agent-saving, crra-above-one, friedman-muth-income, income-risk, asset-return, constraint-in-force, in-a-constraint-scenario]
     sources: {bst: [sec-intro, subsec-setup, ass-shocks]}
   - id: BSM_0000002
     name: bst-model
@@ -147,9 +153,9 @@ model-classes:
     definition: >-
       The buffer-stock models whose shocks are iid with bounded support, whose transitory shock has a zero-income event
       of positive probability, with no artificial constraint, infinite lives and one type: the class to which the
-      paper's theorems apply.
-    subclass_of: buffer-stock-model
-    axioms: [iid-shocks, bounded-support, zero-income-event, riskless-constant-return, no-artificial-constraint, infinite-lives, one-type]
+      paper's theorems apply. It lies in the natural scenario with a point mass, the zero-income event.
+    subclass_of: natural-with-point-mass
+    axioms: [iid-shocks, zero-income-event, riskless-constant-return, no-artificial-constraint, infinite-lives, one-type]
     sources: {bst: [ass-shocks, bounded-support, eq-transhkdef]}
   - id: BSM_0000003
     name: perfect-foresight-benchmark
@@ -195,6 +201,7 @@ model-classes:
       A buffer-stock model with an artificial borrowing constraint a_Art strictly above the natural one. A constraint no
       tighter than the natural one has no effect, and describes the model without it.
     subclass_of: buffer-stock-model
+    axioms: [artificial-tighter, positive-floors]
     reduces_to: {class: bst-model, when: "a_Art <= a_Nat"}
     sources: {bst: [subsubsec-deatonislimit, sec-liqconstraslimit]}
   - id: BSM_0000008
@@ -237,7 +244,7 @@ model-classes:
     label: life-cycle buffer-stock model
     definition: >-
       A buffer-stock model with a finite horizon whose primitives may vary with age. A primitive binds the stage
-      occurrence of the period whose block reads it. In the one-stage period bst/1 writes, β and ℒ are read in period
+      occurrence of the period whose block reads it. In the one-stage period the buffer-stock families write, β and ℒ are read in period
       t's decision block, and R, 𝒢 and the laws of the shocks in period t+1's arrival block: both are the move from t
       to t+1. The paper's limiting solution is the limit of such problems with constant primitives as the horizon
       recedes.
@@ -260,13 +267,56 @@ model-classes:
     name: liquidity-constrained
     label: the liquidity-constrained model
     definition: >-
-      A buffer-stock model with an artificial constraint at zero, a ≥ 0. Its lowest income is positive, so the natural
-      limit lies below zero and the constraint is tighter than it. With no zero-income event (℘ = 0) and BST's other
-      primitives, it is the paper's liquidity-constrained problem, the limit of BST's model as ℘ ↓ 0. In normalized
-      form, it is the income fluctuation problem of Ma, Stachurski and Toda (2020).
-    subclass_of: with-artificial-constraint
+      A buffer-stock model whose constraint in force is a ≥ 0 and binds: an artificial constraint at zero above a
+      negative natural one (the artificial scenario at a_Art = 0), or zero infima, where both constraints give a ≥ 0
+      (the zero-infima scenario). It has no zero-income event, which would keep the constraint from binding. With
+      ℘ = 0, a positive lowest income and BST's other primitives, it is the paper's liquidity-constrained problem, the
+      limit of BST's model as ℘ ↓ 0. In normalized form, it is the income fluctuation problem of Ma, Stachurski and
+      Toda (2020).
+    subclass_of: buffer-stock-model
     axioms: [no-borrowing]
     sources: {bst: [subsubsec-deatonislimit, sec-liqconstraslimit, remark-stochdiscmst]}
+  - id: BSM_0000209
+    name: natural-constraint
+    label: a buffer-stock model with the natural constraint in force
+    definition: >-
+      A buffer-stock model with no artificial constraint tighter than the natural one, so that a > −h_min, the natural
+      constraint, is the one in force, and with both shocks' laws bounded, with strictly positive floors and finite
+      ceilings, as BST assumes. Bounded support is a condition of membership here, by the owner's ruling of 2026-11-01.
+    subclass_of: buffer-stock-model
+    axioms: [natural-in-force, bounded-support]
+    sources: {bst: [ass-shocks, borocnstnat]}
+  - id: BSM_0000210
+    name: natural-with-point-mass
+    label: the natural scenario with a point mass
+    definition: >-
+      A model with the natural constraint in force whose joint worst income, the worst transitory income with ψ at its
+      floor, has positive probability. No agent ever ends a period at the natural limit. BST's own model, whose
+      zero-income event is the point mass, is a member, with h_min = 0. The schemas' family bst-natural/1.
+    subclass_of: natural-constraint
+    axioms: [point-mass-at-joint-worst-income]
+    sources: {bst: [ass-shocks, pdv]}
+  - id: BSM_0000211
+    name: natural-without-point-mass
+    label: the natural scenario without a point mass
+    definition: >-
+      A model with the natural constraint in force whose joint worst income has probability zero. An agent can end a
+      period at the natural limit only when ϱ < k, with k the number of shocks that have densities at their floors.
+      The schemas' family bst-natural-no-point-mass/1.
+    subclass_of: natural-constraint
+    axioms: [no-point-mass-at-joint-worst-income]
+    sources: {bst: [pdv]}
+  - id: BSM_0000212
+    name: zero-infima
+    label: the zero-infima scenario
+    definition: >-
+      A buffer-stock model whose permanent shock or employed draw has infimum zero, so that the minimum present value of
+      future income is zero and the natural constraint is a ≥ 0, which an artificial constraint at zero would only
+      repeat. With no zero-income event and finite E[θ^(−ϱ)] (and E[ψ^(−ϱ)] where ψ's infimum is zero), the constraint
+      binds. The schemas' family bst-zero-infima/1; Ma, Stachurski and Toda's lognormal case.
+    subclass_of: buffer-stock-model
+    axioms: [zero-infimum, no-zero-income-event, finite-negative-moments]
+    sources: {bst: [remark-stochdiscmst], mst-2020: ["Assumption 2.3", "Lemma C.2"]}
 
 axioms:
   # Membership: what makes a model a buffer-stock model.
@@ -321,20 +371,21 @@ axioms:
       worst income impose, or a tighter artificial one.
     sources: {bst: [pdv, borocnstnat]}
   - id: BSM_0000015
-    name: point-mass-at-worst-transitory
-    label: an atom at the worst transitory shock where the natural constraint is in force
-    of: buffer-stock-model
+    name: point-mass-at-joint-worst-income
+    label: a point mass at the joint worst income
+    of: natural-with-point-mass
     tier: membership
     status: ruling
     ruled: "2026-10-31"
     statement: >-
-      Where the natural constraint is as tight as or tighter than every artificial constraint (a_min = a_Nat, the edge
-      a_Art = a_Nat included), the lowest value of the transitory shock carries positive probability under the true law:
-      P(ξ = inf supp ξ) > 0. The condition is on the transitory shock alone, not on income ψξ. The paper calls such an
-      atom inessential to its proofs; the owner's ruling makes it part of the class's definition.
-    check: "a_min > a_Nat or xi_atom > 0"
-    sources: {bst: [pdv]}
-  # Hypotheses: what the paper's theorems assume beyond membership.
+      The joint worst income, the worst transitory income with ψ at its floor, carries positive probability under the
+      true law: p_worst > 0. The owner ruled on 2026-10-31 that the worst transitory realization must be a point mass
+      where the natural constraint is in force; on 2026-11-01 he made the condition the joint one, since with a positive
+      worst transitory income and a continuous ψ a point mass in ξ alone has probability zero jointly, and made the
+      model without one a scenario of its own (natural-without-point-mass). The paper calls such an atom inessential to
+      its proofs.
+    check: "p_worst > 0"
+    sources: {bst: [pdv, wric]}
   - id: BSM_0000016
     name: iid-shocks
     label: iid shocks
@@ -348,12 +399,16 @@ axioms:
   - id: BSM_0000017
     name: bounded-support
     label: bounded support
-    of: bst-model
-    tier: hypothesis
-    status: bst
+    of: natural-constraint
+    tier: membership
+    status: ruling
+    ruled: "2026-11-01"
     statement: >-
-      ψ ∈ [ψ_min, ψ_max] with 0 < ψ_min ≤ 1 ≤ ψ_max < ∞, and the employed draw θ ∈ [θ_min, θ_max] with
-      0 < θ_min ≤ 1 ≤ θ_max < ∞. This excludes the untruncated lognormal, and admits every discretization of it.
+      ψ ∈ [ψ_min, ψ_max] with 0 < ψ_min ≤ 1 ≤ ψ_max < ∞, and the employed draw θ ∈ [θ_min, θ_max] with 0 < θ_min ≤ 1 ≤
+      θ_max < ∞, as BST assumes. A hypothesis of the paper's theorems until 2026-11-01, when the owner made it a
+      condition of membership of the natural scenarios. It excludes the untruncated lognormal, whose model with a ≥ 0 is
+      the zero-infima scenario's.
+    check: "psi_min > 0 and theta_min > 0 and psi_max < inf and theta_max < inf"
     sources: {bst: [ass-shocks, bounded-support]}
   - id: BSM_0000018
     name: zero-income-event
@@ -429,13 +484,100 @@ axioms:
     sources: {bst: [perfect-foresight-with-liquidity-constraints]}
   - id: BSM_0000201
     name: no-borrowing
-    label: no borrowing, with risk
+    label: no borrowing, binding
     of: liquidity-constrained
     tier: membership
     status: bst
-    statement: "End-of-period assets satisfy a ≥ 0, so consumption c ≤ m, and the lowest income is positive."
-    check: "a_Art == 0 and xi_min > 0"
+    statement: >-
+      The constraint in force is a ≥ 0, so consumption c ≤ m, and there is no zero-income event, so that the constraint
+      binds: an artificial constraint at zero with positive floors, or zero infima.
+    check: "a_min == 0 and (wp == 0 or xi_u > 0)"
     sources: {bst: [subsubsec-deatonislimit]}
+  - id: BSM_0000213
+    name: natural-in-force
+    label: the natural constraint in force
+    of: natural-constraint
+    tier: membership
+    status: bst
+    statement: No artificial constraint is tighter than the natural one, so the constraint in force is a_Nat = −h_min.
+    check: "a_min == a_Nat"
+    sources: {bst: [borocnstnat]}
+  - id: BSM_0000214
+    name: no-point-mass-at-joint-worst-income
+    label: no point mass at the joint worst income
+    of: natural-without-point-mass
+    tier: membership
+    status: ruling
+    ruled: "2026-11-01"
+    statement: The joint worst income has probability zero under the true law, p_worst = 0.
+    check: "p_worst == 0"
+    sources: {bst: [pdv]}
+  - id: BSM_0000215
+    name: artificial-tighter
+    label: an artificial constraint tighter than the natural one
+    of: with-artificial-constraint
+    tier: membership
+    status: ruling
+    ruled: "2026-10-22"
+    statement: The artificial constraint lies strictly above the natural one, a_Art > a_Nat; one no tighter has no effect.
+    check: "a_Art > a_Nat"
+    sources: {bst: [subsubsec-deatonislimit]}
+  - id: BSM_0000216
+    name: positive-floors
+    label: positive floors
+    of: with-artificial-constraint
+    tier: membership
+    status: ruling
+    ruled: "2026-11-01"
+    statement: >-
+      ψ_min > 0 and ξ_min > 0, so that h_min > 0 and the natural constraint lies below zero; with a zero floor the model
+      is the zero-infima scenario's, or the natural one's when the zero is a zero-income event.
+    check: "psi_min > 0 and xi_min > 0"
+    sources: {bst: [ass-shocks]}
+  - id: BSM_0000217
+    name: zero-infimum
+    label: a zero infimum
+    of: zero-infima
+    tier: membership
+    status: ruling
+    ruled: "2026-11-01"
+    statement: The permanent shock or the employed draw has infimum zero, so that the natural constraint is a ≥ 0.
+    check: "psi_min == 0 or theta_min == 0"
+    sources: {mst-2020: ["Assumption 2.3"]}
+  - id: BSM_0000218
+    name: no-zero-income-event
+    label: no zero-income event
+    of: zero-infima
+    tier: membership
+    status: ruling
+    ruled: "2026-11-01"
+    statement: The unemployment event, where there is one, pays a positive income, since a zero one makes E[ξ^(−ϱ)] infinite.
+    check: "wp == 0 or xi_u > 0"
+    sources: {mst-2020: ["Assumption 2.3"]}
+  - id: BSM_0000219
+    name: finite-negative-moments
+    label: finite negative moments
+    of: zero-infima
+    tier: membership
+    status: ruling
+    ruled: "2026-11-01"
+    statement: >-
+      E[θ^(−ϱ)] < ∞, and E[ψ^(−ϱ)] < ∞ when ψ's infimum is zero: the expected marginal value of ending a period at a = 0
+      is then finite, and the constraint binds. A law with a positive density at zero fails it for ϱ ≥ 1.
+    sources: {mst-2020: ["Assumption 2.3", "Lemma C.2"]}
+  - id: BSM_0000220
+    name: in-a-constraint-scenario
+    label: in a borrowing-constraint scenario
+    of: buffer-stock-model
+    tier: membership
+    status: ruling
+    ruled: "2026-11-01"
+    statement: >-
+      The model is in one of the four borrowing-constraint scenarios: natural-with-point-mass,
+      natural-without-point-mass, with-artificial-constraint, or zero-infima. A model in none, such as unbounded laws with
+      a zero-income event and no artificial constraint, is not a buffer-stock model. The schemas write each scenario as a
+      family of its own, with its own stage file.
+    sources: {bst: [pdv]}
 
 objects:
   - {id: BSM_0000023, name: agent, label: agent, category: agent, definition: The consumer whose problem the model states.}
@@ -462,7 +604,7 @@ objects:
     symbol: m
     definition: Bank balances plus noncapital income, as a ratio to permanent income; the state of the normalized problem.
     perch: perch-decision
-    state_domain: ℝ in bst/1's stage file, the set Xm
+    state_domain: ℝ, or ℝ₊₊, in the families' stage files, the set Xm
     written_as: {bst: '\mNrm', registry: resources-now, bellman-sym: m}
     sources: {bst: [eq-dbcparts, subsubsec-ratio]}
   - id: BSM_0000027
@@ -480,7 +622,7 @@ objects:
       Arrival assets: the end-of-period assets of the period before, which the connector joins to this period, as a
       ratio to that period's permanent income.
     perch: perch-arrival
-    state_domain: Xa = [a_min, ∞) in bst/1's stage file
+    state_domain: Xa, the constraint in force's set, in the families' stage files
     written_as: {registry: kapital-now, bellman-sym: k}
     sources: {bst: [eq-dbcparts]}
   - id: BSM_0000029
@@ -496,7 +638,7 @@ objects:
     category: state
     definition: a = m − c, as a ratio to permanent income.
     perch: perch-continuation
-    state_domain: Xa = [a_min, ∞) in bst/1's stage file
+    state_domain: Xa, the constraint in force's set, in the families' stage files
     written_as: {registry: assets-now, bellman-sym: a}
     sources: {bst: [eq-veqnnrmrecbellman]}
   - id: BSM_0000031
@@ -522,7 +664,7 @@ objects:
     category: shock
     definition: >-
       ξ, transitory income as a ratio to permanent income, the unemployment event included: ξ_u with probability ℘,
-      else the scaled employed draw. bst/1's stage file composes it from the shocks j and θ in a line of the arrival
+      else the scaled employed draw. The families' stage files compose it from the shocks j and θ in a line of the arrival
       transition, where it is an intermediate field; a stage file may instead declare ξ itself, with a mixture law.
     written_as: {bst: '\tranShkAll', registry: transitory-shock-all, bellman-sym: ξ}
     sources: {bst: [ass-shocks, eq-transhkdef]}
@@ -549,8 +691,8 @@ objects:
     category: shock
     definition: >-
       A shock on a two-point set, alive with probability ℒ, that decides whether an agent alive this period is alive
-      the next. bst/1's stage file draws none: it states survivors' problem, with ℒ in the discount, and the deaths and
-      newborns of the population are stated outside it.
+      the next. The families' stage files draw none: they state survivors' problem, with ℒ in the discount, and the deaths and
+      newborns of the population are stated outside them.
     sources: {bst: [sec-mortality]}
   - id: BSM_0000037
     name: crra
@@ -636,7 +778,34 @@ objects:
     category: bound
     symbol: psi_min
     definition: ψ_min, the infimum of the permanent shock's support under the true law; zero for a law unbounded below.
-    written_as: {bst: '\permShkIndMin', registry: permanent-shock-min}
+    written_as: {bst: '\permShkIndMin', registry: permanent-shock-min, bellman-sym: ψ_min}
+    sources: {bst: [ass-shocks]}
+  - id: BSM_0000221
+    name: permanent-shock-max
+    law_property: {pd: [PD_0000007]}
+    label: highest permanent shock
+    category: bound
+    symbol: psi_max
+    definition: ψ_max, the supremum of the permanent shock's support under the true law; infinite for a law unbounded above.
+    written_as: {bellman-sym: ψ_max}
+    sources: {bst: [ass-shocks]}
+  - id: BSM_0000222
+    name: employed-draw-min
+    law_property: {pd: [PD_0000007]}
+    label: lowest employed draw
+    category: bound
+    symbol: theta_min
+    definition: θ_min, the infimum of the employed draw's support under the true law; zero for a law unbounded below.
+    written_as: {bellman-sym: θ_min}
+    sources: {bst: [ass-shocks]}
+  - id: BSM_0000223
+    name: employed-draw-max
+    law_property: {pd: [PD_0000007]}
+    label: highest employed draw
+    category: bound
+    symbol: theta_max
+    definition: θ_max, the supremum of the employed draw's support under the true law.
+    written_as: {bellman-sym: θ_max}
     sources: {bst: [ass-shocks]}
   - id: BSM_0000047
     name: transitory-shock-min
@@ -748,10 +917,10 @@ objects:
     symbol: a_Nat
     definition: >-
       a_Nat, the lowest end-of-period assets from which the worst income next period still allows positive consumption
-      forever: minus the present value of the worst income, capitalized at ℛ. A quantity of the laws; bst/1's stage
-      file takes it as a calibrated parameter, which must equal the value the laws give, an agreement no stage file
-      can check.
-    written_as: {bst: '\BoroCnstNat', registry: borrowing-limit-natural, bellman-sym: a_Nat}
+      forever: minus the present value of the worst income, capitalized at ℛ, that is −h_min. A quantity of the laws.
+      No stage file carries it as a parameter: the natural scenario without a point mass writes it out from the laws'
+      bounds, since Bellman-SYM has no derived parameters, and the other scenarios need none.
+    written_as: {bst: '\BoroCnstNat', registry: borrowing-limit-natural}
     sources: {bst: [borocnstnat, pdv]}
   - id: BSM_0000058
     name: borrowing-limit
@@ -796,21 +965,21 @@ objects:
     name: perch-arrival
     label: arrival perch
     category: perch
-    definition: The information on entering a stage, before its shocks are drawn; in bst/1 its state is kapital k.
+    definition: The information on entering a stage, before its shocks are drawn; in the buffer-stock families its state is kapital k.
     bellman_concept: perch
     written_as: {bellman-sym: "!arvl"}
   - id: BSM_0000161
     name: perch-decision
     label: decision perch
     category: perch
-    definition: The information at which the control is chosen, the shocks drawn; in bst/1 its state is m.
+    definition: The information at which the control is chosen, the shocks drawn; in the buffer-stock families its state is m.
     bellman_concept: perch
     written_as: {bellman-sym: "!dcsn"}
   - id: BSM_0000162
     name: perch-continuation
     label: continuation perch
     category: perch
-    definition: The information after the choice; in bst/1 its state is end-of-period assets a.
+    definition: The information after the choice; in the buffer-stock families its state is end-of-period assets a.
     bellman_concept: perch
     written_as: {bellman-sym: "!cntn"}
   - id: BSM_0000163
@@ -818,11 +987,10 @@ objects:
     label: stage
     category: structure
     definition: >-
-      One decision problem with its three perches and its transitions, used at each period where it occurs. bst/1
-      writes one stage per period, so its perches coincide with BST's beginning of the period, its moment of choice
-      and its end; a period of several stages would not.
+      One decision problem with its three perches and its transitions, used at each period where it occurs. Each
+      buffer-stock family writes one stage per period, in its own stage file, so its perches coincide with BST's
+      beginning of the period, its moment of choice and its end; a period of several stages would not.
     bellman_concept: stage
-    written_as: {bellman-sym: buffer_stock}
   - id: BSM_0000164
     name: trellis
     label: trellis
@@ -887,7 +1055,7 @@ objects:
     label: end-of-period value
     category: function
     definition: >-
-      𝔳(a) = β̊ V[>](a), the discounted value of end-of-period assets, β̊ E[(𝒢ψ′)^(1−ϱ) v(m′)]. In bst/1's stage file the
+      𝔳(a) = β̊ V[>](a), the discounted value of end-of-period assets, β̊ E[(𝒢ψ′)^(1−ϱ) v(m′)]. In the families' stage files the
       discount stands in the decision block, so the continuation value is undiscounted.
     perch: perch-continuation
     of_state: end-of-period-assets
@@ -948,7 +1116,7 @@ objects:
     category: constraint
     definition: >-
       𝒞(m) = (0, m − a_min], the consumption the constraint in force allows at m: a state-dependent bound, written as a
-      feasibility correspondence. The constraint is stated three times in bst/1's stage file, in the set of a, in this
+      feasibility correspondence. The constraint is stated three times in the families' stage files, in the set of a, in this
       correspondence and in the Euler equation's clause, which agree by the author's care.
     perch: perch-decision
     of_state: market-resources
@@ -1242,7 +1410,7 @@ results:
     kind: remark
     status: stated
     assumes: []
-    within: bst-model
+    within: natural-with-point-mass
     concludes: [not constraint-binds]
     note: >-
       The zero-income event, which leaves income at zero whatever ψ, already keeps the consumer from ending a period at
@@ -1382,6 +1550,36 @@ results:
       β̊(𝒢ψ′)^(1−ϱ) is random. Their footnote 20 says the extension to random discounting is straightforward, but does
       not give it. The paper cites this work where it says βR < 1 is not necessary.
     sources: {bst: [aic, cite-maunboundeddp], mst-2022: ["Theorems 3.1 and 3.2", "Section 4.1", "Remark 4.1", "footnote 20"]}
+  - id: BSM_0000230
+    name: natural-limit-reached-only-below-k
+    label: the natural limit is reached only when ϱ < k
+    kind: remark
+    status: deduced
+    assumes: []
+    within: natural-without-point-mass
+    concludes: []
+    note: >-
+      Without a point mass at the joint worst income, an agent who saves exactly a_Nat lands next period within x of the
+      floor with probability of order x^k, k the number of shocks with densities at their floors (2 with a positive floor
+      and both, 1 with one). The expected marginal value at a_Nat is finite exactly when ϱ < k, so the constraint binds
+      near the floor only then; with ϱ > k the household saves a vanishing amount there. With the class's ϱ > 1 only k = 2
+      and 1 < ϱ < 2 reach the limit. The BufferStockTheory session's derivation of 2026-10-18, run for one density.
+    sources: {bst: [pdv]}
+  - id: BSM_0000231
+    name: zero-infima-constraint-binds
+    label: in the zero-infima scenario a ≥ 0 binds
+    kind: remark
+    status: deduced
+    assumes: []
+    within: zero-infima
+    concludes: [constraint-binds]
+    note: >-
+      At a = 0, next period's resources are ξ′ alone, and the Euler equation's right side is
+      β̊R E[(𝒢ψ′)^(−ϱ) u′(c(ξ′))], finite under the class's E[θ^(−ϱ)] < ∞ and E[ψ^(−ϱ)] < ∞, given c(m) ≥ const · m near
+      zero. Since u′(m) → ∞ as m ↓ 0, c = m on an interval [0, m*], at every ϱ, and the stationary population has a mass
+      at a = 0: Ma, Stachurski and Toda's Lemma C.2, that the constraint binds in finite time with positive probability.
+      Derived by the working group's BufferStockTheory session on 2026-11-01, with a second derivation; not run.
+    sources: {mst-2020: ["Lemma C.2", "Proposition 2.5"]}
 
 identities:
   - id: BSM_0000129
@@ -1444,23 +1642,54 @@ identities:
     sources: {bst: [sec-mortality]}
 
 families:
-  - id: BSM_0000136
-    name: bst-1
-    label: "the schemas' family bst/1"
-    writes: [with-survival, with-positive-benefit, with-artificial-constraint, with-types]
+  - id: BSM_0000224
+    name: bst-natural-1
+    label: "the schemas' family bst-natural/1"
+    writes: [natural-with-point-mass, with-survival, with-types]
     definition: >-
-      The working group's written family bst/1: its parameter file and its stage file write buffer-stock models with
-      perpetual youth and no annuity, a benefit ξ_u ≥ 0, an artificial constraint at or above the natural one, and
-      permanent types differing in β, with mean-one laws of ψ and θ from the ontology of probability distributions.
-    schema: ../../schemas/bst-1/model.md
-  - id: BSM_0000137
-    name: bst-markov-ui-and-agg-1
-    label: "the schemas' family bst-markov_ui-and-agg/1"
-    writes: [with-survival, with-positive-benefit, with-artificial-constraint, with-types, with-markov-states]
+      The schemas' family for the natural scenario with a point mass: its stage file states BST's own model, with
+      truncated lognormals and the zero-income event; a positive benefit with a discrete ψ has no stage file yet.
+    schema: ../../schemas/bst/natural/parameters.schema.json
+  - id: BSM_0000225
+    name: bst-natural-no-point-mass-1
+    label: "the schemas' family bst-natural-no-point-mass/1"
+    writes: [natural-without-point-mass, with-survival, with-positive-benefit, with-types]
     definition: >-
-      The working group's written family for HAFiscal's household: bst/1 with Markov employment and benefit expiry, an
-      aggregate regime, groups of types, a level law for the newborn and the splurge as an observation map.
-    schema: ../../schemas/bst-markov_ui-and-agg/model.md
+      The schemas' family for the natural scenario without a point mass, with truncated lognormals; its stage file
+      writes the natural limit out from the laws' bounds and carries the complementarity clause.
+    schema: ../../schemas/bst/natural-no-point-mass/parameters.schema.json
+  - id: BSM_0000226
+    name: bst-artificial-1
+    label: "the schemas' family bst-artificial/1"
+    writes: [with-artificial-constraint, liquidity-constrained, with-survival, with-positive-benefit, with-types]
+    definition: >-
+      The schemas' family for the artificial scenario, with truncated lognormals and an artificial constraint strictly
+      above the natural one; at a_Art = 0 its members are liquidity-constrained.
+    schema: ../../schemas/bst/artificial/parameters.schema.json
+  - id: BSM_0000227
+    name: bst-zero-infima-1
+    label: "the schemas' family bst-zero-infima/1"
+    writes: [zero-infima, liquidity-constrained, with-survival, with-positive-benefit, with-types]
+    definition: >-
+      The schemas' family for the zero-infima scenario, with lognormals and no stated artificial constraint, since a ≥ 0
+      is the natural one.
+    schema: ../../schemas/bst/zero-infima/parameters.schema.json
+  - id: BSM_0000228
+    name: bst-markov-ui-and-agg-artificial-1
+    label: "the schemas' family bst-markov_ui-and-agg-artificial/1"
+    writes: [with-markov-states, with-artificial-constraint, liquidity-constrained, with-survival, with-positive-benefit, with-types]
+    definition: >-
+      The Markov family's artificial version, HAFiscal's household with laws truncated to positive floors: Markov
+      employment and benefit expiry, an aggregate regime, groups of types, a level law for the newborn and the splurge
+      as an observation map.
+    schema: ../../schemas/bst-markov_ui-and-agg/artificial/parameters.schema.json
+  - id: BSM_0000229
+    name: bst-markov-ui-and-agg-zero-infima-1
+    label: "the schemas' family bst-markov_ui-and-agg-zero-infima/1"
+    writes: [with-markov-states, zero-infima, liquidity-constrained, with-survival, with-positive-benefit, with-types]
+    definition: >-
+      The Markov family's zero-infima version, HAFiscal's household with its published lognormal laws.
+    schema: ../../schemas/bst-markov_ui-and-agg/zero-infima/parameters.schema.json
 
 divergences:
   - id: BSM_0000141
@@ -1499,14 +1728,3 @@ divergences:
       BST writes 𝕄 for the cross-sectional mean, the pairing of the population's measure with a function; a stage's
       forward distribution operator is written 𝕄_π. One letter names two objects.
     sources: {bst: [subsec-cgroeqpermgrofacq]}
-  - id: BSM_0000179
-    name: bst1-stage-files-retired-marginal-role
-    term: marginal-value-continuation
-    where: schemas
-    kind: notation
-    statement: >-
-      bst/1's stage file, and the Markov family's, write the marginal values as fields dV, dV[<] and dV[>] with the role
-      word !mrgnvl. Bellman-SYM retired that role on 2026-10-26: the derivative of a value is no field, and is read by
-      the derivative term, D_{a}V[>]. The language now refuses both files. Rewritten with the three derivative terms,
-      bst/1's elaborates; the rewrite is proposed to the owner.
-    sources: {schemas: ["schemas/bst-1/bellman/buffer_stock.bl:51-63", "schemas/bst-markov_ui-and-agg/bellman/bst_markov_ui.bl:69-81"]}

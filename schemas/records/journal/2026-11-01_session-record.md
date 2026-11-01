@@ -44,10 +44,44 @@ its memorial).
 - **From 10:20.** The ontology's divergence on the cap is retired, and the ontology's 47 tests pass. The second memorial
   is written.
 
-**State at the second memorial:**
+- **10:18–11:44.** HAFiscal-Latest commits its memorial (`764c0d37`, 10:24:21). On the owner's word in that session at
+  11:12:02, HAFiscal-QE's comments on the cap are corrected and pushed as `8d8b71e` (11:13:57).
+- **11:44:52 and 11:46:18.** The owner asks for every configuration of a valid buffer-stock model, each a schema with its
+  own stage file (see the rulings). A proposal follows; at 12:19:08 he asks for at least three scenarios, refined with
+  the BST, HARK and HARK-dev sessions, and places HAFiscal in the second.
+- **12:28:24 to 12:32:00.** The four sessions answer, in order:
+  - HARK-dev, at 12:28:24: the min construction, the point-mass rule, and the third scenario's mass at zero;
+  - HAFiscal-Latest, at 12:28:51: its published model is in the third scenario by its stated laws, and computed as if in
+    the second, on atoms;
+  - HARK, at 12:30:00: which scenarios its types can express, and that h_min > 0 needs both infima positive;
+  - BST, at 12:32:00: its own model has h_min = 0, the point mass is joint, and there is a fourth scenario.
+
+  The proposal is written as `constraint-scenarios.md`.
+- **12:30:17.** The owner rules that a modified condition's modifier follows its base name: FVAC-PF.
+- **12:50:56.** The owner rules on the proposal (see the rulings).
+- **From 12:51.** The six families are written and tested: the four buffer-stock families and the Markov family's two
+  versions, each with its own stage file, all six elaborating on Bellman-SYM's current main; the checker, the adapter,
+  the stones, the documents and the ontology follow. At 13:23:13 the checker's 194 tests, the ontology's 52 and the
+  ontology of probability distributions' 12 pass; the adapter's 7 passed earlier at its pinned HARK.
+
+**State at the second memorial** (10:21):
 - Draft.2 of the ontology, HARK's stone, these records and the memory are committed on `buffer-stock-ontology`, in the
   memorial of 10:14:35 and the one after it. Nothing is pushed.
 - The HAFiscal-Latest session holds the owner's two rulings of 10:18, for its own memorial and its code's comments.
 - Pull request #15, the stage files' rewrite, is open against the schemas' branch, unmerged.
 - The issue on the WRIC is open in the paper's repository.
 - The open decisions are in the rulings and the deferred follow-ups.
+
+- **After the commit.** The community library's session notes that its published model description, v0.1, states
+  untruncated laws, so the truncated `library` is no longer its model as published; put to the owner. HAFiscal-Latest
+  corrects this session's message to it: it had not advised leaving `borrowing_constraint` out of the zero-infima
+  members, which is the owner's decision, and it cautions that a solver taking the natural limit from atoms would let
+  agents borrow. The families' documents now say that the zero-infima stage files impose a ≥ 0 themselves, and that a
+  toolkit imposes it as stated. HAFiscal's emitter hardcodes the old family key and folder; that session has told the
+  owner.
+
+**State at the end of the afternoon:** the scenarios applied and committed on `buffer-stock-ontology`, unpushed: the push
+and the draft pull request against the schemas' branch were refused by the session's permission check as an external
+write, and wait for the owner. #15 stays open. The sessions whose work reads the families are told:
+HAFiscal-Latest (its emitter's family keys, FVAC-PF and the binding case's wording) and the community library's (the
+`library` member truncated, its new path and calibration).

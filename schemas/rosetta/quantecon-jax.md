@@ -1,4 +1,4 @@
-# QuantEcon's JAX code: a Rosetta Stone for `bst/1`
+# QuantEcon's JAX code: a Rosetta Stone for the buffer-stock families
 
 Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md).
 - **The toolkit** is the code of QuantEcon's lecture *The Income Fluctuation Problem V: Stochastic Returns on Assets*:
@@ -17,10 +17,10 @@ Draft, begun on 2026-10-21; see the [Rosetta Stones](README.md).
 - **The Euler equation:** (u′∘σ)(a, z) = max{β E_z R̂ (u′∘σ)[R̂(a − σ(a, z)) + Ŷ, Ẑ], u′(a)}.
 - **Its conditions** follow Ma, Stachurski and Toda (2020): β E R < 1 for an IID return, and E Y < ∞ and E u′(Y) < ∞.
 
-## The recasting: `bst/1`'s household in the lecture's form
+## The recasting: the buffer-stock families' household in the lecture's form
 
-`bst/1`'s normalized household has a law of the right form, m′ = (R/(𝒢ψ′))a + ξ′. But its continuation is
-β̊E[(𝒢ψ′)^(1−ϱ)v(m′)], with a factor that a constant β cannot carry. Tilting ψ's law by ψ^(1−ϱ) removes it. With the
+the buffer-stock families' normalized household has a law of the right form, m′ = (R/(𝒢ψ′))a + ξ′. But its continuation
+is β̊E[(𝒢ψ′)^(1−ϱ)v(m′)], with a factor that a constant β cannot carry. Tilting ψ's law by ψ^(1−ϱ) removes it. With the
 member's nodes ψᵢ and weights wᵢ:
 - the weights become w̃ᵢ = wᵢψᵢ^(1−ϱ) / Σⱼ wⱼψⱼ^(1−ϱ);
 - the discount factor is β̃ = β̊𝒢^(1−ϱ) Σᵢ wᵢψᵢ^(1−ϱ);
@@ -30,7 +30,7 @@ member's nodes ψᵢ and weights wᵢ:
 Then v(m) = max_c {u(c) + β̃ Ẽ[v(m′)]}, the lecture's form, holds exactly. So does the Euler equation:
 β̃Ẽ[R̂u′(c′)] = β̊R𝒢^(−ϱ)E[ψ^(−ϱ)u′(c′)]. The household's problem was solved both ways for one calibration, with HARK's
 code at `4c285e86`, on the same nodes and the same grid: HARK's defaults with ξ_u = 0 and the natural limit, on 200 grid
-points up to 40, not a `bst/1` member. The rules agree to 1.3·10⁻¹⁵ and the values to 1.2·10⁻¹³.
+points up to 40, not a buffer-stock member. The rules agree to 1.3·10⁻¹⁵ and the values to 1.2·10⁻¹³.
 
 **An equivalent change of the code.** Keep the untilted law and R̂ = R/(𝒢ψ′). In `K`'s integrand,
 return R̂^ϱ·u′(c′) in place of R̂·u′(c′), and replace β by β̊R^(1−ϱ). This is the same Euler equation, since
@@ -49,12 +49,12 @@ Three cautions:
   - The households' stationary measure uses ψ's law as given. The income measure tilts by ψ, not by ψ^(1−ϱ).
 - **β̃ < 1 is the FVAC.** The lecture's check, β E R < 1, becomes β̊R𝒢^(−ϱ)E[ψ^(−ϱ)] < 1.
   - That is sufficient for the lecture's argument, and stricter than the GIC-Mod for ϱ ≥ 1.
-  - A `bst/1` member that satisfies the RIC and the FVAC but fails that check still has a solution. So the adapter
+  - A buffer-stock member that satisfies the RIC and the FVAC but fails that check still has a solution. So the adapter
     reports the check's value and does not stop on it.
 
 ## The lexicon
 
-| `bst/1` | the lecture | where the lecture differs, and what the adapter does |
+| the buffer-stock families | the lecture | where the lecture differs, and what the adapter does |
 |---|---|---|
 | m | `a`, cash on hand | — |
 | a = m − c | `s`, savings | — |
@@ -63,7 +63,7 @@ Three cautions:
 | R, `return`, with ψ and 𝒢 | `R`, as R̂ᵢ = R/(𝒢ψᵢ) with the tilted weights | `R = exp(a_r ζ + b_r)` is an untruncated lognormal, so the adapter passes nodes |
 | ξ, from θ (`income.employed_shock`), ℘ (`income.unemployment.prob`) and ξ_u (`income.unemployment.income`) | `Y` | `Y = exp(a_y η + z b_y)` cannot hold the unemployment node, and with one state its mean is exp(a_y²/2), not one. The adapter passes ξ's nodes and weights |
 | the shocks' independence over time | `P`, the Markov chain of z | one state |
-| `a_Art`, `borrowing_constraint`, and `a_Nat` | 0 ≤ c ≤ a | the lecture has no borrowing: its constraint in force is 0, which is `bst/1`'s max(`a_Art`, `a_Nat`) when `a_Art` = 0. A constraint below 0 needs the savings grid to start at `a_min`, and the anchor at (m, c) = (`a_min`, 0) |
+| `a_Art`, `borrowing_constraint`, and `a_Nat` | 0 ≤ c ≤ a | the lecture has no borrowing: its constraint in force is 0, which is `bst-zero-infima/1`'s a ≥ 0 and `bst-artificial/1`'s at `a_Art` = 0. A natural family's member, or an artificial constraint below 0, needs the savings grid to start at `a_min`, and the anchor at (m, c) = (`a_min`, 0) |
 | the newborn, and deaths at 1 − ℒ | none | the lecture's households start at half the grid's top and never die. The adapter computes the population itself |
 | V | none | the lecture iterates on consumption only. The adapter adds an evaluation of v under the converged rule |
 
@@ -87,7 +87,8 @@ Each was read in the lecture's code at `96ede2993` and checked against its sourc
 5. **The value.** An evaluation step for v, for the welfare blocks, in pseudo-inverse form to avoid −∞ at the limit.
    Discounted utility along simulated paths, which the method target `cntn_to_dcsn.value` also allows, carries a
    standard error, and so compares only at that error.
-6. **The population:** deaths at 1 − ℒ, `bst/1`'s newborns, the two measures, and the coverage of the representation.
+6. **The population:** deaths at 1 − ℒ, the buffer-stock families' newborns, the two measures, and the coverage of the
+   representation.
    - The adapter's own lottery does all of these.
    - By simulation instead, the lecture's code would need three things. A household dies with probability 1 − ℒ, and is
      replaced by a newborn whose m is an employed draw. Permanent income p is tracked, since the income measure weights
@@ -107,7 +108,7 @@ cover that member, although the algorithm still runs on nodes.
   - `tol` and `max_iter`;
   - the nodes.
 
-  In the tags of the [method targets](../bst-1/model.md#method-targets), the solve is `!time-iteration` on
+  In the tags of the [method targets](../bst/model.md#method-targets), the solve is `!time-iteration` on
   `policy.euler.solve`, with `solve_model` as its handler, and `jnp.interp` is `!Linear` on `policy`. The lecture's own
   expectation is `!monte-carlo`; the adapter replaces it with `!quadrature` over the member's nodes, on `E_ψ_θ_j`.
 - **The adapter** is not written yet. Its legs:

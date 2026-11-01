@@ -1,16 +1,17 @@
-# bst-markov_ui-and-agg/1: conditions and implications
+# The Markov family: conditions and implications
 
 Draft, 2026-10-18; see the [README](../README.md) and the [model schema](model.md).
 
-This document carries [`bst/1`'s conditions](../bst-1/conditions.md) over to the family with the employment chain. It
-keeps that document's four kinds of statement, validity conditions, domain rules, implications and the simulation phase,
-all computed exactly by the checker from the parameter file, the chain and the [shock laws'](../shock-laws.md)
-closed-form moments. What changes: the household's state carries the employment state j; the growth factor and the law
-of the permanent shock vary with j under `grows` and `frozen`; income in the unemployed states is an atom; the borrowing
-constraint in force depends on the state; and the conditions that are scalar inequalities in `bst/1` become conditions
-on a matrix over the chain, which reduce to `bst/1`'s under `continues`. The stationary problem is the normal regime's,
-since normal is absorbing, so the chain below is the normal regime's. The derivations are of 2026-10-18 and are
-deductions unless a check is named.
+This document carries [the buffer-stock families' conditions](../bst/conditions.md) over to the Markov family's two
+versions, artificial and zero-infima, with the employment chain. It keeps that document's four kinds of statement,
+validity conditions, domain rules, implications and the simulation phase, all computed exactly by the checker from the
+parameter file, the chain and the [shock laws'](../shock-laws.md) closed-form moments. What changes: the household's
+state carries the employment state j; the growth factor and the law of the permanent shock vary with j under `grows` and
+`frozen`; income in the unemployed states is an atom; the borrowing constraint in force depends on the state; and the
+conditions that are scalar inequalities in the buffer-stock families become conditions on a matrix over the chain, which
+reduce to the buffer-stock families' under `continues`. The stationary problem is the normal regime's, since normal is
+absorbing, so the chain below is the normal regime's. The derivations are of 2026-10-18 and are deductions unless a
+check is named.
 
 ## Notation
 
@@ -23,11 +24,11 @@ For one group and its type i:
 - `ξ_min(j)` is the lowest income in state j: e `θ_min` in E, ξ_u in U_2 and U_1, ξ_x in X; and `ψ_min(j)` is the lowest
   value of ψ in j, the law's lowest value where ψ is drawn and 1 where it is fixed.
 - Þ̊_i = (R β̊_i)^(1/ϱ), with β̊_i = β_i ℒ, is the absolute patience factor with survival, and `κ_min` = max(0, 1 −
-  Þ̊_{R,i}) is its limiting MPC as m → ∞, as in `bst/1`.
+  Þ̊_{R,i}) is its limiting MPC as m → ∞, as in the buffer-stock families.
 - For a function f of next quarter's state and shock, M_f is the matrix with entries M_f[j, j′] = P[j, j′] E[f(j′, ψ′) |
   j′], and λ(M_f) is its dominant eigenvalue, which exists and is positive since the entries are. Under `continues`, f
   depends on j′ only through 𝒢(j′) = 𝒢 and the law of ψ is the same in every state, so M_f = E[f] P and λ(M_f) = E[f]:
-  every condition below is then `bst/1`'s with the group's 𝒢.
+  every condition below is then the buffer-stock families' with the group's 𝒢.
 
 ## The constraint in force, by state
 
@@ -40,14 +41,15 @@ states,
 
 a fixed point that a few iterations from zero reach, each bracket being nonpositive. HARK's Markov solver computes the
 same recursion: a state's natural bound comes from the next states' lowest resources, which already carry the artificial
-limit. The **natural limits** `a_Nat(j)` are the same recursion without `a_Art`: the constraint in force of a member
-written with `borrowing_constraint: natural`. In `bst/1`, one state, the recursion gives `a_min` = max(`a_Art`, `a_Nat`)
-with `a_Nat` = −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) and ℛ = R/𝒢. In the chain the artificial limit has to sit inside the
-recursion: taking max(`a_Art`, `a_Nat(j)`) after the fact understates the limit of a state that can be followed by one
-in which the artificial limit binds, since the first must leave room for the second. Consequences:
+limit. The **natural limits** `a_Nat(j)` are the same recursion without `a_Art`. In the buffer-stock families, one
+state, the recursion gives `a_min` = max(`a_Art`, `a_Nat`) with `a_Nat` = −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) and ℛ = R/𝒢. In
+the chain the artificial limit has to sit inside the recursion: taking max(`a_Art`, `a_Nat(j)`) after the fact
+understates the limit of a state that can be followed by one in which the artificial limit binds, since the first must
+leave room for the second. Consequences:
 - With lognormal laws, `θ_min` = 0 and `ψ_min` = 0 in the employed state, which can follow every state, so its term is
   zero, every other term is negative, and `a_min(j)` = max(`a_Art`, 0) = 0 in every state and under every value of the
-  switch. The stage file's single limit, with `a_Nat: 0.0`, is therefore exact for every member it states.
+  switch. The zero-infima version's stage file states a ≥ 0 directly, which is therefore exact for every member it
+  states.
 - With truncated laws the limits are negative and can differ by state. They are the same in every state when the
   employed state's term, a candidate everywhere, is the largest, as at the paper's calibration under `continues`. They
   differ when a state's own worst income is low enough for its term to be the larger, as for the paper's low-benefits
@@ -65,10 +67,10 @@ in which the artificial limit binds, since the first must leave room for the sec
 A member that fails any of these is rejected:
 - the parameter domains of the [model schema](model.md) and the rules of the [shock laws](../shock-laws.md); the shares
   summing to one within each group and across groups;
-- `a_Art` ≤ 0 and, for one written form, no lower than the lowest of the natural limits `a_Nat(j)`, since an artificial
-  limit below it binds in no state and describes the same model as `natural`; or `natural`, for no artificial limit. An
-  artificial limit is relevant only where it lies strictly above the natural limit; one at the lowest natural limit,
-  such as the paper's 0 under lognormal laws, is valid and has no effect;
+- the version's scenario ([`constraint-scenarios.md`](../constraint-scenarios.md)): in the artificial version, ψ and θ
+  with strictly positive floors, and `a_Art` ≤ 0 strictly above the lowest of the natural limits `a_Nat(j)`; in the
+  zero-infima version, the infimum of ψ or of θ zero, so that every limit is 0, and E[θ^(−ϱ)] finite, with E[ψ^(−ϱ)]
+  finite when ψ's infimum is zero;
 - for every group and type, the FVAC and the RIC or the WRIC of the table below.
 
 BST's existence theorem is for independent income with bounded support and ϱ > 1. For the chain the family requires the
@@ -76,8 +78,8 @@ analogous conditions, with the dominant eigenvalue in place of the expectation; 
 
 ## The conditions
 
-Each condition is `bst/1`'s with the chain's matrix in place of the scalar; the right-hand column gives the `continues`
-form, which is `bst/1`'s with the group's 𝒢.
+Each condition is the buffer-stock families' with the chain's matrix in place of the scalar; the right-hand column gives
+the `continues` form, which is theirs with the group's 𝒢.
 
 | Condition | Inequality | Under `continues` |
 |---|---|---|
@@ -85,7 +87,7 @@ form, which is `bst/1`'s with the group's 𝒢.
 | RIC | Þ̊_R < 1 | the same |
 | WRIC | `p_worst(j)`^(1/ϱ) Þ̊_R < 1 in every state, with `p_worst(j)` the probability from j that next quarter's income is its worst | Þ̊_R < 1 when no law has an atom at its floor, since `p_worst` = 0 |
 | FHWC | λ(M_f) < 1 with f = 𝒢(j′) ψ′/R | 𝒢/R < 1 |
-| PF-FVAC | λ(M_f) < 1 with f = β̊ 𝒢(j′)^(1−ϱ) | β̊ 𝒢^(1−ϱ) < 1 |
+| FVAC-PF | λ(M_f) < 1 with f = β̊ 𝒢(j′)^(1−ϱ) | β̊ 𝒢^(1−ϱ) < 1 |
 | FVAC | λ(M_f) < 1 with f = β̊ (𝒢(j′) ψ′)^(1−ϱ) | β̊ 𝒢^(1−ϱ) E[ψ^(1−ϱ)] < 1 |
 | GIC, by state | R (1 − `κ_min`) < E[𝒢(j′) ψ′ \| j] | ℛ (1 − `κ_min`) < 1 |
 | GIC-Mod, by state | R (1 − `κ_min`) E[1/(𝒢(j′) ψ′) \| j] < 1 | ℛ (1 − `κ_min`) E[ψ^(−1)] < 1 |
@@ -118,9 +120,9 @@ The stationary population over (m, j), for each group and type:
 
 **With ℒ < 1:**
 - **Population measure.** It exists for every valid member: a mixture over ages with geometric weights, the fixed point
-  of a map that contracts at rate ℒ, as in `bst/1`, the chain adding a finite state.
+  of a map that contracts at rate ℒ, as in the buffer-stock families, the chain adding a finite state.
 - **Its moments.** The moment of order q of m is finite exactly when q < ε, where ε > 0 solves ℒ λ(M_f) = 1 with
-  f = (R (1 − `κ_min`)/(𝒢(j′) ψ′))^ε; when no root exists every moment is finite. Under `continues` this is `bst/1`'s
+  f = (R (1 − `κ_min`)/(𝒢(j′) ψ′))^ε; when no root exists every moment is finite. Under `continues` this is theirs
   root ℒ E[(ℛ (1 − `κ_min`)/ψ)^ε] = 1.
 - **Income measure.** It exists when ℒ λ(M_f) < 1 with f = 𝒢(j′) ψ′, which is ℒ 𝒢 < 1 under `continues`. Its moment of
   order q is finite exactly when ℒ λ(M_f) < 1 with f = (R (1 − `κ_min`)/(𝒢(j′) ψ′))^q 𝒢(j′) ψ′, which under `continues`
@@ -160,49 +162,53 @@ Exact consequences of the parameters, which the comparison tests a results file 
 - **The tail exponents** ε of the two measures and ε_𝐩 of the level distribution.
 - **Consistency of the rule and the distribution.** The laws of a and c under the stationary population are the images
   of the law of (m, j) under the rule and the observation map.
-- **The reduction to `bst/1`.** A member written as the [model schema](model.md) describes solves the same problem as
-  its `bst/1` original, so every statistic of the two agrees exactly, the natural constraint, the targets and the tail
-  exponents included.
+- **The reduction to the buffer-stock families.** A member written as the [model schema](model.md) describes solves the
+  same problem as its buffer-stock original, so every statistic of the two agrees exactly, the natural constraint, the
+  targets and the tail exponents included.
 
 ## The simulation phase
 
 **Positivity.** Survivors satisfy it by the constraint in force in their state, an implication of ϱ > 1. Newborns
 satisfy it by the family's convention: born employed with no assets, so m = e θ > 0 under every shock law.
 
-**The welfare conditions.** As in `bst/1`, W_i and F_i are finite exactly when E[(m − `m_min(j)`)^(−(ϱ−1))] is under the
-stationary population, and M_i exactly when E[(m − `m_min(j)`)^(−ϱ)] is, with `m_min(j)` the lowest resources in state j
-from which positive consumption is feasible. The cases are `bst/1`'s, taken state by state:
+**The welfare conditions.** As in the buffer-stock families, W_i and F_i are finite exactly when E[(m −
+`m_min(j)`)^(−(ϱ−1))] is under the stationary population, and M_i exactly when E[(m − `m_min(j)`)^(−ϱ)] is, with
+`m_min(j)` the lowest resources in state j from which positive consumption is feasible. The cases are the buffer-stock
+families', taken state by state:
 - Where the artificial limit is the constraint in force and lies strictly above the limit the following states impose,
   the rule keeps consumption above a positive value in that state.
   With truncated laws and the paper's `a_Art` = 0 this is every state, and all three means are finite.
-- With lognormal laws, every state's limit is zero, the natural one, and an artificial limit of zero binds nowhere;
-  resources near zero are reached only in the employed state, with a density that vanishes faster than any power, since
-  θ is lognormal, while the unemployed states' incomes are positive atoms. Every moment is then finite, as in `bst/1`'s
-  thin-density case.
+- With lognormal laws, the zero-infima version, every state's limit is zero, and a ≥ 0 binds: E[θ^(−ϱ)] and E[ψ^(−ϱ)]
+  are finite, so the expected marginal value of ending a quarter at a = 0 is finite, and a household ends one there
+  for m below a kink, at every ϱ. This corrects the reading before 2026-11-01, under which a limit of zero bound nowhere
+  (the BST and HARK-dev sessions, on the Euler equation at a = 0; not yet run). All three means are finite, as in the
+  binding case.
 - A member with an atom at the worst income and no binding constraint, such as `income_without_benefits` below the
-  employed floor under truncated laws with `borrowing_constraint: natural`, falls under `bst/1`'s atom case with the
+  employed floor under truncated laws and with no artificial limit, would fall under the buffer-stock families' atom
+  case; the family has no natural version yet, so this is for when it does, with the
   chain's runs in place of the i.i.d. runs: the condition is ℒ λ(M_f) < 1 with f = `p_worst(j′)`^(1 − q/ϱ) (𝒢(j′)
   ψ′/Þ̊_i)^q on the states where the atom is the worst income, at q = ϱ − 1 for W_i and F_i and q = ϱ for M_i. That form
-  is a deduction from `bst/1`'s, not yet checked.
+  is a deduction from the buffer-stock families', not yet checked.
 
 So every member of the paper's calibration, in any of the three worlds and with either family of laws, defines W, F and
 M; the checker reports the case it falls under.
 
 ## The stated member and the effective member
 
-As for [`bst/1`](../bst-1/conditions.md#the-stated-member-and-the-effective-member): every statement above is defined
-for the stated member and for a toolkit's effective member alike, and decided for each by the same arithmetic on its own
-expectations. Here the expectations a toolkit reports are conditional on the next state, E[(𝒢(j′) ψ′)^k | j′] for the
-powers the conditions use, E[log ψ | j′] and E[ψ log ψ | j′], with the chain's rows, from which the dominant eigenvalues
-are arithmetic; and the lowest values by state, `ξ_min(j)` and `ψ_min(j)`, from which the constraints in force by state
-are the fixed point above. The definition of a law's lowest value as the limit of a representation's bottommost point,
-and its consequence that truncated laws keep every effective member in the stated member's regime, carry over unchanged.
+As for [the buffer-stock families](../bst/conditions.md#the-stated-member-and-the-effective-member): every statement
+above is defined for the stated member and for a toolkit's effective member alike, and decided for each by the same
+arithmetic on its own expectations. Here the expectations a toolkit reports are conditional on the next state, E[(𝒢(j′)
+ψ′)^k | j′] for the powers the conditions use, E[log ψ | j′] and E[ψ log ψ | j′], with the chain's rows, from which the
+dominant eigenvalues are arithmetic; and the lowest values by state, `ξ_min(j)` and `ψ_min(j)`, from which the
+constraints in force by state are the fixed point above. The definition of a law's lowest value as the limit of a
+representation's bottommost point, and its consequence that truncated laws keep every effective member in the stated
+member's regime, carry over unchanged.
 
 ## Open points
 
 - **A theorem.** Existence of the household's problem's solution with the chain, and the Kesten–Goldie-type result
   behind the tail exponents with a Markov-modulated factor, are not cited; the forms above are the natural
-  generalizations and reduce to `bst/1`'s, which were checked numerically for the atom case.
+  generalizations and reduce to the buffer-stock families', which were checked numerically for the atom case.
 - **The per-state limits in a stage file with bounded laws**: four calibrated limits selected by j, which the language
   can state (tested 2026-10-19); they wait for the truncated lognormal's family in Bellman-SYM.
 - **The targets by state** are defined by analogy and have not been checked against a solution.

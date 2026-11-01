@@ -9,6 +9,11 @@
   - The home is `ontologies/probability-distributions/`, under a top-level folder for the project's ontologies.
   - The name of the w3id.org namespace is left for later.
 
+**Since 2026-11-01** the family `bst/1` this note describes is four families, one for each borrowing-constraint
+scenario, and the Markov family `bst-markov_ui-and-agg/1` is two versions
+([`constraint-scenarios.md`](constraint-scenarios.md)). The note keeps its names as they were; its links point to the
+documents that now hold what it cites.
+
   The decision on Bellman's comparator is not among his answers.
 - **What it produced.**
   - The ontology: draft pull request #1, into the fork's `main`.
@@ -55,8 +60,8 @@ point, and the survey's first task is to complete it.
 | Bellman-SYM's families | Bellman's laws page | `N(μ, v)` with the variance; `LogNormal(μ, σ)`; `Mixture`, `Categorical`, `Bernoulli`, `DiscreteMarkov`, `MarkovChain`; positional arguments | the same packages; note that nearly every package takes a normal's standard deviation, not its variance |
 | Methods | [`numerics.md`](numerics.md) | the tags `"!time-iteration"`, `"!Linear"` and `"!quadrature"`, with the handlers `endogenous-grid` and `equiprobable-quantile-nodes`; `value-function`, `histogram`, `gauss-legendre-on-support` | SED-ML and KiSAO, the COMBINE community's description of a simulation experiment and its ontology of algorithms and their parameters; dolo (its documentation names `Equiprobable` and `Gauss-Hermite Nodes` for the discretization of a law; `egm`, `time_iteration`, `value_iteration`, `tauchen`, `rouwenhorst` and `gauss_hermite_nodes` are in its source, not its pages, as the survey found on 2026-10-19); QuantEcon (`tauchen`, `rouwenhorst`, and the CompEcon quadrature names `qnwnorm`, `qnwlogn`, `qnwequi`); scipy's interpolators (`interp1d(kind=…)`, `CubicSpline`, `PchipInterpolator`, `Akima1DInterpolator`); EconForge's interpolation.py (`multilinear`, cubic splines) |
 | Settings | the same | `grid_points`, `grid_max`, `grid_nesting`, `nodes_per_shock`, `euler_tolerance`, `histogram_points`; precision levels `low`, `medium`, `high` | dolo (`grid: {n, min, max}`); KiSAO's algorithm parameters; Dynare's `options_` |
-| Parameter-file keys | [`bst/1`](bst-1/model.md)'s validator | `crra`, `return`, `survival`, `borrowing_constraint`, `income.growth`, `permanent_shock`, `employed_shock`, `unemployment.prob` | dolo's and Dynare's parameter blocks, SBML's parameter element, Bellman's stage-file names |
-| Results-file names | [`bst/1`](bst-1/results.md)'s validator | the statistics (`gl`, `quantiles`, `mean_mpc`, `mpc_by_a_quartile`, …), the residuals, the statuses | SED-ML's outputs; the conditions keep BST's own names |
+| Parameter-file keys | [`bst/1`](bst/model.md)'s validator | `crra`, `return`, `survival`, `borrowing_constraint`, `income.growth`, `permanent_shock`, `employed_shock`, `unemployment.prob` | dolo's and Dynare's parameter blocks, SBML's parameter element, Bellman's stage-file names |
+| Results-file names | [`bst/1`](bst/results.md)'s validator | the statistics (`gl`, `quantiles`, `mean_mpc`, `mpc_by_a_quartile`, …), the residuals, the statuses | SED-ML's outputs; the conditions keep BST's own names |
 
 Out of the review: the math of the model, BST's notation in prose, and the conditions' names, which BST fixes. HARK is
 excluded as a source, on the owner's ruling of 2026-10-19: it is a toolkit the schemas serve, not a standard they adopt;

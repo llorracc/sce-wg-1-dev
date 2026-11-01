@@ -1,6 +1,6 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 2026-11-01: the fork's thirteen pull requests merged and #15 open; the ontology of buffer-stock models at draft.2 on its own branch, naming no toolkit"
+description: "What the schema project holds, what is settled and what is open, as of 2026-11-01 afternoon: the fork's thirteen pull requests merged, #15 open, and the scenarios' draft pull request stacked on it; six families, one stage file each; the ontology at draft.2, naming no toolkit"
 metadata:
   type: project
 ---
@@ -26,6 +26,13 @@ metadata:
   ([the rulings of 2026-10-31](../rulings/2026-10-31_ontology-decisions.md) and
   [of 2026-11-01](../rulings/2026-11-01_ontology-decisions.md);
   [the findings](../findings/2026-11-01_ontology-draft2.md)).
+
+**The borrowing-constraint scenarios** (ruled 12:50:56 on 2026-11-01, applied that afternoon on `buffer-stock-ontology`,
+committed and unpushed, for a draft pull request stacked on #15): `bst/1` gave way to four families, `bst-natural/1`,
+`bst-natural-no-point-mass/1`, `bst-artificial/1` and `bst-zero-infima/1`, and the Markov family to an artificial and a
+zero-infima version, each with its own stage file ([`constraint-scenarios.md`](../../constraint-scenarios.md),
+[the findings](../findings/2026-11-01_constraint-scenarios-applied.md)). The checker's 194 tests, the adapter's 7 and
+the ontology's 52 pass.
 
 **Open pull request #15** (`stage-derivative-terms`, pushed, against the schemas' branch, opened 22:24:43 on
 2026-10-31): both families' stage files rewritten with Bellman-SYM's derivative terms, as the owner approved at 22:17:58.

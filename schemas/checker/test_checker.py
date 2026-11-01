@@ -18,7 +18,12 @@ from canonical import StrictYAMLError, load_strict, model_hash
 from laws import filled, law_from_mapping
 from test_results_schema import sample as schema_sample
 
-MEMBERS = Path(__file__).resolve().parent.parent / "bst-1" / "members"
+BST = Path(__file__).resolve().parent.parent / "bst"
+# The members, by name, in the folders of their families' scenarios.
+MEMBER = {"library": BST / "natural" / "members" / "library.yaml",
+          "toy-natural": BST / "natural-no-point-mass" / "members" / "toy-natural.yaml",
+          "toy": BST / "artificial" / "members" / "toy.yaml",
+          "toy-untruncated": BST / "zero-infima" / "members" / "toy-untruncated.yaml"}
 
 
 def numerical(law, f):
@@ -144,7 +149,7 @@ def test_an_omitted_bound_is_three_standard_deviations_and_hashes_so():
 
 
 def test_null_is_admitted_only_as_a_bound():
-    toy = load_strict((MEMBERS / "toy.yaml").read_text().replace("top: 3.0}}\n  unemployment", "top: null}}\n  unemployment"))
+    toy = load_strict((MEMBER["toy"]).read_text().replace("top: 3.0}}\n  unemployment", "top: null}}\n  unemployment"))
     assert toy["income"]["permanent_shock"]["TruncatedLogNormal"]["top"] is None
     assert math.isinf(Member(toy).psi.top)
     toy["income"]["permanent_shock"]["TruncatedLogNormal"]["sd_log"] = None
@@ -201,8 +206,8 @@ def test_the_bellman_call_states_the_same_law(mapping):
 
 
 def test_members_load_and_report():
-    for name in ("library", "toy", "toy-untruncated"):
-        member = load_member(MEMBERS / f"{name}.yaml")
+    for name in MEMBER:
+        member = load_member(MEMBER[name])
         report = member.report()
         assert report["valid"], name
         assert len(report["hash"]) == 64
@@ -211,7 +216,7 @@ def test_members_load_and_report():
 
 
 def test_library_member_is_the_no_mortality_case():
-    report = load_member(MEMBERS / "library.yaml").report()
+    report = load_member(MEMBER["library"]).report()
     t = report["types"][0]
     names = {c["name"]: c for c in t["conditions"]}
     assert names["GIC-Szeidl"]["holds"] and names["GIC-Harmenberg"]["holds"]
@@ -224,34 +229,33 @@ def test_library_member_is_the_no_mortality_case():
     w = t["welfare"]
     assert w["welfare_factor"] == pytest.approx(0.005 ** 0.5 * (1.03 / t["thorn"]) * 1.0, rel=1e-9)
     assert w["welfare_finite"] and t["domain"]["welfare"]
-    assert w["marginal_factor"] == pytest.approx((1.03 / t["thorn"]) ** 2 * math.exp(0.01), rel=1e-9)
+    psi = load_member(MEMBER["library"]).psi
+    assert w["marginal_factor"] == pytest.approx((1.03 / t["thorn"]) ** 2 * psi.moment(2.0), rel=1e-9)
     assert not w["marginal_finite"] and not t["domain"]["marginal_welfare"]
-    # With L = 1 the tail exponents solve (thorn/G)^z E[psi^-z] = 1 and (thorn/G)^j E[psi^(1-j)] = 1; for a lognormal
-    # psi the first is 2 log(G/thorn)/sigma^2 - 1, and the GIC makes the income-weighted mean finite.
-    sigma2 = 0.01
-    expected = 2 * math.log(1.03 / t["thorn"]) / sigma2 - 1
-    assert t["domain"]["population_tail_exponent"] == pytest.approx(expected, rel=1e-6)
+    # With L = 1 the tail exponents solve (thorn/G)^z E[psi^-z] = 1 and (thorn/G)^j E[psi^(1-j)] = 1, and the GIC makes
+    # the income-weighted mean finite. The laws are truncated, so the root is checked on the law's own moment.
+    z = t["domain"]["population_tail_exponent"]
+    assert (t["thorn"] / 1.03) ** z * psi.moment(-z) == pytest.approx(1.0, rel=1e-6)
     assert t["domain"]["income_tail_exponent"] > 1 and t["domain"]["income_mean"]
 
 
 def test_toy_member_conditions():
-    report = load_member(MEMBERS / "toy.yaml").report()
+    report = load_member(MEMBER["toy"]).report()
     assert report["implications"]["worst_income_probability"] == 0.0
     assert report["implications"]["natural_borrowing_constraint"] < 0.0
     assert report["implications"]["newborn_min_resources"] > 0.0
     for t in report["types"]:
         assert t["domain"]["kink"]
         assert t["domain"]["welfare"] and t["domain"]["marginal_welfare"]
-        assert t["welfare"]["welfare_case"] == "the artificial constraint binds"
+        assert t["welfare"]["welfare_case"] == CASE_BINDING
         assert t["domain"]["population_measure"]
         assert t["domain"]["population_tail_exponent"] is None or t["domain"]["population_tail_exponent"] > 2
 
 
 def test_lower_tail_cases_without_an_artificial_constraint():
-    # The toy under the natural constraint alone: both laws truncated, so a positive density at the floor in two shocks;
-    # E[v] (q = 1) is finite and E[u'(c)] (q = 2) is not at rho = 2.
-    toy = load_strict((MEMBERS / "toy.yaml").read_text())
-    toy["borrowing_constraint"] = "natural"
+    # The toy's laws under the natural constraint alone, bst-natural-no-point-mass/1: both laws truncated, so a positive
+    # density at the floor in two shocks; E[v] (q = 1) is finite and E[u'(c)] (q = 2) is not at rho = 2.
+    toy = load_strict((MEMBER["toy-natural"]).read_text())
     t = Member(toy).report()["types"][0]
     assert t["welfare"]["welfare_case"].endswith("2 shock(s)")
     assert t["domain"]["welfare"] and not t["domain"]["marginal_welfare"]
@@ -263,15 +267,16 @@ def test_lower_tail_cases_without_an_artificial_constraint():
     toy["crra"] = 3.0
     t = Member(toy).report()["types"][0]
     assert t["domain"]["welfare"] and not t["domain"]["marginal_welfare"]
-    # The untruncated toy: a lognormal at zero is thin, so every moment is finite.
-    t = load_member(MEMBERS / "toy-untruncated.yaml").report()["types"][0]
-    assert not t["domain"]["kink"]
-    assert t["welfare"]["welfare_case"] == "a thin density at the floor"
+    # The untruncated toy, bst-zero-infima/1: a >= 0 is the natural constraint and it binds, so there is a kink and every
+    # welfare mean is finite.
+    t = load_member(MEMBER["toy-untruncated"]).report()["types"][0]
+    assert t["domain"]["kink"]
+    assert t["welfare"]["welfare_case"] == CASE_BINDING
     assert t["domain"]["welfare"] and t["domain"]["marginal_welfare"]
 
 
 def test_hash_ignores_the_written_form_of_a_number():
-    a = load_strict((MEMBERS / "library.yaml").read_text())
+    a = load_strict((MEMBER["library"]).read_text())
     b = copy.deepcopy(a)
     b["return"] = 1.040
     b["types"][0]["share"] = 1
@@ -293,15 +298,14 @@ def test_strict_yaml(text, problem):
 
 
 def _library():
-    return load_strict((MEMBERS / "library.yaml").read_text())
+    return load_strict((MEMBER["library"]).read_text())
 
 
 @pytest.mark.parametrize("change, problem", [
     (lambda d: d["types"].append({"beta": 0.95, "share": 0.5}), "increasing"),
     (lambda d: d["types"][0].update(share=0.9), "shares sum"),
     (lambda d: d["income"]["unemployment"].update(prob=0.0, income=0.5), "with prob 0"),
-    (lambda d: d.update(borrowing_constraint=0.5), "borrowing_constraint"),
-    (lambda d: d.update(borrowing_constraint=-0.5), "below the natural constraint"),
+    (lambda d: d.update(borrowing_constraint=0.0), "borrowing_constraint"),
     (lambda d: d.update(crra=0.5), "crra"),
     (lambda d: d.update(crra=1.0), "crra"),
     (lambda d: d["income"].update(permanent_shock={"Formula": {"defines": "quantile", "language": "infix",
@@ -315,50 +319,98 @@ def test_member_rules(change, problem):
         Member(data)
 
 
-def test_natural_keyword_resolves_to_the_natural_constraint():
-    data = _library()
-    data["borrowing_constraint"] = "natural"
-    member = Member(data)
-    assert member.a_art == 0.0
-    toy = load_strict((MEMBERS / "toy.yaml").read_text())
-    toy["borrowing_constraint"] = "natural"
-    member = Member(toy)
-    assert member.a_art == pytest.approx(member.natural_borrowing_constraint())
+def test_the_natural_scenarios_resolve_to_the_natural_constraint():
+    member = load_member(MEMBER["library"])
+    assert member.a_art == 0.0 and member.natural
+    member = load_member(MEMBER["toy-natural"])
+    assert member.a_art == pytest.approx(member.natural_borrowing_constraint()) and member.a_art < 0
     assert not member.report()["types"][0]["domain"]["kink"]
+    member = load_member(MEMBER["toy-untruncated"])
+    assert member.a_art == 0.0 and not member.natural and member.natural_borrowing_constraint() == 0.0
 
 
-@pytest.mark.parametrize("family, stage", [("bst-1", "buffer_stock.bl"), ("bst-markov_ui-and-agg", "bst_markov_ui.bl")])
-def test_every_filed_calibration_names_its_stage_file_s_parameters(family, stage):
+def _with(name, change):
+    data = load_strict(MEMBER[name].read_text())
+    change(data)
+    return data
+
+
+def _untruncated(d):
+    for shock in ("permanent_shock", "employed_shock"):
+        d["income"][shock] = {"LogNormal": {"sd_log": d["income"][shock]["TruncatedLogNormal"]["sd_log"]}}
+
+
+@pytest.mark.parametrize("name, change, problem", [
+    # the natural scenarios need bounded laws with positive floors, and the right kind of worst income
+    ("library", _untruncated, "strictly positive lower and a finite upper bound"),
+    ("library", lambda d: d["income"].update(unemployment={"prob": 0.0, "income": 0.0}), "bst-natural-no-point-mass/1"),
+    ("toy-natural", lambda d: d["income"].update(unemployment={"prob": 0.044, "income": 0.0}), "bst-natural/1"),
+    ("toy-natural", lambda d: d.update(borrowing_constraint=0.0), "borrowing_constraint"),
+    # the artificial scenario needs positive floors, and a constraint strictly above the natural one
+    ("toy", lambda d: d.update(borrowing_constraint=-5.0), "not above the natural constraint"),
+    ("toy", lambda d: d["income"].update(unemployment={"prob": 0.044, "income": 0.0}), "strictly positive"),
+    ("toy", lambda d: d.pop("borrowing_constraint"), "borrowing_constraint"),
+    # the zero-infima scenario needs a zero infimum, no zero-income event, and finite negative moments
+    ("toy-untruncated", lambda d: d["income"].update(unemployment={"prob": 0.044, "income": 0.0}), "zero-income event"),
+    ("toy-untruncated", lambda d: d["income"].update(
+        permanent_shock={"TruncatedLogNormal": {"sd_log": 0.05}}, employed_shock={"TruncatedLogNormal": {"sd_log": 0.3}}),
+     "infimum of psi or of theta"),
+    ("toy-untruncated", lambda d: d.update(borrowing_constraint=0.0), "borrowing_constraint"),
+    ("toy-untruncated", lambda d: d.update(family="bst/1"), "bst/1 is retired"),
+])
+def test_each_scenario_s_requirements(name, change, problem):
+    with pytest.raises(MemberError, match=problem):
+        Member(_with(name, change))
+
+
+@pytest.mark.parametrize("folder", sorted(p.parent for p in (Path(__file__).resolve().parent.parent).glob("*/*/bellman/*.bl")),
+                         ids=lambda p: f"{p.parent.parent.name}/{p.parent.name}")
+def test_every_filed_calibration_names_its_stage_file_s_parameters(folder):
     # A calibration binds the stage file's parameters by name, so a renamed parameter must be renamed in every
     # calibration filed beside it; the declarations are the lines `name : domain :: [...]`, not the sets or the
-    # functions.
+    # functions. A folder with no calibration filed passes.
     import re
     import yaml
 
-    folder = MEMBERS.parent.parent / family / "bellman"
-    text = (folder / stage).read_text(encoding="utf-8")
+    stage = next(folder.glob("*.bl"))
+    text = stage.read_text(encoding="utf-8")
     parameters = {m.group(1) for m in re.finditer(r"^([^\s(]+)\s+:\s[^=\n][^\n]*::\s*\[", text, re.M)}
-    files = sorted(folder.glob("*.yml"))
-    assert files, folder
-    for f in files:
+    for f in sorted(folder.glob("*.yml")):
         keys = set(yaml.safe_load(f.read_text(encoding="utf-8"))["calibration"])
         assert keys == parameters, (f.name, sorted(keys - parameters), sorted(parameters - keys))
+
+
+def test_every_member_s_calibration_names_its_stage_file_s_parameters():
+    import re
+
+    from bst1 import STAGE_FILES
+
+    for name, path in MEMBER.items():
+        member = load_member(path)
+        text = STAGE_FILES[member.family].read_text(encoding="utf-8")
+        parameters = {m.group(1) for m in re.finditer(r"^([^\s(]+)\s+:\s[^=\n][^\n]*::\s*\[", text, re.M)}
+        assert set(member.bellman_calibration(0)) == parameters, name
 
 
 def test_bellman_calibration_matches_the_filed_one():
     import yaml
 
-    member = load_member(MEMBERS / "library.yaml")
-    filed = yaml.safe_load((MEMBERS.parent / "bellman" / "community-library.yml").read_text())["calibration"]
+    member = load_member(MEMBER["library"])
+    filed = yaml.safe_load((BST / "natural" / "bellman" / "community-library.yml").read_text())["calibration"]
     written = member.bellman_calibration(0)
     assert set(written) == set(filed)
     for key, value in filed.items():
         assert written[key] == pytest.approx(value), key
     assert "calibration:" in member.bellman_calibration_yaml(0)
-    with pytest.raises(ValueError, match="no Bellman-SYM family"):
-        load_member(MEMBERS / "toy.yaml").bellman_calibration(0)
-    untruncated = load_member(MEMBERS / "toy-untruncated.yaml").bellman_calibration(6)
-    assert untruncated["β"] == 0.990 and untruncated["a_Nat"] == 0.0 and untruncated["ξ_u"] == 0.7
+    toy = load_member(MEMBER["toy"]).bellman_calibration(0)
+    assert toy["a_Art"] == 0.0 and toy["ψ_min"] > 0 and "a_Nat" not in toy
+    untruncated = load_member(MEMBER["toy-untruncated"]).bellman_calibration(6)
+    assert untruncated["β"] == 0.990 and untruncated["ξ_u"] == 0.7 and "a_Art" not in untruncated
+    # With p_zero = 0 in the natural scenario without a point mass, the never-paid benefit is the employed floor, so that
+    # the stage file's min reads the worst transitory income.
+    data = _with("toy-natural", lambda d: d["income"].update(unemployment={"prob": 0.0, "income": 0.0}))
+    member = Member(data)
+    assert member.bellman_calibration(0)["ξ_u"] == pytest.approx(member.theta.infimum)
 
 
 def _consistent_results(member: Member) -> dict:
@@ -392,7 +444,7 @@ def _consistent_results(member: Member) -> dict:
 
 
 def test_a_consistent_report_verifies():
-    member = load_member(MEMBERS / "library.yaml")
+    member = load_member(MEMBER["library"])
     data = _consistent_results(member)
     assert validate_results(data) == []
     assert member.verify_results(data) == []
@@ -415,7 +467,7 @@ def test_a_consistent_report_verifies():
     (lambda d: d.update(parameter_file_sha256="1" * 64), "sha256"),
 ])
 def test_an_inconsistent_report_is_caught(change, problem):
-    member = load_member(MEMBERS / "library.yaml")
+    member = load_member(MEMBER["library"])
     data = _consistent_results(member)
     change(data)
     assert validate_results(data) == []
@@ -426,7 +478,7 @@ def test_an_inconsistent_report_is_caught(change, problem):
 def test_the_population_block_decides_the_population_conditions():
     # The library member has L = 1, so the GIC-Szeidl decides whether the stationary population exists. A population
     # block whose E[log psi] is far below the household's flips that verdict, and the toolkit's report must follow it.
-    member = load_member(MEMBERS / "library.yaml")
+    member = load_member(MEMBER["library"])
     data = _consistent_results(member)
     population = {"expectations": dict(member.expectations(), psi_log=-1.0), "lowest": member.lowest()}
     data["effective_member"]["population"] = population
@@ -452,12 +504,12 @@ def test_the_population_block_decides_the_population_conditions():
 
 
 def test_a_toolkit_lowest_value_below_the_infimum_is_caught():
-    member = load_member(MEMBERS / "toy.yaml")
+    member = load_member(MEMBER["toy"])
     low = member.lowest()
     assert low["psi"] > 0 and low["income"] > 0
     # A representation's lowest value lies at or above the law's infimum, which is the limit of those values.
     problems = member.verify_results({
-        "family": "bst/1", "parameter_file_sha256": member.hash,
+        "family": member.family, "parameter_file_sha256": member.hash,
         "effective_member": {"expectations": member.expectations(), "lowest": {"psi": low["psi"] * 0.5, "income": low["income"]},
                              "derived": member.derived()},
         "types": [],
@@ -467,7 +519,7 @@ def test_a_toolkit_lowest_value_below_the_infimum_is_caught():
 
 def test_verdicts_name_the_undecided_margin():
     assert verdict(0.1) == "holds" and verdict(-0.1) == "fails" and verdict(1e-14) == "undecided"
-    report = load_member(MEMBERS / "library.yaml").report()
+    report = load_member(MEMBER["library"]).report()
     assert report["member"] == "stated"
     assert all(c["verdict"] in ("holds", "fails") for c in report["types"][0]["conditions"])
 

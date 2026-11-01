@@ -8,10 +8,10 @@ claims:
 - the generator refuses a broken source;
 - the moments' formulas agree with the closed forms of the mean-one lognormal;
 - every condition, evaluated from the ontology's own formulas, gives the schemas' checker's verdict, and every plain
-  factor its value, for every type of every bst/1 member;
+  factor its value, for every type of every member of the buffer-stock families;
 - every implication among the conditions alone holds on sampled models, and is tested on enough of them that it is not
   vacuous; and conditions the ontology keeps apart do come apart;
-- the axioms classify the bst/1 members as the README says;
+- the axioms classify the families' members as the README says, each in exactly the scenario its family writes;
 - each written form a term names in the parameter file or the stage file exists there.
 
 The ontology states its terms; the checker computes them for the schemas. Agreement between the two is the test that the
@@ -40,12 +40,12 @@ import bst1  # noqa: E402  the schemas' checker
 SOURCE, _ = generate.load()
 BY_NAME = {row["name"]: (kind, row) for kind, row in generate.rows(SOURCE)}
 CONDITIONS = {c["name"]: c for c in SOURCE["conditions"]}
-MEMBERS = sorted((SCHEMAS / "bst-1" / "members").glob("*.yaml"))
+BST = SCHEMAS / "bst"
+MEMBERS = sorted(BST.glob("*/members/*.yaml"))
+SCENARIOS = ("natural", "natural-no-point-mass", "artificial", "zero-infima")
 # The checker's names for the ontology's conditions, and the conditions the checker does not compute: the condition of
-# Ma, Stachurski and Toda, which bst/1's conditions.md does not name.
+# Ma, Stachurski and Toda, which the families' conditions.md does not name.
 CHECKER_NAME = {c["name"]: c["short"] for c in SOURCE["conditions"]}
-# The schemas still write the perfect-foresight FVAC as PF-FVAC; the ontology, since 2026-11-01, as FVAC-PF.
-CHECKER_NAME["fvac-pf"] = "PF-FVAC"
 NOT_IN_CHECKER = {"discounted-return"}
 MARGIN = 1e-9
 
@@ -148,6 +148,7 @@ def member_environment(member: bst1.Member, beta: float) -> dict:
               "E(X*log(X))": E["psi_log_psi"], "E(X**(-rho))": member.psi.moment(-member.rho)}
     env = {"rho": member.rho, "beta": beta, "L": member.L, "R": member.R, "G": member.G, "wp": member.wp,
            "xi_u": member.xi_u, "a_Art": member.a_art, "psi_min": member.psi.infimum, "xi_min": member.xi_infimum(),
+           "psi_max": member.psi.supremum, "theta_min": member.theta.infimum, "theta_max": member.theta.supremum,
            "xi_atom": member.xi_mass_at_infimum(), "p_worst": member.worst_income_probability()}
     for m in SOURCE["moments"]:
         env[m["symbol"]] = closed[m["formula"]]
@@ -244,24 +245,53 @@ def axiom_holds(name: str, env: dict) -> bool:
     return bool(formulas.evaluate(BY_NAME[name][1]["check"], env))
 
 
-# What the axioms say of each bst/1 member: membership in buffer-stock-model, and whether the paper's hypotheses hold.
+# What the axioms say of each member: the scenario axioms, and whether the paper's hypotheses hold.
 EXPECTED = {
-    "library": {"point-mass-at-worst-transitory": True, "zero-income-event": True, "no-artificial-constraint": True,
-                "infinite-lives": True},
-    "toy": {"point-mass-at-worst-transitory": True, "zero-income-event": False, "no-artificial-constraint": False,
-            "infinite-lives": False},
-    "toy-untruncated": {"point-mass-at-worst-transitory": False, "zero-income-event": False,
-                        "no-artificial-constraint": True, "infinite-lives": False},
+    "library": {"bounded-support": True, "natural-in-force": True, "point-mass-at-joint-worst-income": True,
+                "zero-income-event": True, "no-artificial-constraint": True, "infinite-lives": True},
+    "toy-natural": {"bounded-support": True, "natural-in-force": True, "point-mass-at-joint-worst-income": False,
+                    "no-point-mass-at-joint-worst-income": True, "zero-income-event": False, "infinite-lives": False},
+    "toy": {"bounded-support": True, "natural-in-force": False, "artificial-tighter": True, "positive-floors": True,
+            "no-borrowing": True, "zero-income-event": False},
+    "toy-untruncated": {"bounded-support": False, "zero-infimum": True, "no-zero-income-event": True, "no-borrowing": True,
+                        "artificial-tighter": False, "infinite-lives": False},
 }
+# The class each family's members fall in, and the four scenario classes.
+SCENARIO_OF = {"bst-natural/1": "natural-with-point-mass", "bst-natural-no-point-mass/1": "natural-without-point-mass",
+               "bst-artificial/1": "with-artificial-constraint", "bst-zero-infima/1": "zero-infima"}
+
+
+def _member(stem):
+    return bst1.load_member(next(p for p in MEMBERS if p.stem == stem))
 
 
 @pytest.mark.parametrize("stem", sorted(EXPECTED))
 def test_the_axioms_classify_the_members(stem):
-    member = bst1.load_member(SCHEMAS / "bst-1" / "members" / f"{stem}.yaml")
+    member = _member(stem)
     env = member_environment(member, member.types[0]["beta"])
     assert axiom_holds("crra-above-one", env) and axiom_holds("asset-return", env)
     for axiom, expected in EXPECTED[stem].items():
         assert axiom_holds(axiom, env) is expected, (stem, axiom)
+
+
+def _in_class(name: str, env: dict) -> bool:
+    """Whether a model meets the checkable axioms of a class and of every class above it."""
+    classes = {c["name"]: c for c in SOURCE["model-classes"]}
+    while name:
+        for axiom in classes[name].get("axioms", []):
+            if "check" in BY_NAME[axiom][1] and not axiom_holds(axiom, env):
+                return False
+        name = classes[name].get("subclass_of")
+    return True
+
+
+@pytest.mark.parametrize("path", MEMBERS, ids=lambda p: p.stem)
+def test_each_member_is_in_exactly_its_family_s_scenario(path):
+    """The four scenarios partition the class: each member meets its family's scenario's axioms and no other's."""
+    member = bst1.load_member(path)
+    env = member_environment(member, member.types[0]["beta"])
+    inside = [s for s in SCENARIO_OF.values() if _in_class(s, env)]
+    assert inside == [SCENARIO_OF[member.family]], (path.stem, inside)
 
 
 def test_every_member_is_covered():
@@ -289,15 +319,19 @@ def test_the_two_constraints_are_told_apart():
     class approaches it as the zero-income event's probability vanishes."""
     classes = {c["name"]: c for c in SOURCE["model-classes"]}
     results = {r["name"]: r for r in SOURCE["results"]}
-    assert BY_NAME["point-mass-at-worst-transitory"][1]["check"] == "a_min > a_Nat or xi_atom > 0"
+    assert BY_NAME["point-mass-at-joint-worst-income"][1]["check"] == "p_worst > 0"
+    assert BY_NAME["point-mass-at-joint-worst-income"][1]["of"] == "natural-with-point-mass"
     assert classes["with-artificial-constraint"]["reduces_to"]["when"] == "a_Art <= a_Nat"
     assert (results["natural-constraint-never-binds"]["within"], results["natural-constraint-never-binds"]["concludes"]) \
-        == ("bst-model", ["not constraint-binds"])
+        == ("natural-with-point-mass", ["not constraint-binds"])
+    assert (results["zero-infima-constraint-binds"]["within"], results["zero-infima-constraint-binds"]["concludes"]) \
+        == ("zero-infima", ["constraint-binds"])
+    assert classes["bst-model"]["subclass_of"] == "natural-with-point-mass"
     assert (results["artificial-constraint-binds"]["within"], results["artificial-constraint-binds"]["concludes"]) \
         == ("with-artificial-constraint", ["constraint-binds"])
     pfc = classes["perfect-foresight-constrained"]
     assert pfc["subclass_of"] == "perfect-foresight-benchmark" and pfc["benchmark_of"] == "liquidity-constrained"
-    assert classes["liquidity-constrained"]["subclass_of"] == "with-artificial-constraint"
+    assert classes["liquidity-constrained"]["subclass_of"] == "buffer-stock-model"
     assert results["liquidity-constrained-limit"]["limit_in"] == "liquidity-constrained"
     for name in ("pf-constrained", "pf-constraint-relevance", "pf-constrained-without-ric", "pf-constrained-degenerate",
                  "pf-constraint-slack", "pf-constrained-converges"):
@@ -316,16 +350,22 @@ def _schema_paths(node, prefix="") -> set[str]:
     return out
 
 
-def test_parameter_file_keys_exist():
+def _family_schema(scenario: str) -> dict:
+    """A family's parameter schema with its references to the shared definitions written in."""
     import json
-    paths = _schema_paths(json.loads((SCHEMAS / "bst-1" / "parameters.schema.json").read_text(encoding="utf-8")))
+    common = json.loads((BST / "parameters.common.schema.json").read_text(encoding="utf-8"))["$defs"]
+    schema = json.loads((BST / scenario / "parameters.schema.json").read_text(encoding="utf-8"))
+    for key, spec in schema["properties"].items():
+        ref = spec.get("$ref", "")
+        if ref.startswith("../parameters.common.schema.json#"):
+            schema["properties"][key] = common[ref.rsplit("/", 1)[1]]
+    return schema
+
+
+def test_parameter_file_keys_exist():
+    paths = set().union(*(_schema_paths(_family_schema(s)) for s in SCENARIOS))
     named = [r["written_as"]["parameter-file"] for _, r in generate.rows(SOURCE) if "parameter-file" in r.get("written_as", {})]
     assert named and all(p in paths for p in named), [p for p in named if p not in paths]
-
-
-# The derivative terms that Bellman-SYM's current language writes in place of the retired marginal-value fields, which
-# bst/1's stage file will carry once its proposed rewrite is made (the divergence bst1-stage-files-retired-marginal-role).
-PENDING_STAGE_SPELLINGS = {"D_{m}V", "D_{k}V[<]", "D_{a}V[>]"}
 
 
 def _in_stage(spelling: str, stage: str) -> bool:
@@ -335,19 +375,12 @@ def _in_stage(spelling: str, stage: str) -> bool:
 
 
 def test_stage_file_identifiers_exist():
-    stage = (SCHEMAS / "bst-1" / "bellman" / "buffer_stock.bl").read_text(encoding="utf-8")
+    """Every spelling the ontology names is in one of the four families' stage files."""
+    stage = "\n".join((BST / s / "bellman" / f"{s}.bl").read_text(encoding="utf-8") for s in SCENARIOS)
     named = [r["written_as"]["bellman-sym"] for _, r in generate.rows(SOURCE) if "bellman-sym" in r.get("written_as", {})]
-    missing = [s for s in named if s not in PENDING_STAGE_SPELLINGS and not _in_stage(s, stage)]
+    missing = [s for s in named if not _in_stage(s, stage)]
     assert named and not missing, missing
-
-
-def test_the_pending_spellings_are_still_pending():
-    """When the stage file is rewritten with derivative terms, this fails, and the pending list is to be emptied."""
-    stage = (SCHEMAS / "bst-1" / "bellman" / "buffer_stock.bl").read_text(encoding="utf-8")
-    named = {r["written_as"]["bellman-sym"] for _, r in generate.rows(SOURCE) if "bellman-sym" in r.get("written_as", {})}
-    assert PENDING_STAGE_SPELLINGS <= named
-    assert not any(_in_stage(s, stage) for s in PENDING_STAGE_SPELLINGS)
-    assert "!mrgnvl" in stage
+    assert "!mrgnvl" not in stage and all(_in_stage(s, stage) for s in ("D_{m}V", "D_{k}V[<]", "D_{a}V[>]"))
 
 
 # Bellman-SYM's terms.
@@ -410,4 +443,4 @@ def test_the_conditions_of_ma_stachurski_and_toda():
     results = {r["name"]: r for r in SOURCE["results"]}
     assert (results["mst-existence"]["assumes"], results["mst-existence"]["within"]) \
         == (["fvac", "discounted-return"], "liquidity-constrained")
-    assert BY_NAME["no-borrowing"][1]["check"] == "a_Art == 0 and xi_min > 0"
+    assert BY_NAME["no-borrowing"][1]["check"] == "a_min == 0 and (wp == 0 or xi_u > 0)"

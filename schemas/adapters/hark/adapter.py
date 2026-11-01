@@ -1,8 +1,8 @@
-"""HARK's adapter for bst/1: a parameter file in, HARK's solution, a results file out.
+"""HARK's adapter for the buffer-stock families: a parameter file in, HARK's solution, a results file out.
 
-The adapter solves a bst/1 member with HARK's MarkovConsumerType and writes the files the schemas ask for: a request file
+The adapter solves a member of a buffer-stock family with HARK's MarkovConsumerType and writes the files the schemas ask for: a request file
 of comparison points (generated from a level-1 solution when none is given), a method file, a settings file and
-`results.json`, which it validates against `bst-1/results.schema.json`. The checker then verifies the report:
+`results.json`, which it validates against `bst/results.schema.json`. The checker then verifies the report:
 
     python ../../checker/check.py <member.yaml> --verify-results <out>/results.json
 
@@ -13,7 +13,7 @@ How the member is solved.
      adapter's effective member (effective-member.md). The results file reports that member's expectations, lowest values
      and derived parameters, decides every condition of conditions.md on it, and takes every status from those verdicts.
   3. Each type is solved by HARK's MarkovConsumerType with two employment states, employed and unemployed, and identical
-     rows: unemployment with probability wp whatever the previous state, the nonpersistent chain that writes bst/1 as a
+     rows: unemployment with probability wp whatever the previous state, the nonpersistent chain that writes a buffer-stock member as a
      member of the Markov family. The employed state's income is the scaled employed draw, the unemployed state's the
      income while unemployed xi_u; psi is drawn in both. The two states' rules must then be the same function of m, which
      the adapter asserts. The rule is cubic Hermite and the value function is on.
@@ -85,7 +85,7 @@ def installed_hark_commit():
 def schema_quantile_probabilities(schemas):
     """The probabilities the results schema asks quantiles at: the required keys of the map that DistributionBlock.quantiles
     refers to. Read from the schema, so that a file matches the schema it is validated against."""
-    schema = json.load(open(os.path.join(schemas, "bst-1", "results.schema.json"), encoding="utf-8"))
+    schema = json.load(open(os.path.join(schemas, "bst", "results.schema.json"), encoding="utf-8"))
     ref = schema["$defs"]["DistributionBlock"]["properties"]["quantiles"]["$ref"].rsplit("/", 1)[-1]
     return list(schema["$defs"][ref]["required"])
 
@@ -218,7 +218,7 @@ def joint_shocks(member, p_psi, psi, p_th, th):
 
 def shocks(member, n):
     """The nodes at n equiprobable nodes per shock, the joint shocks they give, and the newborn's first draws: the employed
-    branch only (bst/1's model schema: a newborn is born employed), as (probabilities, values of m)."""
+    branch only (the buffer-stock families' model schema: a newborn is born employed), as (probabilities, values of m)."""
     p_psi, psi = law_nodes(member.psi, n)
     p_th, th = law_nodes(member.theta, n)
     P, PSI, XI = joint_shocks(member, p_psi, psi, p_th, th)
@@ -377,7 +377,7 @@ def shock_bounds(member):
 
 
 def boro_cnst_art(member):
-    """HARK's artificial constraint: a_Art, or none for a member that states natural, whose limit HARK computes itself from
+    """HARK's artificial constraint: a_Art, or none for a member of a natural family, whose limit HARK computes itself from
     the infima recorded on its distributions."""
     return None if member.natural else float(member.a_art)
 
@@ -848,7 +848,7 @@ def generate_request(member, report, nodes, Pt, PSIt, XIt, nb, a_lo, natural, pa
         pts = {round3(q[u]) for u in REQUEST_U} | {round3(low)} | {round3(q["0.99"] * k) for k in ABOVE_99}
         pts = sorted(p for p in pts if float(cf(p)) > 0.0)
         types.append({"beta": t["beta"], "points": pts})
-    request = {"family": "bst/1", "parameter_file_sha256": report["hash"],
+    request = {"family": member.family, "parameter_file_sha256": report["hash"],
                "rule": "stationary quantiles of m at u = 0.01, 0.05, 0.1, 0.2, ..., 0.9, 0.95, 0.99 from a level-1 solution; "
                        "the lower end of m (the model's infimum of m, or the 0.001 quantile where consumption is zero at the "
                        "infimum); and 1.5, 2, 4 and 8 times the 99th percentile; three significant figures",
@@ -1018,7 +1018,7 @@ def main(argv=None):
     shares = [d["share"] for d in per_type]
     pooled_welfare, pooled_marginal = pooled_welfare_blocks(per_type, shares, pdom, rho)
     results = {
-        "family": "bst/1",
+        "family": member.family,
         "parameter_file_sha256": report["hash"],
         "effective_member": eff,
         "method_file_sha256": file_hash(canonical, methods_path),
@@ -1053,9 +1053,9 @@ def main(argv=None):
     except ImportError:
         print("jsonschema not importable: not validated here", flush=True)
         return out_path
-    schema = json.load(open(os.path.join(args.schemas, "bst-1", "results.schema.json"), encoding="utf-8"))
+    schema = json.load(open(os.path.join(args.schemas, "bst", "results.schema.json"), encoding="utf-8"))
     jsonschema.Draft202012Validator(schema).validate(results)
-    print("results.json validates against bst-1/results.schema.json", flush=True)
+    print("results.json validates against bst/results.schema.json", flush=True)
     return out_path
 
 

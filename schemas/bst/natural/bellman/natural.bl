@@ -1,0 +1,65 @@
+# bst-natural/1, the natural scenario with a point mass, as its stage file states it: Buffer Stock Theory's own
+# model. The shocks' laws are bounded, with strictly positive lower and finite upper bounds, and the unemployment event,
+# with probability p_zero > 0, pays nothing. The worst income is that event, a point mass, so h_min, the minimum present
+# value of future income, is 0, and the natural constraint is a > 0. No agent ever ends a period at it: zero income next
+# period would leave no positive consumption. So the Euler equation holds with equality and needs no complementarity
+# clause. A positive benefit, which needs a point mass in ψ at its floor, has no stage file yet
+# (schemas/constraint-scenarios.md). ξ is transitory income and θ the employed draw; ϱ > 1, as Buffer Stock Theory
+# requires. Survivors only: newborns, types and shares, and the stationary population have no spelling in a stage file.
+
+@stage: natural
+
+Xm := ℝ₊₊
+Xa := ℝ₊₊
+Emp := {emp, unemp}   :: ["the unemployment event: employed; unemployed"]
+
+β     : ℝ₊₊          :: ["discount factor of the type"]
+ℒ     : (0,1]        :: ["probability of surviving into the next period, perpetual youth"]
+ϱ     : (1, inf)     :: ["coefficient of relative risk aversion, greater than one as in Buffer Stock Theory"]
+R     : ℝ₊₊          :: ["gross return on assets, earned by survivors, with no annuity market"]
+𝒢     : ℝ₊₊          :: ["growth factor of permanent income"]
+μ_ψ   : ℝ            :: ["location of log ψ before truncation, set so that E[ψ] = 1"]
+s_ψ   : ℝ₊₊          :: ["scale of log ψ before truncation"]
+ψ_min  : ℝ₊₊          :: ["the lower bound of ψ, strictly positive"]
+ψ_max  : ℝ₊₊          :: ["the upper bound of ψ, finite"]
+μ_θ   : ℝ            :: ["location of log θ before truncation, set so that E[θ] = 1"]
+s_θ   : ℝ₊₊          :: ["scale of log θ before truncation"]
+θ_min  : ℝ₊₊          :: ["the lower bound of θ, strictly positive"]
+θ_max  : ℝ₊₊          :: ["the upper bound of θ, finite"]
+p_zero : (0,1)       :: ["probability ℘ of the zero-income event, positive"]
+
+ψ : ℝ₊₊
+ψ ~ TruncatedLogNormal(μ_ψ, s_ψ, ψ_min, ψ_max)   :: ["permanent shock, E[ψ] = 1"]
+θ : ℝ₊₊
+θ ~ TruncatedLogNormal(μ_θ, s_θ, θ_min, θ_max)   :: ["employed transitory draw, E[θ] = 1; drawn but unused when unemployed"]
+j : Emp
+j ~ Bernoulli(p_zero)                          :: ["unemployment event: unemp with probability p_zero, independent of ψ and θ"]
+
+𝑢(c : ℝ₊₊) := c^(1-ϱ)/(1-ϱ)       :: [id=util]
+𝑑𝑢     := D_{c}(𝑢)                 :: [id=marg_util]
+𝑑𝑢𝑖𝑛𝑣(x : ℝ₊₊) := x^(-1/ϱ)        :: [id=inv_marg_util]
+𝒞(x : Xm) := (0, x)   :: [id=feasible, "consumption strictly below resources: a > 0"]
+
+[id=arvl_to_dcsn, (k : Xa, ψ, θ, j) : !arvl -> (m : Xm) : !dcsn] {
+    ξ = (θ/(1 - p_zero), 0)[j]   :: [id=transitory_income, "ξ = 0 when unemployed, else θ/(1 - ℘), so E[ξ] = 1"]
+    m = R*k/(𝒢*ψ) + ξ                                   :: [id=market_resources, "a survivor's resources; k is last period's a"]
+}
+
+[id=dcsn_to_cntn, (m, c : ℝ₊₊ @ !ctrl) : !dcsn -> (a : Xa) : !cntn] {
+    a = m - c                         :: [id=savings]
+}
+
+[id=cntn_to_dcsn, (V[>] : ℝ @ !vlu, c) : !cntn -> (V : ℝ @ !vlu) : !dcsn] {
+    V      = 𝑢(c) + β*ℒ*V[>]          :: [id=value]
+    D_{m}V = 𝑑𝑢(c)                    :: [id=marginal]
+}
+
+[id=dcsn_to_arvl, (V) : !dcsn -> (V[<] : ℝ @ !vlu) : !arvl] {
+    V[<]      = E_{ψ,θ,j}((𝒢*ψ)^(1-ϱ) * V)             :: [id=value]
+    D_{k}V[<] = E_{ψ,θ,j}(R * (𝒢*ψ)^(-ϱ) * D_{m}V)     :: [id=marginal]
+}
+
+[id=policy, (V[>] : ℝ @ !vlu) : !cntn -> (c : ℝ₊₊ @ !ctrl) : !dcsn] {
+    c     = argmax_{cp : 𝒞(m)}(𝑢(cp) + β*ℒ*V[>])   :: [id=optimality, !doc]
+    𝑑𝑢(c) = β*ℒ*D_{a}V[>]   :: [id=euler, "with equality: the natural constraint is never reached"]
+}

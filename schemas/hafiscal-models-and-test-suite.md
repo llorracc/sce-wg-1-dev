@@ -17,6 +17,11 @@ of the same evening that a method file names the stage file's own targets; `bst-
 gives the current names, and the suite's method files will use those. The benchmark's atoms and its dry-run
 results are left out of this copy until the benchmark has its public home.
 
+**Since 2026-11-01** the family `bst/1` this note describes is four families, one for each borrowing-constraint
+scenario, and the Markov family `bst-markov_ui-and-agg/1` is two versions
+([`constraint-scenarios.md`](constraint-scenarios.md)). The note keeps its names as they were; its links point to the
+documents that now hold what it cites.
+
 ## What HAFiscal solves
 
 ### The household problem of the paper
@@ -250,7 +255,7 @@ exactly (below).
 
 **A parameter file** with the paper's normal-times calibration is in the family's model schema,
 [`bst-markov_ui-and-agg/model.md`](bst-markov_ui-and-agg/model.md), "The parameter file", and the member that reproduces
-the published numbers is [`paper-published`](bst-markov_ui-and-agg/members/paper-published.yaml).
+the published numbers is [`paper-published`](bst-markov_ui-and-agg/zero-infima/members/paper-published.yaml).
 
 Shares within a group sum to one, and group shares sum to one. The file lists the β values as numbers: how they were
 chosen is estimation, the group's layer, not the family's. That calibration, solved with 7 nodes per shock, is the

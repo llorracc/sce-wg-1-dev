@@ -1,0 +1,21 @@
+# The toy's laws with no artificial constraint, in the natural scenario without a point mass. Its worst income, the
+# employed floor with ψ at its floor, has probability zero, and both shocks have densities at their floors, so k = 2;
+# at ϱ = 2 = k no agent reaches the natural limit.
+family: bst-natural-no-point-mass/1
+period: quarter
+crra: 2.0
+types:
+  - {beta: 0.822, share: 0.14285714285714285}
+  - {beta: 0.850, share: 0.14285714285714285}
+  - {beta: 0.878, share: 0.14285714285714285}
+  - {beta: 0.906, share: 0.14285714285714285}
+  - {beta: 0.934, share: 0.14285714285714285}
+  - {beta: 0.962, share: 0.14285714285714285}
+  - {beta: 0.990, share: 0.14285714285714285}
+survival: 0.99375
+return: 1.01
+income:
+  growth: 1.0019026
+  permanent_shock: {TruncatedLogNormal: {sd_log: 0.05477225575051661, bot: -3.0, top: 3.0}}
+  unemployment: {prob: 0.044, income: 0.7}
+  employed_shock: {TruncatedLogNormal: {sd_log: 0.34641016151377546, bot: -3.0, top: 3.0}}

@@ -2,7 +2,7 @@
 
     uv run --with jsonschema --with pyyaml --with scipy --with numpy --with pytest pytest -q schemas/checker
 
-Each symbol has two spellings, the notation section of bst-1/model.md says: typeset, as BST writes it, and in plain text,
+Each symbol has two spellings, the notation section of bst/model.md says: typeset, as BST writes it, and in plain text,
 as a name in code font. Three things are checked:
 - no combining underline (U+0332) appears in the schemas outside the records, since terminals do not draw it reliably; a
   minimum is a name in plain text and `\\underline` when typeset;
@@ -20,9 +20,11 @@ import pytest
 
 SCHEMAS = Path(__file__).resolve().parent.parent
 FAMILIES = {  # each family's stage file, and the model documents whose notation tables it may draw on
-    "bst-1": ("bst-1/bellman/buffer_stock.bl", ["bst-1/model.md"]),
-    "bst-markov_ui-and-agg": ("bst-markov_ui-and-agg/bellman/bst_markov_ui.bl",
-                              ["bst-1/model.md", "bst-markov_ui-and-agg/model.md"]),
+    **{f"bst-{s}": (f"bst/{s}/bellman/{s}.bl", ["bst/model.md"])
+       for s in ("natural", "natural-no-point-mass", "artificial", "zero-infima")},
+    **{f"bst-markov_ui-and-agg-{s}": (f"bst-markov_ui-and-agg/{s}/bellman/{s}.bl",
+                                      ["bst/model.md", "bst-markov_ui-and-agg/model.md"])
+       for s in ("artificial", "zero-infima")},
 }
 
 

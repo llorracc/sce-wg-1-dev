@@ -25,17 +25,17 @@ conditions and results relate them, and when two models are one. Each written fo
 | part | here | in the schemas |
 |---|---|---|
 | ontology: what exists, and when two things are the same | the classes, axioms, objects, quantities, conditions, properties, results and identities in [`source.yaml`](source.yaml) | — |
-| denotation: what stands for what | each term's `written_as`: its spelling in BST, econ-ark's registry, a bst/1 parameter file and the bst/1 stage file; the divergences | each family's `model.md`, which reads its stage file in BST's notation |
+| denotation: what stands for what | each term's `written_as`: its spelling in BST, econ-ark's registry, the families' parameter files and stage files; the divergences | each family's `model.md`, which reads its stage file in BST's notation |
 | syntax: what is written | — | the parameter, stage, results, method and settings files, and their validators |
 | well-posedness | the membership axioms, the paper's hypotheses, the conditions and the results | each family's `conditions.md`, which the checker enforces |
 | equivalence, adequacy, convergence | the identities | the hash, the effective member, the results files, the precision levels |
 
 Systems biology keeps the same split, and keeps it on purpose: SBML fixes the written form of a model, the Systems
 Biology Ontology states what its components mean, and each SBML component carries an SBO term. The two are maintained
-separately, so meaning can change without breaking files. The same holds here. bst/1 and the Markov family are two
-schemas, with two parameter files and two stage files, and their models belong to one class with one set of
-conditions. A schema is written per family; the ontology is written per model class. In the proposal's terms, a paper on
-buffer-stock models is a *model-class* paper, and this is its ontology.
+separately, so meaning can change without breaking files. The same holds here. The buffer-stock families and the Markov
+family are six schemas, with two parameter files and two stage files, and their models belong to one class with one set
+of conditions. A schema is written per family; the ontology is written per model class. In the proposal's terms, a paper
+on buffer-stock models is a *model-class* paper, and this is its ontology.
 
 ## The kinds
 
@@ -51,7 +51,8 @@ Every row of the source is one of these, and the generator writes each as an OWL
   - maps: a function, a law of motion, a connector, an operator, an operation;
   - the rest: a relation, a constraint or a measure.
 - A **moment** is an expectation under the law of one shock.
-- A **quantity** is a number the primitives determine, given by a formula: a patience factor, an MPC limit, human wealth.
+- A **quantity** is a number the primitives determine, given by a formula: a patience factor, an MPC limit, human
+  wealth.
 - A **condition** is an inequality on quantities, which holds or fails.
 - A **property** is a statement about a solution or a population, such as the existence of a target.
 - A **result** relates conditions and properties. Each records its source: proved in BST, cited there, stated without
@@ -73,37 +74,52 @@ The **membership axioms** of the class `buffer-stock-model`:
 - **income risk**: at least one of the shocks is not degenerate;
 - **assets earn a return**, R > 0;
 - **the constraint in force** is `a_min` = max(`a_Art`, `a_Nat`): the natural constraint, or a tighter artificial one;
-- **an atom at the worst transitory shock where the natural constraint is in force** (the owner's ruling of
-  2026-10-31). If `a_min` = `a_Nat`, the edge `a_Art` = `a_Nat` included, then P(ξ = inf supp ξ) > 0 under the true law.
-  The condition is on the transitory shock alone, not on income ψξ. BST calls such an atom inessential to its proofs;
-  the ruling makes it part of the class's definition.
+- **one of the four borrowing-constraint scenarios** (the owner's rulings of 2026-10-31 and 2026-11-01;
+  [`constraint-scenarios.md`](../../schemas/constraint-scenarios.md)), each a class:
+  - `natural-with-point-mass`: the natural constraint in force, both laws bounded with strictly positive floors and
+    finite ceilings, and a point mass at the joint worst income, the worst transitory income with ψ at its floor
+    (p_worst > 0). BST's own model is here;
+  - `natural-without-point-mass`: the same, with p_worst = 0;
+  - `with-artificial-constraint`: positive floors, so that h_min > 0, and `a_Art` > `a_Nat`;
+  - `zero-infima`: ψ's or θ's infimum zero, so that the natural constraint is a ≥ 0; no zero-income event; and
+    E[θ^(−ϱ)] finite, with E[ψ^(−ϱ)] where ψ's infimum is zero.
 
-The **hypotheses** of BST's own class, `bst-model`, which its theorems assume beyond membership: iid shocks, bounded
-support, the zero-income event (ξ = 0 with probability ℘ > 0), a riskless and constant return, no artificial constraint,
-infinite lives and one type. A model with untruncated lognormal shocks can therefore be a buffer-stock model and still
-lie outside the reach of BST's theorems. Keeping the two tiers apart is one of the draft's proposals.
+  The ruling of 2026-10-31 required a point mass at the worst transitory realization wherever the natural constraint is
+  in force. On 2026-11-01 the owner made it the joint worst income, made the model without one a scenario of its own,
+  and made bounded support a condition of the natural scenarios.
+
+The **hypotheses** of BST's own class, `bst-model`, which its theorems assume beyond membership: iid shocks, the
+zero-income event (ξ = 0 with probability ℘ > 0), a riskless and constant return, no artificial constraint, infinite
+lives and one type. Bounded support was one of them until 2026-11-01; it is now a condition of the natural scenarios. A
+model with untruncated lognormal shocks and a ≥ 0 is a buffer-stock model, in the zero-infima scenario, and lies outside
+the reach of BST's theorems. Keeping the two tiers apart is one of the draft's proposals.
 
 **Buffer-stock saving** is a property of a member's solution, not a condition of membership. This draft says a member
 exhibits it when it has a non-degenerate limiting solution and an individual target m̂, as BST's introduction does. The
 perfect-foresight model fails the axiom of income risk: it is the class's benchmark, the limit as the shocks vanish, and
 not a member.
 
-Applied to bst/1's members, the axioms classify them as follows (the tests check this):
-- `library` is a member and satisfies every hypothesis of BST's class;
-- `toy` is a member: its artificial constraint lies above the natural one, so the atom axiom does not apply;
-- `toy-untruncated` is **not** a member. Its untruncated laws put `a_Nat` at 0, equal to `a_Art` (the edge), and the
-  lowest transitory shock comes from the employed lognormal's tail, which has no atom.
+Applied to the schemas' members, the axioms put each in exactly the scenario its family writes (the tests check this):
+- `library`, with its laws truncated, is in `natural-with-point-mass` and satisfies every hypothesis of BST's class;
+- `toy-natural`, the toy's laws with no artificial constraint, is in `natural-without-point-mass`;
+- `toy` is in `with-artificial-constraint`: its floors are positive and a ≥ 0 lies above the natural constraint;
+- `toy-untruncated` is in `zero-infima`. Its untruncated laws put `a_Nat` at 0, and a ≥ 0 binds. Until 2026-11-01 it was
+  outside the class, at the edge without an atom.
 
 ## The classes
 
 ```
 buffer-stock-model
-├── bst-model                     BST's model, as the paper states it
+├── natural-constraint            the natural constraint in force, bounded laws with positive floors
+│   ├── natural-with-point-mass   a point mass at the joint worst income
+│   │   └── bst-model             BST's model, as the paper states it
+│   └── natural-without-point-mass no point mass there
+├── zero-infima                   an infimum zero, so a ≥ 0 from both constraints
+├── liquidity-constrained         a ≥ 0 binding: artificial at 0, or zero infima
 ├── with-survival                 perpetual youth, no annuity: BST's Modigliani scheme
 ├── with-blanchard-annuities      survivors earn R/ℒ
 ├── with-positive-benefit         ξ_u > 0
-├── with-artificial-constraint    a_Art above the natural constraint
-│   └── liquidity-constrained     a ≥ 0, with a positive lowest income
+├── with-artificial-constraint    a_Art above the natural constraint, positive floors
 ├── with-types                    permanent types differing in β
 ├── with-markov-states            Markov employment and an aggregate regime
 ├── with-kinked-return            a higher rate on borrowing
@@ -113,19 +129,23 @@ perfect-foresight-benchmark       the limit, outside the class
 └── perfect-foresight-constrained the benchmark with a ≥ 0, the limit of liquidity-constrained
 ```
 
-Each extension reduces to `bst-model` under a stated restriction, such as ℒ = 1 or ξ_u = 0. The schemas' family bst/1
-writes the members of `with-survival`, `with-positive-benefit`, `with-artificial-constraint` and `with-types`; the
-Markov family adds `with-markov-states`.
+The four scenarios partition the class: every member is in exactly one of `natural-with-point-mass`,
+`natural-without-point-mass`, `with-artificial-constraint` and `zero-infima`. The other extensions reduce to `bst-model`
+under a stated restriction, such as ℒ = 1 or ξ_u = 0. The schemas write each scenario as a family of its own, with its
+own stage file: `bst-natural/1`, `bst-natural-no-point-mass/1`, `bst-artificial/1` and `bst-zero-infima/1`, each also
+writing members of `with-survival`, `with-positive-benefit` and `with-types`; the Markov family's artificial and
+zero-infima versions add `with-markov-states`.
 
-In the life-cycle class, a primitive binds the stage occurrence of the period whose block reads it. In bst/1's one-stage
-period, β and ℒ are read in period t's decision block, and R, 𝒢 and the shocks' laws in period t+1's arrival block.
-Both are the move from t to t+1.
+In the life-cycle class, a primitive binds the stage occurrence of the period whose block reads it. In the families'
+one-stage period, β and ℒ are read in period t's decision block, and R, 𝒢 and the shocks' laws in period t+1's arrival
+block. Both are the move from t to t+1.
 
 ## The conditions
 
-Every condition is a factor compared with a bound. The factors carry survival as bst/1 does, through β̊ = βℒ and
-Þ̊ = (Rβ̊)^(1/ϱ). They are BST's when ℒ = 1. A modified condition's signifier follows its base name: GIC-Mod, GIC-Liv, FVAC-PF. MST-βR is Ma, Stachurski and Toda's (2020) condition G_βR < 1, read for the
-normalized problem, whose discount factor is β̊(𝒢ψ′)^(1−ϱ) and whose return is R/(𝒢ψ′).
+Every condition is a factor compared with a bound. The factors carry survival as the families do, through β̊ = βℒ and Þ̊
+= (Rβ̊)^(1/ϱ). They are BST's when ℒ = 1. A modified condition's signifier follows its base name: GIC-Mod, GIC-Liv,
+FVAC-PF. MST-βR is Ma, Stachurski and Toda's (2020) condition G_βR < 1, read for the normalized problem, whose discount
+factor is β̊(𝒢ψ′)^(1−ϱ) and whose return is R/(𝒢ψ′).
 
 | condition | holds when | governs, by the results |
 |---|---|---|
@@ -157,13 +177,15 @@ collapse.
 
 The two make different models, and the ontology keeps them apart in four ways.
 
-- **Membership.** The atom at the worst transitory shock is required only where the natural constraint is in force, the
-  edge `a_Art` = `a_Nat` included. A model whose artificial constraint lies strictly above the natural one needs no
-  atom. An artificial constraint at or below the natural one is no constraint.
-- **Behavior.** The natural constraint never binds. In BST's class, the zero-income event keeps the consumer from ending
-  a period at the limit, and near the lowest resources the MPC approaches κ_max, below one; the paper states this. An
-  artificial constraint strictly above the natural one binds on an interval of m just above it, where c = m − `a_Art`
-  and the MPC is one. That is deduced here, and not tested.
+- **Membership.** They are four scenarios, each a class, above. An artificial constraint at or below the natural one is
+  no constraint. With zero infima the two constraints coincide at a ≥ 0, and the model is the zero-infima scenario's.
+- **Behavior.** No agent ever ends a period below the constraint in force; what differs is whether one ends a period
+  exactly at it. With the natural constraint and a point mass at the joint worst income, never: near the lowest
+  resources the MPC approaches κ_max, below one; the paper states this for its own model. Without the point mass, only
+  when ϱ < k, k the number of shocks with densities at their floors, so with ϱ > 1 only when k = 2 and ϱ < 2 (deduced).
+  An artificial constraint strictly above the natural one binds on an interval of m just above it, where c = m −
+  `a_Art` and the MPC is one (deduced). With zero infima, a ≥ 0 binds at every ϱ, which is Ma, Stachurski and Toda's
+  Lemma C.2 (deduced). None of these is tested: the tests check implications among the conditions, not solutions.
 - **Conditions.** Without an artificial constraint, the WRIC and the FVAC give a non-degenerate solution. BST says the
   WRIC "cannot be relaxed further without an artificial liquidity constraint". The ontology reads that as necessity
   and, by the owner's decision of 2026-11-01, treats it as true until the paper proves it. With the constraint a ≥ 0
@@ -214,7 +236,7 @@ own, and its concepts are named by their slugs, pinned in `bellman-concepts.txt`
 
 - **Perches and values.**
   - A stage has three perches: arrival, decision and continuation. They are information contexts, not dates.
-  - In bst/1's one-stage period their states are k, m and a. A period of several stages would not keep that
+  - In the families' one-stage period their states are k, m and a. A period of several stages would not keep that
     correspondence.
   - Each perch has a value field: V[<], V and V[>]. Each field is represented by a function of its perch's state.
   - BST's v_t(m) is the decision value. Its arrival value is v≺(k) = E[(𝒢ψ)^(1−ϱ) v(m)]. Its continuation value is a
@@ -239,21 +261,22 @@ own, and its concepts are named by their slugs, pinned in `bellman-concepts.txt`
     points correspond.
   - The forward distribution operator 𝕄_π moves the population's measure. The expectation and BST's cross-sectional mean
     are operations, not operators.
-  - The Euler equation is a Kuhn–Tucker relation. Its clause covers the natural constraint as well as the artificial one.
+  - The Euler equation is a Kuhn–Tucker relation. Its clause covers the natural constraint as well as the artificial
+    one.
 - **Measures.**
   - The population measure is a measure on a perch's states, and its stationary distribution is a fixed point of 𝕄_π
     across the connector.
   - The income measure has no spelling in a stage: it is a second forward problem, with ψ's law weighted by ψ
     (deduced).
-  - Death and the inflow of newborns are stated outside bst/1's stage file, which states survivors' problem.
+  - Death and the inflow of newborns are stated outside the families' stage files, which state survivors' problem.
 - **Time.** A trellis counts periods back from the terminal one, so t = T − h. A primitive binds the occurrence whose
   block reads it (see the life-cycle class above).
 - **Inputs.**
   - The primitives are parameters; none is a setting.
   - The bounds ψ_min, ξ_min and the probabilities at them are properties of the shocks' laws, linked to the ontology of
     probability distributions' support and atoms.
-  - The natural limit is a quantity of the laws. A stage file that takes it as a calibrated parameter must agree with the
-    laws, which no stage file can check.
+  - The natural limit is a quantity of the laws. A stage file that takes it as a calibrated parameter must agree with
+    the laws, which no stage file can check.
   - A shock on a two-point set replaces the category of event.
 - **Meaning and representation.** Each format of the denotation has a role:
   - BST's notation, the registry and the stage file are notations, and `written_as` lists the expressions each one's
@@ -281,14 +304,15 @@ Each term names its written forms in four formats:
 |---|---|---|
 | BST's notation | `\CRRA` | `\mTrgNrm` |
 | econ-ark's notation registry | `crra` | `target` |
-| a bst/1 parameter file | `crra` | — |
-| the bst/1 stage file | `ϱ` | — |
+| a buffer-stock family's parameter file | `crra` | — |
+| a buffer-stock family's stage file | `ϱ` | — |
 
 The parameter file is a calibration, and the others are notations. In the stage file a block's or a line's id, such as
 `policy.euler`, is the address of where a relation is written, not a name of an object. The three derivative terms are
-written as Bellman-SYM now writes them; bst/1's stage file will carry them once its proposed rewrite is made.
+written as Bellman-SYM now writes them, and every family's stage file carries them.
 
-The tests check every parameter-file key against bst/1's validator and every stage-file name against its stage file.
+The tests check every parameter-file key against the four families' validators and every stage-file name against their
+stage files.
 They also check that the ontology's formulas give the checker's verdict and factor for each condition, type and member:
 the ontology and the schemas mean the same thing by each condition.
 
@@ -305,8 +329,6 @@ A toolkit's departures from the terms are not divergences of the ontology: each 
 
 The divergences:
 - **BST and Bellman-SYM:** 𝕄 names BST's cross-sectional mean and the forward distribution operator alike.
-- **The schemas:** bst/1's stage file and the Markov family's still write the marginal values as fields with a role word
-  Bellman-SYM retired on 2026-10-26. The language now refuses both files.
 - **The published HAFiscal paper:**
   - ξ names the employed draw, BST's θ;
   - "target" names a data moment;
@@ -317,15 +339,16 @@ conventions silently differ.
 
 ## Open questions
 
-- **The two tiers.** Are bounded support, iid shocks and the zero-income event hypotheses of BST's theorems, as drafted,
-  or conditions of membership?
+- **The two tiers.** Are iid shocks and the zero-income event hypotheses of BST's theorems, as drafted, or conditions of
+  membership? Bounded support was settled on 2026-11-01: a condition of the natural scenarios.
 - **Buffer-stock saving.** Is it the individual target, as drafted, or does the pseudo-target suffice?
 - **The perfect-foresight model and the risky asset.** Is the first outside the class, as drafted? Is the second inside,
   as drafted from the owner's ruling of 2026-10-27 that a target exists?
 - **GIC-Liv in BST's text.** BST writes ℒ Þ_𝒢 < 1 without saying whether Þ carries survival. The owner ruled on
   2026-10-22, in econ-ark's notation registry, that the condition is ℒ Þ̊_𝒢, and the ontology follows
   the ruling. The paper's text could say so. The condition also assumes, as BST does, that newborns' permanent income
-  grows with aggregate productivity. bst/1's newborn arrives with 𝐩 = 1, and its aggregate conditions are its own.
+  grows with aggregate productivity. The families' newborn arrives with 𝐩 = 1, and their aggregate conditions are
+  their own.
 - **Weak return impatience.** The ontology treats the WRIC as necessary without an artificial constraint, by the
   owner's decision of 2026-11-01, until the paper proves it; the paper's own tracker asks for the proof.
 - **Ma, Stachurski and Toda with a continuous permanent shock.** Their statement fits the normalized problem exactly
@@ -334,13 +357,13 @@ conventions silently differ.
   constant discount factor. Does that extend to the normalized problem's random one, as their footnote expects?
 - **An artificial constraint other than zero.** Their results take a ≥ 0. The ontology states nothing for a borrowing
   limit strictly between the natural one and zero.
-- **The schemas.** Three schema changes, each to be proposed with its consequences before it is made:
-  - **The stage files' rewrite with derivative terms.** Both stage files need it to elaborate under Bellman-SYM's
-    current language. The owner approved it on 2026-10-31, and it is in the fork's pull request #15; once that is
-    merged, the divergence it resolves is closed and the derivative terms are no longer pending.
+- **The schemas.** Two schema changes, each to be proposed with its consequences before it is made:
   - **Identifiers on the schemas' keys.** Should each key carry its term's identifier, as SBML components carry SBO
     terms?
-  - **The atom axiom as a validity condition of bst/1.** That would reject `toy-untruncated`.
+  - **Stage files for the other laws.** A positive benefit in the natural scenario with a point mass needs a discrete ψ,
+    and so a stage file written with that law's family; so does any member whose laws the four files do not write.
+- **Existence in the natural scenario without a point mass**, and in the artificial scenario with `a_Art` < 0: no
+  theorem is stated.
 
 ## The files
 

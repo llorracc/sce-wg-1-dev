@@ -11,7 +11,9 @@ tolerances and simulation sizes stay each toolkit's own choice.
 
 The names the validators fix, and the conventions they follow, are registered in [`conventions.md`](conventions.md).
 
-- **Family:** a versioned template of models with named parameters, such as `bst/1` ("buffer-stock theory, version 1").
+- **Family:** a versioned template of models with named parameters and one stage file, such as `bst-artificial/1`
+  ("buffer-stock theory with an artificial borrowing constraint, version 1"). The buffer-stock families are one for each
+  borrowing-constraint scenario ([`constraint-scenarios.md`](constraint-scenarios.md)).
 - **Member:** one complete parameterization of a family.
 - **Stated member:** the member a parameter file names, with its laws as stated. In general what can be computed about it
   is a limit, approached numerically; for the laws the schemas admit, whose moments have closed forms, the checker computes
@@ -46,7 +48,7 @@ The names the validators fix, and the conventions they follow, are registered in
   exponent, computed for the stated member by the checker.
 - **Method target:** the stage file's own name for a part a method attaches to: a block, a line, or an operator's name
   covering every occurrence. An expectation's method goes on its operator
-  ([`bst-1/model.md`](bst-1/model.md#method-targets)).
+  ([`bst/model.md`](bst/model.md#method-targets)).
 - **Handler:** the routine a method entry names, which carries out what the entry's method tag leaves open, or a part
   no tag names.
 - **Observation map:** a stated transformation from the standard rule to what a household does, such as HAFiscal's splurge,
@@ -74,41 +76,53 @@ Shared by every family:
   [ontology of probability distributions](../ontologies/probability-distributions/).
 - [`numerics.md`](numerics.md): method files, settings files and suites.
 - [`rosetta/`](rosetta/README.md): the Rosetta Stones, one for each toolkit, which say how the toolkit solves a family's
-  members as the stage file states them; begun for `bst/1` with HARK and QuantEcon's JAX code.
+  members as the stage file states them; begun for the buffer-stock families with HARK and QuantEcon's JAX code.
 - [`adapters/`](adapters/README.md): the adapters, one for each toolkit, which read a parameter file, solve the member with
-  the toolkit and write its results file; HARK's for `bst/1` first.
+  the toolkit and write its results file; HARK's for the buffer-stock families first.
 
-The family `bst/1`:
-- [`bst-1/model.md`](bst-1/model.md): the model schema, read from the stage file, with its method targets and its parameter
-  file.
-- [`bst-1/conditions.md`](bst-1/conditions.md): the validity conditions, the domain rules, the implications a results file
-  is tested against, and the conditions of the simulation phase, population welfare's among them.
-- [`bst-1/bellman/buffer_stock.bl`](bst-1/bellman/buffer_stock.bl): the household's problem in Bellman-SYM, the foundation
-  of the family's statement, with a calibration file for the community library's member.
-- [`bst-1/results.md`](bst-1/results.md): the results schema, with the stationary population, welfare and marginal welfare,
-  and the diagnostics; [`bst-1/results.schema.json`](bst-1/results.schema.json) is its validator.
-- [`bst-1/parameters.schema.json`](bst-1/parameters.schema.json): the parameter file's validator, with the members under
-  [`bst-1/members/`](bst-1/members/).
-- [`checker/`](checker/README.md): the checker, which validates and hashes a parameter file and evaluates the family's
-  conditions, domain rules and implications.
+The four buffer-stock families, which replaced `bst/1` on 2026-11-01, one for each borrowing-constraint scenario
+([`constraint-scenarios.md`](constraint-scenarios.md)), in [`bst/`](bst/):
+- [`bst/model.md`](bst/model.md): the model schema the four share, read from their stage files, with the table of the
+  families, their method targets and their parameter files.
+- [`bst/conditions.md`](bst/conditions.md): the validity conditions, each scenario's among them, the domain rules, the
+  implications a results file is tested against, and the conditions of the simulation phase, population welfare's among
+  them.
+- [`bst/results.md`](bst/results.md): the results schema the four share, with the stationary population, welfare and
+  marginal welfare, and the diagnostics; [`bst/results.schema.json`](bst/results.schema.json) is its validator.
+- [`bst/parameters.common.schema.json`](bst/parameters.common.schema.json): the parameter definitions the four share.
+- One folder for each family, each with its parameter file's validator (`parameters.schema.json`), its stage file in
+  Bellman-SYM under `bellman/`, and its members under `members/`:
+  - [`bst/natural/`](bst/natural/), `bst-natural/1`: the natural scenario with a point mass, BST's own model, with the
+    community library's member and its calibration;
+  - [`bst/natural-no-point-mass/`](bst/natural-no-point-mass/), `bst-natural-no-point-mass/1`;
+  - [`bst/artificial/`](bst/artificial/), `bst-artificial/1`, with the benchmark's toy;
+  - [`bst/zero-infima/`](bst/zero-infima/), `bst-zero-infima/1`, with the untruncated toy.
+- [`checker/`](checker/README.md): the checker, which validates and hashes a parameter file, checks its scenario's
+  requirements, and evaluates the family's conditions, domain rules and implications.
 
-The family `bst-markov_ui-and-agg/1`, HAFiscal's household problem, begun stage-file first:
-- [`bst-markov_ui-and-agg/bellman/bst_markov_ui.bl`](bst-markov_ui-and-agg/bellman/bst_markov_ui.bl): the household's
-  problem in Bellman-SYM, with three calibration files for the dropout group's middle type, one per value of the switch for
-  permanent income while unemployed (`continues`, the family's standard; `grows`; `frozen`).
-- [`bst-markov_ui-and-agg/model.md`](bst-markov_ui-and-agg/model.md): the model schema, read from the stage file, with the
+The Markov family, HAFiscal's household problem, begun stage-file first, in two versions since 2026-11-01:
+`bst-markov_ui-and-agg-artificial/1` and `bst-markov_ui-and-agg-zero-infima/1`, in
+[`bst-markov_ui-and-agg/`](bst-markov_ui-and-agg/):
+- each version's folder, [`artificial/`](bst-markov_ui-and-agg/artificial/) and
+  [`zero-infima/`](bst-markov_ui-and-agg/zero-infima/), holds its parameter file's validator, its stage file and its
+  members. The zero-infima version's stage file has three calibration files for the dropout group's middle type, one per
+  value of the switch for permanent income while unemployed (`continues`, the family's standard; `grows`; `frozen`);
+- [`bst-markov_ui-and-agg/model.md`](bst-markov_ui-and-agg/model.md): the model schema, read from the stage files, with the
   groups, the newborn's level law, the splurge as an observation map, the regime, the parameter file and the reduction to
-  `bst/1`.
-- [`bst-markov_ui-and-agg/conditions.md`](bst-markov_ui-and-agg/conditions.md): `bst/1`'s conditions carried over to the
-  chain, each as a condition on a matrix over the states that reduces to `bst/1`'s under `continues`; the natural borrowing
-  constraint by state; the levels' tail exponent; the employment marginal that born-employed newborns imply.
-- [`bst-markov_ui-and-agg/parameters.schema.json`](bst-markov_ui-and-agg/parameters.schema.json): the parameter file's
-  validator, with the members under [`bst-markov_ui-and-agg/members/`](bst-markov_ui-and-agg/members/): `bst/1`'s toy
-  written in the family, the paper's high-school group alone, and the paper's published calibration. The checker's
-  module for the family, `checker/markov.py`, computes the stated member's conditions, limits and implications. Its
-  results schema is not yet written; the design is in the note below.
+  the buffer-stock families;
+- [`bst-markov_ui-and-agg/conditions.md`](bst-markov_ui-and-agg/conditions.md): the buffer-stock families' conditions
+  carried over to the chain, each as a condition on a matrix over the states that reduces to theirs under `continues`;
+  the natural borrowing constraint by state; the levels' tail exponent; the employment marginal that born-employed
+  newborns imply;
+- [`bst-markov_ui-and-agg/parameters.common.schema.json`](bst-markov_ui-and-agg/parameters.common.schema.json): the
+  definitions the two versions share. The members are the benchmark's toy written in the family (artificial), and the
+  paper's high-school group alone and its published calibration (zero-infima, by their stated lognormal laws). The
+  checker's module for the family, `checker/markov.py`, computes the stated member's conditions, limits and
+  implications. Its results schema is not yet written; the design is in the note below.
 
 Design notes:
+- [`constraint-scenarios.md`](constraint-scenarios.md): approved on 2026-11-01: the four borrowing-constraint scenarios,
+  each a family with its own stage file.
 - [`foundation.md`](foundation.md): the plan for making the Bellman-SYM stage file the foundation of a family's statement,
   with the requests it implies for the language.
 - [`effective-member.md`](effective-member.md): approved and executed on 2026-10-18: the schemas state the problem without

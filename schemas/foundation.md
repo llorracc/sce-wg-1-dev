@@ -6,6 +6,11 @@ three-valued switch by 18:37; the sixth, the completeness job, ran at 20:32 on C
 [records](records/findings/2026-10-18_matsya-completeness-job.md). The plan is EXECUTED; the two further requests the job
 produced are at the end.
 
+**Since 2026-11-01** the family `bst/1` this note describes is four families, one for each borrowing-constraint
+scenario, and the Markov family `bst-markov_ui-and-agg/1` is two versions
+([`constraint-scenarios.md`](constraint-scenarios.md)). The note keeps its names as they were; its links point to the
+documents that now hold what it cites.
+
 ## The ruling
 
 A family's true model is to be stated on the `.bl` machinery of Bellman-SYM, the project's language for staged Bellman
@@ -15,7 +20,7 @@ says what changes.
 
 ## What a stage file states today, and what it cannot
 
-For `bst/1`, [`bst-1/bellman/buffer_stock.bl`](bst-1/bellman/buffer_stock.bl) states, with its domains, conditions and blocks: the
+For `bst/1`, [`bst-1/bellman/buffer_stock.bl`](bst/model.md) states, with its domains, conditions and blocks: the
 state and its set; every parameter with its domain, in BST's notation where the language admits the symbol; the shocks and
 their laws; the law of motion; the budget; the value and marginal-value recursions with their discounting; the policy
 condition as the Euler equation with its complementarity clause; and the borrowing constraint in force, `max(a_Art, a_Nat)`.

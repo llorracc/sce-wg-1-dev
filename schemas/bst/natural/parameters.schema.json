@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "bst-natural/1 parameter file",
+  "description": "One member of bst-natural/1, the natural scenario with a point mass (constraint-scenarios.md), as model.md names its free parameters. The natural constraint a > -h_min is the constraint in force, so the file states no artificial one. Draft.",
+  "$comment": "This validator checks names, types and ranges. The checker checks the rest: the shared rules (shares, the order of the types, income 0 with probability 0, wp * xi_u < 1, each law's own rules) and the scenario's: both laws bounded, with strictly positive lower and finite upper bounds; the joint worst income, the worst transitory income with psi at its floor, a point mass; and G psi_min < R, so that h_min is finite.",
+  "type": "object",
+  "required": [
+    "family",
+    "period",
+    "crra",
+    "types",
+    "survival",
+    "return",
+    "income"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "family": {
+      "const": "bst-natural/1"
+    },
+    "period": {
+      "$ref": "../parameters.common.schema.json#/$defs/period"
+    },
+    "crra": {
+      "$ref": "../parameters.common.schema.json#/$defs/crra"
+    },
+    "types": {
+      "$ref": "../parameters.common.schema.json#/$defs/types"
+    },
+    "survival": {
+      "$ref": "../parameters.common.schema.json#/$defs/survival"
+    },
+    "return": {
+      "$ref": "../parameters.common.schema.json#/$defs/return"
+    },
+    "income": {
+      "$ref": "../parameters.common.schema.json#/$defs/income"
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "The buffer-stock families' shared parameter definitions",
+  "description": "What the four buffer-stock families' parameter files have in common, as model.md names it. Each family's parameters.schema.json takes these definitions and adds its own family key and constraint. Draft.",
+  "$defs": {
+    "period": {
+      "description": "The length of a period, as a label. Every rate and probability in the file is per period.",
+      "enum": [
+        "year",
+        "quarter",
+        "month"
+      ]
+    },
+    "crra": {
+      "description": "rho, the coefficient of relative risk aversion, greater than 1 as in BST.",
+      "type": "number",
+      "exclusiveMinimum": 1
+    },
+    "types": {
+      "description": "The discount-factor types, in increasing order of beta, with population shares omega summing to one.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "beta",
+          "share"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "beta": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "share": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    },
+    "survival": {
+      "description": "The survival probability (BST's script L); 1 switches mortality off.",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 1
+    },
+    "return": {
+      "description": "R, the gross return on assets.",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "income": {
+      "type": "object",
+      "required": [
+        "growth",
+        "permanent_shock",
+        "unemployment",
+        "employed_shock"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "growth": {
+          "description": "The growth factor of permanent income (BST's script G).",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "permanent_shock": {
+          "description": "The law of psi.",
+          "$ref": "../shock-laws.schema.json"
+        },
+        "unemployment": {
+          "type": "object",
+          "required": [
+            "prob",
+            "income"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "prob": {
+              "description": "wp, the probability of the unemployment event each period. With 0, income must be 0 too, so that the file has one written form.",
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 1
+            },
+            "income": {
+              "description": "xi_u, income while unemployed, as a ratio to permanent income; 0 in BST, where it is also the lowest value of the transitory shock xi, though not in general.",
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "employed_shock": {
+          "description": "The law of theta, the employed draw, before the scaling (1 - wp xi_u)/(1 - wp) that keeps the mean of the transitory shock at one.",
+          "$ref": "../shock-laws.schema.json"
+        }
+      }
+    },
+    "artificial_constraint": {
+      "description": "The artificial borrowing constraint a_Art, the lowest permitted end-of-period assets as a ratio to permanent income: a number no greater than 0, strictly above the natural constraint a_Nat, which the checker enforces.",
+      "type": "number",
+      "maximum": 0
+    }
+  }
+}

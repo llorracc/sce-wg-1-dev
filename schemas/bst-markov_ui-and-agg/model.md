@@ -1,25 +1,29 @@
-# bst-markov_ui-and-agg/1: the model schema
+# The Markov family: the model schema
 
 Draft, 2026-10-18; see the [README](../README.md) and the design note
 [Describing HAFiscal's household models](../hafiscal-models-and-test-suite.md), whose decisions this document states.
 
-This document states the family `bst-markov_ui-and-agg/1`: buffer-stock theory with Markov employment and
+This document states the Markov family, in its two versions, `bst-markov_ui-and-agg-artificial/1` and
+`bst-markov_ui-and-agg-zero-infima/1`, one for each borrowing-constraint scenario its members fall in
+([`constraint-scenarios.md`](../constraint-scenarios.md)): buffer-stock theory with Markov employment and
 unemployment-insurance states and an aggregate regime, the household problem of HAFiscal (Carroll, Crawley, Du,
-Frankovic and Tretvoll, *Welfare and Spending Effects of Consumption Stimulus Policies*). It is
-[`bst/1`](../bst-1/model.md) with five additions and one convention change: employment as a Markov chain with a benefit
-countdown and exhaustion; groups of types; a level law for the newborn's permanent income; the splurge, as an
-observation map on the standard rule; the aggregate regime, normal or recession, as a Markov state; and employed income
-e θ with the scale e a parameter. Its notation is BST's, with SolvingMicroDSOPs' where BST is silent. The household's
-problem is stated in Bellman-SYM, in [`bellman/bst_markov_ui.bl`](bellman/bst_markov_ui.bl); that stage file is the
-foundation of the statement, and this document adds what the language does not state: the groups and types, the newborn,
-the splurge, the stationary population, the shock laws outside Bellman's families, and the conditions. A parameter file
-names one member by giving every free parameter. The family's [conditions](conditions.md) and [results
-schema](results.md) are companion documents; the [shock laws](../shock-laws.md) and the treatment of [numerical
-methods](../numerics.md) are shared with other families.
+Frankovic and Tretvoll, *Welfare and Spending Effects of Consumption Stimulus Policies*). It is the buffer-stock
+families' model ([`../bst/model.md`](../bst/model.md)) with five additions and one convention change: employment as a
+Markov chain with a benefit countdown and exhaustion; groups of types; a level law for the newborn's permanent income;
+the splurge, as an observation map on the standard rule; the aggregate regime, normal or recession, as a Markov state;
+and employed income e θ with the scale e a parameter. Its notation is BST's, with SolvingMicroDSOPs' where BST is
+silent. The household's problem is stated in Bellman-SYM, in one stage file for each version,
+[`artificial/bellman/artificial.bl`](artificial/bellman/artificial.bl) and
+[`zero-infima/bellman/zero-infima.bl`](zero-infima/bellman/zero-infima.bl); the stage file is the foundation of the
+statement, and this document adds what the language does not state: the groups and types, the newborn, the splurge, the
+stationary population, the shock laws outside Bellman's families, and the conditions. A parameter file names one member
+by giving every free parameter. The family's [conditions](conditions.md) and [results schema](results.md) are companion
+documents; the [shock laws](../shock-laws.md) and the treatment of [numerical methods](../numerics.md) are shared with
+other families.
 
 ## Notation
 
-Everything in [`bst/1`'s table](../bst-1/model.md#notation) keeps its meaning. The family adds:
+Everything in [the buffer-stock families' table](../bst/model.md#notation) keeps its meaning. The family adds:
 
 | typeset | plain text | meaning | source |
 |---|---|---|---|
@@ -37,7 +41,7 @@ Everything in [`bst/1`'s table](../bst-1/model.md#notation) keeps its meaning. T
 | `\underline{a}(j)`, `\underline{a}_{\mathrm{Nat}}(j)`, `\underline{m}(j)` | `a_min(j)`, `a_Nat(j)`, `m_min(j)` | the constraint in force in state j, the natural limit in state j, and the lowest market resources in state j | this family |
 | `p_{\mathrm{worst}}(j)` | `p_worst(j)` | the probability of the worst income in state j | this family |
 
-The two spellings follow [`bst/1`'s rule](../bst-1/model.md#notation).
+The two spellings follow [the buffer-stock families' rule](../bst/model.md#notation).
 
 ## Population
 
@@ -82,7 +86,7 @@ Two Markov states are drawn each quarter, the regime first.
   the paper's corrected code; `frozen` reproduces the published numbers.
 - **Transitory income** is ξ_t 𝐩_t with ξ_t set by the state: e θ_t when employed, ξ_u in U_2 and U_1, ξ_x in X, where θ
   is a positive shock with E[θ] = 1. So E[ξ | employed] = e, and employed income is not rescaled for the unemployment
-  probability, as it is in `bst/1`.
+  probability, as it is in the buffer-stock families.
 - ψ and θ are independent of each other, of the chains, over time and across households; θ is drawn every quarter and
   used only when employed. Their laws are parameters, each one of the [shock laws](../shock-laws.md), common to all
   groups; the paper's are untruncated lognormals, and the truncated lognormal is the recommended variant.
@@ -93,10 +97,10 @@ Two Markov states are drawn each quarter, the regime first.
 2. The regime `reg_t` is drawn, then the employment state j_t.
 3. A survivor draws ψ_t and θ_t. Then 𝐩_t = 𝒢_t ψ_t 𝐩_{t−1}, bank balances are b_t = R k_t/(𝒢_t ψ_t) with k_t = a_{t−1},
    and market resources are m_t = b_t + ξ_t.
-4. A newborn is **born employed**, as in `bst/1`: j_t = E, k_t = 0, no ψ in its first quarter, and its first transitory
-   draw is the employed branch, e θ_t; its permanent income 𝐩_t is drawn from its group's level law. So its market
-   resources are m_t = e θ_t, in levels e θ_t 𝐩_t: a newborn holds no assets and its resources are its first income
-   draw.
+4. A newborn is **born employed**, as in the buffer-stock families: j_t = E, k_t = 0, no ψ in its first quarter, and its
+   first transitory draw is the employed branch, e θ_t; its permanent income 𝐩_t is drawn from its group's level law. So
+   its market resources are m_t = e θ_t, in levels e θ_t 𝐩_t: a newborn holds no assets and its resources are its first
+   income draw.
 5. The household consumes c_t and ends the quarter with a_t = m_t − c_t ≥ `a_min(j_t)`, the constraint in force in its
    state, through the observation map below.
 
@@ -129,22 +133,27 @@ gain is ℷ + (1 − ℷ) c̃′(m̃), and every MPC the [results](results.md) r
   laws the employed state's lowest income is zero, since employed income e θ 𝐩 has infimum zero, and that state can
   follow every state, so every state's limit is zero; with truncated laws the limits are negative, can differ by state,
   and depend on the switch.
-- For one written form, a parameter file writes `a_Art` no lower than the lowest of the natural limits `a_Nat(j)`, or
-  the word `natural`: an artificial limit below the lowest natural limit binds in no state. An artificial limit has an
-  effect only where it is relevant, strictly above the natural limit; one at the lowest natural limit, such as the
-  paper's 0 under lognormal laws, where every state's natural limit is 0, is valid and states the natural-constraint
-  member.
+- The two versions: in **`bst-markov_ui-and-agg-artificial/1`**, ψ and θ have strictly positive floors, every state's
+  natural limit lies below zero, and the parameter file states `a_Art`, strictly above the lowest of them; in
+  **`bst-markov_ui-and-agg-zero-infima/1`**, the infimum of ψ or of θ is zero, every state's natural limit is 0, a ≥ 0
+  is the constraint in force and binds, and the parameter file states no artificial limit. The stage file states a ≥ 0
+  itself, and a toolkit imposes it: one that took the limits from a discretization's lowest values would find them below
+  zero and let its agents borrow, which the published model, stating a ≥ 0 as its no-borrowing constraint, never allows.
+  The paper's published
+  calibration, with lognormal laws, is the zero-infima version's; a member with truncated laws, such as the toy written
+  in the family, is the artificial version's.
 
 ## Parameter domains
 
 β_i > 0 (the validity conditions bound it above); shares positive and summing to one within each group and across
 groups; ϱ > 1; 0 < ℒ ≤ 1; R > 0; 𝒢 > 0 for each group; e > 0; ξ_u > 0 and ξ_x > 0; `sep` and `find` in [0, 1] for each
-regime; `p_exit` in [0, 1]; 0 ≤ ℷ < 1; `a_Art` ≤ 0 and no lower than the lowest `a_Nat(j)`, or `natural`; the newborn's
+regime; `p_exit` in [0, 1]; 0 ≤ ℷ < 1; in the artificial version, `a_Art` ≤ 0 and strictly above the lowest
+`a_Nat(j)`; the newborn's
 level law has a positive median and a standard deviation of the log that may be zero.
 
-## The household's problem, as the stage file states it
+## The household's problem, as the stage files state it
 
-The stage file [`bellman/bst_markov_ui.bl`](bellman/bst_markov_ui.bl) states one type's problem, for one group, in the
+Each version's stage file states one type's problem, for one group, in the
 optimizer's units, in five blocks, read here in BST's notation. k is last quarter's a, the arrival state; `[>]` marks
 next quarter's value and `[<]` this quarter's arrival value. A selector `(…)[j]` or `(…)[P_u]` in the file is read as
 cases.
@@ -195,8 +204,8 @@ two measures:
 - the **population measure**, which gives each household weight one;
 - the **income measure**, which weights each household by its permanent income 𝐩 and is normalized to total weight one,
   Harmenberg's permanent-income-neutral measure. Under `continues`, 𝐩 is independent of j, so the income measure's
-  transition factorizes as in `bst/1`; under `grows` and `frozen` it does not, and the measure is computed on the joint
-  law of (m, j, 𝐩).
+  transition factorizes as in the buffer-stock families; under `grows` and `frozen` it does not, and the measure is
+  computed on the joint law of (m, j, 𝐩).
 
 Statistics in levels, such as the wealth Lorenz curve the paper's estimation targets and the means test of the paper's
 stimulus check, need the distribution of 𝐩 itself, which depends on the group's growth, the newborn's level law and
@@ -208,9 +217,9 @@ also report the mean felicity and the mean marginal utility; [conditions](condit
 
 ## Derived parameters
 
-As in [`bst/1`](../bst-1/model.md#derived-parameters), computed for the stated member by the checker and used by a
-toolkit from its own effective member, which it reports: the worst income by state, `ξ_min(j)` `ψ_min(j)`, and its
-probability from each state; the constraint in force by state, the fixed point stated in [conditions](conditions.md)
+As in [the buffer-stock families](../bst/model.md#derived-parameters), computed for the stated member by the checker and
+used by a toolkit from its own effective member, which it reports: the worst income by state, `ξ_min(j)` `ψ_min(j)`, and
+its probability from each state; the constraint in force by state, the fixed point stated in [conditions](conditions.md)
 with the artificial limit inside the recursion; and the natural limits by state, the same recursion without it. The
 employed-income scale e is a parameter of this family, not a derived one.
 
@@ -225,8 +234,8 @@ employed-income scale e is a parameter of this family, not a derived one.
 ## Method targets
 
 A method file ([numerical methods](../numerics.md)) names the part it computes by the stage file's own target, under the
-rules of attachment of [`bst/1`](../bst-1/model.md#method-targets). Each part exists once for each group and type, and a
-method may be given for all or for one.
+rules of attachment of [the buffer-stock families](../bst/model.md#method-targets). Each part exists once for each group
+and type, and a method may be given for all or for one.
 
 | Target | What it computes | Comment |
 |---|---|---|
@@ -240,9 +249,11 @@ method may be given for all or for one.
 
 ## The parameter file
 
-A parameter file is YAML in the strict subset of `bst/1`. It holds the free parameters, under these names:
-- `crra` (ϱ), `survival` (ℒ), `return` (R), `splurge` (ℷ), and `borrowing_constraint` (`a_Art`, a number no greater than
-  0 and no lower than the lowest natural limit `a_Nat(j)`, or the word `natural`);
+A parameter file is YAML in the strict subset of the buffer-stock families'. It holds the free parameters, under these
+names:
+- `family`, one of the two versions' keys;
+- `crra` (ϱ), `survival` (ℒ), `return` (R), `splurge` (ℷ), and, in the artificial version only, `borrowing_constraint`
+  (`a_Art`, a number no greater than 0 and strictly above the lowest natural limit `a_Nat(j)`);
 - `shocks`, holding `permanent_shock` (the law of ψ) and `employed_shock` (the law of θ);
 - `regimes`, holding `recession: {exit_hazard}` (`p_exit`); the normal regime has no key, since it is absorbing;
 - `employment`, holding `benefit_quarters` (two for the stage file's chain), `job_finding: {normal, recession}` (`find`
@@ -255,15 +266,15 @@ A parameter file is YAML in the strict subset of `bst/1`. It holds the free para
 
 Every free parameter appears, and nothing is left to a toolkit's defaults. The paper's normal-times calibration in the
 family's standard world, with the laws the published code discretized, the paper's estimated discount factors and the
-exact values of its published replication package (llorracc/HAFiscal-QE):
+exact values of its published replication package (llorracc/HAFiscal-QE), in the zero-infima version by its lognormal
+laws ([`zero-infima/members/paper-published.yaml`](zero-infima/members/paper-published.yaml)):
 
-    family: bst-markov_ui-and-agg/1
+    family: bst-markov_ui-and-agg-zero-infima/1
     period: quarter
     crra: 2.0
     splurge: 0.24611389063967778
     survival: 0.99375
     return: 1.01
-    borrowing_constraint: 0.0
     shocks:
       permanent_shock: {LogNormal: {sd_log: 0.05477225575051661}}
       employed_shock: {LogNormal: {sd_log: 0.34641016151377546}}
@@ -323,13 +334,15 @@ The same file with `unemployed_permanent_income: frozen` is the member that repr
 probabilities are below the normal ones, which is consistent: with job finding falling from two thirds to a quarter, the
 dropout group's steady-state unemployment rate roughly doubles, as the paper states.
 
-## A `bst/1` member as a member of this family
+## A buffer-stock member as a member of this family
 
-One group with the `bst/1` types and `growth` = 𝒢; `job_loss` = ℘ and `job_finding` = 1 − ℘ in both regimes, so that the
-chain is unemployment with probability ℘ every quarter whatever the previous state; `income_with_benefits` =
-`income_without_benefits` = the `bst/1` member's ξ_u; `income_employed` = (1 − ℘ξ_u)/(1 − ℘); `splurge` 0;
-`unemployed_permanent_income` `continues`; `benefit_quarters` 2; `newborn_income: {median: 1.0, sd_log: 0.0}`; and the
-recession's parameters equal to the normal ones, with an exit hazard of 1, so that the reduction has one written form
-and the recession changes nothing. [`members/toy-as-hafiscal.yaml`](members/toy-as-hafiscal.yaml) is `bst/1`'s toy
-written this way. The two families then produce the same rule and the same stationary population exactly, the newborn
-convention being the same. That cross-family consistency test belongs in the suite.
+One group with the buffer-stock member's types and `growth` = 𝒢; `job_loss` = ℘ and `job_finding` = 1 − ℘ in both
+regimes, so that the chain is unemployment with probability ℘ every quarter whatever the previous state;
+`income_with_benefits` = `income_without_benefits` = the buffer-stock member's ξ_u; `income_employed` = (1 − ℘ξ_u)/(1 −
+℘); `splurge` 0; `unemployed_permanent_income` `continues`; `benefit_quarters` 2; `newborn_income: {median: 1.0, sd_log:
+0.0}`; and the recession's parameters equal to the normal ones, with an exit hazard of 1, so that the reduction has one
+written form and the recession changes nothing. A member of `bst-artificial/1` becomes one of the artificial version,
+and one of `bst-zero-infima/1` one of the zero-infima version.
+[`artificial/members/toy-as-hafiscal.yaml`](artificial/members/toy-as-hafiscal.yaml) is `bst-artificial/1`'s toy written
+this way. The two families then produce the same rule and the same stationary population exactly, the newborn convention
+being the same. That cross-family consistency test belongs in the suite.

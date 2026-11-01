@@ -157,3 +157,16 @@ Faults found in this project's own work, with their status.
   period's lowest resources to be R a_Art/(𝒢ψ_min) + ξ_min, which holds only for a borrowing limit, a_Art ≤ 0. For
   a_Art > 0 the lowest resources come at the largest ψ. **Status:** fixed 2026-11-01, uncommitted at the time, and the
   row now states the case a_Nat < a_Art ≤ 0.
+- **A limit of zero said to bind nowhere.** The Markov family's conditions document said that under lognormal laws an
+  artificial limit of zero binds in no state, and that every moment of the stationary population is finite as in the
+  thin-density case. Under Ma, Stachurski and Toda's assumptions, which lognormal laws meet, a ≥ 0 binds at every ϱ: the
+  expected marginal value of ending at a = 0 is finite (the BST and HARK-dev sessions, 2026-11-01). **Status:** corrected
+  2026-11-01 in the zero-infima version's documents and the checker's binding case.
+- **A positive lowest income in place of an integrable one.** The ontology's liquidity-constrained class, as first
+  written on 2026-11-01, required a positive lowest income. That excluded lognormal income, which Ma, Stachurski and
+  Toda allow. **Status:** fixed the same afternoon: the class requires a ≥ 0 binding with no zero-income event, across
+  the artificial and zero-infima scenarios.
+- **A reflow that merged code.** While the documents were rewrapped for the families, a script joined indented and fenced
+  code into paragraphs in two files. **Status:** caught before any commit by comparing the files with their committed
+  versions; both were restored and edited again by hand, and the script now leaves code alone.
+

@@ -1,8 +1,8 @@
-# HARK's Rosetta Stone for `bst/1`
+# HARK's Rosetta Stone for the buffer-stock families
 
-Draft, begun on 2026-10-21 and revised on 2026-10-22 and 2026-11-01; see the [Rosetta Stones](README.md). The toolkit is HARK's
-`MarkovConsumerType`, as [HARK's adapter](../adapters/hark/README.md) uses it: on the nonpersistent chain, which writes
-a `bst/1` member as a member of the [Markov family](../bst-markov_ui-and-agg/model.md).
+Draft, begun on 2026-10-21 and revised on 2026-10-22 and 2026-11-01; see the [Rosetta Stones](README.md). The toolkit is
+HARK's `MarkovConsumerType`, as [HARK's adapter](../adapters/hark/README.md) uses it: on the nonpersistent chain, which
+writes a buffer-stock member as a member of the [Markov family](../bst-markov_ui-and-agg/model.md).
 - **Where it was read.** The Markov solver was read at the commit of HARK's draft pull request #1858, `03a2c7a1` on the
   fork `llorracc/HARK`. The adapter's pin is `11852805`, the head of draft econ-ark/HARK#1862, stacked on it,
   which computes the natural borrowing constraint from the laws' infima. HARK's standard consumer,
@@ -16,23 +16,30 @@ a `bst/1` member as a member of the [Markov family](../bst-markov_ui-and-agg/mod
   t + 1, and is used to solve period t. `LivPrb[t]` is survival at the end of t. An infinite horizon is `cycles = 0`
   with `T_cycle = 1`.
 - **States.** The Markov consumer's inputs that can differ by state are arrays with one value per state, here two:
-  employed, then unemployed. `bst/1` gives both states the same return, growth and survival.
-- **Normalization.** Variables are normalized by permanent income, as in `bst/1`: `mNrm`, `aNrm` and `cNrm` are m, a and
-  c.
+  employed, then unemployed. the buffer-stock families gives both states the same return, growth and survival.
+- **Scenarios** (the HARK session, 2026-11-01, at `4c285e86`). HARK's types do not all express every
+  borrowing-constraint scenario ([`constraint-scenarios.md`](../constraint-scenarios.md)). The portfolio family accepts
+  only `BoroCnstArt = 0.0`, so it can express the artificial and zero-infima scenarios, never a natural one
+  (`ConsPortfolioModel.py:520`, `ConsRiskyAssetModel.py:682` and `:1185`, `ConsRiskyContribModel.py:735`,
+  `ConsWealthPortfolioModel.py:179`, `ConsBequestModel.py:554`). The labor model accepts only `None`
+  (`ConsLaborModel.py:267`), so a natural scenario. `IndShockConsumerType`'s default is `0.0`
+  (`ConsIndShockModel.py:2063`), and the perfect-foresight and kinked-return types' is `None`.
+- **Normalization.** Variables are normalized by permanent income, as in the buffer-stock families: `mNrm`, `aNrm` and
+  `cNrm` are m, a and c.
 
-| `bst/1` | HARK | timing and normalization | where HARK differs, and what the adapter does |
+| the buffer-stock families | HARK | timing and normalization | where HARK differs, and what the adapter does |
 |---|---|---|---|
 | ϱ, `crra` | `CRRA` | a number | — |
-| β, `types[].beta`, with the shares, `types[].share` | `DiscFac` | a number | each of `bst/1`'s types is a separate agent: the adapter solves one `MarkovConsumerType` per type and pools them with the shares |
+| β, `types[].beta`, with the shares, `types[].share` | `DiscFac` | a number | each of the buffer-stock families' types is a separate agent: the adapter solves one `MarkovConsumerType` per type and pools them with the shares |
 | ℒ, `survival` | `LivPrb`, a list per period of one value per state | survival at the end of t. It enters only the effective discount factor, `DiscFac`·`LivPrb`. R is not divided by ℒ, and the assets of the dead vanish | the same value in both states |
 | R, `return` | `Rfree`, a list per period of one value per state | element t governs the move from t to t + 1 | the same value in both states |
 | 𝒢, `income.growth` | `PermGroFac`, a list per period of one value per state | as `Rfree`. In `simulate()` the drawn `PermShk` includes it, as ψ𝒢; in the model file it does not | the same value in both states |
 | ψ, `income.permanent_shock` | `PermShk` in each state's distribution in `IncShkDstn` | HARK builds it from `PermShkStd`, the σ of log ψ, and `PermShkCount`: `MeanOneLogNormal(σ)`, cut into equiprobable nodes at the conditional means of their bins | HARK has no truncated law, so the adapter builds the nodes itself: equiprobable bins of the member's law, each node its bin's exact conditional mean, the same in both states. HARK's constructor for `IncShkDstn` is switched off, and `PermShkStd` and `PermShkCount` are placeholders |
 | θ, `income.employed_shock` | `TranShk` in the employed state's distribution | as ψ | the adapter's nodes, scaled by (1 − ℘ξ_u)/(1 − ℘) |
-| ℘, `income.unemployment.prob` | `MrkvArray`, a list per period of the chain's matrix | row i gives the probabilities of next period's states from state i | both rows are (1 − ℘, ℘): unemployment with probability ℘ whatever the previous state, which is `bst/1`'s ξ. HARK's constructor for `MrkvArray` is switched off, since it would replace the adapter's matrix with its defaults, [[0.9, 0.1], [0.6, 0.4]], at construction. `UnempPrb`, the standard consumer's way, is left at zero |
+| ℘, `income.unemployment.prob` | `MrkvArray`, a list per period of the chain's matrix | row i gives the probabilities of next period's states from state i | both rows are (1 − ℘, ℘): unemployment with probability ℘ whatever the previous state, which is the buffer-stock families' ξ. HARK's constructor for `MrkvArray` is switched off, since it would replace the adapter's matrix with its defaults, [[0.9, 0.1], [0.6, 0.4]], at construction. `UnempPrb`, the standard consumer's way, is left at zero |
 | ξ_u, `income.unemployment.income` | `TranShk` in the unemployed state's distribution | a ratio to permanent income | ξ_u at every node of ψ, since ψ is drawn in both states. `IncUnemp` is left at zero |
-| ψ and ξ jointly | `IncShkDstn`, a list per period of one distribution per state | in each state the independent product of ψ's nodes and that state's ξ | weighted by the chain's row, the two states' distributions are `bst/1`'s joint law of ψ and ξ |
-| `a_Art`, `borrowing_constraint` | `BoroCnstArt` | a bound on end-of-period a. The constraint in force in each state is the larger of the natural limit and `BoroCnstArt` | the adapter passes `a_Art`, or none for a member that states `natural`. HARK then computes the natural limit itself from the laws' infima, which the adapter records as each distribution's `limit` (`BoroCnstInfimum`, on by default at the pin); it is the stated laws' limit, the same at every number of nodes |
+| ψ and ξ jointly | `IncShkDstn`, a list per period of one distribution per state | in each state the independent product of ψ's nodes and that state's ξ | weighted by the chain's row, the two states' distributions are the buffer-stock families' joint law of ψ and ξ |
+| `a_Art`, `borrowing_constraint` | `BoroCnstArt` | a bound on end-of-period a. The constraint in force in each state is the larger of the natural limit and `BoroCnstArt` | the adapter passes `a_Art` for a member of `bst-artificial/1`; none for the natural families; and `a_Art` = 0 for `bst-zero-infima/1`, whose a ≥ 0 the pin would also find from the infima, while main, from the lowest nodes, would find a negative limit. HARK then computes the natural limit itself from the laws' infima, which the adapter records as each distribution's `limit` (`BoroCnstInfimum`, on by default at the pin); it is the stated laws' limit, the same at every number of nodes |
 | `a_Nat` | none stored; the solver's `mNrmMin`, one per state, is the constraint in force | at the pin, the larger of the limit from the laws' recorded infima and the one from the lowest nodes; released HARK has only the second | the adapter computes the effective member's natural limit itself, from the nodes' lowest values: −`ξ_min` `ψ_min`/(ℛ − `ψ_min`) with ℛ = R/𝒢, as `model.md` writes it. Here `ξ_min` is the lowest node of ξ, the worst income, which is the lower of ξ_u and the lowest employed node, and `ψ_min` is the lowest node of ψ. On the toy's seven equiprobable nodes the lowest employed node is 0.558, below ξ_u = 0.7. The results file reports it (`effective_member.derived.natural_limit`), with the constraint in force the larger of `a_Art` and it. The adapter asserts that both states' `mNrmMin` equal that constraint. The laws' own limit is tighter whenever ξ_u > 0, since the laws reach below their lowest nodes in both ψ and θ: it is 0 when either law is untruncated, and set by the truncation bounds when both are truncated. Under `natural` it is the constraint in force, and it binds in the effective member, whose nodes never reach it. Draft pull request econ-ark/HARK#1861 records the true bounds of HARK's own discretized laws |
 | the newborn: employed, P = 1, no assets, θ an employed draw | `MrkvPrbsInit`, `NewbornTransShk`; `kLogInitMean`, `kLogInitStd` and `kNrmInitCount`; `pLogInitMean`, `pLogInitStd` and `pLvlInitCount` | in HARK's simulation, a newborn's state is drawn from `MrkvPrbsInit`, and with `NewbornTransShk` its first income from that state's distribution | the adapter sets `MrkvPrbsInit = [1, 0]` and `NewbornTransShk = True`, so that a newborn is employed with an employed draw; P = 1 would also need the `NewbornPermShk = False` of draft econ-ark/HARK#1860. HARK's simulation is not used: the adapter builds the population, newborns included, itself. k = 0 would need a very negative `kLogInitMean`; the default, −12, gives k ≈ 6·10⁻⁶ |
 
@@ -53,7 +60,7 @@ a `bst/1` member as a member of the [Markov family](../bst-markov_ui-and-agg/mod
 
 - **The solution:** `solve_one_period_ConsMarkov`, the endogenous grid method, iterated over an infinite horizon until
   the distance between successive solutions is below `tolerance`. In the tags of the
-  [method targets](../bst-1/model.md#method-targets) this is `!time-iteration` on `policy.euler.solve`, with
+  [method targets](../bst/model.md#method-targets) this is `!time-iteration` on `policy.euler.solve`, with
   `MarkovConsumerType` as its handler. The stage writes the Euler equation with its complementarity clause, not the
   endogenous grid method's steps, so `!egm` does not attach to it.
   - **The pin.** Released HARK interpolates each next state's expected marginal value on a grid starting at that state's
@@ -63,10 +70,16 @@ a `bst/1` member as a member of the [Markov family](../bst-markov_ui-and-agg/mod
     ([the finding](../records/findings/2026-10-21_hark-markov-for-bst1.md)).
   - **The tolerance.** Human wealth and the limiting MPC lag the rule's convergence. On the standard consumer, at HARK's
     defaults and its default tolerance of 10⁻⁶, `hNrm` is 44.99 against its limit of 50.50, and c above the grid is off
-    by 0.0115 at m = 60 and 0.035 at m = 100, against less than 4·10⁻⁵ within the grid. `bst/1`'s population grids reach
-    60, 120 and 240, so the adapter's levels set 10⁻⁸ and tighter.
+    by 0.0115 at m = 60 and 0.035 at m = 100, against less than 4·10⁻⁵ within the grid. the buffer-stock families'
+    population grids reach 60, 120 and 240, so the adapter's levels set 10⁻⁸ and tighter.
   - The stage's `max(a_Art, a_Nat)` is HARK's own: the larger of `BoroCnstArt` and the natural limit it computes, in
     each state. At the pin that limit comes from the laws' recorded infima, so it is the stated member's `a_Nat`.
+- **The one-period relaxation** (the HARK and HARK-dev sessions, at `4c285e86`). Every solver computes the rule as
+  c(m) = min(c̃(m), m − `mNrmMin`): `LowerEnvelope` of the relaxed rule c̃ and the constraint line
+  (`ConsIndShockModel.py:775`, with the line at `:719` and c̃ at `:757` and `:766`). c̃ lifts this period's artificial
+  constraint down to what next period's worst income can repay, `BoroCnstNat` = (`mNrmMin`_{t+1} − θ_min)𝒢ψ_min/R
+  (`:698`, `:510-531`), one period's natural limit rather than −`h_min`. The min is exact for the problem; numerically
+  the kink is exact only where a = `a_Art` is a grid point. This is method, not stage: no stage file states it.
 - **The grid:** `aXtraGrid`, end-of-period assets above the natural limit, nested multi-exponentially. Its settings are
   `aXtraMin` (by default 0.001), `aXtraMax` (20), `aXtraCount` (48), `aXtraNestFac` (3) and `aXtraExtra`.
 - **The interpolation** (`policy`): linear, `!Linear`, or with `CubicBool` a cubic Hermite whose slopes are the
@@ -112,16 +125,17 @@ diverge or jump, enters no reported quantity.
 The adapter's gate solves each type again with `IndShockConsumerType` on the same joint nodes, as the measure of the
 Markov rule. Read at `4c285e86`:
 - **Its income process** is a single `IncShkDstn` per period, the product of ψ's nodes and ξ's, the unemployment node
-  among ξ's: `UnempPrb` and `IncUnemp` give an unemployed node with probability ℘ and scale the employed nodes by
-  (1 − ℘ξ_u)/(1 − ℘), which is `bst/1`'s ξ exactly. The adapter's gate assigns `IncShkDstn` from the same nodes.
+  among ξ's: `UnempPrb` and `IncUnemp` give an unemployed node with probability ℘ and scale the employed nodes by (1 −
+  ℘ξ_u)/(1 − ℘), which is the buffer-stock families' ξ exactly. The adapter's gate assigns `IncShkDstn` from the same
+  nodes.
 - **What reads which distribution.** `GPFacMod`, `VAFac`, `GPFacHrm`, `ELogPermShk` and the target's E[1/ψ] read
   `PermShkDstn[0]`; `WorstPrb`, `WRPFac`, `MPCmax` and `bilt["hNrm"]` read `IncShkDstn[0]`; nothing reads
   `TranShkDstn`, and the target assumes that the transitory nodes have mean one. An assigned `IncShkDstn` must therefore
   be followed by `construct("PermShkDstn", "TranShkDstn")`.
-- **Its newborn** cannot be `bst/1`'s, even with the `NewbornPermShk` of draft econ-ark/HARK#1860: on main, a newborn
-  draws ψ and has θ = 1 unless `NewbornTransShk` is set, which draws from the whole mixture, unemployment included. The
-  Markov consumer's employment states can, with `MrkvPrbsInit = [1, 0]`, `NewbornTransShk = True` and the
-  `NewbornPermShk = False` of draft #1860.
+- **Its newborn** cannot be the buffer-stock families', even with the `NewbornPermShk` of draft econ-ark/HARK#1860: on
+  main, a newborn draws ψ and has θ = 1 unless `NewbornTransShk` is set, which draws from the whole mixture,
+  unemployment included. The Markov consumer's employment states can, with `MrkvPrbsInit = [1, 0]`, `NewbornTransShk =
+  True` and the `NewbornPermShk = False` of draft #1860.
 - **Its targets and conditions.** `calc_stable_points` computes the target, `mNrmTrg`, and the balanced-growth point,
   `mNrmStE`, in `post_solve`, only when `cycles = 0`, `T_cycle = 1` and the type is exactly `IndShockConsumerType`;
   `check_conditions` sets the condition factors. The Markov consumer has neither.
@@ -299,9 +313,9 @@ The departures keep the identifiers they had there, which the ontology now lists
 - **A second HARK implementation** of the same model is in QuantEcon's community library of baseline models, at
   `solutions/buffer-stock/001-hark-egm/`. QuantEcon/community-library#5 added it as `projects/HARK/buffer-stock/`, and
   #15 moved it there. It uses HARK alone, at `econ-ark` 0.17.1. Its checks include an independent endogenous-grid solver
-  written in NumPy and SciPy, and its calibration is `bst/1`'s `library` member.
-- **A check against QuantEcon's form.** The recasting of `bst/1` for QuantEcon's code was checked against HARK's
-  solution of a member: see [`quantecon-jax.md`](quantecon-jax.md).
+  written in NumPy and SciPy, and its calibration is the buffer-stock families' `library` member.
+- **A check against QuantEcon's form.** The recasting of the buffer-stock families for QuantEcon's code was checked
+  against HARK's solution of a member: see [`quantecon-jax.md`](quantecon-jax.md).
 
 ## Sources
 

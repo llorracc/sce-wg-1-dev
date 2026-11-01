@@ -1,0 +1,83 @@
+# bst-markov_ui-and-agg-zero-infima/1, the Markov family's zero-infima version (schemas/constraint-scenarios.md), one
+# stage for one type of one group: HAFiscal's household with its published laws, lognormals with infima zero. A run of
+# employed draws near zero has positive probability from every state, so the minimum present value of future income is 0
+# and the natural constraint is a ≥ 0 in every state; an artificial constraint at 0 would only repeat it, and none is
+# stated. E[θ^(−ϱ)] and E[ψ^(−ϱ)] are finite, so the agent ends a quarter at a = 0 for m below a kink, and the Euler
+# equation carries its complementarity clause. In the notation of Buffer Stock Theory (schemas/hafiscal-models-and-
+# test-suite.md, "The paper's model as a family"). Written by hand on 2026-10-18; derivative terms since 2026-10-31; the
+# zero-infima version since 2026-11-01.
+# Two Markov states: the macro regime reg, drawn first, with normal absorbing;
+# then the employment state j, whose row the previous state selects and whose
+# probabilities the current regime selects. Employed income is e θ; the
+# benefit and exhaustion states have fixed replacement incomes. Permanent
+# income in a quarter of unemployment follows the label parameter P_u:
+# continues (𝒢ψ applies), grows (𝒢 applies and ψ = 1) or frozen (P
+# unchanged). The splurge is outside the stage, as the family's observation
+# map. Survivors only.
+
+@stage: markov_zero_infima
+
+Xm := ℝ
+Xa := ℝ₊
+J   := {E, U_2, U_1, X}        :: ["employment states in the order of the rows: employed; unemployed with two quarters of benefits left, this one included; unemployed with one quarter left; unemployed without benefits"]
+Reg := {normal, recession}     :: ["macro regime in the order of the rows: normal, absorbing; recession"]
+Pu  := {continues, grows, frozen}   :: ["permanent income in a quarter of unemployment: 𝒢ψ applies; 𝒢 applies and ψ = 1; P is unchanged"]
+
+β     : ℝ₊₊          :: ["discount factor of the type"]
+ℒ     : (0,1]        :: ["probability of surviving into the next quarter, perpetual youth (1 - D)"]
+ϱ     : (1, inf)     :: ["coefficient of relative risk aversion"]
+R     : ℝ₊₊          :: ["gross return on assets, earned by survivors, with no annuity market"]
+𝒢     : ℝ₊₊          :: ["growth factor of permanent income of the group"]
+σ_ψ   : ℝ₊₊          :: ["standard deviation of log ψ"]
+σ_θ   : ℝ₊₊          :: ["standard deviation of log θ, the employed draw"]
+e     : ℝ₊₊          :: ["scale of employed income, e θ; 1 in the paper"]
+ξ_u   : ℝ₊₊          :: ["income with benefits, as a ratio to permanent income (the paper's ρ_b)"]
+ξ_x   : ℝ₊₊          :: ["income without benefits, as a ratio to permanent income (the paper's ρ_nb)"]
+P_u   : Pu           :: ["the family's switch unemployed_permanent_income"]
+p_exit : [0,1]       :: ["probability that a recession ends in a quarter (exit_hazard)"]
+sep_n  : [0,1]       :: ["probability of losing a job in a normal quarter, for the group (job_loss.normal)"]
+sep_r  : [0,1]       :: ["probability of losing a job in a recession quarter, for the group (job_loss.recession)"]
+find_n : [0,1]       :: ["probability of finding a job in a normal quarter (job_finding.normal)"]
+find_r : [0,1]       :: ["probability of finding a job in a recession quarter (job_finding.recession)"]
+
+reg : Reg
+reg ~ Categorical(((1, 0), (p_exit, 1 - p_exit))[reg_prev])   :: ["this quarter's regime, from the row of the previous regime reg_prev; normal is absorbing"]
+j : J
+j ~ Categorical(((1 - (sep_n, sep_r)[reg], (sep_n, sep_r)[reg], 0, 0), ((find_n, find_r)[reg], 0, 1 - (find_n, find_r)[reg], 0), ((find_n, find_r)[reg], 0, 0, 1 - (find_n, find_r)[reg]), ((find_n, find_r)[reg], 0, 0, 1 - (find_n, find_r)[reg]))[j_prev])   :: ["this quarter's employment state, from the row of the previous state j_prev, with the probabilities of this quarter's regime reg"]
+ψ : ℝ₊₊
+ψ ~ LogNormal(-((σ_ψ, (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u])[j]^2)/2, (σ_ψ, (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u], (σ_ψ, 0, 0)[P_u])[j])   :: ["mean-one permanent shock; ψ = 1 in a quarter of unemployment when P_u is grows or frozen"]
+θ : ℝ₊₊
+θ ~ LogNormal(-(σ_θ^2)/2, σ_θ)   :: ["mean-one employed draw; drawn but unused when unemployed"]
+
+𝑢(c : ℝ₊₊) := c^(1-ϱ)/(1-ϱ)       :: [id=util]
+𝑑𝑢     := D_{c}(𝑢)                 :: [id=marg_util]
+𝒞(x : Xm) := (0, x]   :: [id=feasible]
+
+[id=arvl_to_dcsn, (k : Xa, j_prev : J, reg_prev : Reg, reg, j, ψ, θ) : !arvl -> (m : Xm, j_d : J, reg_d : Reg) : !dcsn] {
+    𝒢_t = (𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[j]   :: [id=growth, "the growth factor of this quarter: 𝒢 when employed; 𝒢, 𝒢 or 1 in a quarter of unemployment, by the label"]
+    ξ   = (e*θ, ξ_u, ξ_u, ξ_x)[j]     :: [id=transitory_income, "income divided by permanent income"]
+    m   = R*k/(𝒢_t*ψ) + ξ             :: [id=market_resources, "a survivor's resources; k is last quarter's a"]
+    j_d = j                           :: [id=employment_state]
+    reg_d = reg                       :: [id=regime]
+}
+
+[id=dcsn_to_cntn, (m, j_d, reg_d, c : ℝ₊₊ @ !ctrl) : !dcsn -> (a : Xa, j_c : J, reg_c : Reg) : !cntn] {
+    a   = m - c                       :: [id=savings]
+    j_c = j_d                         :: [id=employment_state]
+    reg_c = reg_d                     :: [id=regime]
+}
+
+[id=cntn_to_dcsn, (V[>] : ℝ @ !vlu, c) : !cntn -> (V : ℝ @ !vlu) : !dcsn] {
+    V      = 𝑢(c) + β*ℒ*V[>]          :: [id=value]
+    D_{m}V = 𝑑𝑢(c)                    :: [id=marginal]
+}
+
+[id=dcsn_to_arvl, (V) : !dcsn -> (V[<] : ℝ @ !vlu) : !arvl] {
+    V[<]      = E_{reg,j,ψ,θ}(((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[j]*ψ)^(1-ϱ) * V)             :: [id=value]
+    D_{k}V[<] = E_{reg,j,ψ,θ}(R * ((𝒢, (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u], (𝒢, 𝒢, 1)[P_u])[j]*ψ)^(-ϱ) * D_{m}V)     :: [id=marginal]
+}
+
+[id=policy, (V[>] : ℝ @ !vlu) : !cntn -> (c : ℝ₊₊ @ !ctrl) : !dcsn] {
+    c     = argmax_{cp : 𝒞(m)}(𝑢(cp) + β*ℒ*V[>])   :: [id=optimality, !doc]
+    𝑑𝑢(c) = β*ℒ*D_{a}V[>] ⟂ m - c >= 0   :: [id=euler]
+}

@@ -22,8 +22,11 @@ STONES = ["hark", "quantecon-jax"]
 
 # The stage file's parameters, by the symbol the lexicons write them in, the plain text of model.md's notation. A law's
 # spread is found under its shock.
-SYMBOLS = {"β": "β", "ℒ": "ℒ", "ϱ": "ϱ", "R": "R", "𝒢": "𝒢", "a_Art": "a_Art", "a_Nat": "a_Nat",
-           "σ_ψ": "ψ", "σ_θ": "θ", "p_zero": "℘", "ξ_u": "ξ_u"}
+SYMBOLS = {"β": "β", "ℒ": "ℒ", "ϱ": "ϱ", "R": "R", "𝒢": "𝒢", "a_Art": "a_Art",
+           "σ_ψ": "ψ", "σ_θ": "θ", "p_zero": "℘", "ξ_u": "ξ_u",
+           "μ_ψ": "ψ", "s_ψ": "ψ", "ψ_min": "ψ", "ψ_max": "ψ", "μ_θ": "θ", "s_θ": "θ", "θ_min": "θ", "θ_max": "θ"}
+# The buffer-stock families' folders, one for each borrowing-constraint scenario.
+SCENARIOS = ("natural", "natural-no-point-mass", "artificial", "zero-infima")
 # Keys that identify a file rather than state a number of the model.
 NOT_PARAMETERS = {"family", "period"}
 # The verdicts of a whole-stage handler on the parts it covers, in Bellman's tokens.
@@ -31,18 +34,27 @@ STATUSES = {"honours", "fixed", "requires_own_handler", "absent"}
 
 
 def stage_parameters() -> set[str]:
-    """The names the stage file declares with a domain and a gloss, `name : domain :: [...]`; not its functions."""
-    text = (SCHEMAS / "bst-1" / "bellman" / "buffer_stock.bl").read_text(encoding="utf-8")
-    return {m.group(1) for m in re.finditer(r"^([^\s(]+)\s+:\s[^=\n][^\n]*::\s*\[", text, re.M)}
+    """The names the four stage files declare with a domain and a gloss, `name : domain :: [...]`; not their functions."""
+    names = set()
+    for s in SCENARIOS:
+        text = (SCHEMAS / "bst" / s / "bellman" / f"{s}.bl").read_text(encoding="utf-8")
+        names |= {m.group(1) for m in re.finditer(r"^([^\s(]+)\s+:\s[^=\n][^\n]*::\s*\[", text, re.M)}
+    return names
 
 
 def parameter_keys() -> set[str]:
-    """The leaves of the parameter validator's properties, with `[]` for the items of a list."""
-    schema = json.loads((SCHEMAS / "bst-1" / "parameters.schema.json").read_text(encoding="utf-8"))
+    """The leaves of the four families' parameter validators' properties, with `[]` for the items of a list; a reference to
+    the shared definitions is followed."""
+    common = json.loads((SCHEMAS / "bst" / "parameters.common.schema.json").read_text(encoding="utf-8"))["$defs"]
     keys = set()
+
+    def resolve(spec: dict) -> dict:
+        ref = spec.get("$ref", "")
+        return common[ref.rsplit("/", 1)[1]] if ref.startswith("../parameters.common.schema.json#") else spec
 
     def walk(node: dict, prefix: str) -> None:
         for name, spec in node.get("properties", {}).items():
+            spec = resolve(spec)
             path = prefix + name
             if "properties" in spec:
                 walk(spec, path + ".")
@@ -51,7 +63,8 @@ def parameter_keys() -> set[str]:
             else:
                 keys.add(path)
 
-    walk(schema, "")
+    for s in SCENARIOS:
+        walk(json.loads((SCHEMAS / "bst" / s / "parameters.schema.json").read_text(encoding="utf-8")), "")
     return keys - NOT_PARAMETERS
 
 
@@ -64,7 +77,7 @@ def lexicon_rows(stone: str) -> list[str]:
 
 
 def method_targets() -> set[str]:
-    text = (SCHEMAS / "bst-1" / "model.md").read_text(encoding="utf-8")
+    text = (SCHEMAS / "bst" / "model.md").read_text(encoding="utf-8")
     section = text.split("## Method targets", 1)[1].split("\n## ", 1)[0]
     return {m.group(1) for line in section.splitlines() if line.startswith("| `")
             for m in [re.match(r"\| `([^`]+)`", line)] if m}

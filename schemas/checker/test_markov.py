@@ -1,9 +1,9 @@
-"""The checker's tests for bst-markov_ui-and-agg/1 (markov.py), against bst/1's where the family reduces to it:
+"""The checker's tests for the Markov family's versions (markov.py), against the buffer-stock families' where it reduces to them:
 
     uv run --with jsonschema --with pyyaml --with scipy --with numpy --with pytest pytest -q schemas/checker
 
-A bst/1 member written as the Markov family's model schema describes ("A bst/1 member as a member of this family") solves
-the same problem, so its conditions, its limits and its tail exponents must be bst/1's.
+A buffer-stock member written as the Markov family's model schema describes ("A buffer-stock member as a member of this family") solves
+the same problem, so its conditions, its limits and its tail exponents must be its family's.
 """
 
 from __future__ import annotations
@@ -20,17 +20,24 @@ import markov
 from canonical import load_strict
 
 SCHEMAS = Path(__file__).resolve().parent.parent
-MEMBERS = SCHEMAS / "bst-1" / "members"
-FAMILY_MEMBERS = SCHEMAS / "bst-markov_ui-and-agg" / "members"
+BST = SCHEMAS / "bst"
+MEMBERS = {"toy": BST / "artificial" / "members" / "toy.yaml",
+           "toy-untruncated": BST / "zero-infima" / "members" / "toy-untruncated.yaml"}
+FAMILY = SCHEMAS / "bst-markov_ui-and-agg"
+FAMILY_MEMBERS = {"toy-as-hafiscal": FAMILY / "artificial" / "members" / "toy-as-hafiscal.yaml",
+                  "paper-one-group": FAMILY / "zero-infima" / "members" / "paper-one-group.yaml",
+                  "paper-published": FAMILY / "zero-infima" / "members" / "paper-published.yaml"}
+# The Markov family's version that each buffer-stock family reduces from.
+VERSION = {"bst-artificial/1": "bst-markov_ui-and-agg-artificial/1", "bst-zero-infima/1": "bst-markov_ui-and-agg-zero-infima/1"}
 
 
 def as_markov(member: dict) -> dict:
-    """A bst/1 parameter file's mapping written in the Markov family: one group, the chain unemployment with probability
-    wp every quarter whatever the previous state, both incomes while unemployed xi_u, the employed scale bst/1's."""
+    """A buffer-stock parameter file's mapping written in the Markov family: one group, the chain unemployment with probability
+    wp every quarter whatever the previous state, both incomes while unemployed xi_u, the employed scale of the buffer-stock families."""
     wp, xi_u = member["income"]["unemployment"]["prob"], member["income"]["unemployment"]["income"]
-    return {"family": "bst-markov_ui-and-agg/1", "period": "quarter", "crra": member["crra"], "splurge": 0.0,
+    data = {"family": VERSION[member["family"]], "period": "quarter", "crra": member["crra"], "splurge": 0.0,
             "survival": member["survival"], "return": member["return"],
-            "borrowing_constraint": member["borrowing_constraint"],
+            "borrowing_constraint": member.get("borrowing_constraint"),
             "shocks": {"permanent_shock": member["income"]["permanent_shock"],
                        "employed_shock": member["income"]["employed_shock"]},
             "regimes": {"recession": {"exit_hazard": 1.0}},
@@ -40,21 +47,24 @@ def as_markov(member: dict) -> dict:
             "groups": [{"name": "bst1", "share": 1.0, "growth": member["income"]["growth"],
                         "job_loss": {"normal": wp, "recession": wp}, "newborn_income": {"median": 1.0, "sd_log": 0.0},
                         "types": member["types"]}]}
+    if data["borrowing_constraint"] is None:
+        del data["borrowing_constraint"]
+    return data
 
 
 def _toy() -> dict:
-    return load_strict((MEMBERS / "toy.yaml").read_text())
+    return load_strict(MEMBERS["toy"].read_text())
 
 
 @pytest.mark.parametrize("name", ["toy", "toy-untruncated"])
 def test_the_reduction_to_bst1_gives_bst1_s_conditions(name):
-    data = load_strict((MEMBERS / f"{name}.yaml").read_text())
+    data = load_strict(MEMBERS[name].read_text())
     stated, family = bst1.Member(data), markov.MarkovMember(as_markov(data))
     group = family.groups[0]
     for t in data["types"]:
         mine = {c["name"]: c for c in stated.conditions(t["beta"])["conditions"]}
         theirs = {c["name"]: c for c in family.factors(group, t["beta"])}
-        for c in ["AIC", "RIC", "FHWC", "PF-FVAC", "FVAC", "GIC-Szeidl", "GIC-Liv"]:
+        for c in ["AIC", "RIC", "FHWC", "FVAC-PF", "FVAC", "GIC-Szeidl", "GIC-Liv"]:
             assert theirs[c]["margin"] == pytest.approx(mine[c]["margin"], abs=1e-14), (c, t["beta"])
         for c in ["WRIC", "GIC", "GIC-Mod"]:
             for entry in theirs[c]["by_state"]:
@@ -63,7 +73,7 @@ def test_the_reduction_to_bst1_gives_bst1_s_conditions(name):
 
 @pytest.mark.parametrize("name", ["toy", "toy-untruncated"])
 def test_the_reduction_to_bst1_gives_bst1_s_limits_and_tail(name):
-    data = load_strict((MEMBERS / f"{name}.yaml").read_text())
+    data = load_strict(MEMBERS[name].read_text())
     stated, family = bst1.Member(data), markov.MarkovMember(as_markov(data))
     group = family.groups[0]
     beta = data["types"][len(data["types"]) // 2]["beta"]
@@ -77,7 +87,7 @@ def test_the_reduction_to_bst1_gives_bst1_s_limits_and_tail(name):
 
 
 def test_lognormal_laws_give_a_zero_limit_in_every_state():
-    data = as_markov(load_strict((MEMBERS / "toy-untruncated.yaml").read_text()))
+    data = as_markov(load_strict(MEMBERS["toy-untruncated"].read_text()))
     for switch in markov.SWITCHES:
         data["employment"]["unemployed_permanent_income"] = switch
         family = markov.MarkovMember(data)
@@ -94,7 +104,6 @@ def test_the_artificial_limit_sits_inside_the_recursion():
     data["employment"]["income_employed"] = 1.0
     data["employment"]["job_finding"] = {"normal": 0.5, "recession": 0.25}
     data["groups"][0]["job_loss"] = {"normal": 0.05, "recession": 0.07}
-    data["borrowing_constraint"] = "natural"
     group = markov.MarkovMember(data).groups[0]
     natural = group.limits(None)
     assert natural[3] > natural[0]
@@ -122,7 +131,7 @@ def test_frozen_permanent_income_changes_the_matrix_conditions():
 
 
 @pytest.mark.parametrize("change, problem", [
-    (lambda d: d.update(borrowing_constraint=-5.0), "below the lowest natural limit"),
+    (lambda d: d.update(borrowing_constraint=-5.0), "not above the lowest natural limit"),
     (lambda d: d["employment"].update(benefit_quarters=3), "benefit_quarters"),
     (lambda d: d["groups"][0].update(share=0.9), "shares do not sum"),
     (lambda d: d["groups"][0]["types"].reverse(), "beta must increase"),
@@ -145,14 +154,14 @@ def test_the_employment_marginal_is_the_chain_s_with_newborns_employed():
 
 @pytest.mark.parametrize("name", ["toy-as-hafiscal", "paper-one-group", "paper-published"])
 def test_the_filed_members_are_valid(name):
-    member = markov.load_member(FAMILY_MEMBERS / f"{name}.yaml")
+    member = markov.load_member(FAMILY_MEMBERS[name])
     assert len(member.hash) == 64
     for g in member.groups:
         assert np.all(g.limits(member.a_art_value()) == 0.0), g.name   # a_Art = 0 under lognormal laws: no effect
 
 
 def test_toy_as_hafiscal_is_the_toy_written_in_the_family():
-    filed = load_strict((FAMILY_MEMBERS / "toy-as-hafiscal.yaml").read_text())
+    filed = load_strict(FAMILY_MEMBERS["toy-as-hafiscal"].read_text())
     written = as_markov(_toy())
     written["groups"][0]["name"] = "toy"
     numbers, words = leaves(filed), leaves(written)
@@ -182,7 +191,7 @@ def leaves(data, prefix=""):
     (lambda d: d.update(splurge=1.0), "splurge"),
 ])
 def test_the_validator_refuses(change, problem):
-    data = load_strict((FAMILY_MEMBERS / "paper-one-group.yaml").read_text())
+    data = load_strict(FAMILY_MEMBERS["paper-one-group"].read_text())
     change(data)
     with pytest.raises(markov.MarkovMemberError, match=problem):
         markov.MarkovMember(data)
@@ -193,13 +202,13 @@ def test_the_dropout_calibrations_are_paper_published_s_middle_type(world):
     # The Bellman calibrations state one type of one group in the stage file's names; their numbers must be the member's
     import yaml
 
-    calibration = yaml.safe_load((SCHEMAS / "bst-markov_ui-and-agg" / "bellman"
+    calibration = yaml.safe_load((FAMILY / "zero-infima" / "bellman"
                                   / f"hafiscal-dropout-middle-type-{world}.yml").read_text(encoding="utf-8"))["calibration"]
-    data = load_strict((FAMILY_MEMBERS / "paper-published.yaml").read_text())
+    data = load_strict(FAMILY_MEMBERS["paper-published"].read_text())
     group = next(g for g in data["groups"] if g["name"] == "dropout")
     employment, laws = data["employment"], data["shocks"]
     expected = {"β": group["types"][3]["beta"], "ℒ": data["survival"], "ϱ": data["crra"], "R": data["return"],
-                "𝒢": group["growth"], "a_Art": data["borrowing_constraint"], "a_Nat": 0.0,
+                "𝒢": group["growth"],
                 "σ_ψ": laws["permanent_shock"]["LogNormal"]["sd_log"], "σ_θ": laws["employed_shock"]["LogNormal"]["sd_log"],
                 "e": employment["income_employed"], "ξ_u": employment["income_with_benefits"],
                 "ξ_x": employment["income_without_benefits"], "P_u": world,

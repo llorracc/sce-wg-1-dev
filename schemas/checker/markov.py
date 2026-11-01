@@ -1,4 +1,4 @@
-"""The checker for a bst-markov_ui-and-agg/1 parameter file, for the STATED member: the employment chain, the constraint in
+"""The checker for a parameter file of the Markov family's versions, artificial and zero-infima, for the STATED member: the employment chain, the constraint in
 force by state, the conditions as dominant eigenvalues over the chain, the domain rules and the implications.
 
 The statements follow bst-markov_ui-and-agg/conditions.md, in BST's notation: psi the permanent shock, theta the employed
@@ -6,7 +6,7 @@ draw, e the scale of employed income, xi_u and xi_x the incomes with and without
 P the normal regime's chain over the employment states J = (E, U_2, U_1, X), and P_u the switch for permanent income in a
 quarter of unemployment. The stationary problem is the normal regime's, since normal is absorbing, so every condition is
 on the normal chain. Everything is computed from the laws' closed-form moments, for one type of one group at a time; under
-`continues` every condition reduces to bst/1's with the group's growth (bst1.py).
+`continues` every condition reduces to the buffer-stock families' with the group's growth (bst1.py).
 """
 
 from __future__ import annotations
@@ -24,7 +24,11 @@ from canonical import load_strict, model_hash
 from laws import TOLERANCE, filled, law_from_mapping
 
 SCHEMAS = Path(__file__).resolve().parent.parent
-PARAMETER_SCHEMA = SCHEMAS / "bst-markov_ui-and-agg" / "parameters.schema.json"
+FAMILY_DIR = SCHEMAS / "bst-markov_ui-and-agg"
+# The family's two versions, each a borrowing-constraint scenario with its own folder, parameter schema and stage file.
+FAMILIES = {"bst-markov_ui-and-agg-artificial/1": "artificial", "bst-markov_ui-and-agg-zero-infima/1": "zero-infima"}
+PARAMETER_SCHEMAS = {family: FAMILY_DIR / scenario / "parameters.schema.json" for family, scenario in FAMILIES.items()}
+COMMON_SCHEMA = FAMILY_DIR / "parameters.common.schema.json"
 SHOCK_LAW_SCHEMA = SCHEMAS / "shock-laws.schema.json"
 
 STATES = ("E", "U_2", "U_1", "X")
@@ -32,34 +36,38 @@ SWITCHES = ("continues", "grows", "frozen")
 EMPLOYED = 0
 # The precision of a closed-form evaluation; a condition whose margin lies within it is undecided for the stated member.
 STATED_PRECISION = 1e-12
-CONDITION_NAMES = ["AIC", "RIC", "WRIC", "FHWC", "PF-FVAC", "FVAC", "GIC", "GIC-Mod", "GIC-Szeidl", "GIC-Harmenberg",
+CONDITION_NAMES = ["AIC", "RIC", "WRIC", "FHWC", "FVAC-PF", "FVAC", "GIC", "GIC-Mod", "GIC-Szeidl", "GIC-Harmenberg",
                    "GIC-Liv"]
 
 
 class MarkovMemberError(ValueError):
-    """The file is not a valid bst-markov_ui-and-agg/1 member; the message lists every problem found."""
+    """The file is not a valid member of the Markov family's versions; the message lists every problem found."""
 
 
-def _validator():
-    shock_uri = SHOCK_LAW_SCHEMA.as_uri()
+def _resource(path: Path) -> dict:
+    """A schema with its file's URI as its $id, so that its relative references resolve against its own place."""
+    data = json.loads(path.read_text())
+    data["$id"] = path.resolve().as_uri()
+    return data
 
-    def absolute(node):
-        if isinstance(node, dict):
-            return {key: (shock_uri if key == "$ref" and value == "../shock-laws.schema.json" else absolute(value))
-                    for key, value in node.items()}
-        if isinstance(node, list):
-            return [absolute(item) for item in node]
-        return node
 
-    registry = Registry().with_resource(shock_uri, Resource.from_contents(json.loads(SHOCK_LAW_SCHEMA.read_text())))
-    return jsonschema.Draft202012Validator(absolute(json.loads(PARAMETER_SCHEMA.read_text())), registry=registry,
+def _validator(family: str):
+    registry = Registry()
+    for path in (SHOCK_LAW_SCHEMA, COMMON_SCHEMA):
+        resource = _resource(path)
+        registry = registry.with_resource(resource["$id"], Resource.from_contents(resource))
+    return jsonschema.Draft202012Validator(_resource(PARAMETER_SCHEMAS[family]), registry=registry,
                                            format_checker=jsonschema.FormatChecker())
 
 
 def validate(data) -> list[str]:
-    """The parameter validator's complaints, as sentences with the path of each."""
+    """The parameter validator's complaints, as sentences with the path of each, against the version the file names."""
+    family = data.get("family") if isinstance(data, dict) else None
+    if family not in FAMILIES:
+        return [f"family: {family!r} is not one of the Markov family's versions {sorted(FAMILIES)}; "
+                "bst-markov_ui-and-agg/1 is retired, its members split by borrowing-constraint scenario"]
     return [f"{'/'.join(str(p) for p in e.absolute_path) or '/'}: {e.message}"
-            for e in sorted(_validator().iter_errors(data), key=lambda e: list(e.absolute_path))]
+            for e in sorted(_validator(family).iter_errors(data), key=lambda e: list(e.absolute_path))]
 
 
 def verdict(margin: float) -> str:
@@ -182,20 +190,23 @@ class Group:
 
 
 class MarkovMember:
-    """A bst-markov_ui-and-agg/1 member, parsed from its parameter file's mapping."""
+    """A member of the Markov family's versions, parsed from its parameter file's mapping."""
 
     def __init__(self, data: dict):
         self.data = data
         problems = validate(data)
         if problems:
             raise MarkovMemberError("; ".join(problems))
-        self.hash = model_hash(filled(data))  # over the filled form, as bst/1's: omitted bounds written in
+        self.hash = model_hash(filled(data))  # over the filled form, as the buffer-stock families': omitted bounds written in
         self.rho = data["crra"]
         self.L = data["survival"]
         self.R = data["return"]
         self.splurge = data["splurge"]
-        self.a_art = data["borrowing_constraint"]
-        self.natural = self.a_art == "natural"   # the file's word, before it resolves to the lowest a_Nat(j)
+        self.family = data["family"]
+        self.scenario = FAMILIES[self.family]
+        # a_Art in the artificial version; 0 in the zero-infima version, where a >= 0 is the natural constraint and binds
+        self.a_art = data["borrowing_constraint"] if self.scenario == "artificial" else 0.0
+        self.natural = False
         self.psi = law_from_mapping(data["shocks"]["permanent_shock"])
         self.theta = law_from_mapping(data["shocks"]["employed_shock"])
         self.p_exit = data["regimes"]["recession"]["exit_hazard"]
@@ -229,12 +240,21 @@ class MarkovMember:
         if problems:
             return problems
         lowest = min(float(np.min(g.limits(None))) for g in self.groups)
-        if self.natural:
-            if math.isinf(lowest):
-                problems.append("borrowing_constraint: 'natural' names no finite constraint")
-        elif lowest > -math.inf and self.a_art < lowest - TOLERANCE:
-            problems.append(f"borrowing_constraint {self.a_art!r} is below the lowest natural limit {lowest!r}; a looser "
-                            "artificial limit binds in no state, so write the natural one or 'natural'")
+        if self.scenario == "artificial":
+            if not (self.psi.infimum > 0 and self.theta.infimum > 0):
+                problems.append("shocks: the artificial version needs psi and theta with strictly positive floors, so that "
+                                "every state's natural limit lies below zero; with a zero floor the member is the "
+                                "zero-infima version's")
+            elif lowest > -math.inf and not self.a_art > lowest + TOLERANCE:
+                problems.append(f"borrowing_constraint {self.a_art!r} is not above the lowest natural limit {lowest!r}; "
+                                "an artificial limit no tighter binds in no state")
+        else:
+            if not (self.psi.infimum == 0 or self.theta.infimum == 0):
+                problems.append("shocks: the zero-infima version needs the infimum of psi or of theta to be zero")
+            for name, law, needed in (("employed_shock", self.theta, True),
+                                      ("permanent_shock", self.psi, self.psi.infimum == 0)):
+                if needed and not _finite_moment(law, -self.rho):
+                    problems.append(f"shocks/{name}: E[x^(-rho)] is infinite, so a >= 0 is never reached")
         for g in self.groups:
             for t in g.types:
                 c = {x["name"]: x for x in self.factors(g, t["beta"])}
@@ -276,7 +296,7 @@ class MarkovMember:
             factor("RIC", thorn / R, governs="the limiting MPC is positive"),
             by_state("WRIC", p_worst ** (1 / rho) * thorn / R, "existence in place of the RIC"),
             factor("FHWC", dominant_eigenvalue(g.M(Gpsi / R)), governs="finite human wealth"),
-            factor("PF-FVAC", dominant_eigenvalue(g.M(beta_ring * g.growth ** (1 - rho))),
+            factor("FVAC-PF", dominant_eigenvalue(g.M(beta_ring * g.growth ** (1 - rho))),
                    governs="finite perfect-foresight value of autarky"),
             factor("FVAC", dominant_eigenvalue(g.M(beta_ring * g.growth_moment(1 - rho))),
                    governs="finite value of autarky"),
@@ -313,7 +333,7 @@ class MarkovMember:
         pop = self._root(lambda z: L * dominant_eigenvalue(g.M(thorn_bar ** z * g.growth_moment(-z)))) if L < 1 else None
         levels = self._root(lambda z: L * dominant_eigenvalue(g.M(g.growth_moment(z)))) if L < 1 else None
         income_measure = L * dominant_eigenvalue(g.M(g.growth_moment(1.0)))
-        kink = [bool(not self.natural and limits[j] == self.a_art_value()
+        kink = [bool(self.scenario == "zero-infima") or bool(not self.natural and limits[j] == self.a_art_value()
                      and self.a_art_value() > max((g.growth * g.psi_min() / R * (limits - g.xi_min()))[g.P[j] > 0]) + TOLERANCE)
                 for j in range(4)]
         return {
@@ -332,12 +352,21 @@ class MarkovMember:
         }
 
     def report(self) -> dict:
-        return {"family": "bst-markov_ui-and-agg/1",
+        return {"family": self.family,
                 "groups": [{"name": g.name, "share": g.share,
                             "chain": {"normal": g.P.tolist(), "recession": chain(g.sep["recession"], self.find["recession"]).tolist()},
                             "types": [{"beta": t["beta"], "share": t["share"], "conditions": self.factors(g, t["beta"]),
                                        "implications": self.implications(g, t["beta"])} for t in g.types]}
                            for g in self.groups]}
+
+
+def _finite_moment(law, k: float) -> bool:
+    """Whether E[x^k] of a law is finite."""
+    try:
+        value = law.moment(k)
+    except (OverflowError, ValueError, ZeroDivisionError):
+        return False
+    return value is not None and math.isfinite(value)
 
 
 def load_member(path: Path) -> MarkovMember:

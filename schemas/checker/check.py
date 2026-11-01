@@ -1,10 +1,11 @@
-"""Check a bst/1 parameter file: validate it, hash it, and report its conditions, domain rules and implications; or verify a
-results file against it. A bst-markov_ui-and-agg/1 file is checked by markov.py, for its stated member only: its results
+"""Check a parameter file of a buffer-stock family (bst-natural/1, bst-natural-no-point-mass/1, bst-artificial/1 or
+bst-zero-infima/1): validate it, hash it, and report its conditions, domain rules and implications; or verify a results
+file against it. A file of the Markov family's versions is checked by markov.py, for its stated member only: its results
 schema is not yet written.
 
-    uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml [--json out.json]
-    uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml --verify-results r.json
-    uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst-1/members/toy.yaml --bellman-laws
+    uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst/artificial/members/toy.yaml [--json out.json]
+    uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst/artificial/members/toy.yaml --verify-results r.json
+    uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst/artificial/members/toy.yaml --bellman-laws
 
 Exit status 0 when the file is a valid member whose every type passes the validity conditions (and, with
 --verify-results, when the results file validates and its report is consistent), 1 otherwise. The report is the STATED
@@ -94,7 +95,7 @@ def main(argv=None) -> int:
     except StrictYAMLError as error:
         print(f"{args.member}: not a valid parameter file\n  {error}", file=sys.stderr)
         return 1
-    if family == "bst-markov_ui-and-agg/1":
+    if family in markov.FAMILIES:
         if args.verify_results or args.bellman_laws or args.bellman_calibration is not None:
             print(f"{args.member}: the family's results schema and Bellman converter are not yet written",
                   file=sys.stderr)
@@ -111,7 +112,7 @@ def main(argv=None) -> int:
     try:
         member = load_member(args.member)
     except (StrictYAMLError, MemberError) as error:
-        print(f"{args.member}: not a valid bst/1 member\n  {error}", file=sys.stderr)
+        print(f"{args.member}: not a valid {family} member\n  {error}", file=sys.stderr)
         return 1
     if args.verify_results is not None:
         results = json.loads(args.verify_results.read_text())

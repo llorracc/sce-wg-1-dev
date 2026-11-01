@@ -25,7 +25,7 @@ import pytest
 
 from bst1 import load_member
 from laws import law_from_mapping
-from test_checker import LAWS, MEMBERS
+from test_checker import LAWS
 
 HERE = Path(__file__).resolve().parent
 ONTOLOGY_VERSION = "0.1.0-draft.1"
@@ -196,7 +196,7 @@ def test_the_converter_writes_the_ontology_coordinates(mapping):
 
 
 def test_the_members_laws_agree_with_the_ontology():
-    for path in sorted(MEMBERS.glob("*.yaml")):
+    for path in sorted((Path(__file__).resolve().parent.parent / "bst").glob("*/members/*.yaml")):
         member = load_member(path)
         for shock in ("permanent_shock", "employed_shock"):
             mapping = member.data["income"][shock]

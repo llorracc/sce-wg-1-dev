@@ -1,4 +1,4 @@
-# HARK's Rosetta Stone for bst/1, as cards in the field names of Project Bellman's Rosetta stone. Draft, begun
+# HARK's Rosetta Stone for the buffer-stock families, as cards in the field names of Project Bellman's Rosetta stone. Draft, begun
 # 2026-10-21 and revised on 2026-10-22 for HARK's adapter, which solves with MarkovConsumerType, and for the schemas'
 # rules of attachment. The toolkit's side only: the operator's side (ranks, domains, syntax positions, the named nodes,
 # grades) is Bellman's to fill. The lexicon, the reasons and the sources are in hark.md. Values such as "!quadrature"
@@ -59,7 +59,7 @@ handlers:
           scope: "built by the adapter from the member's laws; HARK's constructor for it is switched off, since HARK otherwise rebuilds it on any update"
         LivPrb:
           scope: "applied inside the solver, in the effective discount factor DiscFac * LivPrb; the adapter does not apply it again"
-      neutralization: "cycles = 0 and T_cycle = 1 give the infinite horizon. Every row of the chain is the same, so the end-of-period value does not depend on the current state, and the two states' rules are bst/1's one rule"
+      neutralization: "cycles = 0 and T_cycle = 1 give the infinite horizon. Every row of the chain is the same, so the end-of-period value does not depend on the current state, and the two states' rules are the buffer-stock families' one rule"
       decode:
         cFunc: {kind: primary, check: "the two states' rules agree to 1e-12 relative; the employed state's is reported"}
         vFunc: {kind: primary, needs: vFuncBool, check: "the two states' values agree to 1e-12 relative"}
