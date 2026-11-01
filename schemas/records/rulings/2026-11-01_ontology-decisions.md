@@ -23,11 +23,18 @@ saving time ended at 02:00 that morning). His words are kept outside this public
 - **10:05:57, β.** A requirement in the schemas or the ontology that β ≤ 1 would be an error in them, not a divergence of
   a paper or its code. Neither states one: both parameter schemas require only β > 0, and the ontology's sampled models
   draw β up to 1.3 ([[feedback_no-upper-bound-on-beta]]).
-- **10:05:57, "commit and memorialize".**
+- **10:05:57, "commit and memorialize".** Committed at 10:14:35.
+- **10:18:27, HAFiscal's cap.** HAFiscal's code caps each type's β through a growth-patience factor held a little below
+  one. That cap is a pragmatic implementation detail. It cuts off the numerical problems that arise when parameters too
+  near the boundary are tried, where the solution slows drastically. If HAFiscal's code and documentation do not explain
+  this clearly, they should. It is not an intrinsic feature of the ontology or the schemas for generic buffer-stock
+  models. The ontology's divergence `BSM_0000152` is retired. The public package's comments present the cap as a
+  theoretical requirement ([the findings](../findings/2026-11-01_ontology-draft2.md)), so the explanation is still to be
+  written, by the HAFiscal-Latest session.
+- **10:18:41, "memorialize here and in HAFiscal".** The memorial in HAFiscal-Latest is that session's. It was sent both
+  rulings in his words at 10:19:34, with what the public package's comments say.
 
 **What stays open:**
-- whether HAFiscal's cap on its types' discount factors, which places survival outside the patience factor in a condition
-  its code calls the GIC-Mod, is a divergence of HAFiscal or a condition the ontology should state;
 - what belongs in a Rosetta Stone, against which the HARK section moved there is to be judged. The owner offered a fuller
   account of a stone's scope;
 - from the reading of Ma, Stachurski and Toda:

@@ -307,11 +307,10 @@ The divergences:
 - **BST and Bellman-SYM:** 𝕄 names BST's cross-sectional mean and the forward distribution operator alike.
 - **The schemas:** bst/1's stage file and the Markov family's still write the marginal values as fields with a role word
   Bellman-SYM retired on 2026-10-26. The language now refuses both files.
-- **The published HAFiscal paper and code:**
+- **The published HAFiscal paper:**
   - ξ names the employed draw, BST's θ;
   - "target" names a data moment;
-  - "MPC" names the share of a windfall spent within a year;
-  - the cap on β places survival outside the patience factor.
+  - "MPC" names the share of a windfall spent within a year.
 
 These divergences are what the proposal's closing comparison is meant to collect: places where the profession's
 conventions silently differ.

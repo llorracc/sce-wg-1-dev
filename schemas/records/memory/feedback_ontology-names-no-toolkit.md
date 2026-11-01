@@ -21,8 +21,9 @@ changes with the toolkit's versions, and it would tie a statement about models t
 - The toolkit documents are the schemas' Rosetta Stones, `schemas/rosetta/<toolkit>.md`. HARK's names for the ontology's
   terms and its ten departures from them moved to HARK's stone on 2026-11-01, keeping their identifiers, which the
   ontology lists as retired.
-- A paper is not a toolkit: HAFiscal's divergences stay, as another paper's uses of the terms. Whether its code's cap on β
-  is a divergence or a condition the ontology lacks is open.
+- A paper is not a toolkit: HAFiscal's three divergences stay, as uses of the terms in its paper. An implementation
+  detail of a paper's code is no more the ontology's than a toolkit's. HAFiscal's cap on β, a guard against slow
+  solutions near the boundary by the owner's ruling of 2026-11-01, left the ontology then.
 - What exactly belongs in a stone, against which the moved HARK section is to be judged, is the owner's to explain. He
   offered on 2026-11-01.
 

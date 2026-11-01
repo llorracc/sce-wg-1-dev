@@ -48,6 +48,9 @@ the owner's instruction of 2026-11-01, it names no toolkit.
 - The WRIC's necessity without an artificial constraint is treated as true until the paper proves it, by the owner's
   decision of 2026-11-01.
 - The deduction that an artificial constraint binds is stated for a borrowing limit, a_Art ≤ 0.
+- HAFiscal's cap on β is no longer a divergence. By the owner's ruling of 2026-11-01 it is an implementation detail of
+  HAFiscal's code, which keeps parameters away from the boundary where the solution slows drastically, and not a
+  feature of the model class. `BSM_0000152` is retired.
 
 **Written forms.**
 - The ontology names no toolkit. HARK's names for the terms, its sources and its ten divergences moved to HARK's Rosetta

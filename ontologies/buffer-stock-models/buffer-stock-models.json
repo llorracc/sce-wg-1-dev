@@ -56,7 +56,7 @@
     "text": "a name in bst/1's Bellman-SYM stage file as the language now writes it: a declared field, parameter, set or function, a perch mark, a derivative term, or the id of a block or line, which is the address of where a relation is written, not an object"
    }
   },
-  "source_digest": "sha256:4dec3b47666eec8f55b5b34f1bd12ab98a384e1846090077e6e35210faed239c"
+  "source_digest": "sha256:864acb61e0d8bf3c61d445feb5fae17a923f3ba26e7db5342e4c7926254b057c"
  },
  "kinds": {
   "model-class": "A class of models, defined by axioms. A model is a member when it satisfies every membership axiom.",
@@ -94,6 +94,7 @@
  },
  "retired": [
   "BSM_0000151",
+  "BSM_0000152",
   "BSM_0000138",
   "BSM_0000139",
   "BSM_0000140",
@@ -4855,28 +4856,6 @@
    },
    "source_urls": [
     "https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Subfiles/Parameterization.tex#L20"
-   ]
-  },
-  {
-   "id": "BSM_0000152",
-   "kind": "divergence",
-   "name": "hafiscal-gic-cap",
-   "divergence_kind": "meaning",
-   "term": {
-    "name": "gic",
-    "id": "BSM_0000088"
-   },
-   "where": "hafiscal-qe",
-   "statement": "HAFiscal's code caps each type's discount factor so that ℒ (Rβ)^(1/ϱ) E[ψ⁻¹]/𝒢, which its comments call the growth patience factor and the GIC-Mod with survival, is at most a margin below one. Survival there multiplies the patience factor without entering it. This ontology's GIC-Mod is Þ̊_𝒢 E[ψ⁻¹] with Þ̊ = (Rβℒ)^(1/ϱ), and its GIC-Liv is ℒ Þ̊_𝒢: three placements of ℒ in two conditions. The cap replaced an earlier (1 − ℒ) + 𝒢^ϱ/R.",
-   "sources": {
-    "hafiscal-qe": [
-     "Code/HA-Models/FromPandemicCode/EstimParameters.py:398-418",
-     "Code/HA-Models/FromPandemicCode/EstimParameters.py:430-437"
-    ]
-   },
-   "source_urls": [
-    "https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Code/HA-Models/FromPandemicCode/EstimParameters.py#L398-L418",
-    "https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Code/HA-Models/FromPandemicCode/EstimParameters.py#L430-L437"
    ]
   },
   {

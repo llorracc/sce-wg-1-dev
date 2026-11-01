@@ -20,7 +20,7 @@
     dcterms:source <https://arxiv.org/abs/1905.13045v3> ;
     dcterms:source <https://arxiv.org/abs/2012.00219v2> ;
     dcterms:source <https://github.com/llorracc/HAFiscal-QE/tree/1afdf80de4325e436a0c1c20895f754aefefd38c> ;
-    bsm:sourceDigest "sha256:4dec3b47666eec8f55b5b34f1bd12ab98a384e1846090077e6e35210faed239c" .
+    bsm:sourceDigest "sha256:864acb61e0d8bf3c61d445feb5fae17a923f3ba26e7db5342e4c7926254b057c" .
 
 skos:definition a owl:AnnotationProperty .
 skos:notation a owl:AnnotationProperty .
@@ -2429,17 +2429,6 @@ bsm:BSM_0000143
     bsm:divergenceKind "meaning" ;
     bsm:concerns bsm:BSM_0000079 ;
     dcterms:source <https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Subfiles/Parameterization.tex#L20> .
-
-bsm:BSM_0000152
-    a owl:NamedIndividual, bsm:Divergence ;
-    rdfs:label "hafiscal-gic-cap"@en ;
-    skos:notation "hafiscal-gic-cap" ;
-    skos:definition "HAFiscal's code caps each type's discount factor so that ℒ (Rβ)^(1/ϱ) E[ψ⁻¹]/𝒢, which its comments call the growth patience factor and the GIC-Mod with survival, is at most a margin below one. Survival there multiplies the patience factor without entering it. This ontology's GIC-Mod is Þ̊_𝒢 E[ψ⁻¹] with Þ̊ = (Rβℒ)^(1/ϱ), and its GIC-Liv is ℒ Þ̊_𝒢: three placements of ℒ in two conditions. The cap replaced an earlier (1 − ℒ) + 𝒢^ϱ/R."@en ;
-    bsm:where "hafiscal-qe" ;
-    bsm:divergenceKind "meaning" ;
-    bsm:concerns bsm:BSM_0000088 ;
-    dcterms:source <https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Code/HA-Models/FromPandemicCode/EstimParameters.py#L398-L418> ;
-    dcterms:source <https://github.com/llorracc/HAFiscal-QE/blob/1afdf80de4325e436a0c1c20895f754aefefd38c/Code/HA-Models/FromPandemicCode/EstimParameters.py#L430-L437> .
 
 bsm:BSM_0000178
     a owl:NamedIndividual, bsm:Divergence ;

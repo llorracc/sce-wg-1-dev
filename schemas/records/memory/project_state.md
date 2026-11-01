@@ -7,7 +7,7 @@ metadata:
 
 **On branch `buffer-stock-ontology`** (from the schemas' branch; committed, not pushed, no pull request):
 `ontologies/buffer-stock-models/`, the semantic ontology of buffer-stock models, version 0.1.0-draft.2, rows
-`BSM_0000001` to `BSM_0000205`, 194 in force and 11 retired; 47 tests, none of which solves a model
+`BSM_0000001` to `BSM_0000205`, 193 in force and 12 retired; 47 tests, none of which solves a model
 ([[feedback_say-what-tests-establish]]).
 - It states:
   - what makes a model a buffer-stock model: the membership axioms, the owner's atom rule of 2026-10-31 among them;
@@ -163,7 +163,6 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
   - the two tiers, and what buffer-stock saving means;
   - the perfect-foresight and risky-asset classes;
   - the ontology's identifiers on the schemas' keys, and the atom axiom as a bst/1 validity condition;
-  - whether HAFiscal's cap on β is a divergence;
   - what a Rosetta Stone holds, against which HARK's moved section is judged;
   - three points left by Ma, Stachurski and Toda;
 - HARK's cyclical index: ruled on 2026-10-31 that solver and simulation be consistent, the simulation side to be fixed,

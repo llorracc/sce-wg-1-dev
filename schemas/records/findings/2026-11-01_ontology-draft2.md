@@ -2,7 +2,7 @@
 
 2026-10-31 evening to 2026-11-01. The draft is `ontologies/buffer-stock-models/`, version 0.1.0-draft.2, on branch
 `buffer-stock-ontology`; its [changelog](../../../ontologies/buffer-stock-models/CHANGELOG.md) lists every row it adds or
-changes. 194 rows, with 11 identifiers retired.
+changes. 193 rows, with 12 identifiers retired.
 
 ## What the tests establish, and what they do not
 
@@ -87,6 +87,15 @@ On the owner's ruling of 09:23:51, the ontology lost:
 - the approximation kind of a divergence.
 
 HARK's ten departures from its terms (`BSM_0000138` to `140`, `144`, `154` to `159`) are retired there and kept in
-[HARK's stone](../../rosetta/hark.md#the-ontologys-terms-in-hark) with their sources at HARK's `4c285e86`. The four
-HAFiscal divergences stay, since HAFiscal is a paper with its code, not a toolkit. Whether its cap on β is a divergence
-at all is open (the rulings of 2026-11-01).
+[HARK's stone](../../rosetta/hark.md#the-ontologys-terms-in-hark) with their sources at HARK's `4c285e86`.
+
+Three HAFiscal divergences stay, each a use of a term in the HAFiscal paper. The fourth, about its code's cap on β, is
+retired. By the owner's ruling of 10:18:27, the cap is an implementation detail that keeps parameters away from the
+boundary, where the solution slows drastically. The public package's comments explain it otherwise. At HAFiscal-QE
+`1afdf80`, `Code/HA-Models/FromPandemicCode/EstimParameters.py` lines 392–440:
+- call the bound "the BST-textbook condition that is necessary and sufficient for a stationary distribution of
+  normalized assets to exist";
+- say the growth patience factor "must stay below 1";
+- explain the margin 0.9995 by a fit to College's wealth concentration.
+
+None says the cap guards against slow solutions near the boundary.

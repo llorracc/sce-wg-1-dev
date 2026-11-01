@@ -18,7 +18,8 @@ and Toda for βR < 1 not being necessary either.
   2026-11-01). The ontology's sampled models draw β from 0.3 to 1.3. Keep it so.
 - Before calling another paper's restriction on β a divergence, check that the ontology or a schema is not the one
   imposing a bound it should not have.
-- A cap a paper places on β to meet a condition, such as HAFiscal's, is to be read as the condition it enforces, not
-  as a bound on β.
+- A cap a paper's code places on β, such as HAFiscal's, is an implementation device, neither a bound the model needs
+  nor a divergence. HAFiscal's keeps parameters away from the boundary, where the solution slows drastically (ruled
+  2026-11-01 at 10:18:27).
 
 See [[feedback_ontology-names-no-toolkit]].

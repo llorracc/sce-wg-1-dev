@@ -35,9 +35,19 @@ its memorial).
 - **From 10:08.** The ruling's wording is corrected in HARK's stone and the changelog, and the memorial is written; the
   clock read 10:10:42 as the records began.
 
-**State at the memorial:**
-- Draft.2 of the ontology, HARK's stone, these records and the memory are committed together on
-  `buffer-stock-ontology`. Nothing is pushed.
+- **10:14:35.** The memorial is committed as `427136d`, and the page is republished.
+- **10:18:27.** The owner rules that HAFiscal's cap is an implementation detail, and at 10:18:41 asks for a memorial here
+  and in HAFiscal (see the rulings). The public package's comments, read at HAFiscal-QE `1afdf80`, present the cap as a
+  theoretical requirement.
+- **10:19:34.** The HAFiscal-Latest session is sent both rulings in his words, to be checked with the relay checker, with
+  what those comments say.
+- **From 10:20.** The ontology's divergence on the cap is retired, and the ontology's 47 tests pass. The second memorial
+  is written.
+
+**State at the second memorial:**
+- Draft.2 of the ontology, HARK's stone, these records and the memory are committed on `buffer-stock-ontology`, in the
+  memorial of 10:14:35 and the one after it. Nothing is pushed.
+- The HAFiscal-Latest session holds the owner's two rulings of 10:18, for its own memorial and its code's comments.
 - Pull request #15, the stage files' rewrite, is open against the schemas' branch, unmerged.
 - The issue on the WRIC is open in the paper's repository.
 - The open decisions are in the rulings and the deferred follow-ups.

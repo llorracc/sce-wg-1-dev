@@ -65,6 +65,9 @@ ontology:
 retired:
   # A divergence withdrawn on checking.
   - BSM_0000151
+  # HAFiscal's cap on β, removed on 2026-11-01: by the owner's ruling, an implementation detail of HAFiscal's code that
+  # cuts off parameters too near the boundary, where the solution slows drastically; no feature of the model class.
+  - BSM_0000152
   # Divergences of a toolkit from the ontology's terms, moved on 2026-11-01 to that toolkit's Rosetta Stone, since the
   # ontology names no toolkit.
   - BSM_0000138
@@ -1487,17 +1490,6 @@ divergences:
       HAFiscal's MPC is the share of a windfall spent over the following four quarters, not the derivative c′(m) whose
       limits this ontology names.
     sources: {hafiscal-qe: ["Subfiles/Parameterization.tex:20"]}
-  - id: BSM_0000152
-    name: hafiscal-gic-cap
-    kind: meaning
-    term: gic
-    where: hafiscal-qe
-    statement: >-
-      HAFiscal's code caps each type's discount factor so that ℒ (Rβ)^(1/ϱ) E[ψ⁻¹]/𝒢, which its comments call the
-      growth patience factor and the GIC-Mod with survival, is at most a margin below one. Survival there multiplies
-      the patience factor without entering it. This ontology's GIC-Mod is Þ̊_𝒢 E[ψ⁻¹] with Þ̊ = (Rβℒ)^(1/ϱ), and its
-      GIC-Liv is ℒ Þ̊_𝒢: three placements of ℒ in two conditions. The cap replaced an earlier (1 − ℒ) + 𝒢^ϱ/R.
-    sources: {hafiscal-qe: ["Code/HA-Models/FromPandemicCode/EstimParameters.py:398-418", "Code/HA-Models/FromPandemicCode/EstimParameters.py:430-437"]}
   - id: BSM_0000178
     name: bst-mean-and-the-forward-operator
     term: cross-sectional-mean
