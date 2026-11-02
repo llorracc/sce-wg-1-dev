@@ -1,8 +1,9 @@
 # The harness: every toolkit on every experiment
 
 Plan, 2026-11-02, drafted on the owner's request of that day and approved by him with six decisions the same morning;
-see the [README](README.md). **Status: APPROVED, not yet built** beyond the experiment schema
-([`experiments.md`](experiments.md)).
+see the [README](README.md). **Status: APPROVED, in progress:** the experiment schema
+([`experiments.md`](experiments.md)), the layout and the runner ([`../harness/`](../harness/README.md)) are done; the
+comparator is next.
 
 ## The four pieces
 
@@ -126,17 +127,18 @@ harness list                          # the experiments and the toolkits
 Each stage is checked before the next starts.
 1. **The experiment schema.** Drafted, with restrained-limit as its first instance and 17 tests
    ([`experiments.md`](experiments.md)), and approved.
-2. **The registry and the runner**, with `harness/toolkits.yaml` for HARK and dolo.
+2. **The registry and the runner**, with `harness/toolkits.yaml` for HARK and dolo. Done and accepted on 2026-11-02
+   ([the findings](records/findings/2026-11-02_harness-acceptance/README.md)); see [`../harness/`](../harness/README.md).
    - Tested on a stub toolkit, whose adapter copies a canned results file, so that the tests need neither HARK nor dolo.
    - Accepted when, at `low`, each real toolkit's results files are identical byte for byte to the committed ones.
-     HARK's adapter is known to reproduce its files exactly: its refactor did on 2026-11-01. dolo's has not yet been
-     checked for that, and this stage checks it.
+     HARK's adapter was known to reproduce its files exactly: its refactor did on 2026-11-01. dolo's was checked by
+     this stage, and does, but for the adapter's own path, which the layout changed.
 3. **The comparator.** Accepted when its verdicts and numbers on the committed HARK and dolo runs match the prototype's
    and `compare_toolkits.py`'s.
 4. **A full run of restrained-limit** for both toolkits at all three levels, through the harness, recorded as a
    findings record that should repeat the hand run of 2026-11-01.
 5. **The toy-hafiscal experiment,** once its member is delivered and the results schema carries the iMPC.
-6. **The layout:** approved, and best made before the runner is built, so that the runner is written in its place.
+6. **The layout:** done on 2026-11-02, before the runner, in commit `9675109`.
 7. **Continuous runs,** later: the harness at `low` for every toolkit on every pull request.
 
 ## The owner's decisions (2026-11-02, 10:33:47)

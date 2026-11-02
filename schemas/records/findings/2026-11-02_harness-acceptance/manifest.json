@@ -1,0 +1,125 @@
+{
+ "experiment": {
+  "name": "restrained-limit/1",
+  "file": "schemas/bst/experiments/restrained-limit/experiment.yaml",
+  "sha256": "0b6372be037633b09235238474206ab6e4222c997370bc240a0b82bb83931755"
+ },
+ "members": [
+  {
+   "id": "bst-p-zero-0.005",
+   "parameter_file_sha256": "b2e365cd24b41d892e1ef40ca495c64a59de4fc1c718e2811b170dd9ae6732e4",
+   "request_file_sha256": "c579f92bede050bd47200507ebdb3a7be7775a6ce7410ff1e45743982be50cb1"
+  },
+  {
+   "id": "bst-p-zero-0.0005",
+   "parameter_file_sha256": "d642d4caef7385d4e8b23d4026edcc1237afbd12b0a86a410b1634b9e27bb773",
+   "request_file_sha256": "a841375573a657e65946fe29951e93febc70366c095699cbe81fc38e0085413a"
+  },
+  {
+   "id": "bst-p-zero-0.00005",
+   "parameter_file_sha256": "d5a187ccc8cddd452ba3ebbbf3c1ff5233e019578b3362147b4c20734421b631",
+   "request_file_sha256": "f558978b2bdf8e8eca290ff3caa233a3044bfde3eae9c2770df87622c2d435f9"
+  },
+  {
+   "id": "bst-restrained",
+   "parameter_file_sha256": "6e8651cdf2cd0baa14ca98ffc3940ba3586e0565e21d2a385f0ff1013e1c137c",
+   "request_file_sha256": "04ec455e2b6a14d0cf1c8d2174ed6c6e96253896df7e9dfa064b8d18d33dfc36"
+  }
+ ],
+ "levels": [
+  "low"
+ ],
+ "toolkits": {
+  "hark": {
+   "adapter": "harness/adapters/hark/adapter.py",
+   "environment": {
+    "project": "harness/envs/hark",
+    "lock_sha256": "307f564af08764208a64ce74994e1409e2246495c59e0f64595c08c0c94e0f3f",
+    "python": "3.12.3"
+   },
+   "code_sha256": "2d8a330a71cf6555ff3a524ce410c9265cdb143bf38e218a4141122b6232fdf6",
+   "threads": 2
+  },
+  "dolo": {
+   "adapter": "harness/adapters/dolo/adapter.py",
+   "environment": {
+    "project": "harness/envs/dolo",
+    "lock_sha256": "5b8b07f58f27e3ed868f66681b2959b7cac5afc1be8d22f1e6b192779c8ad31b",
+    "python": "3.11.14"
+   },
+   "code_sha256": "457b405e6a38cfb913ce874c85e36d769e70d6db9f108998a8da319e71a1d819",
+   "threads": 2
+  }
+ },
+ "harness": {
+  "commit": "96751095d2ba89f56789558bda02c757dfe8c14b",
+  "uncommitted_changes": "yes"
+ },
+ "started": "2026-11-02T16:29:08+00:00",
+ "jobs": [
+  {
+   "toolkit": "hark",
+   "member": "bst-p-zero-0.005",
+   "level": "low",
+   "dir": "harness/runs/restrained-limit-1/hark/bst-p-zero-0.005/level-1",
+   "status": "ok",
+   "skipped": "yes"
+  },
+  {
+   "toolkit": "hark",
+   "member": "bst-p-zero-0.0005",
+   "level": "low",
+   "dir": "harness/runs/restrained-limit-1/hark/bst-p-zero-0.0005/level-1",
+   "status": "ok",
+   "skipped": "yes"
+  },
+  {
+   "toolkit": "hark",
+   "member": "bst-p-zero-0.00005",
+   "level": "low",
+   "dir": "harness/runs/restrained-limit-1/hark/bst-p-zero-0.00005/level-1",
+   "status": "ok",
+   "skipped": "yes"
+  },
+  {
+   "toolkit": "hark",
+   "member": "bst-restrained",
+   "level": "low",
+   "dir": "harness/runs/restrained-limit-1/hark/bst-restrained/level-1",
+   "status": "ok",
+   "skipped": "yes"
+  },
+  {
+   "toolkit": "dolo",
+   "member": "bst-p-zero-0.005",
+   "level": "low",
+   "dir": "harness/runs/restrained-limit-1/dolo/bst-p-zero-0.005/level-1",
+   "status": "ok",
+   "skipped": "no"
+  },
+  {
+   "toolkit": "dolo",
+   "member": "bst-p-zero-0.0005",
+   "level": "low",
+   "dir": "harness/runs/restrained-limit-1/dolo/bst-p-zero-0.0005/level-1",
+   "status": "ok",
+   "skipped": "no"
+  },
+  {
+   "toolkit": "dolo",
+   "member": "bst-p-zero-0.00005",
+   "level": "low",
+   "dir": "harness/runs/restrained-limit-1/dolo/bst-p-zero-0.00005/level-1",
+   "status": "ok",
+   "skipped": "no"
+  },
+  {
+   "toolkit": "dolo",
+   "member": "bst-restrained",
+   "level": "low",
+   "dir": "harness/runs/restrained-limit-1/dolo/bst-restrained/level-1",
+   "status": "ok",
+   "skipped": "no"
+  }
+ ]
+}

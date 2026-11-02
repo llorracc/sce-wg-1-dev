@@ -86,3 +86,50 @@ its run of the restrained-limit suite, the page's version 2, and the records of 
   - the proposal to the working group;
   - the push;
   - sharing the page, which is private.
+- **10:39:40.** The owner gives the go-ahead for the layout move. Made by 10:45 as one commit, `9675109`, with nothing else:
+  - the Rosetta Stones moved to `rosetta/`;
+  - the adapters to `harness/adapters/`;
+  - the experiments to `schemas/bst/experiments/`.
+
+  Every path and link to them was rewritten: 43 Markdown links, the adapters' path to the schemas and their own names,
+  and the ontology source's comment, whose generated files carry the new digest. Checked:
+  - the repository's broken relative links are the 3 there were before;
+  - the checker's 200 tests, the ontologies' 67 and 12, HARK's adapter's 8 and dolo's 4 pass;
+  - HARK's adapter rerun on `bst-restrained` at `low` gives the committed files, differing only in the adapter's own
+    path.
+
+  The records keep the old paths as they were written.
+- **11:23:59.** The owner gives the go-ahead for the runner, the plan's second stage. Built by 11:30, uncommitted:
+  - `harness/envs/hark` and `harness/envs/dolo`: `uv` projects locked in `uv.lock`, each pinning the interpreter
+    and the numpy, scipy and numba of the runs of 2026-11-01. HARK's resolved 45 packages, dolo's 42;
+  - the harness's own locked environment;
+  - `harness/toolkits.yaml`;
+  - `harness/runner.py`, with `list`, `run` and `verify`;
+  - the experiment checks moved from the test into `schemas/checker/experiment.py`, which the runner calls;
+  - `harness/test_runner.py`, 7 tests on a stand-in toolkit, passing;
+  - `.gitignore` for the environments and the run folders.
+- **11:27:54–11:30.** The acceptance run, HARK and dolo at `low`:
+  - the first try failed three of dolo's four jobs on numba's cache, raced on the new environment;
+  - the runner now runs each toolkit's first job alone;
+  - from a cold environment, all eight files are those of 2026-11-01 but for the adapter's path, and verify;
+  - HARK's jobs were skipped on the rerun, as resumption should (`findings/2026-11-02_harness-acceptance/`).
+- **11:30:42.** The runner reported to the owner as built and accepted, uncommitted. What the acceptance does not show:
+  the levels `medium` and `high`, and another machine, where the interpreter, the BLAS or the CPU may change the last
+  digits.
+- **18:24:32.** The owner asks for a memorial. Done by 18:26:
+  - the runner's work committed with the records;
+  - `harness.md` marked in progress, with stage 2's acceptance recorded; the README points at `harness/`;
+  - the project state brought up to the layout and the words: experiments in `schemas/bst/experiments/`, the adapters
+    in `harness/adapters/`, and the tests' counts of the day;
+  - the numba race filed in the defects as fixed; the rulings carry the go-aheads of 10:39:40 and 11:23:59.
+
+  The checker's 200 tests, the runner's 7, the buffer-stock ontology's 67 and the distributions' 12 pass.
+
+**State at the memorial (18:24):**
+- On `buffer-stock-ontology`, unpushed: `9675109`, the layout's move, and this memorial's commit, the runner.
+- Nothing runs; the run folders in `harness/runs/` and the environments are ignored by git.
+- Next, when the owner asks: the comparator, the plan's third stage, accepted when its verdicts and numbers on the
+  committed runs match the prototype's and `compare_toolkits.py`'s; then a full run at the three levels.
+- Open with the owner, as at 10:37: the ontology names' hyphens; the three fixes to the stones; the toy-hafiscal
+  estimation; a smaller fourth rung; `library` against v0.1; the proposal to the working group; the push; sharing the
+  page, which is private.

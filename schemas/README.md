@@ -44,7 +44,8 @@ The names the validators fix, and the conventions they follow, are registered in
   experiment file ([`experiments.md`](experiments.md)). The restrained-limit and toy-hafiscal experiments were
   called test suites until 2026-11-02.
 - **Harness:** the program that runs every toolkit on an experiment through its adapter, verifies the results files and
-  evaluates the experiment's checks ([`harness.md`](harness.md), approved 2026-11-02, not yet built).
+  evaluates the experiment's checks ([`harness.md`](harness.md), approved 2026-11-02; its runner is built in
+  [`../harness/`](../harness/README.md), its comparator not yet).
 - **Request file:** the comparison points at which a results file reports, kept apart from the parameter file so that the
   model's hash does not change.
 - **Validity condition:** a condition on the parameters that a member must meet to be accepted at all.
@@ -84,8 +85,10 @@ Shared by every family:
 - [`experiments.md`](experiments.md): the experiment file, which states what every toolkit is to do with some
   members and what the results must show; [`experiment.schema.json`](experiment.schema.json) is its validator, and
   restrained-limit is the first experiment.
-- [`harness.md`](harness.md), a plan approved on 2026-11-02 and not yet built: the harness that runs every toolkit on every experiment, verifies the
+- [`harness.md`](harness.md), a plan approved on 2026-11-02: the harness that runs every toolkit on every experiment, verifies the
   results files and evaluates the experiment's checks.
+- [`../harness/`](../harness/README.md): the harness as built so far: the toolkit list, a locked environment for each
+  toolkit, and the runner, which runs and verifies; the comparator is next.
 - [`jacobians.md`](jacobians.md): the interface every toolkit follows for its sequence-space Jacobians in the
   toy-hafiscal experiment, approved on 2026-11-01: the results schema's key `jacobians`, which `checker/jacobians.py`
   verifies.

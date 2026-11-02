@@ -203,3 +203,10 @@ Faults found in this project's own work, with their status.
   in `findings/2026-11-01_restrained-limit-suite-hark/page/`. Found at 19:55 while extending the page to dolo.
   **Status:** fixed in version 2, republished at 19:59:55 from
   `findings/2026-11-01_restrained-limit-suite-dolo/page/`. HARK's folder keeps version 1's source as it was published.
+- **dolo's jobs racing on numba's cache.** In the harness's first acceptance run, at 11:27:54 on 2026-11-02, three of
+  dolo's four jobs failed with `LLVM ERROR: Symbol not found: __gufunc__...dolo.algos.invert...`. dolo's numba functions
+  cache their compiled code inside the environment, which had just been built from its lock file; four jobs started
+  together wrote the empty cache at once. The hand run of 2026-11-01 had not met it, its environment's cache being
+  already filled. **Status:** fixed 2026-11-02 before 11:30: the runner runs each toolkit's first job alone, then the
+  rest in parallel. Rerun from a cold environment, all four of dolo's jobs succeeded
+  ([the findings](findings/2026-11-02_harness-acceptance/README.md)).

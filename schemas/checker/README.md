@@ -26,6 +26,9 @@ states it, the converter's output, by the ontology's conversions.
 - [`bst1.py`](bst1.py): a member of the four buffer-stock families, its validation against its family's schema and
   scenario, its conditions, its domain rules and its implications.
 - [`check.py`](check.py): the command.
+- [`experiment.py`](experiment.py): an experiment file loaded and checked for what its validator cannot say: its
+  files, hashes, members, quantities and anchors ([experiments](../experiments.md)); the harness's runner calls it.
+- [`test_experiment.py`](test_experiment.py): the experiment validator, the experiment files, and the breaks it catches.
 - [`test_rosetta.py`](test_rosetta.py): the standing check of the [Rosetta Stones](../../rosetta/README.md): a lexicon row
   in every stone for each parameter of the stage file and each key of the parameter file, and cards that name only the
   stage's method targets.

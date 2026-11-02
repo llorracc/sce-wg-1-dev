@@ -29,6 +29,10 @@ this public repository.
   - **The spelling of names:** the experiment file's underscores, following the schemas' keys, approved. Whether the
     ontology's names keep their hyphens is still open.
 - **10:33:51, memorialize.**
+- **10:39:40, the layout's move:** go ahead, as approved at 10:33:47. Made as commit `9675109`, with nothing else in it.
+- **11:23:59, the runner:** go ahead with the plan's second stage, the registry, the lock files and the runner. Built
+  and accepted by 11:30 ([the findings](../findings/2026-11-02_harness-acceptance/README.md)).
+- **18:24:32, memorialize.** Not a push: pushing stays the owner's to approve.
 
 **What stays open:**
 - whether the ontology's names keep their hyphens, as econ-ark's notation registry has them, or take underscores;

@@ -1,0 +1,24 @@
+# The toolkits the harness runs (README.md, ../schemas/harness.md). Paths are relative to this file.
+#   adapter:     the adapter's command-line program, run as: adapter <parameter file> --out <dir> --level <n> --request <file>
+#   code:        the files whose contents a run depends on besides the environment; a change to any reruns the toolkit's
+#                jobs. Globs are allowed; files named test_* are left out.
+#   environment: the toolkit's uv project, with its pyproject.toml, uv.lock and .python-version; the adapter runs in it
+#                with `uv run --frozen`.
+#   stone:       its Rosetta Stone.
+#   levels:      the adapter's --level for each of the experiments' named levels.
+#   threads:     the cap on each job's BLAS and OpenMP threads.
+toolkits:
+  hark:
+    adapter: adapters/hark/adapter.py
+    code: [adapters/common.py, adapters/hark/adapter.py, ../schemas/checker/*.py]
+    environment: envs/hark
+    stone: ../rosetta/hark.md
+    levels: {low: 1, medium: 2, high: 3}
+    threads: 2
+  dolo:
+    adapter: adapters/dolo/adapter.py
+    code: [adapters/common.py, adapters/dolo/adapter.py, ../schemas/checker/*.py]
+    environment: envs/dolo
+    stone: ../rosetta/dolo.md
+    levels: {low: 1, medium: 2, high: 3}
+    threads: 2

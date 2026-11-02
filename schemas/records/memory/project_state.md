@@ -1,13 +1,13 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 10:37 on 2026-11-02: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two test suites; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit suite run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema drafted and the harness plan approved, with the words experiment and ladder; the ontology at draft.2, naming no toolkit"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 18:24 on 2026-11-02: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted, its comparator next; the ontology at draft.2, naming no toolkit"
 metadata:
   type: project
 ---
 
 **On branch `buffer-stock-ontology`** (from the schemas' branch; committed, not pushed, no pull request):
 `ontologies/buffer-stock-models/`, the semantic ontology of buffer-stock models, version 0.1.0-draft.2, rows
-`BSM_0000001` to `BSM_0000205`, 193 in force and 12 retired; 47 tests, none of which solves a model
+`BSM_0000001` to `BSM_0000205`, 193 in force and 12 retired; 67 tests, none of which solves a model
 ([[feedback_say-what-tests-establish]]).
 - It states:
   - what makes a model a buffer-stock model: the membership axioms, the owner's atom rule of 2026-10-31 among them;
@@ -40,28 +40,34 @@ model is a calibration of the buffer-stock families, and a Markov state only a w
 `bst-artificial/1` member. The four-state family and the paper's members are in the history
 ([the findings](../findings/2026-11-01_markov-family-as-the-code-solves.md)).
 
-**Two test suites for every toolkit's solution** (`bst/model.md`):
-- the restrained-limit suite, BST's experiment: `bst-p-zero-0.005`, `-0.0005` and `-0.00005` in `bst-natural/1` and
+**Two experiments for every toolkit's solution** (`bst/model.md`; called test suites until 2026-11-02):
+- the restrained-limit experiment, BST's "The Liquidity Constrained Solution as a Limit": `bst-p-zero-0.005`, `-0.0005` and `-0.00005` in `bst-natural/1` and
   `bst-restrained` in `bst-artificial/1`, solved with HARK
   ([the findings](../findings/2026-11-01_restrained-limit-suite.md));
-- the toy-hafiscal suite, specified: three types, a center and a spread, estimated by HARK's and HAFiscal's tools to
+- the toy-hafiscal experiment, specified: three types, a center and a spread, estimated by HARK's and HAFiscal's tools to
   HAFiscal's Lorenz points, the iMPC profile and the wealth-to-income ratio, with one prize; every toolkit solves and
   simulates the steady state and exposes what its Jacobians need.
 
-**The Jacobian interface** for the toy-hafiscal suite (`jacobians.md`): designed with the HARK, HARK-dev,
+**The Jacobian interface** for the toy-hafiscal experiment (`jacobians.md`): designed with the HARK, HARK-dev,
 HAFiscal-Latest and QuantEcon sessions and DolARK's design, and approved at 17:05:24 on 2026-11-01. The Jacobians with
 their metadata are required in a results file, as `.npy` matrices; the fake-news ingredients are optional, as data. The
 inputs are the return, a scale on all non-capital income and a transfer proportional to permanent income; the outputs
 C, A and Y_hh; one distribution grid for every toolkit; a steady state to 10⁻¹⁰. The block is the key `jacobians` of
 `bst/results.schema.json` (approved 17:26:21), and `checker/jacobians.py` verifies it.
 
-**The restrained-limit suite's first run** (`bst/suites/restrained-limit/`): common request files for its four members,
+**The restrained-limit experiment's first run** (`schemas/bst/experiments/restrained-limit/`, in `bst/suites/` until
+2026-11-02): common request files for its four members,
 and a comparison from results files alone. HARK's adapter at levels 1 to 3 shows the natural rules converging to the
 restrained one, the largest gap 0.137, 0.061 and 0.027 at the kink
 ([the findings](../findings/2026-11-01_restrained-limit-suite-hark/README.md)), drawn on the private page "The
 Restrained Limit", whose source is in the findings' `page/`.
 
-The checker's 180 tests, the adapter's 8 and the ontology's 67 pass.
+Its experiment file, `experiment.yaml`, is the first under `experiment.schema.json` (`experiments.md`). dolo's adapter
+ran it too on 2026-11-01 and agrees with HARK's (the findings of that run). On 2026-11-02 the harness's runner
+reproduced both toolkits' files at `low` from lock files ([the findings](../findings/2026-11-02_harness-acceptance/README.md)).
+
+On 2026-11-02 the checker's 200 tests, the runner's 7, the buffer-stock ontology's 67 and the distributions' 12 pass;
+HARK's adapter's 8 and dolo's 4 passed after the layout's move.
 
 **Open pull request #15** (`stage-derivative-terms`, pushed, against the schemas' branch, opened 22:24:43 on
 2026-10-31): both families' stage files rewritten with Bellman-SYM's derivative terms, as the owner approved at 22:17:58.
@@ -72,7 +78,7 @@ deferred follow-ups.
 pull requests and `main`'s ontology. Nothing has been proposed to the working group's repository yet.
 - **Shared:**
   - `shock-laws.md` with its validator;
-  - `numerics.md` (method, settings and suite files, with the stage file's targets as a method file's addresses, under
+  - `numerics.md` (method, settings and ladder files, with the stage file's targets as a method file's addresses, under
     the rules of attachment of #11);
   - `foundation.md` (the stage file as the foundation of a family's statement);
   - the design note `hafiscal-models-and-test-suite.md`;
@@ -178,13 +184,13 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
 - **Method targets** (2026-10-22, #11): see [the memory on method attachment](feedback_method-attachment.md).
   `bst/1`'s stage file stays free of any method's lines (15:11:02).
 - **Adapters** (20:41): a toolkit's adapter reads a parameter file, solves, and writes a results file; adapters live in
-  `schemas/adapters/`. HARK's comes first, then dolo's; no QuantEcon module is published. HARK's is built on its Markov
+  `schemas/adapters/`, in `harness/adapters/` since 2026-11-02. HARK's comes first, then dolo's; no QuantEcon module is published. HARK's is built on its Markov
   consumer with `bst/1` as the nonpersistent chain, starts from the benchmark's emitter with its private material taken
   out, and records neither the machine's name nor its operating system. Merged as #8 after passing its gate (the
   findings on HARK's Markov consumer), pinned to #1858's commit; since #12 it pins #1862's, stacked on it, whose solvers
   compute a `natural` member's limit from the laws' infima, the stated `a_Nat`. dolo's adapter followed on 2026-11-01,
   on dolo's release 0.4.9.20 and its `egm`, with the toolkit-neutral code of both in `adapters/common.py`; it has run
-  the restrained-limit suite and agrees with HARK's (the findings of that run).
+  the restrained-limit experiment and agrees with HARK's (the findings of that run).
 
 **The emitter** (the HAFiscal-Latest session).
 - Its ladder of 2026-10-20 and the rerun of the toy's fourth level on 2026-10-21 wrote eight results files. All of them
@@ -222,9 +228,9 @@ Registering `w3id.org/sce` is not raised before a pull request from this fork is
 
 **Next work:**
 - HARK's adapter writing the Jacobians block, from a branch carrying #1863, once the toy-hafiscal member exists;
-- the harness, approved on 2026-11-02 ([`../../harness.md`](../../harness.md)): first the layout's move, as one commit
-  with nothing else; then the registry with a lock file per toolkit, and the runner, accepted when it reproduces the
-  committed results files at `low`; then the comparator. The experiment schema and its first experiment are drafted
+- the harness, approved on 2026-11-02 ([`../../harness.md`](../../harness.md)): the layout's move done in `9675109`
+  (`rosetta/`, `harness/adapters/`, `schemas/bst/experiments/`); the registry, lock files and runner built and accepted
+  (`harness/`; the findings of 2026-11-02 on its acceptance); next the comparator, the plan's third stage. The experiment schema and its first experiment are drafted
   and approved ([`../../experiments.md`](../../experiments.md));
 - the proposal to the working group's repository, whose trigger, dolo's adapter and the first comparison of two
   toolkits' results files, is met as of 2026-11-01 (deferred follow-ups); the owner's to start;
