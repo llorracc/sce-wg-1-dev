@@ -1,12 +1,12 @@
 # Rosetta Stones
 
-Draft, begun on 2026-10-21; see the [README](../README.md) of the schemas.
+Draft, begun on 2026-10-21; see the [README](../schemas/README.md) of the schemas.
 
 A Rosetta Stone says how one toolkit solves a family's members as the family's stage file states them. With a stone for
 each toolkit, one stage file and one parameter file can be solved by every toolkit that has one. Each toolkit writes a
 results file, the checker verifies each file, and the files are compared. The first stones are for the buffer-stock
 families:
-- [`hark.md`](hark.md): HARK's `MarkovConsumerType`, as [HARK's adapter](../adapters/hark/README.md) uses it;
+- [`hark.md`](hark.md): HARK's `MarkovConsumerType`, as [HARK's adapter](../harness/adapters/hark/README.md) uses it;
 - [`quantecon-jax.md`](quantecon-jax.md): the JAX code of QuantEcon's lecture on the income fluctuation problem with
   stochastic returns;
 - [`dolo.md`](dolo.md): dolo's endogenous grid method, `dolo.algos.egm.egm`, with the household recast as a dolo model
@@ -15,10 +15,10 @@ families:
 ## The hub and the spokes
 
 The hub is the family's statement: its stage file, one for each borrowing-constraint scenario
-([`constraint-scenarios.md`](../constraint-scenarios.md)), read in [`model.md`](../bst/model.md), and its parameter
+([`constraint-scenarios.md`](../schemas/constraint-scenarios.md)), read in [`model.md`](../schemas/bst/model.md), and its parameter
 files. Each toolkit is a spoke, mapped to the hub alone. No stone
 translates one toolkit into another: two toolkits meet only in their results files, which the
-[results schema](../bst/results.md) makes alike.
+[results schema](../schemas/bst/results.md) makes alike.
 
 This is the design of Project Bellman's Rosetta stone. That registry records which operations and methods a toolkit's
 routines carry out, and the conventions under which each correspondence holds (Bellman's documentation, *Core
@@ -33,12 +33,12 @@ Each stone is a document, with its cards in a YAML file beside it.
    results file reports. Each row gives the toolkit's name for it and its timing and normalization. Where the toolkit
    differs, it states the difference and what the adapter does about it, citing the toolkit's own documentation.
 2. **The handlers.** One for each of the toolkit's routines that the adapter calls. Each names the stage target it
-   carries out ([method targets](../bst/model.md#method-targets)). It also says whether it does the whole stage or one
+   carries out ([method targets](../schemas/bst/model.md#method-targets)). It also says whether it does the whole stage or one
    part, whether the stage's transition is built into it, and whether it takes one step or iterates to convergence.
 3. **The adapter.** Code in two legs around the handler's call.
    - *Encode* takes a parameter file and the settings to the toolkit's arguments.
    - *Decode* takes the toolkit's output to a results file that reports the toolkit's effective member
-     ([`effective-member.md`](../effective-member.md)).
+     ([`effective-member.md`](../schemas/effective-member.md)).
 
    The adapter does not change the model. The laws, the transitions and the constraint are the member's. The grids and
    the nodes are settings, and any randomness has an explicit seed.
@@ -46,7 +46,7 @@ Each stone is a document, with its cards in a YAML file beside it.
    parts, and for each of them the stone says whether it honors the method file's setting, fixes the part inside, or
    cannot take it, so that the adapter must. The cards write these with Bellman's tokens: `honours`, `fixed`,
    `requires_own_handler` and `absent`. A part the whole-stage handler runs names no handler of its own.
-   - The targets are the stage's, under the rules of attachment ([method targets](../bst/model.md#method-targets)):
+   - The targets are the stage's, under the rules of attachment ([method targets](../schemas/bst/model.md#method-targets)):
      an expectation's method on its operator, `E_ψ_θ_j`; the solution on `policy.euler.solve`; the rule's interpolation
      on `policy`.
    - A method is written in words, with its tag beside it where it has one. An entry lists only the settings its tag
@@ -58,7 +58,7 @@ Each stone is a document, with its cards in a YAML file beside it.
 
    Nothing counts as correct until a run is recorded.
 
-A stone records no run times or speeds ([the memory on timings](../records/memory/feedback_no-timings.md)).
+A stone records no run times or speeds ([the memory on timings](../schemas/records/memory/feedback_no-timings.md)).
 
 ## The workflow
 
@@ -67,10 +67,10 @@ A stone records no run times or speeds ([the memory on timings](../records/memor
       → check.py --verify-results on each
       → the comparison of the files, at the request file's points
 
-Written so far: the stage file, the parameter and results schemas, the checker, and [HARK's adapter](../adapters/hark/).
+Written so far: the stage file, the parameter and results schemas, the checker, and [HARK's adapter](../harness/adapters/hark/).
 Not yet written:
 - the other toolkits' adapters;
-- the validators for the method, settings and request files ([`numerics.md`](../numerics.md));
+- the validators for the method, settings and request files ([`numerics.md`](../schemas/numerics.md));
 - the comparison.
 
 ## Comparing two toolkits
@@ -88,7 +88,7 @@ reviews of this draft.
 - **A quantity that is not a property of the solution is not compared.** Q(1), the quantile at probability one, was one.
   On a grid it is the farthest point carrying any mass (there, weight 1.7·10⁻¹⁷⁰), and it moved from 61.56 to 4.40 on a
   change of 10⁻¹⁵ in a cumulative mass; the schema's quantiles stop at 0.999. An extreme, or anything that reads
-  mass at or beyond a grid's top, needs the representation's coverage ([`results.md`](../bst/results.md)), or no
+  mass at or beyond a grid's top, needs the representation's coverage ([`results.md`](../schemas/bst/results.md)), or no
   comparison at all.
 - **Each quantity has its own scale:**
   - relative, for levels: means, the rule at the points, MPCs;

@@ -159,19 +159,19 @@ options:
   - the uniform grid of m (`domain`, `options.grid`);
   - the nodes.
 
-  In the tags of the [method targets](../bst/model.md#method-targets), the solve is `!time-iteration` on
+  In the tags of the [method targets](../schemas/bst/model.md#method-targets), the solve is `!time-iteration` on
   `policy.euler.solve`, with `egm` as its handler. `policy` is `!Linear`, read by the adapter through the spline's
   node values with the kink's point. The expectation on `E_ψ_θ_j` is a `!quadrature` over the member's nodes, which
   `egm` takes as `dp`.
-- **The adapter** is [`../adapters/dolo/adapter.py`](../adapters/dolo/adapter.py), with HARK's adapter's command line.
+- **The adapter** is [`../adapters/dolo/adapter.py`](../harness/adapters/dolo/adapter.py), with HARK's adapter's command line.
   Its legs:
   - *encode*, from a member and the settings to the recast model file, the nodes and the grids;
   - the call, `egm`, with standard output silenced; it stops with an error if `egm` does not converge;
   - *decode*, from the rule to the results file. The population, the effective member, the conditions and the
-    statuses come from the code the adapters share, [`../adapters/common.py`](../adapters/common.py).
+    statuses come from the code the adapters share, [`../adapters/common.py`](../harness/adapters/common.py).
 - **The evidence: the probe of 2026-11-01**, in the pinned environment. The recast model was solved for `bst-restrained`
   and `bst-p-zero-0.005` on the schemas' nodes, and compared with HARK's adapter at the restrained-limit experiment's
-  common points. HARK's results files are in `records/findings/2026-11-01_restrained-limit-suite-hark/`.
+  common points. HARK's results files are in `schemas/records/findings/2026-11-01_restrained-limit-suite-hark/`.
   - Both converged to an error of 10⁻¹⁰.
   - Below its kink the restrained rule is c = m, to 10⁻¹⁶.
   - With HARK's level-1 nodes, 7 per shock, and 1200 savings points, the rules agree with HARK's level 1 to within
@@ -180,7 +180,7 @@ options:
   - With only 300 savings points, the gap to HARK grows with m, to 10⁻³ at m = 10. That is the coarser grid's error.
   - The node count changes both toolkits' rules alike, by about 10⁻² at m = 10.
 - **The evidence: the restrained-limit experiment, 2026-11-01**, with the adapter at levels 1 to 3
-  (`records/findings/2026-11-01_restrained-limit-suite-dolo/`). All twelve results files validate and are consistent
+  (`schemas/records/findings/2026-11-01_restrained-limit-suite-dolo/`). All twelve results files validate and are consistent
   with their members (`check.py --verify-results`), and so do `toy`'s and `library`'s at level 1, in the adapter's
   tests. Against HARK's adapter, on the same nodes and savings grids:
   - the rules' largest difference for m up to 20 falls with the level, from about 1.5 · 10⁻⁴ at level 1 to

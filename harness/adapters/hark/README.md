@@ -13,7 +13,7 @@ the commit reachable:
 ```sh
 PIN="econ-ark @ git+https://github.com/llorracc/HARK.git@1185280590b21fe2ddac80cadcfea66476e45380"
 uv run --with "$PIN" --with sympy --with jsonschema --with pyyaml --with scipy --with referencing \
-    python schemas/adapters/hark/adapter.py schemas/bst/artificial/members/toy.yaml --out out --level 1
+    python harness/adapters/hark/adapter.py schemas/bst/artificial/members/toy.yaml --out out --level 1
 uv run --with jsonschema --with pyyaml --with scipy --with referencing \
     python schemas/checker/check.py schemas/bst/artificial/members/toy.yaml --verify-results out/results.json
 ```

@@ -1,7 +1,7 @@
 # HARK's Rosetta Stone for the buffer-stock families
 
 Draft, begun on 2026-10-21 and revised on 2026-10-22 and 2026-11-01; see the [Rosetta Stones](README.md). The toolkit is
-HARK's `MarkovConsumerType`, as [HARK's adapter](../adapters/hark/README.md) uses it: on the nonpersistent chain, which
+HARK's `MarkovConsumerType`, as [HARK's adapter](../harness/adapters/hark/README.md) uses it: on the nonpersistent chain, which
 writes the buffer-stock families' unemployment event as a state.
 - **Where it was read.** The Markov solver was read at the commit of HARK's draft pull request #1858, `03a2c7a1` on the
   fork `llorracc/HARK`. The adapter's pin is `11852805`, the head of draft econ-ark/HARK#1862, stacked on it,
@@ -18,7 +18,7 @@ writes the buffer-stock families' unemployment event as a state.
 - **States.** The Markov consumer's inputs that can differ by state are arrays with one value per state, here two:
   employed, then unemployed. the buffer-stock families gives both states the same return, growth and survival.
 - **Scenarios** (the HARK session, 2026-11-01, at `4c285e86`). HARK's types do not all express every
-  borrowing-constraint scenario ([`constraint-scenarios.md`](../constraint-scenarios.md)). The portfolio family accepts
+  borrowing-constraint scenario ([`constraint-scenarios.md`](../schemas/constraint-scenarios.md)). The portfolio family accepts
   only `BoroCnstArt = 0.0`, so it can express the artificial and zero-infima scenarios, never a natural one
   (`ConsPortfolioModel.py:520`, `ConsRiskyAssetModel.py:682` and `:1185`, `ConsRiskyContribModel.py:735`,
   `ConsWealthPortfolioModel.py:179`, `ConsBequestModel.py:554`). The labor model accepts only `None`
@@ -60,14 +60,14 @@ writes the buffer-stock families' unemployment event as a state.
 
 - **The solution:** `solve_one_period_ConsMarkov`, the endogenous grid method, iterated over an infinite horizon until
   the distance between successive solutions is below `tolerance`. In the tags of the
-  [method targets](../bst/model.md#method-targets) this is `!time-iteration` on `policy.euler.solve`, with
+  [method targets](../schemas/bst/model.md#method-targets) this is `!time-iteration` on `policy.euler.solve`, with
   `MarkovConsumerType` as its handler. The stage writes the Euler equation with its complementarity clause, not the
   endogenous grid method's steps, so `!egm` does not attach to it.
   - **The pin.** Released HARK interpolates each next state's expected marginal value on a grid starting at that state's
     own natural limit, then evaluates it on the current state's grid. When the states' worst incomes differ, as here,
     that adds an interpolation error to the rule and a larger one to the value function. Pull request #1858 evaluates
     each next state's expectation at the current state's points, as the standard solver does
-    ([the finding](../records/findings/2026-10-21_hark-markov-for-bst1.md)).
+    ([the finding](../schemas/records/findings/2026-10-21_hark-markov-for-bst1.md)).
   - **The tolerance.** Human wealth and the limiting MPC lag the rule's convergence. On the standard consumer, at HARK's
     defaults and its default tolerance of 10⁻⁶, `hNrm` is 44.99 against its limit of 50.50, and c above the grid is off
     by 0.0115 at m = 60 and 0.035 at m = 100, against less than 4·10⁻⁵ within the grid. the buffer-stock families'
@@ -92,7 +92,7 @@ writes the buffer-stock families' unemployment event as a state.
 
 ## The adapter
 
-The adapter is [`schemas/adapters/hark/`](../adapters/hark/README.md). In this stone's terms:
+The adapter is [`harness/adapters/hark/`](../harness/adapters/hark/README.md). In this stone's terms:
 - **Encode.** The lexicon's names. The chain and the income process are the adapter's, with HARK's constructors for both
   switched off, and HARK's own income inputs are placeholders. The settings it passes are its own, not HARK's defaults:
   - `aXtraMin` = 10⁻⁶;
@@ -145,7 +145,7 @@ Markov rule. Read at `4c285e86`:
 
 ## The ontology's terms in HARK
 
-The [ontology of buffer-stock models](../../ontologies/buffer-stock-models/README.md) names no toolkit. What it said
+The [ontology of buffer-stock models](../ontologies/buffer-stock-models/README.md) names no toolkit. What it said
 about HARK until 2026-11-01 is here: HARK's names for its terms, and where HARK departs from them. Both were read on
 HARK's main branch at `4c285e86`, of 2026-10-07, which the links below cite; a term is named by its row in the ontology.
 The departures keep the identifiers they had there, which the ontology now lists as retired.
@@ -306,10 +306,10 @@ The departures keep the identifiers they had there, which the ontology now lists
   untruncated toy, and the toy's third), the Markov rule agreed with the standard consumer's on the same nodes to
   2.3·10⁻¹⁴ relative or better, and the two employment states' rules were identical. Every number in the adapter's files
   agreed with the benchmark emitter's files to 2.2·10⁻¹² relative and 9.2·10⁻¹³ absolute, and each file passes
-  `check.py --verify-results` ([the finding](../records/findings/2026-10-21_hark-markov-for-bst1.md)).
+  `check.py --verify-results` ([the finding](../schemas/records/findings/2026-10-21_hark-markov-for-bst1.md)).
 - **The emitter's files** themselves, written with the standard consumer, validate and pass the checker: the first two
   levels of the three members and the toy's third, written on 2026-10-20
-  ([the emitter's ladder](../records/findings/2026-10-20_emitter-ladder.md)), and the toy's fourth, rerun on 2026-10-21.
+  ([the emitter's ladder](../schemas/records/findings/2026-10-20_emitter-ladder.md)), and the toy's fourth, rerun on 2026-10-21.
 - **A second HARK implementation** of the same model is in QuantEcon's community library of baseline models, at
   `solutions/buffer-stock/001-hark-egm/`. QuantEcon/community-library#5 added it as `projects/HARK/buffer-stock/`, and
   #15 moved it there. It uses HARK alone, at `econ-ark` 0.17.1. Its checks include an independent endogenous-grid solver

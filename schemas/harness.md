@@ -12,7 +12,7 @@ The owner set out the project as four pieces on 2026-11-02:
 2. **Schemas** of the models and of the experiments every toolkit is to perform: the families, their parameter, request
    and results files, and now the experiment files.
 3. **A Rosetta Stone for each toolkit**: how its names and methods map onto the ontology and the schemas, and where it
-   departs from them ([`rosetta/`](rosetta/README.md): HARK, dolo and QuantEcon's JAX code).
+   departs from them ([`rosetta/`](../rosetta/README.md): HARK, dolo and QuantEcon's JAX code).
 4. **A harness** that runs every toolkit on every experiment, checks the results and compares them.
 
 The **adapters** join the third piece to the fourth. A stone states a toolkit's mapping in words and cards; its adapter
@@ -31,7 +31,7 @@ whole arrangement is what other fields call a model intercomparison:
 ## What exists to build on
 
 - **Two adapters** with the same command line, HARK's and dolo's, sharing their toolkit-neutral code in
-  [`adapters/common.py`](adapters/common.py). On the same member, level and request they solve on the same nodes and
+  [`adapters/common.py`](../harness/adapters/common.py). On the same member, level and request they solve on the same nodes and
   savings grids.
 - **The checker:** `check.py <member> --verify-results <results.json>`.
 - **The restrained-limit experiment's** request files, comparison scripts, and an experiment file.
@@ -59,13 +59,13 @@ adapters keep sharing `common.py`'s toolkit interface, which is a convenience an
 
 ```yaml
 hark:
-  adapter: schemas/adapters/hark/adapter.py
-  stone: schemas/rosetta/hark.md
+  adapter: harness/adapters/hark/adapter.py
+  stone: rosetta/hark.md
   environment: harness/envs/hark      # pyproject.toml and uv.lock: Python 3.12, HARK at 11852805, and the rest
   levels: {low: 1, medium: 2, high: 3}
 dolo:
-  adapter: schemas/adapters/dolo/adapter.py
-  stone: schemas/rosetta/dolo.md
+  adapter: harness/adapters/dolo/adapter.py
+  stone: rosetta/dolo.md
   environment: harness/envs/dolo      # Python 3.11, dolo 0.4.9.20 with dolang 0.0.20, and the rest
   levels: {low: 1, medium: 2, high: 3}
 ```

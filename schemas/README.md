@@ -89,9 +89,9 @@ Shared by every family:
 - [`jacobians.md`](jacobians.md): the interface every toolkit follows for its sequence-space Jacobians in the
   toy-hafiscal experiment, approved on 2026-11-01: the results schema's key `jacobians`, which `checker/jacobians.py`
   verifies.
-- [`rosetta/`](rosetta/README.md): the Rosetta Stones, one for each toolkit, which say how the toolkit solves a family's
+- [`../rosetta/`](../rosetta/README.md): the Rosetta Stones, one for each toolkit, which say how the toolkit solves a family's
   members as the stage file states them; begun for the buffer-stock families with HARK and QuantEcon's JAX code.
-- [`adapters/`](adapters/README.md): the adapters, one for each toolkit, which read a parameter file, solve the member with
+- [`../harness/adapters/`](../harness/adapters/README.md): the adapters, one for each toolkit, which read a parameter file, solve the member with
   the toolkit and write its results file; HARK's for the buffer-stock families first.
 
 The four buffer-stock families, which replaced `bst/1` on 2026-11-01, one for each borrowing-constraint scenario

@@ -1,7 +1,7 @@
 """Tests for dolo's adapter, in the environment of dolo's release (README.md):
 
     uv run --python 3.11 --with dolo==0.4.9.20 --with jsonschema --with pyyaml --with referencing --with pytest \\
-        python -m pytest -q schemas/adapters/dolo/test_adapter.py
+        python -m pytest -q harness/adapters/dolo/test_adapter.py
 
 The restrained member is checked against HARK's committed results file, so that the two toolkits agree; the toy and the
 library are solved and verified by the checker; and the restrained-limit suite converges as BST's proposition says.
@@ -21,7 +21,7 @@ import adapter  # noqa: E402
 
 SCHEMAS = adapter.SCHEMAS
 BST = SCHEMAS / "bst"
-SUITE = BST / "suites" / "restrained-limit"
+SUITE = BST / "experiments" / "restrained-limit"
 HARK_RUN = SCHEMAS / "records" / "findings" / "2026-11-01_restrained-limit-suite-hark" / "results"
 
 

@@ -4,7 +4,7 @@ The adapter solves a member of a buffer-stock family with HARK's MarkovConsumerT
 of comparison points (generated from a level-1 solution when none is given), a method file, a settings file and
 `results.json`, which it validates against `bst/results.schema.json`. The checker then verifies the report:
 
-    python ../../checker/check.py <member.yaml> --verify-results <out>/results.json
+    python ../../../schemas/checker/check.py <member.yaml> --verify-results <out>/results.json
 
 How the member is solved.
   1. The checker reads the member: its hash and its laws, the stated member.
@@ -176,7 +176,7 @@ METHODS = [
 class HarkToolkit:
     """HARK's side of the adapter (common.py, "The Toolkit protocol")."""
     name = "HARK"
-    driver = f"schemas/adapters/hark/adapter.py {ADAPTER_VERSION}"
+    driver = f"harness/adapters/hark/adapter.py {ADAPTER_VERSION}"
     description = __doc__.splitlines()[0]
     representation = ("the unemployment event a state of a chain with identical rows; the newborn draws the employed "
                       "branch; the natural limit from the nodes' lowest values, as HARK computes it")

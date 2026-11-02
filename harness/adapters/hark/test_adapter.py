@@ -1,7 +1,7 @@
 """The standing check of HARK's adapter, with HARK at the adapter's pin (README.md):
 
     uv run --with "econ-ark @ git+https://github.com/llorracc/HARK.git@1185280590b21fe2ddac80cadcfea66476e45380" \
-        --with sympy --with jsonschema --with pyyaml --with scipy --with referencing --with pytest pytest -q schemas/adapters/hark
+        --with sympy --with jsonschema --with pyyaml --with scipy --with referencing --with pytest pytest -q harness/adapters/hark
 
 The Markov solution on the nonpersistent chain must give the same rule in both employment states and the standard
 consumer's rule on the same nodes, the adapter's results file must validate and pass the checker's verification, a

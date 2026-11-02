@@ -1,7 +1,7 @@
 # dolo's adapter
 
 It solves a member of a buffer-stock family with dolo's endogenous grid method and writes the results file. The Rosetta
-Stone [`../../rosetta/dolo.md`](../../rosetta/dolo.md) sets out how the household is written for dolo and how dolo's
+Stone [`../../rosetta/dolo.md`](../../../rosetta/dolo.md) sets out how the household is written for dolo and how dolo's
 output is read back.
 
 ## Running it
@@ -10,7 +10,7 @@ dolo's release 0.4.9.20 needs Python below 3.12:
 
 ```sh
 uv run --python 3.11 --with dolo==0.4.9.20 --with jsonschema --with pyyaml --with referencing \
-    python schemas/adapters/dolo/adapter.py schemas/bst/artificial/members/toy.yaml --out out --level 1
+    python harness/adapters/dolo/adapter.py schemas/bst/artificial/members/toy.yaml --out out --level 1
 uv run --with jsonschema --with pyyaml --with scipy --with referencing \
     python schemas/checker/check.py schemas/bst/artificial/members/toy.yaml --verify-results out/results.json
 ```

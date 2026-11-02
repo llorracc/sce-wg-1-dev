@@ -1,4 +1,4 @@
-"""The standing check of the Rosetta Stones in schemas/rosetta/.
+"""The standing check of the Rosetta Stones in rosetta/.
 
     uv run --with jsonschema --with pyyaml --with scipy --with numpy --with pytest pytest -q schemas/checker
 
@@ -72,7 +72,7 @@ def parameter_keys() -> set[str]:
 
 def lexicon_rows(stone: str) -> list[str]:
     """The first column of each row of the stone's lexicon table."""
-    text = (SCHEMAS / "rosetta" / f"{stone}.md").read_text(encoding="utf-8")
+    text = (SCHEMAS.parent / "rosetta" / f"{stone}.md").read_text(encoding="utf-8")
     section = text.split("## The lexicon", 1)[1].split("\n## ", 1)[0]
     rows = [line for line in section.splitlines() if line.startswith("| ") and not line.startswith("|---")]
     return [row.split("|")[1] for row in rows[1:]]  # the first row is the header
@@ -105,7 +105,7 @@ def test_every_parameter_key_has_a_row(stone):
 
 @pytest.mark.parametrize("stone", STONES)
 def test_the_cards_carry_a_card_s_fields_and_the_stage_s_targets(stone):
-    cards = yaml.safe_load((SCHEMAS / "rosetta" / f"{stone}.cards.yaml").read_text(encoding="utf-8"))
+    cards = yaml.safe_load((SCHEMAS.parent / "rosetta" / f"{stone}.cards.yaml").read_text(encoding="utf-8"))
     assert set(cards) == {"toolkit", "handlers", "methods", "evidence", "examples"}
     assert {"package", "repository", "read_at"} <= set(cards["toolkit"])
     targets = method_targets()

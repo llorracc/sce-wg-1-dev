@@ -38,7 +38,7 @@ from scipy.sparse.linalg import spsolve
 from scipy.special import logsumexp, ndtr, ndtri
 
 HERE = pathlib.Path(__file__).resolve().parent
-SCHEMAS = HERE.parent
+SCHEMAS = HERE.parent.parent / "schemas"
 PROBS = ["0.01", "0.05", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "0.95", "0.99", "0.999", "1"]
 REQUEST_U = ["0.01", "0.05", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "0.95", "0.99"]
 ABOVE_99 = [1.5, 2.0, 4.0, 8.0]          # the request's points above the 99th percentile, as multiples of it

@@ -7,7 +7,7 @@ and when two statements of a model are the same. Its primary source is Carroll a
 Buffer Stock Saving* (BST), cited by the anchors of [its published page](https://llorracc.github.io/BufferStockTheory/).
 Where another paper, a notation or a schema uses BST's terms in another sense, the ontology records the divergence. It
 names no toolkit, and nothing peculiar to how a toolkit solves or simulates a model: how each toolkit holds the terms,
-and where it departs from them, is in that toolkit's [Rosetta Stone](../../schemas/rosetta/README.md).
+and where it departs from them, is in that toolkit's [Rosetta Stone](../../rosetta/README.md).
 
 **Status: draft, version 0.1.0-draft.2.** Its decisions are proposals until the owner rules on them; the ones still open
 are listed [at the end](#open-questions). Its namespace is provisional, as the ontology of probability distributions'
@@ -326,7 +326,7 @@ Each divergence is recorded where it is found, with a checkable source. Each has
 - or an absence.
 
 A toolkit's departures from the terms are not divergences of the ontology: each is recorded in that toolkit's
-[Rosetta Stone](../../schemas/rosetta/README.md).
+[Rosetta Stone](../../rosetta/README.md).
 
 The divergences:
 - **BST and Bellman-SYM:** 𝕄 names BST's cross-sectional mean and the forward distribution operator alike.

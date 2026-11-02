@@ -315,9 +315,9 @@ All four have BST's calibration (its table "Microeconomic Model Calibration"): a
 ξ_u = 0. They differ only in ℘ and the constraint, which the checker's tests confirm. A toolkit passes when each rung's
 rule is closer to the restrained rule than the rung before.
 
-The experiment's file ([`experiment.yaml`](suites/restrained-limit/experiment.yaml), [`../experiments.md`](../experiments.md)), its
+The experiment's file ([`experiment.yaml`](experiments/restrained-limit/experiment.yaml), [`../experiments.md`](../experiments.md)), its
 request files, one per member with the same comparison points, and the comparison scripts are in
-[`suites/restrained-limit/`](suites/restrained-limit/README.md). HARK's adapter ran it at levels 1 to 3 on 2026-11-01
+[`experiments/restrained-limit/`](experiments/restrained-limit/README.md). HARK's adapter ran it at levels 1 to 3 on 2026-11-01
 ([the findings](../records/findings/2026-11-01_restrained-limit-suite-hark/README.md)): the largest gap at level 3 is
 0.137, 0.061 and 0.027 for the three rungs, nearly the same at every level. Solved at level 1 over m in (0, 10], the gap
 was 0.138, 0.061 and 0.027 for the three rungs. It is largest at m ≈ 0.98, the

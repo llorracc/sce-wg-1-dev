@@ -17,7 +17,7 @@ toolkits what CMIP's experiment protocols and data request are to climate models
 and reports, so that the results can be laid side by side.
 
 - [`experiment.schema.json`](experiment.schema.json) is its validator.
-- [`bst/suites/restrained-limit/experiment.yaml`](bst/suites/restrained-limit/experiment.yaml) is the first experiment.
+- [`bst/experiments/restrained-limit/experiment.yaml`](bst/experiments/restrained-limit/experiment.yaml) is the first experiment.
 - [`checker/test_experiment.py`](checker/test_experiment.py) tests both.
 
 ## What an experiment file holds
@@ -69,7 +69,7 @@ A tolerance from a ladder of method-only settings at fixed nodes would be the sh
 
 ## The first experiment: restrained-limit
 
-[`bst/suites/restrained-limit/experiment.yaml`](bst/suites/restrained-limit/experiment.yaml) states BST's "The
+[`bst/experiments/restrained-limit/experiment.yaml`](bst/experiments/restrained-limit/experiment.yaml) states BST's "The
 Liquidity Constrained Solution as a Limit" as [`bst/model.md`](bst/model.md) describes it. It has the suite's four
 members and request files and the levels `low`, `medium` and `high`. It asks for:
 - the rule and its MPCs;
@@ -108,7 +108,7 @@ Adding it is a change to what results carry, to be drawn up with the toolkits an
 The owner's "test suites" of 2026-11-01 are experiments in this document's sense. `numerics.md` used "suite" for
 something else, one method file run under many settings elements, which is now a **ladder**, the word the records already
 used for it (the owner's ruling of 2026-11-02). The records and the findings' folder names keep the old word, as they
-were written; the folder `bst/suites/` becomes `bst/experiments/` with the layout's move ([`harness.md`](harness.md)).
+were written; the folder `bst/suites/` became `bst/experiments/` with the layout's move of 2026-11-02 ([`harness.md`](harness.md)).
 
 ## What the tests establish
 

@@ -20,7 +20,7 @@
     dcterms:source <https://arxiv.org/abs/1905.13045v3> ;
     dcterms:source <https://arxiv.org/abs/2012.00219v2> ;
     dcterms:source <https://github.com/llorracc/HAFiscal-QE/tree/1afdf80de4325e436a0c1c20895f754aefefd38c> ;
-    bsm:sourceDigest "sha256:b9a3a549a38c175c56668cb72dbe9814512808483e26810ea64275177aebeeeb" .
+    bsm:sourceDigest "sha256:8877c421c56dc573e6e7791be9414587dd60b450fe71a54d5b842d49ac05c86b" .
 
 skos:definition a owl:AnnotationProperty .
 skos:notation a owl:AnnotationProperty .

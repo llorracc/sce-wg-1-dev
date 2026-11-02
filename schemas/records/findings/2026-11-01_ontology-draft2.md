@@ -87,7 +87,7 @@ On the owner's ruling of 09:23:51, the ontology lost:
 - the approximation kind of a divergence.
 
 HARK's ten departures from its terms (`BSM_0000138` to `140`, `144`, `154` to `159`) are retired there and kept in
-[HARK's stone](../../rosetta/hark.md#the-ontologys-terms-in-hark) with their sources at HARK's `4c285e86`.
+[HARK's stone](../../../rosetta/hark.md#the-ontologys-terms-in-hark) with their sources at HARK's `4c285e86`.
 
 Three HAFiscal divergences stay, each a use of a term in the HAFiscal paper. The fourth, about its code's cap on β, is
 retired. By the owner's ruling of 10:18:27, the cap is an implementation detail that keeps parameters away from the

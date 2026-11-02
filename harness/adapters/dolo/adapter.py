@@ -5,9 +5,9 @@ the files the schemas ask for: a request file of comparison points (generated fr
 given), a method file, a settings file and `results.json`, validated against `bst/results.schema.json`. The checker then
 verifies the report:
 
-    python ../../checker/check.py <member.yaml> --verify-results <out>/results.json
+    python ../../../schemas/checker/check.py <member.yaml> --verify-results <out>/results.json
 
-How the member is solved (the Rosetta Stone, ../../rosetta/dolo.md).
+How the member is solved (the Rosetta Stone, ../../../rosetta/dolo.md).
   1. The checker reads the member: its hash and its laws, the stated member.
   2. The household, normalized by permanent income, is written as a dolo model file: the state m, the control c, the
      poststate a, the exogenous psi and xi, the transition m' = a R/(G psi') + xi', and the Euler equation with the
@@ -205,7 +205,7 @@ METHODS = [
 class DoloToolkit:
     """dolo's side of the adapter (common.py, "The Toolkit protocol")."""
     name = "dolo"
-    driver = f"schemas/adapters/dolo/adapter.py {ADAPTER_VERSION}"
+    driver = f"harness/adapters/dolo/adapter.py {ADAPTER_VERSION}"
     description = __doc__.splitlines()[0]
     representation = ("the unemployment event an atom of the joint nodes, passed to dolo as a FiniteDistribution; the "
                       "newborn draws the employed branch; the constraint in force the stated member's, a_Art or the "

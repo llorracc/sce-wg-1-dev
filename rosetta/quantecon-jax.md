@@ -108,7 +108,7 @@ cover that member, although the algorithm still runs on nodes.
   - `tol` and `max_iter`;
   - the nodes.
 
-  In the tags of the [method targets](../bst/model.md#method-targets), the solve is `!time-iteration` on
+  In the tags of the [method targets](../schemas/bst/model.md#method-targets), the solve is `!time-iteration` on
   `policy.euler.solve`, with `solve_model` as its handler, and `jnp.interp` is `!Linear` on `policy`. The lecture's own
   expectation is `!monte-carlo`; the adapter replaces it with `!quadrature` over the member's nodes, on `E_ψ_θ_j`.
 - **The adapter** is not written yet. Its legs:

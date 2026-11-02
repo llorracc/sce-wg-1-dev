@@ -12,7 +12,7 @@
 # the public replication package; `mst-2020` and `mst-2022` are papers, cited by their own numbering.
 #
 # The ontology names no toolkit, and nothing peculiar to how a toolkit solves or simulates a model. How each toolkit
-# holds the ontology's terms, and where it departs from them, is in that toolkit's Rosetta Stone (schemas/rosetta/).
+# holds the ontology's terms, and where it departs from them, is in that toolkit's Rosetta Stone (rosetta/).
 
 ontology:
   title: Buffer-stock models

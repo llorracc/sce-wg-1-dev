@@ -25,7 +25,7 @@ import canonical  # noqa: E402
 
 SCHEMA = json.loads((SCHEMAS / "experiment.schema.json").read_text(encoding="utf-8"))
 RESULTS = json.loads((SCHEMAS / "bst" / "results.schema.json").read_text(encoding="utf-8"))
-EXPERIMENTS = sorted((SCHEMAS / "bst" / "suites").glob("*/experiment.yaml"))
+EXPERIMENTS = sorted((SCHEMAS / "bst" / "experiments").glob("*/experiment.yaml"))
 ANCHORS = SCHEMAS.parent / "ontologies" / "buffer-stock-models" / "bst-anchors.txt"
 
 
@@ -123,7 +123,7 @@ def test_each_experiment_is_sound(path):
 
 def test_the_restrained_limit_members_share_their_points():
     # Its first check compares rules member against member, so their request files must ask for the same points.
-    path = SCHEMAS / "bst" / "suites" / "restrained-limit" / "experiment.yaml"
+    path = SCHEMAS / "bst" / "experiments" / "restrained-limit" / "experiment.yaml"
     points = {m["id"]: load(path.parent / m["request_file"])["types"][0]["points"] for m in load(path)["members"]}
     assert len({tuple(p) for p in points.values()}) == 1
 
@@ -148,7 +148,7 @@ BREAKS = {
 
 @pytest.mark.parametrize("name", BREAKS)
 def test_each_break_is_caught(name):
-    path = SCHEMAS / "bst" / "suites" / "restrained-limit" / "experiment.yaml"
+    path = SCHEMAS / "bst" / "experiments" / "restrained-limit" / "experiment.yaml"
     if name == "an anchor BST does not have" and not ANCHORS.is_file():
         pytest.skip("the ontology's list of BST's anchors is not on this branch")
     experiment = load(path)

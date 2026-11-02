@@ -41,7 +41,7 @@ handlers:
       E_ψ_θ_j: {status: honours, reason: "egm takes the discretized process dp as an argument, so the member's nodes and weights are summed as given"}
       cntn_to_dcsn.value: {status: absent}
     adapter_contract:
-      status: "in use: schemas/adapters/dolo/adapter.py"
+      status: "in use: harness/adapters/dolo/adapter.py"
       encode:
         model_file: {from: "the member's parameters, one file per type; the exogenous block a placeholder"}
         dp: {representation: "FiniteDistribution of the joint (psi, xi) nodes: law_nodes, then joint_shocks, as HARK's adapter builds them"}
@@ -77,7 +77,7 @@ evidence:
   smoke_test: "dolo's own consumption_savings_iid.yaml solved by egm in the pinned environment: 475 iterations, c = w below the kink"
   recasting: "the recast model solved for bst-restrained and bst-p-zero-0.005 on the schemas' nodes: within 6e-5 of HARK's adapter at the experiment's common points for m up to 20, at matching nodes (7 or 31) and 1200 savings points; exact below the restrained kink"
   verify_results: "the adapter's files pass check.py --verify-results for the restrained-limit experiment's four members at levels 1 to 3, and for toy and library at level 1"
-  cross_toolkit: "the restrained-limit experiment against HARK's adapter on the same nodes and grids (records/findings/2026-11-01_restrained-limit-suite-dolo/toolkits.md): rules within 2.4e-5 for m up to 20 at level 3, the same kink, populations and convergence"
+  cross_toolkit: "the restrained-limit experiment against HARK's adapter on the same nodes and grids (schemas/records/findings/2026-11-01_restrained-limit-suite-dolo/toolkits.md): rules within 2.4e-5 for m up to 20 at level 3, the same kink, populations and convergence"
   correctness: none
 
 examples: []
