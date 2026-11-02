@@ -1,16 +1,16 @@
-# Numerical methods: methods, settings and suites
+# Numerical methods: methods, settings and ladders
 
 Draft; see the [README](README.md).
 
 A parameter file states a model and holds nothing numerical. A toolkit's numerics go in three other kinds of file, each
 with its own schema. The split exists so that one method can be fixed and run under many settings. For instance, a whole
-set of grid sizes and grid placements can run in parallel, and the suite of results then shows how each reported
+set of grid sizes and grid placements can run in parallel, and the ladder of results then shows how each reported
 quantity depends on each numerical choice.
 
 ## What the schemas prescribe, and what they do not
 
 The schemas state the problem and nothing about how it is solved. A method file and a settings file are a toolkit's own
-record of what it did, stated so that a results file can be identified and so that a suite can show how each quantity
+record of what it did, stated so that a results file can be identified and so that a ladder can show how each quantity
 converges; nothing in them is prescribed by the schemas, neither a discretization of a law, nor a grid, nor a
 quadrature, nor a form for any of them. What a toolkit must do is solve the problem it is handed and report, in the
 results file, what it solved: the expectations the family names, evaluated under its own approximation of the laws;
@@ -22,7 +22,7 @@ Two kinds of setting, as descriptions and not as requirements. A **model-changin
 the number and placement of a shock's nodes, a truncation, the discretization of a level law. A **method-only** setting
 alters only how the effective member's solution is approximated: the asset grid, the interpolation, the solver's
 tolerance, the histogram of the stationary population, a simulation's sample size. Along a ladder the first kind
-converges in the reported expectations and the second in the solution, and a suite's report reads the two separately.
+converges in the reported expectations and the second in the solution, and a ladder's report reads the two separately.
 The method on `diagnostics.expectation` states its own precision in the results file, since the diagnostics are computed
 against the stated member's law.
 
@@ -98,9 +98,9 @@ settings:
   histogram_points: 2000
 ```
 
-## Suite file
+## Ladder file
 
-A suite file names one method file and a set of settings elements, as an explicit list or as the product of value lists
+A ladder file names one method file and a set of settings elements, as an explicit list or as the product of value lists
 over named settings. The other settings take one shared value.
 
 ```yaml
@@ -115,7 +115,7 @@ named:
   high: {grid_points: 400, nodes_per_shock: 11}
 ```
 
-- Each element is one independent run, so a suite runs in parallel.
+- Each element is one independent run, so a ladder runs in parallel.
 - The optional precision levels `low`, `medium` and `high` are named elements.
 - The element's hash is taken over its resolved values, the fixed values merged with the element's own.
 
@@ -127,7 +127,7 @@ A results file records:
 - the settings element's hash;
 - the request file's hash (the comparison points).
 
-Results from one suite share the first two hashes and differ in the third. Gathering them shows how each quantity
+Results from one ladder share the first two hashes and differ in the third. Gathering them shows how each quantity
 converges with each setting. A comparison of two toolkits takes its tolerances from that measured convergence, not from
 fixed numbers.
 

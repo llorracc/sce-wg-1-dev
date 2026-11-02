@@ -91,5 +91,6 @@ shortest rule's points.
 
 ## Pending
 
-- The other toolkits' runs on the same request files, beginning with dolo's adapter once it exists.
+- The other toolkits' runs on the same request files. dolo's followed the same evening and agrees with this one
+  (`../2026-11-01_restrained-limit-suite-dolo/README.md`), where the page's version 2, with both toolkits, is built.
 - A smaller fourth rung, if the owner wants the last gap smaller (deferred follow-ups).

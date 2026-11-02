@@ -54,7 +54,7 @@ adapter passes no artificial constraint for it. A member of `bst-zero-infima/1` 
 0, which main would otherwise miss, taking a negative limit from the lowest nodes. The adapter re-pins to the first HARK
 release that includes both.
 
-**What the adapter computes itself:**
+**What the adapter computes itself,** with the code it shares with dolo's adapter, [`../common.py`](../common.py):
 - the conditions and statuses, through the checker's arithmetic on the effective member's expectations. HARK has no
   condition checks or targets for its Markov consumer.
 - the stationary population: a lottery onto an asset grid with mortality and newborn replacement, and Harmenberg's

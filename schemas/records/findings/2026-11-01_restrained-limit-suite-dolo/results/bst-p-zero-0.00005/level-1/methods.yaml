@@ -1,0 +1,8 @@
+methods:
+- {'on': policy.euler.solve, method: '!time-iteration', handler: 'dolo:egm'}
+- {'on': policy, method: '!Linear', handler: 'adapter:linear-through-dolo-node-values-with-kink'}
+- {'on': E_ψ_θ_j, method: '!quadrature', handler: 'adapter:equiprobable-exact-mean-nodes-as-finite-distribution'}
+- {'on': cntn_to_dcsn.value, method: 'none: not computed'}
+- {'on': arvl_to_dcsn, method: '!histogram', handler: 'adapter:equiprobable-exact-mean-nodes'}
+- {'on': population.distribution, method: 'adapter:lottery-histogram-linear-solve'}
+- {'on': diagnostics.expectation, method: 'adapter:gauss-legendre-log-support-split-at-kink'}

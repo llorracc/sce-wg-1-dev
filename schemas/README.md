@@ -38,7 +38,13 @@ The names the validators fix, and the conventions they follow, are registered in
 - **Method file:** the algorithm chosen for each part of the model, with no numerical values.
 - **Method registry:** the definitions of the methods, each with its contract and the settings it reads.
 - **Settings file:** plain values for the settings that a method file's methods read.
-- **Suite:** one method file run under many settings elements, so that results show how each quantity converges.
+- **Ladder:** one method file run under many settings elements, so that results show how each quantity converges.
+  Called a suite until 2026-11-02.
+- **Experiment:** what every toolkit is to do with some members, and what the results must show, stated in an
+  experiment file ([`experiments.md`](experiments.md)). The restrained-limit and toy-hafiscal experiments were
+  called test suites until 2026-11-02.
+- **Harness:** the program that runs every toolkit on an experiment through its adapter, verifies the results files and
+  evaluates the experiment's checks ([`harness.md`](harness.md), approved 2026-11-02, not yet built).
 - **Request file:** the comparison points at which a results file reports, kept apart from the parameter file so that the
   model's hash does not change.
 - **Validity condition:** a condition on the parameters that a member must meet to be accepted at all.
@@ -74,9 +80,14 @@ Shared by every family:
 - [`conventions.md`](conventions.md): the registry of the names the validators fix, with the ontology chart each writes
   and the convention it follows or the reason it departs; the laws are charts of the
   [ontology of probability distributions](../ontologies/probability-distributions/).
-- [`numerics.md`](numerics.md): method files, settings files and suites.
+- [`numerics.md`](numerics.md): method files, settings files and ladders.
+- [`experiments.md`](experiments.md): the experiment file, which states what every toolkit is to do with some
+  members and what the results must show; [`experiment.schema.json`](experiment.schema.json) is its validator, and
+  restrained-limit is the first experiment.
+- [`harness.md`](harness.md), a plan approved on 2026-11-02 and not yet built: the harness that runs every toolkit on every experiment, verifies the
+  results files and evaluates the experiment's checks.
 - [`jacobians.md`](jacobians.md): the interface every toolkit follows for its sequence-space Jacobians in the
-  toy-hafiscal suite, approved on 2026-11-01: the results schema's key `jacobians`, which `checker/jacobians.py`
+  toy-hafiscal experiment, approved on 2026-11-01: the results schema's key `jacobians`, which `checker/jacobians.py`
   verifies.
 - [`rosetta/`](rosetta/README.md): the Rosetta Stones, one for each toolkit, which say how the toolkit solves a family's
   members as the stage file states them; begun for the buffer-stock families with HARK and QuantEcon's JAX code.
@@ -93,9 +104,9 @@ The four buffer-stock families, which replaced `bst/1` on 2026-11-01, one for ea
 - [`bst/results.md`](bst/results.md): the results schema the four share, with the stationary population, welfare and
   marginal welfare, and the diagnostics; [`bst/results.schema.json`](bst/results.schema.json) is its validator.
 - [`bst/parameters.common.schema.json`](bst/parameters.common.schema.json): the parameter definitions the four share.
-- Two test suites for every toolkit's solution ([`bst/model.md`](bst/model.md)): the restrained-limit suite, BST's
+- Two experiments for every toolkit's solution ([`bst/model.md`](bst/model.md)): the restrained-limit experiment, BST's
   liquidity-constrained solution as a limit, with three `bst-natural/1` members with BST's calibration and ℘ falling
-  and the restrained consumer in `bst-artificial/1`; and the toy-hafiscal suite, a `bst-artificial/1` member whose three
+  and the restrained consumer in `bst-artificial/1`; and the toy-hafiscal experiment, a `bst-artificial/1` member whose three
   discount-factor types HARK and HAFiscal estimate, which every toolkit solves, simulates and differentiates.
 - One folder for each family, each with its parameter file's validator (`parameters.schema.json`), its stage file in
   Bellman-SYM under `bellman/`, and its members under `members/`. The two principal families' folders are in `bst/`:
@@ -130,6 +141,6 @@ Design notes:
   models, the family `bst-markov_ui-and-agg/1` it proposed (retired on 2026-11-01), and the test suite over members,
   methods and settings.
 
-Not yet written: the validators for the method, settings, suite and request files; the method registry; and the checker's
+Not yet written: the validators for the method, settings, ladder and request files; the method registry; and the checker's
 reading of a results file's values against the request file's points. Its reading of a results file's report on the
 effective member, the expectations, the factors, the verdicts, the statuses and the derived parameters, is written.

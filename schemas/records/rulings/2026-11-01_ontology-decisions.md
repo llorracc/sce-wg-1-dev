@@ -155,6 +155,14 @@ saving time ended at 02:00 that morning). His words are kept outside this public
 - **18:22:40, the result shown graphically:** an artifact showing the four rules, since numerical results are not nearly as
   striking as the picture. Published as the page "The Restrained Limit".
 - **18:28:59, its source into the findings record, and "memorialize".**
+- **18:43:23, a second toolkit before the toy-hafiscal estimation:** whether another toolkit, probably dolo, can produce
+  results and figures like HARK's for the restrained-limit suite; a plan first.
+- **18:46:57, dolo's Rosetta Stone first,** stating dolo's capabilities against the ontology and the schemas, starting
+  from dolo's own i.i.d. buffer-stock model solved by the endogenous grid method. The plan approved at 19:05:20: the
+  stone, a probe, an adapter sharing the HARK adapter's toolkit-neutral code, the suite's runs, a comparison across
+  toolkits, and the page extended; a pause after the stone.
+- **19:19:24, past the pause: dolo's adapter to go ahead.** The rest of the plan carried out: the adapter, the
+  suite's runs, the comparison and the page's version 2 (the journal and the findings of dolo's run).
 
 **What stays open:**
 - HARK's adapter writing the Jacobians, from a branch carrying #1863, once the toy-hafiscal member exists; where the target 6.60 is computed; the estimation itself, which HAFiscal's tools do on the owner's word in that

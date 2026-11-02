@@ -1,6 +1,6 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 18:30 on 2026-11-01: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two test suites; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit suite run with HARK; the ontology at draft.2, naming no toolkit"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 10:37 on 2026-11-02: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two test suites; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit suite run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema drafted and the harness plan approved, with the words experiment and ladder; the ontology at draft.2, naming no toolkit"
 metadata:
   type: project
 ---
@@ -182,7 +182,9 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
   consumer with `bst/1` as the nonpersistent chain, starts from the benchmark's emitter with its private material taken
   out, and records neither the machine's name nor its operating system. Merged as #8 after passing its gate (the
   findings on HARK's Markov consumer), pinned to #1858's commit; since #12 it pins #1862's, stacked on it, whose solvers
-  compute a `natural` member's limit from the laws' infima, the stated `a_Nat`.
+  compute a `natural` member's limit from the laws' infima, the stated `a_Nat`. dolo's adapter followed on 2026-11-01,
+  on dolo's release 0.4.9.20 and its `egm`, with the toolkit-neutral code of both in `adapters/common.py`; it has run
+  the restrained-limit suite and agrees with HARK's (the findings of that run).
 
 **The emitter** (the HAFiscal-Latest session).
 - Its ladder of 2026-10-20 and the rerun of the toy's fourth level on 2026-10-21 wrote eight results files. All of them
@@ -220,11 +222,12 @@ Registering `w3id.org/sce` is not raised before a pull request from this fork is
 
 **Next work:**
 - HARK's adapter writing the Jacobians block, from a branch carrying #1863, once the toy-hafiscal member exists;
-- the other toolkits' runs of the restrained-limit suite, dolo's first;
-- the Markov family (ruled 21:42:05 on 2026-10-22), in collaboration with the HARK and HAFiscal sessions: its results
-  document, validator and verification next, to the scope of 22:11:25, then HARK's adapter for its chains; its
-  parameter validator, first members and checker are merged (#13);
-- dolo's adapter, written from the schemas, and the first comparison of two toolkits' results files;
+- the harness, approved on 2026-11-02 ([`../../harness.md`](../../harness.md)): first the layout's move, as one commit
+  with nothing else; then the registry with a lock file per toolkit, and the runner, accepted when it reproduces the
+  committed results files at `low`; then the comparator. The experiment schema and its first experiment are drafted
+  and approved ([`../../experiments.md`](../../experiments.md));
+- the proposal to the working group's repository, whose trigger, dolo's adapter and the first comparison of two
+  toolkits' results files, is met as of 2026-11-01 (deferred follow-ups); the owner's to start;
 - the validators for the method, settings and request files; the survey's other classes;
 - the toy's level-4 gate run for the adapter.
 

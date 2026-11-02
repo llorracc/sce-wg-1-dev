@@ -1,0 +1,83 @@
+# dolo: a Rosetta Stone for the buffer-stock families, as cards in the field names of Project Bellman's Rosetta stone.
+# Draft, 2026-11-01. The toolkit's side only: the operator's side is Bellman's to fill. The recasting, the lexicon, the
+# departures and the sources are in dolo.md. Values such as "!quadrature" are Bellman's method tags, quoted so that YAML
+# does not read them as tags; "on" is quoted because YAML 1.1 reads a bare on as true. A method entry lists only the
+# settings its tag names, unless it names a handler that reads the rest. The settings' shared names follow numerics.md
+# where it has them, and are provisional until the method registry is written.
+
+toolkit:
+  package: "dolo, EconForge's language and solvers for dynamic models, with dolang"
+  repository: "https://github.com/EconForge/dolo.py"
+  import_root: "dolo (dolo.algos.egm, dolo.numeric.distribution)"
+  read_at: {release: "0.4.9.20", tag: v0.4.9.20, commit: d782336b, python: "3.11", master_seen: 33f873ee}
+
+handlers:
+  - id: dolo.algos.egm.egm
+    calls:
+      - "dolo.yaml_import(path) of the recast model file (dolo.md, \"The recasting\")"
+      - "grid, _ = model.discretize(): the uniform grid of m from domain and options.grid"
+      - "dp = FiniteDistribution(points, weights): the member's joint nodes of (psi, xi)"
+      - "egm(model, grid=grid, dp=dp, a_grid=a_grid, η_tol=tol, maxit=maxit), with standard output silenced"
+    target: policy.euler.solve
+    scope: whole stage
+    transition_alignment: model_locked      # half_transition m = a R/(G psi') + xi' is the stage's arvl_to_dcsn
+    single_step: needs_wrapper              # egm iterates to convergence
+    argument_map:
+      "crra": "rho"
+      "types[].beta": "beta, one model per type"
+      "survival": "L, in the expectation as beta*L"
+      "return": "R"
+      "income.growth": "G"
+      "income.permanent_shock": "the first column of dp's points"
+      "income.employed_shock": "the second column of dp's points, scaled by (1 - p xi_u)/(1 - p)"
+      "income.unemployment.prob": "the weight of the unemployment atom in dp"
+      "income.unemployment.income": "the unemployment atom's value of xi"
+      "borrowing_constraint": "a_min, in the bound c <= m - a_min"
+    toolkit_settings_to_kwargs:
+      egm: {solution_tolerance: η_tol, max_iterations: maxit, savings_grid: a_grid}
+      model_file: {grid_max: "domain m upper bound", grid_points: "options.grid orders"}
+    interior_policy:                        # what this whole-stage handler does with each part it covers
+      policy: {status: requires_own_handler, reason: "egm returns a cubic DecisionRule resampled on the model's uniform grid, which rounds the kink; the adapter reads it linearly through the node values, with the kink's point"}
+      E_ψ_θ_j: {status: honours, reason: "egm takes the discretized process dp as an argument, so the member's nodes and weights are summed as given"}
+      cntn_to_dcsn.value: {status: absent}
+    adapter_contract:
+      status: "in use: schemas/adapters/dolo/adapter.py"
+      encode:
+        model_file: {from: "the member's parameters, one file per type; the exogenous block a placeholder"}
+        dp: {representation: "FiniteDistribution of the joint (psi, xi) nodes: law_nodes, then joint_shocks, as HARK's adapter builds them"}
+        a_grid: {from: "a_Art for an artificial member, else just above the natural limit"}
+      neutralization: "none needed: dolo's transition and Euler equation carry R/(G psi') and (G psi')^(-rho) as written"
+      decode:
+        rule: {kind: primary, note: "sol.dr's values at its uniform grid's nodes, read linearly, with the kink's point from the Euler equation at a_min; evaluated at the request's points"}
+        convergence: {kind: primary, from: "sol.a_converged and sol.err"}
+        mpc: {kind: derived, from: "the slope of the linear rule's segment"}
+        value: {kind: derived, from: "not computed: egm gives no value function"}
+        conditions: {kind: derived, from: "the shared code of the adapters, on the nodes"}
+        population: {kind: derived, from: "the shared lottery of the adapters, with deaths and the family's newborns"}
+      inverse_data: ["the savings grid", "the uniform grid of m", "the nodes and their weights"]
+      verify: {region: "m up to 20 at the request's points", tolerance: "5e-4 against HARK's adapter at level 1, in the adapter's test", boundary: "the kink, within 1e-4"}
+      settings_map:
+        a_grid: {semantics: "the savings grid on which egm solves; from a_min for an artificial member"}
+        grid_points: {semantics: "the number of points of the uniform grid of m on which the rule is resampled: 20001, 40001, 80001 and 160001 at levels 1 to 4, a point every 0.005"}
+        grid_max: {semantics: "the top of the uniform grid of m", range: "> 0"}
+        η_tol: {semantics: "the largest change in the endogenous rule and state between iterations at which egm stops", range: "> 0"}
+        maxit: {semantics: "the most iterations"}
+
+methods:
+  - {"on": policy.euler.solve, method: "time iteration by the endogenous grid method", method_tag: "!time-iteration", settings: [solution_tolerance, max_iterations, savings_grid], handler: dolo.algos.egm.egm}
+  - {"on": policy, method: "linear through the rule's values on the uniform grid of m, with the kink's point", method_tag: "!Linear", handler: adapter}
+  - {"on": E_ψ_θ_j, method: "a quadrature of the stated laws: the member's nodes with their weights, passed as dp", method_tag: "!quadrature", settings: [nodes_per_shock]}
+  - {"on": cntn_to_dcsn.value, method: "none: the adapter reports welfare as not computed", handler: adapter}
+  - {"on": arvl_to_dcsn, method: "the adapters' shared lottery on an a-grid", method_tag: "!histogram", settings: [histogram_points], handler: adapter}
+  - {"on": population.distribution, method: "the adapters' shared fixed point, with deaths and newborns", handler: adapter}
+  - {"on": diagnostics.expectation, method: "a finer quadrature of the stated laws than the household's", handler: adapter}
+
+evidence:
+  source_walk: {read_at: "dolo v0.4.9.20 (d782336b), master 33f873ee", on: "2026-11-01"}
+  smoke_test: "dolo's own consumption_savings_iid.yaml solved by egm in the pinned environment: 475 iterations, c = w below the kink"
+  recasting: "the recast model solved for bst-restrained and bst-p-zero-0.005 on the schemas' nodes: within 6e-5 of HARK's adapter at the experiment's common points for m up to 20, at matching nodes (7 or 31) and 1200 savings points; exact below the restrained kink"
+  verify_results: "the adapter's files pass check.py --verify-results for the restrained-limit experiment's four members at levels 1 to 3, and for toy and library at level 1"
+  cross_toolkit: "the restrained-limit experiment against HARK's adapter on the same nodes and grids (records/findings/2026-11-01_restrained-limit-suite-dolo/toolkits.md): rules within 2.4e-5 for m up to 20 at level 3, the same kink, populations and convergence"
+  correctness: none
+
+examples: []

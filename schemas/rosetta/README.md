@@ -8,7 +8,9 @@ results file, the checker verifies each file, and the files are compared. The fi
 families:
 - [`hark.md`](hark.md): HARK's `MarkovConsumerType`, as [HARK's adapter](../adapters/hark/README.md) uses it;
 - [`quantecon-jax.md`](quantecon-jax.md): the JAX code of QuantEcon's lecture on the income fluctuation problem with
-  stochastic returns.
+  stochastic returns;
+- [`dolo.md`](dolo.md): dolo's endogenous grid method, `dolo.algos.egm.egm`, with the household recast as a dolo model
+  and the member's nodes passed to it, checked against HARK's adapter on the restrained-limit experiment.
 
 ## The hub and the spokes
 
@@ -97,7 +99,7 @@ reviews of this draft.
   - Each toolkit's ladder of levels gives an error estimate e for each quantity.
   - Two toolkits agree when |A − B| ≤ k(e_A + e_B), with k about 2 or 3.
   - A simulating toolkit adds its sampling standard error, measured across independent panels.
-  - Where the expectation is itself a Monte Carlo mean, its suite varies the number of draws, the seed, the periods and
+  - Where the expectation is itself a Monte Carlo mean, its ladder varies the number of draws, the seed, the periods and
     the households as well as the grid. Otherwise the measured tolerance is too tight, and a difference of method looks
     like a difference of model.
 - **The residuals say whether the same model was solved.** The Euler residual is taken against the stated member's laws,

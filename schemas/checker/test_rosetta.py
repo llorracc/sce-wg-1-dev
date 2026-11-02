@@ -18,7 +18,7 @@ import pytest
 import yaml
 
 SCHEMAS = Path(__file__).resolve().parent.parent
-STONES = ["hark", "quantecon-jax"]
+STONES = ["hark", "quantecon-jax", "dolo"]
 
 # The stage file's parameters, by the symbol the lexicons write them in, the plain text of model.md's notation. A law's
 # spread is found under its shock.

@@ -350,3 +350,72 @@ its memorial).
 - The restrained-limit suite's HARK run is recorded with its comparison, its figure, and the page's source.
 - Open with the owner: the toy-hafiscal estimation, in HAFiscal's session; a smaller fourth rung; `library` against
   v0.1; the push; sharing the page, which is private.
+- **18:43:23.** The owner: before the toy-hafiscal estimation, can another toolkit, probably dolo, reproduce what HARK
+  did? A plan, in plan mode. Two read-only surveys: dolo's capabilities, and what this repository plans for dolo and
+  what a dolo adapter could reuse.
+- **18:46:57.** The owner: a Rosetta Stone for dolo first; find dolo's i.i.d. buffer-stock model solved by EGM. It is
+  `examples/models/consumption_savings_iid.yaml`, solved in `tests/test_egm.py::test_egm_iid`. The surveys find:
+  - dolo's release 0.4.9.20 needs Python below 3.12;
+  - truncation is not in its model-file language, and its equiprobable nodes are bin medians;
+  - `egm` takes the discretized process as an argument and returns a cubic rule on a uniform grid;
+  - `ergodic_distribution` has no deaths or newborns;
+  - earlier dolo dry runs of the HAFiscal benchmark exist outside this repository and, by the ruling of 2026-10-21, are
+    not the adapter's basis.
+- **19:05:20.** The plan approved.
+- **19:05–19:13.** The smoke test, the probe, and the stone:
+  - dolo 0.4.9.20 on Python 3.11.14 solves its own model in 475 iterations;
+  - the household, recast as a dolo model and solved by `egm` on the schemas' own nodes, agrees with HARK's adapter to
+    about 5 · 10⁻⁵ at matching nodes and 1200 savings points, and exactly below the restrained kink
+    (`findings/2026-11-01_dolo-probe/`);
+  - the stone, `rosetta/dolo.md` with its cards, has the recasting, the capabilities against the ontology and the
+    schemas, the lexicon, the departures and the evidence;
+  - `checker/test_rosetta.py` covers it, and its 10 tests pass.
+
+  Paused for the owner before the adapter, as the plan says.
+- **19:19:24.** The owner gives the go-ahead for dolo's adapter.
+- **19:19–19:35.** The shared module. The toolkit-neutral code of HARK's adapter moved, unchanged, into
+  `adapters/common.py`, which both adapters call through `common.run`. Checked:
+  - HARK's adapter, rerun on `bst-restrained` at level 1, wrote results, method and settings files identical byte for
+    byte to the committed ones;
+  - its 8 tests pass.
+
+  dolo's adapter drafted beside it. Its first run of the suite did not finish and was stopped at 19:35.
+- **19:35–19:48.** Two faults in the draft, found by timing its steps separately:
+  - its copy of HARK's savings grid took one logarithm too many, giving NaN, so `egm` never converged. Fixed at 19:45,
+    the grid identical to HARK's at all three levels;
+  - read as `egm`'s cubic spline, the restrained rule's mass at the constraint was 0.166 against HARK's 0.231, with the
+    kink's slopes wrong. The spline rounds the kink. The rule is now read linearly through the spline's node values,
+    with the kink's point from the Euler equation at a = a_min.
+- **19:48–19:54.** The suite with dolo, four members at levels 1 to 3. dolo's adapter tests, 4 of them, pass at 19:51:
+  - the restrained member against HARK's committed file;
+  - `toy` and `library` solved and verified;
+  - the suite's convergence.
+
+  All twelve results files validate and are consistent with their members at 19:53. Both comparisons written:
+  - dolo's own;
+  - the new one across toolkits, `bst/suites/restrained-limit/compare_toolkits.py`.
+
+  The rules agree to about 10⁻⁵ at level 3, falling 3 to 4 times per level. Also equal:
+  - the kink, to 3 · 10⁻⁶;
+  - the mean MPCs, to five digits;
+  - the convergence factors, 2.254 and 2.286 in both
+    (`findings/2026-11-01_restrained-limit-suite-dolo/`).
+- **19:55–20:00.** The page "The Restrained Limit" extended to both toolkits:
+  - a switch, with dolo dashed over HARK;
+  - a panel of |c_HARK − c_dolo|;
+  - a table with both toolkits' numbers.
+
+  At 19:55 its template was found to lack three fixes made before version 1 was published, so version 1 lacked them
+  too (defects). One headless look found two more things, both fixed:
+  - the difference panel drew one-ulp differences below its floor;
+  - a table cell read −0.0%.
+
+  Republished as version 2 at 19:59:55, to the same link. The twelve files verified again at 20:00.
+- **20:00–20:10.** The records brought up to date:
+  - dolo's stone and cards: the linear reading, the adapter in use, the suite's evidence;
+  - HARK's cards' cross-toolkit evidence;
+  - the adapters' READMEs;
+  - the findings README.
+
+  `checker/test_rosetta.py`'s 10 tests pass.
+- **21:04:57.** The owner asks to see the comparison. `toolkits.md` and `toolkits.png` opened in VS Code.

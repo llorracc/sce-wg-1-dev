@@ -162,7 +162,7 @@ which then carries a standard error; u and u′ at the rule need nothing beyond 
 
 ## Diagnostics that need no reference solution (required)
 
-Convergence across a suite shows that a toolkit is stable, not that it is right. These diagnostics test a solution against the
+Convergence across a ladder shows that a toolkit is stable, not that it is right. These diagnostics test a solution against the
 model itself.
 
 **Euler residuals, at each comparison point and for each type.** Let
@@ -208,7 +208,7 @@ margin is within its precision.
 - Each value may carry the toolkit's own error estimate.
 - A simulated value carries its standard error and its sample size.
 - One run, at the toolkit's `high` level, is required; `low` and `medium` are optional. The levels are named elements of a
-  settings suite ([numerical methods](../numerics.md)): settings, not error targets. No level promises a relative error, since
+  settings ladder ([numerical methods](../numerics.md)): settings, not error targets. No level promises a relative error, since
   what a level reaches depends on the method; the first measurement, HARK's equiprobable discretization near the kink, is in
   the [records](../records/findings/2026-10-18_checker-and-emitter.md). The only source of a tolerance is measured
   convergence, as the comparison below says.
@@ -217,7 +217,7 @@ margin is within its precision.
 
 - Two results files are compared only when their parameter-file hashes match.
 - A quantity agrees when the two values differ by no more than its tolerance. The tolerance comes from measured convergence
-  across each toolkit's suite, widened by the standard errors of simulated values.
+  across each toolkit's ladder, widened by the standard errors of simulated values.
 - If two toolkits each converge within their own errors and still disagree, at least one is wrong or is solving a different model.
   The diagnostics above help say which.
 - Two toolkits whose effective members sit on opposite sides of a condition's boundary report opposite verdicts, and

@@ -295,7 +295,7 @@ The community library follows BST's notation: bold ξ for the transitory shock a
 bank balance relative to next period's permanent income, 𝒢 for growth, ℘ for the probability of unemployment, and bold
 letters for levels. It departs in one name: it writes relative risk aversion as γ, where BST and these schemas write ϱ.
 
-## The restrained-limit suite: the liquidity-constrained solution as a limit
+## The restrained-limit experiment: the liquidity-constrained solution as a limit
 
 Every toolkit's solution of the buffer-stock families is to be run on four members that state BST's experiment "The
 Liquidity Constrained Solution as a Limit" (the owner's ruling of 2026-11-01). As the probability ℘ of the zero-income
@@ -315,7 +315,8 @@ All four have BST's calibration (its table "Microeconomic Model Calibration"): a
 ξ_u = 0. They differ only in ℘ and the constraint, which the checker's tests confirm. A toolkit passes when each rung's
 rule is closer to the restrained rule than the rung before.
 
-The suite's request files, one per member with the same comparison points, and the comparison script are in
+The experiment's file ([`experiment.yaml`](suites/restrained-limit/experiment.yaml), [`../experiments.md`](../experiments.md)), its
+request files, one per member with the same comparison points, and the comparison scripts are in
 [`suites/restrained-limit/`](suites/restrained-limit/README.md). HARK's adapter ran it at levels 1 to 3 on 2026-11-01
 ([the findings](../records/findings/2026-11-01_restrained-limit-suite-hark/README.md)): the largest gap at level 3 is
 0.137, 0.061 and 0.027 for the three rungs, nearly the same at every level. Solved at level 1 over m in (0, 10], the gap
@@ -324,9 +325,9 @@ restrained rule's kink, and falls by a factor of about 2.3 for each tenfold fall
 consumer with two states, employed and the zero-income event, whose chain is not persistent. It implements either
 scenario without changing HARK's i.i.d. solver.
 
-## The toy-hafiscal suite: estimated types, steady states and Jacobians
+## The toy-hafiscal experiment: estimated types, steady states and Jacobians
 
-The second suite every toolkit's solution is to be run on is a simplified HAFiscal, `toy-hafiscal`, specified by the
+The second experiment every toolkit's solution is to be run on is a simplified HAFiscal, `toy-hafiscal`, specified by the
 owner on 2026-11-01:
 - **The model.** `bst-artificial/1` with the values of
   [`iid-ui-artificial`](artificial/members/iid-ui-artificial.yaml) for everything but the discount factors: quarterly; unemployment with probability 0.05 every quarter, whatever the last, paying 0.5 of

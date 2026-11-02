@@ -8,7 +8,7 @@ sessions answered, the last two with the identities below measured on HARK's mai
 
 ## What it is for
 
-The [toy-hafiscal suite](bst/model.md) gives every toolkit one `bst-artificial/1` member whose three discount-factor types
+The [toy-hafiscal experiment](bst/model.md) gives every toolkit one `bst-artificial/1` member whose three discount-factor types
 HARK's and HAFiscal's tools have estimated. Each toolkit solves and simulates that member's steady state. It must also
 expose whatever is needed to compute its sequence-space Jacobians (Auclert, Bardóczy, Rognlie and Straub), so that the
 sequence-space exercise can be run on every toolkit's steady state and the answers compared. No toolkit but HARK and
@@ -71,7 +71,7 @@ HAFiscal estimates anything.
 
 ### The required output: the Jacobians and their metadata
 
-A results file of the suite carries, for each requested output o and input i:
+A results file of the experiment carries, for each requested output o and input i:
 - **the matrix:** `J[o][i]`, T × T. Column s is the date at which the perturbed value applies and row t the date of the
   outcome; the news arrives at date 0, with the steady state before it, so column 0 has no anticipation;
 - **by type and in aggregate,** with the weights: each type's share of aggregate permanent income, which for the toy,
@@ -176,7 +176,7 @@ perturbation (for HARK, `calc_impulse_response_manually`, whose dating under `of
   - **the push forward:** Young's lottery. A household's a falls between two neighbouring nodes and is split between
     them in proportion to its distance from each. Mass above a_max is put at a_max and reported, as the results
     schema's coverage asks;
-  - **in the request,** N, a_max and the exponent are stated, so that the suite can change them. The solution's own
+  - **in the request,** N, a_max and the exponent are stated, so that an experiment can change them. The solution's own
     grid, and the shocks' quadrature, stay each toolkit's own;
   - **the outputs' means are exact:** C and Y_hh are the means of the policy's values under the distribution. A toolkit
     that bins an output on a grid of its own, as HARK's lottery does for cNrm and yNrm, reports any mass clipped at that
@@ -213,7 +213,7 @@ Before Jacobians are compared, the steady states are: A_ss, C_ss and the mean MP
 difference in A_ss runs through all of them. Across toolkits, agreement to about 10⁻³ is to be expected, not 10⁻¹⁰.
 
 **The iMPC profile.** The column J^{C,transfer}[·, 0] is the profile of the intertemporal MPC for an infinitesimal
-transfer. It is the suite's iMPC. The estimation's finite-prize profile is not reported by the toolkits (the owner's
+transfer. It is the experiment's iMPC. The estimation's finite-prize profile is not reported by the toolkits (the owner's
 decision).
 
 ### What HARK would need
@@ -221,7 +221,7 @@ decision).
 From the HARK and HARK-dev sessions:
 - the HANK income constructor for `income_scale`, and a short constructor adding x to every transitory atom for
   `transfer`, both with `offset=True`, as is R;
-- the truncated lognormal, which is not on main: HARK would run the suite from a branch carrying open draft #1863, with
+- the truncated lognormal, which is not on main: HARK would run the experiment from a branch carrying open draft #1863, with
   a constructor of about thirty lines combining the truncated laws with the income scale and the transfer. That is the
   one blocker; the rest is adapter code (the HARK session);
 - the types aggregated, by hand or with open #1835;
@@ -234,7 +234,7 @@ From the HARK and HARK-dev sessions:
   does not return; on main an adapter would call SSJutils' private helpers;
 - memory. On the shared grid HARK's per-period transitions are dense, K × K, so one input with three outputs peaked at
   4.9 GiB at T = 100 and 13.8 GiB at T = 300 (the HARK-dev session, measured on HARK main `4c285e86`). That needs a large
-  machine at the suite's T, and sparse arrays in HARK for a model with a discrete state. The toy's i.i.d. unemployment has
+  machine at the experiment's T, and sparse arrays in HARK for a model with a discrete state. The toy's i.i.d. unemployment has
   none.
 
 On the shared grid, with HARK's defaults and the HANK income process, the flow budget closed to 1.5 × 10⁻¹¹, and A_ss
@@ -254,7 +254,7 @@ turn off. The family's newborn does not, so the remaining difference is stated i
    budget close from the file alone and A is the asset the identity's ρ assumes.
 4. **The format:** left to this session: `.npy`, as above.
 5. **The representation:** one distribution grid for every toolkit, as above.
-6. **The finite-prize iMPC:** omitted; the Jacobian's transfer column is the suite's iMPC.
+6. **The finite-prize iMPC:** omitted; the Jacobian's transfer column is the experiment's iMPC.
 7. **The steady state's precision:** 10⁻¹⁰.
 8. **The QuantEcon module:** not restarted. It was listed because the QuantEcon session said implementing the interface
    there would need it; the owner ruled on 2026-10-21 that no QuantEcon module is published and that dolo's is next. So
@@ -265,7 +265,7 @@ turn off. The family's newborn does not, so the remaining difference is stated i
 Drafted after the toolkits confirmed the grid and the format, and approved by the owner.
 
 - **Where it is.** An optional top-level key `jacobians` of a buffer-stock results file, required in the toy-hafiscal
-  suite, validated by [`bst/results.schema.json`](bst/results.schema.json)'s `$defs/Jacobians`. The draft validator it
+  experiment, validated by [`bst/results.schema.json`](bst/results.schema.json)'s `$defs/Jacobians`. The draft validator it
   was drafted as, `bst/jacobians.schema.json`, is folded in, so that one file validates a results file and readers that
   load it alone need no registry.
 - **What it holds:**

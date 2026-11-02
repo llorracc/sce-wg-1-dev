@@ -1,0 +1,17 @@
+rungs_approach_the_limit PASS
+   HARK low                           0.137 0.0606 0.0264 ok
+   HARK medium                        0.138 0.0611 0.0268 ok
+   HARK high                          0.137 0.061 0.0267 ok
+   dolo low                           0.137 0.0607 0.0265 ok
+   dolo medium                        0.138 0.0611 0.0269 ok
+   dolo high                          0.137 0.061 0.0267 ok
+same_effective_member PASS
+   HARK-dolo bst-p-zero-0.005         6.07e-18 3.33e-16 2.22e-16 ok
+   HARK-dolo bst-p-zero-0.0005        6.07e-18 3.33e-16 2.22e-16 ok
+   HARK-dolo bst-p-zero-0.00005       6.07e-18 3.33e-16 2.22e-16 ok
+   HARK-dolo bst-restrained           6.07e-18 3.33e-16 2.22e-16 ok
+toolkits_agree PASS
+   HARK-dolo bst-p-zero-0.005         0.000452 0.000148 3.87e-05 ok
+   HARK-dolo bst-p-zero-0.0005        0.000441 0.000144 3.77e-05 ok
+   HARK-dolo bst-p-zero-0.00005       0.000438 0.000143 3.74e-05 ok
+   HARK-dolo bst-restrained           0.000436 0.000142 3.72e-05 ok

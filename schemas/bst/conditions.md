@@ -250,7 +250,7 @@ Everything above is defined for both, and is decided for each by the same arithm
   population's beside it when the two differ ([results](results.md)), and the population's then decides the conditions
   that are about the stationary population, the GIC-Szeidl, the GIC-Harmenberg, the welfare conditions and the tail
   exponents, while the household's decides the rest, the natural limit and the constraint in force among them.
-- **Admission.** A member is admitted to a suite by the stated member's validity conditions. A toolkit whose effective
+- **Admission.** A member is admitted to an experiment by the stated member's validity conditions. A toolkit whose effective
   member fails one that the stated member passes reports so; the run is read as a discretization too coarse for the
   member, not as a defect of the member.
 

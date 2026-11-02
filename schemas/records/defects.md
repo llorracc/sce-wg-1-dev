@@ -193,3 +193,13 @@ Faults found in this project's own work, with their status.
 - **Mean income taken as one.** The draft and the toy's prize units took mean non-capital income per unit of aggregate
   permanent income as one; with born-employed newborns it is ℒ𝒢 + (1 − ℒ𝒢)κ, 1.000115 for `iid-ui-artificial`
   (HAFiscal-Latest). **Status:** corrected the same afternoon, with ρ written R ℒ and the output Y renamed Y_hh.
+- **The page's first fixes lost before it was published.** At 18:26 on 2026-11-01, three fixes were stated before the
+  page "The Restrained Limit" was published:
+  - the levels-1-and-2 markers of the convergence chart were no longer to be joined into lines;
+  - the y-axis title was to be placed without a workaround;
+  - a line that did nothing was to go.
+
+  They were never written into the template, so version 1, published from it, lacked them, and so does the source kept
+  in `findings/2026-11-01_restrained-limit-suite-hark/page/`. Found at 19:55 while extending the page to dolo.
+  **Status:** fixed in version 2, republished at 19:59:55 from
+  `findings/2026-11-01_restrained-limit-suite-dolo/page/`. HARK's folder keeps version 1's source as it was published.

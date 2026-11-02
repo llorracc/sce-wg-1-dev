@@ -1,7 +1,8 @@
-# The restrained-limit suite
+# The restrained-limit experiment
 
 BST's experiment "The Liquidity Constrained Solution as a Limit", for every toolkit's solution of the buffer-stock
-families ([`../../model.md`](../../model.md), "The restrained-limit suite").
+families ([`../../model.md`](../../model.md), "The restrained-limit experiment"). Its experiment file is
+[`experiment.yaml`](experiment.yaml) ([`../../../experiments.md`](../../../experiments.md)).
 
 - **The members:**
   - [`bst-p-zero-0.005`](../../natural/members/bst-p-zero-0.005.yaml),

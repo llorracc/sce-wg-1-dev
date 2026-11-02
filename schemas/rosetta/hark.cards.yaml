@@ -95,7 +95,7 @@ evidence:
   output_checks: "the adapter asserts that HARK solved with its chain and income process, that the two states' rules and values agree to 1e-12 relative, and that both states' lower limits equal the effective member's constraint in force. Its gate (schemas/adapters/hark/gate.py) measures the Markov rule against the standard consumer's on the same nodes, and its files against the buffer-stock benchmark's emitter's (records/findings/2026-10-21_hark-markov-for-bst1.md)"
   residual_checks: "the Euler residuals reported in each results file"
   verify_results: "the adapter's files pass check.py --verify-results at the first two levels of the toy, the library member and the untruncated toy, and at the toy's third"
-  cross_toolkit: none yet
+  cross_toolkit: "the restrained-limit experiment against dolo's adapter on the same nodes and grids (records/findings/2026-11-01_restrained-limit-suite-dolo/toolkits.md): rules within 2.4e-5 for m up to 20 at level 3, the same kink, populations and convergence"
   correctness: none
 
 examples:
