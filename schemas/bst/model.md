@@ -382,7 +382,17 @@ under that convention is for a slightly different stationary population, so the 
 delivered member, as HARK's adapter solves it with the family's newborn.
 
 Not yet settled:
-- where the 6.60 is computed: the paper states it, and the package's data script does not produce it;
+- where the 6.60 comes from: the paper states it, and the package's data script does not produce it. The model's
+  ratio is the sum of end-of-period assets in levels over the sum of realized quarterly non-capital income in the same
+  quarter (the finding of 2026-11-03), so it is the income measure's mean of a, up to the newborns' employed branch;
+- **the economy's growth.** The published first step's household has 𝒢 = 1, and its economy grows through its
+  newborns, who enter at an aggregate level growing at 1.01^0.25 a quarter while incumbents keep theirs; relative to
+  the current newborn, permanent income falls with age. This member states 𝒢 = 1.0019026 for every household with
+  the newborn at 𝐩 = 1, where it rises with age. The two differ in the household's problem and in the distribution in
+  levels, so the Lorenz fit of one does not transfer to the other. The estimation is to be of the member as stated,
+  which HAFiscal's tools can do (PermGroFac = 1.0019026, PermGroFacAgg = 1, newborns at 1), unless the owner rules
+  that the toy should mirror the published step, which would need a newborn's permanent income stated as a level law
+  with a trend ([the finding](../records/findings/2026-11-03_hafiscal-lorenz-in-levels.md));
 - what a toolkit exposes for the Jacobians, a change to what results carry that is to be drawn up with the toolkits and
   put to the owner before it is made.
 

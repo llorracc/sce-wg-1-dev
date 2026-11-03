@@ -137,6 +137,15 @@ Statistics that need less:
 condition of the simulation phase, below, holds; **marginal welfare** M_i, and its bottom-quartile mean, when the
 marginal condition holds.
 
+**The distribution of permanent income.** The owner asked on 2026-11-02 for a way to calculate permanent income
+inequality, and ruled on 2026-11-03 that the Lorenz curve of permanent income gives it and that nothing is required of
+a member for it. Newborns enter at 𝐩 = 1, so an agent's permanent income is the product of its draws of 𝒢ψ over its
+age, which is geometric, P(age = s) = (1 − ℒ) ℒ^s; the rule plays no part. A member defines the stationary
+distribution of 𝐩 when ℒ < 1, and its Lorenz curve GL(p)/GL(1) when also the mean is finite, ℒ𝒢 < 1, the income
+measure's own condition; otherwise it is reported as `undefined` ([results](results.md)). With ℒ = 1 there is none:
+the cross-section's log permanent income spreads without bound, while the GIC-Szeidl and the GIC-Harmenberg above
+keep the normalized population stationary.
+
 These conditions differ from the GIC-Liv, which concerns aggregate growth, because newborns here enter at 𝐩 = 1, not at
 the population's mean permanent income.
 
@@ -261,4 +270,8 @@ Everything above is defined for both, and is decided for each by the same arithm
   Kesten–Goldie-type result for a multiplicative process killed at rate 1 − ℒ. None is cited yet.
 - **The income measure when ℒ < 1 and ℒ 𝒢 ≥ 1.** The cross-section normalized by aggregate permanent income may still
   converge, to the stationary law of the income-weighted chain, when the GIC-Harmenberg holds. That is unverified.
+- **A newborn at the trend.** A member whose newborns entered at the trend 𝒢^t, the balanced-growth economy of the
+  GIC-Liv, would have permanent income relative to the trend stationary whenever ℒ < 1, with mean one; under the RIC
+  the GIC-Liv is then the income measure's mean condition. The families fix the newborn at 𝐩 = 1. A member key for
+  the choice was proposed on 2026-11-02 and withdrawn on 2026-11-03 with the condition it served.
 - **The boundary cases.** Equality in any condition is left open.

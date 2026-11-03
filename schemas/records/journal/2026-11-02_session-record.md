@@ -133,3 +133,28 @@ its run of the restrained-limit suite, the page's version 2, and the records of 
 - Open with the owner, as at 10:37: the ontology names' hyphens; the three fixes to the stones; the toy-hafiscal
   estimation; a smaller fourth rung; `library` against v0.1; the proposal to the working group; the push; sharing the
   page, which is private.
+- **18:28:43.** The owner asks what the harness gives each toolkit: parameters, not methods or settings. Answered: the
+  parameter and request files are right; the level number and the adapters' shared code are not, since the shared code
+  turns the level into grids, nodes and tolerances and hands both toolkits the same nodes and population method, which
+  is why they agreed to 10⁻⁵.
+- **19:09:13.** The owner adds what the harness should ask (the target, the ergodic and joint distributions, the
+  economy's means and log variances) and that the shared code must not fix the shocks' representation. Answered with
+  what the results schema already holds, three problems (no stationary permanent income without mortality; each new
+  moment's own condition; how the joint is delivered) and five questions.
+- **19:17:06.** The owner is inclined to require mortality sufficient for a stationary distribution of permanent
+  income. Answered with the moment conditions, the checker's closed-form numbers for BST's calibration and the toy, the
+  newborn's two conventions, and four decisions with recommendations (the rulings).
+- **21:00:56.** The owner accepts all four. The revision is written into `bst/conditions.md`, `bst/results.md`,
+  `bst/model.md`, `experiments.md`, `harness.md` and the README as a proposal, with the rulings, this journal and the
+  deferred list, by 21:13; no validator, checker, member or adapter is changed until he has read it.
+- **21:16:02.** The owner asks what the SIC is. Answered.
+- **21:24:16.** The owner chooses the name SPIC, the stationary permanent income condition; the documents and the
+  records renamed by 21:30. He asks whether it needs to go into core BST. Answered: no; it is a statement about the
+  population, vacuous in the paper's own newborn convention, and the ontology can cite the schemas; worth a row in
+  econ-ark's notation registry instead.
+- **21:28:43.** The owner says to add it to the notation registry. No session lives in econ-ark-tools (checked by
+  process and by the session list), so done from here by path: branch `notation-v8.1-spic`, commit `68a242d7` in
+  `/home/shared/github/econ-ark/econ-ark-tools`, unpushed: registry 8.1.0 with the row `stationary-perm-inc-factor`
+  (`\SPIFac` = ℒ𝒢), the defined term SPIC, the changelog, the artifacts regenerated; its three tests pass. The push
+  and the pull request are the owner's.
+

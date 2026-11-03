@@ -33,6 +33,50 @@ this public repository.
 - **11:23:59, the runner:** go ahead with the plan's second stage, the registry, the lock files and the runner. Built
   and accepted by 11:30 ([the findings](../findings/2026-11-02_harness-acceptance/README.md)).
 - **18:24:32, memorialize.** Not a push: pushing stays the owner's to approve.
+- **18:28:43, what the harness gives a toolkit.** Parameters, not methods or settings. The runner as built passes a level
+  number that the adapters' shared code turns into grids, nodes and tolerances, and hands both toolkits the same nodes,
+  grids and population method; a departure from the ruling, to be undone ([`harness.md`](../../harness.md)).
+- **19:09:13, what the harness asks.** The buffer-stock target; the ergodic distributions of m or a and of permanent
+  income, and the joint distributions an economy of these consumers generates, from which population-wide E[c],
+  E[u′(c)], E[a] and E[m], and perhaps their log variances, are computed. The shared code must not insist on one
+  representation of the shocks: the true model has truncated lognormals, which each toolkit represents as it likes,
+  discretized, continuous or otherwise. He asked for discussion before anything was built.
+- **19:17:06, mortality.** The owner was inclined to rule that the framework require a mortality probability sufficient
+  to guarantee a stationary distribution of permanent income. Put to him: existence needs only ℒ < 1, but the stationary
+  distribution has power-law tails, so the moment of order k exists exactly when ℒ𝒢^k E[ψ^k] < 1 with newborns at
+  𝐩 = 1 (ℒ E[ψ^k] < 1 with newborns at the trend); which tail binds, and what 𝒢 means, turns on where newborns enter;
+  BST's annual calibration needs ℒ < 0.971 for a finite mean at 𝐩 = 1 and gives E[𝐩] = 33 at ℒ = 0.97, while the toy
+  passes everything asked but the variance (factor 1.0005). Four decisions were put with recommendations.
+- **21:00:56, the four decisions,** all as recommended:
+  1. the newborn's permanent income is a member-level choice, `one` or `trend`; the toy at `one`, the restrained-limit
+     members at the trend;
+  2. validity: ℒ < 1, and ℒ𝒢 < 1 at `one`; the variance and the marginal-utility conditions are domain rules with
+     statuses;
+  3. the restrained-limit members' ℒ gives a tail exponent of at least 2 with 𝒢 = 1.03 kept: ℒ = 0.98 proposed
+     (exponent 2.57; ℒ = 0.99 sits on the variance's boundary);
+  4. the name: the stationary income condition, SIC, with its moment conditions SIC(k).
+- **21:16:02.** The owner asks what SIC stands for. Answered: the stationary income condition, its factor ℒ𝒢 at `one`
+  and ℒ at the trend, no patience term in it, unlike the GIC-Liv; and the alternative name SPIC.
+- **21:24:16.** The owner chooses **SPIC, the stationary permanent income condition**, with its moment conditions
+  SPIC(k); the documents were renamed at once. He asks whether it needs to be added to core BST; the answer given is in
+  the journal.
+- **21:28:43.** The owner: add the SPIC to econ-ark's notation registry. Done on branch `notation-v8.1-spic` of
+  econ-ark-tools, commit `68a242d7`, unpushed: version 8.1.0, the row `stationary-perm-inc-factor` with `\SPIFac` = ℒ𝒢
+  (ℒ at the trend), the defined term, the changelog. The registry quotes his words of the evening, as its rows do.
+
+  Consequences, written into the documents the same evening as a proposal ([`bst/conditions.md`](../../bst/conditions.md),
+  [`bst/results.md`](../../bst/results.md), [`bst/model.md`](../../bst/model.md), [`experiments.md`](../../experiments.md),
+  [`harness.md`](../../harness.md)): every member carries `newborn: {permanent_income: one | trend}`, so every hash
+  changes; BST's baseline and `library` (the same model as `bst-p-zero-0.005`, hash `b2e365cd…`) are out as written,
+  `library` retired; the restrained-limit experiment's four members take ℒ = 0.98 at the trend and the experiment its
+  second version, with the hand run of 2026-11-01 as the first version's record; the results schema gains the economy
+  in levels with the joint as weighted points out of git; the check `same_effective_member` goes, replaced by each
+  toolkit approaching the stated member and the pair agreeing within their own convergence.
+
+  **Superseded on 2026-11-03** ([the rulings of 2026-11-03](2026-11-03_harness-decisions.md)): the owner removed the
+  SPIC requirement, and with it the decisions of 21:00:56 and every consequence above but the representation left to
+  each toolkit, the distribution of permanent income reported behind a status, the joint, and the checks that
+  replaced `same_effective_member`.
 
 **What stays open:**
 - whether the ontology's names keep their hyphens, as econ-ark's notation registry has them, or take underscores;

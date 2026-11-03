@@ -18,7 +18,9 @@ metadata:
 - Econ-ark's notation registry, `@resources/notation/notation.yml` in econ-ark/econ-ark-tools, with the generated
   `econark-notation.sty`, `notation-math.yml` and `NOTATION.md`: version 1.0.0 on its master once econ-ark-tools' pull
   requests #38 to #44 merged on 2026-10-21, then 2.1.0 (#46), with rows for the schemas' own symbols, and 3.0.0 (#47)
-  that evening; 5.0.0 (#49), 6.0.0 (#50) and 8.0.0 (#52) on 2026-10-22. Beside it, `econark-shortcuts.sty` in the same repository's `@resources`, the macros most papers load,
+  that evening; 5.0.0 (#49), 6.0.0 (#50) and 8.0.0 (#52) on 2026-10-22. A branch `notation-v8.1-spic` of the clone at
+  `/home/shared/github/econ-ark/econ-ark-tools` (commit `68a242d7`, 2026-11-02, unpushed) holds an 8.1.0 that the
+  ruling of 2026-11-03 superseded, to delete. Beside it, `econark-shortcuts.sty` in the same repository's `@resources`, the macros most papers load,
   and econ-ark/NARK, econ-ark's naming conventions.
 - HARK's main branch at `4c285e86` (2026-10-07), the commit the HARK stone was read at.
 - QuantEcon's lecture on the income fluctuation problem with stochastic returns, `lectures/ifp_advanced.md` of

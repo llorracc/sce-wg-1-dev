@@ -1,6 +1,6 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 18:24 on 2026-11-02: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted, its comparator next; the ontology at draft.2, naming no toolkit"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 08:07 on 2026-11-03: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted; the rulings of 2026-11-02 that the harness gives parameters only and leaves the representation to each toolkit, and the revised proposal of 2026-11-03 that followed, the distributions of permanent income and of wealth in levels and the joint, with the adapters' independence planned, all awaiting the owner's reading; the toy-hafiscal estimation built in the HAFiscal session on his request; the ontology at draft.2, naming no toolkit"
 metadata:
   type: project
 ---
@@ -202,7 +202,33 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
 - HARK's stone describes `MarkovConsumerType` at the adapter's pin, with the standard consumer in a section of its own.
 - Matsya's third session, on HARK's source, ran on 2026-10-22 and agrees with the stone (the findings of that day).
 
+**The harness's rulings of 2026-11-02 and the revised proposal of 2026-11-03**
+([the rulings of 2026-11-02](../rulings/2026-11-02_harness-decisions.md), [of 2026-11-03](../rulings/2026-11-03_harness-decisions.md);
+[`harness.md`](../../harness.md), [`experiments.md`](../../experiments.md), [`bst/results.md`](../../bst/results.md)), in
+no validator, checker, member or adapter:
+- The harness gives each toolkit parameters, never methods or settings (18:28:43 on 2026-11-02); the laws' representation
+  is each toolkit's own, the true model the one with truncated lognormals (19:09:13). The experiment's checks
+  `approaches_stated_member` and `toolkits_agree` replace `same_effective_member`. The adapters' independence is planned
+  as the harness's stage 4, status PROPOSED, with three decisions for the owner; today the grid counts and the
+  quadrature live in the adapters' shared module.
+- The results document proposes three blocks: the distribution of permanent income, required, behind a status, its
+  Lorenz curve defined when ℒ < 1 and ℒ𝒢 < 1; the distribution of wealth in levels a𝐩, required, behind a status, whose
+  Lorenz shares at 0.2, 0.4, 0.6 and 0.8 are HAFiscal's targets and whose mean over mean income is K/Y
+  ([the finding](../findings/2026-11-03_hafiscal-lorenz-in-levels.md)); and the joint of (m, 𝐩, c, a) as weighted
+  points out of git, optional. No member or hash changes.
+- The stationary permanent income condition proposed on the evening of 2026-11-02 was withdrawn at 04:37:53 on
+  2026-11-03 with everything that served it; the notation registry's branch `notation-v8.1-spic` in the econ-ark-tools
+  clone is superseded, to delete.
+- The toy-hafiscal member's estimation was requested of the HAFiscal-Latest session at 05:23 on 2026-11-03 and built
+  there for the member as stated, 𝒢 = 1.0019026 for every household with newborns at 1; it waits on the owner's word in
+  that session. The published first step's economy differs, growing through its newborns, and whether the member should
+  mirror it is the owner's.
+
 **Open with the owner:**
+- the revised proposal of 2026-11-03: the three results blocks and the checker's statuses for them, the restrained-limit
+  experiment's second version, the stage-4 plan's three decisions (dolo's population with mortality, HARK's population
+  method, the diagnostics' quadrature), the joint as weighted points, and the closed forms E[𝐩] and var(log 𝐩) offered;
+- the notation registry's branch `notation-v8.1-spic`, superseded, to delete;
 - the ontology's open questions:
   - the two tiers, and what buffer-stock saving means;
   - the perfect-foresight and risky-asset classes;
@@ -213,7 +239,8 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
   refused as an external write;
 - `library` against the community library's published v0.1, whose laws are untruncated: a v0.2 of the description
   (recommended), a renamed member, or a note;
-- the estimation of the toy-hafiscal member, HAFiscal's to do on the owner's word in that session;
+- the estimation of the toy-hafiscal member, built in the HAFiscal-Latest session on 2026-11-03 and waiting on his word
+  there, and whether the member keeps its stated economy or mirrors the published first step's;
 - HARK's cyclical index: ruled on 2026-10-31 that solver and simulation be consistent, the simulation side to be fixed,
   made clear on 2026-11-01 not to find the solver right; the fix is the HARK-dev session's;
 - #15, to merge;
@@ -222,6 +249,9 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
 - what goes to the working group's repository, and when;
 - in the bellman session: nothing pending from the owner; Bellman's truncated lognormal and the uniform comparator merged
   on 2026-10-22, and the parameter-condition defect is filed;
+- in the bellman-ark session: the three changes asked of Bellman on 2026-10-31, drafted on 2026-11-03 (a message to its
+  maintainer on the Matsya service's lag behind the language, a pull request on the typography of fields and
+  functions, an issue on Γ in two senses), each waiting on his approval there and his word on who sends or posts it;
 
 Registering `w3id.org/sce` is not raised before a pull request from this fork is merged into econ-ark/sce-wg-1
 ([[feedback_w3id-not-yet]]).
@@ -230,8 +260,12 @@ Registering `w3id.org/sce` is not raised before a pull request from this fork is
 - HARK's adapter writing the Jacobians block, from a branch carrying #1863, once the toy-hafiscal member exists;
 - the harness, approved on 2026-11-02 ([`../../harness.md`](../../harness.md)): the layout's move done in `9675109`
   (`rosetta/`, `harness/adapters/`, `schemas/bst/experiments/`); the registry, lock files and runner built and accepted
-  (`harness/`; the findings of 2026-11-02 on its acceptance); next the comparator, the plan's third stage. The experiment schema and its first experiment are drafted
-  and approved ([`../../experiments.md`](../../experiments.md));
+  (`harness/`; the findings of 2026-11-02 on its acceptance); next, on the owner's reading of the revised proposal, the
+  three results blocks with the checker's statuses, the restrained-limit experiment's second version, the adapters'
+  independence (stage 4, planned) and the comparator (stage 5). The experiment schema and its first experiment are
+  drafted and approved ([`../../experiments.md`](../../experiments.md));
+- the toy-hafiscal member, once the HAFiscal session delivers it: validated and hashed by the checker, solved by HARK's
+  adapter, the fit evaluated again with the family's newborn; then its experiment file and request file;
 - the proposal to the working group's repository, whose trigger, dolo's adapter and the first comparison of two
   toolkits' results files, is met as of 2026-11-01 (deferred follow-ups); the owner's to start;
 - the validators for the method, settings and request files; the survey's other classes;
@@ -240,11 +274,16 @@ Registering `w3id.org/sce` is not raised before a pull request from this fork is
 See [`../deferred.md`](../deferred.md).
 
 **Elsewhere:**
-- **The econ-ark-tools session** keeps econ-ark's notation registry (version 8.0.0 on its master since 2026-10-22). **The NARK session** keeps econ-ark's naming conventions.
+- **The econ-ark-tools session** keeps econ-ark's notation registry (version 8.0.0 on its master since 2026-10-22); no
+  session lives in its clone on this machine, whose branch `notation-v8.1-spic` is superseded, to delete. **The NARK
+  session** keeps econ-ark's naming conventions.
 - **The bellman session** holds Bellman's draft pull requests for the truncated lognormal and the uniform, and runs
-  Matsya.
+  Matsya; its consultation of 2026-10-31 on the ontology is in its on-box record.
+- **The bellman-ark session** on this machine, since 2026-11-03 the only writer of Bellman's records, holds the three
+  drafted changes.
 - **The community-library session** stopped the QuantEcon module on the evening of 2026-10-21; its branches stay local.
-- **The HAFiscal-Latest session** runs the emitter (version 0.8, unpushed on 2026-10-22), the basis of HARK's adapter.
+- **The HAFiscal-Latest session** runs the emitter (version 0.8, unpushed on 2026-10-22), the basis of HARK's adapter;
+  since 2026-11-03 it holds the toy-hafiscal estimation, built and waiting on the owner's word there.
 - **As recorded on 2026-10-19:**
   - the HARK session holds the bounds-fix branch and the newborn flag;
   - the BufferStockTheory session recorded the lower-tail finding on two branches.

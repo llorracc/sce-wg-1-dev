@@ -1,13 +1,16 @@
 # The buffer-stock families: the results schema
 
-Draft; see the [README](../README.md).
+Draft; see the [README](../README.md). Revised on 2026-11-02 and 2026-11-03 by the owner's rulings on the
+representation of the laws, the distribution of permanent income and the joint; the validator follows once the owner
+has read the revision.
 
 A results file is JSON, written by a program and checked by a validator. It reports quantities that the
 [model schema](model.md) defines, at arguments that the toolkit does not choose, and it reports what the toolkit solved: its
 **effective member**, known through the expectations the family names, the conditions decided on it and the derived
 parameters it used, never through a form of its laws ([`effective-member.md`](../effective-member.md)). It never reports a
-toolkit's grid, histogram or interpolant. Every value is a ratio to permanent income, in BST's notation. Items are
-**required** unless they are marked optional.
+toolkit's grid, histogram or interpolant. Every value is a ratio to permanent income, in BST's notation, except
+permanent income itself, below, which is in units of a newborn's. Items are **required** unless they are marked
+optional.
 
 ## Identity and provenance
 
@@ -38,6 +41,12 @@ What the toolkit solved, reported in numbers free of any representation:
   stationary population, the GIC-Szeidl, the GIC-Harmenberg, the two welfare conditions and the tail exponents; the
   household's block decides everything else, the natural limit and the constraint in force among them. When absent, the
   household's block decides everything.
+
+**The representation is the toolkit's.** The stated member's laws are the truncated lognormals its parameter file
+names. How a toolkit represents them, by nodes of its own choosing, by a continuous law, or otherwise, and on what
+grids it solves and pushes the population, is its own choice, stated in its Rosetta Stone and its method file, and
+never prescribed by an experiment, by the harness or by code the adapters share (the owner's ruling of 2026-11-02).
+The expectations above are how that choice is reported.
 
 The checker verifies what needs no representation: each factor as the arithmetic of the reported expectations, each
 verdict against its factor, each status against the verdicts, each derived parameter as the arithmetic of the lowest values,
@@ -160,6 +169,40 @@ an infinite mean looks stable. How v_i was obtained is the method on the target 
 ([numerical methods](../numerics.md)): the value function the solver computes, or discounted utility along simulated paths,
 which then carries a standard error; u and u′ at the rule need nothing beyond the rule and the distribution.
 
+## The distribution of permanent income and the joint
+
+The owner asked on 2026-11-02 for the stationary distribution of permanent income and the joint distribution the
+economy generates, and ruled on 2026-11-03 that of permanent income what is needed is its inequality, which the
+Lorenz curve gives; nothing is required of a member for it. The same morning he ruled that HAFiscal's Lorenz targets of
+liquid wealth are of wealth in levels, which HAFiscal's code confirmed
+([the finding](../records/findings/2026-11-03_hafiscal-lorenz-in-levels.md)).
+
+- **The distribution of permanent income 𝐩** (required), for each type and pooled, under the population measure, in
+  units of a newborn's: its GL ordinates and quantiles at the standard probabilities, as for m, behind a status. Its
+  Lorenz curve is GL(p)/GL(1). It is `undefined` when the member has no stationary distribution of permanent income,
+  ℒ = 1, or no finite mean, ℒ𝒢 ≥ 1, the income measure's own condition ([conditions](conditions.md)). The rule
+  plays no part in it, so every type's is the same distribution, and a toolkit that reports it wrong has its
+  population wrong, not its solution.
+- **The distribution of wealth in levels, 𝐀 = a𝐩** (required), end-of-period assets in levels, liquid wealth in
+  HAFiscal's words, for each type and pooled, under the population measure, in units of a newborn's permanent income:
+  its GL ordinates and quantiles at the standard probabilities, behind a status. Its Lorenz shares at p = 0.2, 0.4,
+  0.6 and 0.8, GL(p)/GL(1), are HAFiscal's targets, which its estimation computes on exactly this object across
+  households ranked by it ([the finding](../records/findings/2026-11-03_hafiscal-lorenz-in-levels.md)); and its mean
+  over the economy's mean income is the wealth-to-income ratio, the income measure's mean of a. It is `undefined` when
+  the distribution of permanent income is, or when the income measure's mean of a is infinite, since E[a𝐩] is E[𝐩]
+  times that mean ([conditions](conditions.md)).
+- **The joint distribution** of (m, 𝐩, c, a) (optional; an experiment that needs it asks for it), for each type, as a
+  weighted set of points: a file beside the results file, as the Jacobians' matrices are, with its path, hash and
+  shape in the results file. Each row is one point, m, 𝐩, c, a and its weight, the weights summing to one: a grid
+  method's nodes with their masses, or a simulation's agents with equal weights, pooled over the periods its method
+  states. The results file says which (`kind`), and for a simulation its agents, periods, burn-in and seed. From
+  this one set the harness computes, with one code for every toolkit, the Lorenz curves of permanent income and of
+  wealth in levels, a𝐩, and tests the toolkit's own numbers against them. The file stays out of git, as the
+  Jacobians do; its hash is the record.
+
+Each is a stationary cross-section, so a toolkit that simulates reports the standard error and the sample size, as
+everywhere else.
+
 ## Diagnostics that need no reference solution (required)
 
 Convergence across a ladder shows that a toolkit is stable, not that it is right. These diagnostics test a solution against the
@@ -208,14 +251,21 @@ margin is within its precision.
 - Each value may carry the toolkit's own error estimate.
 - A simulated value carries its standard error and its sample size.
 - One run, at the toolkit's `high` level, is required; `low` and `medium` are optional. The levels are named elements of a
-  settings ladder ([numerical methods](../numerics.md)): settings, not error targets. No level promises a relative error, since
-  what a level reaches depends on the method; the first measurement, HARK's equiprobable discretization near the kink, is in
+  settings ladder ([numerical methods](../numerics.md)): settings, not error targets. What a named level means is the
+  toolkit's own, as its ladder states it; the harness maps the names to the toolkit's elements, and no experiment or
+  shared code prescribes a grid, a node count or a tolerance (the owner's ruling of 2026-11-02). No level promises a
+  relative error, since what a level reaches depends on the method; the first measurement, HARK's equiprobable discretization near the kink, is in
   the [records](../records/findings/2026-10-18_checker-and-emitter.md). The only source of a tolerance is measured
   convergence, as the comparison below says.
 
 ## The comparison
 
 - Two results files are compared only when their parameter-file hashes match.
+- Two toolkits' effective members differ, since each represents the laws its own way. The comparison asks of each
+  toolkit that its expectations approach the stated member's closed forms as its level rises, and of the pair that
+  their difference at the finest level lie within the sum of the two toolkits' own movements between their two finest
+  levels ([experiments](../experiments.md)). Its check against the model itself, the Euler residuals under the stated
+  laws, trusts neither toolkit's representation.
 - A quantity agrees when the two values differ by no more than its tolerance. The tolerance comes from measured convergence
   across each toolkit's ladder, widened by the standard errors of simulated values.
 - If two toolkits each converge within their own errors and still disagree, at least one is wrong or is solving a different model.
@@ -253,6 +303,9 @@ The validator is [`results.schema.json`](results.schema.json). The shape is roug
       "income_measure": {"m": {"gl": {"0.01": 0.0029}}},
       "welfare": {"status": "value", "mean_value": -31.2, "mean_felicity": -1.03},
       "marginal_welfare": {"status": "value", "mean": 1.07, "by_a_quartile": [2.1, 1.1, 0.7, 0.4], "at_constraint": 2.6},
+      "permanent_income": {"status": "value", "gl": {"0.01": 0.0052, "1": 1.434}},
+      "a_levels": {"status": "value", "gl": {"0.2": 0.0027, "1": 9.46}},
+      "joint": {"path": "joint/type-0.npy", "sha256": "…", "shape": [200000, 5], "kind": "simulation"},
       "euler_residuals": {"r": [1e-6, -2e-6], "max_abs": 2e-6},
       "stationarity_residual": {"population": 3e-5, "income": 4e-5}
     }
