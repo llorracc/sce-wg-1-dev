@@ -68,8 +68,16 @@ metadata:
   Q-transform, 2022).
 - HARK's Rosetta Stone holds, since 2026-11-01, HARK's names for the ontology's terms and its departures from them:
   `schemas/rosetta/hark.md`, section "The ontology's terms in HARK".
-- HARK's draft econ-ark/HARK#1869: the continuous path, expectations by quadrature over the true truncated laws. HARK's
-  kink-split page, https://econ-ark.github.io/HARK-dev/kink-split-quadrature/, is public; the HARK-dev repository is not.
+- HARK's continuous path: HARK's continuous solver, on the HARK session's unposted local branches as of 2026-11-04, so
+  not citable, and their names, commits and code stay out of public text (the owner's rule there is to perfect a pull
+  request locally before posting it); its public parts are the drafts econ-ark/HARK#1861 (the true bounds of a
+  discretized law), #1862 (the natural borrowing constraint from the laws' infima) and #1863 (the truncated lognormal)
+  at their GitHub heads, the proposal issue econ-ark/HARK#1869, https://github.com/econ-ark/HARK/issues/1869, open and
+  marked a draft since 2026-10-28, an issue and not a pull request, which is why the pointer that stood here as "the
+  draft #1869" did not resolve as one, and the status page https://econ-ark.github.io/HARK-dev/pr-status/. The solver
+  is built on HARK's main after 0.17.2, so a locked environment can hold it only once a public commit exists. HARK's
+  kink-split page, https://econ-ark.github.io/HARK-dev/kink-split-quadrature/, and its companion on the interpolant,
+  https://econ-ark.github.io/HARK-dev/concavity-violations/, are public; the HARK-dev repository is not.
 - The community library's buffer-stock model description: `models/buffer-stock/model-description.md`, version 0.1, in
   `llorracc/community-library`, a public fork of QuantEcon/community-library whose push to QuantEcon is disabled. It has
   its own session; a change there is that session's, and a push needs the owner's word in it.

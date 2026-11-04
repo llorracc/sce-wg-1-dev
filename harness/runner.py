@@ -7,16 +7,26 @@ on every results file it wrote.
     uv run --project harness --frozen python harness/runner.py verify <run folder>
 
 `run` checks the experiment (schemas/checker/experiment.py) and refuses one with problems. It then runs one job for
-each toolkit, member and level, in parallel, each through the toolkit's adapter in the toolkit's locked environment. Each toolkit's first job runs
-alone before its others, so that one process writes what the toolkit compiles and caches.
+each toolkit, member and level, in parallel, each through the toolkit's adapter in the toolkit's locked environment:
+with `--runtime uv`, the default, in the adapter's uv project on this machine; with `--runtime docker`, in an image
+built from the adapter's environment directory and run under the container contract of ../schemas/registry.md (the
+repository mounted read-only at /src, the job's folder at /out, no network, the thread cap, a scratch /tmp, and the
+caps given). Each toolkit's first job runs alone before its others, so that one process writes what the toolkit
+compiles and caches.
 A job writes into <run folder>/<toolkit>/<member>/level-<n>/, n being 1, 2 and 3 for low, medium and high, and leaves
-there the adapter's log and `job.json`: its status, and a fingerprint of everything its output depends on. A job whose
-fingerprint is unchanged and whose results file exists is skipped, so a rerun redoes only what failed or changed.
-`manifest.json` in the run folder names every hash. Nothing records how long anything took.
+there the adapter's log, `job.json` (its status, and a fingerprint of everything its output depends on) and
+`record.json`, its execution record for the run registry (records.py; the schemas beside this file): the repository's
+state, the environment's hash, the image, the machine, the conditions, the start, end and duration, how it ended, the
+outputs' hashes, and the fork's fields. A job whose fingerprint is unchanged and whose results file exists is skipped,
+so a rerun redoes only what failed or changed. With `--runtime docker` each toolkit's image is built first and its
+build record written as <run folder>/<toolkit>/build.json. `manifest.json` in the run folder names every hash.
 
 `verify` runs `check.py --verify-results` on every results file and checks that each carries the quantities the
-experiment's `reports` names, writing `verification.json`. The experiment's checks are the comparator's, which is not
-written yet.
+experiment's `reports` names, writing `verification.json` and each record's verdict. The experiment's checks are the
+comparator's, which is not written yet.
+
+`register` copies a run's records into the registry folder, runs.registry/<stamp>_<experiment>/, one file per job and
+one per build, validating each.
 """
 
 from __future__ import annotations
@@ -28,8 +38,11 @@ import glob
 import hashlib
 import json
 import os
+import re
+import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 import yaml
@@ -38,12 +51,18 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 SCHEMAS = ROOT / "schemas"
 sys.path.insert(0, str(SCHEMAS / "checker"))
+sys.path.insert(0, str(HERE))
 import canonical  # noqa: E402
 import experiment as experiments  # noqa: E402
+import records  # noqa: E402
 
+VERSION = "0.2.0"
 REGISTRY = HERE / "toolkits.yaml"
+RUNS_REGISTRY = HERE / "runs.registry"
 LEVEL_NUMBER = {"low": 1, "medium": 2, "high": 3}
 THREAD_VARIABLES = ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS")
+OUTPUTS = ("results.json", "methods.yaml", "settings.yaml")
+IMAGE_PREFIX = "sce-wg-1"
 
 
 def sha256_file(path: Path) -> str:
@@ -84,13 +103,19 @@ def load_registry(path: Path = REGISTRY) -> dict:
 
 
 def environment_identity(tk: dict) -> dict | None:
-    """What identifies a toolkit's environment: its lock file and interpreter."""
+    """What identifies a toolkit's environment: its lock file and interpreter, its Dockerfile when it has one, and
+    the image it was built into when the run is in containers."""
     env = tk["environment"]
     if env is None:
         return None
     version = env / ".python-version"
-    return {"project": rel(env), "lock_sha256": sha256_file(env / "uv.lock"),
-            "python": version.read_text(encoding="utf-8").strip() if version.is_file() else None}
+    out = {"project": rel(env), "lock_sha256": sha256_file(env / "uv.lock"),
+           "python": version.read_text(encoding="utf-8").strip() if version.is_file() else None}
+    if (env / "Dockerfile").is_file():
+        out["dockerfile_sha256"] = sha256_file(env / "Dockerfile")
+    if tk.get("image_id"):
+        out["image_id"] = tk["image_id"]
+    return out
 
 
 def code_sha256(tk: dict) -> str:
@@ -145,15 +170,125 @@ def fingerprint(job: dict, tk: dict) -> dict:
             "environment": environment_identity(tk), "code_sha256": code_sha256(tk), "threads": tk["threads"]}
 
 
+def adapter_arguments(job: dict, out_dir: str, in_container: bool) -> list[str]:
+    """The adapter contract's arguments: the parameter file, --out, --level and --request."""
+    p = rel(job["parameter_file"]) if in_container else str(job["parameter_file"])
+    r = rel(job["request_file"]) if in_container else str(job["request_file"])
+    return [p, "--out", out_dir, "--level", str(job["level_arg"]), "--request", r]
+
+
 def command(job: dict, tk: dict) -> list[str]:
-    args = [str(tk["adapter"]), str(job["parameter_file"]), "--out", str(job["dir"]), "--level", str(job["level_arg"]),
-            "--request", str(job["request_file"])]
+    args = [str(tk["adapter"])] + adapter_arguments(job, str(job["dir"]), in_container=False)
     if tk["environment"] is None:
         return [sys.executable] + args
     return ["uv", "run", "--quiet", "--project", str(tk["environment"]), "--frozen", "python"] + args
 
 
-def run_job(job: dict, tk: dict) -> dict:
+def container_name(job: dict, run_id: str) -> str:
+    return re.sub(r"[^A-Za-z0-9_.-]", "-", f"sce-{run_id}-{job['toolkit']}-{job['member']}-{job['level']}")[:120]
+
+
+def container_command(job: dict, tk: dict, ctx: dict) -> list[str]:
+    """One job under the container contract (../schemas/registry.md): the repository read-only at /src, the job's
+    folder at /out, no network, the thread cap, a scratch /tmp for what the toolkit caches, and the caps given."""
+    caps = ctx["caps"]
+    cmd = ["docker", "run", "--init", "--name", container_name(job, ctx["run_id"]),
+           "--user", f"{os.getuid()}:{os.getgid()}", "--network", "none", "--cpus", str(caps["cpus"])]
+    if caps.get("memory"):
+        cmd += ["--memory", caps["memory"]]
+    for v in THREAD_VARIABLES:
+        cmd += ["--env", f"{v}={tk['threads']}"]
+    cmd += ["--tmpfs", "/tmp", "--env", "HOME=/tmp", "--env", "NUMBA_CACHE_DIR=/tmp/numba", "--env", "MPLCONFIGDIR=/tmp/mpl",
+            "--mount", f"type=bind,source={ROOT},target=/src,readonly",
+            "--mount", f"type=bind,source={job['dir']},target=/out",
+            "--workdir", "/src", tk["image_id"], "python", rel(tk["adapter"])]
+    return cmd + adapter_arguments(job, "/out", in_container=True)
+
+
+def docker(*args: str, check: bool = True) -> subprocess.CompletedProcess:
+    done = subprocess.run(["docker", *args], capture_output=True, text=True)
+    if check and done.returncode:
+        raise SystemExit(f"docker {' '.join(args[:2])}: {done.stderr.strip()[:400]}")
+    return done
+
+
+def build_image(tk: dict, out: Path, ctx: dict) -> str:
+    """Builds a toolkit's image from its environment directory, writes the build record, and returns the image ID.
+    The image is named for the environment's hash, so that an unchanged specification keeps its name."""
+    env = tk["environment"]
+    if env is None or not (env / "Dockerfile").is_file():
+        raise SystemExit(f"{tk['name']}: --runtime docker needs a Dockerfile in {rel(env) if env else 'an environment'}")
+    environment = records.environment(ctx["repo"], rel(env), "dockerfile", ctx["where"]["runtime"])
+    tag = f"{IMAGE_PREFIX}/{tk['name']}:{environment['sha256'][:12]}"
+    folder = out / tk["name"]
+    folder.mkdir(parents=True, exist_ok=True)
+    started, clock = records.now(), time.perf_counter()
+    with open(folder / "build.log", "w", encoding="utf-8") as log:
+        code = subprocess.run(["docker", "build", "--file", str(env / "Dockerfile"), "--tag", tag, str(env)],
+                              cwd=ROOT, stdout=log, stderr=subprocess.STDOUT).returncode
+    duration, ended = time.perf_counter() - clock, records.now()
+    if code:
+        raise SystemExit(f"{tk['name']}: the image build failed; see {rel(folder / 'build.log')}")
+    image_id = docker("image", "inspect", "--format", "{{.Id}}", tag).stdout.strip()
+    record = {"$schema": records.FORK_SCHEMA_ID, "record_version": records.RECORD_VERSION, "kind": "build",
+              "recorder": ctx["recorder"], "repository": ctx["repo"], "environment": environment,
+              "image": {"name": tag, "id": image_id}, "where": ctx["where"], "conditions": {"network": True},
+              "when": {"started": started, "ended": ended, "duration_seconds": round(duration, 3)},
+              "outcome": {"exit_code": code, "termination": "exited", "log": "build.log"}}
+    records.write(record, folder / "build.json")
+    return image_id
+
+
+def execution_record(job: dict, tk: dict, ctx: dict, cmd: list[str], when: dict, exit_code: int,
+                     termination: str, signal: str | None) -> dict:
+    d = job["dir"]
+    in_container = ctx["runtime"] == "docker"
+    env_path = rel(tk["environment"]) if tk["environment"] is not None else rel(HERE)
+    environment = records.environment(ctx["repo"], env_path, "dockerfile" if in_container else "host-uv",
+                                      ctx["where"]["runtime"] if in_container else ctx["uv_version"])
+    conditions = {"thread_variables": {v: str(tk["threads"]) for v in THREAD_VARIABLES}}
+    if in_container:
+        conditions.update({"jit_cache": "cold", "cpus": ctx["caps"]["cpus"], "network": False})
+        if ctx["caps"].get("memory_bytes"):
+            conditions["memory_bytes"] = ctx["caps"]["memory_bytes"]
+    if ctx["caps"].get("wall_seconds"):
+        conditions["wall_seconds"] = ctx["caps"]["wall_seconds"]
+    results = d / "results.json"
+    toolkit_block = {}
+    if results.is_file():
+        try:
+            toolkit_block = json.loads(results.read_text(encoding="utf-8")).get("toolkit", {}) or {}
+        except ValueError:
+            toolkit_block = {}
+    outcome = {"exit_code": exit_code, "termination": termination, "output_dir": ".",
+               "outputs": records.outputs(d, OUTPUTS), "log": "adapter.log"}
+    if signal:
+        outcome["signal"] = signal
+    fork = {"experiment": ctx["experiment"], "toolkit": tk["name"],
+            "adapter": {"path": rel(tk["adapter"]), "code_sha256": code_sha256(tk)},
+            "member": {"id": job["member"], "hash": ctx["member_hashes"][job["member"]],
+                       "parameter_file_sha256": job["parameter_file_sha256"]},
+            "request": {"sha256": job["request_file_sha256"]}, "level": job["level"],
+            "results_sha256": next((o["sha256"] for o in outcome["outputs"] if o["path"] == "results.json"), "0" * 64),
+            "verification": {"verdict": "not run"}, "core_version": VERSION}
+    for name, key in (("settings.yaml", "settings_sha256"), ("methods.yaml", "methods_sha256")):
+        h = next((o["sha256"] for o in outcome["outputs"] if o["path"] == name), None)
+        if h:
+            fork[key] = h
+    if toolkit_block.get("version"):
+        fork["toolkit_version"] = " ".join(str(toolkit_block[k]) for k in ("name", "version", "commit") if toolkit_block.get(k))
+    record = {"$schema": records.FORK_SCHEMA_ID, "record_version": records.RECORD_VERSION, "kind": "execution",
+              "recorder": ctx["recorder"], "run": {"id": ctx["run_id"], "manifest": "../../../manifest.json"},
+              "repository": ctx["repo"], "script": rel(tk["adapter"]),
+              "arguments": cmd[cmd.index(rel(tk["adapter"])) + 1:] if in_container else cmd[cmd.index(str(tk["adapter"])) + 1:],
+              "environment": environment, "where": ctx["where"], "conditions": conditions, "when": when,
+              "outcome": outcome, "extensions": {"sce-wg-1": fork}}
+    if in_container:
+        record["image"] = {"id": tk["image_id"], "build_record": "../../build.json"}
+    return record
+
+
+def run_job(job: dict, tk: dict, ctx: dict) -> dict:
     d = job["dir"]
     fp = fingerprint(job, tk)
     record = d / "job.json"
@@ -162,19 +297,43 @@ def run_job(job: dict, tk: dict) -> dict:
         if old.get("status") == "ok" and old.get("fingerprint") == fp:
             return {**old, "skipped": True}
     d.mkdir(parents=True, exist_ok=True)
-    for stale in ("results.json", "job.json"):
+    for stale in ("results.json", "job.json", "record.json"):
         (d / stale).unlink(missing_ok=True)
     env = os.environ.copy()
     env.update({v: str(tk["threads"]) for v in THREAD_VARIABLES})
-    cmd = command(job, tk)
+    in_container = ctx["runtime"] == "docker"
+    cmd = container_command(job, tk, ctx) if in_container else command(job, tk)
+    termination, signal = "exited", None
+    started, clock = records.now(), time.perf_counter()
     with open(d / "adapter.log", "w", encoding="utf-8") as log:
-        code = subprocess.run(cmd, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT).returncode
+        try:
+            code = subprocess.run(cmd, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT,
+                                  timeout=ctx["caps"].get("wall_seconds")).returncode
+        except subprocess.TimeoutExpired:
+            code, termination = 124, "timeout"
+            if in_container:
+                docker("kill", container_name(job, ctx["run_id"]), check=False)
+    when = {"started": started, "ended": records.now(), "duration_seconds": round(time.perf_counter() - clock, 3)}
+    if in_container:
+        state = docker("inspect", "--format", "{{.State.ExitCode}} {{.State.OOMKilled}}",
+                       container_name(job, ctx["run_id"]), check=False)
+        if state.returncode == 0:
+            exit_in, oom = state.stdout.split()
+            if termination == "exited":
+                code = int(exit_in)
+                if oom == "true":
+                    termination = "oom"
+                elif code > 128:
+                    termination, signal = "signal", f"signal {code - 128}"
+        docker("rm", "--force", container_name(job, ctx["run_id"]), check=False)
     ok = code == 0 and (d / "results.json").is_file()
     shown = [rel(Path(c)) if c.startswith("/") else c for c in cmd]
     if tk["environment"] is None:
         shown[0] = "python"
     out = {"status": "ok" if ok else "failed", "exit_code": code, "command": shown, "fingerprint": fp}
     record.write_text(json.dumps(out, indent=1) + "\n", encoding="utf-8")
+    records.write(execution_record(job, tk, ctx, shown if in_container else cmd, when, code, termination, signal),
+                  d / "record.json")
     return {**out, "skipped": False}
 
 
@@ -183,6 +342,21 @@ def harness_commit() -> dict:
     dirty = subprocess.run(["git", "status", "--porcelain", "--", "harness", "schemas", "rosetta"], cwd=ROOT,
                            capture_output=True, text=True).stdout.strip()
     return {"commit": head or None, "uncommitted_changes": "yes" if dirty else "no"}
+
+
+def harness_commit_field() -> dict:
+    head = harness_commit()["commit"]
+    return {"commit": head} if head else {}
+
+
+def memory_bytes(spec: str | None) -> int | None:
+    """Docker's memory spec, such as 8g or 512m, as bytes."""
+    if not spec:
+        return None
+    m = re.fullmatch(r"(\d+)([kmgKMG]?)", spec.strip())
+    if not m:
+        raise SystemExit(f"--memory {spec}: give a number with k, m or g")
+    return int(m.group(1)) * {"": 1, "k": 1024, "m": 1024 ** 2, "g": 1024 ** 3}[m.group(2).lower()]
 
 
 def cmd_run(args) -> int:
@@ -194,13 +368,28 @@ def cmd_run(args) -> int:
     members = args.members.split(",") if args.members else [m["id"] for m in exp["members"]]
     out = Path(args.out).resolve() if args.out else HERE / "runs" / exp["experiment"].replace("/", "-")
     jobs = plan_jobs(exp_path, exp, registry, toolkits, levels, members, out)
+    out.mkdir(parents=True, exist_ok=True)
+    runtime = records.docker_runtime() if args.runtime == "docker" else None
+    if args.runtime == "docker" and runtime is None:
+        raise SystemExit("--runtime docker: the Docker daemon does not answer; run under a shell in the docker group")
+    uv_version = subprocess.run(["uv", "--version"], capture_output=True, text=True).stdout.strip() or "uv"
+    ctx = {"runtime": args.runtime, "run_id": out.name, "repo": records.repository(),
+           "where": records.machine(runtime or "none"), "uv_version": uv_version,
+           "recorder": {"name": "sce-wg-1 harness runner", "version": VERSION, **harness_commit_field()},
+           "experiment": {"id": exp["experiment"], "sha256": exp_hash},
+           "member_hashes": {m["id"]: canonical.model_hash(canonical.load_strict(
+               (exp_path.parent / m["parameter_file"]).read_text(encoding="utf-8"))) for m in exp["members"]},
+           "caps": {"cpus": args.cpus, "memory": args.memory, "memory_bytes": memory_bytes(args.memory),
+                    "wall_seconds": args.wall_seconds}}
     for name in toolkits:
         env = registry[name]["environment"]
-        if env is not None:
+        if args.runtime == "docker":
+            registry[name]["image_id"] = build_image(registry[name], out, ctx)
+            print(f"{name:6s} image {registry[name]['image_id'][:19]}", flush=True)
+        elif env is not None:
             sync = subprocess.run(["uv", "sync", "--quiet", "--project", str(env), "--frozen"], cwd=ROOT)
             if sync.returncode:
                 raise SystemExit(f"{name}: its environment could not be built from {rel(env)}/uv.lock")
-    out.mkdir(parents=True, exist_ok=True)
     started = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat()
     # Each toolkit's first job runs before its others, so that what a toolkit compiles and caches on its first use
     # (numba's cache, for dolo) is written by one process. On 2026-11-02 four dolo jobs started together on a newly
@@ -210,7 +399,7 @@ def cmd_run(args) -> int:
     outcomes = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, args.jobs)) as pool:
         for batch in (lead, rest):
-            futures = {pool.submit(run_job, j, registry[j["toolkit"]]): j for j in batch}
+            futures = {pool.submit(run_job, j, registry[j["toolkit"]], ctx): j for j in batch}
             for f in concurrent.futures.as_completed(futures):
                 j, r = futures[f], f.result()
                 outcomes.append((j, r))
@@ -226,6 +415,7 @@ def cmd_run(args) -> int:
         "toolkits": {n: {"adapter": rel(registry[n]["adapter"]), "environment": environment_identity(registry[n]),
                          "code_sha256": code_sha256(registry[n]), "threads": registry[n]["threads"]} for n in toolkits},
         "harness": harness_commit(),
+        "runtime": ctx["where"]["runtime"],
         "started": started,
         "jobs": [{"toolkit": j["toolkit"], "member": j["member"], "level": j["level"], "dir": rel(j["dir"]),
                   "status": r["status"], "skipped": "yes" if r["skipped"] else "no"} for j, r in outcomes],
@@ -289,10 +479,50 @@ def cmd_verify(args) -> int:
         print(f"{j['toolkit']:6s} {j['member']:22s} {j['level']:7s} {v['status']}"
               + (f"  missing: {', '.join(v['missing_reports'])}" if v.get("missing_reports") else "")
               + ("" if v["status"] == "ok" else f"  {v.get('checker', '')}"))
+        record = j["dir"] / "record.json"
+        if record.is_file():
+            data = json.loads(record.read_text(encoding="utf-8"))
+            verdict = {"verdict": "verified" if v["status"] == "ok" else "failed"}
+            problems = [v["checker"]] if v.get("checker") and v["status"] != "ok" else []
+            problems += [f"missing report {q}" for q in v.get("missing_reports", [])]
+            if problems:
+                verdict["problems"] = problems
+            data["extensions"]["sce-wg-1"]["verification"] = verdict
+            records.write(data, record)
     (run / "verification.json").write_text(json.dumps(out, indent=1) + "\n", encoding="utf-8")
     failed = [v for v in out if v["status"] != "ok"]
     print(f"{len(out)} results files, {len(failed)} failed")
     return 1 if failed else 0
+
+
+def cmd_register(args) -> int:
+    """Copies a run's records into the registry: <registry>/<stamp>_<experiment>/<toolkit>_<member>_<level>.json
+    for each job and <toolkit>_build.json for each build, each validated. A record's relative paths (its manifest,
+    build record, log and outputs) refer to the run folder it came from, named in its `run.id`."""
+    run = Path(args.run).resolve()
+    manifest = json.loads((run / "manifest.json").read_text(encoding="utf-8"))
+    stamp = manifest["started"].replace(":", "-")[:16]
+    name = manifest["experiment"]["name"].replace("/", "-")
+    folder = Path(args.registry_dir).resolve() / f"{stamp}_{name}"
+    folder.mkdir(parents=True, exist_ok=True)
+    copied = 0
+    for j in manifest["jobs"]:
+        record = run / j["dir"].replace(rel(run) + "/", "", 1) / "record.json" if j["dir"].startswith(rel(run)) \
+            else ROOT / j["dir"] / "record.json"
+        if not record.is_file():
+            print(f"{j['toolkit']:6s} {j['member']:22s} {j['level']:7s} no record")
+            continue
+        data = json.loads(record.read_text(encoding="utf-8"))
+        records.validate(data)
+        shutil.copyfile(record, folder / f"{j['toolkit']}_{j['member']}_{j['level']}.json")
+        copied += 1
+    for build in sorted(run.glob("*/build.json")):
+        data = json.loads(build.read_text(encoding="utf-8"))
+        records.validate(data)
+        shutil.copyfile(build, folder / f"{build.parent.name}_build.json")
+        copied += 1
+    print(f"{copied} records registered in {rel(folder)}")
+    return 0
 
 
 def cmd_list(args) -> int:
@@ -320,11 +550,19 @@ def main(argv=None) -> int:
     r.add_argument("--members")
     r.add_argument("--jobs", type=int, default=4)
     r.add_argument("--out")
+    r.add_argument("--runtime", choices=("uv", "docker"), default="uv",
+                   help="uv: the adapter's project on this machine; docker: an image built from its Dockerfile")
+    r.add_argument("--cpus", type=float, default=2.0, help="the CPU cap of each container (docker only)")
+    r.add_argument("--memory", help="the memory cap of each container, such as 8g (docker only)")
+    r.add_argument("--wall-seconds", type=float, help="the wall-time cap of each job; a job past it is a timeout")
     v = sub.add_parser("verify")
     v.add_argument("run")
     v.add_argument("--jobs", type=int, default=4)
+    g = sub.add_parser("register")
+    g.add_argument("run")
+    g.add_argument("--registry-dir", default=str(RUNS_REGISTRY))
     args = ap.parse_args(argv)
-    return {"list": cmd_list, "run": cmd_run, "verify": cmd_verify}[args.command](args)
+    return {"list": cmd_list, "run": cmd_run, "verify": cmd_verify, "register": cmd_register}[args.command](args)
 
 
 if __name__ == "__main__":

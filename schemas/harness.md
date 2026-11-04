@@ -70,12 +70,12 @@ chooses nothing numerical.
 hark:
   adapter: harness/adapters/hark/adapter.py
   stone: rosetta/hark.md
-  environment: harness/envs/hark      # pyproject.toml and uv.lock: Python 3.12, HARK at 11852805, and the rest
+  environment: harness/adapters/hark/env   # pyproject.toml, uv.lock and Dockerfile: Python 3.12, HARK at 11852805, and the rest
   levels: {low: 1, medium: 2, high: 3}
 dolo:
   adapter: harness/adapters/dolo/adapter.py
   stone: rosetta/dolo.md
-  environment: harness/envs/dolo      # Python 3.11, dolo 0.4.9.20 with dolang 0.0.20, and the rest
+  environment: harness/adapters/dolo/env   # Python 3.11, dolo 0.4.9.20 with dolang 0.0.20, and the rest
   levels: {low: 1, medium: 2, high: 3}
 ```
 
@@ -116,7 +116,8 @@ distance from the closed forms and the agreement within the toolkits' own conver
 - a manifest naming every hash: the experiment's, the members', the requests', each toolkit's version and commit and
   its environment's, and the harness's own commit.
 
-The manifest records when a run was made, but no run times or speeds (the memory on timings). A findings record stays
+The manifest records when a run was made and, since the ruling of 2026-11-04 that revoked the no-timings rule, is to
+record each job's duration with the machine, the threads and the environment beside it, once the run registry is built. A findings record stays
 hand-written: the harness gives the numbers, and a person says what they establish.
 
 **The command line, sketched:**
@@ -129,8 +130,7 @@ harness list                          # the experiments and the toolkits
 ```
 
 **What it does not do.**
-- It estimates nothing. toy-hafiscal's estimation is HARK's and HAFiscal's alone, and its member enters the harness
-  delivered.
+- It estimates nothing. An estimated member enters the harness delivered by the toolkit that estimated it.
 - It judges nothing beyond the experiment's checks. A toolkit that passes them is consistent with the others, not
   proved right.
 - It never edits an adapter's output.
@@ -162,7 +162,8 @@ Each stage is checked before the next starts.
    Lorenz curves from them.
 6. **A full run of restrained-limit's second version** for both toolkits at all three levels, through the harness,
    recorded as a findings record; the hand run of 2026-11-01 remains the record of the first version.
-7. **The toy-hafiscal experiment,** once its member is delivered and the results schema carries the iMPC.
+7. **The second experiment,** on an estimated member, once the HAFiscal-Latest repository returns it ready; it moved
+   there on 2026-11-04.
 8. **The layout:** done on 2026-11-02, before the runner, in commit `9675109`.
 9. **Continuous runs,** later: the harness at `low` for every toolkit on every pull request.
 
@@ -254,7 +255,7 @@ staying in the shared module as the verifier's.
 
    The move is one commit with nothing else in it.
 4. **The environments:** lock files from the start. Each toolkit's environment is a `uv` project,
-   `harness/envs/<toolkit>/pyproject.toml` with its `uv.lock`, and the harness runs each adapter with `uv run --frozen`
+   `harness/adapters/<toolkit>/env/pyproject.toml` with its `uv.lock` (moved beside the adapters on 2026-11-04), and the harness runs each adapter with `uv run --frozen`
    in it. The registry names the project in place of a requirement list.
 5. **Large outputs:** the Jacobians' matrices are kept out of git for now. A run folder's `.npy` files are ignored by git,
    and the results file's hashes of them are the record.

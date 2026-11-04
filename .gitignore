@@ -33,5 +33,5 @@ __pycache__/
 # The harness's environments, built from their lock files, and its run folders: a run's results are recorded in the
 # findings when they are kept, and the Jacobians' matrices stay out of git (harness/README.md).
 harness/.venv/
-harness/envs/*/.venv/
+harness/adapters/*/env/.venv/
 harness/runs/

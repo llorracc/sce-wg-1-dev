@@ -22,6 +22,9 @@ Constrained Solution as a Limit", three `bst-natural/1` members with ℘ = 0.005
   ```sh
   python schemas/checker/check.py schemas/bst/<scenario>/members/<member>.yaml --verify-results <dir>/results.json
   ```
+- **Since 2026-11-04** the results schema requires the quantiles, which these files carry, and the distribution function
+  at the comparison points, which they predate: against the current schema they fail validation on that field alone.
+  They stay as the record of this run.
 - **dolo's own comparison,** the same script as HARK's run, into `comparison.md` and `convergence.png`:
 
   ```sh

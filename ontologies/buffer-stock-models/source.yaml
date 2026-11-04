@@ -81,6 +81,10 @@ retired:
   # unemployment model is a calibration of the buffer-stock families, and writing unemployment as a Markov state is a
   # way to solve it, not a model of its own.
   - BSM_0000228
+  # The family rows of bst-natural-no-point-mass/1 and bst-zero-infima/1, retired on 2026-11-03: the owner abolished
+  # both families as uninteresting cases. The two scenario classes stay; no family of the schemas writes them.
+  - BSM_0000225
+  - BSM_0000227
   # Divergences of a toolkit from the ontology's terms, moved on 2026-11-01 to that toolkit's Rosetta Stone, since the
   # ontology names no toolkit.
   - BSM_0000138
@@ -310,7 +314,8 @@ model-classes:
     definition: >-
       A model with the natural constraint in force whose joint worst income has probability zero. An agent can end a
       period at the natural limit only when ϱ < k, with k the number of shocks that have densities at their floors.
-      The schemas' family bst-natural-no-point-mass/1.
+      No family of the schemas writes it: its family, bst-natural-no-point-mass/1, was abolished on 2026-11-03 as an
+      uninteresting case.
     subclass_of: natural-constraint
     axioms: [no-point-mass-at-joint-worst-income]
     sources: {bst: [pdv]}
@@ -321,7 +326,8 @@ model-classes:
       A buffer-stock model whose permanent shock or employed draw has infimum zero, so that the minimum present value of
       future income is zero and the natural constraint is a ≥ 0, which an artificial constraint at zero would only
       repeat. With no zero-income event and finite E[θ^(−ϱ)] (and E[ψ^(−ϱ)] where ψ's infimum is zero), the constraint
-      binds. The schemas' family bst-zero-infima/1; Ma, Stachurski and Toda's lognormal case.
+      binds. Ma, Stachurski and Toda's lognormal case. No family of the schemas writes it: its family, bst-zero-infima/1,
+      was abolished on 2026-11-03 as an uninteresting case.
     subclass_of: buffer-stock-model
     axioms: [zero-infimum, no-zero-income-event, finite-negative-moments]
     sources: {bst: [remark-stochdiscmst], mst-2020: ["Assumption 2.3", "Lemma C.2"]}
@@ -926,8 +932,9 @@ objects:
     definition: >-
       a_Nat, the lowest end-of-period assets from which the worst income next period still allows positive consumption
       forever: minus the present value of the worst income, capitalized at ℛ, that is −h_min. A quantity of the laws.
-      No stage file carries it as a parameter: the natural scenario without a point mass writes it out from the laws'
-      bounds, since Bellman-SYM has no derived parameters, and the other scenarios need none.
+      No stage file carries it as a parameter: the natural family's members have it at zero, through the zero-income
+      event, and the artificial family states a_Art above it. The family of the natural scenario without a point mass
+      wrote it out from the laws' bounds until its abolition on 2026-11-03.
     written_as: {bst: '\BoroCnstNat', registry: borrowing-limit-natural}
     sources: {bst: [borocnstnat, pdv]}
   - id: BSM_0000058
@@ -1658,14 +1665,6 @@ families:
       The schemas' family for the natural scenario with a point mass: its stage file states BST's own model, with
       truncated lognormals and the zero-income event; a positive benefit with a discrete ψ has no stage file yet.
     schema: ../../schemas/bst/natural/parameters.schema.json
-  - id: BSM_0000225
-    name: bst-natural-no-point-mass-1
-    label: "the schemas' family bst-natural-no-point-mass/1"
-    writes: [natural-without-point-mass, with-survival, with-positive-benefit, with-types]
-    definition: >-
-      The schemas' family for the natural scenario without a point mass, with truncated lognormals; its stage file
-      writes the natural limit out from the laws' bounds and carries the complementarity clause.
-    schema: ../../schemas/bst/other/natural-no-point-mass/parameters.schema.json
   - id: BSM_0000226
     name: bst-artificial-1
     label: "the schemas' family bst-artificial/1"
@@ -1674,14 +1673,6 @@ families:
       The schemas' family for the artificial scenario, with truncated lognormals and an artificial constraint strictly
       above the natural one; at a_Art = 0 its members are liquidity-constrained.
     schema: ../../schemas/bst/artificial/parameters.schema.json
-  - id: BSM_0000227
-    name: bst-zero-infima-1
-    label: "the schemas' family bst-zero-infima/1"
-    writes: [zero-infima, liquidity-constrained, with-survival, with-positive-benefit, with-types]
-    definition: >-
-      The schemas' family for the zero-infima scenario, with lognormals and no stated artificial constraint, since a ≥ 0
-      is the natural one.
-    schema: ../../schemas/bst/other/zero-infima/parameters.schema.json
 
 divergences:
   - id: BSM_0000141

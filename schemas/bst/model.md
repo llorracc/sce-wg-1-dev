@@ -2,30 +2,28 @@
 
 Draft; see the [README](../README.md).
 
-This document states the four buffer-stock families, one for each borrowing-constraint scenario
+This document states the two buffer-stock families, one for each borrowing-constraint scenario that has a family
 ([`constraint-scenarios.md`](../constraint-scenarios.md)). Their model is that of Carroll's *Theoretical Foundations of
 Buffer Stock Saving* (BST), with discount-factor types, perpetual youth, and a transitory shock whose worst value may be
 positive. Their notation is BST's, with SolvingMicroDSOPs' where BST is silent. They replace the single family `bst/1`.
 
-Two of the families are principal: `bst-natural/1`, under the natural constraint, and `bst-artificial/1`, under a
-binding artificial one. Their folders are in this one. The other two, `bst-natural-no-point-mass/1` and
-`bst-zero-infima/1`, are in [`other/`](other/). That is the owner's ruling of 2026-11-01: the model is in practice
-solved numerically under an artificial constraint, which covers the zero-infima scenario's laws once they are truncated,
-and the natural scenario without a point mass is of more theoretical than practical interest. The other two remain valid families,
-with their own stage files, checks and members.
+Two families remain: `bst-natural/1`, under the natural constraint, and `bst-artificial/1`, under a binding artificial
+one. Until 2026-11-03 two more stood in `other/`, `bst-natural-no-point-mass/1` and `bst-zero-infima/1`, kept apart by
+the owner's ruling of 2026-11-01 that the model is in practice solved numerically under an artificial constraint, which
+covers the zero-infima scenario's laws once they are truncated, and that the natural scenario without a point mass is
+of more theoretical than practical interest. On 2026-11-03 he abolished both as uninteresting cases. Their stage
+files, validators and members are in the repository's history; the two scenarios stay described in
+[`constraint-scenarios.md`](../constraint-scenarios.md), with no family writing them.
 
 | family | folder | the constraint in force | the shocks' laws | the stage file |
 |---|---|---|---|---|
 | `bst-natural/1` | [`natural/`](natural/) | the natural one, a > −`h_min`, never reached: the joint worst income is a point mass | bounded, with strictly positive floors and finite ceilings | [`natural.bl`](natural/bellman/natural.bl): truncated lognormals and BST's zero-income event, so `h_min` = 0 |
-| `bst-natural-no-point-mass/1` | [`other/natural-no-point-mass/`](other/natural-no-point-mass/) | the natural one, a ≥ −`h_min`, reached only if ϱ < k: the joint worst income has probability zero | bounded, as above | [`natural-no-point-mass.bl`](other/natural-no-point-mass/bellman/natural-no-point-mass.bl): truncated lognormals |
 | `bst-artificial/1` | [`artificial/`](artificial/) | the artificial one, a ≥ `a_Art`, strictly above −`h_min`; it binds | the floors of ψ and of ξ strictly positive | [`artificial.bl`](artificial/bellman/artificial.bl): truncated lognormals |
-| `bst-zero-infima/1` | [`other/zero-infima/`](other/zero-infima/) | a ≥ 0, from both constraints, since the laws' infima are zero; it binds | ψ's or θ's infimum zero, E[θ^(−ϱ)] finite, and no zero-income event | [`zero-infima.bl`](other/zero-infima/bellman/zero-infima.bl): lognormals |
 
 Each family's household problem is stated in Bellman-SYM in its stage file, the foundation of its statement. The files'
 names are this document's plain-text names, given in the notation below, except ℘, which the language refuses and the
-files spell `p_zero`. No stage file carries the natural limit as a parameter. `natural-no-point-mass.bl` writes it out
-from the laws' bounds, −`h_min` = −`ξ_min` 𝒢`ψ_min`/(R − 𝒢`ψ_min`), since Bellman-SYM has no derived parameters, and the
-others need none. This document adds what the language does not yet state: the population of types, the newborn, the
+files spell `p_zero`. No stage file carries the natural limit as a parameter: `natural.bl` has it at zero, through the
+zero-income event, and `artificial.bl` states `a_Art` above it. This document adds what the language does not yet state: the population of types, the newborn, the
 stationary population, the shock laws outside the stage files' families, and the conditions. A parameter file names one
 member of a family by giving every free parameter. The companion documents give the families'
 [conditions and implications](conditions.md) and their shared [results schema](results.md); the
@@ -48,8 +46,8 @@ A plain-text name is never pasted into LaTeX as it stands: `ξ_min` is `\underli
 | `\psi`, `\underline{\psi}` | ψ, `ψ_min` | the permanent shock, E[ψ] = 1, and its lowest value | BST |
 | `\xi`, `\underline{\xi}` | ξ, `ξ_min` | the transitory shock, the ratio of income to permanent income, and its lowest value, the worst transitory income: the lower of ξ_u and the employed draw's lowest value `θ_min` (1 − ℘ξ_u)/(1 − ℘) | BST |
 | `\theta`, `\underline{\theta}` | θ, `θ_min` | the employed draw, E[θ] = 1, and its lowest value | BST |
-| `\sigma_{\psi}`, `\sigma_{\theta}` | σ_ψ, σ_θ | the standard deviations of log ψ and log θ, the parameters of the lognormal laws `zero-infima.bl` writes | BST |
-| `\mu_{\psi}`, `s_{\psi}`, `\mu_{\theta}`, `s_{\theta}` | μ_ψ, s_ψ, μ_θ, s_θ | the location and the scale of log ψ and log θ before truncation, the parameters, with the bounds, of the truncated lognormals the other stage files write; the location makes the mean one after truncation | this family |
+| `\sigma_{\psi}`, `\sigma_{\theta}` | σ_ψ, σ_θ | the standard deviations of log ψ and log θ, the parameter files' `sd_log`, kept after truncation ([`shock-laws.md`](../shock-laws.md)) | BST |
+| `\mu_{\psi}`, `s_{\psi}`, `\mu_{\theta}`, `s_{\theta}` | μ_ψ, s_ψ, μ_θ, s_θ | the location and the scale of log ψ and log θ before truncation, the parameters, with the bounds, of the truncated lognormals the stage files write; the location makes the mean one after truncation | this family |
 | `\bar{\psi}`, `\bar{\theta}` | `ψ_max`, `θ_max` | the highest values of ψ and θ, finite in the natural scenarios | BST |
 | `\underline{h}` | `h_min` | the minimum present value of future noncapital income, as a ratio to permanent income: `ξ_min` 𝒢`ψ_min`/(R − 𝒢`ψ_min`), finite when 𝒢`ψ_min` < R; the natural limit is −`h_min` | HARK's hNrmMin, the owner's name for it |
 | `\wp` | ℘, `p_zero` in the stage file | the probability of unemployment, whatever ξ_u; BST's zero-income event when ξ_u = 0 | BST; econ-ark's `\pZero`, HARK's `UnempPrb` |
@@ -87,8 +85,8 @@ A plain-text name is never pasted into LaTeX as it stands: `ξ_min` is `\underli
 - ψ, θ and the unemployment event are independent of each other, over time and across agents. The expectation over (ψ′,
   ξ′) is over the product of their laws; a method that treats the two shocks separately composes as the product rule.
 - The laws of ψ and θ are parameters, each one of the [shock laws](../shock-laws.md), within what the family's scenario
-  allows. BST assumes bounded support for both shocks, with strictly positive floors, and the natural scenarios require
-  it. The artificial scenario needs only positive floors, and the zero-infima scenario a zero infimum.
+  allows. BST assumes bounded support for both shocks, with strictly positive floors, and the natural scenario requires
+  it. The artificial scenario needs only positive floors.
 
 ## Events within a period, in order
 
@@ -114,19 +112,12 @@ In ratios to permanent income, a survivor's resources evolve as
   household ends a period below it, since next period's worst income could then force consumption to zero or below. With
   ℛ = R/𝒢, `a_Nat` = −`ξ_min` `ψ_min`/(ℛ − `ψ_min`), where `ξ_min` and `ψ_min` are the lowest values of ξ and ψ. With
   BST's zero-income event, or with a law whose infimum is zero, `a_Nat` = 0.
-- The constraint in force, `a_min`, is the family's: `a_Nat` in the natural scenarios; the artificial constraint
-  `a_Art` ≤ 0, a parameter strictly above `a_Nat`, in the artificial scenario; and 0 in the zero-infima scenario, where
-  both constraints give it. Only the artificial family's parameter file states a constraint, so that each model has one
-  written form, by the owner's decision of 2026-11-01.
-- **The zero-infima constraint is still imposed.** Its stage file states a ≥ 0 itself, in the set of a, the feasible set
-  and the Euler equation's clause, since the natural limit there comes from the laws' infima, which are zero. A toolkit
-  imposes it as stated. One that took the natural limit from a discretization's lowest values would find it below zero
-  and let its agents borrow, which the model rules out; HARK's adapter therefore passes `BoroCnstArt = 0.0` for such a
-  member. A paper that states the constraint as an artificial one, as HAFiscal's does, writes the same model.
+- The constraint in force, `a_min`, is the family's: `a_Nat` in the natural scenario; the artificial constraint
+  `a_Art` ≤ 0, a parameter strictly above `a_Nat`, in the artificial scenario. Only the artificial family's parameter
+  file states a constraint, so that each model has one written form, by the owner's decision of 2026-11-01.
 - **Reaching the limit.** No household ends a period below `a_min`. Whether one ends a period exactly at it, consuming c
-  = m − `a_min`, is the scenario's mark: never, when the joint worst income is a point mass; only when ϱ < k, without
-  one; and for m below a kink, in the artificial and zero-infima scenarios
-  ([`constraint-scenarios.md`](../constraint-scenarios.md)).
+  = m − `a_min`, is the scenario's mark: never, in the natural family, whose joint worst income is a point mass; and
+  for m below a kink, in the artificial family ([`constraint-scenarios.md`](../constraint-scenarios.md)).
 
 ## Parameter domains
 
@@ -137,16 +128,14 @@ own requirements on the laws ([conditions](conditions.md), "Validity conditions"
 ## The household's problem, as the stage files state it
 
 Each stage file states one type's problem in five blocks, read here in BST's notation. k is last period's a, the arrival
-state; `[>]` marks next period's value and `[<]` this period's arrival value. The blocks are the same in the four files
+state; `[>]` marks next period's value and `[<]` this period's arrival value. The blocks are the same in both files
 except where the scenario's constraint and laws enter.
 
 - **Sets and parameters.** m ∈ ℝ, or ℝ₊₊ where the constraint keeps resources positive; a in the set of the scenario's
-  constraint: (0, ∞) in `natural.bl`; [−`h_min`, ∞) in `natural-no-point-mass.bl`; [`a_Art`, ∞) in `artificial.bl`;
-  [0, ∞) in `zero-infima.bl`. The employment state j ∈ {employed, unemployed}. The parameters β, ℒ, ϱ, R, 𝒢 and ℘, with,
+  constraint: (0, ∞) in `natural.bl`; [`a_Art`, ∞) in `artificial.bl`. The employment state j ∈ {employed, unemployed}. The parameters β, ℒ, ϱ, R, 𝒢 and ℘, with,
   by file, ξ_u, `a_Art`, and the laws' parameters.
-- **Shocks.** In the truncated files, ψ ~ TruncatedLogNormal(μ_ψ, s_ψ, `ψ_min`, `ψ_max`) and θ ~
-  TruncatedLogNormal(μ_θ, s_θ, `θ_min`, `θ_max`); in `zero-infima.bl`, ψ ~ LogNormal(−σ_ψ²/2, σ_ψ) and θ ~
-  LogNormal(−σ_θ²/2, σ_θ); j ~ Bernoulli(℘). The three are independent of each other and of the state. A member with
+- **Shocks.** In both files, ψ ~ TruncatedLogNormal(μ_ψ, s_ψ, `ψ_min`, `ψ_max`) and θ ~
+  TruncatedLogNormal(μ_θ, s_θ, `θ_min`, `θ_max`); j ~ Bernoulli(℘). The three are independent of each other and of the state. A member with
   another law, such as a discrete one, needs a stage file written with that law's family.
 - **Arrival to decision** (`arvl_to_dcsn`): ξ = ξ_u in the unemployment event (0 in `natural.bl`), else
   θ (1 − ℘ξ_u)/(1 − ℘); m = R k/(𝒢 ψ) + ξ.
@@ -236,7 +225,7 @@ own. Each part exists once for each type, and a method may be given for all type
 
 A parameter file is YAML in a strict subset, with no anchors, tags or merge keys. It holds the free parameters, under
 these names:
-- `family`, one of the four families' keys, which chooses the scenario, its stage file and its validator;
+- `family`, one of the two families' keys, which chooses the scenario, its stage file and its validator;
 - `crra` (ϱ);
 - `types`, a list of `{beta, share}` (β_i, ω_i), in increasing order of `beta`, with no repeat;
 - `survival` (ℒ);
@@ -268,10 +257,6 @@ artificial scenario ([`artificial/members/toy.yaml`](artificial/members/toy.yaml
       permanent_shock: {TruncatedLogNormal: {sd_log: 0.05477225575051661, bot: -3.0, top: 3.0}}
       unemployment: {prob: 0.044, income: 0.7}
       employed_shock: {TruncatedLogNormal: {sd_log: 0.34641016151377546, bot: -3.0, top: 3.0}}
-
-The same laws with no artificial constraint are `bst-natural-no-point-mass/1`'s member
-[`toy-natural`](other/natural-no-point-mass/members/toy-natural.yaml), and the toy with untruncated lognormals is
-`bst-zero-infima/1`'s [`toy-untruncated`](other/zero-infima/members/toy-untruncated.yaml).
 
 The community library's buffer-stock model (QuantEcon community-library pull request 5, annual period) is BST's own
 version, in the natural scenario with a point mass: K = 1 and ℒ = 1; ℘ = 0.005 with ξ_u = 0; 𝒢 = 1.03, R = 1.04, β =
@@ -324,75 +309,3 @@ was 0.138, 0.061 and 0.027 for the three rungs. It is largest at m ≈ 0.98, the
 restrained rule's kink, and falls by a factor of about 2.3 for each tenfold fall in ℘. That route is HARK's Markov
 consumer with two states, employed and the zero-income event, whose chain is not persistent. It implements either
 scenario without changing HARK's i.i.d. solver.
-
-## The toy-hafiscal experiment: estimated types, steady states and Jacobians
-
-The second experiment every toolkit's solution is to be run on is a simplified HAFiscal, `toy-hafiscal`, specified by the
-owner on 2026-11-01:
-- **The model.** `bst-artificial/1` with the values of
-  [`iid-ui-artificial`](artificial/members/iid-ui-artificial.yaml) for everything but the discount factors: quarterly; unemployment with probability 0.05 every quarter, whatever the last, paying 0.5 of
-  permanent income; employed income scaled to mean one; the toy's laws, truncated at three standard deviations, and its
-  growth, survival, return and ϱ; a ≥ 0. There is one group, no splurge and no recession.
-- **The types.** Three discount-factor types with equal shares, set by a center β and a spread ∇: the midpoints of
-  three equal parts of [β − ∇, β + ∇], that is β − 2∇/3, β and β + 2∇/3, as HAFiscal sets its seven.
-- **The calibration.** HARK's and HAFiscal's tools choose (β, ∇) to match HAFiscal's targets for the Lorenz curve of
-  wealth and the whole profile of the intertemporal MPC, the iMPC. The estimation is theirs alone; no other toolkit
-  estimates anything. What they deliver is a member file with the three types fixed, and a record of the targets, the
-  fit and the code that produced it.
-- **What every toolkit does.** It takes the member and solves and simulates the steady state: each type's consumption
-  rule and the ergodic distribution, as the results schema already asks. It also exposes what is needed to compute its
-  sequence-space Jacobians, so that the SSJ exercise can be done on every toolkit's steady state.
-
-The targets, as HAFiscal's published package states and computes them (llorracc/HAFiscal-QE,
-`Code/HA-Models/Target_AggMPCX_LiquWealth/Estimation_BetaNablaSplurge.py`, the model of its first estimation step,
-which has one population and a one-quarter unemployment event):
-- **The Lorenz curve of liquid wealth,** from the 2004 Survey of Consumer Finances (`Code/Empirical/make_liquid_wealth.py`):
-  checking and savings times 1.05, plus certificates of deposit, mutual funds, stocks and bonds, less credit-card
-  balances, for heads aged 25 to 62 with positive income, without the bottom 5% by permanent income or negative liquid
-  wealth, with the survey's weights. The targets are the shares of total liquid wealth held by the bottom 20, 40, 60
-  and 80% of households ranked by liquid wealth: 0.029%, 0.354%, 1.84% and 7.42% (`lorenz_target`).
-- **The iMPC profile,** Fagereng, Holm and Natvik (2021), Figure 2: the share of a lottery prize spent in years 0 to 4,
-  0.5056845, 0.1759051, 0.1035106, 0.0444222 and 0.0336616 (`Agg_MPCX_target`). The quarterly model maps to years by
-  letting each winner win in a quarter of year 0 drawn uniformly and summing, in levels, each year's four quarters of
-  consumption with the win less consumption without it, over the prize; year 0 so counts one to four quarters.
-- **The ratio of aggregate liquid wealth to aggregate quarterly income,** 6.60 (`KY_target`), which the Lorenz shares
-  cannot pin, since they do not depend on the level of wealth.
-- **The objective:** the sum of squared gaps over the five years of the profile and over the four Lorenz points, with
-  equal weights, plus ((K/Y − 6.60)/6.60)², as the package writes that block. The published objective's fourth block,
-  on the year-0 share by wealth quartile, is left out.
-- **The prize:** drawn for each winner from Fagereng, Holm and Natvik's four sizes, with equal probability, as the
-  paper describes: 1,625, 3,374, 7,129 and 40,000 USD, which the package's conversion (1,000 NOK = 110 USD, quarterly
-  after-tax income of 270,000/4 NOK) makes 0.219, 0.454, 0.960 and 5.387 of average quarterly income
-  (`lottery_size_USD`). Each winner's response is the share of their own prize spent, and the profile is the mean over
-  winners. The published code's switch for this never ran, so its estimates gave every winner 7,129 USD.
-- **The prize's units:** a level, the same for every winner of a size, equal to those fractions of the steady state's
-  mean quarterly income per capita. That is the population's mean permanent income, (1 − ℒ)/(1 − ℒ𝒢) ≈ 1.4337 in the
-  family's units, where a newborn's permanent income is 1, times mean non-capital income per unit of it,
-  ℒ𝒢 + (1 − ℒ𝒢)κ ≈ 1.000115, slightly above one since newborns draw the employed branch: about 1.4339 in all. A winner's normalized
-  prize is the level over their own permanent income. This keeps the data's conversion, a prize over average income; in
-  HAFiscal's first step, where 𝒢 = 1, the population's mean is a newborn's and the two readings coincide (the owner's
-  choice, 17:12:52, given tentatively).
-
-These choices are the owner's, of 2026-11-01; the prize's law was changed from one prize to the four sizes at 17:09:41.
-
-**The newborn.** The member states the family's newborn: born employed, at permanent income 1 with no assets, with the
-employed branch of ξ. The published estimation code leaves HARK's newborn settings at their defaults: its newborns draw
-a first permanent shock and growth, take a transitory shock of exactly 1, and start with assets of 1e-5. A fit reported
-under that convention is for a slightly different stationary population, so the fit is to be evaluated again on the
-delivered member, as HARK's adapter solves it with the family's newborn.
-
-Not yet settled:
-- where the 6.60 comes from: the paper states it, and the package's data script does not produce it. The model's
-  ratio is the sum of end-of-period assets in levels over the sum of realized quarterly non-capital income in the same
-  quarter (the finding of 2026-11-03), so it is the income measure's mean of a, up to the newborns' employed branch;
-- **the economy's growth.** The published first step's household has 𝒢 = 1, and its economy grows through its
-  newborns, who enter at an aggregate level growing at 1.01^0.25 a quarter while incumbents keep theirs; relative to
-  the current newborn, permanent income falls with age. This member states 𝒢 = 1.0019026 for every household with
-  the newborn at 𝐩 = 1, where it rises with age. The two differ in the household's problem and in the distribution in
-  levels, so the Lorenz fit of one does not transfer to the other. The estimation is to be of the member as stated,
-  which HAFiscal's tools can do (PermGroFac = 1.0019026, PermGroFacAgg = 1, newborns at 1), unless the owner rules
-  that the toy should mirror the published step, which would need a newborn's permanent income stated as a level law
-  with a trend ([the finding](../records/findings/2026-11-03_hafiscal-lorenz-in-levels.md));
-- what a toolkit exposes for the Jacobians, a change to what results carry that is to be drawn up with the toolkits and
-  put to the owner before it is made.
-

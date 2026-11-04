@@ -1,7 +1,8 @@
 """A stand-in toolkit for the harness's tests (../test_runner.py). It takes an adapter's command line and copies the
 results, method and settings files of HARK's committed run of the restrained-limit experiment for the member and level
-it is given, solving nothing. STUB_FAIL names a member to fail on; STUB_DROP names a key to remove from every type of
-the results file."""
+it is given, solving nothing, and adds a stand-in for the distribution function at the comparison points, which those
+files predate (results.md, 2026-11-04). STUB_FAIL names a member to fail on; STUB_DROP names a key to remove from every
+type of the results file."""
 
 import argparse
 import json
@@ -27,9 +28,14 @@ src, out = RUN / member / f"level-{a.level}", Path(a.out)
 out.mkdir(parents=True, exist_ok=True)
 for name in ("methods.yaml", "settings.yaml", "results.json"):
     shutil.copyfile(src / name, out / name)
-if os.environ.get("STUB_DROP"):
-    results = json.loads((out / "results.json").read_text(encoding="utf-8"))
-    for t in results["types"]:
+results = json.loads((out / "results.json").read_text(encoding="utf-8"))
+for t in results["types"]:
+    n = len(t["comparison_points"])
+    stand_in = [(i + 1) / n for i in range(n)]
+    t["population"]["m"]["cdf"] = list(stand_in)            # m's alone: the files' requests give a no points of its own
+    if t["income_measure"]["status"] == "value":
+        t["income_measure"]["m"]["cdf"] = list(stand_in)
+    if os.environ.get("STUB_DROP"):
         t.pop(os.environ["STUB_DROP"], None)
-    (out / "results.json").write_text(json.dumps(results), encoding="utf-8")
+(out / "results.json").write_text(json.dumps(results), encoding="utf-8")
 print(f"stub: {member} level {a.level}")

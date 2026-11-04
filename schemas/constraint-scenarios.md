@@ -17,6 +17,11 @@ the whole family, since its one-state unemployment model is a calibration of the
 state only a way to solve it (the owner's rulings). What the paragraphs below say of the Markov family and the paper's
 members is superseded.
 
+**Since 2026-11-03, two scenarios have no family.** The owner abolished `bst-natural-no-point-mass/1` and
+`bst-zero-infima/1` as uninteresting cases. The two scenarios stay in the analysis below, which is why the natural
+family requires a point mass and the artificial one positive floors; their stage files, validators and members are in
+the repository's history, and what the paragraphs below say of their files and members is superseded.
+
 ## What separates the scenarios
 
 Two facts about the true laws decide where a member falls, never facts about a discretization:
@@ -45,7 +50,7 @@ reaches its limit, and one with k = 2 does only when 1 < ϱ < 2.
 
 ## The scenarios
 
-| | natural, with a point mass | natural, without one | artificial | zero infima |
+| | natural, with a point mass (`bst-natural/1`) | natural, without one (no family since 2026-11-03) | artificial (`bst-artificial/1`) | zero infima (no family since 2026-11-03) |
 |---|---|---|---|---|
 | constraint in force | a > −h_min, h_min ≥ 0 | a > −h_min, h_min > 0 | a ≥ a_Art > −h_min, h_min > 0 | a ≥ 0, the natural constraint, which an artificial one at 0 would only repeat |
 | the laws | ψ in [ψ_min, ψ_max] and θ in [θ_min, θ_max], all four bounds positive and finite | the same | ψ_min > 0 and ξ_min > 0; no upper bounds needed | ψ_min · θ_min = 0 |
@@ -54,7 +59,7 @@ reaches its limit, and one with k = 2 does only when 1 < ϱ < 2.
 | a mass at the floor | none | none when ϱ > k | if the binding region reaches the lowest attainable m (a matter of calibration) | yes |
 | the Euler equation | equality everywhere | Kuhn–Tucker | Kuhn–Tucker | Kuhn–Tucker |
 | existence | BST's theorem for its own case (℘ > 0, ξ_u = 0): WRIC and FVAC. Otherwise conjectured, not proved: FVAC, the WRIC with p_worst, and 𝒢ψ_min < R | no theorem | at a_Art = 0: Ma, Stachurski and Toda, FVAC and MST-βR; between −h_min and 0, none stated | Ma, Stachurski and Toda: FVAC, MST-βR and E[ξ^(−ϱ)] < ∞; exact in their framework for a finite-valued ψ, unchecked for a continuous one |
-| examples | BST's own model, with h_min = 0; a positive benefit with a discrete ψ; all-discrete laws | a positive benefit with continuous truncated laws and no artificial constraint | `toy`; HAFiscal with laws truncated as `iid-ui-artificial` has them | Ma, Stachurski and Toda's and QuantEcon's lognormal model with a ≥ 0; `toy-untruncated`; HAFiscal's published model, by its stated laws |
+| examples | BST's own model, with h_min = 0; a positive benefit with a discrete ψ; all-discrete laws | a positive benefit with continuous truncated laws and no artificial constraint | `toy`; HAFiscal with its laws truncated | Ma, Stachurski and Toda's and QuantEcon's lognormal model with a ≥ 0; `toy-untruncated`; HAFiscal's published model, by its stated laws |
 
 Sources: BST's assumption on the shocks and its existence theorem; Ma, Stachurski and Toda (2020), Theorem 2.2 and Lemma
 C.2. The thresholds in k come from the BST session's derivation of 2026-10-18, run for one density and not for two. The

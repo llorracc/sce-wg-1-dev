@@ -58,7 +58,8 @@ Each stone is a document, with its cards in a YAML file beside it.
 
    Nothing counts as correct until a run is recorded.
 
-A stone records no run times or speeds ([the memory on timings](../schemas/records/memory/feedback_no-timings.md)).
+A stone records no run times or speeds: those belong to the run registry, since the ruling of 2026-11-04 that revoked
+the no-timings rule ([the memory on timings](../schemas/records/memory/feedback_no-timings.md), superseded).
 
 ## The workflow
 

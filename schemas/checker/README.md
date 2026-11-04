@@ -69,11 +69,8 @@ model. A `null` bound stays `null`. The three members write their bounds, so the
   and masses:
   - `bst-natural/1`: both laws bounded, with strictly positive floors and finite ceilings; 𝒢`ψ_min` < R; and the joint
     worst income a point mass;
-  - `bst-natural-no-point-mass/1`: the same bounds, and the joint worst income of probability zero;
   - `bst-artificial/1`: `ψ_min` > 0 and `ξ_min` > 0, and `a_Art` strictly above `a_Nat` = −`ξ_min` `ψ_min`/(ℛ −
     `ψ_min`), with ℛ = R/𝒢;
-  - `bst-zero-infima/1`: the infimum of ψ or of θ zero; no zero-income event; E[θ^(−ϱ)] finite, and E[ψ^(−ϱ)] when ψ's
-    infimum is zero.
 - Each law passes its own rules.
 - Every type passes the validity conditions: the FVAC, and the RIC or the WRIC.
 
@@ -92,8 +89,9 @@ employed draw's scale, and the lowest resources a newborn can have.
 validates the results file against `bst/results.schema.json` and verifies its report on the toolkit's effective member
 against the member (`effective-member.md`): each factor as the arithmetic of the reported expectations and the
 parameters, each verdict against its factor, each status against the verdicts, each derived parameter as the arithmetic
-of the reported lowest values, the lowest values against the stated member's infima, and the expectations against what
-every law obeys. The expectations' values themselves are the toolkit's and are trusted. The member's own report is the
+of the reported lowest values, the lowest values against the stated member's infima, the expectations against what
+every law obeys, and each distribution function at the comparison points as one value per point, nondecreasing along
+the points. The expectations' values themselves are the toolkit's and are trusted. The member's own report is the
 stated member's, the limit a toolkit's effective member approaches; a condition whose margin lies within the closed
 forms' precision is marked `undecided`.
 

@@ -56,7 +56,7 @@
     "text": "a name in the buffer-stock families' Bellman-SYM stage files as the language now writes it: a declared field, parameter, set or function, a perch mark, a derivative term, or the id of a block or line, which is the address of where a relation is written, not an object"
    }
   },
-  "source_digest": "sha256:8877c421c56dc573e6e7791be9414587dd60b450fe71a54d5b842d49ac05c86b"
+  "source_digest": "sha256:5141628f045867100b88ad96a64ed8039c0a497f372b5b6b92ce495e8b9182de"
  },
  "kinds": {
   "model-class": "A class of models, defined by axioms. A model is a member when it satisfies every membership axiom.",
@@ -100,6 +100,8 @@
   "BSM_0000179",
   "BSM_0000229",
   "BSM_0000228",
+  "BSM_0000225",
+  "BSM_0000227",
   "BSM_0000138",
   "BSM_0000139",
   "BSM_0000140",
@@ -596,7 +598,7 @@
    "kind": "model-class",
    "name": "natural-without-point-mass",
    "label": "the natural scenario without a point mass",
-   "definition": "A model with the natural constraint in force whose joint worst income has probability zero. An agent can end a period at the natural limit only when ϱ < k, with k the number of shocks that have densities at their floors. The schemas' family bst-natural-no-point-mass/1.",
+   "definition": "A model with the natural constraint in force whose joint worst income has probability zero. An agent can end a period at the natural limit only when ϱ < k, with k the number of shocks that have densities at their floors. No family of the schemas writes it: its family, bst-natural-no-point-mass/1, was abolished on 2026-11-03 as an uninteresting case.",
    "subclass_of": {
     "name": "natural-constraint",
     "id": "BSM_0000209"
@@ -621,7 +623,7 @@
    "kind": "model-class",
    "name": "zero-infima",
    "label": "the zero-infima scenario",
-   "definition": "A buffer-stock model whose permanent shock or employed draw has infimum zero, so that the minimum present value of future income is zero and the natural constraint is a ≥ 0, which an artificial constraint at zero would only repeat. With no zero-income event and finite E[θ^(−ϱ)] (and E[ψ^(−ϱ)] where ψ's infimum is zero), the constraint binds. The schemas' family bst-zero-infima/1; Ma, Stachurski and Toda's lognormal case.",
+   "definition": "A buffer-stock model whose permanent shock or employed draw has infimum zero, so that the minimum present value of future income is zero and the natural constraint is a ≥ 0, which an artificial constraint at zero would only repeat. With no zero-income event and finite E[θ^(−ϱ)] (and E[ψ^(−ϱ)] where ψ's infimum is zero), the constraint binds. Ma, Stachurski and Toda's lognormal case. No family of the schemas writes it: its family, bst-zero-infima/1, was abolished on 2026-11-03 as an uninteresting case.",
    "subclass_of": {
     "name": "buffer-stock-model",
     "id": "BSM_0000001"
@@ -2137,7 +2139,7 @@
    "label": "natural borrowing constraint",
    "category": "constraint",
    "symbol": "a_Nat",
-   "definition": "a_Nat, the lowest end-of-period assets from which the worst income next period still allows positive consumption forever: minus the present value of the worst income, capitalized at ℛ, that is −h_min. A quantity of the laws. No stage file carries it as a parameter: the natural scenario without a point mass writes it out from the laws' bounds, since Bellman-SYM has no derived parameters, and the other scenarios need none.",
+   "definition": "a_Nat, the lowest end-of-period assets from which the worst income next period still allows positive consumption forever: minus the present value of the worst income, capitalized at ℛ, that is −h_min. A quantity of the laws. No stage file carries it as a parameter: the natural family's members have it at zero, through the zero-income event, and the artificial family states a_Art above it. The family of the natural scenario without a point mass wrote it out from the laws' bounds until its abolition on 2026-11-03.",
    "written_as": {
     "bst": "\\BoroCnstNat",
     "registry": "borrowing-limit-natural"
@@ -5237,32 +5239,6 @@
    "schema": "../../schemas/bst/natural/parameters.schema.json"
   },
   {
-   "id": "BSM_0000225",
-   "kind": "family",
-   "name": "bst-natural-no-point-mass-1",
-   "label": "the schemas' family bst-natural-no-point-mass/1",
-   "writes": [
-    {
-     "name": "natural-without-point-mass",
-     "id": "BSM_0000211"
-    },
-    {
-     "name": "with-survival",
-     "id": "BSM_0000004"
-    },
-    {
-     "name": "with-positive-benefit",
-     "id": "BSM_0000006"
-    },
-    {
-     "name": "with-types",
-     "id": "BSM_0000008"
-    }
-   ],
-   "definition": "The schemas' family for the natural scenario without a point mass, with truncated lognormals; its stage file writes the natural limit out from the laws' bounds and carries the complementarity clause.",
-   "schema": "../../schemas/bst/other/natural-no-point-mass/parameters.schema.json"
-  },
-  {
    "id": "BSM_0000226",
    "kind": "family",
    "name": "bst-artificial-1",
@@ -5291,36 +5267,6 @@
    ],
    "definition": "The schemas' family for the artificial scenario, with truncated lognormals and an artificial constraint strictly above the natural one; at a_Art = 0 its members are liquidity-constrained.",
    "schema": "../../schemas/bst/artificial/parameters.schema.json"
-  },
-  {
-   "id": "BSM_0000227",
-   "kind": "family",
-   "name": "bst-zero-infima-1",
-   "label": "the schemas' family bst-zero-infima/1",
-   "writes": [
-    {
-     "name": "zero-infima",
-     "id": "BSM_0000212"
-    },
-    {
-     "name": "liquidity-constrained",
-     "id": "BSM_0000200"
-    },
-    {
-     "name": "with-survival",
-     "id": "BSM_0000004"
-    },
-    {
-     "name": "with-positive-benefit",
-     "id": "BSM_0000006"
-    },
-    {
-     "name": "with-types",
-     "id": "BSM_0000008"
-    }
-   ],
-   "definition": "The schemas' family for the zero-infima scenario, with lognormals and no stated artificial constraint, since a ≥ 0 is the natural one.",
-   "schema": "../../schemas/bst/other/zero-infima/parameters.schema.json"
   },
   {
    "id": "BSM_0000141",

@@ -20,7 +20,10 @@ They are not the same thing, and the working group needs both. A schema fixes th
 which parameter files, stage files and results files are legal, and what each key means for that family. It is the
 *syntax* of a semantic ontology, with parts of its *denotation* and of its *well-posedness*. This ontology states the
 model class itself, independently of any written form: what a buffer-stock model is, which objects it has, which
-conditions and results relate them, and when two models are one. Each written form then denotes one of its terms.
+conditions and results relate them, and when two models are one. Each written form then denotes one of its terms. Each
+family of the schemas is meant as a canonical, exact definition of the members it writes, a statement under which every
+valid solution method converges to one solution; the conditions this ontology states are what make such a definition
+well-posed.
 
 | part | here | in the schemas |
 |---|---|---|
@@ -101,10 +104,11 @@ not a member.
 
 Applied to the schemas' members, the axioms put each in exactly the scenario its family writes (the tests check this):
 - `library`, with its laws truncated, is in `natural-with-point-mass` and satisfies every hypothesis of BST's class;
-- `toy-natural`, the toy's laws with no artificial constraint, is in `natural-without-point-mass`;
 - `toy` is in `with-artificial-constraint`: its floors are positive and a ≥ 0 lies above the natural constraint;
-- `toy-untruncated` is in `zero-infima`. Its untruncated laws put `a_Nat` at 0, and a ≥ 0 binds. Until 2026-11-01 it was
-  outside the class, at the edge without an atom.
+
+Until 2026-11-03 two more members stood in the other two scenarios: `toy-natural`, the toy's laws with no artificial
+constraint, in `natural-without-point-mass`, and `toy-untruncated`, whose untruncated laws put `a_Nat` at 0 so that a ≥ 0
+binds, in `zero-infima`. Their families were abolished that day, and the schemas' history keeps them.
 
 ## The classes
 
@@ -131,11 +135,12 @@ perfect-foresight-benchmark       the limit, outside the class
 
 The four scenarios partition the class: every member is in exactly one of `natural-with-point-mass`,
 `natural-without-point-mass`, `with-artificial-constraint` and `zero-infima`. The other extensions reduce to `bst-model`
-under a stated restriction, such as ℒ = 1 or ξ_u = 0. The schemas write each scenario as a family of its own, with its
-own stage file: `bst-natural/1`, `bst-natural-no-point-mass/1`, `bst-artificial/1` and `bst-zero-infima/1`, each also
-writing members of `with-survival`, `with-positive-benefit` and `with-types`. No family writes `with-markov-states`
-since the Markov family's retirement on 2026-11-01. The schemas treat two scenarios as principal, the natural one with a point
-mass and the artificial one; that is a choice of emphasis, and the ontology's classes do not depend on it.
+under a stated restriction, such as ℒ = 1 or ξ_u = 0. The schemas write two scenarios as families of their own, each
+with its own stage file: `bst-natural/1` and `bst-artificial/1`, each also writing members of `with-survival`,
+`with-positive-benefit` and `with-types`. The other two scenarios had families, `bst-natural-no-point-mass/1` and
+`bst-zero-infima/1`, until the owner abolished them on 2026-11-03 as uninteresting cases; no family writes
+`with-markov-states` since the Markov family's retirement on 2026-11-01. The ontology's classes do not depend on which
+scenarios have a family.
 
 In the life-cycle class, a primitive binds the stage occurrence of the period whose block reads it. In the families'
 one-stage period, β and ℒ are read in period t's decision block, and R, 𝒢 and the shocks' laws in period t+1's arrival
@@ -363,8 +368,8 @@ conventions silently differ.
     terms?
   - **Stage files for the other laws.** A positive benefit in the natural scenario with a point mass needs a discrete ψ,
     and so a stage file written with that law's family; so does any member whose laws the four files do not write.
-- **Existence in the natural scenario without a point mass**, and in the artificial scenario with `a_Art` < 0: no
-  theorem is stated.
+- **Existence in the artificial scenario with `a_Art` < 0**: no theorem is stated. The same question in the natural
+  scenario without a point mass lost its family on 2026-11-03.
 
 ## The files
 

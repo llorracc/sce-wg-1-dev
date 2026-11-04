@@ -18,8 +18,10 @@ optional.
 - The hash of the method file and of the settings element ([numerical methods](../numerics.md)).
 - The hash of the request file, which holds the comparison points.
 - The toolkit and its version.
-- The hardware and the threads, which account for differences in the last digits. No run time: a results file describes a
-  solution, and the files of different toolkits are read side by side.
+- The hardware and the threads, which account for differences in the last digits. No run time in the file, dropped in the fork's pull
+  request #5: a results file describes a solution, and the files of different toolkits are read side by side. Since the
+  ruling of 2026-11-04 that revoked the no-timings rule, a run's time belongs to the run registry, and whether the file
+  carries its own again is a schema question.
 - Optional: the numerical environment, a free-form object of library versions; the driver, the program that assembled the
   file when the toolkit has more than one; and the parameter file's path. The hash, not the path, identifies the member.
 
@@ -65,7 +67,29 @@ Its points come, by a stated rule, from a quick solution of the member. For each
   point of the toolkit's grid;
 - several points above the 99th percentile.
 
-Each point is rounded to three significant figures.
+Each point is rounded to three significant figures. The rule, its derivative, the Euler residuals and the distribution
+functions of m and of c are reported at these points.
+
+For a, the request file gives points of its own, `a_points`, by the ruling of 2026-11-04: the stationary quantiles of a
+at the same probabilities, above the constraint's atom, whose mass the results file reports as it is, and the same
+multiples of its 99th percentile. At m's points the distribution function of a reads m's tail, since the rule is
+increasing, as the HAFiscal session measured; at its own points it reads the wealth distribution where its mass is.
+
+**Genuine atoms.** A point that lands on an atom of the stated member's distribution makes the distribution function
+there turn on round-off and on where a representation holds the atom's mass, up to the atom's whole mass, which the
+HAFiscal session measured at 1.2 points. The atoms whose locations the parameters fix are m = ξ_u, when the constraint
+is artificial at zero and the unemployed income is positive, since every constrained household that loses its job
+arrives there whatever ψ; and a at an artificial constraint, where the constrained households sit. The request rule
+moves a point that lands on one of them one unit up in its third figure, 0.5 to 0.501, and leaves a's points at the
+constraint out. A third atom, a(ξ_u), the one m's maps to, sits at the rule's value ξ_u − c(ξ_u) when ξ_u lies above
+the kink and at the constraint when it lies below, and near a kink at one or the other depending on the toolkit, since
+the kink moves with the settings. Its location carries c's error whole, a few thousandths of c at default settings,
+which against a small a(ξ_u) is large, so the rule keeps a's points clear of the higher of that atom and the
+constraint by a hundredth of c(ξ_u), moving a point within that distance to the smallest three-figure value beyond it.
+In today's members ξ_u lies below every kink, so the atom is the constraint's, and the clearance from the constraint
+still applies: it moves the lowest point of a for a few types by a few thousandths, to where the mass just above the
+constraint is read, which is where differences in the kink show. The checker flags any comparison point at an atom
+whose location the parameters fix.
 
 ## The rule, for each type
 
@@ -94,10 +118,18 @@ so that a reader can compute dynamics that the results file does not report.
 Under the **population measure**, for m, a and c:
 - The **generalized Lorenz ordinates** GL(p) = ∫₀^p Q(u) du, where Q is the quantile function, at p = 0.01, 0.05, 0.1, 0.2, …,
   0.9, 0.95, 0.99, 0.999 and 1. GL(1) is the mean.
-- The quantiles at the same probabilities except 1 (optional). Q(1) is the top of the support, infinite whenever the upper
-  tail is unbounded, as the tail exponents in the checker's report show it is for every type of the three members. A computed
-  Q(1) is the largest point with any mass at all: it grows with the representation's top, and read through a running total of
-  the masses it turns on round-off. It says nothing about the solution.
+- The quantiles at the same probabilities except 1, required since the ruling of 2026-11-04. Q(1) is the top of the support,
+  infinite whenever the upper tail is unbounded, as the tail exponents in the checker's report show it is for every type of
+  the three members. A computed Q(1) is the largest point with any mass at all: it grows with the representation's top, and
+  read through a running total of the masses it turns on round-off. It says nothing about the solution.
+- The **distribution function** F(x) = P(X ≤ x) at the comparison points, in the request file's order, an atom at x counted
+  in full; required for m since the same ruling, so results files written before 2026-11-04 carry none and the validator
+  says so. It is bounded in the tail, where the thin density amplifies a quantile's error, and every representation
+  evaluates it: a histogram sums its cells, a lottery its nodes, a simulation its sample, a density integrates. Q and F
+  are the standard pair, Q(p) = inf{x : F(x) ≥ p}. For a it is reported at a's own points, the request file's
+  `a_points`, whenever the request file gives them, and the checker holds the two to each other. For c it is optional
+  and, at m's points, says little: for one type the rule is increasing, so F_c(x) = F_m(c⁻¹(x)) reads m's tail, which
+  the HAFiscal session measured above 0.999 at most points of the request rule.
 - The mean of c, the aggregate ratio of consumption to income.
 - The mass at the borrowing constraint, a = `a_min`, and the fraction with a ≤ 0.
 - The mean MPC, and the mean MPC within each quartile of a. The quartiles are defined through the quantile rank, so a mass point
@@ -105,7 +137,8 @@ Under the **population measure**, for m, a and c:
 - The coverage of the representation (optional; see below).
 
 Under the **income measure**, for m and a:
-- the GL ordinates at the same probabilities;
+- the GL ordinates at the same probabilities, the quantiles, and the distribution functions, m's at its comparison
+  points and a's at its own;
 - the mass at the borrowing constraint;
 - the mean of a;
 - the mean MPC, the weighting that aggregate consumption responses use;
@@ -130,7 +163,8 @@ mass falls as x^(−α), so mass on the top far above what the tail's points ext
 exponent α > 1, which the checker's report gives for each type, a clipped representation misses about
 `top` · `top_mass`/(α − 1) of the mean; at α ≤ 1 the mean is infinite, as the domain rules say. When `top_mass` is well
 below 0.001, Q(0.999) lies below the top, so neither it nor GL(0.999) reads the mass held there. In the pooled blocks
-the coverage is given only when the types share a top, with share-weighted masses.
+the coverage is given only when the types share a top, with share-weighted masses, and the distribution function only
+when they share the comparison points.
 
 Why generalized Lorenz ordinates:
 - They are defined whatever the distribution's mass points and gaps.
@@ -175,7 +209,8 @@ The owner asked on 2026-11-02 for the stationary distribution of permanent incom
 economy generates, and ruled on 2026-11-03 that of permanent income what is needed is its inequality, which the
 Lorenz curve gives; nothing is required of a member for it. The same morning he ruled that HAFiscal's Lorenz targets of
 liquid wealth are of wealth in levels, which HAFiscal's code confirmed
-([the finding](../records/findings/2026-11-03_hafiscal-lorenz-in-levels.md)).
+([the rulings of 2026-11-03](../records/rulings/2026-11-03_harness-decisions.md); the finding itself is with the
+HAFiscal-Latest repository since 2026-11-04).
 
 - **The distribution of permanent income 𝐩** (required), for each type and pooled, under the population measure, in
   units of a newborn's: its GL ordinates and quantiles at the standard probabilities, as for m, behind a status. Its
@@ -187,7 +222,7 @@ liquid wealth are of wealth in levels, which HAFiscal's code confirmed
   HAFiscal's words, for each type and pooled, under the population measure, in units of a newborn's permanent income:
   its GL ordinates and quantiles at the standard probabilities, behind a status. Its Lorenz shares at p = 0.2, 0.4,
   0.6 and 0.8, GL(p)/GL(1), are HAFiscal's targets, which its estimation computes on exactly this object across
-  households ranked by it ([the finding](../records/findings/2026-11-03_hafiscal-lorenz-in-levels.md)); and its mean
+  households ranked by it; and its mean
   over the economy's mean income is the wealth-to-income ratio, the income measure's mean of a. It is `undefined` when
   the distribution of permanent income is, or when the income measure's mean of a is infinite, since E[a𝐩] is E[𝐩]
   times that mean ([conditions](conditions.md)).
@@ -299,7 +334,7 @@ The validator is [`results.schema.json`](results.schema.json). The shape is roug
       "kink": {"status": "value", "m": 0.38, "slope_below": 1.0, "slope_above": 0.93},
       "target": {"status": "value", "m": 1.39, "c": 1.01, "mpc": 0.07},
       "pseudo_target": {"status": "value", "m": 1.21, "c": 0.99, "mpc": 0.09},
-      "population": {"m": {"gl": {"0.01": 0.0031, "1": "undefined"}}},
+      "population": {"m": {"gl": {"0.01": 0.0031, "1": "undefined"}, "quantiles": {"0.01": 0.31}, "cdf": [0.02, 0.09]}},
       "income_measure": {"m": {"gl": {"0.01": 0.0029}}},
       "welfare": {"status": "value", "mean_value": -31.2, "mean_felicity": -1.03},
       "marginal_welfare": {"status": "value", "mean": 1.07, "by_a_quartile": [2.1, 1.1, 0.7, 0.4], "at_constraint": 2.6},

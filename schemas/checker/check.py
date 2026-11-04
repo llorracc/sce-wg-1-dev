@@ -1,6 +1,5 @@
-"""Check a parameter file of a buffer-stock family (bst-natural/1, bst-natural-no-point-mass/1, bst-artificial/1 or
-bst-zero-infima/1): validate it, hash it, and report its conditions, domain rules and implications; or verify a results
-file against it.
+"""Check a parameter file of a buffer-stock family (bst-natural/1 or bst-artificial/1): validate it, hash it, and report
+its conditions, domain rules and implications; or verify a results file against it.
 
     uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst/artificial/members/toy.yaml [--json out.json]
     uv run --with jsonschema --with pyyaml --with scipy python check.py ../bst/artificial/members/toy.yaml --verify-results r.json

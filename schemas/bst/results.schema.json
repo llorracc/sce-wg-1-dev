@@ -8,7 +8,7 @@
                "toolkit", "provenance", "effective_member", "types", "pooled"],
   "additionalProperties": false,
   "properties": {
-    "family": { "enum": ["bst-natural/1", "bst-natural-no-point-mass/1", "bst-artificial/1", "bst-zero-infima/1"] },
+    "family": { "enum": ["bst-natural/1", "bst-artificial/1"] },
     "effective_member": { "$ref": "#/$defs/EffectiveMember" },
     "parameter_file_sha256": { "$ref": "#/$defs/Sha256" },
     "method_file_sha256": { "$ref": "#/$defs/Sha256" },
@@ -220,16 +220,27 @@
     },
 
     "DistributionBlock": {
-      "description": "One variable under one measure: its GL ordinates, optionally its quantiles, and the keys left null.",
+      "description": "One variable under one measure: its GL ordinates, its quantiles, its distribution function at the comparison points, and the keys left null. The quantiles are required everywhere and the distribution function for m in a type's blocks (the ruling of 2026-11-04); for a and c it is optional, and in the pooled blocks it is given only when the types share the comparison points.",
       "type": "object",
-      "required": ["gl"],
+      "required": ["gl", "quantiles"],
       "additionalProperties": false,
       "properties": {
         "gl": { "$ref": "#/$defs/ProbabilityMap" },
         "quantiles": { "$ref": "#/$defs/QuantileMap" },
+        "cdf": { "type": "array", "items": { "type": "number", "minimum": 0, "maximum": 1 },
+                 "description": "The distribution function F(x) = P(X <= x) at the variable's comparison points, in the request file's order: m's points for m and c, a's own points (a_comparison_points) for a; an atom at x counted in full. Every representation evaluates it: a histogram sums its cells, a lottery its nodes, a simulation its sample, a density integrates." },
         "undefined": { "$ref": "#/$defs/KeyList" },
         "not_computed": { "$ref": "#/$defs/KeyList" }
       }
+    },
+    "CdfRequired": {
+      "description": "A type's population block carries the distribution function of m. For a and c it is optional: the rule being increasing, theirs at m's comparison points read m's tail (results.md).",
+      "properties": { "m": { "required": ["cdf"] } }
+    },
+    "CdfRequiredWhenValue": {
+      "description": "A type's income-measure block carries the distribution function of m whenever the measure exists.",
+      "if": { "properties": { "status": { "const": "value" } } },
+      "then": { "properties": { "m": { "required": ["cdf"] } } }
     },
 
     "PopulationBlock": {
@@ -456,13 +467,15 @@
         "share": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
         "conditions": { "$ref": "#/$defs/Conditions" },
         "comparison_points": { "$ref": "#/$defs/NumberArray" },
+        "a_comparison_points": { "$ref": "#/$defs/NumberArray",
+                                 "description": "a's own comparison points, the request file's a_points, at which a's distribution function is reported (results.md, the ruling of 2026-11-04)." },
         "rule": { "$ref": "#/$defs/Rule" },
         "exported_rule": { "$ref": "#/$defs/ExportedRule" },
         "kink": { "$ref": "#/$defs/Kink" },
         "target": { "$ref": "#/$defs/SpecialPoint" },
         "pseudo_target": { "$ref": "#/$defs/SpecialPoint" },
-        "population": { "$ref": "#/$defs/PopulationBlock" },
-        "income_measure": { "$ref": "#/$defs/IncomeMeasureBlock" },
+        "population": { "allOf": [ { "$ref": "#/$defs/PopulationBlock" }, { "$ref": "#/$defs/CdfRequired" } ] },
+        "income_measure": { "allOf": [ { "$ref": "#/$defs/IncomeMeasureBlock" }, { "$ref": "#/$defs/CdfRequiredWhenValue" } ] },
         "welfare": { "$ref": "#/$defs/Welfare" },
         "marginal_welfare": { "$ref": "#/$defs/MarginalWelfare" },
         "euler_residuals": { "$ref": "#/$defs/EulerResiduals" },
@@ -495,7 +508,7 @@
     },
 
     "Jacobians": {
-      "description": "The sequence-space Jacobians and their metadata (../jacobians.md, approved 2026-11-01): optional, required in the toy-hafiscal suite. Column s of a matrix is the date at which its input's perturbed value applies, row t the date of the outcome, with news at date 0.",
+      "description": "The sequence-space Jacobians and their metadata (../jacobians.md, approved 2026-11-01): optional; an experiment may require it. Column s of a matrix is the date at which its input's perturbed value applies, row t the date of the outcome, with news at date 0.",
       "type": "object",
       "required": [
         "T",

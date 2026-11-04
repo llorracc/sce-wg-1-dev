@@ -63,7 +63,7 @@ Three cautions:
 | R, `return`, with ψ and 𝒢 | `R`, as R̂ᵢ = R/(𝒢ψᵢ) with the tilted weights | `R = exp(a_r ζ + b_r)` is an untruncated lognormal, so the adapter passes nodes |
 | ξ, from θ (`income.employed_shock`), ℘ (`income.unemployment.prob`) and ξ_u (`income.unemployment.income`) | `Y` | `Y = exp(a_y η + z b_y)` cannot hold the unemployment node, and with one state its mean is exp(a_y²/2), not one. The adapter passes ξ's nodes and weights |
 | the shocks' independence over time | `P`, the Markov chain of z | one state |
-| `a_Art`, `borrowing_constraint`, and `a_Nat` | 0 ≤ c ≤ a | the lecture has no borrowing: its constraint in force is 0, which is `bst-zero-infima/1`'s a ≥ 0 and `bst-artificial/1`'s at `a_Art` = 0. A natural family's member, or an artificial constraint below 0, needs the savings grid to start at `a_min`, and the anchor at (m, c) = (`a_min`, 0) |
+| `a_Art`, `borrowing_constraint`, and `a_Nat` | 0 ≤ c ≤ a | the lecture has no borrowing: its constraint in force is 0, which is `bst-artificial/1`'s at `a_Art` = 0; with the lecture's untruncated laws it is the natural constraint, the zero-infima scenario, whose family was abolished on 2026-11-03. A natural family's member, or an artificial constraint below 0, needs the savings grid to start at `a_min`, and the anchor at (m, c) = (`a_min`, 0) |
 | the newborn, and deaths at 1 − ℒ | none | the lecture's households start at half the grid's top and never die. The adapter computes the population itself |
 | V | none | the lecture iterates on consumption only. The adapter adds an evaluation of v under the converged rule |
 

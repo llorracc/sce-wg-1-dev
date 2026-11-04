@@ -1,13 +1,73 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 08:07 on 2026-11-03: the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two principal buffer-stock families and two in other/; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted; the rulings of 2026-11-02 that the harness gives parameters only and leaves the representation to each toolkit, and the revised proposal of 2026-11-03 that followed, the distributions of permanent income and of wealth in levels and the joint, with the adapters' independence planned, all awaiting the owner's reading; the toy-hafiscal estimation built in the HAFiscal session on his request; the ontology at draft.2, naming no toolkit"
+description: "What the schema project holds, what is settled and what is open, as of the commit of the evening of 2026-11-04 (the state of the memorial of 08:07 on 2026-11-03 kept below the day's changes): the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two buffer-stock families, the other two abolished on 2026-11-03; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted; the rulings of 2026-11-02 that the harness gives parameters only and leaves the representation to each toolkit, and the revised proposal of 2026-11-03 that followed, the distributions of permanent income and of wealth in levels and the joint, with the adapters' independence planned, all awaiting the owner's reading; the toy-hafiscal estimation built in the HAFiscal session on his request; the ontology at draft.2, naming no toolkit; the ruling of 2026-11-04 that a reference solution is the standard, his answers to its decisions later that morning, and the results-schema ruling of the same morning, the quantiles required and the distribution function at the comparison points added"
 metadata:
   type: project
 ---
 
+**As of the commit of the evening of 2026-11-04** (the day's rulings: [the purpose](../rulings/2026-11-04_purpose.md),
+[the architecture](../rulings/2026-11-04_architecture.md), [the reference solution](../rulings/2026-11-04_reference-solution.md);
+[the journal](../journal/2026-11-04_session-record.md)):
+- **The purpose made exact.** The owner confirmed the reading that the project is its own test of Project A's thesis,
+  and the exact-definition criterion, every valid solution method converging, given unbounded computation, to the same
+  solution as every other, with a canonical definition fixed for each model the group takes up, was proposed, approved
+  and opened as econ-ark/sce-wg-1 pull request #14 from the fork's branch `exact-definition`
+  ([`project-a/exact-definition.md`](../../../project-a/exact-definition.md)); the fork's own documents say "valid
+  solution method" for "bug-free toolkit", and the vocabulary gained the three terms.
+- **The architecture.** The buffer-stock model is the canonical model, its scenarios its families; one repository per
+  canonical model, not split yet; the adapters define and pin their environments; the images live in the model
+  repository until a second model; ConsIndShock and the Markov version with nonpersistent unemployment are two modes of
+  solution, a `mode` string proposed for the results schema; the no-timings rule is revoked
+  ([[feedback_no-timings]], superseded); Docker, its buildx plugin and repo2docker are installed on jhu-dell.
+- **The toy-hafiscal work moved to HAFiscal-Latest** until it is ready: the bundle verified there row by row; the member
+  `iid-ui-artificial`, the HAFiscal design note, the Lorenz-in-levels finding and the model document's section removed
+  here, the Jacobian interface kept and made general. It returns as one piece on three decisions typed in that session.
+- **The run registry on REMARK's machinery, adopted** ([`registry.md`](../../registry.md)): the model repository as a
+  REMARK whose `reproduce.sh` is the comparison and whose exit is the verdicts, `binder/` defining the organizer's
+  image; a registry entry as a REMARK execution record, the core
+  [`harness/execution-record.schema.json`](../../../harness/execution-record.schema.json) at 0.1.0-draft.4 after three
+  readings by the REMARK session, the fork's entry [`harness/runs.registry.schema.json`](../../../harness/runs.registry.schema.json);
+  five updates to REMARK begun in the session `jd_REMARK_integrate-with-WG1` on the owner's word, its first, execution
+  without a terminal, committed locally there, the push and the pull requests on his word in that session.
+- **Built here.** `harness/adapters/<toolkit>/env/` with a Dockerfile beside each lock file, both images built; the
+  runner's `--runtime docker` under the container contract, build and execution records (`harness/records.py`),
+  `verify` filling the verdicts, `register` into `harness/runs.registry/`; one HARK and one dolo job through
+  containers, verified. Tests: runner 9, checker 199, HARK 9, dolo 4, the ontologies 58 and 12.
+- **Open for the owner:** the registry entries' location; the `mode` string; the license; the level names (coarse,
+  default and fine proposed); the HAFiscal session's three decisions; the REMARK session's push and pull requests; the
+  push of this branch; and the morning's items on the reference solution and the results schema, recorded below.
+
+**The ruling of 2026-11-04, 06:23:39** ([the ruling](../rulings/2026-11-04_reference-solution.md)): a reference
+solution of each member, solved to very high precision by the continuous methods developed in the HAFiscal and HARK
+contexts, with a wide and dense grid and an ergodic distribution on a dense grid to the 99.9th percentile of wealth, is
+the standard, and actual solutions at default settings are compared to it. It answers the two questions of
+`schemas/comparing-solutions.md` put to him the evening before, and supersedes that design's agreement question. The
+proposal is `schemas/reference-solution.md`, PROPOSED, nothing built; the HAFiscal-Latest, HARK-dev and HARK sessions
+were asked the same morning which code solves the members as stated and what their defaults are. The continuous
+methods: HAFiscal's kink-split expectation in its SM2 form with the Hermite EGM, private and moving into HARK as its
+single source; HARK's continuous solver on the HARK session's unposted local branches, whose names stay out of public
+text, with the issue #1869 and the drafts #1861 to #1863 as its public parts; the bench's diagnostics expectation, the
+same rule. The three sessions answered the same morning; the proposal carries what they settled. The probe of the same
+morning, `records/findings/2026-11-04_reference-probe/`, ran the bench's continuous EGM on the four restrained-limit
+members: the rule to 10⁻¹² to 10⁻¹⁰ with the closed forms at round-off, the committed ladder's finest level 8 · 10⁻⁴
+from the stated member's solution, HARK's defaults 5 · 10⁻³ to 10⁻² off, and on a dense distribution grid the
+transition's nodes the binding error, so that a continuous landing is required; the proposal's section "What the probe
+found" carries it.
+
+**The owner's answers later that morning** ([the rulings](../rulings/2026-11-04_reference-solution.md)): R1 and R5
+accepted; R4 ruled in part, the harness without default settings and each stone stating three precision levels, the
+names coarse, default and fine proposed; R3 answered, awaiting his word; R6 to be discussed in detail; a registry of
+every run requested, in tension with the rule against timings, put to him. On R2 he ruled that the results schema
+require the quantiles and carry the distribution function at the comparison points; applied the same morning to the
+schema, the results document, the checker's verifier and the shared emitter, with the consequence that the committed
+results files of 2026-11-01 no longer validate until superseded or regenerated. On the HAFiscal session's measurements
+of the field, two defects, he ruled before 11:31:06 that request points move off genuine atoms and that a get
+comparison points of its own: the request rule, the request file's `a_points`, the results file's
+`a_comparison_points` and the checker's flags, applied the same hour; the field required for m alone.
+
 **On branch `buffer-stock-ontology`** (from the schemas' branch; committed, not pushed, no pull request):
 `ontologies/buffer-stock-models/`, the semantic ontology of buffer-stock models, version 0.1.0-draft.2, rows
-`BSM_0000001` to `BSM_0000205`, 193 in force and 12 retired; 67 tests, none of which solves a model
+`BSM_0000001` to `BSM_0000231`, 209 in force and 19 retired; 61 tests, none of which solves a model
 ([[feedback_say-what-tests-establish]]).
 - It states:
   - what makes a model a buffer-stock model: the membership axioms, the owner's atom rule of 2026-10-31 among them;
@@ -31,7 +91,9 @@ metadata:
 committed and unpushed, for a draft pull request stacked on #15): `bst/1` gave way to four families, each with its own
 stage file ([`constraint-scenarios.md`](../../constraint-scenarios.md),
 [the findings](../findings/2026-11-01_constraint-scenarios-applied.md)). Since 13:38 two are principal, `bst-natural/1`
-and `bst-artificial/1`, in `bst/`; `bst-natural-no-point-mass/1` and `bst-zero-infima/1` are in `bst/other/`.
+and `bst-artificial/1`, in `bst/`; `bst-natural-no-point-mass/1` and `bst-zero-infima/1` were in `bst/other/` until
+the owner abolished both on 2026-11-03 as uninteresting cases ([the rulings of 2026-11-03](../rulings/2026-11-03_harness-decisions.md)):
+two families remain, and the two scenarios stay described in `constraint-scenarios.md` with no family writing them.
 
 **The Markov family is retired** (16:10:29 on 2026-11-01), after its zero-infima version went at 13:51:57 since
 HAFiscal's code never solved that scenario ([[feedback_classify-by-what-the-code-solves]]). Its one-state unemployment
@@ -40,17 +102,16 @@ model is a calibration of the buffer-stock families, and a Markov state only a w
 `bst-artificial/1` member. The four-state family and the paper's members are in the history
 ([the findings](../findings/2026-11-01_markov-family-as-the-code-solves.md)).
 
-**Two experiments for every toolkit's solution** (`bst/model.md`; called test suites until 2026-11-02):
-- the restrained-limit experiment, BST's "The Liquidity Constrained Solution as a Limit": `bst-p-zero-0.005`, `-0.0005` and `-0.00005` in `bst-natural/1` and
-  `bst-restrained` in `bst-artificial/1`, solved with HARK
-  ([the findings](../findings/2026-11-01_restrained-limit-suite.md));
-- the toy-hafiscal experiment, specified: three types, a center and a spread, estimated by HARK's and HAFiscal's tools to
-  HAFiscal's Lorenz points, the iMPC profile and the wealth-to-income ratio, with one prize; every toolkit solves and
-  simulates the steady state and exposes what its Jacobians need.
+**One experiment for every toolkit's solution** (`bst/model.md`; called a test suite until 2026-11-02): the
+restrained-limit experiment, BST's "The Liquidity Constrained Solution as a Limit": `bst-p-zero-0.005`, `-0.0005` and
+`-0.00005` in `bst-natural/1` and `bst-restrained` in `bst-artificial/1`, solved with HARK and dolo
+([the findings](../findings/2026-11-01_restrained-limit-suite.md)). The second, on an estimated member with three
+types, is with the HAFiscal-Latest repository since 2026-11-04 until it is ready.
 
-**The Jacobian interface** for the toy-hafiscal experiment (`jacobians.md`): designed with the HARK, HARK-dev,
-HAFiscal-Latest and QuantEcon sessions and DolARK's design, and approved at 17:05:24 on 2026-11-01. The Jacobians with
-their metadata are required in a results file, as `.npy` matrices; the fake-news ingredients are optional, as data. The
+**The Jacobian interface** (`jacobians.md`), kept as buffer-stock infrastructure when the toy-hafiscal work moved:
+designed with the HARK, HARK-dev, HAFiscal-Latest and QuantEcon sessions and DolARK's design, and approved at 17:05:24
+on 2026-11-01. The Jacobians with their metadata are optional in a results file, an experiment may require them, as
+`.npy` matrices; the fake-news ingredients are optional, as data. The
 inputs are the return, a scale on all non-capital income and a transfer proportional to permanent income; the outputs
 C, A and Y_hh; one distribution grid for every toolkit; a steady state to 10⁻¹⁰. The block is the key `jacobians` of
 `bst/results.schema.json` (approved 17:26:21), and `checker/jacobians.py` verifies it.
@@ -66,8 +127,8 @@ Its experiment file, `experiment.yaml`, is the first under `experiment.schema.js
 ran it too on 2026-11-01 and agrees with HARK's (the findings of that run). On 2026-11-02 the harness's runner
 reproduced both toolkits' files at `low` from lock files ([the findings](../findings/2026-11-02_harness-acceptance/README.md)).
 
-On 2026-11-02 the checker's 200 tests, the runner's 7, the buffer-stock ontology's 67 and the distributions' 12 pass;
-HARK's adapter's 8 and dolo's 4 passed after the layout's move.
+On 2026-11-03, after the two families' abolition, the checker's 191 tests, the runner's 7, the buffer-stock ontology's 61
+and the distributions' 12 pass, and HARK's adapter's 8 and dolo's 4 in their locked environments.
 
 **Open pull request #15** (`stage-derivative-terms`, pushed, against the schemas' branch, opened 22:24:43 on
 2026-10-31): both families' stage files rewritten with Bellman-SYM's derivative terms, as the owner approved at 22:17:58.
@@ -214,7 +275,7 @@ no validator, checker, member or adapter:
 - The results document proposes three blocks: the distribution of permanent income, required, behind a status, its
   Lorenz curve defined when ℒ < 1 and ℒ𝒢 < 1; the distribution of wealth in levels a𝐩, required, behind a status, whose
   Lorenz shares at 0.2, 0.4, 0.6 and 0.8 are HAFiscal's targets and whose mean over mean income is K/Y
-  ([the finding](../findings/2026-11-03_hafiscal-lorenz-in-levels.md)); and the joint of (m, 𝐩, c, a) as weighted
+  (the finding, with the HAFiscal-Latest repository since 2026-11-04); and the joint of (m, 𝐩, c, a) as weighted
   points out of git, optional. No member or hash changes.
 - The stationary permanent income condition proposed on the evening of 2026-11-02 was withdrawn at 04:37:53 on
   2026-11-03 with everything that served it; the notation registry's branch `notation-v8.1-spic` in the econ-ark-tools
@@ -239,8 +300,9 @@ no validator, checker, member or adapter:
   refused as an external write;
 - `library` against the community library's published v0.1, whose laws are untruncated: a v0.2 of the description
   (recommended), a renamed member, or a note;
-- the estimation of the toy-hafiscal member, built in the HAFiscal-Latest session on 2026-11-03 and waiting on his word
-  there, and whether the member keeps its stated economy or mirrors the published first step's;
+- the toy-hafiscal work, with the HAFiscal-Latest session since 2026-11-04: the estimation's go, the emitter's move to
+  the new schema and the continuous method for the reference, typed there; the return as one piece, or the member
+  alone first;
 - HARK's cyclical index: ruled on 2026-10-31 that solver and simulation be consistent, the simulation side to be fixed,
   made clear on 2026-11-01 not to find the solver right; the fix is the HARK-dev session's;
 - #15, to merge;
@@ -257,15 +319,18 @@ Registering `w3id.org/sce` is not raised before a pull request from this fork is
 ([[feedback_w3id-not-yet]]).
 
 **Next work:**
-- HARK's adapter writing the Jacobians block, from a branch carrying #1863, once the toy-hafiscal member exists;
+- the model repository as a REMARK: `binder/Dockerfile` for the organizer's image with the root Dockerfile kept
+  identical by a test, `reproduce.sh` and `reproduce_min.sh`, the catalog entry on the owner's word; the two HARK modes
+  and the `mode` string; the runner calling REMARK's package once its signatures are final;
+- HARK's adapter writing the Jacobians block, from a branch carrying #1863, once an estimated member returns;
 - the harness, approved on 2026-11-02 ([`../../harness.md`](../../harness.md)): the layout's move done in `9675109`
   (`rosetta/`, `harness/adapters/`, `schemas/bst/experiments/`); the registry, lock files and runner built and accepted
   (`harness/`; the findings of 2026-11-02 on its acceptance); next, on the owner's reading of the revised proposal, the
   three results blocks with the checker's statuses, the restrained-limit experiment's second version, the adapters'
   independence (stage 4, planned) and the comparator (stage 5). The experiment schema and its first experiment are
   drafted and approved ([`../../experiments.md`](../../experiments.md));
-- the toy-hafiscal member, once the HAFiscal session delivers it: validated and hashed by the checker, solved by HARK's
-  adapter, the fit evaluated again with the family's newborn; then its experiment file and request file;
+- the estimated member, once the HAFiscal session returns it ready: validated and hashed by the checker, solved by
+  HARK's adapter, the fit evaluated again with the family's newborn; then its experiment file and request file;
 - the proposal to the working group's repository, whose trigger, dolo's adapter and the first comparison of two
   toolkits' results files, is met as of 2026-11-01 (deferred follow-ups); the owner's to start;
 - the validators for the method, settings and request files; the survey's other classes;
@@ -283,7 +348,10 @@ See [`../deferred.md`](../deferred.md).
   drafted changes.
 - **The community-library session** stopped the QuantEcon module on the evening of 2026-10-21; its branches stay local.
 - **The HAFiscal-Latest session** runs the emitter (version 0.8, unpushed on 2026-10-22), the basis of HARK's adapter;
-  since 2026-11-03 it holds the toy-hafiscal estimation, built and waiting on the owner's word there.
+  since 2026-11-04 it holds the toy-hafiscal work, the estimation built there on 2026-11-03 and the material moved
+  from this fork, waiting on the owner's three decisions there.
+- **The REMARK session**, `jd_REMARK_integrate-with-WG1`, in the local clone of econ-ark/REMARK since 2026-11-04,
+  makes the five updates to REMARK; its first is committed locally; nothing pushed without the owner's word there.
 - **As recorded on 2026-10-19:**
   - the HARK session holds the bounds-fix branch and the newborn flag;
   - the BufferStockTheory session recorded the lower-tail finding on two branches.

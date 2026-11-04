@@ -19,11 +19,8 @@ from pathlib import Path
 import pytest
 
 SCHEMAS = Path(__file__).resolve().parent.parent
-FAMILIES = {  # each family's stage file, and the model documents whose notation tables it may draw on; the principal
-    # scenarios' folders are in their family's, the others in its other/
-    **{f"bst-{s}": (f"bst/{d}/bellman/{s}.bl", ["bst/model.md"])
-       for s, d in (("natural", "natural"), ("natural-no-point-mass", "other/natural-no-point-mass"),
-                    ("artificial", "artificial"), ("zero-infima", "other/zero-infima"))},
+FAMILIES = {  # each family's stage file, and the model documents whose notation tables it may draw on
+    **{f"bst-{s}": (f"bst/{s}/bellman/{s}.bl", ["bst/model.md"]) for s in ("natural", "artificial")},
 }
 
 

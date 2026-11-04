@@ -50,9 +50,7 @@ state's expectation at the current state's points, as HARK's standard solver doe
 standard consumer's on the same nodes to about 1e-15. The branch above it computes the natural borrowing constraint from
 the laws' infima, which the adapter records on each distribution it gives HARK, rather than from the lowest nodes. A
 member of a natural family is then solved under the stated laws' own limit, the same at every number of nodes, and the
-adapter passes no artificial constraint for it. A member of `bst-zero-infima/1` is passed `BoroCnstArt = 0.0`, its a ≥
-0, which main would otherwise miss, taking a negative limit from the lowest nodes. The adapter re-pins to the first HARK
-release that includes both.
+adapter passes no artificial constraint for it. The adapter re-pins to the first HARK release that includes both.
 
 **What the adapter computes itself,** with the code it shares with dolo's adapter, [`../common.py`](../common.py):
 - the conditions and statuses, through the checker's arithmetic on the effective member's expectations. HARK has no
@@ -79,4 +77,4 @@ Steps 1 and 3 need no reference.
 
 A results file's provenance carries the hardware as the architecture and the number of logical cores, the thread count,
 the files' names, and the numerical libraries' versions. It carries no machine name, no operating-system string and no
-run time.
+run time; a run's time belongs to the run registry since the ruling of 2026-11-04.

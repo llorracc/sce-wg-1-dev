@@ -6,7 +6,9 @@ metadata:
 ---
 
 On 2026-10-21 the owner ruled that the Rosetta Stones cite their sources by what a reader can check:
-- HARK at `4c285e86`;
+- HARK at `4c285e86`; never an unposted branch: its name, commit and code stay out of public text, since the owner's
+  rule in the HARK sessions is to perfect a pull request locally before posting it, even as a draft (relayed by the
+  HARK session on 2026-11-04, after this repository's records of that morning had named one; corrected the same hour);
 - the lecture's source at `96ede2993`;
 - HARK's draft pull requests by number;
 - the buffer-stock benchmark's emitter, called not yet public.

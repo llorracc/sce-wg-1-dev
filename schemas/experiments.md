@@ -119,28 +119,14 @@ HARK's and dolo's runs of 2026-11-01, by a prototype of the harness's comparator
 | `same_effective_member`, largest at any level | | | 3.3 · 10⁻¹⁶ |
 | `toolkits_agree`, `bst-restrained` | | | 4.4 · 10⁻⁴, 1.4 · 10⁻⁴, 3.7 · 10⁻⁵ |
 
-## The toy-hafiscal experiment, sketched
+## The second experiment, moved
 
-Not written, since its member is not delivered: HARK's and HAFiscal's tools estimate its three types
-([`bst/model.md`](bst/model.md)). Written to this schema it would have:
-- one member, `toy-hafiscal`, with its request file, which states the Jacobians' horizon, inputs, outputs and shared
-  grid ([`jacobians.md`](jacobians.md));
-- one level, `high`, since the Jacobians ask for a steady state to 10⁻¹⁰;
-- reports: the types' rules and populations, the pooled population, the distributions of permanent income and of
-  wealth in levels, the joint, and `jacobians`.
-
-The toy, HAFiscal's calibration with ℒ = 0.99375 and 𝒢 = 1.0019 a quarter, has a stationary distribution of permanent
-income with a finite mean, ℒ𝒢 = 0.9956 < 1, so its Lorenz curve of permanent income is defined, the same for every
-type.
-
-**One gap in the results schema.** The targets' Lorenz shares of liquid wealth are shares of end-of-period assets in
-levels, a𝐩, across households ranked by them, at p = 0.2, 0.4, 0.6 and 0.8: the owner's ruling of 2026-11-03, which
-HAFiscal's code confirmed ([the finding](records/findings/2026-11-03_hafiscal-lorenz-in-levels.md)). GL(p)/GL(1) of a
-under the population measure is the Lorenz curve of normalized wealth, a different curve whenever permanent income
-varies across households. So the results schema now carries the distribution of wealth in levels beside the
-distribution of permanent income, and the targets are read off it; K/Y is its mean over the economy's mean income. The
-iMPC profile after a lottery prize is not in a results file.
-Adding it is a change to what results carry, to be drawn up with the toolkits and put to the owner before it is made.
+A second experiment, on a `bst-artificial/1` member with three estimated discount-factor types, solved, simulated and
+differentiated for its Jacobians, was sketched here until 2026-11-04. On the owner's ruling of that day it moved to the
+HAFiscal-Latest repository, with its member, until it is ready, and returns as one piece: the member, its specification
+revised by a run carried through, and a reference results file. The Jacobian interface it was to use stays
+([`jacobians.md`](jacobians.md)), as do the distributions of permanent income and of wealth in levels in the results
+schema.
 
 ## Names
 
@@ -170,4 +156,4 @@ only previews.
 - **A region** for a check, such as m ≤ 20, where the rule is far from the grid's top. Not needed by the first
   experiment, which passes over all its points.
 - **Checks on the levels' own convergence,** `compare: levels`, which the first experiment does not use.
-- The **iMPC** in the results schema, for toy-hafiscal.
+- The **iMPC** in the results schema, when an experiment needs it.

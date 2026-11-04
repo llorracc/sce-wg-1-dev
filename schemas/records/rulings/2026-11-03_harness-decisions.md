@@ -49,11 +49,25 @@ The owner's decisions, in substance and by time (EST). His words are kept outsid
   the member file, the fit and the code's commit, the wealth variable and the denominator of K/Y, and the provenance of
   6.60.
 
+- **17:59:50 and 18:01:14, two families abolished.** `bst-natural-no-point-mass/1` is to be abolished as an
+  uninteresting case, and then `bst-zero-infima/1` also. Two families remain, `bst-natural/1` and `bst-artificial/1`.
+  Applied the same evening, as the Markov family's retirement was: the folder `bst/other/`, with both families' stage
+  files, validators and members (`toy-natural`, `toy-untruncated`), removed from the tree and kept in the history at
+  `2ae4c35`; the checker and its tests, the results validator's list of families, the notation and stone checks,
+  HARK's adapter tests, the stones, the adapters' README and the families' documents brought to two families; the
+  ontology's two family rows retired, its two scenario classes kept and written by no family; the records. The two
+  scenarios stay described in [`constraint-scenarios.md`](../../constraint-scenarios.md), which is why the natural
+  family requires a point mass at the joint worst income and the artificial one positive floors; a natural member
+  without the point mass is now refused with no family to send it to
+  ([the finding](../findings/2026-11-03_two-families-abolished.md)).
+
 **What stays open:**
-- the toy-hafiscal member's economy, after the HAFiscal session's answer ([the finding](../findings/2026-11-03_hafiscal-lorenz-in-levels.md)):
+- the toy-hafiscal member's economy, after the HAFiscal session's answer (the finding, with the HAFiscal-Latest repository since 2026-11-04):
   the family's as stated, 𝒢 = 1.0019026 for every household with newborns at 1, which the estimation was told to
   run, or the published first step's, 𝒢 = 1 with growth through the newborns, which the family cannot state without
   a newborn level law with a trend; the owner's to decide;
 - the closed forms E[𝐩] = (1 − ℒ)/(1 − ℒ𝒢) and var(log 𝐩), dropped with the condition, which could test a reported
   distribution exactly ([deferred](../deferred.md));
-- whether the joint as weighted points is the owner's word; it was put to him on 2026-11-02 and not yet answered.
+- whether the joint as weighted points is the owner's word; it was put to him on 2026-11-02 and not yet answered;
+- whether the ontology's two scenario classes without a family, `natural-without-point-mass` and `zero-infima`, should
+  go as well; the owner abolished the families and said nothing of the classes, which say what exists.

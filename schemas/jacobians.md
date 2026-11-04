@@ -8,11 +8,12 @@ sessions answered, the last two with the identities below measured on HARK's mai
 
 ## What it is for
 
-The [toy-hafiscal experiment](bst/model.md) gives every toolkit one `bst-artificial/1` member whose three discount-factor types
-HARK's and HAFiscal's tools have estimated. Each toolkit solves and simulates that member's steady state. It must also
-expose whatever is needed to compute its sequence-space Jacobians (Auclert, Bardóczy, Rognlie and Straub), so that the
-sequence-space exercise can be run on every toolkit's steady state and the answers compared. No toolkit but HARK and
-HAFiscal estimates anything.
+An experiment may give every toolkit a `bst-artificial/1` member with several discount-factor types, estimated by the
+toolkit's own authors, and ask each toolkit to solve and simulate that member's steady state. Each toolkit must then
+also expose whatever is needed to compute its sequence-space Jacobians (Auclert, Bardóczy, Rognlie and Straub), so that
+the sequence-space exercise can be run on every toolkit's steady state and the answers compared. The experiment that
+first needed this moved to the HAFiscal-Latest repository on 2026-11-04, until it is ready; the interface stays, for
+any member.
 
 ## What the toolkits do now
 
@@ -152,7 +153,7 @@ perturbation (for HARK, `calc_impulse_response_manually`, whose dating under `of
   All are per capita, per unit of the steady state's aggregate permanent income, which the three inputs leave unchanged.
   Mean non-capital income in those units is not quite one: newborns draw the employed branch, whose mean is the employed
   scale κ = (1 − ℘ξ_u)/(1 − ℘), and they hold a share 1 − ℒ𝒢 of aggregate permanent income, so Ȳ = ℒ𝒢 + (1 − ℒ𝒢)κ,
-  1.000115 for `iid-ui-artificial`. It does not include capital income.
+  a little above one for a member with ℘ > 0 and ξ_u < 1. It does not include capital income.
 - **The population:**
   - the family's newborn: born employed, at permanent income 1 with no assets, so a change in R pays it nothing;
   - the dead's assets vanish, so the factor that turns this period's A into next period's resources is ρ = R ℒ. (In an
@@ -264,8 +265,8 @@ turn off. The family's newborn does not, so the remaining difference is stated i
 
 Drafted after the toolkits confirmed the grid and the format, and approved by the owner.
 
-- **Where it is.** An optional top-level key `jacobians` of a buffer-stock results file, required in the toy-hafiscal
-  experiment, validated by [`bst/results.schema.json`](bst/results.schema.json)'s `$defs/Jacobians`. The draft validator it
+- **Where it is.** An optional top-level key `jacobians` of a buffer-stock results file, which an experiment may
+  require, validated by [`bst/results.schema.json`](bst/results.schema.json)'s `$defs/Jacobians`. The draft validator it
   was drafted as, `bst/jacobians.schema.json`, is folded in, so that one file validates a results file and readers that
   load it alone need no registry.
 - **What it holds:**

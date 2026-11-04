@@ -41,9 +41,9 @@ SOURCE, _ = generate.load()
 BY_NAME = {row["name"]: (kind, row) for kind, row in generate.rows(SOURCE)}
 CONDITIONS = {c["name"]: c for c in SOURCE["conditions"]}
 BST = SCHEMAS / "bst"
-MEMBERS = sorted([*BST.glob("*/members/*.yaml"), *BST.glob("other/*/members/*.yaml")])
-SCENARIOS = ("natural", "natural-no-point-mass", "artificial", "zero-infima")
-FOLDER = {bst1.FAMILIES[family]: folder for family, folder in bst1.FOLDERS.items()}   # the principal two in bst/, the others in bst/other/
+MEMBERS = sorted(BST.glob("*/members/*.yaml"))
+SCENARIOS = ("natural", "artificial")      # the scenarios that have a family; two more lost theirs on 2026-11-03
+FOLDER = {bst1.FAMILIES[family]: folder for family, folder in bst1.FOLDERS.items()}
 # The checker's names for the ontology's conditions, and the conditions the checker does not compute: the condition of
 # Ma, Stachurski and Toda, which the families' conditions.md does not name.
 CHECKER_NAME = {c["name"]: c["short"] for c in SOURCE["conditions"]}
@@ -250,24 +250,19 @@ def axiom_holds(name: str, env: dict) -> bool:
 EXPECTED = {
     "library": {"bounded-support": True, "natural-in-force": True, "point-mass-at-joint-worst-income": True,
                 "zero-income-event": True, "no-artificial-constraint": True, "infinite-lives": True},
-    "toy-natural": {"bounded-support": True, "natural-in-force": True, "point-mass-at-joint-worst-income": False,
-                    "no-point-mass-at-joint-worst-income": True, "zero-income-event": False, "infinite-lives": False},
     "toy": {"bounded-support": True, "natural-in-force": False, "artificial-tighter": True, "positive-floors": True,
             "no-borrowing": True, "zero-income-event": False},
-    "toy-untruncated": {"bounded-support": False, "zero-infimum": True, "no-zero-income-event": True, "no-borrowing": True,
-                        "artificial-tighter": False, "infinite-lives": False},
     # BST's experiment "The Liquidity Constrained Solution as a Limit": three natural rungs and the restrained consumer.
     **{f"bst-p-zero-{wp}": {"bounded-support": True, "natural-in-force": True, "point-mass-at-joint-worst-income": True,
                             "zero-income-event": True, "no-artificial-constraint": True, "infinite-lives": True}
        for wp in ("0.005", "0.0005", "0.00005")},
-    "iid-ui-artificial": {"bounded-support": True, "natural-in-force": False, "artificial-tighter": True,
-                          "positive-floors": True, "no-borrowing": True, "zero-income-event": False},
     "bst-restrained": {"bounded-support": True, "natural-in-force": False, "artificial-tighter": True,
                        "positive-floors": True, "no-borrowing": True, "zero-income-event": False, "infinite-lives": True},
 }
-# The class each family's members fall in, and the four scenario classes.
-SCENARIO_OF = {"bst-natural/1": "natural-with-point-mass", "bst-natural-no-point-mass/1": "natural-without-point-mass",
-               "bst-artificial/1": "with-artificial-constraint", "bst-zero-infima/1": "zero-infima"}
+# The four scenario classes, which partition the class, and the class each family's members fall in; the scenarios
+# without a point mass and with zero infima have had no family since 2026-11-03.
+SCENARIO_CLASSES = ("natural-with-point-mass", "natural-without-point-mass", "with-artificial-constraint", "zero-infima")
+SCENARIO_OF = {"bst-natural/1": "natural-with-point-mass", "bst-artificial/1": "with-artificial-constraint"}
 
 
 def _member(stem):
@@ -299,7 +294,7 @@ def test_each_member_is_in_exactly_its_family_s_scenario(path):
     """The four scenarios partition the class: each member meets its family's scenario's axioms and no other's."""
     member = bst1.load_member(path)
     env = member_environment(member, member.types[0]["beta"])
-    inside = [s for s in SCENARIO_OF.values() if _in_class(s, env)]
+    inside = [s for s in SCENARIO_CLASSES if _in_class(s, env)]
     assert inside == [SCENARIO_OF[member.family]], (path.stem, inside)
 
 
@@ -384,7 +379,7 @@ def _in_stage(spelling: str, stage: str) -> bool:
 
 
 def test_stage_file_identifiers_exist():
-    """Every spelling the ontology names is in one of the four families' stage files."""
+    """Every spelling the ontology names is in one of the two families' stage files."""
     stage = "\n".join((FOLDER[s] / "bellman" / f"{s}.bl").read_text(encoding="utf-8") for s in SCENARIOS)
     named = [r["written_as"]["bellman-sym"] for _, r in generate.rows(SOURCE) if "bellman-sym" in r.get("written_as", {})]
     missing = [s for s in named if not _in_stage(s, stage)]

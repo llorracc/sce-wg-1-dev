@@ -20,7 +20,7 @@
     dcterms:source <https://arxiv.org/abs/1905.13045v3> ;
     dcterms:source <https://arxiv.org/abs/2012.00219v2> ;
     dcterms:source <https://github.com/llorracc/HAFiscal-QE/tree/1afdf80de4325e436a0c1c20895f754aefefd38c> ;
-    bsm:sourceDigest "sha256:8877c421c56dc573e6e7791be9414587dd60b450fe71a54d5b842d49ac05c86b" .
+    bsm:sourceDigest "sha256:5141628f045867100b88ad96a64ed8039c0a497f372b5b6b92ce495e8b9182de" .
 
 skos:definition a owl:AnnotationProperty .
 skos:notation a owl:AnnotationProperty .
@@ -517,7 +517,7 @@ bsm:BSM_0000211
     a bsm:ModelClass ;
     rdfs:label "the natural scenario without a point mass"@en ;
     skos:notation "natural-without-point-mass" ;
-    skos:definition "A model with the natural constraint in force whose joint worst income has probability zero. An agent can end a period at the natural limit only when ϱ < k, with k the number of shocks that have densities at their floors. The schemas' family bst-natural-no-point-mass/1."@en ;
+    skos:definition "A model with the natural constraint in force whose joint worst income has probability zero. An agent can end a period at the natural limit only when ϱ < k, with k the number of shocks that have densities at their floors. No family of the schemas writes it: its family, bst-natural-no-point-mass/1, was abolished on 2026-11-03 as an uninteresting case."@en ;
     bsm:hasAxiom bsm:BSM_0000214 ;
     dcterms:source <https://llorracc.github.io/BufferStockTheory/#pdv> .
 
@@ -527,7 +527,7 @@ bsm:BSM_0000212
     a bsm:ModelClass ;
     rdfs:label "the zero-infima scenario"@en ;
     skos:notation "zero-infima" ;
-    skos:definition "A buffer-stock model whose permanent shock or employed draw has infimum zero, so that the minimum present value of future income is zero and the natural constraint is a ≥ 0, which an artificial constraint at zero would only repeat. With no zero-income event and finite E[θ^(−ϱ)] (and E[ψ^(−ϱ)] where ψ's infimum is zero), the constraint binds. The schemas' family bst-zero-infima/1; Ma, Stachurski and Toda's lognormal case."@en ;
+    skos:definition "A buffer-stock model whose permanent shock or employed draw has infimum zero, so that the minimum present value of future income is zero and the natural constraint is a ≥ 0, which an artificial constraint at zero would only repeat. With no zero-income event and finite E[θ^(−ϱ)] (and E[ψ^(−ϱ)] where ψ's infimum is zero), the constraint binds. Ma, Stachurski and Toda's lognormal case. No family of the schemas writes it: its family, bst-zero-infima/1, was abolished on 2026-11-03 as an uninteresting case."@en ;
     bsm:hasAxiom bsm:BSM_0000217 ;
     bsm:hasAxiom bsm:BSM_0000218 ;
     bsm:hasAxiom bsm:BSM_0000219 ;
@@ -1282,7 +1282,7 @@ bsm:BSM_0000057
     a owl:NamedIndividual, bsm:Constraint ;
     rdfs:label "natural borrowing constraint"@en ;
     skos:notation "borrowing-limit-natural" ;
-    skos:definition "a_Nat, the lowest end-of-period assets from which the worst income next period still allows positive consumption forever: minus the present value of the worst income, capitalized at ℛ, that is −h_min. A quantity of the laws. No stage file carries it as a parameter: the natural scenario without a point mass writes it out from the laws' bounds, since Bellman-SYM has no derived parameters, and the other scenarios need none."@en ;
+    skos:definition "a_Nat, the lowest end-of-period assets from which the worst income next period still allows positive consumption forever: minus the present value of the worst income, capitalized at ℛ, that is −h_min. A quantity of the laws. No stage file carries it as a parameter: the natural family's members have it at zero, through the zero-income event, and the artificial family states a_Art above it. The family of the natural scenario without a point mass wrote it out from the laws' bounds until its abolition on 2026-11-03."@en ;
     bsm:symbol "a_Nat" ;
     bsm:category "constraint" ;
     bsm:inBST "\\BoroCnstNat" ;
@@ -2598,17 +2598,6 @@ bsm:BSM_0000224
     bsm:writes bsm:BSM_0000004 ;
     bsm:writes bsm:BSM_0000008 .
 
-bsm:BSM_0000225
-    a owl:NamedIndividual, bsm:Family ;
-    rdfs:label "the schemas' family bst-natural-no-point-mass/1"@en ;
-    skos:notation "bst-natural-no-point-mass-1" ;
-    skos:definition "The schemas' family for the natural scenario without a point mass, with truncated lognormals; its stage file writes the natural limit out from the laws' bounds and carries the complementarity clause."@en ;
-    bsm:schemaDocument "../../schemas/bst/other/natural-no-point-mass/parameters.schema.json" ;
-    bsm:writes bsm:BSM_0000211 ;
-    bsm:writes bsm:BSM_0000004 ;
-    bsm:writes bsm:BSM_0000006 ;
-    bsm:writes bsm:BSM_0000008 .
-
 bsm:BSM_0000226
     a owl:NamedIndividual, bsm:Family ;
     rdfs:label "the schemas' family bst-artificial/1"@en ;
@@ -2616,18 +2605,6 @@ bsm:BSM_0000226
     skos:definition "The schemas' family for the artificial scenario, with truncated lognormals and an artificial constraint strictly above the natural one; at a_Art = 0 its members are liquidity-constrained."@en ;
     bsm:schemaDocument "../../schemas/bst/artificial/parameters.schema.json" ;
     bsm:writes bsm:BSM_0000007 ;
-    bsm:writes bsm:BSM_0000200 ;
-    bsm:writes bsm:BSM_0000004 ;
-    bsm:writes bsm:BSM_0000006 ;
-    bsm:writes bsm:BSM_0000008 .
-
-bsm:BSM_0000227
-    a owl:NamedIndividual, bsm:Family ;
-    rdfs:label "the schemas' family bst-zero-infima/1"@en ;
-    skos:notation "bst-zero-infima-1" ;
-    skos:definition "The schemas' family for the zero-infima scenario, with lognormals and no stated artificial constraint, since a ≥ 0 is the natural one."@en ;
-    bsm:schemaDocument "../../schemas/bst/other/zero-infima/parameters.schema.json" ;
-    bsm:writes bsm:BSM_0000212 ;
     bsm:writes bsm:BSM_0000200 ;
     bsm:writes bsm:BSM_0000004 ;
     bsm:writes bsm:BSM_0000006 ;

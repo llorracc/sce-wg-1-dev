@@ -2,7 +2,7 @@
 
 Draft; see the [README](../README.md).
 
-This document collects four kinds of statement about a member of the four buffer-stock families ([model](model.md)),
+This document collects four kinds of statement about a member of the two buffer-stock families ([model](model.md)),
 each defined for any member, whatever its laws:
 
 - **validity conditions**, restrictions on the parameters under which the household's problem has a solution; a member
@@ -48,17 +48,14 @@ A member that fails any of these is rejected outright:
   laws' true bounds and masses, never from a representation's points:
   - `bst-natural/1`: both laws bounded, with strictly positive floors and finite ceilings; 𝒢`ψ_min` < R, so that `h_min`
     is finite; and the joint worst income a point mass, `p_worst` > 0;
-  - `bst-natural-no-point-mass/1`: the same bounds, with `p_worst` = 0;
   - `bst-artificial/1`: `ψ_min` > 0 and `ξ_min` > 0, so that `h_min` > 0, and `a_Nat` < `a_Art` ≤ 0;
-  - `bst-zero-infima/1`: the infimum of ψ or of θ zero, so that `a_Nat` = 0; no zero-income event, since it would make
-    E[ξ^(−ϱ)] infinite; and E[θ^(−ϱ)] finite, with E[ψ^(−ϱ)] finite when ψ's infimum is zero;
 - for every type, the FVAC, and the RIC or the WRIC, from the table below.
 
 **Existence.** BST's theorem covers its own case, `bst-natural/1` with ℘ > 0 and ξ_u = 0: ϱ > 1, the WRIC and the FVAC.
 For a positive benefit with a point mass, the natural conjecture (the FVAC, the WRIC with `p_worst`, and 𝒢`ψ_min` < R)
-is not proved. In the zero-infima scenario, and the artificial one with `a_Art` = 0, Ma, Stachurski and Toda (2020) give
-existence under the FVAC and their condition G_βR < 1; their framework fits the normalized problem exactly when ψ has
-finite support. Nothing is stated for `bst-natural-no-point-mass/1`, or for the artificial scenario with `a_Art` < 0.
+is not proved. In the artificial scenario with `a_Art` = 0, Ma, Stachurski and Toda (2020) give existence under the
+FVAC and their condition G_βR < 1; their framework fits the normalized problem exactly when ψ has finite support.
+Nothing is stated for the artificial scenario with `a_Art` < 0.
 The checker requires the FVAC and the RIC or the WRIC in every family, as before.
 
 ## The conditions
@@ -182,9 +179,8 @@ resources from which positive consumption is feasible, and u′ like (m − `m_m
 when E[(m − `m_min`)^(−(ϱ−1))] is under the stationary population, and M_i exactly when E[(m − `m_min`)^(−ϱ)] is:
 conditions on the lower tail, the mirror image of the upper-tail condition ε > 1 for the mean of m. The lower tail
 depends on the constraint and on the laws at their lowest values:
-- **A binding constraint**, which is the kink's existence: in `bst-artificial/1`, `a_Art` > `a_Nat`; in
-  `bst-zero-infima/1`, a ≥ 0, which both constraints give and which binds. The rule keeps consumption above a positive
-  value, and all three means are finite. HAFiscal's model and the toy are in this case. An income floor
+- **A binding constraint**, which is the kink's existence: in `bst-artificial/1`, `a_Art` > `a_Nat`. The rule keeps
+  consumption above a positive value, and all three means are finite. HAFiscal's model and the toy are in this case. An income floor
   alone does not do this: the natural constraint moves down by the floor's capitalized value and consumption still goes
   to zero as resources approach it, which is BST's own remark on a nonzero minimum of ξ. An earlier version of this
   document credited the floor; the BufferStockTheory session corrected that on 2026-10-18.
@@ -204,7 +200,7 @@ depends on the constraint and on the laws at their lowest values:
   integrated over the stationary distribution: M_i is infinite whenever Þ̊_{𝒢,i}^ϱ E[ψ^(−ϱ)] < 1, which with ψ degenerate
   is the GIC.
 - **The natural constraint alone, with a positive density at the floor in n of the two shocks**
-  (`bst-natural-no-point-mass/1`; a truncated lognormal, the uniform, or a tabulated law rising from its first point; n
+  (no family since 2026-11-03; a truncated lognormal, the uniform, or a tabulated law rising from its first point; n
   = 1 when the other shock has an atom at its floor, n = 2 when both have densities and the floor income is positive):
   the mass that lands within a distance x of `m_min` in one step is of order x^n, but the stationary tail's exponent is
   max(n, ϱ). For ϱ < n the constraint binds on a neighborhood of `m_min` and the tail is the landing law's; for ϱ > n
@@ -215,8 +211,8 @@ depends on the constraint and on the laws at their lowest values:
   corrected an earlier statement here that the tail was x^n throughout; the two-density landing law is a deduction, not
   yet run.
 - **A density that vanishes at the floor faster than any power**, the untruncated lognormal at zero: every moment is
-  finite. No family now has one under the natural constraint alone: with such a law the natural constraint is a ≥ 0 and
-  it binds, so the member is `bst-zero-infima/1`'s, in the binding case.
+  finite. No family has one: with such a law the natural constraint is a ≥ 0 and it binds, the zero-infima scenario,
+  whose family was abolished on 2026-11-03.
 
 These derivations are of 2026-10-18; the atom case is checked numerically, the rest are deductions.
 

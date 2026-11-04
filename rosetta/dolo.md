@@ -97,9 +97,7 @@ options:
 | | what dolo's model file expresses | what the adapter supplies | tested |
 |---|---|---|---|
 | the natural scenario with a point mass, `bst-natural/1` | the transition, the Euler equation, and c ≤ m as the bound, which coincides with the natural limit at 0 | the laws' nodes with the zero-income atom; a savings grid starting above 0 | yes: the restrained-limit suite's three members and `library`, verified; within 2.4 · 10⁻⁵ of HARK at level 3 |
-| the natural scenario without a point mass | c ≤ m − a_min with a_min the natural limit, −h_min | a_min from the laws' bounds | no |
 | the artificial scenario, `bst-artificial/1` | c ≤ m − a_Art | the savings grid from a_Art, and the kink's point | yes, a_Art = 0: `bst-restrained` and `toy`, verified; the same as HARK's below the kink to machine precision, within 1.1 · 10⁻⁵ above it at level 3 |
-| the zero-infima scenario | c ≤ m; `!LogNormal` for an untruncated law | nodes, as below | no |
 | truncated lognormal laws | none: `Truncation` exists in Python only, and needs a `cdf` that `LogNormal` lacks | the nodes, as a `FiniteDistribution` | yes |
 | untruncated lognormal laws | `!LogNormal`, whose default μ is 1, not −σ²/2 | the nodes. dolo's own equiprobable nodes are bin medians, not conditional means, so their mean is not one | — |
 | the zero-income event | `!Mixture` with `!Bernouilli`, its inner laws cut into a fixed 5 nodes | the atom ξ_u with weight ℘, in the joint nodes | yes |

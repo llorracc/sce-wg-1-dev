@@ -24,6 +24,9 @@ event of falling probability ℘, against the restrained consumer, with ℘ = 0 
   ```sh
   python schemas/checker/check.py schemas/bst/<scenario>/members/<member>.yaml --verify-results <dir>/results.json
   ```
+- **Since 2026-11-04** the results schema requires the quantiles, which these files carry, and the distribution function
+  at the comparison points, which they predate: against the current schema they fail validation on that field alone.
+  They stay as the record of this run.
 - **The comparison:** written from the results files alone into `comparison.md` and `convergence.png`:
 
   ```sh

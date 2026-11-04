@@ -463,13 +463,13 @@ def pooled_pairs(pops, shares, key):
             np.concatenate([s * p.w for s, p in zip(shares, pops)]))
 
 
-def pooled_population_block(pops, shares, mean_defined):
+def pooled_population_block(pops, shares, mean_defined, points=None, a_points=None):
     """The pooled population block: means and masses exactly as share-weighted sums of the types' own; the distributions and the
-    quartile means from one variable's stacked pairs at a time."""
+    quartile means from one variable's stacked pairs at a time; the distribution functions only at points the types share."""
     out = {}
-    for key in ("m", "a", "c"):
+    for key, pts in (("m", points), ("a", a_points), ("c", None)):
         x, w = pooled_pairs(pops, shares, key)
-        out[key] = distribution_block(x, w, mean_defined)
+        out[key] = distribution_block(x, w, mean_defined, pts)
         del x, w
     mean_c = float(sum(s * np.dot(p.w, p.c) for s, p in zip(shares, pops)))
     out["mean_c"] = {"status": "value", "value": mean_c} if mean_defined else {"status": "undefined"}
@@ -481,13 +481,13 @@ def pooled_population_block(pops, shares, mean_defined):
     return out
 
 
-def pooled_income_block(incs, shares, mean_defined):
+def pooled_income_block(incs, shares, mean_defined, points=None, a_points=None):
     if any(i is None for i in incs):
         return {"status": "undefined"}
     out = {"status": "value"}
-    for key in ("m", "a"):
+    for key, pts in (("m", points), ("a", a_points)):
         x, w = pooled_pairs(incs, shares, key)
-        out[key] = distribution_block(x, w, mean_defined)
+        out[key] = distribution_block(x, w, mean_defined, pts)
         del x, w
     out["mass_at_constraint"] = float(sum(s * i.w[i.at_floor].sum() for s, i in zip(shares, incs)))
     mean_a = float(sum(s * np.dot(i.w, i.a) for s, i in zip(shares, incs)))
@@ -555,8 +555,21 @@ def quantiles(x, w):
     return {ps: float(x[min(int(np.searchsorted(W, float(ps), side="left")), len(x) - 1)]) for ps in QUANTILE_PROBS}
 
 
-def distribution_block(x, w, mean_defined=True):
+def cdf_at_points(x, w, points):
+    """F(x) = P(X <= x) at the comparison points, in the request file's order: the mass at or below each point, an atom at
+    the point counted in full (results.md, the ruling of 2026-11-04). Q and F are the standard pair, Q(p) = inf{x : F(x) >= p}."""
+    x, w = _sorted(x, w)
+    W = np.cumsum(w)
+    k = np.searchsorted(x, np.asarray(points, float), side="right")       # how many samples lie at or below each point
+    return [min(float(W[i - 1]), 1.0) if i > 0 else 0.0 for i in k]       # the running total can pass 1 by round-off
+
+
+def distribution_block(x, w, mean_defined=True, points=None):
+    """One variable under one measure: the GL ordinates, the quantiles and, given the comparison points, the distribution
+    function there. The pooled blocks pass points only when the types share them (results.md)."""
     block = {"gl": gl_ordinates(x, w), "quantiles": quantiles(x, w)}
+    if points is not None:
+        block["cdf"] = cdf_at_points(x, w, points)
     if not mean_defined:
         block["gl"]["1"] = None
         block["undefined"] = ["1"]
@@ -581,10 +594,12 @@ def by_a_quartile(a, w, values):
     return out
 
 
-def population_block(m, w, c, a, mpc, at_floor, mean_defined):
+def population_block(m, w, c, a, mpc, at_floor, mean_defined, points=None, a_points=None):
+    """The population block: m's distribution function at the comparison points, a's at its own points, c's none, since at
+    m's points it reads m's tail (results.md)."""
     return {
-        "m": distribution_block(m, w, mean_defined),
-        "a": distribution_block(a, w, mean_defined),
+        "m": distribution_block(m, w, mean_defined, points),
+        "a": distribution_block(a, w, mean_defined, a_points),
         "c": distribution_block(c, w, mean_defined),
         "mean_c": {"status": "value", "value": float(np.dot(w, c))} if mean_defined else {"status": "undefined"},
         "mass_at_constraint": float(w[at_floor].sum()),
@@ -594,12 +609,13 @@ def population_block(m, w, c, a, mpc, at_floor, mean_defined):
     }
 
 
-def income_block(pop, mean_defined):
+def income_block(pop, mean_defined, points=None, a_points=None):
     if pop is None:
         return {"status": "undefined"}
     _c, a, mpc, at_floor = pop.derived()
     return {"status": "value",
-            "m": distribution_block(pop.m, pop.w, mean_defined), "a": distribution_block(a, pop.w, mean_defined),
+            "m": distribution_block(pop.m, pop.w, mean_defined, points),
+            "a": distribution_block(a, pop.w, mean_defined, a_points),
             "mass_at_constraint": float(pop.w[at_floor].sum()),
             "mean_a": {"status": "value", "value": float(np.dot(pop.w, a))} if mean_defined else {"status": "undefined"},
             "mean_mpc": float(np.dot(pop.w, mpc))}
@@ -721,14 +737,57 @@ def m_infimum(member):
     return xi_inf + (min(member.R * a_lo / (member.G * p) for p in ends) if ends else 0.0)
 
 
+def genuine_atoms(member, a_lo, natural):
+    """The atoms of the stated member's stationary distributions whose locations the parameters fix (results.md, "Comparison
+    points"): of m at xi_u, when the constraint is artificial at zero and the unemployed income is positive, since every
+    constrained household that loses its job arrives at m = xi_u whatever psi; and of a at an artificial constraint, where the
+    constrained households sit. Under a natural constraint no household reaches the limit, so a has none."""
+    atoms = {"m": [], "a": []}
+    if not natural:
+        atoms["a"].append(float(a_lo))
+        if a_lo == 0.0 and member.wp > 0 and member.xi_u > 0:
+            atoms["m"].append(float(member.xi_u))
+    return atoms
+
+
+RULE_CLEARANCE = 0.01         # of c(xi_u): how far a's points keep from the atom a(xi_u), whose location is a rule's value. A
+                              # rule's error in c at default settings is 4e-3 to 6e-3 (the reference probe of 2026-11-04), and
+                              # a(xi_u) = xi_u - c(xi_u) carries that error whole, large against a small a(xi_u)
+
+
+def off_atom(x, atoms):
+    """A comparison point that lands on a genuine atom whose location the parameters fix moves one unit up in its third
+    significant figure (results.md): m = xi_u has three figures, so a point lands on it exactly, and 0.5 becomes 0.501, clear of
+    round-off and of a representation holding the atom's mass a little above the constraint."""
+    for at in atoms:
+        if at > 0 and abs(x - at) <= 1e-9 * at:
+            return round3(x + 10.0 ** (math.floor(math.log10(x)) - 2))
+    return x
+
+
+def clear_of(x, at, clearance):
+    """A point within `clearance` of an atom whose location is a rule's value, a(xi_u), moves to the smallest three-figure value
+    at least that far above the atom (results.md; the HAFiscal session's findings of 2026-11-04). The clearance is absolute,
+    in c's units, since a(xi_u) carries c's error, and the atom is taken at the constraint when the rule puts it there."""
+    if abs(x - at) <= clearance:
+        y = at + clearance
+        unit = 10.0 ** (math.floor(math.log10(y)) - 2)
+        return round3(math.ceil(y / unit - 1e-9) * unit)
+    return x
+
+
 def generate_request(member, report, nodes, Pt, PSIt, XIt, nb, a_lo, natural, path, solve):
-    """The comparison points from a level-1 solution: the stationary quantiles of m at the request probabilities, the lower end
-    of m, and 1.5, 2, 4 and 8 times the 99th percentile, to three significant figures (results.md). The lower end is the
-    model's own infimum of m (toolkit-independent); where the rule consumes nothing there (a natural constraint met by the
-    zero-income event: no Euler residual exists at c = 0) the 0.001 quantile stands in."""
+    """The comparison points from a level-1 solution (results.md). For m: its stationary quantiles at the request
+    probabilities, the lower end of m, and 1.5, 2, 4 and 8 times the 99th percentile. For a (the ruling of 2026-11-04): its
+    stationary quantiles at the same probabilities above the constraint's atom, whose mass the results file reports as it
+    is, and the same multiples of its 99th percentile. Three significant figures; a point on a genuine atom moved one unit up
+    in its third figure. The lower end of m is the model's own infimum (toolkit-independent); where the rule consumes
+    nothing there (a natural constraint met by the zero-income event: no Euler residual exists at c = 0) the 0.001 quantile
+    stands in."""
     lev = LEVELS[1]
     R, G, L = member.R, member.G, member.L
     m_inf = m_infimum(member)
+    atoms = genuine_atoms(member, a_lo, natural)
     types = []
     for t in member.types:
         cf = solve(member, t["beta"], nodes, lev).cFunc
@@ -740,12 +799,28 @@ def generate_request(member, report, nodes, Pt, PSIt, XIt, nb, a_lo, natural, pa
             ms, ws = _sorted(pop.m, pop.w)
             low = float(ms[min(int(np.searchsorted(np.cumsum(ws), 0.001, side="left")), len(ms) - 1)])
         pts = {round3(q[u]) for u in REQUEST_U} | {round3(low)} | {round3(q["0.99"] * k) for k in ABOVE_99}
-        pts = sorted(p for p in pts if float(cf(p)) > 0.0)
-        types.append({"beta": t["beta"], "points": pts})
+        pts = sorted({off_atom(p, atoms["m"]) for p in pts if float(cf(p)) > 0.0})
+        # a's own points: above the constraint's atom, left out since its mass is reported as it is, and clear of a(xi_u), the
+        # atom that m's maps to when it lies above the constraint, whose location is the rule's value and so each toolkit's own
+        _c, a_arr, _mpc, _floor = pop.derived()
+        qa = quantiles(a_arr, pop.w)
+        del _c, a_arr, _mpc, _floor
+        a_pts = {round3(qa[u]) for u in REQUEST_U if qa[u] > a_lo + 1e-9} | {round3(qa["0.99"] * k) for k in ABOVE_99}
+        a_pts = {p for p in a_pts if p > a_lo + 1e-9}
+        if atoms["m"]:
+            # a(xi_u) sits at the rule's value, or at the constraint when the unemployed there stay constrained, and near a
+            # kink at one or the other depending on the toolkit: a's points keep clear of the higher by a hundredth of c(xi_u)
+            c_xi = float(cf(member.xi_u))
+            at = max(float(member.xi_u) - c_xi, float(a_lo))
+            a_pts = {clear_of(p, at, RULE_CLEARANCE * c_xi) for p in a_pts}
+        a_pts = sorted(a_pts)
+        types.append({"beta": t["beta"], "points": pts, "a_points": a_pts})
     request = {"family": member.family, "parameter_file_sha256": report["hash"],
-               "rule": "stationary quantiles of m at u = 0.01, 0.05, 0.1, 0.2, ..., 0.9, 0.95, 0.99 from a level-1 solution; "
+               "rule": "m: stationary quantiles of m at u = 0.01, 0.05, 0.1, 0.2, ..., 0.9, 0.95, 0.99 from a level-1 solution; "
                        "the lower end of m (the model's infimum of m, or the 0.001 quantile where consumption is zero at the "
-                       "infimum); and 1.5, 2, 4 and 8 times the 99th percentile; three significant figures",
+                       "infimum); and 1.5, 2, 4 and 8 times the 99th percentile. a: its stationary quantiles at the same u "
+                       "above the constraint's atom, and the same multiples of its 99th percentile. Three significant "
+                       "figures; a point on a genuine atom moved one unit up in its third figure",
                "types": types}
     dump_strict_yaml(request, path)
     return request
@@ -808,6 +883,9 @@ def run(argv, tk):
         nodes1, P1, PSI1, XI1, nb1 = shocks(member, LEVELS[1]["nodes"])
         request = generate_request(member, report, nodes1, P1, PSI1, XI1, nb1, a_lo, natural, request_path, tk.solve)
     points_by_beta = {float(t["beta"]): [float(x) for x in t["points"]] for t in request["types"]}
+    # a's own points (results.md, the ruling of 2026-11-04); a request file written before it has none
+    a_points_by_beta = {float(t["beta"]): ([float(x) for x in t["a_points"]] if t.get("a_points") else None)
+                        for t in request["types"]}
 
     # ---- the method and settings files (numerics.md), on the parts the stage file's targets name (model.md, "Method targets")
     methods_path = os.path.join(args.out, "methods.yaml")
@@ -837,6 +915,7 @@ def run(argv, tk):
             assert abs(float(sol.mNrmMin) - a_lo) < 1e-9, (sol.mNrmMin, a_lo)
         m_floor = float(sol.mNrmMin)
         pts = points_by_beta[beta]
+        pts_a = a_points_by_beta[beta]
         agrid = make_agrid(lev["dist_points"], lev["dist_top"], a_lo, natural)
         pop = Population(cf, agrid, Pt, PSIt, XIt, R, G, a_lo, L, nbt[0], nbt[1], False)
         # the income measure exists when the toolkit's own verdicts say so; its survivors' share of mass is L G, and when
@@ -867,13 +946,14 @@ def run(argv, tk):
                         "method": "one forward step of the adapter's lottery transition on the reported distribution, same nodes"}
         types_out.append({
             "beta": beta, "share": share, "conditions": conds, "comparison_points": pts,
+            **({"a_comparison_points": pts_a} if pts_a is not None else {}),
             "rule": {"c": [float(x) for x in np.asarray(cf(np.asarray(pts)), float)],
                      "mpc": [float(x) for x in np.asarray(cf.derivative(np.asarray(pts)), float)]},
             "exported_rule": {"m": [float(x) for x in m_dense], "c": [float(x) for x in np.asarray(cf(m_dense), float)],
                               "range": [float(m_dense[0]), float(m_dense[-1])]},
             "kink": kink, "target": target, "pseudo_target": pseudo,
-            "population": population_block(pop.m, pop.w, c, a, mpc, at_floor, dom["population_mean"]),
-            "income_measure": income_block(inc, dom["income_mean"]),
+            "population": population_block(pop.m, pop.w, c, a, mpc, at_floor, dom["population_mean"], pts, pts_a),
+            "income_measure": income_block(inc, dom["income_mean"], pts, pts_a),
             "welfare": welfare, "marginal_welfare": marginal,
             "euler_residuals": {"r": r, "max_abs": r_max, "expectation_method": tk.diagnostics_method,
                                 "expectation_precision": precision, "under_effective_laws": {"r": r_eff, "max_abs": r_eff_max}},
@@ -892,6 +972,11 @@ def run(argv, tk):
     pdom = {k: all(d[k] for d in own_domains) for k in own_domains[0] if not k.endswith("exponent")}
     shares = [d["share"] for d in per_type]
     pooled_welfare, pooled_marginal = pooled_welfare_blocks(per_type, shares, pdom, rho)
+    # the pooled distribution functions exist only at comparison points the types share (results.md)
+    all_points = list(points_by_beta.values())
+    shared_points = all_points[0] if all(p == all_points[0] for p in all_points) else None
+    all_a = list(a_points_by_beta.values())
+    shared_a = all_a[0] if all_a[0] is not None and all(p == all_a[0] for p in all_a) else None
     results = {
         "family": member.family,
         "parameter_file_sha256": report["hash"],
@@ -908,8 +993,10 @@ def run(argv, tk):
                        "environment": numerical_environment(),
                        "solver": tk.solver},
         "types": types_out,
-        "pooled": {"population": pooled_population_block([d["pop"] for d in per_type], shares, pdom["population_mean"]),
-                   "income_measure": pooled_income_block([d["inc"] for d in per_type], shares, pdom["income_mean"]),
+        "pooled": {"population": pooled_population_block([d["pop"] for d in per_type], shares, pdom["population_mean"],
+                                                         shared_points, shared_a),
+                   "income_measure": pooled_income_block([d["inc"] for d in per_type], shares, pdom["income_mean"],
+                                                         shared_points, shared_a),
                    "welfare": pooled_welfare, "marginal_welfare": pooled_marginal},
     }
     out_path = os.path.join(args.out, "results.json")

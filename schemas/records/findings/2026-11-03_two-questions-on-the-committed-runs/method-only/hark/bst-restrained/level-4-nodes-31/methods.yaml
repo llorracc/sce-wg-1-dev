@@ -1,0 +1,8 @@
+methods:
+- {'on': policy.euler.solve, method: '!time-iteration', handler: endogenous-grid}
+- {'on': policy, handler: 'hark:cubic-hermite'}
+- {'on': E_ψ_θ_j, method: '!quadrature', handler: 'hark:equiprobable-exact-mean-nodes-by-employment-state'}
+- {'on': cntn_to_dcsn.value, method: value-function}
+- {'on': arvl_to_dcsn, method: '!histogram', handler: 'hark:equiprobable-exact-mean-nodes-by-employment-state'}
+- {'on': population.distribution, method: 'hark:lottery-histogram-linear-solve'}
+- {'on': diagnostics.expectation, method: 'hark:gauss-legendre-log-support-split-at-kink'}

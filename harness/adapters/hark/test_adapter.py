@@ -21,9 +21,7 @@ import adapter  # noqa: E402
 
 BST = adapter.SCHEMAS / "bst"
 MEMBER = {"library": BST / "natural" / "members" / "library.yaml",
-          "toy-natural": BST / "other" / "natural-no-point-mass" / "members" / "toy-natural.yaml",
-          "toy": BST / "artificial" / "members" / "toy.yaml",
-          "toy-untruncated": BST / "other" / "zero-infima" / "members" / "toy-untruncated.yaml"}
+          "toy": BST / "artificial" / "members" / "toy.yaml"}
 SAME_AS_STANDARD = 1e-12      # the largest relative difference from the standard consumer's rule
 LEVEL = adapter.LEVELS[1]
 
@@ -58,11 +56,14 @@ def test_the_results_file_passes_the_checker(name, tmp_path):
 
 def test_a_natural_member_is_solved_under_the_stated_limit(tmp_path):
     # In a natural family HARK computes the natural limit from the infima the adapter records, so the constraint in force is
-    # the stated laws' a_Nat, whatever the nodes; and the results file passes the checker.
+    # the stated laws' a_Nat, whatever the nodes; and the results file passes the checker. Every member of the natural
+    # family has BST's zero-income event, so a_Nat = 0; the member with a negative limit this test used until 2026-11-03
+    # belonged to the family without a point mass, abolished that day.
     import json
-    member_file = MEMBER["toy-natural"]
+    member_file = MEMBER["library"]
     member = adapter.load_checker(str(adapter.SCHEMAS))[0].load_member(member_file)
     a_nat = member.natural_borrowing_constraint()
+    assert a_nat == 0.0
     for n in (5, 9):                 # HARK's iteration stops a little above the limit; the nodes do not move it
         nodes, *_ = adapter.shocks(member, n)
         lo = adapter.solve_type(member, float(member.types[0]["beta"]), nodes, LEVEL).solution[0].mNrmMin
@@ -108,3 +109,18 @@ def test_the_restrained_limit_suite_converges():
     gaps = [float(np.max(np.abs(rule(BST / "natural" / "members" / f"bst-p-zero-{wp}.yaml") - restrained)))
             for wp in ("0.005", "0.0005", "0.00005")]
     assert gaps[0] > gaps[1] > gaps[2] > 0, gaps
+
+
+def test_a_point_on_a_genuine_atom_moves_off_it():
+    # results.md, "Comparison points": a point on an atom at a three-figure location, xi_u, moves one unit up in its third
+    # figure; a point within a clearance of an atom at a rule's value, a(xi_u), moves to the smallest three-figure value
+    # beyond the clearance, which is absolute, in c's units
+    sys.path.insert(0, str(HERE.parent))
+    import common
+    assert common.off_atom(0.5, [0.5]) == 0.501 and common.off_atom(0.7, [0.7]) == 0.701
+    assert common.off_atom(12.3, [12.3]) == 12.4 and common.off_atom(0.52, [0.5]) == 0.52
+    clearance = common.RULE_CLEARANCE * 0.75                 # c(xi_u) = 0.75: 0.0075
+    assert common.clear_of(0.05, 0.05, clearance) == 0.0575
+    assert common.clear_of(0.044, 0.05, clearance) == 0.0575 and common.clear_of(0.056, 0.05, clearance) == 0.0575
+    assert common.clear_of(0.06, 0.05, clearance) == 0.06
+    assert common.clear_of(0.00148, 0.0, clearance) == 0.0075   # the atom at the constraint

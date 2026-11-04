@@ -19,11 +19,9 @@ from laws import filled, law_from_mapping
 from test_results_schema import sample as schema_sample
 
 BST = Path(__file__).resolve().parent.parent / "bst"
-# The members, by name, in the folders of their families' scenarios: the principal two in bst/, the others in bst/other/.
+# The members, by name, in the folders of their families' scenarios.
 MEMBER = {"library": BST / "natural" / "members" / "library.yaml",
-          "toy-natural": BST / "other" / "natural-no-point-mass" / "members" / "toy-natural.yaml",
-          "toy": BST / "artificial" / "members" / "toy.yaml",
-          "toy-untruncated": BST / "other" / "zero-infima" / "members" / "toy-untruncated.yaml"}
+          "toy": BST / "artificial" / "members" / "toy.yaml"}
 
 
 def numerical(law, f):
@@ -252,29 +250,6 @@ def test_toy_member_conditions():
         assert t["domain"]["population_tail_exponent"] is None or t["domain"]["population_tail_exponent"] > 2
 
 
-def test_lower_tail_cases_without_an_artificial_constraint():
-    # The toy's laws under the natural constraint alone, bst-natural-no-point-mass/1: both laws truncated, so a positive
-    # density at the floor in two shocks; E[v] (q = 1) is finite and E[u'(c)] (q = 2) is not at rho = 2.
-    toy = load_strict((MEMBER["toy-natural"]).read_text())
-    t = Member(toy).report()["types"][0]
-    assert t["welfare"]["welfare_case"].endswith("2 shock(s)")
-    assert t["domain"]["welfare"] and not t["domain"]["marginal_welfare"]
-    # The stationary tail's exponent is max(n, rho): with n = 2 the marginal mean is finite for rho < 2 and the value's mean
-    # for every rho.
-    toy["crra"] = 1.5
-    t = Member(toy).report()["types"][0]
-    assert t["domain"]["welfare"] and t["domain"]["marginal_welfare"]
-    toy["crra"] = 3.0
-    t = Member(toy).report()["types"][0]
-    assert t["domain"]["welfare"] and not t["domain"]["marginal_welfare"]
-    # The untruncated toy, bst-zero-infima/1: a >= 0 is the natural constraint and it binds, so there is a kink and every
-    # welfare mean is finite.
-    t = load_member(MEMBER["toy-untruncated"]).report()["types"][0]
-    assert t["domain"]["kink"]
-    assert t["welfare"]["welfare_case"] == CASE_BINDING
-    assert t["domain"]["welfare"] and t["domain"]["marginal_welfare"]
-
-
 def test_hash_ignores_the_written_form_of_a_number():
     a = load_strict((MEMBER["library"]).read_text())
     b = copy.deepcopy(a)
@@ -319,14 +294,11 @@ def test_member_rules(change, problem):
         Member(data)
 
 
-def test_the_natural_scenarios_resolve_to_the_natural_constraint():
+def test_the_natural_scenario_resolves_to_the_natural_constraint():
     member = load_member(MEMBER["library"])
     assert member.a_art == 0.0 and member.natural
-    member = load_member(MEMBER["toy-natural"])
-    assert member.a_art == pytest.approx(member.natural_borrowing_constraint()) and member.a_art < 0
+    assert member.a_art == pytest.approx(member.natural_borrowing_constraint())
     assert not member.report()["types"][0]["domain"]["kink"]
-    member = load_member(MEMBER["toy-untruncated"])
-    assert member.a_art == 0.0 and not member.natural and member.natural_borrowing_constraint() == 0.0
 
 
 def _with(name, change):
@@ -341,30 +313,24 @@ def _untruncated(d):
 
 
 @pytest.mark.parametrize("name, change, problem", [
-    # the natural scenarios need bounded laws with positive floors, and the right kind of worst income
+    # the natural scenario needs bounded laws with positive floors, and a point mass at the joint worst income; the
+    # scenario without one has had no family since 2026-11-03
     ("library", _untruncated, "strictly positive lower and a finite upper bound"),
-    ("library", lambda d: d["income"].update(unemployment={"prob": 0.0, "income": 0.0}), "bst-natural-no-point-mass/1"),
-    ("toy-natural", lambda d: d["income"].update(unemployment={"prob": 0.044, "income": 0.0}), "bst-natural/1"),
-    ("toy-natural", lambda d: d.update(borrowing_constraint=0.0), "borrowing_constraint"),
+    ("library", lambda d: d["income"].update(unemployment={"prob": 0.0, "income": 0.0}), "no family since 2026-11-03"),
+    ("library", lambda d: d.update(borrowing_constraint=0.0), "borrowing_constraint"),
     # the artificial scenario needs positive floors, and a constraint strictly above the natural one
     ("toy", lambda d: d.update(borrowing_constraint=-5.0), "not above the natural constraint"),
     ("toy", lambda d: d["income"].update(unemployment={"prob": 0.044, "income": 0.0}), "strictly positive"),
     ("toy", lambda d: d.pop("borrowing_constraint"), "borrowing_constraint"),
-    # the zero-infima scenario needs a zero infimum, no zero-income event, and finite negative moments
-    ("toy-untruncated", lambda d: d["income"].update(unemployment={"prob": 0.044, "income": 0.0}), "zero-income event"),
-    ("toy-untruncated", lambda d: d["income"].update(
-        permanent_shock={"TruncatedLogNormal": {"sd_log": 0.05}}, employed_shock={"TruncatedLogNormal": {"sd_log": 0.3}}),
-     "infimum of psi or of theta"),
-    ("toy-untruncated", lambda d: d.update(borrowing_constraint=0.0), "borrowing_constraint"),
-    ("toy-untruncated", lambda d: d.update(family="bst/1"), "bst/1 is retired"),
+    # the retired single family
+    ("toy", lambda d: d.update(family="bst/1"), "bst/1 is retired"),
 ])
 def test_each_scenario_s_requirements(name, change, problem):
     with pytest.raises(MemberError, match=problem):
         Member(_with(name, change))
 
 
-@pytest.mark.parametrize("folder", sorted(p.parent for pattern in ("*/*/bellman/*.bl", "*/other/*/bellman/*.bl")
-                                           for p in (Path(__file__).resolve().parent.parent).glob(pattern)),
+@pytest.mark.parametrize("folder", sorted(p.parent for p in (Path(__file__).resolve().parent.parent).glob("*/*/bellman/*.bl")),
                          ids=lambda p: str(p.parent.relative_to(Path(__file__).resolve().parent.parent)))
 def test_every_filed_calibration_names_its_stage_file_s_parameters(folder):
     # A calibration binds the stage file's parameters by name, so a renamed parameter must be renamed in every
@@ -405,13 +371,6 @@ def test_bellman_calibration_matches_the_filed_one():
     assert "calibration:" in member.bellman_calibration_yaml(0)
     toy = load_member(MEMBER["toy"]).bellman_calibration(0)
     assert toy["a_Art"] == 0.0 and toy["ψ_min"] > 0 and "a_Nat" not in toy
-    untruncated = load_member(MEMBER["toy-untruncated"]).bellman_calibration(6)
-    assert untruncated["β"] == 0.990 and untruncated["ξ_u"] == 0.7 and "a_Art" not in untruncated
-    # With p_zero = 0 in the natural scenario without a point mass, the never-paid benefit is the employed floor, so that
-    # the stage file's min reads the worst transitory income.
-    data = _with("toy-natural", lambda d: d["income"].update(unemployment={"prob": 0.0, "income": 0.0}))
-    member = Member(data)
-    assert member.bellman_calibration(0)["ξ_u"] == pytest.approx(member.theta.infimum)
 
 
 def _consistent_results(member: Member) -> dict:
@@ -454,6 +413,33 @@ def test_a_consistent_report_verifies():
     assert t["kink"]["status"] == "undefined" and t["target"]["status"] == "value"
     assert t["marginal_welfare"]["status"] == "undefined"
     assert t["conditions"]["welfare"]["case"] == CASE_ATOM
+
+
+def test_a_comparison_point_on_a_genuine_atom_is_caught():
+    # The toy member's constraint is artificial at zero and its unemployed income 0.7, so every constrained household that
+    # loses its job arrives at m = 0.7: a genuine atom, where the distribution function turns on round-off (results.md,
+    # "Comparison points"). The constraint itself is a's atom.
+    member = load_member(MEMBER["toy"])
+    data = _consistent_results(member)
+    t = data["types"][0]
+    t["comparison_points"] = [0.25, 0.5, 0.7, 2.0, 5.0]
+    t["a_comparison_points"] = [0.0, 0.1, 0.3, 0.8, 2.0]
+    problems = member.verify_results(data)
+    assert any("genuine atom" in p for p in problems) and any("constraint's atom" in p for p in problems), problems
+    t["comparison_points"] = [0.25, 0.5, 0.701, 2.0, 5.0]
+    t["a_comparison_points"] = [0.05, 0.1, 0.3, 0.8, 2.0]
+    assert not any("atom" in p for p in member.verify_results(data))
+
+
+def test_a_s_distribution_function_goes_with_its_points():
+    member = load_member(MEMBER["library"])
+    data = _consistent_results(member)
+    t = data["types"][0]
+    del t["population"]["a"]["cdf"]
+    assert any("no distribution function" in p for p in member.verify_results(data))
+    data = _consistent_results(member)
+    del data["types"][0]["a_comparison_points"]
+    assert any("without a's comparison points" in p for p in member.verify_results(data))
 
 
 @pytest.mark.parametrize("change, problem", [
@@ -560,17 +546,6 @@ def test_the_restrained_limit_suite_differs_only_in_the_zero_income_event_and_th
     member = Member(restrained)
     assert member.a_art == 0.0 and member.natural_borrowing_constraint() < 0.0
     assert Member(files["0.005"]).hash == load_member(MEMBER["library"]).hash
-
-
-def test_iid_ui_artificial_is_the_toy_with_its_unemployment():
-    # The one-state unemployment model of the toy-hafiscal suite (bst/model.md): the toy with unemployment of probability
-    # 0.05 paying 0.5, and a >= 0; everything else is the toy's.
-    toy = load_strict(MEMBER["toy"].read_text())
-    member = load_strict((BST / "artificial" / "members" / "iid-ui-artificial.yaml").read_text())
-    toy["income"]["unemployment"] = {"prob": 0.05, "income": 0.5}
-    assert member == toy
-    m = Member(member)
-    assert m.a_art == 0.0 and m.natural_borrowing_constraint() < 0.0
 
 
 def test_the_retired_markov_family_is_refused():

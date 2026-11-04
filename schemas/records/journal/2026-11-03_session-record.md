@@ -42,7 +42,7 @@ evening; the notation registry's branch `notation-v8.1-spic` in the econ-ark-too
 - **Before 05:35.** The HAFiscal session answers the question of 05:14: the Lorenz targets are computed on end-of-period
   assets in levels, because the SCF targets are shares of dollars; the 6.60 is wealth over realized quarterly income;
   the published first step's newborns enter at an aggregate level growing at 1% a year while incumbents keep theirs
-  ([the finding](../findings/2026-11-03_hafiscal-lorenz-in-levels.md)). On the request of 05:23: the relay checked
+  (the finding, with the HAFiscal-Latest repository since 2026-11-04). On the request of 05:23: the relay checked
   TYPED BY THE USER; the run awaits the owner's confirmation in that session, a relay approving only commits and
   pushes; the estimation being built. Done by 05:35: the results schema's block for wealth in levels drafted in
   `bst/results.md`, with `experiments.md`, `harness.md`, `bst/model.md`'s open points, the deferred list and the
@@ -86,3 +86,93 @@ evening; the notation registry's branch `notation-v8.1-spic` in the econ-ark-too
   independence wait on the owner's reading of the proposal and the three stage-4 decisions.
 - The estimation waits on his confirmation in the HAFiscal session; the three changes to Bellman wait on his approval
   in the session that drafted them.
+
+**After the memorial:**
+- **Shortly before 17:04.** The owner asks to see the full revised proposal, then to open the five documents in VS
+  Code. The Remote SSH server's sockets on this machine were dead; the documents were opened in the local VS Code
+  window, each at its revised passage, and the decisions the proposal asks of him were listed in the reply.
+- **17:46.** He asks what the proprietor of another toolkit would see if sent a description of the schemas for feeding
+  a model into the apparatus, and recalls that an earlier attempt reached him only as an authentication message.
+  Found: no description for a toolkit's author exists as one document, the content being spread over the READMEs of
+  the schemas, the harness, the adapters and the stones; the pages published on 2026-10-31 and 2026-11-01 are private
+  artifacts under this session's account, which another login cannot open; and the branch holding the apparatus is
+  unpushed, so the public fork shows the schemas as of 2026-10-22. Drafted [`for-toolkit-authors.md`](../../for-toolkit-authors.md),
+  what an author receives, supplies, is given, must report, is judged by, and does in order, with the three results
+  blocks marked as proposed; opened in VS Code at 17:51, for his reading before anything is sent
+  ([deferred](../deferred.md)).
+- **Soon after.** He asks what the families are and why there are four. Answered from
+  [`constraint-scenarios.md`](../../constraint-scenarios.md) and his ruling of 12:50:56 on 2026-11-01.
+- **17:59:50 and 18:01:14.** He abolishes `bst-natural-no-point-mass/1` as an uninteresting case, and then
+  `bst-zero-infima/1` too ([the rulings](../rulings/2026-11-03_harness-decisions.md)). Applied by 18:16, as the
+  Markov family's retirement was: `bst/other/` removed from the tree, the checker and its tests, the results validator,
+  the notation and stone checks, HARK's adapter tests, the stones, the adapters' READMEs and the families' documents
+  brought to two families; the ontology's two family rows retired and its files regenerated, the scenario classes
+  kept; the deferred list, the project state, the rulings and the index. The checker's 191 tests, the ontology's 61,
+  the distributions' 12 and the runner's 7 pass ([the finding](../findings/2026-11-03_two-families-abolished.md));
+  HARK's adapter's 8 and dolo's 4 pass in their locked environments.
+- **18:07:18.** He asks why the laws' scales are s rather than σ. Answered in the reply, with no change: σ is the
+  standard deviation of the log that the parameter file states and keeps after truncation; s is the scale of the
+  normal before truncation that produces it, which Bellman-SYM's `TruncatedLogNormal` takes; the two differ, by about
+  1.4 percent at bounds of three standard deviations, so they carry two names.
+- **18:26:03.** He asks why not ς for that scale. Answered: no strong reason, the symbol being this family's own; ς is
+  accepted by Bellman-SYM, whose own portfolio example declares the risky share as ς, which is the one argument
+  against it should a risky-asset family ever be written; the change is small and nothing hashed moves; it waits on
+  his word. The converter's unreachable calibration path for untruncated laws, a leftover of the abolition, removed;
+  the checker's 191 tests pass.
+- **18:46:40.** He asks again what the proprietor of a new toolkit would see as what they must provide, says the
+  scheme looks very elaborate, asks how it compares with successful software and numerical-coding architectures of
+  the past, and asks for a revised plan by a multi-agent workflow. Started at 18:51: six precedent families
+  researched from primary sources, the apparatus and the rulings inventoried, four plans drafted from different
+  stances, judged through three lenses, synthesized into a plan, a precedents record and a participant page, then
+  verified for citations, fidelity to the rulings and completeness, and revised. Nothing is written into the
+  repository until the result is read.
+- **20:07 to 20:14.** The workflow finished at 20:07, twenty agents and none failed: six precedent families from primary
+  sources, the apparatus and sixty-seven rulings inventoried, four plans judged, one synthesis, one hundred fifty claims
+  checked and sixty-four corrected. Its three documents read and checked against the repository before anything was
+  written: the line counts, the paths, the adapters' interface, the thirteen conditions, the ten expectations, the entry
+  member's values, the committed files' kink, target, mass and MPC, and every ruling stamp the plan cites hold; no
+  quotation, no British form, no private source, no run time. Corrected on the way in: the rules' movement between the
+  medium and high levels at the request points up to m = 20 is about 3.5e-3, not 3.3e-3; the export's interpolation gap
+  at the finest level is about 3e-5, below the residual under the stated laws and above the residual under the
+  toolkits' own, stated in numbers in place of a claim; the thirteen documents the first draft linked are about 2,700
+  lines, not 3,300; the adapters' interface named by its classes; the comparison paper of the 2010 JEDC suite cited by
+  its DOI, Kollmann's copy being a dead link. Written as proposals, uncommitted: [`participation.md`](../../participation.md),
+  [the precedents](../findings/2026-11-03_precedents-for-the-apparatus.md) and
+  [`for-toolkit-authors.md`](../../for-toolkit-authors.md) rewritten at its path, the afternoon's draft kept outside the
+  repository; the README's contents map, the index and the deferred list gain their lines. Opened in VS Code. Nothing
+  committed, pushed or sent.
+- **20:21:43.** He asks to open the three documents in VS Code; opened again, one call per file, in the local window.
+- **20:26:58.** He asks that the lessons of the day's precedents, of the work with Bellman and of the consultations
+  with Matsya be drawn, and the proposals for comparing alternative solutions of the class's models revised on them.
+  Read again before writing: the Bellman and Matsya findings of 2026-10-18 to 2026-10-22, the foundation and
+  existing-syntax notes, the effective-member note, the stones' README, the rulings of 2026-10-19, 2026-10-20,
+  2026-10-31, 2026-11-01 and 2026-11-02, the experiment-checks and dolo-probe findings, the workflow's judgments, and the
+  committed ladders, where every step moves the named expectations, by 1.6e-2 and then 3.4e-3, so that no step of
+  either measures the solver alone. Written by 20:37 as [`comparing-solutions.md`](../../comparing-solutions.md),
+  PROPOSED: fidelity and agreement as two questions; the lessons under four heads with their consequences; the bench
+  in place of the kit, computing the diagnostics from each toolkit's exports; the method-only step detected from the
+  effective member as the tolerance's source; the statement a participant is held to; the stone's departures from a
+  cited reading of the source; six decisions in order. The plan's status line points to it; the README's contents map
+  and the deferred list gain their lines. Opened in VS Code. Nothing committed, pushed or sent; the HARK and HAFiscal
+  sessions not yet consulted on the split, which waits on his reading.
+- **21:42:46.** He asks that the design of [`comparing-solutions.md`](../../comparing-solutions.md) be pursued and
+  that its two questions be put to him. The two questions were put to the committed runs first, by a script that reads
+  the restrained-limit suite's twenty-four results files and the checker's closed forms and solves nothing, and then to
+  one more run per toolkit and member: the method-only step the design asks every ladder to hold, level 4's grids with
+  level 3's nodes, through each adapter in its locked environment, started at 21:48:36 in the scratchpad and finished by
+  22:27; the eight files verify with the checker. What the files showed: both toolkits pass both fidelity
+  checks on every member; the floor is necessary, and the metric must be absolute at a zero closed form; dolo's residual
+  near the natural constraint is the error of its rule's slope against the MPC at the constraint, 1 − ℘^(1/ϱ) Þ̊_R,
+  amplified by one over the saving share and capped by the residual's definition, which the residual under its own laws
+  shows and the stated-law residual's rate hides; HARK's rule carries that MPC to one part in 10¹⁴; across the
+  method-only step each toolkit's rule moves by about 10⁻⁵ at the request points up to m = 20, the size of the
+  difference between them, where the representation step moved each by 3.4e-3; on the relative scale the difference is
+  largest at the constraint, where the residual sits. Written as the record
+  [`2026-11-03_two-questions-on-the-committed-runs/`](../findings/2026-11-03_two-questions-on-the-committed-runs/README.md)
+  with its script, report and the eight files, and into `comparing-solutions.md` as a section and six decisions under
+  the two questions, by 22:27. Nothing committed; the HARK and HAFiscal sessions not consulted; the
+  deferral of 2026-11-02 stands until he rules.
+- **22:27:51.** The two questions put to him: the record of the committed runs and the method-only probe, and the
+  proposal's six decisions under the two questions, 1a to 1c on fidelity and 2a to 2c on agreement, each with a
+  recommendation; the probe's runs in the record without their logs; nothing committed. His answer came the next
+  morning ([the journal of 2026-11-04](2026-11-04_session-record.md)).

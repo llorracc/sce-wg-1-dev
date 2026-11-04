@@ -89,6 +89,11 @@ the owner's instruction of 2026-11-01, it names no toolkit.
 
 52 tests.
 
+**2026-11-03.** The family rows `BSM_0000225`, `bst-natural-no-point-mass/1`, and `BSM_0000227`, `bst-zero-infima/1`,
+are retired: the owner abolished both families as uninteresting cases. The scenario classes
+`natural-without-point-mass` and `zero-infima` stay, written by no family; the members `toy-natural` and
+`toy-untruncated` left the schemas. Labels and text only: no class or term changes.
+
 ## 0.1.0-draft.1 (unreleased)
 
 The first draft, with rows `BSM_0000001` to `BSM_0000159`, of which `BSM_0000151`, a divergence withdrawn on checking,

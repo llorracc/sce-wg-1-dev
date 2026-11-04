@@ -18,10 +18,15 @@ def gl_map(scale=1.0, undefined=()):
     return {p: (None if p in undefined else scale * float(p)) for p in PROBS}
 
 
-def distribution(undefined=(), quantiles=False):
+CDF = [0.1, 0.3, 0.6, 0.85, 0.99]          # one value per comparison point of sample()
+
+
+def distribution(undefined=(), quantiles=True, cdf=True):
     block = {"gl": gl_map(undefined=undefined)}
     if quantiles:
         block["quantiles"] = {p: 2.0 * float(p) for p in QUANTILE_PROBS}
+    if cdf:
+        block["cdf"] = list(CDF)
     if undefined:
         block["undefined"] = list(undefined)
     return block
@@ -68,6 +73,7 @@ def sample():
     points = [0.25, 0.5, 1.0, 2.0, 5.0]
     one_type = {
         "beta": 0.96, "share": 1.0, "conditions": conditions(), "comparison_points": points,
+        "a_comparison_points": [0.05, 0.1, 0.3, 0.8, 2.0],
         "rule": {"c": [0.25, 0.5, 0.93, 1.3, 1.9], "mpc": [1.0, 1.0, 0.5, 0.29, 0.18]},
         "exported_rule": {"m": [0.1, 1.0, 50.0], "c": [0.1, 0.93, 7.6], "range": [0.01, 500.0]},
         "kink": {"status": "undefined"},
@@ -111,6 +117,23 @@ def test_coverage_is_optional():
     jsonschema.Draft202012Validator(SCHEMA).validate(data)
 
 
+def test_the_pooled_blocks_may_omit_the_distribution_function():
+    # the types' comparison points may differ, and then the pooled blocks carry no distribution function (results.md)
+    data = sample()
+    for v in ("m", "a", "c"):
+        del data["pooled"]["population"][v]["cdf"]
+    jsonschema.Draft202012Validator(SCHEMA).validate(data)
+
+
+def test_the_distribution_function_is_required_for_m_alone():
+    # a's and c's at m's points read m's tail (results.md): optional, in both measures
+    data = sample()
+    del data["types"][0]["population"]["a"]["cdf"]
+    del data["types"][0]["population"]["c"]["cdf"]
+    del data["types"][0]["income_measure"]["a"]["cdf"]
+    jsonschema.Draft202012Validator(SCHEMA).validate(data)
+
+
 def test_a_simulation_s_coverage_validates():
     data = sample()
     data["types"][0]["population"]["coverage"] = {"variable": "m", "beyond_top": "kept", "top": 60.0, "top_mass": 0.0,
@@ -133,6 +156,11 @@ def test_optional_provenance_keys_validate():
     lambda d: d["types"][0]["population"]["m"]["gl"].pop("1"),
     lambda d: d["types"][0]["population"]["m"]["quantiles"].update({"1": 60.0}),
     lambda d: d["types"][0]["population"]["m"]["quantiles"].pop("0.999"),
+    lambda d: d["types"][0]["population"]["m"].pop("quantiles"),
+    lambda d: d["pooled"]["population"]["a"].pop("quantiles"),
+    lambda d: d["types"][0]["population"]["m"].pop("cdf"),
+    lambda d: d["types"][0]["income_measure"]["m"].pop("cdf"),
+    lambda d: d["types"][0]["population"]["m"]["cdf"].__setitem__(0, 1.5),
     lambda d: d["types"][0]["target"].update(status="maybe"),
     lambda d: d["types"][0]["population"].update(mean_c=1.0),
     lambda d: d.update(parameter_file_sha256="abc"),

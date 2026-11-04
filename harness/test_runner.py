@@ -4,7 +4,7 @@ tests need neither HARK nor dolo:
     uv run --project harness --frozen pytest -q harness/test_runner.py
 
 What they establish: the registry names files that exist; a run lays out its jobs, records each job's status and
-fingerprint and a manifest with no timings; a rerun skips what is done and redoes what changed or failed; a failure is
+fingerprint, an execution record for the registry with its duration, machine and conditions, and a manifest; a rerun skips what is done and redoes what changed or failed; a failure is
 recorded and the other jobs run; verification passes good files and catches a missing quantity; an experiment with
 problems is refused. They solve nothing. Whether the real toolkits reproduce their committed files is the acceptance
 run, recorded in the findings.
@@ -22,6 +22,7 @@ import yaml
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
+import records  # noqa: E402
 import runner  # noqa: E402
 
 EXPERIMENT = runner.SCHEMAS / "bst" / "experiments" / "restrained-limit" / "experiment.yaml"
@@ -66,8 +67,52 @@ def test_a_run_lays_out_its_jobs(tmp_path):
         assert (d / "results.json").is_file() and (d / "adapter.log").is_file()
         assert json.loads((d / "job.json").read_text())["fingerprint"]["parameter_file_sha256"]
     assert m["experiment"]["name"] == "restrained-limit/1" and m["toolkits"]["stub"]["code_sha256"]
-    words = json.dumps(m).lower()
-    assert not any(w in words for w in ("duration", "elapsed", "seconds")), "a run records no timings"
+    assert m["runtime"] == "none"
+    for j in m["jobs"]:
+        d = out / "stub" / j["member"] / f"level-{runner.LEVEL_NUMBER[j['level']]}"
+        r = json.loads((d / "record.json").read_text())
+        records.validate(r)  # the fork's schema, which refers to the core's
+        assert r["kind"] == "execution" and r["record_version"] == records.RECORD_VERSION
+        assert r["when"]["duration_seconds"] >= 0 and r["where"]["cores"] >= 1 and r["where"]["runtime"] == "none"
+        assert r["environment"]["kind"] == "host-uv" and len(r["environment"]["sha256"]) == 64
+        assert r["conditions"]["thread_variables"]["OMP_NUM_THREADS"] == str(runner.load_registry(reg)["stub"]["threads"])
+        assert "image" not in r
+        assert r["outcome"]["termination"] == "exited" and {o["path"] for o in r["outcome"]["outputs"]} >= {"results.json"}
+        fork = r["extensions"]["sce-wg-1"]
+        assert fork["member"]["id"] == j["member"] and fork["level"] == j["level"] and fork["verification"] == {"verdict": "not run"}
+        assert r["repository"]["dirty"] in (True, False) and ("worktree_tree" in r["repository"]) == r["repository"]["dirty"]
+
+
+def test_the_container_command_follows_the_contract(tmp_path):
+    reg, _ = stub_registry(tmp_path)
+    registry = runner.load_registry(reg)
+    tk = {**registry["stub"], "image_id": "sha256:" + "0" * 64}
+    job = {"toolkit": "stub", "member": "bst-restrained", "level": "low", "level_arg": 1,
+           "parameter_file": runner.ROOT / "schemas/bst/artificial/members/bst-restrained.yaml",
+           "request_file": runner.ROOT / "schemas/bst/experiments/restrained-limit/bst-restrained.request.yaml",
+           "dir": tmp_path / "run" / "stub" / "bst-restrained" / "level-1"}
+    ctx = {"run_id": "run", "caps": {"cpus": 2.0, "memory": "8g"}}
+    cmd = runner.container_command(job, tk, ctx)
+    assert cmd[:2] == ["docker", "run"] and "--network" in cmd and cmd[cmd.index("--network") + 1] == "none"
+    assert cmd[cmd.index("--cpus") + 1] == "2.0" and cmd[cmd.index("--memory") + 1] == "8g"
+    assert "--tmpfs" in cmd and "NUMBA_CACHE_DIR=/tmp/numba" in cmd and "HOME=/tmp" in cmd
+    assert f"type=bind,source={runner.ROOT},target=/src,readonly" in cmd and cmd[cmd.index("--workdir") + 1] == "/src"
+    assert cmd[cmd.index(tk["image_id"]) + 1] == "python" and cmd[-6:-4] == ["--out", "/out"]
+    assert cmd[-7] == "schemas/bst/artificial/members/bst-restrained.yaml" and cmd[-1].endswith(".request.yaml")
+
+
+def test_register_copies_the_records(tmp_path):
+    reg, _ = stub_registry(tmp_path)
+    out = tmp_path / "run"
+    assert run(reg, out, "--levels", "low") == 0
+    assert runner.main(["--registry", str(reg), "verify", str(out)]) == 0
+    assert runner.main(["--registry", str(reg), "register", str(out), "--registry-dir", str(tmp_path / "registry")]) == 0
+    folders = list((tmp_path / "registry").iterdir())
+    assert len(folders) == 1 and folders[0].name.endswith("_restrained-limit-1")
+    files = sorted(p.name for p in folders[0].iterdir())
+    assert files == sorted(f"stub_{m}_low.json" for m in (j["member"] for j in manifest(out)["jobs"]))
+    r = json.loads((folders[0] / files[0]).read_text())
+    assert r["extensions"]["sce-wg-1"]["verification"] == {"verdict": "verified"}
 
 
 def test_a_rerun_skips_what_is_done_and_redoes_what_changed(tmp_path):

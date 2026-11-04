@@ -25,13 +25,11 @@ from laws import FLOOR_ATOM, FLOOR_DENSITY, FLOOR_THIN, TOLERANCE, filled, law_f
 
 SCHEMAS = Path(__file__).resolve().parent.parent
 BST = SCHEMAS / "bst"
-# The four families, each a borrowing-constraint scenario with its own folder, parameter schema and stage file.
-FAMILIES = {"bst-natural/1": "natural", "bst-natural-no-point-mass/1": "natural-no-point-mass",
-            "bst-artificial/1": "artificial", "bst-zero-infima/1": "zero-infima"}
-# The two principal scenarios have their folders in bst/; the other two are in bst/other/ (bst/model.md, "Families").
-PRINCIPAL = ("natural", "artificial")
-FOLDERS = {family: BST / scenario if scenario in PRINCIPAL else BST / "other" / scenario
-           for family, scenario in FAMILIES.items()}
+# The two families, each a borrowing-constraint scenario with its own folder, parameter schema and stage file. The
+# natural scenario without a point mass and the zero-infima scenario had families until 2026-11-03, when the owner
+# abolished them as uninteresting cases (bst/model.md, "Families").
+FAMILIES = {"bst-natural/1": "natural", "bst-artificial/1": "artificial"}
+FOLDERS = {family: BST / scenario for family, scenario in FAMILIES.items()}
 PARAMETER_SCHEMAS = {family: FOLDERS[family] / "parameters.schema.json" for family in FAMILIES}
 STAGE_FILES = {family: FOLDERS[family] / "bellman" / f"{scenario}.bl" for family, scenario in FAMILIES.items()}
 COMMON_SCHEMA = BST / "parameters.common.schema.json"
@@ -145,11 +143,11 @@ class Member:
             self.employed_scale = (1 - self.wp * self.xi_u) / (1 - self.wp)
         self.family = data["family"]
         self.scenario = FAMILIES[self.family]
-        # The constraint in force: a_Art in the artificial scenario; the natural constraint a_Nat in the natural ones, and 0
-        # in the zero-infima scenario, resolved once the laws are checked. natural: no artificial constraint is stated and
-        # the natural one is not the binding kind (in the zero-infima scenario it binds, as an artificial one at 0 would).
+        # The constraint in force: a_Art in the artificial scenario; the natural constraint a_Nat in the natural one,
+        # resolved once the laws are checked. natural: no artificial constraint is stated and the natural one is not the
+        # binding kind.
         self.a_art = data.get("borrowing_constraint")
-        self.natural = self.scenario in ("natural", "natural-no-point-mass")
+        self.natural = self.scenario == "natural"
         problems = self._check()
         if problems:
             raise MemberError("; ".join(problems))
@@ -182,42 +180,28 @@ class Member:
         problems = []
         a_nat = self.natural_borrowing_constraint()
         s = self.scenario
-        if s in ("natural", "natural-no-point-mass"):
+        if s == "natural":
             for name, law in (("permanent_shock", self.psi), ("employed_shock", self.theta)):
                 if not (law.infimum > 0 and not math.isinf(law.supremum)):
-                    problems.append(f"income/{name}: the natural scenarios need a law with a strictly positive lower and a "
+                    problems.append(f"income/{name}: the natural scenario needs a law with a strictly positive lower and a "
                                     f"finite upper bound; {law.name} spans [{law.infimum!r}, {law.supremum!r}]")
             if math.isinf(a_nat):
                 problems.append("income: G psi_min >= R, so h_min is infinite and there is no finite natural constraint")
             p_worst = self.worst_income_probability()
-            if s == "natural" and not p_worst > 0:
+            if not p_worst > 0:
                 problems.append("income: the joint worst income, the worst transitory income with psi at its floor, has "
-                                "probability zero, so the member is bst-natural-no-point-mass/1")
-            if s == "natural-no-point-mass" and p_worst > 0:
-                problems.append(f"income: the joint worst income is a point mass, with probability {p_worst!r}, so the "
-                                "member is bst-natural/1")
+                                "probability zero; the natural family needs a point mass there, and the scenario without "
+                                "one has had no family since 2026-11-03")
             if not problems:
                 self.a_art = a_nat
         elif s == "artificial":
             if not (self.psi.infimum > 0 and self.xi_infimum() > 0):
                 problems.append("income: the artificial scenario needs the floors of psi and of transitory income strictly "
-                                "positive, so that h_min > 0; with a zero floor the member is bst-zero-infima/1, or "
-                                "bst-natural/1 when the zero is a zero-income event")
+                                "positive, so that h_min > 0; a zero floor is bst-natural/1's zero-income event, or the "
+                                "zero-infima scenario, which has had no family since 2026-11-03")
             elif not math.isinf(a_nat) and not self.a_art > a_nat + TOLERANCE:
                 problems.append(f"borrowing_constraint {self.a_art!r} is not above the natural constraint {a_nat!r}; an "
                                 "artificial constraint no tighter has no effect, so the member is a natural one")
-        elif s == "zero-infima":
-            if not (self.psi.infimum == 0 or self.theta.infimum == 0):
-                problems.append("income: the zero-infima scenario needs the infimum of psi or of theta to be zero")
-            if self.wp > 0 and self.xi_u == 0:
-                problems.append("income/unemployment: a zero-income event makes E[xi^(-rho)] infinite, so a >= 0 is never "
-                                "reached; with bounded laws the member is bst-natural/1")
-            for name, law, needed in (("employed_shock", self.theta, True),
-                                      ("permanent_shock", self.psi, self.psi.infimum == 0)):
-                if needed and not _finite_moment(law, -self.rho):
-                    problems.append(f"income/{name}: E[x^(-rho)] is infinite, so a >= 0 is never reached")
-            if not problems:
-                self.a_art = 0.0
         return problems
 
     # The transitory shock xi: xi_u with probability wp, else the scaled employed draw.
@@ -301,7 +285,7 @@ class Member:
         its artificial constraint does not bind.
         """
         a_nat = self.natural_borrowing_constraint()
-        if self.scenario == "zero-infima" or math.isinf(a_nat) or self.a_art > a_nat + TOLERANCE:
+        if math.isinf(a_nat) or self.a_art > a_nat + TOLERANCE:
             return {"finite": True, "factor": None, "case": CASE_BINDING}
         if q <= 0:
             return {"finite": True, "factor": None, "case": "no negative moment needed"}
@@ -398,7 +382,7 @@ class Member:
         d = {}
         d["buffer_stock_target"] = growth * psi.moment(-1.0) < 1
         d["pseudo_target"] = growth < 1
-        d["kink"] = self.scenario == "zero-infima" or math.isinf(a_nat) or self.a_art > a_nat + TOLERANCE
+        d["kink"] = math.isinf(a_nat) or self.a_art > a_nat + TOLERANCE
         log_growth = math.log(growth)
         if L < 1:
             # Mortality: a mixture over ages with weights (1 - L) L^s, and the income measure's weight L G per age. The
@@ -568,36 +552,65 @@ class Member:
                 if not defined and status != "undefined":
                     problems.append(f"{where}/{key}/status: {status!r}, but the toolkit's own verdicts leave it "
                                     "undefined")
+
+            # No comparison point sits on a genuine atom, whose location the parameters fix (results.md): m = xi_u with an
+            # artificial constraint at zero and a positive unemployed income; a at an artificial constraint.
+            pts_m = t["comparison_points"]
+            pts_a = t.get("a_comparison_points")
+            if not self.natural:
+                if self.a_art == 0 and self.wp > 0 and self.xi_u > 0:
+                    for x in pts_m:
+                        if abs(x - self.xi_u) <= ARITHMETIC_TOLERANCE * max(1.0, abs(x)):
+                            problems.append(f"{where}/comparison_points: {x!r} sits on the genuine atom of m at xi_u, "
+                                            "where the distribution function turns on round-off (results.md)")
+                for x in pts_a or []:
+                    if abs(x - self.a_art) <= ARITHMETIC_TOLERANCE * max(1.0, abs(x)):
+                        problems.append(f"{where}/a_comparison_points: {x!r} sits on the constraint's atom (results.md)")
+
+            # The distribution functions (results.md): m's and c's at m's comparison points, a's at its own, one value per
+            # point and nondecreasing along the points; a's present exactly when a has points. m's absence is the validator's
+            # to report.
+            blocks = [(f"{where}/population/{v}", t["population"][v], pts_a if v == "a" else pts_m) for v in ("m", "a", "c")]
+            if t["income_measure"]["status"] == "value":
+                blocks += [(f"{where}/income_measure/{v}", t["income_measure"][v], pts_a if v == "a" else pts_m)
+                           for v in ("m", "a")]
+            for where_F, block, pts in blocks:
+                F = block.get("cdf")
+                if pts is None:
+                    if F is not None:
+                        problems.append(f"{where_F}/cdf: reported without a's comparison points")
+                    continue
+                if F is None:
+                    if where_F.endswith("/a"):
+                        problems.append(f"{where_F}/cdf: a has comparison points but no distribution function")
+                    continue
+                order = sorted(range(len(pts)), key=lambda j: pts[j])
+                if len(F) != len(pts):
+                    problems.append(f"{where_F}/cdf: {len(F)} values for {len(pts)} comparison points")
+                elif any(F[order[j + 1]] < F[order[j]] - ARITHMETIC_TOLERANCE for j in range(len(order) - 1)):
+                    problems.append(f"{where_F}/cdf: falls between two comparison points, which no distribution "
+                                    "function does")
         return problems
 
     def bellman_calibration(self, type_index: int = 0) -> dict:
         """The calibration mapping of the family's stage file for one type, in the stage file's names.
 
-        Each stage file writes its laws' family: TruncatedLogNormal in the natural and artificial scenarios, LogNormal in the
-        zero-infima scenario; a member with another law has no stage file yet, and the converter says so. Bellman-SYM has no
-        derived parameters, so the stage files write the natural limit out from the laws' bounds, which come from here.
+        Both stage files write TruncatedLogNormal laws; a member with another law has no stage file yet, and the converter
+        says so.
         """
-        want = "LogNormal" if self.scenario == "zero-infima" else "TruncatedLogNormal"
+        want = "TruncatedLogNormal"
         for name, law in (("permanent_shock", self.psi), ("employed_shock", self.theta)):
             if law.name != want:
                 raise ValueError(f"{name} is {law.name}; the stage file of {self.family} writes {want}")
         cal = {"β": self.types[type_index]["beta"], "ℒ": self.L, "ϱ": self.rho, "R": self.R, "𝒢": self.G}
         if self.scenario == "artificial":
             cal["a_Art"] = self.a_art
-        if want == "TruncatedLogNormal":
-            for sym, law in (("ψ", self.psi), ("θ", self.theta)):
-                cal.update({f"μ_{sym}": law.normal.location, f"s_{sym}": law.normal.scale,
-                            f"{sym}_min": law.infimum, f"{sym}_max": law.supremum})
-        else:
-            cal.update({"σ_ψ": self.psi.params["sd_log"], "σ_θ": self.theta.params["sd_log"]})
+        for sym, law in (("ψ", self.psi), ("θ", self.theta)):
+            cal.update({f"μ_{sym}": law.normal.location, f"s_{sym}": law.normal.scale,
+                        f"{sym}_min": law.infimum, f"{sym}_max": law.supremum})
         cal["p_zero"] = self.wp
-        if self.scenario != "natural":
-            # With p_zero = 0 the unemployment income is never paid; the natural limit's worst transitory income is then
-            # the employed floor, which the stage file reads as min(ξ_u, the scaled employed floor).
-            xi_u = self.xi_u
-            if self.wp == 0 and self.scenario == "natural-no-point-mass":
-                xi_u = self.employed_scale * self.theta.infimum
-            cal["ξ_u"] = xi_u
+        if self.scenario == "artificial":
+            cal["ξ_u"] = self.xi_u
         return cal
 
     def bellman_calibration_yaml(self, type_index: int = 0) -> str:
@@ -649,15 +662,6 @@ class Member:
 def atom_factor(p_min: float, q: float, rho: float, L: float, G: float, thorn: float, E_psi_q: float) -> float:
     """The factor of the atom case: E[(m - m_min)^(-q)] is finite exactly when it is below one."""
     return p_min ** (1 - q / rho) * L * (G / thorn) ** q * E_psi_q
-
-
-def _finite_moment(law, k: float) -> bool:
-    """Whether E[x^k] of a law is finite."""
-    try:
-        value = law.moment(k)
-    except (OverflowError, ValueError, ZeroDivisionError):
-        return False
-    return value is not None and math.isfinite(value)
 
 
 def load_member(path: Path) -> Member:

@@ -23,12 +23,11 @@ STONES = ["hark", "quantecon-jax", "dolo"]
 # The stage file's parameters, by the symbol the lexicons write them in, the plain text of model.md's notation. A law's
 # spread is found under its shock.
 SYMBOLS = {"β": "β", "ℒ": "ℒ", "ϱ": "ϱ", "R": "R", "𝒢": "𝒢", "a_Art": "a_Art",
-           "σ_ψ": "ψ", "σ_θ": "θ", "p_zero": "℘", "ξ_u": "ξ_u",
+           "p_zero": "℘", "ξ_u": "ξ_u",
            "μ_ψ": "ψ", "s_ψ": "ψ", "ψ_min": "ψ", "ψ_max": "ψ", "μ_θ": "θ", "s_θ": "θ", "θ_min": "θ", "θ_max": "θ"}
-# The buffer-stock families' folders, one for each borrowing-constraint scenario: the principal two in bst/, the others
-# in bst/other/.
-SCENARIOS = ("natural", "natural-no-point-mass", "artificial", "zero-infima")
-FOLDER = {s: SCHEMAS / "bst" / (s if s in ("natural", "artificial") else f"other/{s}") for s in SCENARIOS}
+# The buffer-stock families' folders, one for each borrowing-constraint scenario that has a family.
+SCENARIOS = ("natural", "artificial")
+FOLDER = {s: SCHEMAS / "bst" / s for s in SCENARIOS}
 # Keys that identify a file rather than state a number of the model.
 NOT_PARAMETERS = {"family", "period"}
 # The verdicts of a whole-stage handler on the parts it covers, in Bellman's tokens.
@@ -36,7 +35,7 @@ STATUSES = {"honours", "fixed", "requires_own_handler", "absent"}
 
 
 def stage_parameters() -> set[str]:
-    """The names the four stage files declare with a domain and a gloss, `name : domain :: [...]`; not their functions."""
+    """The names the two stage files declare with a domain and a gloss, `name : domain :: [...]`; not their functions."""
     names = set()
     for s in SCENARIOS:
         text = (FOLDER[s] / "bellman" / f"{s}.bl").read_text(encoding="utf-8")
@@ -45,7 +44,7 @@ def stage_parameters() -> set[str]:
 
 
 def parameter_keys() -> set[str]:
-    """The leaves of the four families' parameter validators' properties, with `[]` for the items of a list; a reference to
+    """The leaves of the two families' parameter validators' properties, with `[]` for the items of a list; a reference to
     the shared definitions is followed."""
     common = json.loads((SCHEMAS / "bst" / "parameters.common.schema.json").read_text(encoding="utf-8"))["$defs"]
     keys = set()
