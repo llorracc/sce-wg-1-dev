@@ -95,6 +95,31 @@ Under the first reading instead, items 5 to 9 widen: the families, the checker, 
 experiments and the findings go in as three or four further pull requests after the harness, and the records stay
 in the fork and the model repository in either reading.
 
+## The series as it stands
+
+| pull request | branch of the fork | state on 2026-11-04 in the evening |
+|---|---|---|
+| #14, the purpose | `exact-definition` | open |
+| #16, the apparatus, the vocabulary, the conventions | `apparatus` | open |
+| #15, the ontology of probability distributions | `ontology-probability-distributions` | open; the compiled files it first carried removed and ignored |
+| #17, the ontology of buffer-stock models | `ontology-buffer-stock-models`, on #15's branch | open; a family row may name the repository that holds its schema; the six tests that need the model's files stay with the model |
+| #18, the shock laws and the stone convention | `shock-laws-and-stones` | open |
+| #19, the experiment schema and the execution-record schemas | `experiment-and-record-schemas` | open; the schemas identified by upstream's paths |
+| the harness's core | | not cut: it needs the package's design, below |
+| participation | | not cut: a rewrite of four documents whose decisions are still the owner's |
+| the first canonical model | | after wg1-buffer-stock is public and cataloged |
+
+**The harness's core needs a design before it is cut.** Today the runner imports the checker's modules by path and the
+experiment checker reads the family's results schema and the model's experiments folder; the runner's tests use the
+model's experiment and its committed results through the stand-in adapter. A package that a model repository pins
+needs: a name; the modules that move (the runner, the records, the canonical serialization and hash, the laws, the
+experiment checker with the results schema given to it rather than found); the command line; a stand-in family and
+experiment for its own tests; and the model repository's imports changed to it, which is the wg1-buffer-stock
+session's work. That design is put to the owner before anything is cut.
+
+**Participation needs the owner's decisions.** `participation.md` lists twenty decisions for him; the settled form
+upstream states rules, not decisions, so the rewrite follows the rulings.
+
 ## What each pull request costs
 
 The code moves are mechanical. The cost is the writing: every document goes upstream in its settled form, stating

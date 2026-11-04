@@ -431,3 +431,21 @@ Times are EST, from the session's transcript. The day opens on the two questions
   `buffer-stock-ontology` with the ignore file resolved by keeping both sides (daefbaa) and into the fork's `main`,
   which merged clean (8fae06b), both pushed; the fork's branches are now even with upstream, the landing page's
   deferred row closed by it. The temporary worktrees removed, the branches kept.
+- **17:01:39 to 17:10:49.** The ignore file reordered as upstream's plus the fork's additions (56b223e). The series
+  continued: #17, the ontology of buffer-stock models, cut on the probability ontology's branch since its generator
+  imports that ontology's formulas; its README, changelog and source settled (twenty passages that named a decision's
+  maker or a session now state the decision), the six tests that need the model's members, checker and stage files
+  left to the model's repository, and a family row allowed to name the repository that holds its schema, so the
+  generator's check passes without the model's files; 37 tests pass. Two mistakes of this session caught and
+  repaired: the first ontology commits had carried compiled Python files, since the tests ran before the files were
+  added in branches whose ignore file lacked the fork's rule, removed from both branches with the rule added (c3f3f15
+  on #15); and on #17 a commit whose message described edits that a failed script had not made, dropped and replaced
+  by the real one (d329bce) with a force-with-lease push of that minutes-old branch of the fork.
+- **17:10:49 to 17:15:16.** The series continued on "continue pushing the PR's to the upstream": #18, the shock laws
+  and the stone convention (`shock-laws.md` and its validator, `rosetta/README.md`, twelve passages settled, the
+  stones left with the model); #19, the experiment schema and the execution-record schemas (`experiments.md`
+  settled, its model-specific sections removed, the three schemas identified by upstream's paths, a new
+  `execution-record.md` saying what a record holds and why; the example records validate under the new
+  identifiers); two descriptions that still named the fork settled in a second commit. Six of the nine are open.
+  `upstreaming.md` gains the series as it stands and why the harness's core and participation are not cut: the
+  core needs a package design, put to the owner; participation needs his twenty decisions.
