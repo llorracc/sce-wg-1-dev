@@ -464,3 +464,15 @@ Times are EST, from the session's transcript. The day opens on the two questions
   series' branches are the fork's; #20 and #17, which stands on #15's branch, now open with a note saying which to
   merge first and that each then shows only its own files. That session holds the package's adoption in its deferred
   list until #20 is merged and tagged and the owner's word comes there.
+- **17:26:19 to 18:53:27.** The owner: build the remaining pieces in the fork before pushing upstream; wg1-buffer-stock
+  is his to push; are there obstacles? Answered: none hard; three decisions (the fork's trunk, the split of work with
+  the model repository, a license for the core) and three small tasks. He rules: merge the series into the fork's
+  main and build from it; confer with the wg1-buffer-stock session on what it needs to build; Apache 2.0; the small
+  tasks first. Done: the core package licensed on #20 (HARK's license text byte for byte, named in its project
+  file); the three facts sent to the wg1-buffer-stock session (its tmux server predates Docker's install, so
+  `sg docker` until restarted; upstream's ontology copies are the ones to track; pin a commit, never a branch) with
+  the consultation on the split and four questions (what it builds first; what the comparator gives it; how a
+  reference results file is marked, a toolkit named `reference` recommended; what its checker needs to import from
+  the package); the seven series branches merged in order into the fork's main, one conflict in the ignore file
+  resolved by union, the core's nine tests and the ontologies' 12 and 37 passing on main, pushed at 0652b49, 29
+  commits beyond upstream; the pin commit sent to that session. `upstreaming.md` records the trunk.

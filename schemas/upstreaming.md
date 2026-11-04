@@ -120,6 +120,17 @@ session's work. That design is put to the owner before anything is cut.
 **Participation needs the owner's decisions.** `participation.md` lists twenty decisions for him; the settled form
 upstream states rules, not decisions, so the rewrite follows the rulings.
 
+## The fork's trunk, since the evening of 2026-11-04
+
+The owner decided to build the remaining framework pieces in the fork before they go upstream: the seven branches
+of the series were merged in order into the fork's `main`, which tracks upstream and now stands 29 commits beyond it
+at 0652b49, with the core's tests and both ontologies' passing there. The remaining framework branches, the
+comparator and the core's continuous integration first, are cut from `main` and merged back into it; each later
+goes upstream as a pull request from its branch. wg1-buffer-stock pins the core from the fork's `main` at a commit
+until upstream merges and tags. `buffer-stock-ontology`, the old working branch, is frozen as history, except that this
+session's journal and records continue on it until the owner moves them. The core package is under the Apache
+License 2.0, as HARK is.
+
 ## What each pull request costs
 
 The code moves are mechanical. The cost is the writing: every document goes upstream in its settled form, stating
