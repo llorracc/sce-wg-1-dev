@@ -420,3 +420,14 @@ Times are EST, from the session's transcript. The day opens on the two questions
 - **Before 16:57:06.** The owner takes the recommendations on the series to upstream ([the rulings](../rulings/2026-11-04_architecture.md));
   `upstreaming.md` marked ADOPTED. Begun: the apparatus pull request (a new document with the vocabulary and the
   conventions in settled form) and the probability ontology's, each on a branch from upstream's main in a worktree.
+- **16:57:06 to 17:01:55.** The first two new pull requests of the series cut from upstream's main and opened on
+  econ-ark/sce-wg-1: #15, the ontology of probability distributions (`ontology-probability-distributions`, cad5663;
+  its twelve tests pass standalone, nothing in it names the fork's records or sessions), and #16, the apparatus
+  (`apparatus`, d1b50b0: `apparatus.md` new, in settled form, with `vocabulary.md` from the schemas' README's
+  glossary and `conventions.md`, stamps, sessions and proposals removed, and a README section pointing at the
+  three). On "commit and push": the fork's records committed as 3104e76 and pushed. On "are there conflicts between
+  the upstream and the fork?": a merge test found exactly one, `.gitignore`, both sides having added rules since the
+  fork point, everything else clean. On "update my fork from its upstream": upstream's main merged into
+  `buffer-stock-ontology` with the ignore file resolved by keeping both sides (daefbaa) and into the fork's `main`,
+  which merged clean (8fae06b), both pushed; the fork's branches are now even with upstream, the landing page's
+  deferred row closed by it. The temporary worktrees removed, the branches kept.
