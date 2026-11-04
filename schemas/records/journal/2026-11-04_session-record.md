@@ -372,3 +372,51 @@ Times are EST, from the session's transcript. The day opens on the two questions
   Docker's buildx plugin, which Ubuntu's docker.io package lacks; the plugin installed here from Ubuntu's
   docker-buildx package under the ruling that installed Docker, and both sessions told. Its function signatures are
   not to be adopted yet; it will shape them after the runner's docker calls so that swapping them in is mechanical.
+- **Before 16:06:18, "commit today's work"; committed by 16:09:50.** The project-state memory brought current with a
+  section for the day, its index line and the deferred rows updated (the runner's timings test done and dropped; the
+  toy-hafiscal and registry rows revised); everything staged and committed as 5c6961b on buffer-stock-ontology, one
+  commit for the afternoon of 2026-11-03 and the day of 2026-11-04 (111 files added, 46 changed, 9 removed, 6
+  renamed; the findings' binaries small). Not pushed. The hash sent to the HAFiscal session for its README. In the
+  same stretch the owner asks to start building the wg1-buffer-stock REMARK under llorracc, now.
+- **16:09:50 to 16:13:31, wg1-buffer-stock begun.** On the owner's word, the repository `llorracc/wg1-buffer-stock`
+  created private, so that he decides when it opens, and cloned to `/home/shared/github/llorracc/wg1-buffer-stock`:
+  the fork's `schemas/` with the records, `harness/`, `rosetta/`, `ontologies/`, the guard hook and the ignore
+  file at 5c6961b; the REMARK's files (`binder/Dockerfile` for the organizer's image, the root `Dockerfile` its
+  copy with a test, `binder/environment.yml` installing uv, `reproduce.sh` with the levels as its argument and the
+  runtime chosen, `reproduce_min.sh`, `REMARK.md` at tier 1, `CITATION.cff`, the README, a CLAUDE.md); four
+  references to the fork's `project-a/` redirected; the organizer's image built and its environment checked; the
+  first commit 2a1ff5a pushed to the private repository's main. The runner's tests failed at commit time only because
+  the repository had no commit yet for the records to name, and pass after it. The reproduction of the coarse level
+  started there to register the first records.
+- **By 16:17:05.** In wg1-buffer-stock: the coarse level reproduced through the containers, eight jobs verified, ten
+  records registered on the clean commit 2a1ff5a; the REMARK session's lint of that commit (the missing license, the
+  owner's; the README under fifty non-blank lines, rewritten to seventy-nine); its reading of the socket option
+  noted in that repository's `schemas/registry.md`; the second commit pushed. The fork's copy of the design
+  document does not carry the socket note; where design edits go from here is the owner's to say.
+- **16:17:05 to 16:25:31.** The owner's three answers ([the rulings](../rulings/2026-11-04_architecture.md)): the license
+  HARK's, Apache 2.0; a session of its own in wg1-buffer-stock, seen as `jd_wg1-buffer-stock`; the push. The fork's
+  branch pushed to origin. The new session handed the repository: a handoff written outside both repositories in its
+  own project directory on this machine, and a message with his words and their time, so that its relay check lets it
+  commit and push the license to the private repository. The HAFiscal and REMARK sessions told that the fork's
+  branch is public and that the model repository has its own session from now on.
+- **Before 16:26:34.** The REMARK session confirms its lint of wg1-buffer-stock at 73cf4b2: the README at seventy-nine
+  non-blank lines by the tool's own count, the missing license the only tier-one failure left, which the new session
+  adds on the owner's ruling of Apache License 2.0, HARK's.
+- **Before 16:28:57.** The wg1-buffer-stock session reports the license committed there as 9204288, HARK's Apache
+  License 2.0 byte for byte, with the citation file, the README and the design documents no longer calling it
+  pending and a test for its presence; the push held, since the owner's "OK, let's push" answered the fork's branch
+  and his relay rule lets a push approve only what it answered, a stricter and correct reading than this session's
+  handoff gave; it asks him in its own session. It takes the coordination from here.
+- **Before 16:37:15.** The owner asks how thoroughly the new plan is documented and where, and whether the work since
+  the fork left upstream should become a set of coherent pull requests to econ-ark/sce-wg-1, merged in order to build
+  the new way systematically. Measured: the branch 95 commits past the fork point of 2026-10-01, upstream 34 commits
+  ahead, 406 files added of which 262 are records; the work branch and #15 inside the branch; #14's family retired.
+  Written as `schemas/upstreaming.md`, PROPOSED: where the documentation is and that it is complete as records but
+  spread over sixteen design documents with no single statement of the apparatus; the one decision the series depends
+  on, the framework upstream with the model in wg1-buffer-stock (recommended) or everything upstream; nine pull
+  requests in order, from #14 through the apparatus document, the two ontologies, the shock laws and stone
+  convention, the experiment and record schemas, the harness's core as a package, participation, and the pointer to
+  the first canonical model; the cost in the writing of settled forms; the fork's branches afterwards.
+- **Before 16:57:06.** The owner takes the recommendations on the series to upstream ([the rulings](../rulings/2026-11-04_architecture.md));
+  `upstreaming.md` marked ADOPTED. Begun: the apparatus pull request (a new document with the vocabulary and the
+  conventions in settled form) and the probability ontology's, each on a branch from upstream's main in a worktree.

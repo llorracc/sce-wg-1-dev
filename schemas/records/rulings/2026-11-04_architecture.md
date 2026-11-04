@@ -52,3 +52,13 @@ purpose rulings of the same day are in [their own file](2026-11-04_purpose.md).
   econ-ark/REMARK is public, a relay lets it commit but not push or open the pull requests, which need his word in
   that session. The fork's side begins: the environments moved beside their adapters, the Dockerfiles, the container
   executor, the records.
+- **Between 16:17:05 and 16:24:22, the license, the session and the push.** Three answers: wg1-buffer-stock takes the
+  same license as HARK, which is Apache License 2.0 (econ-ark/HARK's license as GitHub reports it); the owner has
+  opened a session of its own in that repository, `jd_wg1-buffer-stock`, so this session writes there no more and
+  hands the work over; and the fork's branch `buffer-stock-ontology` is pushed, which it was at 16:24:22, the branch
+  now public with the day's commit 5c6961b.
+- **Between 16:37:15 and 16:57:06, the series to upstream.** Taking the recommendations of [`upstreaming.md`](../../upstreaming.md),
+  now ADOPTED: the framework goes to econ-ark/sce-wg-1 in ordered pull requests and the buffer-stock model stays in
+  wg1-buffer-stock, which vendors the core until the core is a package; the records stay with the model and the
+  fork; the apparatus document goes at upstream's root; the order as proposed, with the apparatus and the ontology of
+  probability distributions cut now, each from upstream's main on its own branch of the fork.
