@@ -458,3 +458,9 @@ Times are EST, from the session's transcript. The day opens on the two questions
   file's folder; a stand-in model repository built by the tests themselves, committed in a temporary git repository,
   nine tests passing and the command answering. Cut on #19's branch and opened as #20. "push": the fork had nothing
   unpushed. The model repository's change to the package is the wg1-buffer-stock session's, told.
+- **Before 17:28:07.** The wg1-buffer-stock session checked #20 against the code (every file the change would touch
+  exists there) and noted that #20's base is upstream's main while its branch stands on #19's, so its diff carries
+  #19's commits. A retarget is not possible, since a pull request's base must be a branch of econ-ark/sce-wg-1 and the
+  series' branches are the fork's; #20 and #17, which stands on #15's branch, now open with a note saying which to
+  merge first and that each then shows only its own files. That session holds the package's adoption in its deferred
+  list until #20 is merged and tagged and the owner's word comes there.
