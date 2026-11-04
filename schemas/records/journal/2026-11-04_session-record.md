@@ -449,3 +449,12 @@ Times are EST, from the session's transcript. The day opens on the two questions
   identifiers); two descriptions that still named the fork settled in a second commit. Six of the nine are open.
   `upstreaming.md` gains the series as it stands and why the harness's core and participation are not cut: the
   core needs a package design, put to the owner; participation needs his twenty decisions.
+- **17:15:19 to 17:26:17.** On "take your recommendations on the package design and cut the harness PR": the core as
+  the package `wg1core` under `core/` of upstream, pinned by a model repository from a tag with uv's subdirectory
+  syntax; the runner, the records, the canonical hash, the laws and the experiment checker moved in, the checker
+  taking the model's results schema and anchors as arguments, the records taking the repository's root, the three
+  validators as package data with the documents pointing at them, a `model` section in the registry file naming
+  the results schema, anchors, experiments folder, verifier and registry folder, the root the git top level of the
+  file's folder; a stand-in model repository built by the tests themselves, committed in a temporary git repository,
+  nine tests passing and the command answering. Cut on #19's branch and opened as #20. "push": the fork had nothing
+  unpushed. The model repository's change to the package is the wg1-buffer-stock session's, told.

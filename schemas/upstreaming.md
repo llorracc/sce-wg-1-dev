@@ -105,11 +105,11 @@ in the fork and the model repository in either reading.
 | #17, the ontology of buffer-stock models | `ontology-buffer-stock-models`, on #15's branch | open; a family row may name the repository that holds its schema; the six tests that need the model's files stay with the model |
 | #18, the shock laws and the stone convention | `shock-laws-and-stones` | open |
 | #19, the experiment schema and the execution-record schemas | `experiment-and-record-schemas` | open; the schemas identified by upstream's paths |
-| the harness's core | | not cut: it needs the package's design, below |
+| #20, the core as a package, `wg1core` | `harness-core`, on #19's branch | open; the design taken: the runner, records, canonical, laws and the experiment checker in `core/`, the three validators as its data, a `model` section in the registry file, nine tests on a model repository of their own |
 | participation | | not cut: a rewrite of four documents whose decisions are still the owner's |
 | the first canonical model | | after wg1-buffer-stock is public and cataloged |
 
-**The harness's core needs a design before it is cut.** Today the runner imports the checker's modules by path and the
+**The harness's core, cut as #20 with the design below taken.** Today the runner imports the checker's modules by path and the
 experiment checker reads the family's results schema and the model's experiments folder; the runner's tests use the
 model's experiment and its committed results through the stand-in adapter. A package that a model repository pins
 needs: a name; the modules that move (the runner, the records, the canonical serialization and hash, the laws, the
