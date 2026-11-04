@@ -476,3 +476,16 @@ Times are EST, from the session's transcript. The day opens on the two questions
   the package); the seven series branches merged in order into the fork's main, one conflict in the ignore file
   resolved by union, the core's nine tests and the ontologies' 12 and 37 passing on main, pushed at 0652b49, 29
   commits beyond upstream; the pin commit sent to that session. `upstreaming.md` records the trunk.
+- **18:52:59 to 18:56:25.** The wg1-buffer-stock session answers the consultation from the core at 0652b49 and its own
+  code: the split taken with three model-side additions (the levels in both adapters, restrained-limit's second
+  version with regenerated request files, the reference solver as an adapter), R6 still open so only the rule
+  certifiable, the comparator to take its quantities from the experiment; on verdicts, R5's letter against the
+  registry schema's `comparison.verdict`: the experiment's checks keep pass or fail, the distance from the reference
+  gets none, the block becomes reference, status and report, and the reproduction fails on verification, a failed
+  check or an uncomputable comparison, never on a distance; on the reference, neither a toolkit named `reference`
+  nor an entry under `model`: each reference solver a toolkit named for its code with its own records, the
+  experiment pinning each member's reference file by hash; and one blocker, the adapters reading the model through
+  the checker's modules inside their containers while the core required Python 3.12 and dolo's environment is 3.11.
+  Fixed on #20's branch and merged into main at c0d07a86: the core requires 3.11 or later, its tests pass under
+  both, and it names its own commit from the installation's metadata in the records and the manifest. The two schema
+  changes, the registry's comparison block and the experiment's reference entries, put to the owner.
