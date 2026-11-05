@@ -511,3 +511,7 @@ Times are EST, from the session's transcript. The day opens on the two questions
   uncommitted fixes was removed by a command that recreated it, and the fixes were reapplied from the transcript;
   the lesson, never remove a worktree before its changes are committed or discarded knowingly. The pin sent to that
   session. On "memorialize": every record category brought current and committed, not pushed.
+- **Before 19:13:31.** The wg1-buffer-stock session, checking the three fixes at ee85a8f6, found the job folders named by
+  the level's position, which the owner's rule against numerical names forbids: a level added changes every folder
+  after it. A job's folder is now named for its level, `<run>/<toolkit>/<member>/<level>/`, matching the registry's
+  file names; on the fork's main, the pin sent.
