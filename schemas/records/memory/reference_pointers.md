@@ -101,3 +101,10 @@ metadata:
 - The page "The Restrained Limit", https://claude.ai/artifact/Lp8sHuCW2EoAvqDYfmBcdb: a private claude.ai page,
   published 2026-11-01, drawing the restrained-limit suite's HARK run; its source is
   `findings/2026-11-01_restrained-limit-suite-hark/page/`. Only the owner can open it until he shares it.
+- Since 2026-11-04: the buffer-stock model's own repository, https://github.com/llorracc/wg1-buffer-stock (private as
+  it begins; its session `jd_wg1-buffer-stock`); the series to the working group's repository, pull requests #14 to
+  #20 on https://github.com/econ-ark/sce-wg-1/pulls (the purpose, the apparatus, the two ontologies, the shock laws
+  and stone convention, the experiment and record schemas, the core as a package); the fork's `main` as the trunk
+  of the framework, https://github.com/llorracc/sce-wg-1-dev/tree/main, with `core/` the package a model repository
+  pins; REMARK, https://github.com/econ-ark/REMARK, its clone at `/home/shared/github/econ-ark/REMARK` with the
+  session `jd_REMARK_integrate-with-WG1`, whose first update is a local branch there.

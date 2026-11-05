@@ -62,6 +62,18 @@ purpose rulings of the same day are in [their own file](2026-11-04_purpose.md).
   wg1-buffer-stock, which vendors the core until the core is a package; the records stay with the model and the
   fork; the apparatus document goes at upstream's root; the order as proposed, with the apparatus and the ontology of
   probability distributions cut now, each from upstream's main on its own branch of the fork.
+- **Between 17:15:19 and 17:26:19, the package design and the harness pull request.** Taking the recommendations
+  on the package's design: the core as `wg1core` under `core/` of the working group's repository, pinned by a model
+  repository from a tag with uv's subdirectory syntax, holding the runner, the records, the canonical hash, the laws
+  and the experiment checker with the three validators as its data, a `model` section in the registry file naming
+  what the core needs of a model repository, its own tests on a stand-in model; cut and opened as #20.
+- **Between 17:26:19 and 18:52:59, building in the fork first.** The owner wants the remaining pieces built in the
+  fork before they go upstream, wg1-buffer-stock being his to push, and asks whether anything obstructs the two
+  repositories working together; told that nothing hard does, he rules: the series merged into the fork's `main`,
+  which becomes the trunk the remaining framework branches are built from; the wg1-buffer-stock session consulted
+  and conferred with on what it needs to build; the core package under the Apache License 2.0; and the small tasks
+  first (the session's shell and the docker group, the ontology copies as snapshots of upstream's, pinning a commit
+  and never a branch). Done the same evening; the fork's main at 0652b49 held the whole series.
 - **Between 18:55:51 and 19:04:33, the two schema changes and the comparator.** Taking both recommendations: the
   registry entry's comparison block carries a status, the reference's hash, the report and the largest distance with
   the reference's error, and no verdict, since the fifth reference decision reports the distance and judges it not;

@@ -501,3 +501,13 @@ Times are EST, from the session's transcript. The day opens on the two questions
   commit lacked three document edits; they followed in a second commit, with the lesson that errexit is not to be
   relied on in this shell and results are to be checked. The record document, the experiment document and the
   core's README describe the comparator and the block.
+- **19:04:33 to 19:12:50.** The wg1-buffer-stock session read the comparator at ae464ee and found three problems, the
+  first against the agreement: an uncomputable comparison did not fail the command; nothing checked that a reference
+  answered the same question; the levels' order was a built-in map. All three fixed on the comparator's branch and
+  merged into the fork's main at ee85a8f6: a status of error with its reason, failing the command, the entry schema
+  at its sixth draft; the identity keys the model names in its registry file (`identity`), which a job's file and
+  its reference must agree on; the levels ordered as the experiment lists them, in the comparator and the runner's
+  job folders; seventeen tests under both interpreters. One slip of this session on the way: a worktree holding the
+  uncommitted fixes was removed by a command that recreated it, and the fixes were reapplied from the transcript;
+  the lesson, never remove a worktree before its changes are committed or discarded knowingly. The pin sent to that
+  session. On "memorialize": every record category brought current and committed, not pushed.

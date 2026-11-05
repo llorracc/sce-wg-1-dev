@@ -1,9 +1,37 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the commit of the evening of 2026-11-04 (the state of the memorial of 08:07 on 2026-11-03 kept below the day's changes): the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two buffer-stock families, the other two abolished on 2026-11-03; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted; the rulings of 2026-11-02 that the harness gives parameters only and leaves the representation to each toolkit, and the revised proposal of 2026-11-03 that followed, the distributions of permanent income and of wealth in levels and the joint, with the adapters' independence planned, all awaiting the owner's reading; the toy-hafiscal estimation built in the HAFiscal session on his request; the ontology at draft.2, naming no toolkit; the ruling of 2026-11-04 that a reference solution is the standard, his answers to its decisions later that morning, and the results-schema ruling of the same morning, the quantiles required and the distribution function at the comparison points added"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 19:12:50 on 2026-11-04 (the state of the evening's commit and of the memorial of 08:07 on 2026-11-03 kept below the later changes): the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two buffer-stock families, the other two abolished on 2026-11-03; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted; the rulings of 2026-11-02 that the harness gives parameters only and leaves the representation to each toolkit, and the revised proposal of 2026-11-03 that followed, the distributions of permanent income and of wealth in levels and the joint, with the adapters' independence planned, all awaiting the owner's reading; the toy-hafiscal estimation built in the HAFiscal session on his request; the ontology at draft.2, naming no toolkit; the ruling of 2026-11-04 that a reference solution is the standard, his answers to its decisions later that morning, and the results-schema ruling of the same morning, the quantiles required and the distribution function at the comparison points added"
 metadata:
   type: project
 ---
+
+**As of the memorial of 19:12:50 on 2026-11-04**, the evening's additions to the block below:
+- **The series to upstream.** Seven pull requests open on econ-ark/sce-wg-1, #14 to #20: the purpose; the
+  apparatus with the vocabulary and the conventions; the ontology of probability distributions; the ontology of
+  buffer-stock models, on #15's branch; the shock laws and the stone convention; the experiment and execution-record
+  schemas; the core as the package `wg1core`, on #19's branch, under the Apache License 2.0, on Python 3.11 or later,
+  naming its own commit. Each cut from upstream's main on its own branch of the fork with its documents in settled
+  form; the two stacked ones say which merges first. The plan is [`upstreaming.md`](../../upstreaming.md), adopted.
+- **The fork's trunk.** The owner builds the remaining framework in the fork before it goes upstream: the seven
+  branches are merged into the fork's `main`, from which the framework branches are cut and merged back;
+  wg1-buffer-stock pins the core from `main` at a commit, the latest ee85a8f6, and changes the pin to upstream at a
+  tag when the series merges. This branch, `buffer-stock-ontology`, is frozen as history, except for these records.
+- **The comparator**, in the core: the experiment's checks evaluated as written, between members, toolkits or
+  successive levels in the experiment's order, with verdicts of pass, fail, not applicable or error; every job's
+  distances from its member's reference reported with the reference's error and no verdict, as the fifth reference
+  decision has it; an uncomputable comparison an error that fails the command; the reference required to answer the
+  same question by the identity keys the model names; the `compare` command; the registry entry's comparison block
+  without a verdict (draft.6) and the experiment's pinned references with `reference_quantities`, both ruled.
+- **The model repository's side**, the wg1-buffer-stock session's on the owner's word there: the switch to the
+  package, the workflow, the levels in both adapters, restrained-limit's second version with pinned references, the
+  reference solvers as toolkits named for their code (`bench-continuous`, later `hark-continuous`), the second HARK
+  mode, the license push, going public and the REMARK catalog entry. The REMARK session's first update is committed
+  locally in its clone, unpushed. The sixth reference decision, the distribution's method, is still open, so only the
+  rule is certifiable.
+- **Open for the owner:** the level names (coarse, default, fine proposed); the comparator's pull request upstream;
+  participation's rewrite, after his twenty decisions; the model pointer upstream once wg1-buffer-stock is public and
+  cataloged; the pushes of the model repository's commits and the REMARK session's branches, in their sessions; and
+  the earlier items, R6 among them.
 
 **As of the commit of the evening of 2026-11-04** (the day's rulings: [the purpose](../rulings/2026-11-04_purpose.md),
 [the architecture](../rulings/2026-11-04_architecture.md), [the reference solution](../rulings/2026-11-04_reference-solution.md);

@@ -105,7 +105,8 @@ in the fork and the model repository in either reading.
 | #17, the ontology of buffer-stock models | `ontology-buffer-stock-models`, on #15's branch | open; a family row may name the repository that holds its schema; the six tests that need the model's files stay with the model |
 | #18, the shock laws and the stone convention | `shock-laws-and-stones` | open |
 | #19, the experiment schema and the execution-record schemas | `experiment-and-record-schemas` | open; the schemas identified by upstream's paths |
-| #20, the core as a package, `wg1core` | `harness-core`, on #19's branch | open; the design taken: the runner, records, canonical, laws and the experiment checker in `core/`, the three validators as its data, a `model` section in the registry file, nine tests on a model repository of their own |
+| #20, the core as a package, `wg1core` | `harness-core`, on #19's branch | open; the design taken: the runner, records, canonical, laws and the experiment checker in `core/`, the three validators as its data, a `model` section in the registry file, its tests on a model repository of their own; since, the Apache License 2.0, Python 3.11 or later, the core naming its commit |
+| the comparator | `comparator`, merged into the fork's main; not yet a pull request | built on 2026-11-04 in the evening with the two schema changes it rests on |
 | participation | | not cut: a rewrite of four documents whose decisions are still the owner's |
 | the first canonical model | | after wg1-buffer-stock is public and cataloged |
 
@@ -124,8 +125,8 @@ upstream states rules, not decisions, so the rewrite follows the rulings.
 
 The owner decided to build the remaining framework pieces in the fork before they go upstream: the seven branches
 of the series were merged in order into the fork's `main`, which tracks upstream and now stands 29 commits beyond it
-at 0652b49, with the core's tests and both ontologies' passing there. The remaining framework branches, the
-comparator and the core's continuous integration first, are cut from `main` and merged back into it; each later
+at 0652b49, with the core's tests and both ontologies' passing there. The remaining framework branches are cut from `main` and merged back into it, the comparator the first of them, built
+the same evening, the core's continuous integration next; each later
 goes upstream as a pull request from its branch. wg1-buffer-stock pins the core from the fork's `main` at a commit
 until upstream merges and tags. `buffer-stock-ontology`, the old working branch, is frozen as history, except that this
 session's journal and records continue on it until the owner moves them. The core package is under the Apache
