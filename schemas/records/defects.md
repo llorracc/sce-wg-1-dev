@@ -210,3 +210,6 @@ Faults found in this project's own work, with their status.
   already filled. **Status:** fixed 2026-11-02 before 11:30: the runner runs each toolkit's first job alone, then the
   rest in parallel. Rerun from a cold environment, all four of dolo's jobs succeeded
   ([the findings](findings/2026-11-02_harness-acceptance/README.md)).
+- **The journal of 2026-11-04 left out of the index.** The memorials of 2026-11-04 wrote the day's journal but no line
+  for it in `MEMORY.md`, so the index's journals stopped at 2026-11-03. Found on 2026-11-05 while indexing the next day's.
+  **Status:** fixed 2026-11-05, the line added.

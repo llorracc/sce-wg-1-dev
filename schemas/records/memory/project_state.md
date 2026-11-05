@@ -34,6 +34,11 @@ metadata:
   mode, the license push, going public and the REMARK catalog entry. The REMARK session's first update is committed
   locally in its clone, unpushed. The sixth reference decision, the distribution's method, is still open, so only the
   rule is certifiable.
+- **The Markov route reassessed, 2026-11-05.** The owner now holds that solving the model through HARK's Markov consumer
+  with a nonpersistent unemployment state was not the best approach and means to prepare a specialized
+  `ConsBufferStockModel` class in HARK; the survey of the route is [the finding](../findings/2026-11-05_hark-markov-route-survey.md).
+  The second HARK mode of the ruling of 2026-11-04 is superseded in prospect; what the class is to do and where its
+  work lives are his to say.
 - **Open for the owner:** the level names (coarse, default, fine proposed); whether a record's `ci` block should
   carry fields for the attempt, the repository and the workflow's name beyond the provider, the identifier and the
   attempt's address, recommended not; the comparator's pull request upstream;
