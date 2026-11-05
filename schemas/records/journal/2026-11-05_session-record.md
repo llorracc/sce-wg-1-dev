@@ -24,6 +24,12 @@ Times are EST, from the clock, the transcript or git.
   two principal families as they stand the standard consumer's constraint arithmetic is the stated model's, and the
   member that showed the difference belonged to the scenario abolished on 2026-11-03.
 
-**State at the end of the entry.** The survey committed on this branch, not pushed; the two sessions' answers pending,
-to be added to the finding when they come; nothing of HARK's changed; the owner's word awaited on what the new class is
+- **12:07 to about 12:30.** The HARK session's answer, received: the drafts' states and today's review activity, its
+  unposted work by what it does, its measurements of the standard and the Markov consumer on main, and its view of a
+  fresh class; added to the finding as a section of its own, with two corrections to the survey, that a transition
+  matrix for the Markov consumer does exist on main through the model-file route and that the condition methods
+  raise rather than being merely absent.
+
+**State at the end of the entry.** The survey committed on this branch, not pushed; the HAFiscal session's answer
+pending, to be added to the finding when it comes; nothing of HARK's changed; the owner's word awaited on what the new class is
 to do and where its work lives.

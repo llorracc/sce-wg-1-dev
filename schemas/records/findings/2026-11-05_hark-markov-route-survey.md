@@ -7,7 +7,8 @@ and in HARK's pull requests, why, what it established, what it cost, and what th
 and does not decide. Its sources are the fork's records, the adapter and the stone at the fork's commit 5c6961b (the
 copy that lives on in wg1-buffer-stock), HARK's solvers at the adapter's pin, and econ-ark/HARK's pull requests and
 issues as GitHub showed them on 2026-11-05. The HARK and HAFiscal-Latest sessions were asked for their side the same
-day; their answers are to be added when they come.
+day; the HARK session's answer, received at 12:07 EST, is the section before the last; the HAFiscal session's is to be
+added when it comes.
 
 ## Why the Markov route was taken
 
@@ -48,8 +49,9 @@ day; their answers are to be added when they come.
   limit from the nodes, the conditions and statuses through the checker's arithmetic on the effective member's
   expectations, the kink and the targets as roots of the rule, the stationary population by a lottery on an asset grid
   with mortality and newborn replacement under both measures, welfare from the value function, and the Euler residuals
-  by its own quadrature of the stated laws. HARK's Markov consumer has no condition checks, no targets, no Euler-error
-  function and no transition matrix.
+  by its own quadrature of the stated laws. HARK's Markov consumer has no condition checks, no targets and no
+  Euler-error function; a transition matrix for it does exist on main through the model-file route, as the HARK
+  session measured on 2026-11-05 (below), but the adapter built its own.
 - **The gate** (`gate.py`, proposed by the HAFiscal-Latest session): at each level the Markov rule against HARK's standard
   consumer on the same joint nodes, the adapter's file against the benchmark emitter's number by number, and the
   checker's verdict. Over the benchmark's ladder the Markov rule agreed with the standard consumer's to 2.3·10⁻¹⁴
@@ -156,8 +158,9 @@ pin, 11852805 on the fork llorracc/HARK (the first commit of draft #1862, on #18
   `NewbornPermShk` of draft #1860; assets of exactly zero cannot be set through the initial law (the default gives about
   6·10⁻⁶). The Markov consumer's `MrkvPrbsInit` lets a newborn start employed.
 - **The targets and condition checks exist only for `IndShockConsumerType` exactly**, in an infinite horizon with one
-  period per cycle (`calc_stable_points` in `post_solve`); the Markov consumer has neither, nor an Euler-error function
-  nor a transition matrix (`rosetta/hark.md`).
+  period per cycle (`calc_stable_points` in `post_solve`, which returns early for every subclass); the Markov consumer
+  has neither, nor an Euler-error function: its four condition methods raise, and its `pre_solve` does not check
+  conditions (`rosetta/hark.md`; the HARK session, below).
 - **The condition factors depart from the paper's in places**: VAFac without survival (BSM_0000138, draft #1855),
   GPFacLivMod with survival twice (BSM_0000139), the WRIC's and FVAC-PF's messages (BSM_0000154, BSM_0000155), the
   message when the RIC fails (BSM_0000158), no log target (BSM_0000140), all at HARK's main of 2026-10-07.
@@ -219,6 +222,81 @@ issue #1868 (the labeled type's distance infinite while the natural limit moves,
 solver's natural-limit rules unwritten; the stacked branches one commit behind #1858; retirement, persistent
 unemployment and the truncation defaults in the employment model; the human-wealth weight's conflict with the group's
 edits of the same file.
+
+## The HARK session's account, 2026-11-05 at 12:07 EST
+
+The HARK session, which holds HARK's clone and the drafts, answered the same day. Its unposted work is given by what it
+does, as the records' rule for that clone requires; its measurements are its own, with HARK's main at 4c285e86 unless
+a draft is named.
+
+**On the standard consumer, measured or read on main.**
+- The one-period natural limit always takes ψ's minimum; when next period's lowest resources exceed the worst
+  transitory income, which needs an artificial constraint above it, ψ's supremum is the binding one. Read, not run.
+- The kink under an artificial constraint is the crossing of two interpolants, not a gridpoint, so its location
+  depends on the interpolant: with ℘ = 0.05, ξ_u = 0.5, ℒ = 0.99375, a ≥ 0 and HARK's default nodes it sits at 0.8725
+  under linear interpolation and 0.8730 under the cubic, with the lowest employed income node, 0.87281, between them;
+  over the last hundred of three hundred simulated periods with twenty thousand agents, the constrained households
+  numbered 35,053 under the one and 41,646 under the other. The simulation itself is exact at the atoms: a
+  constrained household has c = m and a = 0.
+- Human wealth comes from the atoms' mean income; the worst income's probability from the atoms, ℘ with a zero-income
+  event and otherwise the product of the lowest atoms' probabilities, a property of the discretization.
+- The newborn: the first transitory shock pinned at one unless `NewbornTransShk` draws it, when unemployment can be
+  drawn since it is an atom; ψ drawn with growth in the birth period, nothing letting a newborn enter at P = 1; initial
+  assets about 6·10⁻⁶ from the default of −12 for the log mean; one of HARK's own simulation tests misspells the flag
+  and runs with newborns mismatched, passing either way.
+- The model-file route to a population replaces the asset grid by the arrival grid when a twist is specified, and a
+  uniform arrival grid's first cell inflates the mass at the constraint: 0.026 on a uniform grid of 801 points to 40
+  against 0.018 on a geometric one.
+- With HARK's atoms, the cubic rule violates concavity at 200 gridpoints and above.
+- `MPCmaxEff` is not in the standard solver; it is in the fast solver, the bequest model and the Markov solver.
+
+**On the Markov consumer.** All four condition methods raise `NotImplementedError` and `pre_solve` does not call the
+check; `calc_stable_points` returns early for every subclass, so there is no target; the value function on main is a
+linear interpolant of the pseudo-inverse value with its limit suppressed, which #1858 changes; the natural limit and
+the worst income's probability come from the atoms per next state and are combined across states, with the top MPC
+set to one where the artificial constraint binds. A transition matrix is not a cost on main: the model-file route,
+`initialize_sym`, the transition matrices with the previous state's grid given, and the steady state, gives total mass
+one for a default Markov consumer; leaving the previous state's grid out aborted the interpreter rather than raising,
+which the session traces, unconfirmed, to a compiled helper writing past a one-node grid. Not checked: the employment
+chain under the income measure with mortality.
+
+**Its unposted work, by what it does.** A group built from 2026-10-28 to 2026-10-31, reviewed by the owner on
+2026-10-29, carries issue #1869's plan: a shape-preserving cubic, a rational cubic of least tension on a segment whose
+data are concave but whose cubic is not, used for the standard consumer's rule under `CubicBool`; the lognormal laws'
+new names with the old kept; truncation bounds on the standard consumer's income constructor, in standard deviations
+of the log, with the laws' bounds recorded; the natural limit from the infima restacked on #1861; an expectation over
+independent continuous laws by Gauss–Legendre quadrature in pieces split at kinks the caller gives; a lognormal mixture
+with a construction from points; and a continuous solver for the standard consumer, chosen by an option whose default
+keeps the atoms bit for bit, in which the employed branch is integrated against its laws with weight 1 − ℘ and the
+unemployed branch is a point at its income with weight ℘, zero allowed; the natural limit comes from the infima and the
+asset grid starts at the binding constraint; where an artificial constraint binds the grid includes the constraint,
+whose endogenous gridpoint is the kink, recorded, with the period before split there; where the natural limit binds,
+consumption falls to zero at it with no kink and seventeen asset points are placed by next period's MPC transition,
+constants tuned rather than derived. A defect in that solver, found on 2026-11-04 and not yet fixed: where the natural
+limit binds without a kink and the zero-income event puts mass on the worst landing, it uses a worst-income
+probability of zero, so the top MPC is one instead of 1 − ℘^(1/ϱ) Þ_R, 0.7863 in its test case, and the value misses
+the envelope condition by 38 percent just above the limit; the fix, prototyped and tested, uses that mass and sets the
+cubic's slope at the limit, and waits on the owner. On the Markov line: persistent unemployment in the employment
+states through a mean spell length, with the separation rate set to keep the stationary unemployment rate, on #1860;
+and HARK.stationary's Markov value function built as the exact solver builds it. Two branches of 2026-10-23 that the
+group superseded are left out of the records at the owner's request of 2026-10-25.
+
+**Its view of a fresh class.** For a nonpersistent unemployment state the Markov route buys only the newborn
+convention. A buffer-stock class could keep the standard consumer's one-state machinery and make these first-class:
+the laws rather than their nodes, with the natural limit from recorded infima and ψ's infimum or supremum chosen by the
+sign of next period's lowest resources less the worst transitory income, so that nothing moves with the node count;
+the zero-income event as parameters, ℘ and ξ_u ≥ 0, never a transitory atom, so that the mass at the worst landing is
+℘ or zero under densities and the top MPC is 1 − ℘^(1/ϱ) Þ_R exactly, the same value in the solution, the report and
+the cubic's slope at the limit; an artificial constraint only when tighter, with a knot at the constraint so that the
+kink is its endogenous gridpoint, recorded; expectations against the continuous laws by kink-split quadrature with
+atoms kept as an option, and a rule that stays increasing and concave at any grid size; at requested points the rule
+and its derivative from the interpolant, the value through its inverse, and Euler residuals computed with the same
+expectation operator; the conditions and targets built in, the patience factors named as factors, with `MPCmin`,
+`hNrm` and `MPCmax` from the laws; the newborn stated, born employed at P = 1 and k = 0 with its first draw from the
+employed branch, the same in simulation and in the transition matrices; the stationary distribution by the model-file
+route with nodes at the requested points and at the constraint, geometric above it, under the income measure; the
+effective member stated from what was solved, which with laws instead of nodes is the stated member plus the
+quadrature; and persistence, if ever wanted, as a Markov extension of the same class rather than another solver.
 
 ## What the harness asks of any route
 
