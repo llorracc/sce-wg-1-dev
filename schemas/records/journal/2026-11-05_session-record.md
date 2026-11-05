@@ -41,6 +41,13 @@ Times are EST, from the clock, the transcript or git.
   way, reached only where an artificial constraint sits exactly at the natural limit, the restrained member and the
   reference probe unaffected. Added to the finding.
 
-**State at the end of the entry.** The survey committed on this branch, not pushed, complete with both sessions'
-accounts and the released finding; nothing of HARK's changed; the owner's word awaited on what the new class is
+- **After 12:43:56.** The owner asks for a plan to revise HARK's outstanding pull requests to address the finding.
+  Written as [the plan](../plans/2026-11-05_hark-pull-requests-point-mass.md), PROPOSED, the records' first plan
+  document: the worst income's mass recorded on the law beside its bounds and read by every solver, atoms-based or
+  continuous; the changes to #1861, #1863, the revised #1862, #1858, #1859 and the unposted continuous expectation;
+  one rewrite per branch, the trailers stripped at the same time; the order; five decisions for the owner. Sent to
+  the HARK session for its reading before it is put to him as settled.
+
+**State at the end of the entry.** The survey and the plan committed on this branch, not pushed; the HARK session's
+reading of the plan pending; nothing of HARK's changed; the owner's word awaited on what the new class is
 to do and where its work lives.
