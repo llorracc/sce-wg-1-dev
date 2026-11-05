@@ -62,3 +62,11 @@ purpose rulings of the same day are in [their own file](2026-11-04_purpose.md).
   wg1-buffer-stock, which vendors the core until the core is a package; the records stay with the model and the
   fork; the apparatus document goes at upstream's root; the order as proposed, with the apparatus and the ontology of
   probability distributions cut now, each from upstream's main on its own branch of the fork.
+- **Between 18:55:51 and 19:04:33, the two schema changes and the comparator.** Taking both recommendations: the
+  registry entry's comparison block carries a status, the reference's hash, the report and the largest distance with
+  the reference's error, and no verdict, since the fifth reference decision reports the distance and judges it not;
+  the experiment pins each member's reference file by hash with the record that produced it and names the quantities
+  compared with it, each reference solver a toolkit named for its code. And the comparator built: the experiment's
+  checks evaluated as written with verdicts of pass, fail, not applicable or error, the distances reported with the
+  reference's error beside each, the exit status the checks' alone; in the core's package on the fork's main, not yet
+  a pull request upstream, since the remaining pieces are built in the fork first.

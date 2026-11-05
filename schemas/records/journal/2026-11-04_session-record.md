@@ -489,3 +489,15 @@ Times are EST, from the session's transcript. The day opens on the two questions
   Fixed on #20's branch and merged into main at c0d07a86: the core requires 3.11 or later, its tests pass under
   both, and it names its own commit from the installation's metadata in the records and the manifest. The two schema
   changes, the registry's comparison block and the experiment's reference entries, put to the owner.
+- **18:55:51 to 19:05:30.** The owner takes both schema changes and says to build the comparator. Built on a branch
+  from the fork's main and merged back: the registry entry schema at its fifth draft with the comparison block as
+  ruled; the experiment schema with a member's pinned reference (results file, hash, record, certified errors) and
+  `reference_quantities`, the experiment checker refusing a reference file missing or not hashing; the comparator
+  module, the quantities' numbers in a fixed order, the two metrics, each check evaluated between members, toolkits
+  or successive levels with a verdict, the reference distances per job, the run's JSON and tables, a report per job,
+  each record's comparison block; the `compare` command; fourteen tests under Python 3.12 and 3.11, among them a
+  failed check failing the comparison while a large distance does not, and a reference that does not hash refused
+  before anything runs. One slip: a document-edit script failed on one sentence yet the shell went on, so the first
+  commit lacked three document edits; they followed in a second commit, with the lesson that errexit is not to be
+  relied on in this shell and results are to be checked. The record document, the experiment document and the
+  core's README describe the comparator and the block.
