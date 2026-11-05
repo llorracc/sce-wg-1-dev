@@ -135,7 +135,22 @@ Times are EST, from the clock, the transcript or git.
   15:48:33. A push of this branch held in [the deferred items](../deferred.md) until his answer; if he holds
   the fact, the unpushed commits need rewriting, which is put to him first.
 
-**State at the end of the entry.** The handoff sent and the notices given; the HARK-dev session's names awaited, on
-which the proposal's and the point-mass plan's files are reduced to the harness's part with a pointer and marked
-HANDED OFF; the handoff plan ACTIVE; this branch not pushed, and not to be pushed before the owner's answer on the
-HAFiscal session's hold; nothing of HARK's changed.
+- **15:54:22, the HARK-dev session's confirmation.** It checked his words of 15:09:32 and 15:32:48 as typed, at 15:40 by
+  its account, and found this session's reading of his choices to match; it filed the handoff as
+  `records/handoffs/2026-11-05_expectation-redesign-from-sce-wg-1-dev/`, a README with the bundle, from the held version
+  of 15:48:07, holding in addition, under its team-visible rule, the solve times, the size estimates and the evaluation
+  counts, and what two of the HARK session's branches do, each place marked; it checked the bundle's three documents
+  identical to af8e609, 419f8fa and 997b2d3; it took the redesign as
+  `plans/20261105-1411h_expectation-machinery-redesign_plan.md` and the point-mass plan as
+  `plans/20261105-1249h_hark-pull-requests-point-mass_plan.md`. All of it is in its working tree, uncommitted until its
+  next memorial, the names fixed. Two notes of its: its repository is private, so the pointers name files few can open,
+  and a small possible difference with the HARK session, on where the code sits before promotion, is recorded in its
+  plan's header.
+- **15:54:22 to 15:55.** The two public files reduced: the proposal to the request in substance and what the harness
+  needs of it, the point-mass plan to the paragraph on what is not HARK's, each marked HANDED OFF with the names and a
+  pointer, their full texts in history at af8e609 and 419f8fa. The handoff plan EXECUTED; the index, the state and the
+  references brought current.
+
+**State at the end of the entry.** The handoff made, filed and confirmed, and the two public files reduced; open are
+the owner's decisions on both plans, in the HARK-dev session, and his answer on the HAFiscal session's hold, on which
+six places of the bundle and any push of this branch wait; this branch not pushed; nothing of HARK's changed.

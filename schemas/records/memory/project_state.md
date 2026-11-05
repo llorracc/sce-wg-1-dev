@@ -40,12 +40,13 @@ metadata:
   The second HARK mode of the ruling of 2026-11-04 is superseded in prospect; what the class is to do and where its
   work lives are his to say.
 - **The redesign of HARK's expectation machinery, 2026-11-05.** Asked for at 13:46:09, proposed here with the HARK,
-  HARK-dev and HAFiscal sessions consulted, and ruled at 15:09:32 to be HARK-dev's work: [the handoff plan](../plans/2026-11-05_handoff-to-hark-dev.md)
-  is ACTIVE on his choices of 15:32:48 (everything this afternoon, the accounts included, the harness's part with a
-  pointer, the notices sent); the bundle with the eight received messages in full, less the HAFiscal session's held
-  fact, handed to the HARK-dev session at 15:38:43, the HARK and HAFiscal sessions told. Waiting on HARK-dev's names for
-  its handoff file and its two plans, on which the proposal's and the point-mass plan's files here are reduced to the
-  harness's part with a pointer and marked HANDED OFF.
+  HARK-dev and HAFiscal sessions consulted, and ruled at 15:09:32 to be HARK-dev's work. Handed off with the whole
+  afternoon's thread on his choices of 15:32:48 ([the handoff plan](../plans/2026-11-05_handoff-to-hark-dev.md),
+  EXECUTED): filed in econ-ark/HARK-dev and confirmed at 15:54:22, the redesign and the point-mass plan now plans
+  there with their decisions; the two files here keep the harness's part with a pointer. One hold is open: the
+  HAFiscal session holds a fact about HARK's grid at a binding artificial constraint on his word in its session and
+  is asking him whether that reaches the HARK session's independent measurement, which the survey's committed bullet
+  carries; until his answer this branch is not pushed ([the deferred items](../deferred.md)).
 - **Open for the owner:** the level names (coarse, default, fine proposed); whether a record's `ci` block should
   carry fields for the attempt, the repository and the workflow's name beyond the provider, the identifier and the
   attempt's address, recommended not; the comparator's pull request upstream;

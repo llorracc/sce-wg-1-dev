@@ -1,12 +1,15 @@
 # Handing the redesign of HARK's expectation machinery to the HARK-dev session
 
-**Status: ACTIVE since 15:32:48 EST on 2026-11-05, when the owner answered the five decisions: everything this
-afternoon, the other sessions' accounts included, the public files reduced to the harness's part with a pointer, the
-notices sent.** Proposed at 15:16 on his instruction of 15:09:32 that
-[the redesign proposal](2026-11-05_expectation-machinery-redesign.md) should have been formulated in the HARK-dev
-session, not here. The handoff message went to that session at 15:38:43, the notices at 15:38:51 and 15:38:59; the reduction of the
-two public files waits on HARK-dev's names for its handoff file and its plans. The bundle was rebuilt before sending
-with the eight received messages in full, less the HAFiscal session's held fact.
+**Status: EXECUTED on 2026-11-05 at 15:55 EST.** Proposed at 15:16 on the owner's instruction of 15:09:32 that [the
+redesign proposal](2026-11-05_expectation-machinery-redesign.md) should have been formulated in the HARK-dev session,
+not here; ACTIVE from 15:32:48, when he answered the five decisions: everything this afternoon, the other sessions'
+accounts included, the public files reduced to the harness's part with a pointer, the notices sent. The handoff message
+went at 15:38:43 and the notices at 15:38:51 and 15:38:59; the HARK-dev session confirmed at 15:54:22 that it had
+checked his words and filed the handoff as `records/handoffs/2026-11-05_expectation-redesign-from-sce-wg-1-dev/`, with
+the redesign as its plan `plans/20261105-1411h_expectation-machinery-redesign_plan.md` and the point-mass plan as its
+plan `plans/20261105-1249h_hark-pull-requests-point-mass_plan.md`; the two public files were reduced at 15:55. What
+stays open is not this plan's: his decisions on both plans, in the HARK-dev session, and his answer on the HAFiscal
+session's hold, on which six places of the bundle and a push of this branch wait ([the deferred items](../deferred.md)).
 
 ## Why it belongs there
 
@@ -91,7 +94,8 @@ HARK-dev's own that are already in its commit messages. Filing them is HARK-dev'
 
 1. This plan and the draft bundle: done at 15:16 EST; the bundle rebuilt with the accounts by 15:37:41.
 2. On his word of 15:32:48: the message to the HARK-dev session (15:38:43) and the two notices (15:38:51, 15:38:59): done.
-3. On HARK-dev's confirmation: the changes to these records above, committed, not pushed.
+3. On HARK-dev's confirmation of 15:54:22: the changes to these records above, made at 15:55 and committed, not pushed:
+   done.
 4. In the HARK-dev session, on his word there: the plan's status, the seven decisions of the redesign and the six of
    the point-mass plan.
 

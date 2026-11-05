@@ -108,3 +108,8 @@ metadata:
   of the framework, https://github.com/llorracc/sce-wg-1-dev/tree/main, with `core/` the package a model repository
   pins; REMARK, https://github.com/econ-ark/REMARK, its clone at `/home/shared/github/econ-ark/REMARK` with the
   session `jd_REMARK_integrate-with-WG1`, whose first update is a local branch there.
+- Since 2026-11-05: econ-ark/HARK-dev, the private workspace for HARK development (private to econ-ark's admins; its
+  session `jd:HARK-dev`), holds the redesign of HARK's expectation machinery as `plans/20261105-1411h_expectation-machinery-redesign_plan.md`
+  and the plan for HARK's pull requests and the point mass as `plans/20261105-1249h_hark-pull-requests-point-mass_plan.md`, both made from
+  its handoff record `records/handoffs/2026-11-05_expectation-redesign-from-sce-wg-1-dev/`; this repository keeps what the
+  harness needs of them in `plans/2026-11-05_expectation-machinery-redesign.md`.
