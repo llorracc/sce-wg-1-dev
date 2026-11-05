@@ -9,6 +9,7 @@ registry file; the runner calls this before it runs anything.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -90,6 +91,14 @@ def problems(experiment: dict, folder: Path, results_schema: dict | None = None,
             out.append(f"{m['id']}: the request file's hash differs")
         if request.get("family") != member.get("family") or request.get("parameter_file_sha256") != m["parameter_file_sha256"]:
             out.append(f"{m['id']}: the request file is for another member")
+        if m.get("reference"):
+            ref = folder / m["reference"]["results_file"]
+            if not ref.is_file():
+                out.append(f"{m['id']}: no reference file {m['reference']['results_file']}")
+            elif hashlib.sha256(ref.read_bytes()).hexdigest() != m["reference"]["results_sha256"]:
+                out.append(f"{m['id']}: the reference file's hash differs")
+            if results_schema is not None:
+                out += [f"the results schema has no {q}" for q in m["reference"].get("errors", {}) if not resolves(q, results_schema)]
     check_ids = [c["id"] for c in experiment["checks"]]
     if len(set(check_ids)) != len(check_ids):
         out.append("a check's id is repeated")
@@ -97,7 +106,9 @@ def problems(experiment: dict, folder: Path, results_schema: dict | None = None,
         named = [i for pair in c.get("pairs", []) for i in pair] + c.get("members", [])
         out += [f"{c['id']}: no member {i}" for i in named if i not in ids]
     if results_schema is not None:
-        for q in experiment["reports"] + [c["quantity"] for c in experiment["checks"]]:
+        named = experiment["reports"] + [c["quantity"] for c in experiment["checks"]]
+        named += [q["quantity"] for q in experiment.get("reference_quantities", [])]
+        for q in named:
             if not resolves(q, results_schema):
                 out.append(f"the results schema has no {q}")
     for s in experiment.get("report_scripts", []):

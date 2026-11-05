@@ -5,6 +5,7 @@ registry's records. The `wg1core` command.
     wg1core run <experiment.yaml> --toolkits hark,dolo [--levels low,medium] [--members <id>,...] [--jobs 8] \\
         [--out <run folder>] [--runtime uv|docker] [--cpus 2] [--memory 8g] [--wall-seconds 3600]
     wg1core verify <run folder>
+    wg1core compare <run folder>
     wg1core register <run folder>
 
 Every command reads a model repository's registry file, `--registry`, `harness/toolkits.yaml` under the current
@@ -26,8 +27,11 @@ With `--runtime docker` each toolkit's image is built first and its build record
 
 `verify` runs the model's verifier on every results file, or validates it against the results schema when the model
 names none, checks that each carries the quantities the experiment's `reports` names, and writes `verification.json`
-and each record's verdict. `register` copies a run's records into the registry folder, one file per job and one per
-build, validating each.
+and each record's verdict. `compare` evaluates the experiment's checks on the run's results and every job's distances
+from its member's reference, with the reference's error beside each, writing `comparison.json` and `comparison.md` in
+the run folder, a report in each job's folder and each record's comparison block; its exit status is the checks'
+alone. `register` copies a run's records into the registry folder, one file per job and one per build, validating
+each.
 """
 
 from __future__ import annotations
@@ -543,6 +547,30 @@ def cmd_register(args) -> int:
     return 0
 
 
+def cmd_compare(args) -> int:
+    """The experiment's checks on a run's results, and every job's distances from its member's reference; the exit
+    status is the checks' alone."""
+    from . import comparator
+
+    model = Model(Path(args.registry))
+    run = Path(args.run).resolve()
+    manifest = json.loads((run / "manifest.json").read_text(encoding="utf-8"))
+    exp_path = model.root / manifest["experiment"]["file"]
+    exp, exp_hash = load_experiment(exp_path, model)
+    if exp_hash != manifest["experiment"]["sha256"]:
+        raise SystemExit("the experiment file has changed since the run")
+    jobs = plan_jobs(exp_path, exp, model, list(manifest["toolkits"]), manifest["levels"],
+                     [m["id"] for m in manifest["members"]], run)
+    report = comparator.run_comparison(exp, exp_path, jobs, run)
+    comparator.write_outputs(report, jobs, run)
+    for c in report["checks"]:
+        print(f"{c['id']:32s} {c['verdict']}" + (f"  {c['errors'][0]}" if c["errors"] else ""))
+    computed = [j for j in report["reference"] if j["status"] == "computed"]
+    print(f"{len(report['checks'])} checks; distances from the reference computed for {len(computed)} of {len(report['reference'])} jobs;"
+          f" the report is in {model.rel(run / 'comparison.md')}")
+    return 1 if any(c["verdict"] in ("fail", "error") for c in report["checks"]) else 0
+
+
 def cmd_list(args) -> int:
     model = Model(Path(args.registry))
     print("experiments:")
@@ -585,11 +613,13 @@ def main(argv=None) -> int:
     v = sub.add_parser("verify")
     v.add_argument("run")
     v.add_argument("--jobs", type=int, default=4)
+    c = sub.add_parser("compare")
+    c.add_argument("run")
     g = sub.add_parser("register")
     g.add_argument("run")
     g.add_argument("--registry-dir", help="where to register (default: the registry file's registry_dir, runs.registry beside it)")
     args = ap.parse_args(argv)
-    return {"list": cmd_list, "run": cmd_run, "verify": cmd_verify, "register": cmd_register}[args.command](args)
+    return {"list": cmd_list, "run": cmd_run, "verify": cmd_verify, "compare": cmd_compare, "register": cmd_register}[args.command](args)
 
 
 if __name__ == "__main__":

@@ -41,10 +41,11 @@ Three rules:
 | `experiment` | the name and version, as a family's: `restrained-limit/1`. A change to what it asks makes a new version |
 | `title`, `statement` | what it shows, in words |
 | `sources` | where it comes from, by anchor; BST's must be among the published page's (`bst-anchors.txt` in the ontology) |
-| `members` | for each member: its `id` (the parameter file's name), the parameter file and the request file, each with its hash as the checker takes it. Pinning the hashes means an edited member makes the experiment fail its test, not silently change |
+| `members` | for each member: its `id` (the parameter file's name), the parameter file and the request file, each with its hash as the checker takes it, and optionally its `reference`: the reference results file, that file's hash, the record that produced it, and the reference's certified error per quantity. Pinning the hashes means an edited member or reference makes the experiment fail its test, not silently change; a changed reference is a new experiment version |
 | `levels` | the named precision levels every toolkit runs: `low`, `medium` and `high`, as a toolkit's ladder names its elements. A toolkit may run more |
 | `reports` | the results-file quantities every run must carry beyond what the results schema requires of every file, as paths into it: `types[].rule.c`, `types[].kink` |
 | `checks` | what the results must show (below) |
+| `reference_quantities` | optional: the quantities every job is compared with its member's reference on, each with its metric; the `reports` under the absolute metric when left out |
 | `report_scripts` | optional scripts of the experiment's own that write tables and figures from the results files alone, solving nothing |
 
 The file is strict YAML, like a parameter file, so it has a hash, and its keys and values follow the schemas' own spelling,
@@ -69,6 +70,16 @@ Each check compares results files and says what the comparison must show. It has
   - `{at_most: x}`: the metric no larger than x, at every level;
   - `within_own_convergence`: at the finest level, the metric no larger than the sum of the two toolkits' own movements
     of the same quantity between their two finest levels (for `toolkits`).
+
+**How the comparator reports.** It evaluates the checks as written and gives each a verdict: pass, fail, not applicable
+when the run holds too little to apply it, such as one level for a check on successive levels, or error when two
+files cannot be compared. For every job whose member has a reference pinned, it reports the distance from the
+reference on each named quantity with the reference's own error beside it, and no verdict: a distance from the
+reference is reported, never judged, since the reference's certification is the error stated and a tolerance would
+have to be ruled for each quantity. It writes `comparison.json` and `comparison.md` in the run folder, a report in
+each job's folder, and the comparison block of each job's record; its exit status is the checks' alone. A reference
+solver is a toolkit like any other, named for its code and run far along its ladder, with records of its own; the
+experiment pins the file it produced.
 
 **How two toolkits are compared.** A comparison of two toolkits takes its tolerance from measured convergence. Since
 each toolkit represents the laws its own way, the two solve

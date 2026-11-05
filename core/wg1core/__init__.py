@@ -7,6 +7,7 @@
   and the hash that identifies a model.
 - `laws`: the shock laws a parameter file states, with their moments in closed form.
 - `experiment`: experiment files, and what their validator cannot say about them.
+- `comparator`: the experiment's checks evaluated on a run, and every job's distance from its member's reference.
 - `schemas/`: the validators of an experiment file, of an execution record, and of a model repository's registry entry.
 """
 
