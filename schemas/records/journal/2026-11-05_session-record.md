@@ -91,6 +91,18 @@ Times are EST, from the clock, the transcript or git.
   choice, a new class in the tier on a body shared with the classic and Markov solvers, the cost and order, and
   seven decisions for the owner.
 
-**State at the end of the entry.** The survey, the point-mass plan and the redesign proposal committed on this
-branch, not pushed; nothing of HARK's changed; the owner's word awaited on what the new class is
-to do and where its work lives.
+- **15:09:32.** The owner: the redesign proposal should have been formulated in the HARK-dev session, not here; a
+  plan is asked for to hand his prompt and all of this session's responses to that session.
+- **15:09:32 to 15:16.** The HARK-dev session found live (`jd:HARK-dev`, rooted in econ-ark/HARK-dev) and its
+  instructions read: material from other sessions arrives by message quoting his words and stamps and is filed under
+  its handoffs directory; plans for HARK work live there. A bundle drafted on this machine from the transcript, his
+  thirteen entries of the afternoon verbatim with their stamps, this session's twenty-one replies and eleven briefs,
+  the three documents as committed; the other sessions' messages listed by stamp, sender and size only.
+  [The handoff plan](../plans/2026-11-05_handoff-to-hark-dev.md) written, PROPOSED: one message to HARK-dev on his
+  word, two notices, the public files reduced to the harness's part with a pointer on confirmation, five decisions.
+  The day's rulings recorded in substance ([the rulings](../rulings/2026-11-05_hark-decisions.md)) and the rule in
+  [a feedback memory](../memory/feedback_route-hark-work-to-hark-dev.md), beside the Matsya precedent.
+
+**State at the end of the entry.** The survey, the point-mass plan, the redesign proposal and the handoff plan
+committed on this branch, not pushed; nothing of HARK's changed and nothing sent to the HARK-dev session; the owner's
+word awaited on the handoff and its five decisions, and on what the new class is to do.
