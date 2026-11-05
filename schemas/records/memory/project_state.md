@@ -32,7 +32,9 @@ metadata:
   mode, the license push, going public and the REMARK catalog entry. The REMARK session's first update is committed
   locally in its clone, unpushed. The sixth reference decision, the distribution's method, is still open, so only the
   rule is certifiable.
-- **Open for the owner:** the level names (coarse, default, fine proposed); the comparator's pull request upstream;
+- **Open for the owner:** the level names (coarse, default, fine proposed); whether a record's `ci` block should
+  carry fields for the attempt, the repository and the workflow's name beyond the provider, the identifier and the
+  attempt's address, recommended not; the comparator's pull request upstream;
   participation's rewrite, after his twenty decisions; the model pointer upstream once wg1-buffer-stock is public and
   cataloged; the pushes of the model repository's commits and the REMARK session's branches, in their sessions; and
   the earlier items, R6 among them.

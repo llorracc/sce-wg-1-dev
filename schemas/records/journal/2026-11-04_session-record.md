@@ -528,3 +528,15 @@ Times are EST, from the session's transcript. The day opens on the two questions
   from a registry file in a subdirectory and checks its working directory and the absolute member and results
   paths it receives; on #20's branch at 21c14dd and merged into the fork's main at f741353, both pushed; eighteen
   tests under both interpreters.
+- **19:39:19 to 19:59:04.** The wg1-buffer-stock session, building the model repository's workflow, finds that a
+  record registered from a continuous-integration run cannot be traced to it: the record schema's `where.ci` block,
+  the provider and the run's identifier with an address, was never filled, so such a record named only the
+  runner's throwaway host. Filled from GitHub Actions' own variables: the provider, the run's identifier and the
+  address of the attempt that ran; no schema change, the block being in the schema since its first commit, 5c6961b. That session
+  also proposed fields for the repository, the attempt and the workflow's name, which is a schema change and is
+  put to the owner, with the recommendation against it for now since the address carries the repository and the
+  attempt. Found there too: a clone whose origin is a local path failed at validation after its jobs had run,
+  since a record names the repository by its https remote; the run command now refuses it before anything is
+  written, saying what to set. Both documented in the core's README and the record document; on #20's branch at
+  fc5b3ac and the fork's main at 7679b48, both pushed; twenty tests under both interpreters. That session's
+  workflow uploads the run folder and the records as an artifact named for the run; committed there, unpushed.
