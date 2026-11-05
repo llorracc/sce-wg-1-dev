@@ -540,3 +540,15 @@ Times are EST, from the session's transcript. The day opens on the two questions
   written, saying what to set. Both documented in the core's README and the record document; on #20's branch at
   fc5b3ac and the fork's main at 7679b48, both pushed; twenty tests under both interpreters. That session's
   workflow uploads the run folder and the records as an artifact named for the run; committed there, unpushed.
+- **Before 21:33:06.** The wg1-buffer-stock session reports, for information: on the owner's word there at
+  21:17:53, the model repository's three locks repinned from a4a52bbd to 7679b48 (its commit 30c9872), a third
+  reproduction on that clean commit through the containers registered (3eaa965), its twenty-four outputs
+  byte-identical to the second's on the same machine, and the branch pushed at 21:27; its first GitHub Actions run
+  (41955346334, attempt 1) passed both jobs, the tests and the coarse reproduction, every record carrying the
+  `ci` block with the run's address and the recorder's commit. A finding for the comparator's design, from that
+  run against the workstation's: a results file is not byte-identical across machines (an Intel i9-13900K and
+  the runner's AMD EPYC), though the methods and settings files are; quantities agree to within 6e-12 relative,
+  residuals within 2e-14 absolute, and the largest relative gap, 6e-4, is on a quantile of about -4e-18. So
+  equality by hash holds on one machine only, a reference pinned by `results_sha256` identifies the reference's
+  file and not a reproduction of it, and the comparison by distance is the right one. No document on the fork's
+  main claims otherwise; the experiment document gains the sentence, on the comparator's branch at cc51178 and the fork's main at b292560, both pushed.

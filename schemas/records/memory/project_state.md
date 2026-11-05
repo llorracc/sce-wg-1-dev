@@ -14,7 +14,7 @@ metadata:
   form; the two stacked ones say which merges first. The plan is [`upstreaming.md`](../../upstreaming.md), adopted.
 - **The fork's trunk.** The owner builds the remaining framework in the fork before it goes upstream: the seven
   branches are merged into the fork's `main`, from which the framework branches are cut and merged back;
-  wg1-buffer-stock runs on the core from `main` at a commit, a4a52bbd since 19:20:13 on 2026-11-04, and changes the
+  wg1-buffer-stock runs on the core from `main` at a commit, 7679b48 since 21:17:53 on 2026-11-04, and changes the
   pin to upstream at a tag when the series merges. This branch, `buffer-stock-ontology`, is frozen as history, except for these records.
 - **The comparator**, in the core: the experiment's checks evaluated as written, between members, toolkits or
   successive levels in the experiment's order, with verdicts of pass, fail, not applicable or error; every job's
@@ -26,7 +26,9 @@ metadata:
   19:20:13 on 2026-11-04: its harness and both adapters pin `wg1-core` at a4a52bbd, the vendored runner, records,
   schemas and the checker's generic modules are gone, every suite passes, and the coarse-level reproduction through
   containers gives the eight jobs' results, methods and settings byte-identical to the vendored runner's, with ten
-  records registered at the sixth draft; committed there, unpushed. Still that session's, on the owner's word there:
+  records registered at the sixth draft. Repinned at 7679b48 and pushed on his word there at 21:17:53; its first
+  continuous-integration run passed, every record naming the run. A results file is not byte-identical across
+  machines, so a reference's hash identifies its file, not a reproduction. Still that session's, on the owner's word there:
   the workflow, the levels in both adapters, restrained-limit's second version with pinned references, the
   reference solvers as toolkits named for their code (`bench-continuous`, later `hark-continuous`), the second HARK
   mode, the license push, going public and the REMARK catalog entry. The REMARK session's first update is committed
