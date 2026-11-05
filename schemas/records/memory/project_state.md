@@ -27,7 +27,7 @@ metadata:
   schemas and the checker's generic modules are gone, every suite passes, and the coarse-level reproduction through
   containers gives the eight jobs' results, methods and settings byte-identical to the vendored runner's, with ten
   records registered at the sixth draft. Repinned at 7679b48 and pushed on his word there at 21:17:53; its first
-  continuous-integration run passed, every record naming the run. A results file is not byte-identical across
+  continuous-integration run passed, every record naming the run. A results file need not be byte-identical across
   machines, so a reference's hash identifies its file, not a reproduction. Still that session's, on the owner's word there:
   the workflow, the levels in both adapters, restrained-limit's second version with pinned references, the
   reference solvers as toolkits named for their code (`bench-continuous`, later `hark-continuous`), the second HARK

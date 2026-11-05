@@ -552,3 +552,10 @@ Times are EST, from the session's transcript. The day opens on the two questions
   equality by hash holds on one machine only, a reference pinned by `results_sha256` identifies the reference's
   file and not a reproduction of it, and the comparison by distance is the right one. No document on the fork's
   main claims otherwise; the experiment document gains the sentence, on the comparator's branch at cc51178 and the fork's main at b292560, both pushed.
+- **Before 22:25:09.** That session corrects itself: "holds on one machine only" was too strong. Its second
+  continuous-integration run (41960920344) ran on an Intel Xeon Platinum 8573C with two cores, the first on an AMD
+  EPYC 9V74 with two; HARK's four results files are byte-identical between the two runners and differ from the
+  thirty-two-core i9's, while dolo's four differ on all three machines, for reasons not yet looked into. So
+  identity across machines is possible and not guaranteed; the conclusion stands, reproductions compared by
+  distance and a reference's hash naming its file. The experiment document's sentence corrected to "need not be",
+  on the comparator's branch and the fork's main at eb661ed, both pushed; the state memory likewise.
