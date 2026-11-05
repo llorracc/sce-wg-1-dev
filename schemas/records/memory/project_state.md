@@ -14,16 +14,20 @@ metadata:
   form; the two stacked ones say which merges first. The plan is [`upstreaming.md`](../../upstreaming.md), adopted.
 - **The fork's trunk.** The owner builds the remaining framework in the fork before it goes upstream: the seven
   branches are merged into the fork's `main`, from which the framework branches are cut and merged back;
-  wg1-buffer-stock pins the core from `main` at a commit, the latest ee85a8f6, and changes the pin to upstream at a
-  tag when the series merges. This branch, `buffer-stock-ontology`, is frozen as history, except for these records.
+  wg1-buffer-stock runs on the core from `main` at a commit, a4a52bbd since 19:20:13 on 2026-11-04, and changes the
+  pin to upstream at a tag when the series merges. This branch, `buffer-stock-ontology`, is frozen as history, except for these records.
 - **The comparator**, in the core: the experiment's checks evaluated as written, between members, toolkits or
   successive levels in the experiment's order, with verdicts of pass, fail, not applicable or error; every job's
   distances from its member's reference reported with the reference's error and no verdict, as the fifth reference
   decision has it; an uncomputable comparison an error that fails the command; the reference required to answer the
   same question by the identity keys the model names; the `compare` command; the registry entry's comparison block
   without a verdict (draft.6) and the experiment's pinned references with `reference_quantities`, both ruled.
-- **The model repository's side**, the wg1-buffer-stock session's on the owner's word there: the switch to the
-  package, the workflow, the levels in both adapters, restrained-limit's second version with pinned references, the
+- **The model repository's side.** The switch to the package is made, on the owner's word in that session at
+  19:20:13 on 2026-11-04: its harness and both adapters pin `wg1-core` at a4a52bbd, the vendored runner, records,
+  schemas and the checker's generic modules are gone, every suite passes, and the coarse-level reproduction through
+  containers gives the eight jobs' results, methods and settings byte-identical to the vendored runner's, with ten
+  records registered at the sixth draft; committed there, unpushed. Still that session's, on the owner's word there:
+  the workflow, the levels in both adapters, restrained-limit's second version with pinned references, the
   reference solvers as toolkits named for their code (`bench-continuous`, later `hark-continuous`), the second HARK
   mode, the license push, going public and the REMARK catalog entry. The REMARK session's first update is committed
   locally in its clone, unpushed. The sixth reference decision, the distribution's method, is still open, so only the

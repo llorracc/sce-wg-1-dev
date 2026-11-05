@@ -515,3 +515,16 @@ Times are EST, from the session's transcript. The day opens on the two questions
   the level's position, which the owner's rule against numerical names forbids: a level added changes every folder
   after it. A job's folder is now named for its level, `<run>/<toolkit>/<member>/<level>/`, matching the registry's
   file names; on the fork's main, the pin sent.
+- **19:20:13 to 19:39:19.** The wg1-buffer-stock session reports the model repository running on the package at
+  a4a52bbd, on the owner's word there at 19:20:13: its harness's environment and both adapters' pin `wg1-core`, each
+  lock gaining only that package and a test holding the three locks to one commit; the vendored runner, records, the
+  record and experiment schemas and the checker's generic modules removed; every suite passing; the coarse-level
+  reproduction through containers, eight jobs whose results, methods and settings are byte-identical to the
+  afternoon's vendored-runner run, ten records registered at the sixth draft naming the core's commit; two commits
+  there, unpushed. It also found the core README's example verifier written relative to the registry file, where
+  every other key's path resolves, while the runner runs the command from the repository's root. Decided here: the
+  verifier is a command, not a path, and runs from the root as the adapters do, since a command's tokens cannot be
+  told from paths; the example corrected, the rule stated in the README and pinned by a test that runs a verifier
+  from a registry file in a subdirectory and checks its working directory and the absolute member and results
+  paths it receives; on #20's branch at 21c14dd and merged into the fork's main at f741353, both pushed; eighteen
+  tests under both interpreters.
