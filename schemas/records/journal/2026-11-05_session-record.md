@@ -124,6 +124,18 @@ Times are EST, from the clock, the transcript or git.
   "about 13:20"). The records already carry the transcript's stamps; the HAFiscal session sent the correction at
   15:41:55, 15:38:43 being the send.
 
+- **15:45:57, the HAFiscal session.** It checked his two messages as typed, acknowledged the correction, and showed
+  that the fact it holds still stood in the bundle in the HARK session's independent words and in this session's own:
+  two bullets and a clause of the HARK session's account of 12:12:18, a sentence and a clause of this session's reply
+  of 12:14:42, and the survey's committed bullet on the kink under an artificial constraint, which is in every commit
+  since 46176b7, none pushed. Whether its hold reaches the HARK session's words it puts to the owner in its session.
+- **15:45:57 to 15:48:33.** Those six places held in the bundle, each replaced by a marker saying what is held and
+  why, the version as sent retained on this machine unfiled; the wording checked absent. The HARK-dev session told
+  at 15:48:26 that the file at the path is replaced and where the places are; the HAFiscal session told at
+  15:48:33. A push of this branch held in [the deferred items](../deferred.md) until his answer; if he holds
+  the fact, the unpushed commits need rewriting, which is put to him first.
+
 **State at the end of the entry.** The handoff sent and the notices given; the HARK-dev session's names awaited, on
 which the proposal's and the point-mass plan's files are reduced to the harness's part with a pointer and marked
-HANDED OFF; the handoff plan ACTIVE; this branch not pushed; nothing of HARK's changed.
+HANDED OFF; the handoff plan ACTIVE; this branch not pushed, and not to be pushed before the owner's answer on the
+HAFiscal session's hold; nothing of HARK's changed.
