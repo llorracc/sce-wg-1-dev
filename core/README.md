@@ -66,7 +66,7 @@ wg1core register <run folder>
   in its environment directory, its build record written, and each job runs under the container contract: the
   repository mounted read-only at `/src`, the job's folder at `/out`, no network, the thread cap, a scratch `/tmp` for
   what the toolkit caches, and the processor, memory and wall-time caps given. A job writes into
-  `<run folder>/<toolkit>/<member>/level-<n>/`: the adapter's files, its log, `job.json` with the fingerprint of
+  `<run folder>/<toolkit>/<member>/<level>/`, the folder named for the level and never for its position: the adapter's files, its log, `job.json` with the fingerprint of
   everything the output depends on, and `record.json`, its execution record. A job whose fingerprint is unchanged and
   whose results file exists is skipped. `manifest.json` names every hash.
 - **`verify`** runs the model's verifier on every results file, or validates it against the results schema when the

@@ -20,7 +20,8 @@ in parallel, each through the toolkit's adapter: with `--runtime uv`, the defaul
 machine; with `--runtime docker`, in an image built from the adapter's environment directory and run under the
 container contract (the repository mounted read-only at /src, the job's folder at /out, no network, the thread cap, a
 scratch /tmp, and the caps given). Each toolkit's first job runs alone before its others, so that one process writes
-what the toolkit compiles and caches. A job writes into <run folder>/<toolkit>/<member>/level-<n>/ and leaves there
+what the toolkit compiles and caches. A job writes into <run folder>/<toolkit>/<member>/<level>/, the folder named
+for the level and never for its position, and leaves there
 the adapter's log, `job.json`, its status and a fingerprint of everything its output depends on, and `record.json`,
 its execution record for the registry. A job whose fingerprint is unchanged and whose results file exists is skipped.
 With `--runtime docker` each toolkit's image is built first and its build record written as
@@ -31,8 +32,7 @@ names none, checks that each carries the quantities the experiment's `reports` n
 and each record's verdict. `compare` evaluates the experiment's checks on the run's results and every job's distances
 from its member's reference, with the reference's error beside each, writing `comparison.json` and `comparison.md` in
 the run folder, a report in each job's folder and each record's comparison block; its exit status is the checks' and
-the comparison errors', never a distance's. A job's folder is level-<n>, n the level's position in the experiment's
-list, coarse to fine. `register` copies a run's records into the registry folder, one file per job and one per build, validating
+the comparison errors', never a distance's. `register` copies a run's records into the registry folder, one file per job and one per build, validating
 each.
 """
 
@@ -181,7 +181,7 @@ def plan_jobs(exp_path: Path, exp: dict, model: Model, toolkits: list[str], leve
                              "request_file": (folder / m["request_file"]).resolve(),
                              "parameter_file_sha256": m["parameter_file_sha256"],
                              "request_file_sha256": m["request_file_sha256"],
-                             "dir": out / name / mid / f"level-{exp['levels'].index(lv) + 1}"})
+                             "dir": out / name / mid / lv})
     return jobs
 
 

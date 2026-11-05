@@ -137,7 +137,7 @@ def manifest(model: dict) -> dict:
 
 
 def record(model: dict, member: str) -> dict:
-    return json.loads((model["out"] / "stub" / member / "level-1" / "record.json").read_text())
+    return json.loads((model["out"] / "stub" / member / "low" / "record.json").read_text())
 
 
 def test_a_run_writes_its_jobs_and_records(model):
@@ -146,7 +146,7 @@ def test_a_run_writes_its_jobs_and_records(model):
     assert m["experiment"]["name"] == "tiny/1" and m["runtime"] == "none" and m["core"]["name"] == "wg1core"
     assert [j["status"] for j in m["jobs"]] == ["ok", "ok"] and m["model"]["uncommitted_changes"] == "no"
     for j in m["jobs"]:
-        d = model["out"] / "stub" / j["member"] / "level-1"
+        d = model["out"] / "stub" / j["member"] / "low"
         assert (d / "results.json").is_file() and (d / "adapter.log").is_file()
         assert json.loads((d / "job.json").read_text())["fingerprint"]["parameter_file_sha256"]
         r = json.loads((d / "record.json").read_text())
@@ -209,7 +209,7 @@ def test_the_comparator_evaluates_the_checks_and_reports_the_distances(model):
     assert d["types[].kink"]["reference_error"] == 0.001 and d["types[].rule.c"]["metric"] == "max_relative_difference"
     assert m1["largest_distance"]["quantity"] in ("types[].kink", "types[].rule.c")
     # each job's own report, and the record's block: a status and the reference, never a verdict
-    job_report = json.loads((model["out"] / "stub" / "m1" / "level-1" / "comparison.json").read_text())
+    job_report = json.loads((model["out"] / "stub" / "m1" / "low" / "comparison.json").read_text())
     assert job_report["status"] == "computed" and job_report["reference"] == m1["reference"]
     block = record(model, "m1")["extensions"]["sce-wg-1"]["comparison"]
     assert block["status"] == "computed" and block["reference"] == m1["reference"] and "verdict" not in block
@@ -302,7 +302,7 @@ def test_the_container_command_follows_the_contract(model):
     job = {"toolkit": "stub", "member": "m1", "level": "low", "level_arg": 1,
            "parameter_file": model["experiment"].parent / "m1.yaml",
            "request_file": model["experiment"].parent / "m1.request.yaml",
-           "dir": model["out"] / "stub" / "m1" / "level-1"}
+           "dir": model["out"] / "stub" / "m1" / "low"}
     cmd = runner.container_command(job, tk, {"model": m, "run_id": "run", "caps": {"cpus": 2.0, "memory": "8g"}})
     assert cmd[:2] == ["docker", "run"] and cmd[cmd.index("--network") + 1] == "none"
     assert cmd[cmd.index("--cpus") + 1] == "2.0" and cmd[cmd.index("--memory") + 1] == "8g"
