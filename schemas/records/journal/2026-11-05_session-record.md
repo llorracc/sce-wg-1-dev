@@ -35,6 +35,12 @@ Times are EST, from the clock, the transcript or git.
   its own check of the Markov route's newborn, and one finding withheld on the owner's word; added to the finding
   as a section of its own.
 
+- **12:40:42.** The owner: the HAFiscal session is to be asked explicitly what the withheld finding is. Relayed with
+  his words and their time; that session checked them as typed and released the finding: the HARK session's defect,
+  found there independently on 2026-11-04, and HAFiscal's own continuous solver treating the point mass the same
+  way, reached only where an artificial constraint sits exactly at the natural limit, the restrained member and the
+  reference probe unaffected. Added to the finding.
+
 **State at the end of the entry.** The survey committed on this branch, not pushed, complete with both sessions'
-accounts; one finding of the HAFiscal session's withheld on the owner's word; nothing of HARK's changed; the owner's word awaited on what the new class is
+accounts and the released finding; nothing of HARK's changed; the owner's word awaited on what the new class is
 to do and where its work lives.

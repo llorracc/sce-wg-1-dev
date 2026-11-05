@@ -303,7 +303,8 @@ quadrature; and persistence, if ever wanted, as a Markov extension of the same c
 The HAFiscal-Latest session's emitter, the benchmark's private program, has solved the model with the standard
 consumer since 2026-10-18, by the endogenous grid method with the cubic rule and the value function; its files were
 the gate's reference. Its account, with HARK's line numbers at main 4c285e86 and three scratch computations of the day
-on the toy's median type at the first level; one finding is withheld on the owner's word.
+on the toy's median type at the first level; one finding, withheld until the owner's word of 12:40:42, is the last
+part of this section.
 
 **The standard consumer against the model as stated.**
 - The emitter reports its nodes' natural limit as the effective member's, and refuses a natural member whose stated
@@ -360,6 +361,30 @@ born-employed newborn in the simulator, which the standard consumer cannot state
 same, and without it the Markov solver did not reproduce the standard consumer; the cost seen is the route's
 dependence on three unmerged drafts. Not measured: the Markov solve's time against the standard consumer's, and the
 transition-matrix path under the Markov formulation.
+
+**The finding released on the owner's word.** It is the HARK session's defect, found here independently on 2026-11-04,
+and what it adds is that HAFiscal's own continuous solver treats the point mass the same way. A solver that integrates
+the income shocks' continuous laws sets the worst-income probability to zero, so its top MPC, the MPC at the natural
+limit, is one. That is right only when the worst income carries no mass. With a continuous permanent shock, the worst
+income has mass exactly when the worst transitory value is a zero-income point mass: income is then zero whatever ψ
+is, with the event's probability ℘, and the limit is 1 − ℘^(1/ϱ) Þ_R with Þ_R = (R β ℒ)^(1/ϱ) / R; with a positive
+benefit the worst income ψ_min ξ_u has no mass under a continuous ψ and one is right. HAFiscal's continuous solver,
+the one that serves its first estimation step and served the restrained member in the reference probe of
+2026-11-04, has a worst-income probability of zero under the continuous laws, so its recorded MPC at the natural
+limit is one and so is the slope at its cubic rule's first knot there. It refuses whenever the natural limit binds,
+that is, with no artificial constraint or one below the limit its atoms give, so it never solves a natural member as
+stated; the assignment is reached only where the artificial constraint sits exactly at the natural limit, as with a
+zero-income event and a ≥ 0, both zero, and there the bottom slope and the recorded top MPC are one instead of
+1 − ℘^(1/ϱ) Þ_R. It builds no value function, so the envelope-condition error the HARK session measured does not
+arise in it. Unaffected: every case where the artificial constraint binds above the natural limit, where the MPC at
+the constraint is one by the constrained segment, correctly, which covers the restrained member, the toy-hafiscal
+member and HAFiscal's first estimation step; and the reference probe on the restrained member. For the reference's
+certified errors near the limit: on the restrained member they hold, as far as this defect goes; a natural member
+with a zero-income point mass cannot come from HAFiscal's solver as stated, since it refuses, and through any
+continuous solver that member needs the fix, which in HARK's solver is the one prototyped; HAFiscal is to adopt
+HARK's continuous solver rather than keep its own, so its copy would not be fixed in place. Not measured: the
+defect's size in HAFiscal's solver at a ≥ 0 with a zero-income event; the HARK session's figure for consumption is
+its own solver's on its grid.
 
 ## What the harness asks of any route
 
