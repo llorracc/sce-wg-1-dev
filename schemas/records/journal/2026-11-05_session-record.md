@@ -103,6 +103,21 @@ Times are EST, from the clock, the transcript or git.
   The day's rulings recorded in substance ([the rulings](../rulings/2026-11-05_hark-decisions.md)) and the rule in
   [a feedback memory](../memory/feedback_route-hark-work-to-hark-dev.md), beside the Matsya precedent.
 
-**State at the end of the entry.** The survey, the point-mass plan, the redesign proposal and the handoff plan
-committed on this branch, not pushed; nothing of HARK's changed and nothing sent to the HARK-dev session; the owner's
-word awaited on the handoff and its five decisions, and on what the new class is to do.
+- **15:32:48.** The owner's choices on the handoff plan's five decisions: everything this afternoon; the other
+  sessions' accounts included; the public files reduced to the harness's part with a pointer; the notices sent.
+- **15:32:48 to 15:37:41.** The bundle rebuilt with the eight messages received in full: the HAFiscal session's survey
+  account found in a request blob that carries no stamp (received between 12:12:18 and 12:14:42 by the surrounding
+  stamps). The fact that session holds on his word in its session removed from its two messages, from the statement
+  inside its hold notice and from this session's own reply of 14:05:21 that restated it, each place marked. A check
+  that none of the held wording remains caught two mistakes before the file was final: a first pass removed the
+  wrong lines, their numbers having been counted before the wrapper was stripped, and the hold notice and this
+  session's reply still stated the fact.
+- **15:38:43.** The handoff message to the HARK-dev session: his words of 15:09:32, 15:32:48 and 13:46:09 with their
+  stamps and transcript lines for its relay check, the bundle's path and contents, what was removed, the figures
+  its team-visible rule covers, and five requests, the last that it name its handoff file and its two plans so
+  that the fork's records can point at them. The notices to the HARK session (15:38:51) and the HAFiscal session
+  (15:38:59), the latter told what of its own was kept out.
+
+**State at the end of the entry.** The handoff sent and the notices given; the HARK-dev session's names awaited, on
+which the proposal's and the point-mass plan's files are reduced to the harness's part with a pointer and marked
+HANDED OFF; the handoff plan ACTIVE; this branch not pushed; nothing of HARK's changed.

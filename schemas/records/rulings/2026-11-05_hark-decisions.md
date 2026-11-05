@@ -25,3 +25,6 @@ The owner's decisions, in substance and by time (EST). His words are kept outsid
   here; his prompt and all of this session's responses are to be handed to that session, by
   [the handoff plan](../plans/2026-11-05_handoff-to-hark-dev.md), PROPOSED. The rule it sets is recorded in
   [the memory](../memory/feedback_route-hark-work-to-hark-dev.md).
+- **15:32:48, the handoff's five decisions.** Everything this afternoon goes, the survey's thread, the point-mass plan
+  and the redesign; the other sessions' accounts are included; the two public plan files keep the harness's part
+  with a pointer; the HARK and HAFiscal sessions are told. Carried out at 15:38:43, 15:38:51 and 15:38:59.

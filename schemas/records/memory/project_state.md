@@ -41,8 +41,11 @@ metadata:
   work lives are his to say.
 - **The redesign of HARK's expectation machinery, 2026-11-05.** Asked for at 13:46:09, proposed here with the HARK,
   HARK-dev and HAFiscal sessions consulted, and ruled at 15:09:32 to be HARK-dev's work: [the handoff plan](../plans/2026-11-05_handoff-to-hark-dev.md)
-  is PROPOSED, the bundle drafted on-box, nothing sent. On his word the proposal and, if he includes it, the point-mass
-  plan become HARK-dev's plans and keep here only what the harness needs of them.
+  is ACTIVE on his choices of 15:32:48 (everything this afternoon, the accounts included, the harness's part with a
+  pointer, the notices sent); the bundle with the eight received messages in full, less the HAFiscal session's held
+  fact, handed to the HARK-dev session at 15:38:43, the HARK and HAFiscal sessions told. Waiting on HARK-dev's names for
+  its handoff file and its two plans, on which the proposal's and the point-mass plan's files here are reduced to the
+  harness's part with a pointer and marked HANDED OFF.
 - **Open for the owner:** the level names (coarse, default, fine proposed); whether a record's `ci` block should
   carry fields for the attempt, the repository and the workflow's name beyond the provider, the identifier and the
   attempt's address, recommended not; the comparator's pull request upstream;

@@ -1,9 +1,12 @@
 # Handing the redesign of HARK's expectation machinery to the HARK-dev session
 
-**Status: PROPOSED, 2026-11-05 at 15:16 EST, on the owner's instruction of 15:09:32 EST.** The owner holds that
+**Status: ACTIVE since 15:32:48 EST on 2026-11-05, when the owner answered the five decisions: everything this
+afternoon, the other sessions' accounts included, the public files reduced to the harness's part with a pointer, the
+notices sent.** Proposed at 15:16 on his instruction of 15:09:32 that
 [the redesign proposal](2026-11-05_expectation-machinery-redesign.md) should have been formulated in the HARK-dev
-session, not here, and asked for a plan to hand his prompt and all of this session's responses to that session. Nothing
-is sent until he says so; the draft bundle described below exists on this machine only.
+session, not here. The handoff message went to that session at 15:38:43, the notices at 15:38:51 and 15:38:59; the reduction of the
+two public files waits on HARK-dev's names for its handoff file and its plans. The bundle was rebuilt before sending
+with the eight received messages in full, less the HAFiscal session's held fact.
 
 ## Why it belongs there
 
@@ -86,8 +89,8 @@ HARK-dev's own that are already in its commit messages. Filing them is HARK-dev'
 
 ## The order
 
-1. This plan and the draft bundle, now: done at 15:16 EST.
-2. On his word: the message to the HARK-dev session and the two notices.
+1. This plan and the draft bundle: done at 15:16 EST; the bundle rebuilt with the accounts by 15:37:41.
+2. On his word of 15:32:48: the message to the HARK-dev session (15:38:43) and the two notices (15:38:51, 15:38:59): done.
 3. On HARK-dev's confirmation: the changes to these records above, committed, not pushed.
 4. In the HARK-dev session, on his word there: the plan's status, the seven decisions of the redesign and the six of
    the point-mass plan.
