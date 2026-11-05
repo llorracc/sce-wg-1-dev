@@ -50,6 +50,7 @@ conditions, the start, end and duration, the outcome, and the extensions.
 Under the namespace `sce-wg-1`: the experiment and its hash, the toolkit and, when it has several ways of solving the
 same member, the mode, the adapter's path and the hash of its code, the member with its canonical hash and its file's
 hash, the request file's hash, the level, the settings', methods' and results files' hashes, the toolkit's version, the
-verification's verdict with its problems, the comparison's verdict against the reference, and the version of the core
-that gated the run. A run's records are registered in the model repository's registry, one file per job and one per
+verification's verdict with its problems, the comparison with the reference as a status of computed or not run with
+the reference file's hash, the report's path and the largest distance with the reference's error beside it, never a
+verdict, and the version of the core that gated the run. A run's records are registered in the model repository's registry, one file per job and one per
 build, and one validation covers the folder, since the model's schema dispatches on the record's kind.

@@ -55,6 +55,7 @@ wg1core list
 wg1core run <experiment.yaml> --toolkits hark,dolo [--levels low,medium] [--members <id>,...] [--jobs 8] \
     [--out <run folder>] [--runtime uv|docker] [--cpus 2] [--memory 8g] [--wall-seconds 3600]
 wg1core verify <run folder>
+wg1core compare <run folder>
 wg1core register <run folder>
 ```
 
@@ -70,6 +71,10 @@ wg1core register <run folder>
 - **`verify`** runs the model's verifier on every results file, or validates it against the results schema when the
   model names none, checks that each carries the experiment's `reports`, writes `verification.json`, and fills each
   record's verdict.
+- **`compare`** evaluates the experiment's checks on the run's results files, each with a verdict of pass, fail, not
+  applicable or error, and reports every job's distances from its member's reference on the experiment's quantities,
+  with the reference's own error beside each and no verdict. It writes `comparison.json` and `comparison.md` in the
+  run folder, a report in each job's folder, and each record's comparison block; its exit status is the checks' alone.
 - **`register`** copies a run's records into the registry folder, `<registry_dir>/<stamp>_<experiment>/`, one file per
   job and one per build, validating each against `wg1core/schemas/runs.registry.schema.json`.
 
@@ -82,6 +87,7 @@ wg1core register <run folder>
 | `canonical` | the strict YAML subset, the canonical serialization and the hash that identifies a model |
 | `laws` | the shock laws a parameter file states, with their moments in closed form and their counterparts in the stage files' language |
 | `experiment` | experiment files and what their validator cannot say |
+| `comparator` | the experiment's checks evaluated on a run, and every job's distance from its member's reference |
 | `schemas/` | `experiment.schema.json`, `execution-record.schema.json`, `runs.registry.schema.json` |
 
 The tests, `tests/test_core.py`, build a tiny model repository of their own and run everything on it:
