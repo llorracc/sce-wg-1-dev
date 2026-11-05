@@ -28,7 +28,8 @@ metadata:
   containers gives the eight jobs' results, methods and settings byte-identical to the vendored runner's, with ten
   records registered at the sixth draft. Repinned at 7679b48 and pushed on his word there at 21:17:53; its first
   continuous-integration run passed, every record naming the run. A results file need not be byte-identical across
-  machines, so a reference's hash identifies its file, not a reproduction. Still that session's, on the owner's word there:
+  machines, so a reference's hash identifies its file, not a reproduction; by 2026-11-05 three two-core runners had
+  given two sets of HARK files, so identity does not follow the core count, and its cause is not examined. Still that session's, on the owner's word there:
   the workflow, the levels in both adapters, restrained-limit's second version with pinned references, the
   reference solvers as toolkits named for their code (`bench-continuous`, later `hark-continuous`), the second HARK
   mode, the license push, going public and the REMARK catalog entry. The REMARK session's first update is committed

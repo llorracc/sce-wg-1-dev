@@ -151,6 +151,16 @@ Times are EST, from the clock, the transcript or git.
   pointer, their full texts in history at af8e609 and 419f8fa. The handoff plan EXECUTED; the index, the state and the
   references brought current.
 
+- **16:19:55, from the model repository's session, for information.** A third continuous-integration run of
+  wg1-buffer-stock (42102375486, 15:19:55 to 15:25:22, both jobs passed) ran on an AMD EPYC 7763 with two cores, and
+  its results files match no other machine's: not HARK's, which the first two two-core runners (an AMD EPYC 9V74 and
+  an Intel Xeon Platinum 8573C) had byte for byte in common, and not dolo's, which have matched nowhere; every methods
+  and settings file is identical on all four machines. So three machines of one core count give two sets of HARK
+  files, which refutes that session's guess that identity follows the core count; a candidate cause, not examined, is
+  the processors' vector instruction sets, which numpy and numba select at run time. The documents' wording, that a
+  results file need not be byte-identical across machines and a solution is compared with its reference by distance,
+  never by hash, stands unchanged.
+
 **State at the end of the entry.** The handoff made, filed and confirmed, and the two public files reduced; open are
 the owner's decisions on both plans, in the HARK-dev session, and his answer on the HAFiscal session's hold, on which
 six places of the bundle and any push of this branch wait; this branch not pushed; nothing of HARK's changed.
