@@ -58,5 +58,39 @@ Times are EST, from the clock, the transcript or git.
   their own; the Markov group's content held. The plan revised accordingly and the survey's sentence on the top
   MPC corrected.
 
-**State at the end of the entry.** The survey and the revised plan committed on this branch, not pushed; nothing of HARK's changed; the owner's word awaited on what the new class is
+- **13:46:09.** The owner: the retrofit of the continuous distribution and its solver onto a structure not designed
+  for them has reached the point where a thorough redesign may serve better, one in which a solver can be told on
+  the fly whether to take expectations by a continuous or a discrete method, so that the two methods' results can
+  be compared directly and an adapter can instruct HARK either way; the HARK, HARK-dev and HAFiscal sessions are
+  to be consulted and a proposal developed.
+- **13:46:09 to 13:47:47.** Three briefs sent, the solver architecture to the HARK session, the distribution, the
+  simulation and the model file to HARK-dev, the reference's, the estimation's and an adapter's needs to HAFiscal,
+  each with his words exactly but with their time given from memory as about 13:20; corrected to 13:46:09 from the
+  transcript in a second message to each, after 13:47:47 ([[feedback_stamps-from-the-clock]]). The harness's own
+  requirements drafted from the schemas and the rulings.
+- **Before 13:54:47.** The HARK session's account: the owner's review of 2026-10-29 as a bound on the design, with
+  HARK-dev to confirm it before it is cited; one income-process object owning the laws, the method a settings
+  object chosen at call time, the model's quantities from the laws under either method; its measurement of the
+  discrete method converging to the continuous one at about the three-halves power of the atom count where the
+  natural limit binds and stalling under an artificial constraint; a new class favored; a size and an order.
+- **Before 14:04:37.** The HAFiscal session's account, checked against his words: its own continuous solver by what
+  it does, what a redesign must get right from its defects and measurements, the reference's settings and
+  certified errors on the restrained member, the estimation's precomputed operator, what an adapter sets and HARK
+  reports, the comparison's set-up, and its view that the method belongs to the solve, with a new class acceptable
+  only on the body the Markov solver calls. One fact held on his word in that session, that HARK's grid has no
+  point at a binding artificial constraint and the kink's error that causes; that session's earlier statement of
+  it taken out of the survey (997b2d3), the HARK session's own measurement kept.
+- **Before 14:10:46.** HARK-dev's account: the brief's premise corrected, draws come from atoms, so the split a
+  redesign closes is the solver's alone; the distribution's method a setting of its own with three values; the
+  newborn stated once in the model file; the laws in the model file and the method not; the moving limit of
+  #1868; five measurements to fix by construction; the object in core as a description and the methods in the
+  experimental tier; a new class recommended; the review of 2026-10-29 confirmed with what may be cited, and the
+  request read as fitting it in how a method is chosen and going beyond it in how the solver is built.
+- **By 14:10:46.** The proposal written as [the plan](../plans/2026-11-05_expectation-machinery-redesign.md),
+  PROPOSED: the harness's requirements, the three accounts, where they agree and differ, the proposal with its one
+  choice, a new class in the tier on a body shared with the classic and Markov solvers, the cost and order, and
+  seven decisions for the owner.
+
+**State at the end of the entry.** The survey, the point-mass plan and the redesign proposal committed on this
+branch, not pushed; nothing of HARK's changed; the owner's word awaited on what the new class is
 to do and where its work lives.
