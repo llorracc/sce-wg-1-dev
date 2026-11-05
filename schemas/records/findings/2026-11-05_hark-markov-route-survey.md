@@ -7,8 +7,8 @@ and in HARK's pull requests, why, what it established, what it cost, and what th
 and does not decide. Its sources are the fork's records, the adapter and the stone at the fork's commit 5c6961b (the
 copy that lives on in wg1-buffer-stock), HARK's solvers at the adapter's pin, and econ-ark/HARK's pull requests and
 issues as GitHub showed them on 2026-11-05. The HARK and HAFiscal-Latest sessions were asked for their side the same
-day; the HARK session's answer, received at 12:07 EST, is the section before the last; the HAFiscal session's is to be
-added when it comes.
+day; their answers, the HARK session's at 12:07 EST and the HAFiscal session's just after, are the two sections before
+the last.
 
 ## Why the Markov route was taken
 
@@ -297,6 +297,69 @@ employed branch, the same in simulation and in the transition matrices; the stat
 route with nodes at the requested points and at the constraint, geometric above it, under the income measure; the
 effective member stated from what was solved, which with laws instead of nodes is the stated member plus the
 quadrature; and persistence, if ever wanted, as a Markov extension of the same class rather than another solver.
+
+## The HAFiscal session's account, 2026-11-05
+
+The HAFiscal-Latest session's emitter, the benchmark's private program, has solved the model with the standard
+consumer since 2026-10-18, by the endogenous grid method with the cubic rule and the value function; its files were
+the gate's reference. Its account, with HARK's line numbers at main 4c285e86 and three scratch computations of the day
+on the toy's median type at the first level; one finding is withheld on the owner's word.
+
+**The standard consumer against the model as stated.**
+- The emitter reports its nodes' natural limit as the effective member's, and refuses a natural member whose stated
+  limit lies above it, since the checker would hand the stated limit over as an artificial constraint and HARK would
+  bind there. It solves a natural member only when the two limits coincide, as they do with a zero-income event, both
+  zero. That is the reading above confirmed from the emitter's side.
+- When the artificial constraint binds, HARK's `BoroCnstNat` is not the model's natural limit but the one-step limit
+  from next period's constraint, −θ_min 𝒢 ψ_min / R: −0.5066 on the toy against the nodes' −5.540. The grid is that
+  limit plus `aXtraGrid`, cut by the constraint line, so no gridpoint sits at a = a_Art: the kink fell between
+  a = −0.00046 and a = 0.0092, and HARK records no kink. The emitter finds the kink where the rule leaves the
+  forty-five-degree line, bracketed by the Euler kink computed from the rule; the two differ by 2.0·10⁻⁶, the
+  interpolation's error, which shrinks with the grid. The Markov solver builds its grids the same way.
+- The value function is −∞ at `mNrmMin` for ϱ > 1 whichever constraint binds, the pseudo-inverse value being zero
+  there with slope `MPCmaxNow`^(−ϱ/(1−ϱ)); the emitter's distribution grid therefore has no node at a natural
+  constraint, an early file of the library member having had infinite welfare from exactly that.
+- A law with no atom at its infimum still gets one at its lowest node, of mass 1/n for n equiprobable nodes, so
+  HARK's MPC at its natural limit is 1 − `WorstIncPrb`^(1/ϱ) Þ_R where the stated model's is one, and the welfare
+  conditions see an atom the model does not have; the emitter decides every condition on its effective member, with
+  that atom, and says which case applies.
+- Human wealth and the limiting MPC are updated by their own recursions and can be unconverged at HARK's default
+  tolerance of 10⁻⁶, while above the grid the rule follows their line; the emitter solves at 10⁻⁸ to 10⁻¹² and reports
+  nothing above the grid's top. HARK's two conventions for human wealth give 50.5 and 51.5 for its default agent.
+- The newborn and the zero-income event as the HARK session says; the emitter sets `UnempPrb` and `IncUnemp` to zero
+  and supplies the atoms itself, the event as its own atom with the member's employed scale, and builds the newborn
+  itself, born employed at P = 1 with the employed branch and no assets. With `IncUnemp` = 0 HARK's natural limit is
+  zero and its worst-income probability is ℘, both right.
+- Assigning `IncShkDstn` leaves the two marginals as the constructor's placeholders, which the condition checks and
+  the post-solve target read; since its version 0.6 of 2026-10-21 the emitter constructs them after assigning and
+  asserts afterwards that HARK rebuilt nothing.
+- **The cost of precision by nodes.** On the toy of 2026-10-18, at 7, 15, 31 and 63 equiprobable nodes per shock, the
+  Euler residual at the kink was 9.8·10⁻³, 3.9·10⁻³, 1.4·10⁻³ and 5.3·10⁻⁴, about n^(−1.4); the kink moved from
+  0.8417 to 0.8298; and HARK's solve time rose from 3.5 to 190 seconds, about linear in the joint nodes (on jhu-dell,
+  threads and environment not stated). A residual of 10⁻⁴ near the kink is out of practical reach by refining the
+  nodes, which is the case for a continuous expectation.
+
+**What the emitter computes outside HARK, and why.** The discretization, since HARK had no truncated law; the
+effective member, with its expectations, lowest values, natural limit, constraint in force and worst income with its
+mass under the solver's nodes, every condition decided by the checker's arithmetic on it, because the schema asks for
+what was actually solved and HARK's own checks cover neither the schema's set nor, before version 0.6, the nodes
+actually used; the stationary population and the income measure by a lottery histogram on an asset grid and one
+sparse linear solve, because HARK's simulator is Monte Carlo and its transition matrices place newborns at m = 1, have
+no income measure and keep a dense matrix per period, which stopped the refinement of HARK's own Jacobians; the kink
+and the two targets by root-finding, since HARK records no kink; the Euler residuals against Gauss–Legendre quadrature
+in the logs split where next period's resources cross the kink, with 32 nodes a piece, beside the residual under the
+solver's own nodes, the first including the discretization's error and the second the solver's alone.
+
+**The Markov route against the standard consumer.** The gate's outcome as recorded above. The session's own check of
+2026-10-20, rerun on 2026-10-27 on a HARK build carrying #1858 to #1860, for the toy's median type: both states'
+rules equal the standard consumer's to 2.7·10⁻¹⁵ for m from 0.6 to 50; all 94,985 newborns in twenty thousand
+households over six hundred quarters were born employed with permanent income exactly one and an employed first draw;
+the cross-section's mean of assets, 0.333084 with a standard error of 1.7·10⁻⁴, against the specification's 0.333075,
+cannot tell the newborn rules apart, since a control with the full draw is as close. The benefit seen is the
+born-employed newborn in the simulator, which the standard consumer cannot state; with #1858 the solution is the
+same, and without it the Markov solver did not reproduce the standard consumer; the cost seen is the route's
+dependence on three unmerged drafts. Not measured: the Markov solve's time against the standard consumer's, and the
+transition-matrix path under the Markov formulation.
 
 ## What the harness asks of any route
 

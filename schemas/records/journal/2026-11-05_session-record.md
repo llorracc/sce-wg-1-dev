@@ -30,6 +30,11 @@ Times are EST, from the clock, the transcript or git.
   matrix for the Markov consumer does exist on main through the model-file route and that the condition methods
   raise rather than being merely absent.
 
-**State at the end of the entry.** The survey committed on this branch, not pushed; the HAFiscal session's answer
-pending, to be added to the finding when it comes; nothing of HARK's changed; the owner's word awaited on what the new class is
+- **Before 12:13:27.** The HAFiscal session's answer, received: what its emitter met in the standard consumer, with
+  three scratch computations of the day, what it computes outside HARK and why, the pull requests as it has them,
+  its own check of the Markov route's newborn, and one finding withheld on the owner's word; added to the finding
+  as a section of its own.
+
+**State at the end of the entry.** The survey committed on this branch, not pushed, complete with both sessions'
+accounts; one finding of the HAFiscal session's withheld on the owner's word; nothing of HARK's changed; the owner's word awaited on what the new class is
 to do and where its work lives.
