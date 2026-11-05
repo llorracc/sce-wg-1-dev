@@ -11,7 +11,11 @@ journal, since they record what they are told.
 
 **Why:** on 2026-11-01 this session wrote "16:41" for a request typed at 16:37:49 into four sessions' briefs, and three
 journal stamps ahead of the clock; HARK-dev caught the first, and both HARK sessions had to correct their records. The
-same lapse was corrected earlier that day.
+same lapse was corrected earlier that day. On 2026-11-05 it happened twice more, both in messages to other sessions:
+"about 13:20" for a request typed at 13:46:09, and "15:4x" for a message's own send time, written before the message
+was sent; the HARK session caught the second.
 
 **How to apply:** before writing a time, read it: the transcript's stamp for the owner's words, `date` for the present.
-Write "by HH:MM" with a time already read when an event's own time is not known. Related: [[project_state]].
+Write "by HH:MM" with a time already read when an event's own time is not known. A message's own send time is not
+known while it is being written: say "now" or "in this message", and read the stamp afterwards for the records.
+Related: [[project_state]].

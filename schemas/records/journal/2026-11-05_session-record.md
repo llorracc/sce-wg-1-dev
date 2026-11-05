@@ -118,6 +118,12 @@ Times are EST, from the clock, the transcript or git.
   that the fork's records can point at them. The notices to the HARK session (15:38:51) and the HAFiscal session
   (15:38:59), the latter told what of its own was kept out.
 
+- **15:39:01 (the HARK session's stamp), answered by 15:41:55.** The HARK session acknowledges the notice and will send
+  its readings to HARK-dev; it catches a stamp in the two notices, "15:4x" for the handoff message's time, written
+  before the send and not from the clock ([[feedback_stamps-from-the-clock]], the second such lapse of the day after
+  "about 13:20"). The records already carry the transcript's stamps; the HAFiscal session sent the correction at
+  15:41:55, 15:38:43 being the send.
+
 **State at the end of the entry.** The handoff sent and the notices given; the HARK-dev session's names awaited, on
 which the proposal's and the point-mass plan's files are reduced to the harness's part with a pointer and marked
 HANDED OFF; the handoff plan ACTIVE; this branch not pushed; nothing of HARK's changed.
