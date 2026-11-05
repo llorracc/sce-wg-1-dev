@@ -77,7 +77,9 @@ files cannot be compared. For every job whose member has a reference pinned, it 
 reference on each named quantity with the reference's own error beside it, and no verdict: a distance from the
 reference is reported, never judged, since the reference's certification is the error stated and a tolerance would
 have to be ruled for each quantity. It writes `comparison.json` and `comparison.md` in the run folder, a report in
-each job's folder, and the comparison block of each job's record; its exit status is the checks' alone. A reference
+each job's folder, and the comparison block of each job's record. A comparison that cannot be computed for a member
+that pins a reference, the reference not loading, not agreeing with the job's file on the identity keys the model
+names, or a quantity not comparable, is an error. Its exit status is the checks' and the errors', never a distance's. A reference
 solver is a toolkit like any other, named for its code and run far along its ladder, with records of its own; the
 experiment pins the file it produced.
 

@@ -11,7 +11,8 @@ registry's records. The `wg1core` command.
 Every command reads a model repository's registry file, `--registry`, `harness/toolkits.yaml` under the current
 directory by default. The file names the toolkits, each with its adapter, the files its runs depend on, its
 environment, its stone, its levels and its thread cap, and under `model` what the core needs of the repository: its
-results schema, its source page's anchors, its experiments folder, its verifier and its registry folder (README.md).
+results schema, its source page's anchors, its experiments folder, its verifier, its registry folder and the
+identity keys a results file and its reference must agree on (README.md).
 The repository's root is the git top level of the registry file's folder.
 
 `run` checks the experiment and refuses one with problems. It then runs one job for each toolkit, member and level,
@@ -29,8 +30,9 @@ With `--runtime docker` each toolkit's image is built first and its build record
 names none, checks that each carries the quantities the experiment's `reports` names, and writes `verification.json`
 and each record's verdict. `compare` evaluates the experiment's checks on the run's results and every job's distances
 from its member's reference, with the reference's error beside each, writing `comparison.json` and `comparison.md` in
-the run folder, a report in each job's folder and each record's comparison block; its exit status is the checks'
-alone. `register` copies a run's records into the registry folder, one file per job and one per build, validating
+the run folder, a report in each job's folder and each record's comparison block; its exit status is the checks' and
+the comparison errors', never a distance's. A job's folder is level-<n>, n the level's position in the experiment's
+list, coarse to fine. `register` copies a run's records into the registry folder, one file per job and one per build, validating
 each.
 """
 
@@ -56,12 +58,11 @@ import yaml
 from . import VERSION, canonical, identity, records
 from . import experiment as experiments
 
-LEVEL_NUMBER = {"low": 1, "medium": 2, "high": 3}
 THREAD_VARIABLES = ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS")
 OUTPUTS = ("results.json", "methods.yaml", "settings.yaml")
 IMAGE_PREFIX = "sce-wg-1"
 TOOLKIT_KEYS = {"adapter", "code", "environment", "stone", "levels", "threads"}
-MODEL_KEYS = {"results_schema", "anchors", "experiments", "verifier", "registry_dir"}
+MODEL_KEYS = {"results_schema", "anchors", "experiments", "verifier", "registry_dir", "identity"}
 
 
 def sha256_file(path: Path) -> str:
@@ -93,6 +94,7 @@ class Model:
         self.experiments_dir = (self.dir / m["experiments"]).resolve() if m.get("experiments") else self.root
         self.verifier = [str(a) for a in m["verifier"]] if m.get("verifier") else None
         self.registry_dir = (self.dir / m.get("registry_dir", "runs.registry")).resolve()
+        self.identity = [str(k) for k in m.get("identity", [])]
         self.toolkits = self._toolkits(raw.get("toolkits") or {})
 
     def _toolkits(self, raw: dict) -> dict:
@@ -162,7 +164,7 @@ def plan_jobs(exp_path: Path, exp: dict, model: Model, toolkits: list[str], leve
     folder = Path(exp_path).resolve().parent
     by_id = {m["id"]: m for m in exp["members"]}
     unknown = [m for m in members if m not in by_id] + [t for t in toolkits if t not in model.toolkits]
-    unknown += [lv for lv in levels if lv not in LEVEL_NUMBER]
+    unknown += [lv for lv in levels if lv not in exp["levels"]]
     if unknown:
         raise SystemExit(f"unknown toolkit, member or level: {unknown}")
     jobs = []
@@ -179,7 +181,7 @@ def plan_jobs(exp_path: Path, exp: dict, model: Model, toolkits: list[str], leve
                              "request_file": (folder / m["request_file"]).resolve(),
                              "parameter_file_sha256": m["parameter_file_sha256"],
                              "request_file_sha256": m["request_file_sha256"],
-                             "dir": out / name / mid / f"level-{LEVEL_NUMBER[lv]}"})
+                             "dir": out / name / mid / f"level-{exp['levels'].index(lv) + 1}"})
     return jobs
 
 
@@ -561,14 +563,17 @@ def cmd_compare(args) -> int:
         raise SystemExit("the experiment file has changed since the run")
     jobs = plan_jobs(exp_path, exp, model, list(manifest["toolkits"]), manifest["levels"],
                      [m["id"] for m in manifest["members"]], run)
-    report = comparator.run_comparison(exp, exp_path, jobs, run)
+    report = comparator.run_comparison(exp, exp_path, jobs, run, model.identity)
     comparator.write_outputs(report, jobs, run)
     for c in report["checks"]:
         print(f"{c['id']:32s} {c['verdict']}" + (f"  {c['errors'][0]}" if c["errors"] else ""))
     computed = [j for j in report["reference"] if j["status"] == "computed"]
-    print(f"{len(report['checks'])} checks; distances from the reference computed for {len(computed)} of {len(report['reference'])} jobs;"
-          f" the report is in {model.rel(run / 'comparison.md')}")
-    return 1 if any(c["verdict"] in ("fail", "error") for c in report["checks"]) else 0
+    in_error = [j for j in report["reference"] if j["status"] == "error"]
+    for j in in_error:
+        print(f"{j['toolkit']:6s} {j['member']:22s} {j['level']:7s} comparison error: {j['reason']}")
+    print(f"{len(report['checks'])} checks; distances from the reference computed for {len(computed)} of {len(report['reference'])} jobs,"
+          f" {len(in_error)} in error; the report is in {model.rel(run / 'comparison.md')}")
+    return 1 if report["failed"] else 0
 
 
 def cmd_list(args) -> int:

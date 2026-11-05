@@ -22,8 +22,9 @@ from wg1core import canonical, comparator, experiment, records, runner
 
 RESULTS_SCHEMA = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object", "required": ["toolkit", "types"],
+    "type": "object", "required": ["toolkit", "types", "parameter_file_sha256", "request_file_sha256"],
     "properties": {
+        "parameter_file_sha256": {"type": "string"}, "request_file_sha256": {"type": "string"},
         "toolkit": {"type": "object", "required": ["name", "version"],
                     "properties": {"name": {"type": "string"}, "version": {"type": "string"}}},
         "types": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/Type"}},
@@ -40,15 +41,18 @@ STUB_ADAPTER = textwrap.dedent('''
     import argparse, json, os
     from pathlib import Path
     import yaml
+    from wg1core import canonical
     ap = argparse.ArgumentParser()
     ap.add_argument("member"); ap.add_argument("--out", required=True); ap.add_argument("--level", required=True)
     ap.add_argument("--request", required=True)
     a = ap.parse_args()
-    beta = yaml.safe_load(Path(a.member).read_text())["beta"]
+    member, request = canonical.load_strict(Path(a.member).read_text()), canonical.load_strict(Path(a.request).read_text())
+    beta = member["beta"]
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     t = {"kink": 1.25 + 0.01 * int(a.level) + beta / 100, "rule": {"c": [0.5 * beta, 0.75 * beta]}}
     t.pop(os.environ.get("STUB_DROP", ""), None)
-    (out / "results.json").write_text(json.dumps({"toolkit": {"name": "stub", "version": "0.0"}, "types": [t]}))
+    (out / "results.json").write_text(json.dumps({"toolkit": {"name": "stub", "version": "0.0"}, "types": [t],
+        "parameter_file_sha256": canonical.model_hash(member), "request_file_sha256": canonical.model_hash(request)}))
     (out / "methods.yaml").write_text("policy: time-iteration\\n")
     (out / "settings.yaml").write_text(f"level: {a.level}\\n")
 ''')
@@ -61,9 +65,10 @@ def git(root: Path, *args: str) -> str:
     return subprocess.run(["git", *args], cwd=root, capture_output=True, text=True, check=True).stdout.strip()
 
 
-def make_model(tmp_path: Path, at_most: float = 1.0) -> dict:
+def make_model(tmp_path: Path, at_most: float = 1.0, reference: dict | None = None, same_question: bool = True) -> dict:
     """A tiny model repository, committed: one experiment of two members, a reference pinned for the first, and a
-    stand-in toolkit; `at_most` is the tolerance of the experiment's one check on the kinks."""
+    stand-in toolkit; `at_most` is the tolerance of the experiment's one check on the kinks; `reference` replaces the
+    reference's content; with `same_question` false the reference carries another request's hash."""
     root = tmp_path / "model"
     exp_dir, harness = root / "schemas" / "experiments" / "tiny", root / "harness"
     exp_dir.mkdir(parents=True)
@@ -78,7 +83,12 @@ def make_model(tmp_path: Path, at_most: float = 1.0) -> dict:
         (exp_dir / f"{mid}.request.yaml").write_text(yaml.safe_dump(request))
         members.append({"id": mid, "parameter_file": f"{mid}.yaml", "parameter_file_sha256": mh,
                         "request_file": f"{mid}.request.yaml", "request_file_sha256": canonical.model_hash(request)})
-    ref_bytes = json.dumps(REFERENCE_M1, indent=1).encode()
+    m1_member = {"family": "tiny/1", "beta": 0.9}
+    m1_request = {"family": "tiny/1", "parameter_file_sha256": canonical.model_hash(m1_member), "points": [1.0, 2.0]}
+    ref = dict(reference or REFERENCE_M1)
+    ref["parameter_file_sha256"] = canonical.model_hash(m1_member)
+    ref["request_file_sha256"] = canonical.model_hash(m1_request) if same_question else "f" * 64
+    ref_bytes = json.dumps(ref, indent=1).encode()
     (exp_dir / "m1.reference.json").write_bytes(ref_bytes)
     members[0]["reference"] = {"results_file": "m1.reference.json", "results_sha256": hashlib.sha256(ref_bytes).hexdigest(),
                                "errors": {"types[].kink": 0.001, "types[].rule.c": 0.002}}
@@ -95,7 +105,7 @@ def make_model(tmp_path: Path, at_most: float = 1.0) -> dict:
     (harness / "stub_adapter.py").write_text(STUB_ADAPTER)
     (harness / "toolkits.yaml").write_text(yaml.safe_dump({
         "model": {"results_schema": "../schemas/results.schema.json", "experiments": "../schemas/experiments",
-                  "registry_dir": "runs.registry"},
+                  "registry_dir": "runs.registry", "identity": ["parameter_file_sha256", "request_file_sha256"]},
         "toolkits": {"stub": {"adapter": "stub_adapter.py", "code": ["stub_adapter.py"],
                               "levels": {"low": 1, "medium": 2, "high": 3}, "threads": 1}}}))
     git(root, "init", "-q")
@@ -205,7 +215,8 @@ def test_the_comparator_evaluates_the_checks_and_reports_the_distances(model):
     assert block["status"] == "computed" and block["reference"] == m1["reference"] and "verdict" not in block
     assert block["report"] == "comparison.json" and block["largest_distance"]["distance"] >= 0
     records.validate(record(model, "m1"))
-    assert record(model, "m2")["extensions"]["sce-wg-1"]["comparison"] == {"status": "not run", "report": "comparison.json"}
+    assert record(model, "m2")["extensions"]["sce-wg-1"]["comparison"] == {"status": "not run", "report": "comparison.json",
+                                                                          "reason": "the member pins no reference"}
     md = (model["out"] / "comparison.md").read_text()
     assert "| `kinks_agree` |" in md and "**pass**" in md and "Distances from the reference" in md
 
@@ -219,6 +230,35 @@ def test_a_failed_check_fails_the_comparison_but_a_distance_never_does(tmp_path)
     # the reference distances are large relative to the reference's error, and still carry no verdict
     m1 = next(j for j in report["reference"] if j["member"] == "m1")
     assert m1["status"] == "computed" and all("verdict" not in r for r in m1["distances"])
+
+
+def test_an_uncomputable_comparison_is_an_error_that_fails_the_command(tmp_path):
+    # the reference lacks the rule, so one of the two named distances cannot be computed
+    model = make_model(tmp_path, reference={"toolkit": {"name": "bench-continuous", "version": "0.0"}, "types": [{"kink": 1.30}]})
+    assert run(model, "--levels", "low") == 0
+    assert command(model, "compare") == 1
+    report = json.loads((model["out"] / "comparison.json").read_text())
+    m1 = next(j for j in report["reference"] if j["member"] == "m1")
+    assert m1["status"] == "error" and "could not be computed" in m1["reason"] and report["failed"]
+    assert {c["verdict"] for c in report["checks"]} == {"pass", "not applicable"}  # the checks themselves pass
+    block = record(model, "m1")["extensions"]["sce-wg-1"]["comparison"]
+    assert block["status"] == "error" and "reason" in block and "largest_distance" not in block
+    records.validate(record(model, "m1"))
+
+
+def test_a_reference_to_another_question_is_an_error(tmp_path):
+    model = make_model(tmp_path, same_question=False)
+    assert run(model, "--levels", "low") == 0
+    assert command(model, "compare") == 1
+    report = json.loads((model["out"] / "comparison.json").read_text())
+    m1 = next(j for j in report["reference"] if j["member"] == "m1")
+    assert m1["status"] == "error" and "request_file_sha256 differs" in m1["reason"]
+
+
+def test_levels_are_ordered_as_the_experiment_lists_them():
+    assert comparator._levels_in_order({"high", "low", "medium"}, ["low", "medium", "high"]) == ["low", "medium", "high"]
+    assert comparator._levels_in_order({"fine", "coarse"}, ["coarse", "default", "fine"]) == ["coarse", "fine"]
+    assert comparator._levels_in_order({"odd", "low"}, ["low", "medium", "high"]) == ["low", "odd"]
 
 
 def test_a_reference_that_does_not_hash_is_refused_before_anything_runs(model):

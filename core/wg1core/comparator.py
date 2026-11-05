@@ -2,10 +2,13 @@
 files, and every job's distance from its member's reference with the reference's own error beside it.
 
 A check compares one quantity, a path into the results file, between members of one toolkit at one level, between
-toolkits for one member at one level, or between successive levels of one toolkit for one member, under a metric and
-an expectation; its verdict is pass, fail, not applicable when the run holds too little to apply it, or error when the
-files cannot be compared. The distance from the reference gets no verdict: it is reported, with the reference's error,
-for every quantity the experiment names. The comparator's exit status is the checks' alone.
+toolkits for one member at one level, or between successive levels of one toolkit for one member, the levels ordered
+as the experiment lists them, under a metric and an expectation; its verdict is pass, fail, not applicable when the run
+holds too little to apply it, or error when the files cannot be compared. The distance from the reference gets no
+verdict: it is reported, with the reference's error, for every quantity the experiment names. A comparison that
+cannot be computed for a member that pins a reference, the reference not loading, not answering the same question by
+the identity keys the model names, or a quantity not comparable, is an error. The comparator's exit status is the
+checks' and the errors', never a distance's.
 
 It writes `comparison.json` and `comparison.md` in the run folder, `comparison.json` in each job's folder, and the
 comparison block of each job's record.
@@ -19,8 +22,6 @@ import json
 from pathlib import Path
 
 from . import records
-
-LEVEL_NUMBER = {"low": 1, "medium": 2, "high": 3}
 
 
 # Quantities and metrics ------------------------------------------------------------------------------------------------
@@ -82,8 +83,19 @@ def compare(a: dict, b: dict, quantity: str, metric: str) -> float:
 
 # The checks -------------------------------------------------------------------------------------------------------------
 
-def _levels_in_order(levels) -> list[str]:
-    return sorted(levels, key=lambda lv: LEVEL_NUMBER.get(lv, 99))
+def _levels_in_order(levels, order: list[str]) -> list[str]:
+    """Levels as the experiment lists them, coarse to fine; a level the experiment does not list comes last."""
+    return sorted(levels, key=lambda lv: (order.index(lv) if lv in order else len(order), lv))
+
+
+def value_at(data: dict, path: str):
+    """One value along a path with no [] in it, such as parameter_file_sha256; None when absent."""
+    node = data
+    for key in path.split("."):
+        if not isinstance(node, dict) or key not in node:
+            return None
+        node = node[key]
+    return node
 
 
 def _verdict(outcomes: list[bool], errors: list[str]) -> str:
@@ -94,9 +106,10 @@ def _verdict(outcomes: list[bool], errors: list[str]) -> str:
     return "pass" if all(outcomes) else "fail"
 
 
-def evaluate_check(check: dict, results: dict, members: list[str]) -> dict:
-    """One check on a run's results, `results[toolkit][member][level]`. Returns the verdict and the numbers behind it.
-    A comparison the run holds too little for is not applicable, never a failure."""
+def evaluate_check(check: dict, results: dict, members: list[str], order: list[str]) -> dict:
+    """One check on a run's results, `results[toolkit][member][level]`, the levels ordered as the experiment lists
+    them. Returns the verdict and the numbers behind it. A comparison the run holds too little for is not applicable,
+    never a failure."""
     quantity, metric, expect = check["quantity"], check["metric"], check["expect"]
     at_most = expect.get("at_most") if isinstance(expect, dict) else None
     values, outcomes, errors = [], [], []
@@ -111,7 +124,7 @@ def evaluate_check(check: dict, results: dict, members: list[str]) -> dict:
     if check["compare"] == "members":
         for toolkit, by_member in results.items():
             levels = set().union(*(set(v) for v in by_member.values())) if by_member else set()
-            for level in _levels_in_order(levels):
+            for level in _levels_in_order(levels, order):
                 series = []
                 for a, b in check["pairs"]:
                     ra, rb = by_member.get(a, {}).get(level), by_member.get(b, {}).get(level)
@@ -131,7 +144,7 @@ def evaluate_check(check: dict, results: dict, members: list[str]) -> dict:
         chosen = check.get("members") or members
         for t1, t2 in itertools.combinations(sorted(results), 2):
             for member in chosen:
-                levels = _levels_in_order(set(results[t1].get(member, {})) & set(results[t2].get(member, {})))
+                levels = _levels_in_order(set(results[t1].get(member, {})) & set(results[t2].get(member, {})), order)
                 series = []
                 for level in levels:
                     d = dist(results[t1][member][level], results[t2][member][level], f"{t1} against {t2}, {member} at {level}")
@@ -151,7 +164,7 @@ def evaluate_check(check: dict, results: dict, members: list[str]) -> dict:
         chosen = check.get("members") or members
         for toolkit, by_member in results.items():
             for member in chosen:
-                levels = _levels_in_order(by_member.get(member, {}))
+                levels = _levels_in_order(by_member.get(member, {}), order)
                 steps = []
                 for lo, hi in zip(levels, levels[1:]):
                     d = dist(by_member[member][lo], by_member[member][hi], f"{toolkit} {member}, {lo} to {hi}")
@@ -214,8 +227,11 @@ def reference_distances(results: dict, reference: dict, quantities: list[dict], 
 
 # The run ----------------------------------------------------------------------------------------------------------------
 
-def run_comparison(experiment: dict, experiment_file: Path, jobs: list[dict], run: Path) -> dict:
-    """Everything the comparator writes for one run folder, as one object; the files are written by the caller."""
+def run_comparison(experiment: dict, experiment_file: Path, jobs: list[dict], run: Path,
+                   identity: list[str] = ()) -> dict:
+    """Everything the comparator writes for one run folder, as one object; the files are written by the caller.
+    `identity` names the results-file keys, such as parameter_file_sha256 and request_file_sha256, that a job's file
+    and its reference must agree on for the reference to answer the same question."""
     results: dict = {}
     job_results = {}
     for j in jobs:
@@ -225,7 +241,7 @@ def run_comparison(experiment: dict, experiment_file: Path, jobs: list[dict], ru
             results.setdefault(j["toolkit"], {}).setdefault(j["member"], {})[j["level"]] = data
             job_results[id(j)] = data
     members = [m["id"] for m in experiment["members"]]
-    checks = [evaluate_check(c, results, members) for c in experiment["checks"]]
+    checks = [evaluate_check(c, results, members, list(experiment["levels"])) for c in experiment["checks"]]
     quantities = reference_quantities(experiment)
     by_member = {m["id"]: m for m in experiment["members"]}
     per_job = []
@@ -233,22 +249,34 @@ def run_comparison(experiment: dict, experiment_file: Path, jobs: list[dict], ru
         entry = {"toolkit": j["toolkit"], "member": j["member"], "level": j["level"], "dir": str(j["dir"])}
         data = job_results.get(id(j))
         reference, digest, problem = load_reference(experiment_file, by_member[j["member"]])
+        pinned = bool(by_member[j["member"]].get("reference"))
         if data is None:
             entry.update({"status": "not run", "reason": "no results file"})
+        elif not pinned:
+            entry.update({"status": "not run", "reason": "the member pins no reference"})
         elif reference is None:
-            entry.update({"status": "not run", "reason": problem or "the member has no reference"})
+            entry.update({"status": "error", "reason": problem})
             if digest:
                 entry["reference"] = digest
         else:
+            mismatched = [k for k in identity if value_at(data, k) != value_at(reference, k)]
             errors = by_member[j["member"]]["reference"].get("errors", {})
             rows = reference_distances(data, reference, quantities, errors)
-            computed = [r for r in rows if "distance" in r]
-            entry.update({"status": "computed", "reference": digest, "distances": rows})
-            if computed:
-                largest = max(computed, key=lambda r: r["distance"])
+            problems = [f"{r['quantity']}: {r['problem']}" for r in rows if "problem" in r]
+            entry.update({"reference": digest, "distances": rows})
+            if mismatched:
+                entry.update({"status": "error", "reason": "the reference does not answer the same question: "
+                              + ", ".join(f"{k} differs" for k in mismatched)})
+            elif problems:
+                entry.update({"status": "error", "reason": "a distance could not be computed: " + "; ".join(problems)})
+            else:
+                entry["status"] = "computed"
+                largest = max(rows, key=lambda r: r["distance"])
                 entry["largest_distance"] = {k: largest[k] for k in ("quantity", "metric", "distance", "reference_error") if k in largest}
         per_job.append(entry)
-    return {"experiment": experiment["experiment"], "run": run.name, "checks": checks, "reference": per_job}
+    failed = any(c["verdict"] in ("fail", "error") for c in checks) or any(j["status"] == "error" for j in per_job)
+    return {"experiment": experiment["experiment"], "run": run.name, "checks": checks, "reference": per_job,
+            "failed": failed}
 
 
 def as_markdown(report: dict) -> str:
@@ -273,8 +301,9 @@ def as_markdown(report: dict) -> str:
               "| toolkit | member | level | quantity | metric | distance | the reference's error |", "|---|---|---|---|---|---|---|"]
     for j in report["reference"]:
         if j["status"] != "computed":
-            lines.append(f"| {j['toolkit']} | {j['member']} | {j['level']} | | | not run: {j['reason']} | |")
-            continue
+            lines.append(f"| {j['toolkit']} | {j['member']} | {j['level']} | | | **{j['status']}**: {j['reason']} | |")
+            if "distances" not in j:
+                continue
         for r in j["distances"]:
             d = f"{r['distance']:.3g}" if "distance" in r else f"not computed: {r['problem']}"
             e = f"{r['reference_error']:.3g}" if "reference_error" in r else "not stated"
@@ -296,6 +325,8 @@ def write_outputs(report: dict, jobs: list[dict], run: Path) -> None:
         if record.is_file():
             data = json.loads(record.read_text(encoding="utf-8"))
             block = {"status": entry["status"], "report": "comparison.json"}
+            if entry.get("reason"):
+                block["reason"] = entry["reason"]
             if entry.get("reference"):
                 block["reference"] = entry["reference"]
             if entry.get("largest_distance"):

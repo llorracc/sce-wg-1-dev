@@ -36,6 +36,7 @@ model:
                                                                # optional: the command that verifies one results file; its exit
                                                                # status is the verdict; without it the results schema's validation is
   registry_dir: runs.registry                                  # optional: where `register` writes; this is the default
+  identity: [parameter_file_sha256, request_file_sha256]       # optional: results-file keys a job's file and its reference must agree on
 toolkits:
   hark:
     adapter: adapters/hark/adapter.py          # the adapter contract: <adapter> <parameter file> --out <dir> --level <n> --request <file>
@@ -73,8 +74,11 @@ wg1core register <run folder>
   record's verdict.
 - **`compare`** evaluates the experiment's checks on the run's results files, each with a verdict of pass, fail, not
   applicable or error, and reports every job's distances from its member's reference on the experiment's quantities,
-  with the reference's own error beside each and no verdict. It writes `comparison.json` and `comparison.md` in the
-  run folder, a report in each job's folder, and each record's comparison block; its exit status is the checks' alone.
+  with the reference's own error beside each and no verdict. A comparison that cannot be computed for a member that
+  pins a reference, the reference not loading, not agreeing with the job's file on the model's identity keys, or a
+  quantity not comparable, is an error. It writes `comparison.json` and `comparison.md` in the run folder, a report in
+  each job's folder, and each record's comparison block; its exit status is the checks' and the errors', never a
+  distance's. The levels are ordered as the experiment lists them.
 - **`register`** copies a run's records into the registry folder, `<registry_dir>/<stamp>_<experiment>/`, one file per
   job and one per build, validating each against `wg1core/schemas/runs.registry.schema.json`.
 
