@@ -124,9 +124,11 @@ pin, 11852805 on the fork llorracc/HARK (the first commit of draft #1862, on #18
 - **The probability of the worst income is read from the atoms** (`calc_worst_inc_prob`, line 493): the mass of the
   smallest product of the atoms. It is ℘ when the unemployment event pays nothing, and with a positive benefit and a
   continuous permanent shock it is ℘ divided by the number of permanent-shock atoms, where the true law gives zero
-  (departure BSM_0000156). `MPCmax` is built on it (`calc_mpc_max`, line 548), so the top MPC of the effective member
-  is the discretization's, not the stated model's; the adapter therefore reports the limiting MPCs from the checker's
-  closed forms and reads neither of HARK's.
+  (departure BSM_0000156). The unconstrained rule's bottom slope and the condition report's weak return impatience
+  factor are built on it; the reported top MPC is not, at the pin: with the infimum option the infima's limit binds
+  as a constraint and the top MPC is one, which is the model's, and with a zero-income event the atoms' mass is ℘,
+  also the model's, as the HARK session measured on 2026-11-05 (the plan that followed the survey). The adapter
+  reports the limiting MPCs from the checker's closed forms and reads neither of HARK's.
 - **The one-period relaxation and the lower envelope.** Every solver computes c(m) = min(c̃(m), m − `mNrmMin`), the
   lower envelope of the relaxed rule and the constraint line, always, with the comment that it "should only be used
   when BoroCnstArt is True" (line 788; the Markov solver, line 642). The min is exact for the problem; numerically the

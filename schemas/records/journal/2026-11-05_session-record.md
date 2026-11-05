@@ -48,6 +48,15 @@ Times are EST, from the clock, the transcript or git.
   one rewrite per branch, the trailers stripped at the same time; the order; five decisions for the owner. Sent to
   the HARK session for its reading before it is put to him as settled.
 
-**State at the end of the entry.** The survey and the plan committed on this branch, not pushed; the HARK session's
-reading of the plan pending; nothing of HARK's changed; the owner's word awaited on what the new class is
+- **Before 12:59.** The HARK session's reading of the plan: the atoms path with #1862's infimum option already gives
+  the model's top MPC in both cases, measured, so the first draft's change to the unconstrained slope would have been
+  a regression, and what stays atoms-made there is the condition report's worst-income probability and weak return
+  impatience factor; the landing mass depends on the limit's sign, with the permanent shock's supremum when the
+  limit is positive, so a single joint mass is the wrong quantity and no recorded field is needed, the event being
+  on the transitory law's record already; the Markov combination divides by the masses' sum and needs a guard; the
+  first draft's halt trigger would halt the solvable positive-benefit case, unlike #1869's; the trailers in a pass of
+  their own; the Markov group's content held. The plan revised accordingly and the survey's sentence on the top
+  MPC corrected.
+
+**State at the end of the entry.** The survey and the revised plan committed on this branch, not pushed; nothing of HARK's changed; the owner's word awaited on what the new class is
 to do and where its work lives.
