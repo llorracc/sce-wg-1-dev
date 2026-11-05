@@ -314,11 +314,10 @@ part of this section.
   bind there. It solves a natural member only when the two limits coincide, as they do with a zero-income event, both
   zero. That is the reading above confirmed from the emitter's side.
 - When the artificial constraint binds, HARK's `BoroCnstNat` is not the model's natural limit but the one-step limit
-  from next period's constraint, −θ_min 𝒢 ψ_min / R: −0.5066 on the toy against the nodes' −5.540. The grid is that
-  limit plus `aXtraGrid`, cut by the constraint line, so no gridpoint sits at a = a_Art: the kink fell between
-  a = −0.00046 and a = 0.0092, and HARK records no kink. The emitter finds the kink where the rule leaves the
-  forty-five-degree line, bracketed by the Euler kink computed from the rule; the two differ by 2.0·10⁻⁶, the
-  interpolation's error, which shrinks with the grid. The Markov solver builds its grids the same way.
+  from next period's constraint, −θ_min 𝒢 ψ_min / R: −0.5066 on the toy against the nodes' −5.540. HARK records no
+  kink; the emitter finds it where the rule leaves the forty-five-degree line, bracketed by the Euler kink computed
+  from the rule. One further fact about HARK's grid at a binding artificial constraint, and the kink's error it
+  causes, that session holds on the owner's word in its session.
 - The value function is −∞ at `mNrmMin` for ϱ > 1 whichever constraint binds, the pseudo-inverse value being zero
   there with slope `MPCmaxNow`^(−ϱ/(1−ϱ)); the emitter's distribution grid therefore has no node at a natural
   constraint, an early file of the library member having had infinite welfare from exactly that.
