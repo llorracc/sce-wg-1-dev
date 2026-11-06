@@ -81,7 +81,22 @@ Times are EST, from the clock, the transcript or git.
   the removal of thirty-one empty temporary folders dolo's import left in the system's temporary directory; they
   stay.
 
-**State at the end of the entry.** The proposals, the prototype and the regeneration test committed on this branch,
-not pushed; nothing changed in the stones, the adapters or the convention; the model repository's session to be told
-what concerns its files. Open as yesterday: the owner's decisions on both plans in the HARK-dev session, and his answer
-on the HAFiscal session's hold, on which six places of the bundle and any push of this branch wait.
+- **18:24:07 to 18:26:41.** The owner returns to the architecture, one statement of a model realized by many toolkits
+  with the buffer-stock problem as the prototype, and asks to see the recommended choice on each of the stones'
+  nine decisions; shown as a table.
+- **18:36:57, the owner's direction.** The system is to be operated by capable AI sessions: not prescriptions a rigid
+  script could carry out, but desiderata that a competent reader meets by reading each toolkit's documentation and
+  code, by the mathematical structure of the problem, and from the parameters and settings it is given.
+- **18:36:57 to 18:45.** [The proposals](../plans/2026-11-06_stones-as-data.md) revised to that direction: no
+  executable data file; a stone holds the desiderata, the method expected on each target, the settings at each
+  level, the conventions that move a reported number and what a results file says of the toolkit, and beside them
+  each realization's record, the reader's account of what it read, decided and found wrong, with the evidence;
+  acceptance by outcome through a reader that has seen no adapter; two conventions the hub owes, the slope at a node
+  and a grid's start above a natural limit; the shared code a reference realization a reader may use or replace. The
+  day's measurements read again under it: the clean-room test as the demonstration, the prototype as a road that
+  works and is not needed. Nine decisions, revised.
+
+**State at the end of the entry.** The proposals revised and committed on this branch, not pushed; nothing changed in
+the stones, the adapters or the convention; the model repository's session told of the first version and to be told
+of the revision with his decisions. Open as yesterday: the owner's decisions on both plans in the HARK-dev session,
+and his answer on the HAFiscal session's hold, on which six places of the bundle and any push of this branch wait.
