@@ -1,0 +1,83 @@
+# PROTOTYPE, in a scratch folder: the data of HARK's Rosetta Stone that its adapter reads. Written by the
+# sce-wg-1-dev session on 2026-11-06 from the model repository's adapter at af1539c, to test whether the adapter's
+# arguments can leave its code. Every value below is that adapter's; nothing here is a proposal about HARK.
+#
+# The file is in the schemas' strict YAML subset (no tags, booleans, nulls or anchors), so a value that is not a plain
+# number or string is written as the toolkit's own literal, in a string, under `literal`: HARK is Python, so "True",
+# "None", "[None]". `as: array` makes a NumPy array of it.
+#
+# Four kinds of argument, kept apart because they answer different questions:
+#   arguments     what the MODEL says: the member's parameter-file keys, each with HARK's name and HARK's shape for it.
+#                 Nothing here is a setting.
+#   fixed         what the ADAPTER decides, the same for every member: each with its reason.
+#   placeholders  what HARK asks for at construction although the adapter replaces what it would build from it.
+#   settings      what the METHOD reads: the names only; their values at each level are in the ladder file.
+# And two lists of what stays code, by name: what the adapter builds itself and hands HARK, and what it switches off.
+
+stone_data: prototype-1
+toolkit: HARK
+handler:
+  module: HARK.ConsumptionSaving.ConsMarkovModel
+  class: MarkovConsumerType
+  defaults: init_indshk_markov       # the dictionary whose `constructors` entry the adapter starts from
+  extra: {verbose: {literal: "False", why: "no printing"}}
+states: [employed, unemployed]       # the order of HARK's per-state entries
+
+shapes:
+  scalar: "the value itself"
+  per-period-per-state: "a list with one entry for the period, an array with one value per state, the same in each"
+
+arguments:
+  CRRA: {from: crra, shape: scalar}
+  DiscFac: {from: "types[].beta", shape: scalar, note: "one agent per type; the shared code pools the types"}
+  Rfree: {from: return, shape: per-period-per-state}
+  PermGroFac: {from: income.growth, shape: per-period-per-state}
+  LivPrb: {from: survival, shape: per-period-per-state}
+  BoroCnstArt:
+    from: borrowing_constraint
+    shape: scalar
+    in_a_natural_family: {literal: "None", why: "HARK then computes the natural limit itself, from the infima the adapter records on each distribution"}
+
+fixed:
+  cycles: {literal: "0", why: "an infinite horizon"}
+  T_cycle: {literal: "1", why: "one period, repeated"}
+  vFuncBool: {literal: "True", why: "the value function kept: welfare needs it"}
+  CubicBool: {literal: "True", why: "the rule a cubic Hermite whose slopes are the solution's own MPCs"}
+  MrkvPrbsInit: {literal: "[1.0, 0.0]", as: array, why: "a newborn is employed; read by HARK's simulation, which the adapter does not use"}
+  NewbornTransShk: {literal: "True", why: "a newborn's first income an employed draw; likewise the simulation's"}
+  aXtraExtra: {literal: "[None]", why: "no extra gridpoints beyond the ladder's"}
+  T_retire: {literal: "0", why: "NOT IN THE STONE: as the adapter passes it"}
+  T_age: {literal: "None", why: "NOT IN THE STONE: as the adapter passes it"}
+  AgentCount: {literal: "1", why: "NOT IN THE STONE: as the adapter passes it"}
+
+placeholders:
+  PermShkStd: {literal: "[[0.1, 0.1]]", as: array, why: "the stone: a placeholder, HARK's constructor for the income process being switched off"}
+  TranShkStd: {literal: "[[0.1, 0.1]]", as: array, why: "NOT IN THE STONE by name; as PermShkStd"}
+  PermShkCount: {literal: "3", why: "the stone: a placeholder"}
+  TranShkCount: {literal: "3", why: "NOT IN THE STONE by name; as PermShkCount"}
+  UnempPrb: {literal: "[0.0, 0.0]", as: array, why: "the stone: left at zero, the standard consumer's way of stating unemployment not being used"}
+  IncUnemp: {literal: "[0.0, 0.0]", as: array, why: "the stone: left at zero"}
+  UnempPrbRet: {literal: "None", why: "NOT IN THE STONE: as the adapter passes it"}
+  IncUnempRet: {literal: "None", why: "NOT IN THE STONE: as the adapter passes it"}
+
+settings:
+  ladder: ladder.yaml
+  passed: [aXtraMin, aXtraMax, aXtraCount, aXtraNestFac, tolerance]
+
+switched_off:
+  constructors: [MrkvArray, IncShkDstn]
+  why: "HARK otherwise rebuilds the chain at construction and the income process on any update, from its defaults"
+
+built_by_the_adapter:
+  MrkvArray: {routine: "adapter.chain", what: "the nonpersistent chain: both rows (1 - p_zero, p_zero), in a list for the period"}
+  IncShkDstn: {routine: "adapter.income_process", what: "one labeled distribution per state over PermShk and TranShk, on the adapters' shared nodes, each with the stated laws' infima and suprema as its limit"}
+
+read_back:
+  rule: "solution[0].cFunc[0]"
+  value: "solution[0].vFunc[0]"
+  lower_limit: "solution[0].mNrmMin[0]"
+
+asserted_after_the_solve:
+  - {routine: "adapter.solve_type", what: "HARK solved with the adapter's chain and income process, unchanged"}
+  - {routine: "adapter.solve_type", what: "the two states' lower limits are equal"}
+  - {routine: "adapter.solve_type", what: "the two states' rules and values agree", tolerance: 1.0e-12, scale: "relative, floored at one"}

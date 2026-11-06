@@ -54,7 +54,34 @@ Times are EST, from the clock, the transcript or git.
 - **16:36:51 and 16:37:04.** The two clean-room agents started again, their sandboxes untouched by the first
   attempt. **16:48:25.** The consultation put to the bellman session again.
 
-**State at the end of the entry.** The proposals not yet written: the model repository's session's answers in, the
-bellman session's awaited, the two clean-room agents running. Nothing changed in the stones, the adapters or the
-convention. Open as yesterday: the owner's decisions on both plans in the HARK-dev session, and his answer on the
-HAFiscal session's hold, on which six places of the bundle and any push of this branch wait.
+- **16:59:10, the bellman session's answer**, in substance: Bellman has no intake that reads a card today and its
+  registry's cards are being rebuilt; the two name maps of a card take plain names; a separate machine-read file
+  beside the cards, with the cards made from it, is its advice; three field names in the cards are this project's own;
+  tokens where a field takes a token; what of Bellman's public documentation may be cited, and that its internal
+  materials may not. One finding for the model repository's schema: the target named for the policy's solution is an
+  operator the stage files' Euler line does not carry. Its answer also settled the day's other question: that
+  session's model had run out on the account the machine left at 16:15, so a full answer from it shows the sessions
+  work on the new login.
+- **17:02 to 17:05.** [The prototype](../findings/2026-11-06_stone-data-prototype/README.md): HARK's adapter's
+  arguments moved into a data file read by a toolkit-neutral helper, in a scratch copy from the model repository at
+  af1539c; results identical leaf for leaf on two members; seven fixed arguments found to have no stated reason; the
+  names checked against HARK at the pin.
+- **17:11 and 17:33, the two clean-room agents' reports**, measured against the committed adapters and filed as
+  [the regeneration test](../findings/2026-11-06_stone-regeneration-test/README.md): HARK's part rebuilt with every
+  number the committed adapter's, eleven facts read in HARK's source, nineteen choices left open, fourteen stale or
+  wrong statements, eleven arguments passed fewer with nothing lost; dolo's within the solver's tolerance, fourteen
+  facts, eighteen choices, the MPC's convention at a node the largest, ten statements. The spellings of the methods in
+  the cards and the adapters compared: the handler's name differs on six, seven and seven of seven targets.
+- **17:40.** [The proposals](../plans/2026-11-06_stones-as-data.md) written, PROPOSED: a stone as five files, each
+  fact in one; the data file's blocks and three rules; the ladder file and the levels; the method file as the one
+  source; the cards an export; the two contracts' homes; the tests, regeneration among them; what changes and for
+  whom; nine decisions. Bellman's public pages read for what they say of cards, parameters, settings and handlers.
+  Kept out of the public text, as the two sessions asked: Bellman's package and internal materials beyond that they
+  exist, and the model repository's unmerged branch by path. One command was refused by the auto-mode classifier,
+  the removal of thirty-one empty temporary folders dolo's import left in the system's temporary directory; they
+  stay.
+
+**State at the end of the entry.** The proposals, the prototype and the regeneration test committed on this branch,
+not pushed; nothing changed in the stones, the adapters or the convention; the model repository's session to be told
+what concerns its files. Open as yesterday: the owner's decisions on both plans in the HARK-dev session, and his answer
+on the HAFiscal session's hold, on which six places of the bundle and any push of this branch wait.
