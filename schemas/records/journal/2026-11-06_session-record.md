@@ -96,7 +96,14 @@ Times are EST, from the clock, the transcript or git.
   day's measurements read again under it: the clean-room test as the demonstration, the prototype as a road that
   works and is not needed. Nine decisions, revised.
 
-**State at the end of the entry.** The proposals revised and committed on this branch, not pushed; nothing changed in
-the stones, the adapters or the convention; the model repository's session told of the first version and to be told
-of the revision with his decisions. Open as yesterday: the owner's decisions on both plans in the HARK-dev session,
-and his answer on the HAFiscal session's hold, on which six places of the bundle and any push of this branch wait.
+- **18:46:34.** The owner accepts all nine recommendations and asks for the convention's text.
+- **18:46:34 to 18:48:29.** The branch `stone-convention` cut from the fork's main (eb661ed, even with its remote) in a
+  worktree of its own; `rosetta/README.md` rewritten there as the plan has it, a stone written for a competent reader
+  with its desiderata and its realization's record, how it is accepted, and the vocabulary; committed at 359fb78, not
+  merged, not pushed; opened in VS Code for him. [The rulings](../rulings/2026-11-06_hark-decisions.md) record the
+  afternoon's and evening's three.
+
+**State at the end of the entry.** The convention's text drafted on `stone-convention` and awaiting his reading before
+it merges; the proposals ACCEPTED, their execution in the stones and adapters the model repository's session's on his
+word there, to which the acceptance goes; this branch not pushed. Open as yesterday: his decisions on both plans in the
+HARK-dev session, and his answer on the HAFiscal session's hold, on which six places of the bundle and any push wait.

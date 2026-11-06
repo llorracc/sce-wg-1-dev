@@ -1,7 +1,9 @@
 # What a Rosetta Stone holds: desiderata for a competent reader, and the record of each realization
 
-**Status: PROPOSED on 2026-11-06 at 17:40 EST, on the owner's request of 16:01:18; REVISED at 18:45 on his direction
-of 18:36:57.** Nothing here changes a stone, an adapter or the convention. The stones and the adapters are the
+**Status: ACCEPTED on 2026-11-06 at 18:46:34 EST, all nine decisions as recommended; proposed at 17:40 on the owner's
+request of 16:01:18 and revised at 18:45 on his direction of 18:36:57.** The convention's text is drafted on the fork's
+branch `stone-convention`, cut from main, at 359fb78, put to him before it merges; the rest is the model repository's
+session's, on his word there. Nothing here changes a stone, an adapter or the convention. The stones and the adapters are the
 buffer-stock model's repository's, and its session carries out what is adopted, on the owner's word there; the
 convention's text, `rosetta/README.md` on this fork's main and in the series upstream, is this fork's. The model
 repository's session and the bellman session were consulted for the first version, and their answers stand below in
@@ -162,9 +164,10 @@ Nothing in a stone calls a setting a parameter, whatever the toolkit calls it.
 
 ## The order
 
-1. The owner's decisions below.
-2. The convention's text, as a change to `rosetta/README.md` on a branch of this fork, put to him before it merges;
-   the two conventions in the results document with it.
+1. The owner's decisions below: taken at 18:46:34, all nine as recommended.
+2. The convention's text, as a change to `rosetta/README.md` on a branch of this fork, put to him before it merges:
+   drafted at 18:48 on `stone-convention` (359fb78). The two conventions in the family's results document are the
+   model repository's, and go to its session with the rest.
 3. In the model repository, on his word in its session: the method files and the ladders; then each stone's
    realization record from the logs it has, HARK's and dolo's first; the third toolkit's by a reader of its own.
 4. The acceptance run for each stone.
