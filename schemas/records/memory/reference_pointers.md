@@ -101,6 +101,13 @@ metadata:
 - The page "The Restrained Limit", https://claude.ai/artifact/Lp8sHuCW2EoAvqDYfmBcdb: a private claude.ai page,
   published 2026-11-01, drawing the restrained-limit suite's HARK run; its source is
   `findings/2026-11-01_restrained-limit-suite-hark/page/`. Only the owner can open it until he shares it.
+- The page "The Restrained Limit, Three Ways", https://claude.ai/artifact/P5BgKxim7DLg3Tjs1Yn4fM: a private
+  claude.ai page of the Dashboard type, made 2026-11-07 under the account 20x.max.pro.claude@llorracc.org, drawing
+  HARK's, dolo's and QuantEcon EGM's results on the restrained-limit experiment's four members at three levels, from
+  the model repository's run of 2026-11-06. Its data files and page are attached to the artifact; the extraction
+  script and the page's source were sent to the model repository's session for the run's folder, since that
+  repository's run folders are its own and not this fork's. It opens only under that account until shared with
+  the other two; sharing is his, from the page's Share menu.
 - Since 2026-11-04: the buffer-stock model's own repository, https://github.com/llorracc/wg1-buffer-stock (private as
   it begins; its session `jd_wg1-buffer-stock`); the series to the working group's repository, pull requests #14 to
   #20 on https://github.com/econ-ark/sce-wg-1/pulls (the purpose, the apparatus, the two ontologies, the shock laws

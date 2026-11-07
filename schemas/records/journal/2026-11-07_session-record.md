@@ -51,6 +51,27 @@ Times are EST, from the clock, the transcript or git.
   superseded: the explanation goes into the pull request's comments, and the Hermite reason explains the envelope.
   Both replies awaited ([the deferred items](../deferred.md)).
 
+- **12:4x.** The owner asks whether an artifact displays and compares the three toolkits' solutions. None did: the
+  page of 2026-11-01 draws two. He asks for it, and later puts the session into plan mode, so the remaining steps were
+  written as a plan and approved. Built from the model repository's run of 2026-11-06 at 12:42, which holds all three
+  toolkits' results files for the experiment's four members at three levels, verified, with the comparator's report:
+  eight data files of rows taken from the results files (the rules and the MPC at the comparison points, their
+  pairwise differences and the largest of them, the gaps to the restrained rule, the kinks, targets, population and
+  residuals, the comparator's checks, the toolkits as the files describe them, the facts of the run), and a page with
+  member and level filters, three tiles, five charts (the rules, the MPC, pointwise differences, agreement by level,
+  the rungs against ℘) and three tables, every number marked to its source. Published as a Dashboard-type page,
+  "The Restrained Limit, Three Ways", under this session's account ([the references](../memory/reference_pointers.md)),
+  at 12:50. What it makes visible, for the model repository's session to take up: dolo and QuantEcon's code agree with
+  each other far more closely than either does with HARK, by a margin that does not shrink from member to member at
+  the high level, and the toolkits' MPCs differ by more than their consumption levels, by the convention for the slope
+  at a point that is a node. Nothing of the run is committed here: its folders are the model repository's.
+- **12:1x.** HARK-dev reports the grid change's plan, draft issue, a new specification and a pull-request description
+  revised to his words of 12:34:22, checked by relay there: three comment blocks with the reasons, the fast solver in
+  parallel, the benchmarks re-pinned, two new tests including the check that the rule equals the constraint line below
+  the kink, and the wasted computation as the first paragraph. Three of this session's wordings sharpened there: the
+  envelope evaluates the unconstrained function below the kink and always takes the line; the slope that jumps is the
+  consumption function's; the natural limit's reason is the infinite marginal value there.
+
 **State at the end of the entry.** The fork's main pushed, 7a4889f, with the stone convention's revision; [the
 proposals](../plans/2026-11-06_stones-as-data.md) ACCEPTED, their execution in the stones and adapters the model
 repository's session's on his word there; this records branch not pushed, held on the HAFiscal session's open
