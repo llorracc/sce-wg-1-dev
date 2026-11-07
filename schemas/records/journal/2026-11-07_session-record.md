@@ -89,6 +89,17 @@ Times are EST, from the clock, the transcript or git.
   should be built directly without the envelope. The pull request's description now opens by resolving it; the pull
   request itself is the HARK session's, from HARK-dev's specification ([the deferred items](../deferred.md)).
 
+- **13:2x.** The HARK session reports that it committed nothing for the morning's note, having received the
+  superseding message before editing; the explanation goes into the grid pull request's comments, which it builds
+  from HARK-dev's specification on the owner's word typed there. Two corrections to this session's statements: on
+  HARK's main as it stands, the Markov solver's zero-consumption point sits at the binding constraint, not the natural
+  limit, so the first two points are out of order when an artificial constraint binds; it is the adapter's pin, which
+  carries pull request #1858's commit, that moves the point to the natural limit, and that is the code this session
+  read, so a comment on the Markov solver belongs on #1858's branch or after it merges. And the morning's framing is
+  confirmed as revised: a node of the unconstrained function at the cusp does no harm, holding only the slope on its
+  right while the constraint line supplies one on the left; two slopes would be needed only if one interpolant carried
+  the constrained function across the kink, which the lower envelope avoids.
+
 **State at the end of the entry.** The fork's main pushed, 7a4889f, with the stone convention's revision; [the
 proposals](../plans/2026-11-06_stones-as-data.md) ACCEPTED, their execution in the stones and adapters the model
 repository's session's on his word there; this records branch not pushed, held on the HAFiscal session's open
