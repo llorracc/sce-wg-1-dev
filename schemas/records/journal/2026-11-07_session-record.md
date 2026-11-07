@@ -121,7 +121,9 @@ Times are EST, from the clock, the transcript or git.
   a pointer in its instructions, and pushed, so that his other machines can take them up; the rest of that plan is
   another session's. Two fixes went in with them, for a terminal's name on macOS and for finding tmux; the skill now
   says the startup setting has been on since yesterday evening and that a relinked session's title is generated, not
-  its name. The details stay on this machine.
+  its name. The details stay on this machine. By 18:36 the session that owns that repository had done the rest of
+  the plan on his word there: the tool installed by a pull on every machine but one, its two macOS faults fixed, the
+  blind typing shown to work there; checked from here at 18:40 on five machines, every session on this one linked.
 
 **State at the end of the entry.** The fork's main pushed, 7a4889f, with the stone convention's revision; [the
 proposals](../plans/2026-11-06_stones-as-data.md) ACCEPTED, their execution in the stones and adapters the model
