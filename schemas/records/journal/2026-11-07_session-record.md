@@ -30,6 +30,27 @@ Times are EST, from the clock, the transcript or git.
   the pin in both buffer-stock solvers and the kinked-return contrast, and the measurement; its reply is awaited
   ([the deferred items](../deferred.md)). Nothing changed here; this fork holds no HARK code.
 
+- **12:04:55.** The owner asks for the recent work that moves HARK's asset grid to start above the kink rather than
+  above the natural limit where an artificial constraint is tighter, meaning to withdraw it for the reason above.
+  Found by 12:1x: HARK-dev's plan of 2026-11-06 on the asset grid at the artificial constraint, from his words typed in
+  the model repository's session at 13:06:18 that day, with a draft issue and a finding, all untracked there and
+  nothing posted on econ-ark/HARK; the same anchor in the HARK session's unposted continuous-expectation branch and in
+  the redesign plan's grid rule. Told him that the draft keeps HARK's construction: the constraint point becomes a
+  node of the unconstrained function, which is smooth there with one slope, the natural-limit point stays inserted
+  below it, and the kink of the constrained rule is still the lower envelope's, so no Hermite node carries two slopes;
+  HARK-dev had measured the change with the cubic rule.
+- **12:20:28 and 12:29:51.** His two checks, answered from the patch and HARK's main: the kink point is on the
+  unconstrained functions, a = a_Art being the grid's first point before a_Art + aXtraMin; below it there is one point
+  on the functions built on the asset grid, the natural limit, while the value function of m keeps its grid
+  mNrmMin + aXtraGrid, 125 of 300 points below the kink for the restrained member at the low level.
+- **12:34:22.** He accepts the drafted modification and asks for code comments that explain the reasons for the
+  choices, and a pull request that names as its primary reason the wasted computation of the unconstrained functions'
+  fine structure below the constraint, where they are never evaluated. Drafted the comments for the grid, the inserted
+  bottom point and the lower envelope, the fast solver's, the pull request's first paragraph and a test, and sent them
+  with his words to HARK-dev at 12:36 and to the HARK session at 12:37, the latter told that the morning's request is
+  superseded: the explanation goes into the pull request's comments, and the Hermite reason explains the envelope.
+  Both replies awaited ([the deferred items](../deferred.md)).
+
 **State at the end of the entry.** The fork's main pushed, 7a4889f, with the stone convention's revision; [the
 proposals](../plans/2026-11-06_stones-as-data.md) ACCEPTED, their execution in the stones and adapters the model
 repository's session's on his word there; this records branch not pushed, held on the HAFiscal session's open
