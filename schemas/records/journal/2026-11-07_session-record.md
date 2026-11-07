@@ -106,6 +106,15 @@ Times are EST, from the clock, the transcript or git.
   adapter's pin is unchanged ([the routing memory](../memory/feedback_route-hark-work-to-hark-dev.md)). The grid
   pull request, the Markov comment and the morning's explanation are therefore HARK-dev's.
 
+- **15:40.** HARK-dev reports that at 15:03, on the owner's word there, the branches of fifteen pull requests on his
+  HARK fork were force-pushed with the session trailers taken out of their commit messages, every tree unchanged;
+  among them #1858, whose head moved from `a68c5293` to `9cb777f9`, and #1862, from `ddf7ada6` to `2f58e7c9`. It adds
+  that #1862 may be withdrawn, closed with its branch kept, under a proposal to shorten the open list. Checked on the
+  fork at 15:40: the two heads are as reported, and the adapter's tags still resolve, `sce-adapter/2026-10-22` at
+  `03a2c7a1` and `sce-adapter/2026-10-22.2` peeling to `11852805`, so the pin is reachable as before. Nothing here
+  depends on the branches' heads; the pointer to the pull requests and [the deferred item](../deferred.md) on the
+  re-pin now say so. No action was asked or taken.
+
 **State at the end of the entry.** The fork's main pushed, 7a4889f, with the stone convention's revision; [the
 proposals](../plans/2026-11-06_stones-as-data.md) ACCEPTED, their execution in the stones and adapters the model
 repository's session's on his word there; this records branch not pushed, held on the HAFiscal session's open

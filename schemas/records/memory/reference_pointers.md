@@ -11,10 +11,14 @@ metadata:
 - HARK's draft pull requests from the owner's fork that bear on the adapters: econ-ark/HARK#1858 (the Markov solver's
   expectations on the current state's points, and its value function; the HARK adapter's pin, commit `03a2c7a1` on
   llorracc/HARK's branch `markov-exact-expectations`), #1859 (the employment income process for the Markov consumer),
-  #1860 (`NewbornPermShk`), #1862 (the natural limit from the shock laws' recorded infima, stacked on #1858; head
-  `11852805`, the adapter's pin in the fork's #12). The fork's tags `sce-adapter/2026-10-22` (`03a2c7a1`) and
-  `sce-adapter/2026-10-22.2` (`11852805`) keep the pins reachable. Others' open ones: #1848 (cubic interpolation above
-  the grid), #1853 (human wealth in the Markov solver).
+  #1860 (`NewbornPermShk`), #1862 (the natural limit from the shock laws' recorded infima, stacked on #1858; its first
+  commit `11852805` is the adapter's pin since the fork's #12). The fork's tags `sce-adapter/2026-10-22` (`03a2c7a1`)
+  and `sce-adapter/2026-10-22.2` (`11852805`) keep the pins reachable. On 2026-11-07 at 15:03 the branches of fifteen
+  of these pull requests, #1858 and #1862 among them, were rewritten on the owner's word in the HARK-dev session, the
+  session trailers taken out of their commit messages and every tree unchanged, so their heads are new commits
+  (`markov-exact-expectations` at `9cb777f9`, `natural-limit-infimum` at `2f58e7c9`); both tags still resolve, checked
+  on the fork at 15:40. Others' open ones: #1848 (cubic interpolation above the grid), #1853 (human wealth in the
+  Markov solver).
 - Econ-ark's notation registry, `@resources/notation/notation.yml` in econ-ark/econ-ark-tools, with the generated
   `econark-notation.sty`, `notation-math.yml` and `NOTATION.md`: version 1.0.0 on its master once econ-ark-tools' pull
   requests #38 to #44 merged on 2026-10-21, then 2.1.0 (#46), with rows for the schemas' own symbols, and 3.0.0 (#47)
