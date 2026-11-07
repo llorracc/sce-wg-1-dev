@@ -100,8 +100,14 @@ Times are EST, from the clock, the transcript or git.
   right while the constraint line supplies one on the left; two slopes would be needed only if one interpolant carried
   the constrained function across the kink, which the lower envelope avoids.
 
+- **14:2x.** HARK-dev reports that from today it is the one Claude session for HARK, writing the HARK clone as well
+  as HARK-dev, by the owner's choice in the HARK session at 14:10:21 and his confirmation there; the HARK session has
+  stopped, and the session list here no longer shows it. HARK requests go to HARK-dev with his words and stamps; the
+  adapter's pin is unchanged ([the routing memory](../memory/feedback_route-hark-work-to-hark-dev.md)). The grid
+  pull request, the Markov comment and the morning's explanation are therefore HARK-dev's.
+
 **State at the end of the entry.** The fork's main pushed, 7a4889f, with the stone convention's revision; [the
 proposals](../plans/2026-11-06_stones-as-data.md) ACCEPTED, their execution in the stones and adapters the model
 repository's session's on his word there; this records branch not pushed, held on the HAFiscal session's open
 question, on which six places of the handoff bundle also wait. Open as before: his decisions on both plans in the
-HARK-dev session; the convention's revision upstream through #18 or a follow-up; the grid pull request after issue #1871; the HARK session's reply on the note; the filing of the three-toolkit page's source in the model repository.
+HARK-dev session; the convention's revision upstream through #18 or a follow-up; the grid pull request after issue #1871, now HARK-dev's to build on his word there; the filing of the three-toolkit page's source in the model repository.

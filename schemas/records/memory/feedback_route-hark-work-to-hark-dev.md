@@ -1,6 +1,6 @@
 ---
 name: feedback_route-hark-work-to-hark-dev
-description: "A request about HARK's own design belongs to the HARK-dev session; this session states what the harness needs and hands the rest over, saying so first"
+description: "A request about HARK, its design or its code, belongs to the HARK-dev session, since 2026-11-07 the one session for HARK and its clone; this session states what the harness needs and hands the rest over, saying so first"
 metadata:
   type: feedback
 ---
@@ -18,3 +18,9 @@ stale. This session's part is what the harness asks of a toolkit, which the sche
 first lines, write here only what the harness needs of the result, and offer to hand the rest to the HARK-dev session
 by message with his words and their stamps. The same holds for HAFiscal's code and the HAFiscal session. See
 [[feedback_route-matsya-work-to-matsya]] and [[feedback_consult-the-toolkits]].
+
+**Since 2026-11-07, 14:10:21:** the HARK-dev session is the one Claude session for HARK. It writes the HARK clone as
+well as HARK-dev; the separate HARK session has stopped. The owner chose this in the HARK session and confirmed it in
+HARK-dev, which reported it here at 14:2x. So every request about HARK's code, its pull requests and its branches goes
+to HARK-dev, with his words and their stamps, one hop, checked once there. The adapter's pin on the fork's tag is
+unchanged.
