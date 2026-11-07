@@ -82,8 +82,15 @@ Times are EST, from the clock, the transcript or git.
   owner's word there, its run folders being outside its git. My drafted wording of the slope convention for the hub
   stands, it says, as a statement of what the results files report.
 
+- **13:19:00.** HARK-dev reports the grid issue posted on econ-ark/HARK as #1871, from that session as llorracc on
+  the owner's word typed there, with two additions he asked for: why HARK builds the unconstrained function and takes
+  the minimum, the cubic Hermite rule's two derivatives at a kink not sharing one node, a rationale the piecewise
+  linear rule lacks though it follows the same procedure; and a question to the maintainers whether the linear rule
+  should be built directly without the envelope. The pull request's description now opens by resolving it; the pull
+  request itself is the HARK session's, from HARK-dev's specification ([the deferred items](../deferred.md)).
+
 **State at the end of the entry.** The fork's main pushed, 7a4889f, with the stone convention's revision; [the
 proposals](../plans/2026-11-06_stones-as-data.md) ACCEPTED, their execution in the stones and adapters the model
 repository's session's on his word there; this records branch not pushed, held on the HAFiscal session's open
 question, on which six places of the handoff bundle also wait. Open as before: his decisions on both plans in the
-HARK-dev session; the convention's revision upstream through #18 or a follow-up.
+HARK-dev session; the convention's revision upstream through #18 or a follow-up; the grid pull request after issue #1871; the HARK session's reply on the note; the filing of the three-toolkit page's source in the model repository.
