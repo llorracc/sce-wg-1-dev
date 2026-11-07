@@ -2,7 +2,8 @@
 
 **Status: ACCEPTED on 2026-11-06 at 18:46:34 EST, all nine decisions as recommended; proposed at 17:40 on the owner's
 request of 16:01:18 and revised at 18:45 on his direction of 18:36:57.** The convention's text was drafted on the fork's
-branch `stone-convention` at 359fb78 and merged to the fork's main on his word at 19:13 (7a4889f), not yet pushed; the
+branch `stone-convention` at 359fb78, merged to the fork's main on his word at 19:13 (7a4889f) and pushed on his word of
+08:49:35 on 2026-11-07; the
 rest is the model repository's session's, on his word there. Nothing here changes a stone, an adapter or the convention. The stones and the adapters are the
 buffer-stock model's repository's, and its session carries out what is adopted, on the owner's word there; the
 convention's text, `rosetta/README.md` on this fork's main and in the series upstream, is this fork's. The model
@@ -166,7 +167,8 @@ Nothing in a stone calls a setting a parameter, whatever the toolkit calls it.
 
 1. The owner's decisions below: taken at 18:46:34, all nine as recommended.
 2. The convention's text, as a change to `rosetta/README.md` on a branch of this fork, put to him before it merges:
-   drafted at 18:48 on `stone-convention` (359fb78) and merged to main at 19:13 (7a4889f), not yet pushed. The two
+   drafted at 18:48 on `stone-convention` (359fb78), merged to main at 19:13 (7a4889f) and pushed to the fork's remote
+   on his word of 08:49:35 on 2026-11-07. The two
    conventions in the family's results document are the model repository's, and went to its session with the rest.
 3. In the model repository, on his word in its session: the method files and the ladders; then each stone's
    realization record from the logs it has, HARK's and dolo's first; the third toolkit's by a reader of its own.

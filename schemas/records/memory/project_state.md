@@ -49,9 +49,13 @@ metadata:
   is asking him whether that reaches the HARK session's independent measurement, which the survey's committed bullet
   carries; until his answer this branch is not pushed ([the deferred items](../deferred.md)).
 - **The Rosetta Stones as data, 2026-11-06.** Asked at 10:46:02 whether the stones hold what builds the adapters and
-  answered no; he agreed at 16:01:18 and asked for proposals. [The proposals](../plans/2026-11-06_stones-as-data.md)
-  are PROPOSED with a prototype and a clean-room regeneration test behind them; the stones and adapters are the model
-  repository's session's to change, on his word there; the convention's text is this fork's.
+  answered no; he agreed at 16:01:18 and asked for proposals. [The proposals](../plans/2026-11-06_stones-as-data.md),
+  revised at 18:45 to his direction that capable AI sessions operate the system, are ACCEPTED (18:46:34, all nine
+  decisions): a stone states desiderata for a competent reader and records each realization, with acceptance by
+  outcome. The convention's text, `rosetta/README.md`, was drafted on `stone-convention`, merged to the fork's main
+  (7a4889f) and pushed on his word on 2026-11-07; its revision reaches upstream through the open #18 or a follow-up.
+  The stones and adapters are the model repository's session's to change, on his word there, with the prototype and
+  the clean-room regeneration test as its evidence.
 - **Open for the owner:** the level names (coarse, default, fine proposed); whether a record's `ci` block should
   carry fields for the attempt, the repository and the workflow's name beyond the provider, the identifier and the
   attempt's address, recommended not; the comparator's pull request upstream;
