@@ -115,6 +115,14 @@ Times are EST, from the clock, the transcript or git.
   depends on the branches' heads; the pointer to the pull requests and [the deferred item](../deferred.md) on the
   re-pin now say so. No action was asked or taken.
 
+- **18:07 to 18:12, outside this project.** The owner has the brief written for this session in another of his
+  sessions read and done: the tool and the skill written yesterday for the sessions' Remote Control, untracked until
+  now in his configuration repository on this machine, are committed there with a memory of what was established and
+  a pointer in its instructions, and pushed, so that his other machines can take them up; the rest of that plan is
+  another session's. Two fixes went in with them, for a terminal's name on macOS and for finding tmux; the skill now
+  says the startup setting has been on since yesterday evening and that a relinked session's title is generated, not
+  its name. The details stay on this machine.
+
 **State at the end of the entry.** The fork's main pushed, 7a4889f, with the stone convention's revision; [the
 proposals](../plans/2026-11-06_stones-as-data.md) ACCEPTED, their execution in the stones and adapters the model
 repository's session's on his word there; this records branch not pushed, held on the HAFiscal session's open
