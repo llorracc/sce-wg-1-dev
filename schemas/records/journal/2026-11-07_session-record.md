@@ -72,6 +72,16 @@ Times are EST, from the clock, the transcript or git.
   envelope evaluates the unconstrained function below the kink and always takes the line; the slope that jumps is the
   consumption function's; the natural limit's reason is the infinite marginal value there.
 
+- **About 13:00.** The model repository's session reports that the page's extraction, rerun there, reproduces the
+  eight attached files byte for byte; that one sentence of the page's prose held for dolo alone, the slope convention
+  at a node, since every comparison point is a node of dolo's uniform grid and of no other toolkit's; that the MPC gaps
+  come from two toolkits reporting a segment's slope of a piecewise-linear rule while HARK reports its cubic's
+  derivative, widest just above the kink; and that HARK's gap in consumption sits at the grid's sparse top, the cubic
+  rule against the linear ones on the same gridpoints, not near the kink. The page's sentence and a tile's caption
+  were corrected at 12:59 and the source with them; that session keeps the source for its finding's folder on the
+  owner's word there, its run folders being outside its git. My drafted wording of the slope convention for the hub
+  stands, it says, as a statement of what the results files report.
+
 **State at the end of the entry.** The fork's main pushed, 7a4889f, with the stone convention's revision; [the
 proposals](../plans/2026-11-06_stones-as-data.md) ACCEPTED, their execution in the stones and adapters the model
 repository's session's on his word there; this records branch not pushed, held on the HAFiscal session's open
