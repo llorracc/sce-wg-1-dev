@@ -103,7 +103,11 @@ Times are EST, from the clock, the transcript or git.
   merged, not pushed; opened in VS Code for him. [The rulings](../rulings/2026-11-06_hark-decisions.md) record the
   afternoon's and evening's three.
 
-**State at the end of the entry.** The convention's text drafted on `stone-convention` and awaiting his reading before
-it merges; the proposals ACCEPTED, their execution in the stones and adapters the model repository's session's on his
-word there, to which the acceptance goes; this branch not pushed. Open as yesterday: his decisions on both plans in the
-HARK-dev session, and his answer on the HAFiscal session's hold, on which six places of the bundle and any push wait.
+- **19:13.** On the owner's word, `stone-convention` merged into the fork's main with a merge commit (7a4889f); main
+  stands two commits ahead of its remote, not pushed. The open upstream pull request #18 carries the stone
+  convention, so the revision reaches it as a further commit on its branch or a pull request after it.
+
+**State at the end of the entry.** The convention's revision on the fork's main, not pushed; the proposals ACCEPTED,
+their execution in the stones and adapters the model repository's session's on his word there, which has his words;
+this records branch not pushed. Open as yesterday: his decisions on both plans in the HARK-dev session, and his answer
+on the HAFiscal session's hold, on which six places of the bundle and any push of this branch wait.
