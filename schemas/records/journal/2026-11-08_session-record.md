@@ -24,6 +24,12 @@ Times are EST, from the clock, the transcript or git.
   One design point told to that session: the comparator's `falls_with_level` is strict, so a closed form whose files
   do not change with the level cannot pass a levels check, and the convergence belongs in a toolkits check or in the
   reference. Nothing changed in this repository's schemas or in the core.
+- **17:31.** The model repository's session reports that all five answers are in the design it puts to the owner
+  this evening, taken as given: the core imported at 7679b488 and never copied; a family checker of the repository's
+  own; the family `perfect-foresight/1` and the ontology's two terms; the closed form as each member's pinned
+  reference with its errors at round-off, and one check comparing toolkits across levels; the core's test model as
+  the skeleton; the images decision flagged as due; the anchor-check fault left to this session to propose. The
+  name is put to him with the precedent `wg1-perfect-foresight` beside the one he typed, his to choose.
 
 **State at the end of the entry.** As at the end of the journal of 2026-11-07: the fork's main at 7a4889f, pushed; this
 records branch not pushed, held on the HAFiscal session's open question; the model repository's session designing the
