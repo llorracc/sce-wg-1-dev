@@ -64,7 +64,19 @@ Times are EST, from the clock, the transcript or git.
   changed on the fork's main. The records: [the pointers](../memory/reference_pointers.md), [the routing
   memory](../memory/feedback_route-matsya-work-to-matsya.md), [the deferred items](../deferred.md) and [the
   state](../memory/project_state.md) say bellman-dev where they said bellman.
+- **10:5x, the model repository's session's answer.** Its findings agree, with two facts from its side. On the two
+  families' stage files under bellman-dev's main of this morning, methods files in the new form bind, `!egm` at the
+  policy builder with its handler and the method's three lines, `!Linear` at the rule's evaluate place and
+  `!quadrature` at the expectation, and the compiled pieces of the three builders that QuantEcon's adapter reads are
+  identical, digest for digest, to those at the earlier pin, 13 of 13 and 14 of 14, the adapter's suite passing as
+  at the pin: the hub and the kernels are unchanged, and only the methods file's form and the pin move. Its pin now
+  points at bellman-dev's main of today and its method files are in the new form, in its working tree pending the
+  owner's word there, with a finding of its own on the day. And the targets' move into Bellman's places, the policy
+  builder for the solution, its evaluate place for the rule's representation, the value's evaluate place and the
+  expectation, has been a step of that repository's plan for the Bellman substrate, open with the owner since
+  2026-11-07; this session's first proposal is that plan's steps three and five asked again. So the question is one,
+  put to him in two places: whichever session he answers in tells the other the ruling's time and substance, and
+  the other brings its documents into line without asking him twice.
 
 **State at the end of the entry.** The fork's main at 7a4889f, pushed; this records branch not pushed, held on the
-HAFiscal session's open question; the three proposals above with the owner; the model repository's session told of the
-places; the second model repository's design and name his to settle in that session.
+HAFiscal session's open question; the three proposals above with the owner, the first also open as the model repository's plan; the second model repository's design and name his to settle in that session.
