@@ -70,13 +70,16 @@ Times are EST, from the clock, the transcript or git.
   `!quadrature` at the expectation, and the compiled pieces of the three builders that QuantEcon's adapter reads are
   identical, digest for digest, to those at the earlier pin, 13 of 13 and 14 of 14, the adapter's suite passing as
   at the pin: the hub and the kernels are unchanged, and only the methods file's form and the pin move. Its pin now
-  points at bellman-dev's main of today and its method files are in the new form, in its working tree pending the
-  owner's word there, with a finding of its own on the day. And the targets' move into Bellman's places, the policy
+  points at bellman-dev's main of today and its method files are in the new form, with a finding of its own on the
+  day, committed and pushed on his word there within the hour (below). And the targets' move into Bellman's places, the policy
   builder for the solution, its evaluate place for the rule's representation, the value's evaluate place and the
   expectation, has been a step of that repository's plan for the Bellman substrate, open with the owner since
   2026-11-07; this session's first proposal is that plan's steps three and five asked again. So the question is one,
   put to him in two places: whichever session he answers in tells the other the ruling's time and substance, and
   the other brings its documents into line without asking him twice.
+- **11:01:29, in the model repository's session; reported here at 11:0x.** On the owner's word typed there, that
+  repository's move is committed and pushed on its working branch: QuantEcon's adapter pinned to bellman-dev's main of
+  today, the method files as `.bl` additions, and its finding on the day. Nothing asked of this session.
 
 **State at the end of the entry.** The fork's main at 7a4889f, pushed; this records branch not pushed, held on the
 HAFiscal session's open question; the three proposals above with the owner, the first also open as the model repository's plan; the second model repository's design and name his to settle in that session.
