@@ -47,11 +47,16 @@ metadata:
 - Bellman-SYM: the stage files here were elaborated and calibrated by the bellman session under Bellman at its repository
   head and under the Matsya service's installed version; the repository and its documentation site were not public on
   2026-10-18, nor on 2026-10-22, so its pages were cited by title, and since 2026-10-22 its rules are stated as the
-  schemas' own.
+  schemas' own. Since 2026-11-09, on the owner's word, Bellman is read in `bellman-dev`, the development repository,
+  and consulted through the bellman-dev session; `bellman` is its public export. Both, and `bellman-ark`, answer an
+  unauthenticated request with 404 that morning and are treated as private. The documentation is public at
+  https://bellman.io/ since the evening of 2026-11-08 (its changelog at https://bellman.io/changelog/; the earlier
+  address under econ-ark's GitHub pages redirects there). The two stage files elaborate unchanged under the package
+  of 2026-11-09, specification 0.7 included ([the journal](../journal/2026-11-09_session-record.md)).
 - Matsya: the design review of 2026-10-18 ran as four questions in one session and one stage-file question in another; the
   client is `bellman-matsya`. Its four questions-only sessions on the ontology of probability distributions ran from the
   bellman session on 2026-10-19; their answers are kept outside this repository, and the findings of that day hold what
-  they say.
+  they say. Since 2026-11-09 a consultation goes through the bellman-dev session.
 - The buffer-stock benchmark `bst_bench` lives in HAFiscal-Latest, destined for its own econ-ark repository; its emitter of
   results files in this schema's form is the HAFiscal-Latest session's.
 - The ontology of buffer-stock models' sources, pinned on 2026-10-31:

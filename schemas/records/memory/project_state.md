@@ -367,8 +367,8 @@ no validator, checker, member or adapter:
 - in the HARK session: #1858 and #1862, which stay drafts; the tags on HARK's fork at the adapter's two pins,
   `sce-adapter/2026-10-22` and `sce-adapter/2026-10-22.2`, were made on 2026-10-22;
 - what goes to the working group's repository, and when;
-- in the bellman session: nothing pending from the owner; Bellman's truncated lognormal and the uniform comparator merged
-  on 2026-10-22, and the parameter-condition defect is filed;
+- in the bellman-dev session, the bellman session's successor since 2026-11-09: nothing pending from the owner; Bellman's
+  truncated lognormal and the uniform comparator merged on 2026-10-22, and the parameter-condition defect is filed;
 - in the bellman-ark session: the three changes asked of Bellman on 2026-10-31, drafted on 2026-11-03 (a message to its
   maintainer on the Matsya service's lag behind the language, a pull request on the typography of fields and
   functions, an issue on Γ in two senses), each waiting on his approval there and his word on who sends or posts it;
@@ -400,8 +400,12 @@ See [`../deferred.md`](../deferred.md).
 - **The econ-ark-tools session** keeps econ-ark's notation registry (version 8.0.0 on its master since 2026-10-22); no
   session lives in its clone on this machine, whose branch `notation-v8.1-spic` is superseded, to delete. **The NARK
   session** keeps econ-ark's naming conventions.
-- **The bellman session** holds Bellman's draft pull requests for the truncated lognormal and the uniform, and runs
-  Matsya; its consultation of 2026-10-31 on the ontology is in its on-box record.
+- **The bellman-dev session**, in the clone of `bellman-dev`, the development repository, is since 2026-11-09 the
+  session Bellman is read in and consulted through, on the owner's word; the bellman session before it held Bellman's
+  draft pull requests for the truncated lognormal and the uniform and ran Matsya, and its consultation of 2026-10-31
+  on the ontology is in its on-box record. Bellman's changes to 2026-11-09 are reviewed in
+  [the journal](../journal/2026-11-09_session-record.md): the stage files, the laws and the concepts stand; the
+  methods file and the public site are with the owner.
 - **The bellman-ark session** on this machine, since 2026-11-03 the only writer of Bellman's records, holds the three
   drafted changes.
 - **The community-library session** stopped the QuantEcon module on the evening of 2026-10-21; its branches stay local.

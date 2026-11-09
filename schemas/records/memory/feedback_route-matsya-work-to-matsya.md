@@ -12,6 +12,8 @@ asked why the work had not gone to Matsya. The gathering was needed, but the sub
 **Why:** the owner decides who does a piece of work, and a substitution made without asking reads as the request ignored;
 doing the evaluation here would also anchor Matsya's read on this session's.
 
-**How to apply:** route work assigned to Matsya through the bellman session, which runs it on the owner's word there. When
+**How to apply:** route work assigned to Matsya through the bellman-dev session (the bellman session until 2026-11-09,
+when the owner had Bellman's users move to `bellman-dev`, the development repository), which runs it on the owner's word
+there. When
 part of it is beyond Matsya (the web, material outside its index), say so in the reply's first lines and ask before doing
 that part here. Give Matsya material, not conclusions. See [[feedback_matsya-answers-are-weighed]].
