@@ -199,6 +199,14 @@ Times are EST, from the clock, the transcript or git.
     vocabulary: places for targets, Bellman's method words for tags, and a stone's method file as the pair, the
     addition for what Bellman's language states and the YAML rows for the rest. Proposed to the owner, to be drafted
     on a branch and merged and pushed on his word here.
+- **16:05, REMARK's six pull requests merged; reported here and checked on GitHub at 16:07.** On the owner's word in
+  the REMARK session, #196 to #201 are merged into econ-ark/REMARK's main, whose tree is the tested one. Main now
+  holds the execution-record schema, with no rule different from the core's fourth draft, compared again here; the
+  build and the execution that write records; environments in subdirectories; the mark for a private entry; and the
+  status table that finds a reader by a unit's kind. Its package is at version 0.2.0 and no release is tagged, so
+  there is still nothing for the core to pin: the registry schema's reference to REMARK's schema and the core's use
+  of REMARK's records functions wait on a tag and on the owner's word here. Open with him as before: the rule on a
+  failed build's image, in both copies or neither, and the name of the working group's kind.
 
 **State at the end of the entry.** As at the end of the journal of 2026-11-09: the fork's main at 7a4889f, pushed; this
-records branch not pushed, held on the HAFiscal session's open question; of the two questions above, the stone convention's answered by the owner in the model repository's session, revised by him at 15:03:31, its amendment on the fork's main waiting on his word here, the ontology's statement still with him; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's six updates open as pull requests #196 to #201, unmerged and untagged, the reader for its status table proposed to the owner here; four changes to the core and one to the record schema's rule on the image proposed, none made.
+records branch not pushed, held on the HAFiscal session's open question; of the two questions above, the stone convention's answered by the owner in the model repository's session, revised by him at 15:03:31, its amendment on the fork's main waiting on his word here, the ontology's statement still with him; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's six updates merged into its main and not yet tagged, the reader for its status table proposed to the owner here; four changes to the core and one to the record schema's rule on the image proposed, none made.
