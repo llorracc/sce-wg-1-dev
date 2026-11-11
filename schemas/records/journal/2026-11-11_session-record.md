@@ -131,6 +131,15 @@ Times are EST, from the clock, the transcript or git.
   core's jobs from REMARK's execution is that it runs a shell script where the contract runs an adapter, the fifth of
   the updates. It reports that the thirty records committed in the model repository validate against REMARK's
   schema as they are.
+- **13:56, REMARK's four branches posted; reported here and checked on GitHub at 13:59.** On the owner's word typed
+  in the REMARK session, the four branches are stacked pull requests on econ-ark/REMARK, all open:
+  [#196](https://github.com/econ-ark/REMARK/pull/196), execution in a container without a terminal;
+  [#197](https://github.com/econ-ark/REMARK/pull/197), the tool as an importable package with tests;
+  [#198](https://github.com/econ-ark/REMARK/pull/198), an execution record for every build and execution, with the
+  schema that is the core's fourth draft; and [#199](https://github.com/econ-ark/REMARK/pull/199), environments kept
+  in subdirectories and the options a runner needs. The checks pass on the last three. Nothing is merged or tagged,
+  so the core has no tag to pin and keeps its own records and run. The rule on a failed build's image is unchanged
+  in both copies, waiting on his word.
 
 **State at the end of the entry.** As at the end of the journal of 2026-11-09: the fork's main at 7a4889f, pushed; this
-records branch not pushed, held on the HAFiscal session's open question; of the two questions above, the stone convention's answered by the owner in the model repository's session and its amendment waiting on that session's report and his word here, the ontology's statement still with him; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's records branch local and unpushed in its session; four changes to the core and one to the record schema's rule on the image proposed, none made.
+records branch not pushed, held on the HAFiscal session's open question; of the two questions above, the stone convention's answered by the owner in the model repository's session and its amendment waiting on that session's report and his word here, the ontology's statement still with him; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's four updates open as pull requests #196 to #199, unmerged and untagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
