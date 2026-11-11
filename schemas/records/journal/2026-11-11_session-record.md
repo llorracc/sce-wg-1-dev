@@ -179,6 +179,26 @@ Times are EST, from the clock, the transcript or git.
   catalog entries marked private, and [#201](https://github.com/econ-ark/REMARK/pull/201), the status table. Their
   checks pass; #196 to #199 are approved and unmerged, these two not yet approved. This session's note is adopted in
   #201: a run that read a private entry says so at the top of the table, in the data and on the terminal.
+- **15:03:31, the owner's ruling on the method files revised, in the model repository's session; reported here and
+  checked by 15:20.** Typed there, and found by the relay check: what a Bellman methods file cannot hold stays in
+  the YAML file, and whatever it can hold leaves the YAML file. This replaces his answer of 12:13:41 that the one
+  replaces the other: each toolkit has both, and each part is stated in exactly one. As that session reports, and
+  as its working tree shows, uncommitted: a methods addition for each toolkit and family, six files beside the
+  adapters, each binding under Bellman's package at its pin; the solution method at the policy builder, the rule's
+  representation at its evaluate place, the expectation, the histogram at the arrival builder, where the entry of
+  2026-11-09 named another builder by inference; a place whose method Bellman has no word for, HARK's cubic rule for
+  one, carrying its handler alone; no grid typed and no setting declared, the settings staying the toolkit's own in
+  its ladder. A run's YAML record keeps the rows an addition cannot hold, the population's distribution, the
+  diagnostics' expectation and a value a toolkit does not compute, with a pointer to the addition and its hash.
+  Two consequences here:
+  - **The core need not change for the methods file.** The YAML record is still written, listed among a job's
+    outputs and hashed, and its hash now moves with the addition's. The proposal of 13:31 to the owner is
+    withdrawn; listing the addition among the outputs would be a refinement.
+  - **The convention's amendment has what it waited for.** On the fork's main it touches the second desideratum of
+    the stone convention and its workflow line, one word of the apparatus document, and three entries of the
+    vocabulary: places for targets, Bellman's method words for tags, and a stone's method file as the pair, the
+    addition for what Bellman's language states and the YAML rows for the rest. Proposed to the owner, to be drafted
+    on a branch and merged and pushed on his word here.
 
 **State at the end of the entry.** As at the end of the journal of 2026-11-09: the fork's main at 7a4889f, pushed; this
-records branch not pushed, held on the HAFiscal session's open question; of the two questions above, the stone convention's answered by the owner in the model repository's session and its amendment waiting on that session's report and his word here, the ontology's statement still with him; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's six updates open as pull requests #196 to #201, unmerged and untagged, the reader for its status table proposed to the owner here; four changes to the core and one to the record schema's rule on the image proposed, none made.
+records branch not pushed, held on the HAFiscal session's open question; of the two questions above, the stone convention's answered by the owner in the model repository's session, revised by him at 15:03:31, its amendment on the fork's main waiting on his word here, the ontology's statement still with him; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's six updates open as pull requests #196 to #201, unmerged and untagged, the reader for its status table proposed to the owner here; four changes to the core and one to the record schema's rule on the image proposed, none made.
