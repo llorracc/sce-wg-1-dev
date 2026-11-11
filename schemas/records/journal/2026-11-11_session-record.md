@@ -41,6 +41,24 @@ Times are EST, from the clock, the transcript or git.
     with a site that honors a tag and a state before publication.
   - **To avoid:** a status table edited by hand, floating branches, any score, rank or bare timing, silent skips,
     a second record format, a copy of the core, and a model's numbers in a public catalog before he publishes them.
+- **A second round from that session, answered by 13:05.** It reports that the three sessions it asked, this one, the
+  model repository's and the REMARK session, converge: the catalog of pointers, built with REMARK's standard and
+  tools; the model repository as the unit; a replication a cell derived from the registry file and the committed
+  records, nothing kept by hand and nothing run again; the catalog a separate private root, a model entering
+  REMARK's public catalog when the owner publishes it. Three points put for objection, answered so:
+  - **The pointer** holds the remote, the title and a pin and nothing else: agreed, the pin resolving to a commit,
+    never a branch, and the table printing the commit read.
+  - **The reader** of a comparison supplied by the core, found by a kind the unit declares in its REMARK metadata
+    file: agreed, with two notes. REMARK's standard requires that file only from its second tier, so the kind needs
+    a home at the first. And a reader in the core is a change to the core, to be proposed to the owner before it is
+    made ([the deferred items](../deferred.md)); it must read records written under earlier commits of the core.
+  - **The run of record**, named by the model repository in one committed file: amended. A run is a folder for one
+    experiment holding one record for each toolkit, member and level, so the file maps an experiment, a toolkit and
+    a mode to a run folder, not a cell to one entry; the run is of a clean tree and reproduced, as [the execution
+    records' document](https://github.com/llorracc/sce-wg-1-dev/blob/7a4889f6fc69f266b5892f9de59cf3ad13aa30a1/schemas/execution-record.md)
+    requires of a finding; and the reader says when a run's experiment hash is no longer the current one, not
+    only when a newer run exists.
+  Nothing changed here. The design is that session's to put to the owner.
 
 **State at the end of the entry.** As at the end of the journal of 2026-11-09: the fork's main at 7a4889f, pushed; this
 records branch not pushed, held on the HAFiscal session's open question; the two questions above with the owner; the registry for replications in design in his bellman-dev session on another machine, with this session's answer.
