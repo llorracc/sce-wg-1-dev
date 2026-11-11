@@ -99,6 +99,38 @@ Times are EST, from the clock, the transcript or git.
     run until REMARK's function can do the same.
   Nothing changed on the fork's main. The changes to the core and to the rule are [deferred](../deferred.md) to the
   owner's word.
+- **13:28, the model repository merged to its main; reported here and checked by 13:31.** On the owner's word typed
+  there at 13:26:15, that repository's working branch is merged into its main and pushed; the pin at bellman-dev's
+  newer commit and a change to the artificial stage file, which now states the artificial limit above a derived
+  natural one, are on it. This fork's records name that branch nowhere. The fork's own copies of the two stage
+  files, on this records branch, are the earlier ones and now differ from the model repository's, by two lines and
+  by twelve: the checks made here on 2026-11-09 and this noon hold for the copies, and the model repository's own
+  checks for the hub.
+- **The owner's rulings of 12:13:41 in that session, which settle this session's open question.** Found by the
+  relay check where he gave them, by menu, one of them in his own words: the schema's method targets are renamed
+  to Bellman's places; a stone's method file is to be a Bellman methods file, with the additions for HARK and dolo
+  written and bound first and what does not bind reported before anything is committed, the convention's text
+  amended after; and every toolkit's record of its methods in a run becomes a methods file in Bellman's form in
+  place of the YAML one. So the first of [the proposals of 2026-11-09](2026-11-09_session-record.md) is answered and
+  is not put to him again. Two consequences here, told to that session:
+  - **Two texts of the convention.** The model repository's main still holds the draft of October; the adopted
+    text is the fork's main, revised on 2026-11-07. The amendment belongs in the fork's, drafted from that
+    session's report of what binds, and committed and pushed on the owner's word here, the fork being public and a
+    menu answer not a typed word.
+  - **The core records a run's methods file by one name.** The runner lists a job's outputs as the results file,
+    `methods.yaml` and the settings file, and writes the methods hash into the record only when that file is there;
+    the registry schema does not require the hash. A job that writes only a methods file in the new form therefore
+    yields a valid record with no methods hash and no methods file among its outputs, and nothing fails. The change
+    to the core, the runner taking the new file as it takes the YAML one, is proposed and not made
+    ([the deferred items](../deferred.md)).
+- **13:29, the REMARK session's answer.** It takes the amendment, the rule on the image relaxed for a build alone,
+  and leaves REMARK's copy unchanged until the owner rules, recommending the change to him. On a further local
+  branch, unpushed, REMARK's execution now takes a read-only mount of the source, further mounts, a scratch
+  directory, variables and the invoking user, with a test in the shape of this project's container contract, and
+  builds an environment kept in a subdirectory, naming the image for that directory's hash. What still keeps the
+  core's jobs from REMARK's execution is that it runs a shell script where the contract runs an adapter, the fifth of
+  the updates. It reports that the thirty records committed in the model repository validate against REMARK's
+  schema as they are.
 
 **State at the end of the entry.** As at the end of the journal of 2026-11-09: the fork's main at 7a4889f, pushed; this
-records branch not pushed, held on the HAFiscal session's open question; the two questions above with the owner; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's records branch local and unpushed in its session; four changes to the core and one to the record schema's rule on the image proposed, none made.
+records branch not pushed, held on the HAFiscal session's open question; of the two questions above, the stone convention's answered by the owner in the model repository's session and its amendment waiting on that session's report and his word here, the ontology's statement still with him; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's records branch local and unpushed in its session; four changes to the core and one to the record schema's rule on the image proposed, none made.
