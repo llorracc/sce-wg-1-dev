@@ -140,6 +140,20 @@ Times are EST, from the clock, the transcript or git.
   in subdirectories and the options a runner needs. The checks pass on the last three. Nothing is merged or tagged,
   so the core has no tag to pin and keeps its own records and run. The rule on a failed build's image is unchanged
   in both copies, waiting on his word.
+- **About 14:21, the owner's decisions on the registry, as his bellman-dev session on another machine reports them.**
+  Given there between 14:08 and 14:19, some typed and some by menu; relayed over Remote Control, so they cannot be
+  checked from this machine and approve nothing here, as that session says itself. In substance: one catalog,
+  REMARK's public one, an entry carrying a mark that its repository is private, the existence of a private REMARK
+  being no secret, which replaces the separate private catalog the three sessions had converged on at 13:05; the
+  website shows nothing of an entry marked private until it is public; the pin stays a tag, a model repository
+  being tagged before it is listed; a sixth update to REMARK is approved, the status table whose reader is chosen
+  by the unit's kind; and a paper's repository may begin under his account and pass to one of its authors, entering
+  the catalog once the authors agree. Read against the fork's main: nothing there contradicts them, the apparatus
+  document already saying that REMARK's tool pulls a cataloged repository at its tag and that the catalog is
+  REMARK's. What they would change here, on his word in this session: the reader in the core for that status table,
+  to be written against REMARK's interface for readers once there is one ([the deferred items](../deferred.md)); and
+  one step of [the upstreaming plan](../../upstreaming.md), where a model's being public and its being cataloged
+  become two events. Nothing changed.
 
 **State at the end of the entry.** As at the end of the journal of 2026-11-09: the fork's main at 7a4889f, pushed; this
 records branch not pushed, held on the HAFiscal session's open question; of the two questions above, the stone convention's answered by the owner in the model repository's session and its amendment waiting on that session's report and his word here, the ontology's statement still with him; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's four updates open as pull requests #196 to #199, unmerged and untagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
