@@ -174,6 +174,11 @@ Times are EST, from the clock, the transcript or git.
     published by habit, as his ruling that the site show nothing of a private entry requires.
   The reader in the core is proposed to the owner in this session, with the kind's name his to choose, and not
   written ([the deferred items](../deferred.md)).
+- **Reported at 14:35 and checked on GitHub then.** On the owner's word typed in the REMARK session, its two further
+  branches are pull requests on econ-ark/REMARK, stacked on the four: [#200](https://github.com/econ-ark/REMARK/pull/200),
+  catalog entries marked private, and [#201](https://github.com/econ-ark/REMARK/pull/201), the status table. Their
+  checks pass; #196 to #199 are approved and unmerged, these two not yet approved. This session's note is adopted in
+  #201: a run that read a private entry says so at the top of the table, in the data and on the terminal.
 
 **State at the end of the entry.** As at the end of the journal of 2026-11-09: the fork's main at 7a4889f, pushed; this
-records branch not pushed, held on the HAFiscal session's open question; of the two questions above, the stone convention's answered by the owner in the model repository's session and its amendment waiting on that session's report and his word here, the ontology's statement still with him; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's four updates open as pull requests #196 to #199, unmerged and untagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
+records branch not pushed, held on the HAFiscal session's open question; of the two questions above, the stone convention's answered by the owner in the model repository's session and its amendment waiting on that session's report and his word here, the ontology's statement still with him; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's six updates open as pull requests #196 to #201, unmerged and untagged, the reader for its status table proposed to the owner here; four changes to the core and one to the record schema's rule on the image proposed, none made.
