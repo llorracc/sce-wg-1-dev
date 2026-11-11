@@ -141,8 +141,9 @@ Times are EST, from the clock, the transcript or git.
   so the core has no tag to pin and keeps its own records and run. The rule on a failed build's image is unchanged
   in both copies, waiting on his word.
 - **About 14:21, the owner's decisions on the registry, as his bellman-dev session on another machine reports them.**
-  Given there between 14:08 and 14:19, some typed and some by menu; relayed over Remote Control, so they cannot be
-  checked from this machine and approve nothing here, as that session says itself. In substance: one catalog,
+  Given there between 14:08 and 14:19, some typed and some by menu; relayed over Remote Control, so they could not be
+  checked from this machine when they came and approve nothing here, as that session says itself; he confirmed them
+  at 14:22:34 in the REMARK session on this machine (below). In substance: one catalog,
   REMARK's public one, an entry carrying a mark that its repository is private, the existence of a private REMARK
   being no secret, which replaces the separate private catalog the three sessions had converged on at 13:05; the
   website shows nothing of an entry marked private until it is public; the pin stays a tag, a model repository
@@ -154,6 +155,25 @@ Times are EST, from the clock, the transcript or git.
   to be written against REMARK's interface for readers once there is one ([the deferred items](../deferred.md)); and
   one step of [the upstreaming plan](../../upstreaming.md), where a model's being public and its being cataloged
   become two events. Nothing changed.
+- **14:30 to 14:33, the status table's frame and the reader it expects.** The REMARK session reports the sixth
+  update built on two local branches, unpushed: a command that pulls every entry of the catalog at its pin, runs
+  nothing, and writes a table with the commit read, the newest commit and a reader's result; a unit declaring its
+  kind in the front matter of its REMARK metadata file; a reader found by the kind's name among the entry points
+  installed packages offer, a function of the checkout and the entry that returns a one-line summary and, if it
+  likes, a table of its own and data; a private entry left out unless asked for, its row then saying only that it
+  exists. It says the owner confirmed the decisions relayed at 14:21 in its window; found there, typed at 14:22:34,
+  so they are his. Read on that branch and against the two model repositories:
+  - **The interface fits the core.** The core's model loader already reads a checkout's registry file and finds its
+    run registry, and a reader needs nothing of REMARK's package. Both model repositories already hold the metadata
+    file, so the kind has a home; neither has a tag yet, which the pin now requires before listing.
+  - **The records name two drafts of the registry schema** in the buffer-stock repository, ten under the fourth and
+    twenty under the sixth, and its build records carry no version of the core: a reader says which schema each run
+    was checked against and reports what it cannot check as unchecked.
+  - **One note sent back:** a run that reads private entries writes their own tables, verdicts and distances
+    included, into the same two files as the public rows; a line saying so would keep such a file from being
+    published by habit, as his ruling that the site show nothing of a private entry requires.
+  The reader in the core is proposed to the owner in this session, with the kind's name his to choose, and not
+  written ([the deferred items](../deferred.md)).
 
 **State at the end of the entry.** As at the end of the journal of 2026-11-09: the fork's main at 7a4889f, pushed; this
 records branch not pushed, held on the HAFiscal session's open question; of the two questions above, the stone convention's answered by the owner in the model repository's session and its amendment waiting on that session's report and his word here, the ontology's statement still with him; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's four updates open as pull requests #196 to #199, unmerged and untagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
