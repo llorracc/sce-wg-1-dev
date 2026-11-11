@@ -52,7 +52,8 @@ metadata:
   unauthenticated request with 404 that morning and are treated as private. The documentation is public at
   https://bellman.io/ since the evening of 2026-11-08 (its changelog at https://bellman.io/changelog/; the earlier
   address under econ-ark's GitHub pages redirects there). The two stage files elaborate unchanged under the package
-  of 2026-11-09, specification 0.7 included ([the journal](../journal/2026-11-09_session-record.md)).
+  of 2026-11-09, specification 0.7 included ([the journal](../journal/2026-11-09_session-record.md)), and again under
+  that of 2026-11-11 ([the journal](../journal/2026-11-11_session-record.md)).
 - Matsya: the design review of 2026-10-18 ran as four questions in one session and one stage-file question in another; the
   client is `bellman-matsya`. Its four questions-only sessions on the ontology of probability distributions ran from the
   bellman session on 2026-10-19; their answers are kept outside this repository, and the findings of that day hold what
