@@ -70,6 +70,35 @@ Times are EST, from the clock, the transcript or git.
   REMARK, the status table with a reader chosen by the unit's kind; commits or tags as pins; where the private
   catalog is kept; whether and where a unit declares its kind; and the runs of record, once the toolkits have run
   again at their present pins.
+- **13:23 to 13:26, the REMARK session's report and this session's check of it.** That session reports REMARK's
+  build and execute functions settled, each writing an execution record, on a local branch of its clone, unpushed and
+  untagged, with the functions' signatures; its schema is the core's fourth draft under REMARK's own identifier; three
+  findings that touch the core's runner; and one proposed change of rule, that a record need not name an image when
+  the build failed. Checked against the core on the fork's main, read-only:
+  - **The schemas agree.** REMARK's file and the core's differ in six places, the identifier, the title and four
+    descriptions; no field or rule differs. The fork's registry schema refers to the core's by its identifier, so it
+    will refer to REMARK's once that is merged and tagged, a schema change to put to the owner then.
+  - **The rule on the image, amended.** The schema states it twice, for a build and for an execution. A failed build
+    has no image; an execution always has the one it ran in. So the change belongs to the build alone: an image
+    required when the runtime is a container's and the build's exit code is zero. Every record valid today stays
+    valid. The core writes no record for a failed build today, stopping with the log's path, so nothing depends on
+    the rule. Told to that session; the core's copy changes on the owner's word only.
+  - **The memory kill the runtime does not report.** That session measured the runtime's flag false after one of
+    forty kills at a memory cap. The core's runner reads the same flag once, as the container exits, and on a miss
+    records a kill by signal with the exit code, never an exit of the run's own: the record is true and less
+    specific. The records' document says the runtime reports the memory cap; it should say that a kill under a
+    memory cap may be an unreported one.
+  - **The stale image** that REMARK's builder would reuse does not reach the core, whose runner builds from the
+    environment's directory alone, names the image for that directory's hash, records its identifier and runs each
+    job by it.
+  - **A latent fault in the core's hash of an environment**, found by comparing with REMARK's: [the
+    defects](../defects.md). No recorded hash is affected.
+  - **Two smaller differences:** REMARK records a signal by its name and the core by its number, where one format
+    should have one spelling, the name; and REMARK's execution mounts the checkout writable, where the container
+    contract here mounts the source read-only and the job's folder apart with no network, so the core keeps its own
+    run until REMARK's function can do the same.
+  Nothing changed on the fork's main. The changes to the core and to the rule are [deferred](../deferred.md) to the
+  owner's word.
 
 **State at the end of the entry.** As at the end of the journal of 2026-11-09: the fork's main at 7a4889f, pushed; this
-records branch not pushed, held on the HAFiscal session's open question; the two questions above with the owner; the registry for replications in design in his bellman-dev session on another machine, with this session's answer.
+records branch not pushed, held on the HAFiscal session's open question; the two questions above with the owner; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's records branch local and unpushed in its session; four changes to the core and one to the record schema's rule on the image proposed, none made.

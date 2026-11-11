@@ -213,3 +213,12 @@ Faults found in this project's own work, with their status.
 - **The journal of 2026-11-04 left out of the index.** The memorials of 2026-11-04 wrote the day's journal but no line
   for it in `MEMORY.md`, so the index's journals stopped at 2026-11-03. Found on 2026-11-05 while indexing the next day's.
   **Status:** fixed 2026-11-05, the line added.
+- **The environment's hash can depend on the machine's git settings.** The core's `environment_hash`
+  (`core/wg1core/records.py` on the fork's main) lists the environment's directory with `git ls-tree -r` and without
+  `-z`. A file name that git quotes, one with a byte outside ASCII under the default `core.quotePath` or with a
+  quote, a backslash or a control character, comes back quoted, so the test that strips the directory's prefix
+  fails on the leading quote and the listing that is hashed holds the quoted name with its prefix; and since the
+  quoting follows `core.quotePath`, two machines can hash one tree differently. Found on 2026-11-11 by comparing
+  with REMARK's implementation, which lists with `-z`. No tracked file under either model repository's adapters has
+  such a name (none of 41, none of 17), so no recorded hash is affected, and listing with `-z` changes none.
+  **Status:** open; the fix, `-z` and names split on the null byte, is a change to the core, proposed and not made.
