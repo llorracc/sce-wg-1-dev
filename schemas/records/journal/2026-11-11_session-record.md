@@ -59,6 +59,17 @@ Times are EST, from the clock, the transcript or git.
     requires of a finding; and the reader says when a run's experiment hash is no longer the current one, not
     only when a newer run exists.
   Nothing changed here. The design is that session's to put to the owner.
+- **That session's closing note, read at 13:07.** What it reports to the owner, nothing decided until he rules and
+  nothing asked: the catalog design as agreed, with this session's amendment taken, one committed file in the model
+  repository mapping an experiment, a toolkit and a mode to the run folder that is its run of record. From the
+  other two sessions it took that the execution record's schema is REMARK's once REMARK's third update ships it, the
+  core keeping the working group's extensions, which is what [the registry design](../../registry.md) adopted and
+  not yet the state: the schema's file is in the core's package today; that REMARK's tool pins by tag alone while
+  the buffer-stock repository can be pinned only by commit; and that a toolkit which cannot be built publicly needs
+  a stated status. His decisions, as it lists them: pushing REMARK's two committed branches; a sixth update to
+  REMARK, the status table with a reader chosen by the unit's kind; commits or tags as pins; where the private
+  catalog is kept; whether and where a unit declares its kind; and the runs of record, once the toolkits have run
+  again at their present pins.
 
 **State at the end of the entry.** As at the end of the journal of 2026-11-09: the fork's main at 7a4889f, pushed; this
 records branch not pushed, held on the HAFiscal session's open question; the two questions above with the owner; the registry for replications in design in his bellman-dev session on another machine, with this session's answer.
