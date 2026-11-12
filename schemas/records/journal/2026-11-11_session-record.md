@@ -207,6 +207,66 @@ Times are EST, from the clock, the transcript or git.
   there is still nothing for the core to pin: the registry schema's reference to REMARK's schema and the core's use
   of REMARK's records functions wait on a tag and on the owner's word here. Open with him as before: the rule on a
   failed build's image, in both copies or neither, and the name of the working group's kind.
+- **22:21:34, in the model repository's session; found there by 22:33.** The owner adopts that session's four
+  recommendations on its first issue, what the YAML method file still holds: the expectation in the Euler residuals
+  is the harness's instrument, named in the results file alone; a toolkit that computes no value says so by typing
+  nothing at the value's place, with a check that ties the silence to the results' status; the stationary
+  population's row stays in the YAML file for now; and the file is not dropped yet. Typed there, and found by the
+  relay check with what it answered. That session's working tree held the change, uncommitted, when it was read.
+- **22:27:19, the owner's word here** for the two pieces proposed to him in the afternoon (above): the amendment of
+  the stone convention, as a draft, and the reader in the core, with `canonical-model` as the name of the working
+  group's kind. Each is on a branch of its own off the fork's main, local, unpushed and unmerged, for him to read.
+- **The convention's amendment, drafted by 22:33** on the branch `stone-method-files` (76fa199). The stone
+  convention's second desideratum states the method at each of the stage's places, in two files with each part in
+  exactly one: a methods addition in Bellman's form, for whatever Bellman's language can state, an entry naming the
+  place by its path, the method by Bellman's word and the handler once a reader has realized it, a place with no
+  word carrying its handler alone; and the YAML method file for what an addition cannot hold, which names the
+  addition with its hash. A part not computed is in neither file, and the harness's instruments are no toolkit's
+  method. The workflow line says method files; the apparatus document says places for targets; the vocabulary's
+  entries for the method target, the method files, the handler and the ladder follow. Two sentences go beyond what
+  was scoped in the afternoon, both required by the ruling of 22:21:34: the desideratum on what the results file
+  says of the toolkit no longer lists the diagnostics' expectation, and the comparison rules name the residuals'
+  quadrature as the harness's. The draft's claim that Bellman refuses a place the stage does not have and a word the
+  place does not admit was tried under Bellman's package as built for this morning's recheck: an addition of each
+  kind on the fork's natural stage file is refused, and a well-formed one binds.
+- **The reader, written by 22:41** on the branch `status-reader` (cf8ddf2). In the core: a module that reads a model
+  repository's registry file, its experiments, its registry's records and a new file naming the runs of record, and
+  runs nothing; an entry point `canonical-model` in the group `remark.status`, through which REMARK's status command
+  finds it; a command, `wg1core status`, that prints the same for the repository it is run in; the core's README,
+  the execution records' document, the apparatus document and the vocabulary. What it reports for each toolkit on
+  each experiment: the run of record with the repository's commit, the toolkit's version, whether the run was in a
+  container, the members and levels covered, the draft of the registry schema the records name and whether they
+  validate, the verification's verdicts, and the largest distance from the reference at each level with the
+  reference's error beside it; notes for a run from a dirty tree, a job that did not end cleanly, an experiment
+  whose hash is no longer the run's and a newer run in the registry; and a toolkit with no run of record. No score,
+  rank or duration. Decisions taken in writing it, each the owner's to change before it merges:
+  - **The file of runs of record** is `runs-of-record.yaml` in the registry folder, a list of entries each naming
+    an experiment, a toolkit, a mode where the records carry one, and the run's folder. It adds no key to the
+    registry file, so a core pinned before this one still reads a repository that has the file.
+  - **A problem is kept apart from a note.** A problem is something wrong with what the repository states: the file
+    malformed, or naming a folder, a toolkit or an experiment the repository does not hold, or a record of a run of
+    record that does not validate. The command exits nonzero on a problem and never on a note, as the comparator's
+    exit status is the checks' and never a distance's.
+  - **A record of another draft is unchecked,** not invalid: the core holds the validator of its own draft only.
+  - **A checkout the runner would refuse raises an exception,** which REMARK reports as a repository it could not
+    read; the runner's own refusal is an exit, which REMARK's command would not survive.
+  - **The command** is more than the reader asked for: a model repository needs a way to check its file without
+    installing REMARK.
+  - **The core's version is unchanged,** 0.1.0: a number and a tag are his.
+  Tried three ways. The core's tests pass, twenty-eight with the eight new ones, on the tiny model repository the
+  tests build. On scratch clones of the two model repositories, the reader says of each as it stands that it has no
+  file of runs of record and names the newest run for each toolkit; with a file written in the scratch clone alone
+  it reads the records of both drafts in the buffer-stock repository, the earlier as unchecked, and both toolkits
+  of the perfect-foresight repository. And under REMARK's own status command, installed in a scratch environment
+  from its main with the core from the branch: REMARK finds the reader by the kind, pulls each scratch clone at a
+  tag, and writes a row for each with the reader's summary and table, marked not for publication since both
+  entries were marked private. None of those outputs is in the fork. REMARK's main had moved on by two merged
+  pull requests since the afternoon, by its clone's remote ref (2ac99d5), neither on the status table.
+- **What follows in other repositories, their sessions' to do after the reader merges:** a model repository
+  declares `kind: canonical-model` in its REMARK metadata file, writes its file of runs of record, and is tagged
+  before it is listed; the buffer-stock repository has a first tag, seen tonight, the perfect-foresight one none.
+- **By 22:43, the two sessions with a stake told,** as information and nothing to act on: the model repository's
+  session, where the draft is and what it says, to be checked against what its additions and method file do before
+  the owner reads it; and the REMARK session, the kind's name and the check of the reader under its main.
 
-**State at the end of the entry.** As at the end of the journal of 2026-11-09: the fork's main at 7a4889f, pushed; this
-records branch not pushed, held on the HAFiscal session's open question; of the two questions above, the stone convention's answered by the owner in the model repository's session, revised by him at 15:03:31, its amendment on the fork's main waiting on his word here, the ontology's statement still with him; the registry for replications in design in his bellman-dev session on another machine, with this session's answer; REMARK's six updates merged into its main and not yet tagged, the reader for its status table proposed to the owner here; four changes to the core and one to the record schema's rule on the image proposed, none made.
+**State at the end of the entry.** The fork's main at 7a4889f, pushed; two local branches off it, unpushed and unmerged, for the owner to read: `stone-method-files` (76fa199), the convention's amendment, and `status-reader` (cf8ddf2), the core's reader; this records branch not pushed, held on the HAFiscal session's open question; the ontology's statement on Bellman's documentation still with him; REMARK's updates merged into its main and not yet tagged; four changes to the core and one to the record schema's rule on the image proposed, none made.

@@ -54,6 +54,10 @@ metadata:
   decisions): a stone states desiderata for a competent reader and records each realization, with acceptance by
   outcome. The convention's text, `rosetta/README.md`, was drafted on `stone-convention`, merged to the fork's main
   (7a4889f) and pushed on his word on 2026-11-07; its revision reaches upstream through the open #18 or a follow-up.
+  An amendment for the method files, after Bellman's specification 0.7 and his rulings of 2026-11-11 in the model
+  repository's session, is drafted on the local branch `stone-method-files` (76fa199), and the core's reader for
+  REMARK's status table, kind `canonical-model`, is written on the local branch `status-reader` (cf8ddf2): both on
+  his word of that night, unpushed and unmerged, for him to read.
   The stones and adapters are the model repository's session's to change, on his word there, with the prototype and
   the clean-room regeneration test as its evidence.
 - **Open for the owner:** the level names (coarse, default, fine proposed); whether a record's `ci` block should
