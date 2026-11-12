@@ -65,6 +65,7 @@ wg1core run <experiment.yaml> --toolkits hark,dolo [--levels low,medium] [--memb
 wg1core verify <run folder>
 wg1core compare <run folder>
 wg1core register <run folder>
+wg1core status
 ```
 
 - **`run`** checks the experiment with the model's results schema and anchors and refuses one with problems, then runs
@@ -88,6 +89,47 @@ wg1core register <run folder>
   distance's. The levels are ordered as the experiment lists them.
 - **`register`** copies a run's records into the registry folder, `<registry_dir>/<stamp>_<experiment>/`, one file per
   job and one per build, validating each against `wg1core/schemas/runs.registry.schema.json`.
+- **`status`** runs nothing. It prints what the repository holds: for each experiment and toolkit, the run of record
+  the repository names and what that run's records say, as the next section describes. Its exit status is nonzero
+  when the file of runs of record, or a record of a run it names, has a problem.
+
+## The runs of record and the status table
+
+A registry folder holds every run that was registered. Which of them is the measurement is the repository's to say,
+in one file, `runs-of-record.yaml` in the registry folder:
+
+```yaml
+runs_of_record:
+  - experiment: restrained-limit/1               # the experiment's name
+    toolkit: hark                                # as the registry file spells it
+    mode: markov                                 # only where the toolkit's records carry a mode of solution
+    run: 2026-11-05T02-25_restrained-limit-1     # a folder of the registry
+```
+
+The file names the run and states nothing else, since everything else is in the run's records. A run of record is
+made from a clean tree, since a finding is not made from a dirty run ([the records' document](../schemas/execution-record.md));
+the reader notes one that was not.
+
+`wg1core/status.py` reads the registry file, the experiments, the registry's records and that file, and reports one
+row for every toolkit of the registry file on every experiment the repository holds. A row with a run of record
+gives the repository's commit, the toolkit's version, whether the run was in a container, the members and levels it
+covers, the draft of the registry schema its records name and whether they validate under it, the verification's
+verdicts, and the largest distance from the reference at each level with the reference's error beside it. It notes
+a run from a tree with uncommitted changes, a job that did not end cleanly, an experiment whose hash is no longer the
+run's, and a newer run of the same toolkit on the same experiment. A row without one says so. A record written under
+a draft of the schema that this core does not hold is reported as unchecked, never as invalid. No row carries a
+score, a rank or a duration.
+
+The same report is a canonical model's row in the status table of REMARK's catalog. `remark status` pulls each
+cataloged repository at its tag and asks a reader, chosen by the kind of unit the repository declares, what it
+holds. A canonical model's repository declares its kind in the front matter of its `REMARK.md`:
+
+```yaml
+kind: canonical-model
+```
+
+and this package offers the reader for that kind, `wg1core.status:read`, as an entry point in the group
+`remark.status`, so that REMARK finds it wherever both packages are installed. The core imports nothing of REMARK's.
 
 ## The modules
 
@@ -99,9 +141,11 @@ wg1core register <run folder>
 | `laws` | the shock laws a parameter file states, with their moments in closed form and their counterparts in the stage files' language |
 | `experiment` | experiment files and what their validator cannot say |
 | `comparator` | the experiment's checks evaluated on a run, and every job's distance from its member's reference |
+| `status` | what a repository holds, its runs of record with what their records say; REMARK's reader for the kind `canonical-model` |
 | `schemas/` | `experiment.schema.json`, `execution-record.schema.json`, `runs.registry.schema.json` |
 
-The tests, `tests/test_core.py`, build a tiny model repository of their own and run everything on it:
+The tests, `tests/test_core.py` and `tests/test_status.py`, build a tiny model repository of their own and run
+everything on it:
 
 ```sh
 uv run --project core --with pytest pytest -q core/tests
