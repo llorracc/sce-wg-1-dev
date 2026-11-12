@@ -240,3 +240,9 @@ Faults found in this project's own work, with their status.
   where a check against the reference now refuses such a value.
   **Status:** open for the earlier paths; refusing it there changes what an earlier run reports, so it is the
   owner's to say.
+- **A run interrupted after an entry's kind changed leaves the earlier manifest standing.** The runner writes a
+  run's manifest after every job has returned, and a comparison reads each entry's kind from the manifest. If a
+  registry file's kind for an entry is changed and the rerun is interrupted, the jobs already rerun carry the new
+  kind in their records while the manifest still states the old one. Suspected by the independent review of
+  2026-11-11 from reading the runner, and not run.
+  **Status:** open, unconfirmed; a rerun that completes writes the manifest and removes the disagreement.

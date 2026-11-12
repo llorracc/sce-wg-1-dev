@@ -1,9 +1,31 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 19:12:50 on 2026-11-04 (the state of the evening's commit and of the memorial of 08:07 on 2026-11-03 kept below the later changes): the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two buffer-stock families, the other two abolished on 2026-11-03; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted; the rulings of 2026-11-02 that the harness gives parameters only and leaves the representation to each toolkit, and the revised proposal of 2026-11-03 that followed, the distributions of permanent income and of wealth in levels and the joint, with the adapters' independence planned, all awaiting the owner's reading; the toy-hafiscal estimation built in the HAFiscal session on his request; the ontology at draft.2, naming no toolkit; the ruling of 2026-11-04 that a reference solution is the standard, his answers to its decisions later that morning, and the results-schema ruling of the same morning, the quantiles required and the distribution function at the comparison points added"
+description: "What the schema project holds, what is settled and what is open, as of the memorial of 11:46 on 2026-11-12 (earlier memorials' blocks kept below it): the fork's main with the reference as its own kind, three branches of live work unmerged, a plan for the branches; and as of the memorial of 19:12:50 on 2026-11-04 (the state of the evening's commit and of the memorial of 08:07 on 2026-11-03 kept below the later changes): the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two buffer-stock families, the other two abolished on 2026-11-03; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted; the rulings of 2026-11-02 that the harness gives parameters only and leaves the representation to each toolkit, and the revised proposal of 2026-11-03 that followed, the distributions of permanent income and of wealth in levels and the joint, with the adapters' independence planned, all awaiting the owner's reading; the toy-hafiscal estimation built in the HAFiscal session on his request; the ontology at draft.2, naming no toolkit; the ruling of 2026-11-04 that a reference solution is the standard, his answers to its decisions later that morning, and the results-schema ruling of the same morning, the quantiles required and the distribution function at the comparison points added"
 metadata:
   type: project
 ---
+
+**As of the memorial of 11:46 on 2026-11-12**, what has changed since the blocks below:
+- **The fork's main is at f557ef4,** pushed. It gained, by pull request #16, the reference as an object of its own:
+  a solution's kind, exact or numerical, and its role, the reference or an entry; checks that hold the entries of
+  one kind to a member's reference; a metric relative to the reference; the registry schema's seventh draft.
+- **Three branches of live work wait on the owner,** each local, unpushed and unmerged, and all three merging
+  together without conflict: `stone-method-files` (2700da6), the stone convention's amendment for Bellman's methods
+  file; `status-reader` (74312f9), the core's reader for the status table of REMARK's catalog, kind
+  `canonical-model`; `experiment-metrics` (09a4548), the metrics an experiment defines, with the registry schema's
+  eighth draft.
+- **Bellman is read in `bellman-dev`** and consulted through its session, since 2026-11-09; its documentation is
+  public at bellman.io.
+- **REMARK's main holds the working group's six updates,** the execution records, the private mark and the status
+  table among them, with no release tagged; the core's use of REMARK's records and schema waits on a tag.
+- **Two model repositories pin the core:** the buffer-stock model's and the perfect-foresight model's, the second
+  at the commit #16 merged.
+- **The fork has eleven worktrees and eighteen local branches,** most of them finished; a plan to bring them to two
+  each is proposed, its first step begun ([the plan](../plans/2026-11-12_branches-and-worktrees.md)).
+- **What is open with the owner** is in [the deferred items](../deferred.md): the three branches; four further
+  points on metrics from the buffer-stock session; the plan's five decisions; the rule on a failed build's image and
+  three small fixes to the core; the ontology's statement on Bellman's documentation; and the records branch's
+  push, held.
 
 **As of the memorial of 19:12:50 on 2026-11-04**, the evening's additions to the block below:
 - **The series to upstream.** Seven pull requests open on econ-ark/sce-wg-1, #14 to #20: the purpose; the

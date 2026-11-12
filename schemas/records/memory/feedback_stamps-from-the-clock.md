@@ -18,4 +18,8 @@ was sent; the HARK session caught the second.
 **How to apply:** before writing a time, read it: the transcript's stamp for the owner's words, `date` for the present.
 Write "by HH:MM" with a time already read when an event's own time is not known. A message's own send time is not
 known while it is being written: say "now" or "in this message", and read the stamp afterwards for the records.
+On 2026-11-11 and 2026-11-12 it happened five more times, each in the journal and each corrected by amending an
+unpushed commit: a "by HH:MM" written a minute or more ahead of the clock, or behind it, because the entry was composed
+before the clock was read. So read the clock in the same command that writes the entry, before the text is fixed, and
+take the stamp from that reading; a stamp remembered from an earlier command is an inference.
 Related: [[project_state]].

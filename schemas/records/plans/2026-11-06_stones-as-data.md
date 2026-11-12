@@ -3,7 +3,8 @@
 **Status: ACCEPTED on 2026-11-06 at 18:46:34 EST, all nine decisions as recommended; proposed at 17:40 on the owner's
 request of 16:01:18 and revised at 18:45 on his direction of 18:36:57.** The convention's text was drafted on the fork's
 branch `stone-convention` at 359fb78, merged to the fork's main on his word at 19:13 (7a4889f) and pushed on his word of
-08:49:35 on 2026-11-07; the
+08:49:35 on 2026-11-07; an amendment for Bellman's methods file is drafted on the branch `stone-method-files` since
+2026-11-11, unmerged; the
 rest is the model repository's session's, on his word there. Nothing here changes a stone, an adapter or the convention. The stones and the adapters are the
 buffer-stock model's repository's, and its session carries out what is adopted, on the owner's word there; the
 convention's text, `rosetta/README.md` on this fork's main and in the series upstream, is this fork's. The model

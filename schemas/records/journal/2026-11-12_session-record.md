@@ -90,6 +90,30 @@ Times are EST, from the clock, the transcript or git.
   request 1863, the truncated lognormal, is rebased onto HARK's current main and force-pushed, its code unchanged.
   Neither the old head nor its parent is named anywhere in this fork, on any branch, by a search of both hashes;
   the records cite the pull request by its number. Answered so; nothing changes here.
+- **11:42:37, the owner's word here: memorialize.** Every category of the records brought current and committed on
+  this branch, unpushed. Written for it: the rulings of [2026-11-09](../rulings/2026-11-09_bellman-dev.md),
+  [2026-11-11](../rulings/2026-11-11_registry-method-files-and-kind.md) and
+  [2026-11-12](../rulings/2026-11-12_metrics-the-merge-and-the-branches.md), which until now stood only in the
+  journals; two findings, [the review of Bellman's changes](../findings/2026-11-09_bellman-dev-review.md) and
+  [the core's two changes tried on real runs](../findings/2026-11-12_the-cores-changes-on-real-runs.md); a rule of
+  memory, [that the fork merges by a merge commit](../memory/feedback_merge-commits-keep-pins.md), and five more
+  lapses added to [the rule on stamps](../memory/feedback_stamps-from-the-clock.md); the project's state; a suspected
+  defect of the runner's manifest; and two deferred items, the plan's decisions and the reader's reading of records
+  of earlier drafts. The vocabulary's new terms are in `vocabulary.md` on the branches that coin them: the kind and
+  the role of a solution on main; the place, the methods addition and the method files on `stone-method-files`; the
+  kind of unit and the status table on `status-reader`; the metric on `experiment-metrics`. No report to others
+  quotes a result that changed.
+
+**State at the memorial, 11:46 on 2026-11-12.**
+- **Running:** nothing of this session's. A tab of the owner's browser shows pull request #16, merged.
+- **The fork:** main at f557ef4, pushed. Eleven worktrees, all clean. Local and unpushed: `stone-method-files`
+  (2700da6), `status-reader` (74312f9), `experiment-metrics` (09a4548), and this records branch, held. The branch
+  `reference-as-its-own-kind` is merged and still on the fork.
+- **Elsewhere, as their sessions report:** the perfect-foresight repository's main pins the commit that #16 merged;
+  the buffer-stock repository's main holds the method files as ruled. Nothing of this session's is uncommitted in
+  another repository.
+- **Open with the owner:** the three branches; four further points on metrics; the plan's five decisions; and what
+  [the deferred items](../deferred.md) carried from before.
 
 **State at the end of the entry.** The fork's main at f557ef4, pushed, with the reference as an object of its own
 merged by pull request #16; its branch still on the fork at 6c12de1, to delete with the plan's other steps on his
