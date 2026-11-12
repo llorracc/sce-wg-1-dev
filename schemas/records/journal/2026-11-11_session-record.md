@@ -343,5 +343,16 @@ Times are EST, from the clock, the transcript or git.
   comparator do not have, a check against the stated member and an expectation within two toolkits' own
   convergence ([the defects](../defects.md)). And the vocabulary of the reader's branch called the catalog's kind
   of unit by the bare word; it is now the kind of unit there (74312f9), since a solution's kind is another thing.
+- **The perfect-foresight session's trial of the commit, reported here by 23:23.** In throwaway clones, with the
+  core installed from this repository by its local address and nothing committed with that address, as it reports:
+  - **Its experiment's first version,** under a registry file without kinds, with both toolkits at every level:
+    every results, methods and settings file is byte for byte that of its run of record, its one check passes with
+    the same distances, and the report differs only by the new part on the reference and the new columns.
+  - **Its second version,** with one entry numerical and one exact: all five of its checks pass, the numerical
+    entry's distance from the reference falling at each level under the absolute and the relative metric, and the
+    exact entry within the reference's stated error; its own tests pass but the one that holds the pin, which the
+    local address changes.
+  Its branch moves its pin to the commit and waits on the push here. The numbers are that repository's, which is
+  private, and are not repeated here.
 
 **State at the end of the entry.** The fork's main at 7a4889f, pushed; three local branches off it, unpushed and unmerged, for the owner to read: `stone-method-files` (2700da6), the convention's amendment as corrected after the model repository's session read it; `status-reader` (74312f9), the core's reader; and `reference-as-its-own-kind` (744393d), the reference as its own kind of object, built overnight on his acceptance of the perfect-foresight repository's plan, with an independent review of it under way; this records branch not pushed, held on the HAFiscal session's open question; the ontology's statement on Bellman's documentation still with him; REMARK's updates merged into its main and not yet tagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
