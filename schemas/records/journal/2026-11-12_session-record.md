@@ -19,6 +19,13 @@ Times are EST, from the clock, the transcript or git.
   three are October's work on the model, superseded when the model moved to its own repository, five are the
   fork's copies of the working group's own branches, three are live work, and two stay. The plan would leave two
   worktrees and two local branches, with the working group's seven pull requests the last to go.
+- **The perfect-foresight repository's main pins the pushed commit by its hash; reported here by 09:14.** As its
+  session reports: it found the commit on GitHub at 08:59:53, its locks held against GitHub, it made its
+  experiment's second version's run of record with all five checks passing, and its main was pushed at 09:03 with
+  its continuous integration passing. Its pin rests on the branch `reference-as-its-own-kind` until that branch is
+  in the fork's main. So the branch stays on GitHub as it is, neither rebased nor deleted, until the merge, and the
+  merge is a merge commit, which keeps the pinned commit in main's history
+  ([the plan](../plans/2026-11-12_branches-and-worktrees.md) says so).
 
 **State at the end of the entry.** The fork's main at 7a4889f, pushed; the branch `reference-as-its-own-kind` pushed at
 6c12de1, with pull request #16 open into the fork's main, to merge on his word; two local branches unpushed and

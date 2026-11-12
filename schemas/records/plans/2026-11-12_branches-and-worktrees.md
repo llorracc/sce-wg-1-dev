@@ -40,7 +40,8 @@ Each step is safe to stop after. A step marked *his word* needs it; the others r
 fork or main already holds.
 
 - **Merge the live work.** *His word.* Merge the fork's pull request #16, with a merge commit as the fork's merges
-  have been and not a squash, so that the commit a model repository pins stays in main's history. Then push `stone-method-files` and
+  have been and not a squash, so that the commit a model repository pins stays in main's history: the perfect-foresight repository's main pins
+  6c12de1 by its hash since 2026-11-12, so until the merge that branch is neither rebased nor deleted on the fork. Then push `stone-method-files` and
   `status-reader` and open a pull request for each into the fork's main, so that the checks run on them as they did
   on #16, and merge them. Afterwards delete the three branches, locally and on the fork, and remove their worktrees.
 - **Drop the local copies of the working group's seven heads.** Delete the seven local branches and the
