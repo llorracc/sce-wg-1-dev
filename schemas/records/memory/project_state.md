@@ -56,8 +56,11 @@ metadata:
   (7a4889f) and pushed on his word on 2026-11-07; its revision reaches upstream through the open #18 or a follow-up.
   An amendment for the method files, after Bellman's specification 0.7 and his rulings of 2026-11-11 in the model
   repository's session, is drafted on the local branch `stone-method-files` (2700da6), and the core's reader for
-  REMARK's status table, kind `canonical-model`, is written on the local branch `status-reader` (cf8ddf2): both on
-  his word of that night, unpushed and unmerged, for him to read.
+  REMARK's status table, kind `canonical-model`, is written on the local branch `status-reader` (74312f9): both on
+  his word of that night, unpushed and unmerged, for him to read. The same night the core gained, on a third local
+  branch, `reference-as-its-own-kind` (744393d), the distinction he asked for in the perfect-foresight repository's
+  session between a reference solution and a numerical one: a solution's kind, exact or numerical, and its role, the
+  reference or an entry, with checks that hold entries to the reference; unpushed and unmerged.
   The stones and adapters are the model repository's session's to change, on his word there, with the prototype and
   the clean-room regeneration test as its evidence.
 - **Open for the owner:** the level names (coarse, default, fine proposed); whether a record's `ci` block should

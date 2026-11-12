@@ -222,3 +222,11 @@ Faults found in this project's own work, with their status.
   with REMARK's implementation, which lists with `-z`. No tracked file under either model repository's adapters has
   such a name (none of 41, none of 17), so no recorded hash is affected, and listing with `-z` changes none.
   **Status:** open; the fix, `-z` and names split on the null byte, is a change to the core, proposed and not made.
+- **The experiments' document describes two checks the core does not have.** `schemas/experiments.md` on the fork's
+  main lists, among what a check may compare, `stated`, a toolkit's files against the checker's report of the stated
+  member, and, among the expectations, `within_own_convergence`; its account of the first experiment names checks
+  that use them. The core's validator of experiments admits neither, and its comparator evaluates neither; the
+  buffer-stock repository's experiment, as committed, uses the three comparisons and three expectations the core
+  does have. Found on 2026-11-11 while adding the checks against the reference to that document's list. The
+  document was carried into the core's repository from the model repository's earlier harness, which had them.
+  **Status:** open; either the document's two items go, or the core gains them, the owner's to say.

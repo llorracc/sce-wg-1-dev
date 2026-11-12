@@ -290,5 +290,58 @@ Times are EST, from the clock, the transcript or git.
     which that repository's test of the cards asks for, while the method files are silent there. The convention
     calls the cards an export of the method and ladder files, made when Bellman's registry takes cards; the draft
     does not touch that sentence. Whether the cards follow the silence is the owner's, in that session.
+- **23:02:56, in the perfect-foresight repository's session; relayed here and checked at 23:05.** The owner accepts
+  that session's plan to make a reference solution an object of its own in the apparatus, with its recommendations,
+  and wants the work carried through overnight without waiting on him
+  ([the ruling](../rulings/2026-11-11_reference-as-its-own-kind.md)). The
+  relay check finds the words typed by him, the plan's message as what they answered, and nothing typed after. The
+  plan has this session build the core's part. Taken as his word for the commits of that change on a branch of the
+  fork; the push and the merge into main wait on his word typed here.
+- **The design, conferred between the sessions before the build was committed at 23:17.** The perfect-foresight session's specification, this
+  session's choices where it left one open, and six additions from the buffer-stock session's review, which that
+  session agreed and which replace the specification where they differ: the table of distances from the reference
+  stays without a verdict, a check against the reference being optional; a check may name its levels; a fall against
+  a reference counts a level within the reference's stated error as fallen; a reference's errors are stated by
+  quantity and by metric, a bare number being the error under the absolute metric; a largest distance says where
+  among the quantity's numbers it sits; what produced a reference may be a toolkit with its commit, settings and
+  record, with a list of what certified it. The third of these was this session's own recommendation on reading the
+  specification. The buffer-stock repository's proposal of a computed reference, of 2026-11-04, is cited throughout
+  as proposed and undecided.
+- **The core's part, built by 23:18** on the local branch `reference-as-its-own-kind` (744393d), off the fork's main,
+  unpushed and unmerged.
+  - **The registry file** takes `kind: exact | numerical` under a toolkit, numerical when left out. The runner
+    carries it to the job, the manifest and the record. An exact entry's kind is in its fingerprint, so stating it
+    runs that entry again; a numerical entry's fingerprint is unchanged.
+  - **The experiment schema:** a member's reference takes its kind, what produced it and what certified it, and
+    errors by metric. A check takes `compare: reference` with the kind of entry it applies to, its levels, the
+    expectation `within_reference_error` for an exact entry, a fall or a bound for a numerical one, and the metric
+    `max_relative_to_reference` with a floor. The checker of experiments refuses, before a run, a check against the
+    reference that no member's reference can answer.
+  - **The comparator:** the checks between toolkits and between levels set numerical entries alone side by side;
+    the check between members is every entry's, as before; the report states each member's reference and each
+    entry's kind, and where each largest distance sits.
+  - **The registry schema's seventh draft:** the record's field for the entry's kind, and the new metric admitted
+    where a record states its largest distance. Records of the sixth draft validate under it.
+  - **The documents:** the experiments' document has a section on kinds and roles and the checks' list; the core's
+    README, the execution records' document and the vocabulary follow.
+  Decisions taken in building it, each the owner's to change before it merges: an entry's kind in a comparison is
+  the run's own, read from its manifest, numerical where an earlier manifest states none; a bare error is still
+  shown beside a quantity's distance under any metric in the table, as it was, while a verdict uses it under the
+  absolute metric alone; a producer written as an object must name its toolkit; the levels' names are unchanged; the
+  vocabulary's entry for the reference now says that a model's closed form, where it has one, is its reference.
+- **Tried four ways.** The core's tests pass, twenty-nine: the twenty earlier ones unchanged, and nine new ones on a
+  model with one numerical and one exact entry. Real runs of the two model repositories, copied to the scratchpad
+  and compared under the core before and under this one, each against a scratch clone at the run's own commit, give
+  the same verdicts, the same distances and byte-identical records, the comparison's data equal once the new keys
+  are set aside: thirty-six jobs of the buffer-stock repository's, six of the perfect-foresight one's. The
+  perfect-foresight session's draft of its experiment's second version, read from its working tree, passes the new
+  checker of experiments, and its registry file loads with one entry of each kind. And the three unmerged branches
+  of the fork merge together without conflict. That session has the branch, the commit and these results, and
+  tests its second version against the commit from the local repository. An independent review of the change's
+  diff was started by 23:19 and had not reported when this was written.
+- **Found on the way.** The experiments' document on the fork's main describes two things the core's validator and
+  comparator do not have, a check against the stated member and an expectation within two toolkits' own
+  convergence ([the defects](../defects.md)). And the vocabulary of the reader's branch called the catalog's kind
+  of unit by the bare word; it is now the kind of unit there (74312f9), since a solution's kind is another thing.
 
-**State at the end of the entry.** The fork's main at 7a4889f, pushed; two local branches off it, unpushed and unmerged, for the owner to read: `stone-method-files` (2700da6), the convention's amendment as corrected after the model repository's session read it, and `status-reader` (cf8ddf2), the core's reader; this records branch not pushed, held on the HAFiscal session's open question; the ontology's statement on Bellman's documentation still with him; REMARK's updates merged into its main and not yet tagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
+**State at the end of the entry.** The fork's main at 7a4889f, pushed; three local branches off it, unpushed and unmerged, for the owner to read: `stone-method-files` (2700da6), the convention's amendment as corrected after the model repository's session read it; `status-reader` (74312f9), the core's reader; and `reference-as-its-own-kind` (744393d), the reference as its own kind of object, built overnight on his acceptance of the perfect-foresight repository's plan, with an independent review of it under way; this records branch not pushed, held on the HAFiscal session's open question; the ontology's statement on Bellman's documentation still with him; REMARK's updates merged into its main and not yet tagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
