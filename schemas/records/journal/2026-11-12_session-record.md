@@ -26,6 +26,22 @@ Times are EST, from the clock, the transcript or git.
   in the fork's main. So the branch stays on GitHub as it is, neither rebased nor deleted, until the merge, and the
   merge is a merge commit, which keeps the pinned commit in main's history
   ([the plan](../plans/2026-11-12_branches-and-worktrees.md) says so).
+- **11:00, his question whether #16 is ready to merge.** Read on GitHub then: open, not a draft, mergeable and
+  clean against the fork's main at 7a4889f, its head still 6c12de1, its three checks passing; main is not protected
+  and requires no review; the fork allows a merge commit, a squash and a rebase, of which the pinned commit needs
+  the first. Answered that it is.
+- **10:33:47 and 10:59:42, in the perfect-foresight repository's session; relayed here and checked by 11:01.** He
+  holds that no metric is the default and that which metric, or which several, is the user's to define, and he has
+  that session propose to this one that an experiment may define a metric of its own. Both typed by him. What he
+  approved there is the proposing; building it is on his word here. That session's proposal: a map of named
+  metrics in the experiment, each a pointwise distance with an aggregate, a largest, a mean, a root mean square or
+  a quantile, optionally weighted, the three metrics the core has now being such pairs with the largest as
+  aggregate and keeping their names; a function of the model repository as a further way to define one, its file's
+  hash recorded; a reference's errors and the checks naming a defined metric as they name the three; the report
+  stating each definition. Its occasion: in that repository a uniform small shift of a rule became, under the
+  metric relative to the reference, a large distance at the single point nearest the limit, where an average over
+  the points was what he asked for and the core has none. Put to the owner here with this session's
+  recommendations, and not built ([the deferred items](../deferred.md)).
 
 **State at the end of the entry.** The fork's main at 7a4889f, pushed; the branch `reference-as-its-own-kind` pushed at
 6c12de1, with pull request #16 open into the fork's main, to merge on his word; two local branches unpushed and
