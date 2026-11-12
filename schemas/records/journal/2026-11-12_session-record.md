@@ -86,6 +86,10 @@ Times are EST, from the clock, the transcript or git.
   error; and a statement of what a function may import, which is in this build. A function's contract, two lists
   and parameters by name, leaves room for companions as a further named argument. Both model repositories'
   sessions have the branch and the commit.
+- **A notice from the HARK-dev session, read at 11:23.** On the owner's word there, the fork branch of HARK's pull
+  request 1863, the truncated lognormal, is rebased onto HARK's current main and force-pushed, its code unchanged.
+  Neither the old head nor its parent is named anywhere in this fork, on any branch, by a search of both hashes;
+  the records cite the pull request by its number. Answered so; nothing changes here.
 
 **State at the end of the entry.** The fork's main at f557ef4, pushed, with the reference as an object of its own
 merged by pull request #16; its branch still on the fork at 6c12de1, to delete with the plan's other steps on his
