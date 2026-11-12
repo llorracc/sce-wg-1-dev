@@ -61,7 +61,9 @@ metadata:
   branch, `reference-as-its-own-kind` (6c12de1), the distinction he asked for in the perfect-foresight repository's
   session between a reference solution and a numerical one: a solution's kind, exact or numerical, and its role, the
   reference or an entry, with checks that hold entries to the reference; pushed and merged into the fork's main
-  on his word on 2026-11-12, by pull request #16 (main at f557ef4).
+  on his word on 2026-11-12, by pull request #16 (main at f557ef4). On his word of the same morning an experiment may define its own metrics, a
+  pointwise distance with an aggregate or a function of the model's repository: built on the local branch
+  `experiment-metrics` (09a4548), unpushed and unmerged.
   The stones and adapters are the model repository's session's to change, on his word there, with the prototype and
   the clean-room regeneration test as its evidence.
 - **Open for the owner:** the level names (coarse, default, fine proposed); whether a record's `ci` block should

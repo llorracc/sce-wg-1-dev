@@ -49,11 +49,48 @@ Times are EST, from the clock, the transcript or git.
   merge into the new main without conflict. The perfect-foresight session is told; moving its pin to follow main is
   on his word there. This is the first part of the first step of
   [the plan for the fork's branches](../plans/2026-11-12_branches-and-worktrees.md).
+- **11:05:21, the owner's word here: the metrics an experiment defines,** the declarative ones as this session
+  described them and the function of the model's repository as well. Built by 11:12 on the local branch
+  `experiment-metrics` (09a4548), off the fork's main, unpushed and unmerged.
+  - **The experiment schema** takes `metrics`, a map from a name to a definition. A definition is a pointwise
+    distance, the absolute difference, the earlier relative one, or the one relative to the reference with its
+    floor, with an aggregate, the largest, the mean, the root mean square or a quantile; or a function of the
+    model's repository, by its file and name, with the file's hash and parameters. A check, a reference quantity
+    and a reference's errors name a defined metric as they name the core's three, whose names are reserved.
+  - **A new module of the core** holds the three as such pairs with the largest as aggregate, so that there is one
+    path, and loads a function once its file hashes as stated. The checker of experiments reads a function's file,
+    checks its hash and that it defines the function, and runs nothing; the comparator imports and runs it.
+  - **The registry schema's eighth draft:** a record names its largest distance's metric by any metric's name.
+    Records of the seventh draft validate under it.
+  - **The documents:** a section on metrics in the experiments' document, which says that no metric is the
+    default; the core's README and the vocabulary.
+  Decisions taken in building it, each his to change: a function's file is pinned by its hash in the experiment, as
+  a member's files are, where the proposal had the hash only recorded; a quantile takes no interpolation and reads
+  its fraction as the decimal written; a defined metric refuses a value that is not a number wherever it is used;
+  where the largest pointwise distance sits is reported for every aggregate; a bare error is shown under the
+  absolute metric and the earlier relative one and never under a defined metric; no weights by point.
+- **Tried.** The core's tests pass, forty-two: main's thirty-four, one assertion on the draft's number loosened,
+  and eight new ones, with means, root mean squares and quantiles against values computed by hand, the core's
+  three against their pairs on random numbers, functions that keep and break the contract, and what the checker
+  refuses. Four real runs, the buffer-stock repository's and the perfect-foresight repository's three, compared on
+  scratch copies under main's core and under the branch: the comparison's data and every record are identical,
+  the report differing in one closing sentence. The branch merges with the two other unpushed branches. No
+  independent review was run on this one.
+- **The buffer-stock session's view,** asked at 11:06 and received while building. The design covers what its
+  experiment and its proposed reference comparison name; the quantile is right for it. It asks for more, none of it
+  built and all put to the owner: a definition naming companion quantities that the metric also receives, such as
+  the comparison points and a distribution's ordinates, which would give weights by where households are and
+  regions stated in the points' own values; a declarative region; `at` reported as a type and a point, not only an
+  index over the flattened numbers; a quantity that one file reports as undefined or not computed giving "not
+  compared" with its reason, where today the two files hold different counts of numbers and the comparison is an
+  error; and a statement of what a function may import, which is in this build. A function's contract, two lists
+  and parameters by name, leaves room for companions as a further named argument. Both model repositories'
+  sessions have the branch and the commit.
 
 **State at the end of the entry.** The fork's main at f557ef4, pushed, with the reference as an object of its own
 merged by pull request #16; its branch still on the fork at 6c12de1, to delete with the plan's other steps on his
 word; two local branches unpushed and unmerged, for him to read: `stone-method-files` (2700da6) and `status-reader`
-(74312f9); the plan for the fork's branches and worktrees proposed, its first step begun; an experiment's own metrics
-proposed to him and not built; this records branch not pushed, held on the HAFiscal session's open question; the
+(74312f9); the plan for the fork's branches and worktrees proposed, its first step begun; an experiment's own metrics built on the local branch `experiment-metrics` (09a4548), unpushed and unmerged, with four
+further points from the buffer-stock session put to him; this records branch not pushed, held on the HAFiscal session's open question; the
 ontology's statement on Bellman's documentation still with him; REMARK's updates merged into its main and not yet
 tagged; four changes to the core and one to the record schema's rule on the image proposed, none made.

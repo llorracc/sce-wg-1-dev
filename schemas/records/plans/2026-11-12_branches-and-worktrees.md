@@ -2,7 +2,8 @@
 
 **Status: PROPOSED on 2026-11-12, on the owner's request of that morning; its first step begun on his word at 11:03
 that day, the fork's pull request #16 merged with a merge commit (f557ef4), its branch not yet deleted. Nothing else
-in it is done.** Every step that
+in it is done. A fourth branch of live work has come since the plan was written, `experiment-metrics`, local, with a
+worktree; it goes the way of the other two.** Every step that
 merges, closes a pull request, deletes a branch on GitHub or makes a tag waits on his word.
 
 ## What there is
