@@ -112,7 +112,7 @@ registered in [the conventions](conventions.md).
   toolkit's author who provides a card, an adapter or results files.
 - **REMARK:** a repository that meets econ-ark's standard for a reproducible project: a tagged release, a Dockerfile,
   a reproduce script, an environment file, and at the higher tiers a citation file and an archived release. A
-  canonical model's repository is one. **Kind:** what sort of unit a cataloged repository is, declared in its
+  canonical model's repository is one. **Kind of unit:** what sort of unit a cataloged repository is, declared in its
   `REMARK.md`; a canonical model's is `canonical-model`. **Status table:** the catalog's table of what each
   repository holds at its tag, read and never run, each row by the reader for the repository's kind.
 - **Records:** a project's own memory, its rulings, journal, findings and deferred follow-ups, kept with the model's
