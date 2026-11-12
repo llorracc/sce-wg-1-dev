@@ -268,5 +268,27 @@ Times are EST, from the clock, the transcript or git.
 - **By 22:43, the two sessions with a stake told,** as information and nothing to act on: the model repository's
   session, where the draft is and what it says, to be checked against what its additions and method file do before
   the owner reads it; and the REMARK session, the kind's name and the check of the reader under its main.
+- **The model repository's session's reading of the draft, received before 22:45 and checked at its pushed commit;
+  the draft corrected by 22:46** (2700da6, a second commit on the branch). It reports that the ruling of 22:21:34 is
+  made and pushed there, and that nothing in the draft misstates what its additions and method file do, with four
+  facts to weigh. Each was found as it says:
+  - **Neither file is kept with the stone.** The addition is beside the adapter. The YAML method file is kept
+    nowhere in that repository: every run writes it beside its results, from a list in the adapter's program, with
+    the addition copied beside it. The draft said the stone's method files; it now says that every run writes the
+    YAML file and names the addition the run used by its hash. Where the rows a run writes are stated before any
+    run is thereby the adapter's program, which the convention's own form would have in the stone's data: open, with
+    the stones' move to the adopted form that the model repository has deferred.
+  - **The handler's form.** The draft had loosened the adopted wording, a package and a callable in it, to a
+    package and a name in it. That was this session's and is undone: the adopted wording stands, and it is the form
+    Bellman's documentation gives a handler, a package and a function. Of the eleven handlers the six additions
+    name, three are a routine of a package, HARK's solver, dolo's and the lecture's operator; eight are a prefix
+    and a descriptive name that no package holds. The convention is not met there on that point, and was not
+    before the amendment: the owner's to weigh, the model repository's to change on his word there.
+  - **Silence means not computed at the value's place,** where he ruled it and where that repository checks it; the
+    draft had said it of any part. It now says it of the value.
+  - **The cards.** Two toolkits' cards there keep a row at the value's place saying that welfare is not computed,
+    which that repository's test of the cards asks for, while the method files are silent there. The convention
+    calls the cards an export of the method and ladder files, made when Bellman's registry takes cards; the draft
+    does not touch that sentence. Whether the cards follow the silence is the owner's, in that session.
 
-**State at the end of the entry.** The fork's main at 7a4889f, pushed; two local branches off it, unpushed and unmerged, for the owner to read: `stone-method-files` (76fa199), the convention's amendment, and `status-reader` (cf8ddf2), the core's reader; this records branch not pushed, held on the HAFiscal session's open question; the ontology's statement on Bellman's documentation still with him; REMARK's updates merged into its main and not yet tagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
+**State at the end of the entry.** The fork's main at 7a4889f, pushed; two local branches off it, unpushed and unmerged, for the owner to read: `stone-method-files` (2700da6), the convention's amendment as corrected after the model repository's session read it, and `status-reader` (cf8ddf2), the core's reader; this records branch not pushed, held on the HAFiscal session's open question; the ontology's statement on Bellman's documentation still with him; REMARK's updates merged into its main and not yet tagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
