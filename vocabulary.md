@@ -98,9 +98,15 @@ registered in [the conventions](conventions.md).
   and per build of each run of record.
 - **Reference solution,** or **the reference:** the organizer's solve of a member to very high precision by continuous
   methods, the standard every solution at default settings is compared to; its own error is reported beside every
-  distance. **The continuous methods:** the expectation integrated against the shocks' continuous laws and split at
-  the kink's preimage, the cubic Hermite interpolation that makes legal, the natural limit from the laws' infima, and
-  the continuous landing of the transition's mass on the distribution grid.
+  distance. Where the model has a closed form, the reference is the closed form, evaluated exactly. **The continuous
+  methods:** the expectation integrated against the shocks' continuous laws and split at the kink's preimage, the
+  cubic Hermite interpolation that makes legal, the natural limit from the laws' infima, and the continuous landing
+  of the transition's mass on the distribution grid.
+- **Kind of a solution:** how it is obtained: **exact,** evaluated from a closed form, with no settings and no error
+  but round-off, or **numerical,** approximated by a method with settings at a level. **Role of a solution:** what it
+  is for in an experiment: the **reference,** which a member pins with its stated errors, or an **entry,** a
+  registered toolkit's solution measured against it. A reference may be of either kind, and so may an entry: an exact
+  entry is the closed form written in a toolkit's language, and is no second method.
 - **The bench:** the organizer's own numerical code, which is no toolkit: the diagnostics' quadrature, the comparator,
   the reference solver.
 - **Probe:** a measurement made for planning and recorded as a finding; not a run of record. **Run of record:** a run

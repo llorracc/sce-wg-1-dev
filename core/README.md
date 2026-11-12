@@ -48,7 +48,13 @@ toolkits:
     stone: ../rosetta/hark.md
     levels: {low: 1, medium: 2, high: 3}       # the adapter's --level for each named level
     threads: 2                                 # the cap on each job's BLAS and OpenMP threads
+    kind: numerical                            # optional: exact for an entry that evaluates a closed form; numerical when left out
 ```
+
+An entry's kind says how it obtains its solution ([`../schemas/experiments.md`](../schemas/experiments.md), "Kinds and
+roles"). The run's manifest and every record the runner writes carry it, and the comparator sets only numerical
+entries beside one another and along their levels. An entry stated to be exact has its kind in its jobs' fingerprints, so stating
+it reruns that entry; a numerical entry's fingerprint is what it was before entries had kinds.
 
 The repository's root is the git top level of the registry file's folder; the records are written against it. Every
 record names the repository by its remote, `origin` normalized to its https form, so a clone whose origin is a local
@@ -80,8 +86,9 @@ wg1core register <run folder>
   model names none, checks that each carries the experiment's `reports`, writes `verification.json`, and fills each
   record's verdict.
 - **`compare`** evaluates the experiment's checks on the run's results files, each with a verdict of pass, fail, not
-  applicable or error, and reports every job's distances from its member's reference on the experiment's quantities,
-  with the reference's own error beside each and no verdict. A comparison that cannot be computed for a member that
+  applicable or error, among them the checks that hold the entries of one kind to a member's reference; and it reports
+  every job's distances from its member's reference on the experiment's quantities, with where the largest sits and
+  the reference's own error beside each, and no verdict. An entry's kind is the run's own, read from its manifest. A comparison that cannot be computed for a member that
   pins a reference, the reference not loading, not agreeing with the job's file on the model's identity keys, or a
   quantity not comparable, is an error. It writes `comparison.json` and `comparison.md` in the run folder, a report in
   each job's folder, and each record's comparison block; its exit status is the checks' and the errors', never a
