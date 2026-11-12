@@ -34,24 +34,26 @@ A stone has two parts, which answer two questions: what is expected of the toolk
 What the reader may not decide for itself. Short, exact, and in one place each.
 
 1. **The model, by reference.** The family's stage file and the member's parameter file. The stone restates neither.
-2. **The method expected at each of the stage's places**, in the stone's method files: the endogenous grid method
-   on the policy's block, an interpolation on the evaluation that closes it, a quadrature on an expectation, a
-   histogram on the population's transition, and so on, under the family's rules of attachment. Each place takes one
-   method. There are two files, and each part is stated in exactly one of them.
+2. **The method expected at each of the stage's places:** the endogenous grid method on the policy's block, an
+   interpolation on the evaluation that closes it, a quadrature on an expectation, a histogram on the population's
+   transition, and so on, under the family's rules of attachment. Each place takes one method. The methods are
+   stated in two files, each part in exactly one of them.
    - *The methods addition* holds whatever Bellman's language can state. It is a methods file in Bellman's form
      (Bellman's documentation, *Addition* and *Methodization*): an addition to the family's stage file, kept beside
      the adapter, one for each family the toolkit solves. An entry names the place by its path in the stage and the
      method by Bellman's word for it, from Bellman's published method types; once a reader has realized the method,
-     the entry also names the handler, as a package and a name in it. A place whose method Bellman has no word for
-     carries its handler alone. The addition is checked by binding it on the stage file under Bellman's package,
+     the entry also names the handler, as a package and a callable in it. A place whose method Bellman has no word
+     for carries its handler alone. The addition is checked by binding it on the stage file under Bellman's package,
      which refuses a place the stage does not have and a word the place does not admit.
    - *The YAML method file* holds what an addition cannot: a part the stage has no place for, such as the stationary
-     population, and a method that is neither a word nor a routine at a place. It names the addition beside it, with
-     the hash of that file's bytes, so that the one hash a record carries covers both.
+     population, and a method that is neither a word nor a routine at a place. Every run writes it beside its
+     results, with the addition the run used, and names that addition by the hash of its bytes, so that the one hash
+     a record carries covers both.
 
-   A part the toolkit does not compute has an entry in neither file, and the results file says that it is not
-   computed. The harness's own instruments, such as the expectation in the Euler residuals, are no toolkit's method
-   and are in no method file; the results file names them.
+   A toolkit that computes no value function enters nothing at the value's place, in either file: silence there
+   means not computed, and the results file reports what needs the value, such as welfare, as not computed. The
+   harness's own instruments, such as the expectation in the Euler residuals, are no toolkit's method and are in no
+   method file; the results file names them.
 3. **The settings at each named level**, in the toolkit's own names and with their values, in the stone's ladder file
    (the numerics document): the grids, the tolerances, the limits of iteration, the nodes. The toolkit's own defaults
    are an element of their own, read from the toolkit's documentation at the pin, with the citation. Settings are the
