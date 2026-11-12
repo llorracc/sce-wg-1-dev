@@ -220,6 +220,11 @@
                     "max_relative_to_reference"
                   ]
                 },
+                "floor": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "description": "Under max_relative_to_reference, the floor the distance was taken with."
+                },
                 "distance": {
                   "type": "number",
                   "minimum": 0

@@ -34,6 +34,7 @@ from __future__ import annotations
 import hashlib
 import itertools
 import json
+import math
 from pathlib import Path
 
 from . import records
@@ -81,9 +82,12 @@ def numbers(value: dict, quantity: str) -> list[float]:
     return out
 
 
-def distance_at(a: list[float], b: list[float], metric: str, floor: float | None = None) -> tuple[float, int]:
+def distance_at(a: list[float], b: list[float], metric: str, floor: float | None = None,
+                strict: bool = False) -> tuple[float, int]:
     """The largest distance over every number, and where it sits: the index, among the quantity's numbers in their
-    fixed order, of the first number that attains it.
+    fixed order, of the first number that attains it. With `strict`, a value that is not a number is refused: a
+    largest distance passes over one that is not the first, so a verdict that an entry lies within an error must not
+    rest on it.
 
     max_abs_difference: the absolute difference. max_relative_difference: the absolute difference divided by the
     larger of one and the first value's magnitude. max_relative_to_reference: the absolute difference divided by the
@@ -92,6 +96,10 @@ def distance_at(a: list[float], b: list[float], metric: str, floor: float | None
         raise ValueError(f"the two files hold {len(a)} and {len(b)} numbers")
     if not a:
         raise ValueError("no numbers to compare")
+    if strict:
+        unread = next((i for i, (x, y) in enumerate(zip(a, b)) if math.isnan(x) or math.isnan(y)), None)
+        if unread is not None:
+            raise ValueError(f"a value that is not a number, at {unread}")
     if metric == "max_abs_difference":
         each = [abs(x - y) for x, y in zip(a, b)]
     elif metric == "max_relative_difference":
@@ -110,8 +118,9 @@ def distance(a: list[float], b: list[float], metric: str, floor: float | None = 
     return distance_at(a, b, metric, floor)[0]
 
 
-def compare_at(a: dict, b: dict, quantity: str, metric: str, floor: float | None = None) -> tuple[float, int]:
-    return distance_at(numbers(a, quantity), numbers(b, quantity), metric, floor)
+def compare_at(a: dict, b: dict, quantity: str, metric: str, floor: float | None = None,
+               strict: bool = False) -> tuple[float, int]:
+    return distance_at(numbers(a, quantity), numbers(b, quantity), metric, floor, strict)
 
 
 def compare(a: dict, b: dict, quantity: str, metric: str, floor: float | None = None) -> float:
@@ -161,9 +170,9 @@ def evaluate_check(check: dict, results: dict, members: list[str], order: list[s
         """The levels the check applies to, of those given, in the order the expectation reads them."""
         return [lv for lv in _levels_in_order(levels, order) if not check.get("levels") or lv in order]
 
-    def dist(x: dict, y: dict, label: str) -> tuple[float, int] | None:
+    def dist(x: dict, y: dict, label: str, strict: bool = False) -> tuple[float, int] | None:
         try:
-            return compare_at(x, y, quantity, metric, floor)
+            return compare_at(x, y, quantity, metric, floor, strict)
         except (KeyError, ValueError) as e:
             errors.append(f"{label}: {e}")
             return None
@@ -252,7 +261,8 @@ def evaluate_check(check: dict, results: dict, members: list[str], order: list[s
                                       + ", ".join(f"{k} differs" for k in mismatched))
                         series = None
                         break
-                    d = dist(by_member[member][level], reference["results"], f"{toolkit} against the reference, {member} at {level}")
+                    d = dist(by_member[member][level], reference["results"],
+                             f"{toolkit} against the reference, {member} at {level}", strict=True)
                     if d is None:
                         series = None
                         break
@@ -296,7 +306,8 @@ def reference_quantities(experiment: dict) -> list[dict]:
 
 
 def load_reference(experiment_file: Path, member: dict) -> tuple[dict | None, str | None, str | None]:
-    """A member's reference results file, its hash checked: (results, hash, problem)."""
+    """A member's reference results file, its hash checked: (results, hash, problem). A file that hashes as stated
+    and is not JSON, or holds no object, is a problem like a missing one."""
     ref = member.get("reference")
     if not ref:
         return None, None, None
@@ -307,15 +318,22 @@ def load_reference(experiment_file: Path, member: dict) -> tuple[dict | None, st
     digest = hashlib.sha256(data).hexdigest()
     if digest != ref["results_sha256"]:
         return None, digest, f"the reference file {ref['results_file']} does not hash as the experiment says"
-    return json.loads(data.decode("utf-8")), digest, None
+    try:
+        results = json.loads(data.decode("utf-8"))
+    except ValueError:
+        return None, digest, f"the reference file {ref['results_file']} is not JSON"
+    if not isinstance(results, dict):
+        return None, digest, f"the reference file {ref['results_file']} holds no results"
+    return results, digest, None
 
 
-def load_references(experiment: dict, experiment_file: Path) -> dict:
-    """Every member's pinned reference, by the member's id: what the experiment states of it, its results when the
-    file loads and hashes as stated, the hash of the file found, and the problem when it does not load."""
+def load_references(experiment: dict, experiment_file: Path, members=None) -> dict:
+    """The pinned reference of every member, or of the members named, by the member's id: what the experiment states
+    of it, its results when the file loads and hashes as stated, the hash of the file found, and the problem when it
+    does not load."""
     out = {}
     for member in experiment["members"]:
-        if member.get("reference"):
+        if member.get("reference") and (members is None or member["id"] in members):
             results, digest, problem = load_reference(experiment_file, member)
             out[member["id"]] = {"stated": member["reference"], "results": results, "sha256": digest, "problem": problem}
     return out
@@ -329,7 +347,8 @@ def _producers(stated: dict) -> list[str]:
 
 def describe_references(references: dict, entries: list[str]) -> list[dict]:
     """The report's part on the reference: for each member that pins one, its kind, what produced and certified it,
-    its file and hash, its stated errors, whether it loaded, and which of the run's entries are among its producers."""
+    its file and hash, its stated errors, whether it loaded, and which of the run's entries a producer names: a
+    producer written as that entry's name, or as a toolkit of that name."""
     out = []
     for member, reference in references.items():
         stated = reference["stated"]
@@ -349,8 +368,9 @@ def describe_references(references: dict, entries: list[str]) -> list[dict]:
 def reference_distances(results: dict, reference: dict, quantities: list[dict], errors: dict) -> list[dict]:
     """Every distance from the reference, each with where its largest sits and the reference's own error for that
     quantity beside it, or the reason it could not be computed. No verdict. An error stated by metric is shown under
-    its metric; an error stated as a bare number is shown beside the quantity's distance under any metric, as it was
-    before errors were keyed by metric."""
+    its metric. An error stated as a bare number is the error under the absolute metric; it is also shown beside the
+    distance under max_relative_difference, as it was before errors were keyed by metric, and never beside a distance
+    relative to the reference."""
     out = []
     for q in quantities:
         row = {"quantity": q["quantity"], "metric": q["metric"]}
@@ -363,6 +383,8 @@ def reference_distances(results: dict, reference: dict, quantities: list[dict], 
         stated = errors.get(q["quantity"])
         if isinstance(stated, dict):
             stated = stated.get(q["metric"])
+        elif q["metric"] == "max_relative_to_reference":
+            stated = None
         if stated is not None:
             row["reference_error"] = stated
         out.append(row)
@@ -387,7 +409,7 @@ def run_comparison(experiment: dict, experiment_file: Path, jobs: list[dict], ru
             results.setdefault(j["toolkit"], {}).setdefault(j["member"], {})[j["level"]] = data
             job_results[id(j)] = data
     members = [m["id"] for m in experiment["members"]]
-    references = load_references(experiment, experiment_file)
+    references = load_references(experiment, experiment_file, {j["member"] for j in jobs})  # of the members the run holds
     checks = [evaluate_check(c, results, members, list(experiment["levels"]), kinds, references, identity)
               for c in experiment["checks"]]
     quantities = reference_quantities(experiment)
@@ -421,7 +443,8 @@ def run_comparison(experiment: dict, experiment_file: Path, jobs: list[dict], ru
             else:
                 entry["status"] = "computed"
                 largest = max(rows, key=lambda r: r["distance"])
-                entry["largest_distance"] = {k: largest[k] for k in ("quantity", "metric", "distance", "reference_error") if k in largest}
+                entry["largest_distance"] = {k: largest[k] for k in ("quantity", "metric", "floor", "distance", "reference_error")
+                                             if k in largest}
         per_job.append(entry)
     failed = any(c["verdict"] in ("fail", "error") for c in checks) or any(j["status"] == "error" for j in per_job)
     return {"experiment": experiment["experiment"], "run": run.name, "entries": kinds,

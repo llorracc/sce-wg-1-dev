@@ -52,8 +52,8 @@ toolkits:
 ```
 
 An entry's kind says how it obtains its solution ([`../schemas/experiments.md`](../schemas/experiments.md), "Kinds and
-roles"). The run's manifest and every job's record carry it, and the comparator sets only numerical entries beside
-one another and along their levels. An entry stated to be exact has its kind in its jobs' fingerprints, so stating
+roles"). The run's manifest and every record the runner writes carry it, and the comparator sets only numerical
+entries beside one another and along their levels. An entry stated to be exact has its kind in its jobs' fingerprints, so stating
 it reruns that entry; a numerical entry's fingerprint is what it was before entries had kinds.
 
 The repository's root is the git top level of the registry file's folder; the records are written against it. Every

@@ -125,6 +125,9 @@
         "allOf": [
           {
             "if": {
+              "required": [
+                "metric"
+              ],
               "properties": {
                 "metric": {
                   "const": "max_relative_to_reference"
@@ -234,7 +237,7 @@
             },
             "errors": {
               "type": "object",
-              "description": "The reference's certified error for each quantity, by the quantity's path: a number, which is its error under max_abs_difference, or its error under each metric named.",
+              "description": "The reference's certified error for each quantity, by the quantity's path: a number, which is its error under max_abs_difference, or its error under each metric named. An error under max_relative_to_reference is stated for the floor the experiment's checks and reference quantities use.",
               "additionalProperties": {
                 "oneOf": [
                   {
@@ -438,6 +441,9 @@
         },
         {
           "if": {
+            "required": [
+              "compare"
+            ],
             "properties": {
               "compare": {
                 "const": "reference"
@@ -459,6 +465,9 @@
         },
         {
           "if": {
+            "required": [
+              "expect"
+            ],
             "properties": {
               "expect": {
                 "const": "within_reference_error"
@@ -478,6 +487,10 @@
         },
         {
           "if": {
+            "required": [
+              "compare",
+              "expect"
+            ],
             "properties": {
               "compare": {
                 "const": "reference"
@@ -497,6 +510,9 @@
         },
         {
           "if": {
+            "required": [
+              "metric"
+            ],
             "properties": {
               "metric": {
                 "const": "max_relative_to_reference"
@@ -532,7 +548,7 @@
       ]
     },
     "Kind": {
-      "description": "How a solution is obtained. exact: evaluated from a closed form, with no settings and no error but round-off. numerical: approximated by a method with settings, at a level.",
+      "description": "How a solution is obtained. exact: evaluated from a closed form, with no settings, so that every level names the same computation, and no error but round-off. numerical: approximated by a method with settings, at a level.",
       "enum": [
         "exact",
         "numerical"

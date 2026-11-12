@@ -56,7 +56,9 @@ with underscores. A quantity's path must resolve in the family's results schema;
 A solution has two properties, which the apparatus keeps apart.
 
 **Its kind is how it is obtained.**
-- **exact:** evaluated from a closed form. It has no settings and no levels, and its only error is round-off.
+- **exact:** evaluated from a closed form. It has no settings, so each level names the same computation, and its only
+  error is round-off. An exact entry is still registered with the levels' names and run at each, since a run is a
+  job for every toolkit, member and level.
 - **numerical:** approximated by a method with settings, at a level. Its error is not known beforehand and is what
   an experiment measures.
 
@@ -72,15 +74,17 @@ and it is no second method.
 
 Where each is stated:
 - **An entry's kind** is the registry file's: `kind: exact` or `kind: numerical` under the toolkit, numerical when
-  left out. The run's manifest and every job's record carry it.
+  left out. The run's manifest carries it, and so does every record the runner writes from then on; a job the runner
+  skips, its fingerprint unchanged, keeps the record it had.
 - **A reference's kind** is the experiment's, `kind` under the member's `reference`, with what produced it:
   `produced_by`, as words, such as the checker at a commit, or as a toolkit with its commit, its settings and the
   record of the solve; and `certified_by`, a list of the same, for an independent second solve. A producer names no
-  entry of the registry file. The comparator says so when a producer is also among a run's entries, since an entry
-  measured against its own solution shows nothing.
+  entry of the registry file. The comparator says so when a producer is written as the name of one of a run's
+  entries, or as a toolkit of that name, since an entry measured against its own solution shows nothing.
 - **A reference's errors** are stated by quantity. A number is the error under the absolute metric. A mapping states
   the error under each metric it names, `{max_abs_difference: 1.0e-14, max_relative_to_reference: 1.0e-9}`, since a
-  quantity near zero can have a small absolute error and a large relative one.
+  quantity near zero can have a small absolute error and a large relative one. An error relative to the reference is
+  stated for the floor the experiment uses.
 
 ## The checks
 
@@ -112,7 +116,8 @@ Each check compares results files and says what the comparison must show. It has
   - `within_reference_error`: every distance, at every level, no larger than the reference's stated error under the
     check's metric (for an exact entry against the `reference`). The reference must state that error, or the
     experiment's checker refuses the check. This is a test that the entry encodes the solution, not a measurement of
-    a method;
+    a method. A value that is not a number, in the entry's file or the reference's, makes a check against the
+    reference an error;
   - `within_own_convergence`: at the finest level, the metric no larger than the sum of the two toolkits' own movements
     of the same quantity between their two finest levels (for `toolkits`).
 

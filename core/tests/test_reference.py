@@ -10,6 +10,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import shutil
 import textwrap
 from pathlib import Path
 
@@ -98,11 +99,23 @@ def results_of_the_entries() -> dict:
     return {"stub": {"m1": stub}, "formula": {"m1": formula}}
 
 
-def evaluate(c: dict, errors: dict | None = None) -> dict:
+def evaluate(c: dict, errors: dict | None = None, results: dict | None = None) -> dict:
     stated = {"results_file": "m1.reference.json", "results_sha256": "0" * 64, "errors": errors if errors is not None else REFERENCE["errors"]}
     references = {"m1": {"stated": stated, "results": copy.deepcopy(REFERENCE_M1), "sha256": "0" * 64, "problem": None}}
-    return comparator.evaluate_check(c, results_of_the_entries(), ["m1", "m2"], ["low", "medium", "high"],
+    return comparator.evaluate_check(c, results or results_of_the_entries(), ["m1", "m2"], ["low", "medium", "high"],
                                      {"stub": "numerical", "formula": "exact"}, references)
+
+
+def recommit(model: dict, change, reference: bytes | None = None) -> None:
+    """The experiment file changed, the first member's reference file replaced and pinned again if given, committed."""
+    exp = yaml.safe_load(model["experiment"].read_text())
+    if reference is not None:
+        (model["experiment"].parent / "m1.reference.json").write_bytes(reference)
+        exp["members"][0]["reference"]["results_sha256"] = hashlib.sha256(reference).hexdigest()
+    change(exp)
+    model["experiment"].write_text(yaml.safe_dump(exp, sort_keys=False))
+    git(model["root"], "add", "-A")
+    git(model["root"], "commit", "-q", "-m", "the experiment changed")
 
 
 def test_an_entry_has_a_kind_and_the_run_carries_it(tmp_path):
@@ -223,6 +236,61 @@ def test_an_exact_entry_is_held_to_the_error_stated_under_the_checks_metric():
     assert other["verdict"] == "error" and "does not answer the same question" in other["errors"][0]
 
 
+@pytest.mark.parametrize("content, problem", [(b"null", "holds no results"), (b"not json", "is not JSON")])
+def test_a_reference_that_cannot_be_read_is_an_error_and_never_a_crash(tmp_path, content, problem):
+    model = with_two_entries(tmp_path)
+    recommit(model, lambda exp: None, reference=content)
+    assert run_both(model, "--levels", "low") == 0 and command(model, "compare") == 1
+    report = comparison(model)
+    (ref,) = report["member_references"]
+    assert ref["status"] == "error" and problem in ref["problem"]
+    assert {c["verdict"] for c in report["checks"] if c["compare"] == "reference"} == {"error"}
+    assert {j["status"] for j in report["reference"] if j["member"] == "m1"} == {"error"}
+    assert problem in (model["out"] / "comparison.md").read_text()
+    # the reference of a member the run does not hold is not read, and stops nothing
+    shutil.rmtree(model["out"])
+    assert run_both(model, "--levels", "low", "--members", "m2") == 0 and command(model, "compare") == 0
+    assert comparison(model)["member_references"] == []
+
+
+def test_a_value_that_is_not_a_number_makes_a_check_against_the_reference_an_error():
+    results = results_of_the_entries()
+    for at_level in results["formula"]["m1"].values():
+        at_level["types"][0]["rule"]["c"][1] = float("nan")
+    within = check("formula_conforms", "reference", "types[].rule.c", "within_reference_error", kind="exact")
+    unread = evaluate(within, results=results)
+    assert unread["verdict"] == "error" and "not a number, at 1" in unread["errors"][0]
+    # a largest distance alone passes over such a value when it is not the first, which is why the check refuses it
+    passed_over = ([1.0, float("nan"), 3.0], [1.0, 2.0, 3.0], "max_abs_difference")
+    assert comparator.distance(*passed_over) == 0.0
+    with pytest.raises(ValueError, match="not a number, at 1"):
+        comparator.distance_at(*passed_over, strict=True)
+
+
+def test_a_bare_error_is_shown_under_the_metrics_of_before_and_never_relative_to_the_reference():
+    stub = results_of_the_entries()["stub"]["m1"]["low"]
+    quantities = [{"quantity": "types[].rule.c", "metric": "max_abs_difference"},
+                  {"quantity": "types[].rule.c", "metric": "max_relative_difference"},
+                  {"quantity": "types[].rule.c", "metric": "max_relative_to_reference", "floor": 0.5}]
+    bare = comparator.reference_distances(stub, REFERENCE_M1, quantities, {"types[].rule.c": 0.002})
+    assert [row.get("reference_error") for row in bare] == [0.002, 0.002, None]
+    keyed = comparator.reference_distances(stub, REFERENCE_M1, quantities, {"types[].rule.c": {"max_relative_to_reference": 0.004}})
+    assert [row.get("reference_error") for row in keyed] == [None, None, 0.004]
+    assert [row["at"] for row in keyed] == [1, 1, 1] and keyed[2]["floor"] == 0.5
+
+
+def test_a_record_names_the_floor_its_largest_distance_was_taken_with(tmp_path):
+    model = with_two_entries(tmp_path)
+    relative = {"quantity": "types[].rule.c", "metric": "max_relative_to_reference", "floor": 0.5}
+    recommit(model, lambda exp: exp.update(reference_quantities=[relative]))
+    assert run_both(model, "--levels", "low") == 0 and command(model, "compare") == 0
+    record = json.loads((model["out"] / "stub" / "m1" / "low" / "record.json").read_text())
+    largest = record["extensions"]["sce-wg-1"]["comparison"]["largest_distance"]
+    assert largest == {"quantity": "types[].rule.c", "metric": "max_relative_to_reference", "floor": 0.5,
+                       "distance": pytest.approx(0.005 / 0.68), "reference_error": 0.004}
+    records.validate(record)
+
+
 def test_a_check_names_its_levels_in_the_order_its_expectation_reads_them():
     falls = check("kink_falls", "reference", "types[].kink", "falls_with_level", kind="numerical")
     two = evaluate({**falls, "levels": ["low", "high"]})
@@ -264,6 +332,9 @@ def test_the_experiment_checker_refuses_what_the_design_forbids(tmp_path):
     reference = check("c", "reference", "types[].kink", {"at_most": 1.0}, kind="numerical")
     assert problems(reference) == ""
     assert "'kind' is a required property" in problems({k: v for k, v in reference.items() if k != "kind"})
+    # a check that lacks a key is told of that key, and not of the rules that hang on it
+    lacking = problems({k: v for k, v in reference.items() if k != "metric"})
+    assert "'metric' is a required property" in lacking and "floor" not in lacking and "'reference' was expected" not in lacking
     assert problems(check("c", "toolkits", "types[].kink", {"at_most": 1.0}, kind="numerical")) != ""  # a kind only against the reference
     assert problems({**reference, "expect": "within_reference_error"}) != ""                           # only an exact entry
     assert problems({**reference, "expect": "falls_with_level", "kind": "exact"}) != ""                # no ladder to fall along
