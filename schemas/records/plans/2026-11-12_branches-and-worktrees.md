@@ -1,6 +1,8 @@
 # Plan: fewer branches and worktrees in the fork
 
-**Status: PROPOSED on 2026-11-12, on the owner's request of that morning. Nothing in it is done.** Every step that
+**Status: PROPOSED on 2026-11-12, on the owner's request of that morning; its first step begun on his word at 11:03
+that day, the fork's pull request #16 merged with a merge commit (f557ef4), its branch not yet deleted. Nothing else
+in it is done.** Every step that
 merges, closes a pull request, deletes a branch on GitHub or makes a tag waits on his word.
 
 ## What there is

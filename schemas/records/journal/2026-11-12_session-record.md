@@ -42,10 +42,18 @@ Times are EST, from the clock, the transcript or git.
   metric relative to the reference, a large distance at the single point nearest the limit, where an average over
   the points was what he asked for and the core has none. Put to the owner here with this session's
   recommendations, and not built ([the deferred items](../deferred.md)).
+- **11:02:56, the owner's word here: the merge.** Pull request #16 is merged into the fork's main at 11:03 with a
+  merge commit, f557ef4, whose parents are the earlier main and the branch's head, so the commit the
+  perfect-foresight repository pins is in main's history; the merge adds no change of its own. The core's
+  thirty-four tests pass on main. The branch is still on the fork, not deleted. The other two live branches still
+  merge into the new main without conflict. The perfect-foresight session is told; moving its pin to follow main is
+  on his word there. This is the first part of the first step of
+  [the plan for the fork's branches](../plans/2026-11-12_branches-and-worktrees.md).
 
-**State at the end of the entry.** The fork's main at 7a4889f, pushed; the branch `reference-as-its-own-kind` pushed at
-6c12de1, with pull request #16 open into the fork's main, to merge on his word; two local branches unpushed and
-unmerged, for him to read: `stone-method-files` (2700da6) and `status-reader` (74312f9); this records branch not pushed,
-held on the HAFiscal session's open question; the ontology's statement on Bellman's documentation still with him;
-REMARK's updates merged into its main and not yet tagged; four changes to the core and one to the record schema's rule
-on the image proposed, none made.
+**State at the end of the entry.** The fork's main at f557ef4, pushed, with the reference as an object of its own
+merged by pull request #16; its branch still on the fork at 6c12de1, to delete with the plan's other steps on his
+word; two local branches unpushed and unmerged, for him to read: `stone-method-files` (2700da6) and `status-reader`
+(74312f9); the plan for the fork's branches and worktrees proposed, its first step begun; an experiment's own metrics
+proposed to him and not built; this records branch not pushed, held on the HAFiscal session's open question; the
+ontology's statement on Bellman's documentation still with him; REMARK's updates merged into its main and not yet
+tagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
