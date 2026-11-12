@@ -378,5 +378,11 @@ Times are EST, from the clock, the transcript or git.
   number, as it did before this change ([the defects](../defects.md)). The core's tests pass, thirty-four, the
   twenty earlier ones unchanged; the two repositories' real runs compare as before; the perfect-foresight session
   has the new head and moves its pin to it.
+- **The perfect-foresight session's second trial, reported here by 23:35.** Its branch pins the new head, unpushed.
+  In a fresh throwaway clone on the local address, as it reports: its own tests all pass, the one holding the pin
+  among them; the five checks of its experiment's second version pass; and every results, methods and settings file
+  is byte for byte that of its trial on the first commit, the report the same but for its times. It has recorded
+  this on its own main, and waits on the push here to verify its locks against GitHub, make its run of record,
+  merge and push.
 
 **State at the end of the entry.** The fork's main at 7a4889f, pushed; three local branches off it, unpushed and unmerged, for the owner to read: `stone-method-files` (2700da6), the convention's amendment as corrected after the model repository's session read it; `status-reader` (74312f9), the core's reader; and `reference-as-its-own-kind` (6c12de1), the reference as its own kind of object, built overnight on his acceptance of the perfect-foresight repository's plan, reviewed independently and tried by that repository's session on both versions of its experiment; this records branch not pushed, held on the HAFiscal session's open question; the ontology's statement on Bellman's documentation still with him; REMARK's updates merged into its main and not yet tagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
