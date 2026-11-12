@@ -44,6 +44,7 @@ Three rules:
 | `members` | for each member: its `id` (the parameter file's name), the parameter file and the request file, each with its hash as the checker takes it, and optionally its `reference`: the reference results file, that file's hash, its `kind`, what it was `produced_by` and `certified_by`, the record that produced it, and the reference's certified `errors` per quantity (below). Pinning the hashes means an edited member or reference makes the experiment fail its test, not silently change; a changed reference is a new experiment version. The hash identifies the reference's file, not a reproduction of it: a results file need not be byte-identical across machines, so a solution is compared with the reference by distance, never by hash |
 | `levels` | the named precision levels every toolkit runs: `low`, `medium` and `high`, as a toolkit's ladder names its elements. A toolkit may run more |
 | `reports` | the results-file quantities every run must carry beyond what the results schema requires of every file, as paths into it: `types[].rule.c`, `types[].kink` |
+| `metrics` | optional: the metrics the experiment defines, by name (below) |
 | `checks` | what the results must show (below) |
 | `reference_quantities` | optional: the quantities every job is compared with its member's reference on, each with its metric, and its `floor` under the metric relative to the reference; the `reports` under the absolute metric when left out |
 | `report_scripts` | optional scripts of the experiment's own that write tables and figures from the results files alone, solving nothing |
@@ -86,6 +87,56 @@ Where each is stated:
   quantity near zero can have a small absolute error and a large relative one. An error relative to the reference is
   stated for the floor the experiment uses.
 
+## Metrics
+
+A metric is the distance between two files' numbers for one quantity. Every check and every reference quantity names
+the metric it uses. No metric is the default, and which metrics an experiment uses is its own to say.
+
+**The core has three, by name,** each a distance at every number with the largest taken:
+- `max_abs_difference`: the absolute difference;
+- `max_relative_difference`: the absolute difference divided by the larger of one and the first value's magnitude,
+  which for a quantity far below one is the absolute difference;
+- `max_relative_to_reference`, against a reference: the absolute difference divided by the reference's own magnitude
+  at that number, or by the check's `floor` where the reference is smaller.
+
+**An experiment defines others under `metrics`,** each by a name. Its checks, its reference quantities and its
+references' errors then use that name as they use the three, whose names are reserved. A definition is one of two
+things.
+- **A pointwise distance with an aggregate.** `pointwise` is `abs_difference`, `relative_difference`, or
+  `relative_to_reference` with its `floor`, which only a comparison with the reference can use. `aggregate` is `max`,
+  `mean`, `rms`, the root of the mean of the squares, or `quantile` with its fraction `q`: the smallest pointwise
+  distance with at least the fraction `q` of them at or below it, taken with no interpolation, so that two programs
+  cannot differ on it. The core's three are the three pointwise distances with `max`.
+- **A function of the model's repository:** `function: file.py:name`, the file by its path from the experiment
+  file, with the file's `sha256` and, optionally, `parameters`. The function is called with the two files' numbers
+  as two lists, an entry's first and the reference's or the other file's second, and the parameters by name. It
+  returns the distance, a number not below zero, or the distance and the index among the numbers where its largest
+  pointwise distance sits. It must give the same answer each time. The comparator imports the file and runs the
+  function in its own process: it is the model repository's code run by the core, as the model's adapters and
+  verifier are. It runs where the comparison does, in the environment of the model repository's harness, so it may
+  import the standard library, what the core depends on, numpy and scipy among it, and whatever else that
+  environment declares. The hash is pinned as a member's files are, so a changed function is a changed experiment;
+  the experiment's checker reads the file and runs nothing.
+
+```yaml
+metrics:
+  mean_abs_difference: {pointwise: abs_difference, aggregate: mean}
+  rms_relative_to_reference: {pointwise: relative_to_reference, floor: 1.0e-12, aggregate: rms}
+  weighted_abs_difference: {function: "metrics.py:weighted_abs_difference", sha256: "…", parameters: {power: 2}}
+```
+
+Three rules hold for every metric:
+- **`at`.** With every distance the comparator reports where the largest pointwise distance sits, as the index among
+  the quantity's numbers. For a largest that is where the distance itself sits; for a mean it is the worst point. A
+  function that returns no index reports none.
+- **A reference's error under a metric** is stated under the metric's name. A metric that an exact entry is held to,
+  or that a fall against the reference rests on, needs the error stated under that same name.
+- **A value that is not a number** is refused by every metric an experiment defines. The core's three refuse one in
+  a check against the reference and otherwise pass over one that is not the first, as they always have.
+
+The comparator's report states each defined metric, a function's with its file's hash, so that a reader sees what a
+distance means.
+
 ## The checks
 
 Each check compares results files and says what the comparison must show. It has an `id`, a `statement` in words, and:
@@ -100,10 +151,9 @@ Each check compares results files and says what the comparison must show. It has
     member: the quantity's distance from its closed form, such as the effective member's expectations from the laws'.
 - **`quantity`,** a path into the results file. Every number it holds is compared: a rule's values at the request's
   points, or the whole `effective_member` block.
-- **`metric`,** `max_abs_difference`; `max_relative_difference`, divided by the larger of one and the first value's
-  magnitude, which for a quantity far below one is the absolute difference; or, against a reference,
-  `max_relative_to_reference`, the absolute difference divided by the reference's own magnitude at that number, or by
-  the check's `floor` where the reference is smaller, so that a reference value of zero is not divided by.
+- **`metric`,** by name: one of the core's three, or one the experiment defines (above). The check's `floor` goes
+  with `max_relative_to_reference` alone, so that a reference value of zero is not divided by; a defined metric
+  states its own.
 - **`levels`,** optional: the levels the check applies to, in the order its expectation reads them; every level, as
   the experiment lists them, when left out.
 - **`expect`:**
@@ -191,6 +241,8 @@ The checker of experiment files, part of the harness's core, checks that:
 - the members of a member-against-member check ask for the same points;
 - a check names levels the experiment has, and a check against the reference names members that pin one, each
   stating the error an exact entry is to be held to;
+- every metric named is the core's or one the experiment defines, and a metric's function is in its file, the file
+  hashing as stated;
 - breaks are caught, from a wrong hash to a toolkit's setting written into the file.
 
 It solves nothing and says nothing about whether a toolkit passes. That is the harness's job.

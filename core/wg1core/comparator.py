@@ -19,6 +19,9 @@ the reference's stated error under the check's metric has come as close as the r
 fallen. An exact entry is to lie within the reference's stated error, which is a test that it encodes the solution and
 not a measurement of a method.
 
+A check names its metric, one of the core's three or one the experiment defines (metrics.py); no metric is the
+default.
+
 Beside the checks, the distance of every job from its member's reference is reported for every quantity the
 experiment names, with the reference's error beside it and where in the quantity's numbers the largest distance sits.
 That distance gets no verdict. A comparison that cannot be computed for a member that pins a reference, the reference
@@ -34,9 +37,9 @@ from __future__ import annotations
 import hashlib
 import itertools
 import json
-import math
 from pathlib import Path
 
+from . import metrics as metric_definitions
 from . import records
 from .experiment import stated_error
 
@@ -82,49 +85,27 @@ def numbers(value: dict, quantity: str) -> list[float]:
     return out
 
 
-def distance_at(a: list[float], b: list[float], metric: str, floor: float | None = None,
-                strict: bool = False) -> tuple[float, int]:
-    """The largest distance over every number, and where it sits: the index, among the quantity's numbers in their
-    fixed order, of the first number that attains it. With `strict`, a value that is not a number is refused: a
-    largest distance passes over one that is not the first, so a verdict that an entry lies within an error must not
-    rest on it.
-
-    max_abs_difference: the absolute difference. max_relative_difference: the absolute difference divided by the
-    larger of one and the first value's magnitude. max_relative_to_reference: the absolute difference divided by the
-    larger of the floor and the second value's magnitude, the second being the reference's."""
-    if len(a) != len(b):
-        raise ValueError(f"the two files hold {len(a)} and {len(b)} numbers")
-    if not a:
-        raise ValueError("no numbers to compare")
-    if strict:
-        unread = next((i for i, (x, y) in enumerate(zip(a, b)) if math.isnan(x) or math.isnan(y)), None)
-        if unread is not None:
-            raise ValueError(f"a value that is not a number, at {unread}")
-    if metric == "max_abs_difference":
-        each = [abs(x - y) for x, y in zip(a, b)]
-    elif metric == "max_relative_difference":
-        each = [abs(x - y) / max(1.0, abs(x)) for x, y in zip(a, b)]
-    elif metric == "max_relative_to_reference":
-        if floor is None or not floor > 0:
-            raise ValueError("max_relative_to_reference needs a floor above zero")
-        each = [abs(x - y) / max(floor, abs(y)) for x, y in zip(a, b)]
-    else:
-        raise ValueError(f"unknown metric {metric}")
-    at = max(range(len(each)), key=each.__getitem__)
-    return each[at], at
+def distance_at(a: list[float], b: list[float], metric: str, floor: float | None = None, strict: bool = False,
+                defined: dict | None = None) -> tuple[float, int | None]:
+    """The distance between two files' numbers under a metric, and where the largest pointwise distance sits: the
+    index, among the quantity's numbers in their fixed order, of the first number that attains it (metrics.py). The
+    metric is one of the core's three or one of `defined`, the experiment's own. With `strict`, a value that is not a
+    number is refused: a largest distance passes over one that is not the first, so a verdict that an entry lies
+    within an error must not rest on it."""
+    return metric_definitions.distance_at(a, b, metric, floor, strict, defined)
 
 
-def distance(a: list[float], b: list[float], metric: str, floor: float | None = None) -> float:
-    return distance_at(a, b, metric, floor)[0]
+def distance(a: list[float], b: list[float], metric: str, floor: float | None = None, defined: dict | None = None) -> float:
+    return distance_at(a, b, metric, floor, defined=defined)[0]
 
 
-def compare_at(a: dict, b: dict, quantity: str, metric: str, floor: float | None = None,
-               strict: bool = False) -> tuple[float, int]:
-    return distance_at(numbers(a, quantity), numbers(b, quantity), metric, floor, strict)
+def compare_at(a: dict, b: dict, quantity: str, metric: str, floor: float | None = None, strict: bool = False,
+               defined: dict | None = None) -> tuple[float, int | None]:
+    return distance_at(numbers(a, quantity), numbers(b, quantity), metric, floor, strict, defined)
 
 
-def compare(a: dict, b: dict, quantity: str, metric: str, floor: float | None = None) -> float:
-    return compare_at(a, b, quantity, metric, floor)[0]
+def compare(a: dict, b: dict, quantity: str, metric: str, floor: float | None = None, defined: dict | None = None) -> float:
+    return compare_at(a, b, quantity, metric, floor, defined=defined)[0]
 
 
 # The checks -------------------------------------------------------------------------------------------------------------
@@ -153,12 +134,13 @@ def _verdict(outcomes: list[bool], errors: list[str]) -> str:
 
 
 def evaluate_check(check: dict, results: dict, members: list[str], order: list[str], kinds: dict | None = None,
-                   references: dict | None = None, identity: list[str] = ()) -> dict:
+                   references: dict | None = None, identity: list[str] = (), defined: dict | None = None) -> dict:
     """One check on a run's results, `results[toolkit][member][level]`, the levels ordered as the experiment lists
     them, or as the check lists the ones it applies to. `kinds` gives each entry's kind, numerical where it gives
     none; `references` gives, for each member that pins one, the reference as `load_references` returns it;
-    `identity` names the keys an entry's file and the reference must agree on. Returns the verdict and the numbers
-    behind it. A comparison the run holds too little for is not applicable, never a failure."""
+    `identity` names the keys an entry's file and the reference must agree on; `defined` holds the metrics the
+    experiment defines. Returns the verdict and the numbers behind it. A comparison the run holds too little for is
+    not applicable, never a failure."""
     quantity, metric, expect, floor = check["quantity"], check["metric"], check["expect"], check.get("floor")
     at_most = expect.get("at_most") if isinstance(expect, dict) else None
     kinds, references = kinds or {}, references or {}
@@ -172,7 +154,7 @@ def evaluate_check(check: dict, results: dict, members: list[str], order: list[s
 
     def dist(x: dict, y: dict, label: str, strict: bool = False) -> tuple[float, int] | None:
         try:
-            return compare_at(x, y, quantity, metric, floor, strict)
+            return compare_at(x, y, quantity, metric, floor, strict, defined)
         except (KeyError, ValueError) as e:
             errors.append(f"{label}: {e}")
             return None
@@ -271,7 +253,8 @@ def evaluate_check(check: dict, results: dict, members: list[str], order: list[s
                     continue
                 error = stated_error(reference["stated"], quantity, metric)
                 entry = {"toolkit": toolkit, "kind": check["kind"], "member": member,
-                         "values": {lv: d for lv, (d, _) in series}, "at": {lv: at for lv, (_, at) in series}}
+                         "values": {lv: d for lv, (d, _) in series},
+                         "at": {lv: at for lv, (_, at) in series if at is not None}}
                 if error is not None:
                     entry["reference_error"] = error
                 values.append(entry)
@@ -365,25 +348,28 @@ def describe_references(references: dict, entries: list[str]) -> list[dict]:
     return out
 
 
-def reference_distances(results: dict, reference: dict, quantities: list[dict], errors: dict) -> list[dict]:
+def reference_distances(results: dict, reference: dict, quantities: list[dict], errors: dict,
+                        defined: dict | None = None) -> list[dict]:
     """Every distance from the reference, each with where its largest sits and the reference's own error for that
     quantity beside it, or the reason it could not be computed. No verdict. An error stated by metric is shown under
     its metric. An error stated as a bare number is the error under the absolute metric; it is also shown beside the
     distance under max_relative_difference, as it was before errors were keyed by metric, and never beside a distance
-    relative to the reference."""
+    relative to the reference or under a metric the experiment defines."""
     out = []
     for q in quantities:
         row = {"quantity": q["quantity"], "metric": q["metric"]}
         if "floor" in q:
             row["floor"] = q["floor"]
         try:
-            row["distance"], row["at"] = compare_at(results, reference, q["quantity"], q["metric"], q.get("floor"))
+            row["distance"], at = compare_at(results, reference, q["quantity"], q["metric"], q.get("floor"), defined=defined)
+            if at is not None:
+                row["at"] = at
         except (KeyError, ValueError) as e:
             row["problem"] = str(e)
         stated = errors.get(q["quantity"])
         if isinstance(stated, dict):
             stated = stated.get(q["metric"])
-        elif q["metric"] == "max_relative_to_reference":
+        elif q["metric"] not in ("max_abs_difference", "max_relative_difference"):
             stated = None
         if stated is not None:
             row["reference_error"] = stated
@@ -410,7 +396,8 @@ def run_comparison(experiment: dict, experiment_file: Path, jobs: list[dict], ru
             job_results[id(j)] = data
     members = [m["id"] for m in experiment["members"]]
     references = load_references(experiment, experiment_file, {j["member"] for j in jobs})  # of the members the run holds
-    checks = [evaluate_check(c, results, members, list(experiment["levels"]), kinds, references, identity)
+    defined = metric_definitions.load(experiment, experiment_file)
+    checks = [evaluate_check(c, results, members, list(experiment["levels"]), kinds, references, identity, defined)
               for c in experiment["checks"]]
     quantities = reference_quantities(experiment)
     by_member = {m["id"]: m for m in experiment["members"]}
@@ -432,7 +419,7 @@ def run_comparison(experiment: dict, experiment_file: Path, jobs: list[dict], ru
         else:
             mismatched = [k for k in identity if value_at(data, k) != value_at(reference, k)]
             errors = by_member[j["member"]]["reference"].get("errors", {})
-            rows = reference_distances(data, reference, quantities, errors)
+            rows = reference_distances(data, reference, quantities, errors, defined)
             problems = [f"{r['quantity']}: {r['problem']}" for r in rows if "problem" in r]
             entry.update({"reference": digest, "distances": rows})
             if mismatched:
@@ -447,9 +434,27 @@ def run_comparison(experiment: dict, experiment_file: Path, jobs: list[dict], ru
                                              if k in largest}
         per_job.append(entry)
     failed = any(c["verdict"] in ("fail", "error") for c in checks) or any(j["status"] == "error" for j in per_job)
-    return {"experiment": experiment["experiment"], "run": run.name, "entries": kinds,
-            "member_references": describe_references(references, list(kinds)), "checks": checks, "reference": per_job,
-            "failed": failed}
+    report = {"experiment": experiment["experiment"], "run": run.name, "entries": kinds,
+              "member_references": describe_references(references, list(kinds)), "checks": checks, "reference": per_job,
+              "failed": failed}
+    if defined:
+        report["metrics"] = metric_definitions.describe(experiment)
+    return report
+
+
+def _metric_text(definition: dict) -> str:
+    """A metric's definition in words, for the report."""
+    if "function" in definition:
+        parameters = definition.get("parameters")
+        return (f"the function `{definition['function']}`" + (f" with {json.dumps(parameters, sort_keys=True)}" if parameters else "")
+                + f", its file's hash `{definition['sha256'][:12]}`")
+    pointwise = {"abs_difference": "the absolute difference",
+                 "relative_difference": "the absolute difference over the larger of one and the first value's magnitude",
+                 "relative_to_reference": "the absolute difference over the larger of the floor and the reference's magnitude"
+                 }[definition["pointwise"]]
+    how = {"max": "the largest", "mean": "the mean", "rms": "the root of the mean square",
+           "quantile": f"the quantile at {definition.get('q')}, with no interpolation,"}[definition["aggregate"]]
+    return f"{how} over the quantity's numbers of {pointwise}" + (f", floor {definition['floor']:g}" if "floor" in definition else "")
 
 
 def _producer_text(producer) -> str:
@@ -491,6 +496,9 @@ def as_markdown(report: dict) -> str:
         for r in references:
             for name in r.get("producers_among_the_entries", []):
                 lines += ["", f"What produced or certified the reference of {r['member']}, {name}, is also an entry of this run."]
+    if report.get("metrics"):
+        lines += ["", "## The metrics the experiment defines", "", "| metric | what it is |", "|---|---|"]
+        lines += [f"| `{name}` | {_metric_text(definition)} |" for name, definition in report["metrics"].items()]
     kinds = report.get("entries", {})
     if any(kind != NUMERICAL for kind in kinds.values()):
         lines += ["", "The entries: " + ", ".join(f"{name}, {kind}" for name, kind in kinds.items()) + ". An exact entry is "
@@ -530,7 +538,8 @@ def as_markdown(report: dict) -> str:
             lines.append(f"| {j['toolkit']} | {kind} | {j['member']} | {j['level']} | `{r['quantity']}` | {metric} | {d} "
                          f"| {r.get('at', '')} | {e} |")
     lines += ["", "A distance in this table is reported with the reference's error beside it and carries no verdict; `at` is the "
-              "index, among the quantity's numbers, where the largest distance sits. The exit status is the checks' alone."]
+              "index, among the quantity's numbers, where the largest pointwise distance sits. The exit status is the checks' "
+              "alone."]
     return "\n".join(lines) + "\n"
 
 

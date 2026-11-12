@@ -582,7 +582,10 @@ def cmd_compare(args) -> int:
                      [m["id"] for m in manifest["members"]], run)
     for j in jobs:
         j["kind"] = manifest["toolkits"][j["toolkit"]].get("kind", "numerical")
-    report = comparator.run_comparison(exp, exp_path, jobs, run, model.identity)
+    try:
+        report = comparator.run_comparison(exp, exp_path, jobs, run, model.identity)
+    except ValueError as e:  # a metric's function that cannot be imported: a refusal, as an experiment with problems is
+        raise SystemExit(str(e))
     comparator.write_outputs(report, jobs, run)
     for c in report["checks"]:
         print(f"{c['id']:32s} {c['verdict']}" + (f"  {c['errors'][0]}" if c["errors"] else ""))
