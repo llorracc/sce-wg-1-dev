@@ -354,5 +354,29 @@ Times are EST, from the clock, the transcript or git.
     local address changes.
   Its branch moves its pin to the commit and waits on the push here. The numbers are that repository's, which is
   private, and are not repeated here.
+- **The independent review's report, and its edge cases fixed by 23:33** (6c12de1, a second commit on the branch).
+  A second reader, given the diff and the specification and not this session's reasoning, found no defect in the
+  main paths: random runs of the earlier form compare the same under the core before and under this one once the
+  new keys are set aside; every verdict of a check against the reference, on random runs of the new form, agrees
+  with its own second statement of the specification; and every combination of a check's keys validates as the
+  specification says. It found edge cases, each tried by it, and these are changed:
+  - a reference file that hashes as pinned and is not JSON, or holds no results, crashed the comparison; it is now a
+    stated problem, and only the references of the members a run holds are read;
+  - a bare error, which is an absolute one, was shown beside a distance relative to the reference; it is now shown
+    under the absolute metric and, as before the change, under the earlier relative one;
+  - a check that an exact entry lies within the reference's error passed an entry holding a value that is not a
+    number, wherever that value was not the first, since a largest distance passes over it; a check against the
+    reference now refuses such a value, and the table of distances and the other checks are as they were;
+  - a record could not say which floor its largest distance was taken with; it now does;
+  - a check lacking a required key was also told of rules that hang on that key; the messages are now the key's own;
+  - the documents said an exact entry has no levels and that every record carries the kind; they now say that an
+    exact entry is registered and run at each level, and that a skipped job keeps the record it had.
+  Left as they are, and noted: a record written by this core names the seventh draft where one written before
+  names the sixth, besides carrying the new field; the remark that a reference's producer is also an entry rests
+  on the names being the same; a run interrupted after an entry's kind changed leaves the earlier manifest
+  standing; and a largest distance outside a check against the reference still passes over a value that is not a
+  number, as it did before this change ([the defects](../defects.md)). The core's tests pass, thirty-four, the
+  twenty earlier ones unchanged; the two repositories' real runs compare as before; the perfect-foresight session
+  has the new head and moves its pin to it.
 
-**State at the end of the entry.** The fork's main at 7a4889f, pushed; three local branches off it, unpushed and unmerged, for the owner to read: `stone-method-files` (2700da6), the convention's amendment as corrected after the model repository's session read it; `status-reader` (74312f9), the core's reader; and `reference-as-its-own-kind` (744393d), the reference as its own kind of object, built overnight on his acceptance of the perfect-foresight repository's plan, with an independent review of it under way; this records branch not pushed, held on the HAFiscal session's open question; the ontology's statement on Bellman's documentation still with him; REMARK's updates merged into its main and not yet tagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
+**State at the end of the entry.** The fork's main at 7a4889f, pushed; three local branches off it, unpushed and unmerged, for the owner to read: `stone-method-files` (2700da6), the convention's amendment as corrected after the model repository's session read it; `status-reader` (74312f9), the core's reader; and `reference-as-its-own-kind` (6c12de1), the reference as its own kind of object, built overnight on his acceptance of the perfect-foresight repository's plan, reviewed independently and tried by that repository's session on both versions of its experiment; this records branch not pushed, held on the HAFiscal session's open question; the ontology's statement on Bellman's documentation still with him; REMARK's updates merged into its main and not yet tagged; four changes to the core and one to the record schema's rule on the image proposed, none made.

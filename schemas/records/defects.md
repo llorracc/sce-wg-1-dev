@@ -228,5 +228,15 @@ Faults found in this project's own work, with their status.
   that use them. The core's validator of experiments admits neither, and its comparator evaluates neither; the
   buffer-stock repository's experiment, as committed, uses the three comparisons and three expectations the core
   does have. Found on 2026-11-11 while adding the checks against the reference to that document's list. The
-  document was carried into the core's repository from the model repository's earlier harness, which had them.
-  **Status:** open; either the document's two items go, or the core gains them, the owner's to say.
+  document was carried into the core's repository from the model repository's earlier harness, which had them. It
+  also says the experiments' checker verifies that the members of a check between members ask for the same points,
+  which the core's checker does not do.
+  **Status:** open; either the document's items go, or the core gains them, the owner's to say.
+- **A largest distance passes over a value that is not a number.** The comparator's distance is the largest over a
+  quantity's numbers, and Python's largest of a list skips a value that is not a number unless it is the first. So a
+  results file holding one in a compared quantity is reported with the distance of its other numbers, in the table
+  of distances from the reference and in the checks between members, toolkits and levels. In the core since the
+  comparator was written; found on 2026-11-11 by the independent review of the branch `reference-as-its-own-kind`,
+  where a check against the reference now refuses such a value.
+  **Status:** open for the earlier paths; refusing it there changes what an earlier run reports, so it is the
+  owner's to say.
