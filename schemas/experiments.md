@@ -41,47 +41,96 @@ Three rules:
 | `experiment` | the name and version, as a family's: `restrained-limit/1`. A change to what it asks makes a new version |
 | `title`, `statement` | what it shows, in words |
 | `sources` | where it comes from, by anchor; BST's must be among the published page's (`bst-anchors.txt` in the ontology) |
-| `members` | for each member: its `id` (the parameter file's name), the parameter file and the request file, each with its hash as the checker takes it, and optionally its `reference`: the reference results file, that file's hash, the record that produced it, and the reference's certified error per quantity. Pinning the hashes means an edited member or reference makes the experiment fail its test, not silently change; a changed reference is a new experiment version. The hash identifies the reference's file, not a reproduction of it: a results file need not be byte-identical across machines, so a solution is compared with the reference by distance, never by hash |
+| `members` | for each member: its `id` (the parameter file's name), the parameter file and the request file, each with its hash as the checker takes it, and optionally its `reference`: the reference results file, that file's hash, its `kind`, what it was `produced_by` and `certified_by`, the record that produced it, and the reference's certified `errors` per quantity (below). Pinning the hashes means an edited member or reference makes the experiment fail its test, not silently change; a changed reference is a new experiment version. The hash identifies the reference's file, not a reproduction of it: a results file need not be byte-identical across machines, so a solution is compared with the reference by distance, never by hash |
 | `levels` | the named precision levels every toolkit runs: `low`, `medium` and `high`, as a toolkit's ladder names its elements. A toolkit may run more |
 | `reports` | the results-file quantities every run must carry beyond what the results schema requires of every file, as paths into it: `types[].rule.c`, `types[].kink` |
 | `checks` | what the results must show (below) |
-| `reference_quantities` | optional: the quantities every job is compared with its member's reference on, each with its metric; the `reports` under the absolute metric when left out |
+| `reference_quantities` | optional: the quantities every job is compared with its member's reference on, each with its metric, and its `floor` under the metric relative to the reference; the `reports` under the absolute metric when left out |
 | `report_scripts` | optional scripts of the experiment's own that write tables and figures from the results files alone, solving nothing |
 
 The file is strict YAML, like a parameter file, so it has a hash, and its keys and values follow the schemas' own spelling,
 with underscores. A quantity's path must resolve in the family's results schema; the experiment's checker verifies it.
 
+## Kinds and roles
+
+A solution has two properties, which the apparatus keeps apart.
+
+**Its kind is how it is obtained.**
+- **exact:** evaluated from a closed form. It has no settings and no levels, and its only error is round-off.
+- **numerical:** approximated by a method with settings, at a level. Its error is not known beforehand and is what
+  an experiment measures.
+
+**Its role is what it is for in an experiment.**
+- **the reference:** the standard a member's other solutions are measured against, pinned by the experiment with
+  its stated errors.
+- **an entry:** a registered toolkit's solution, measured against the reference.
+
+Each combination occurs. An exact reference is a closed form that the model repository's checker evaluates. A
+numerical reference is a solve carried far along its ladder and certified. A numerical entry is a toolkit's solver.
+An exact entry is the closed form written in a toolkit's language: it shows that the language encodes the solution,
+and it is no second method.
+
+Where each is stated:
+- **An entry's kind** is the registry file's: `kind: exact` or `kind: numerical` under the toolkit, numerical when
+  left out. The run's manifest and every job's record carry it.
+- **A reference's kind** is the experiment's, `kind` under the member's `reference`, with what produced it:
+  `produced_by`, as words, such as the checker at a commit, or as a toolkit with its commit, its settings and the
+  record of the solve; and `certified_by`, a list of the same, for an independent second solve. A producer names no
+  entry of the registry file. The comparator says so when a producer is also among a run's entries, since an entry
+  measured against its own solution shows nothing.
+- **A reference's errors** are stated by quantity. A number is the error under the absolute metric. A mapping states
+  the error under each metric it names, `{max_abs_difference: 1.0e-14, max_relative_to_reference: 1.0e-9}`, since a
+  quantity near zero can have a small absolute error and a large relative one.
+
 ## The checks
 
 Each check compares results files and says what the comparison must show. It has an `id`, a `statement` in words, and:
 - **`compare`,** what is set side by side:
-  - `members`: one toolkit's files at one level, between the named `pairs` of members;
-  - `toolkits`: two toolkits' files for one member at one level, for every pair of toolkits run;
-  - `levels`: one toolkit's files for one member, at successive levels;
+  - `members`: one toolkit's files at one level, between the named `pairs` of members, for every entry;
+  - `toolkits`: two numerical entries' files for one member at one level, for every pair of them run;
+  - `levels`: one numerical entry's files for one member, at successive levels;
+  - `reference`: for each entry of the check's `kind`, its files for one member beside the member's pinned
+    reference. The check names the `kind` of entry it applies to, and applies to every member that pins a reference
+    unless it names its `members`;
   - `stated`: one toolkit's files for one member at successive levels, against the checker's report of the stated
     member: the quantity's distance from its closed form, such as the effective member's expectations from the laws'.
 - **`quantity`,** a path into the results file. Every number it holds is compared: a rule's values at the request's
   points, or the whole `effective_member` block.
-- **`metric`,** `max_abs_difference`, or `max_relative_difference` (divided by the larger of one and the first value's
-  magnitude).
+- **`metric`,** `max_abs_difference`; `max_relative_difference`, divided by the larger of one and the first value's
+  magnitude, which for a quantity far below one is the absolute difference; or, against a reference,
+  `max_relative_to_reference`, the absolute difference divided by the reference's own magnitude at that number, or by
+  the check's `floor` where the reference is smaller, so that a reference value of zero is not divided by.
+- **`levels`,** optional: the levels the check applies to, in the order its expectation reads them; every level, as
+  the experiment lists them, when left out.
 - **`expect`:**
   - `decreasing`: each pair's metric smaller than the pair before it, at every level (for `members`);
-  - `falls_with_level`: the metric smaller at each finer level (for `toolkits` and `levels`);
+  - `falls_with_level`: the metric smaller at each finer level (for `toolkits`, `levels`, and a numerical entry
+    against the `reference`). Between toolkits and between levels the fall is strict. Against a reference, a level
+    whose distance is no larger than the reference's stated error under the check's metric is as close as the
+    reference resolves, and the step to it counts as a fall;
   - `{at_most: x}`: the metric no larger than x, at every level;
+  - `within_reference_error`: every distance, at every level, no larger than the reference's stated error under the
+    check's metric (for an exact entry against the `reference`). The reference must state that error, or the
+    experiment's checker refuses the check. This is a test that the entry encodes the solution, not a measurement of
+    a method;
   - `within_own_convergence`: at the finest level, the metric no larger than the sum of the two toolkits' own movements
     of the same quantity between their two finest levels (for `toolkits`).
 
 **How the comparator reports.** It evaluates the checks as written and gives each a verdict: pass, fail, not applicable
 when the run holds too little to apply it, such as one level for a check on successive levels, or error when two
-files cannot be compared. For every job whose member has a reference pinned, it reports the distance from the
-reference on each named quantity with the reference's own error beside it, and no verdict: a distance from the
-reference is reported, never judged, since the reference's certification is the error stated and a tolerance would
-have to be ruled for each quantity. It writes `comparison.json` and `comparison.md` in the run folder, a report in
-each job's folder, and the comparison block of each job's record. A comparison that cannot be computed for a member
+files cannot be compared. An exact entry has no method to compare and no ladder to converge along, so the checks
+between toolkits and between levels leave it out; what holds it is a check against the reference. For every job
+whose member has a reference pinned, it also reports the distance from the reference on each named quantity, with
+where among the quantity's numbers the largest distance sits and the reference's own error beside it, and no
+verdict: a distance in that table is reported, never judged, and no experiment is required to hold an entry to the
+reference. A check with `compare: reference` is how an experiment does. Its report states each member's reference,
+with its kind, what produced it and its errors, and each entry's kind. It writes `comparison.json` and
+`comparison.md` in the run folder, a report in each job's folder, and the comparison block of each job's record. A comparison that cannot be computed for a member
 that pins a reference, the reference not loading, not agreeing with the job's file on the identity keys the model
-names, or a quantity not comparable, is an error. Its exit status is the checks' and the errors', never a distance's. A reference
-solver is a toolkit like any other, named for its code and run far along its ladder, with records of its own; the
-experiment pins the file it produced.
+names, or a quantity not comparable, is an error. Its exit status is the checks' and the errors', never a reported
+distance's. A numerical reference's solver is named for its code and run far along its ladder, with records of its
+own, and an exact reference is named for what evaluates the closed form; the experiment pins the file either
+produced.
 
 **How two toolkits are compared.** A comparison of two toolkits takes its tolerance from measured convergence. Since
 each toolkit represents the laws its own way, the two solve
@@ -135,6 +184,8 @@ The checker of experiment files, part of the harness's core, checks that:
 - the checks name declared members, and every quantity resolves in the family's results schema;
 - the report scripts exist, and BST's anchors are the published page's;
 - the members of a member-against-member check ask for the same points;
+- a check names levels the experiment has, and a check against the reference names members that pin one, each
+  stating the error an exact entry is to be held to;
 - breaks are caught, from a wrong hash to a toolkit's setting written into the file.
 
 It solves nothing and says nothing about whether a toolkit passes. That is the harness's job.

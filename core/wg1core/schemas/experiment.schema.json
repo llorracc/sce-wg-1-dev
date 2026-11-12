@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/econ-ark/sce-wg-1/schemas/experiment.schema.json",
   "title": "An experiment every toolkit performs",
-  "description": "Draft, 2026-11-02 (experiments.md). An experiment names the members to solve, the request file each is solved with, the precision levels each toolkit runs, what every results file must carry, and the checks the harness makes on the results files. It names no toolkit and holds no setting of one.",
+  "description": "Draft, 2026-11-02, revised 2026-11-11 (experiments.md). An experiment names the members to solve, the request file each is solved with, the precision levels each toolkit runs, what every results file must carry, and the checks the harness makes on the results files. It names no toolkit and holds no setting of one. A member may pin a reference solution, with its kind, what produced it and its stated errors; a check may hold the entries of one kind to it.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -54,11 +54,7 @@
       "minItems": 1,
       "uniqueItems": true,
       "items": {
-        "enum": [
-          "low",
-          "medium",
-          "high"
-        ]
+        "$ref": "#/$defs/Level"
       }
     },
     "reports": {
@@ -99,7 +95,7 @@
       }
     },
     "reference_quantities": {
-      "description": "The quantities every job is compared with its member's reference on, each with its metric; the experiment's reports under the absolute metric when left out. The distances are reported with the reference's error beside them and carry no verdict.",
+      "description": "The quantities every job is compared with its member's reference on, each with its metric; the experiment's reports under the absolute metric when left out. The distances are reported with the reference's error beside them and carry no verdict; a check with compare: reference is what holds an entry to the reference.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -116,10 +112,39 @@
           "metric": {
             "enum": [
               "max_abs_difference",
-              "max_relative_difference"
+              "max_relative_difference",
+              "max_relative_to_reference"
             ]
+          },
+          "floor": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "For max_relative_to_reference: the least magnitude a distance is divided by."
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "metric": {
+                  "const": "max_relative_to_reference"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "floor"
+              ]
+            },
+            "else": {
+              "not": {
+                "required": [
+                  "floor"
+                ]
+              }
+            }
+          }
+        ]
       }
     }
   },
@@ -174,7 +199,7 @@
           "minLength": 1
         },
         "reference": {
-          "description": "The member's reference solution, pinned: its results file, that file's hash, the record that produced it, and the reference's own certified error per quantity. A changed reference is a new experiment version.",
+          "description": "The member's reference solution, pinned: its results file, that file's hash, its kind, what produced it, the record that produced it, and the reference's own certified error per quantity. A changed reference is a new experiment version.",
           "type": "object",
           "additionalProperties": false,
           "required": [
@@ -188,16 +213,54 @@
             "results_sha256": {
               "$ref": "#/$defs/Sha256"
             },
+            "kind": {
+              "$ref": "#/$defs/Kind",
+              "description": "The reference's kind: exact, such as a closed form the checker evaluates, or numerical, a solve carried far along its ladder."
+            },
+            "produced_by": {
+              "$ref": "#/$defs/Producer"
+            },
+            "certified_by": {
+              "description": "Independent second solves that certify the reference.",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/Producer"
+              }
+            },
             "record": {
               "$ref": "#/$defs/RelativePath",
               "description": "The execution record of the solve that produced the file."
             },
             "errors": {
               "type": "object",
-              "description": "The reference's certified error for each quantity, by the quantity's path.",
+              "description": "The reference's certified error for each quantity, by the quantity's path: a number, which is its error under max_abs_difference, or its error under each metric named.",
               "additionalProperties": {
-                "type": "number",
-                "minimum": 0
+                "oneOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "minProperties": 1,
+                    "properties": {
+                      "max_abs_difference": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "max_relative_difference": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "max_relative_to_reference": {
+                        "type": "number",
+                        "minimum": 0
+                      }
+                    }
+                  }
+                ]
               }
             }
           }
@@ -205,7 +268,7 @@
       }
     },
     "Check": {
-      "description": "One comparison of results files and what it must show. members: one toolkit's files at one level, between the named pairs of members. toolkits: two toolkits' files for one member at one level. levels: one toolkit's files for one member, at successive levels.",
+      "description": "One comparison of results files and what it must show. members: one toolkit's files at one level, between the named pairs of members. toolkits: two numerical entries' files for one member at one level. levels: one numerical entry's files for one member, at successive levels. reference: the files of each entry of the check's kind for one member, each beside the member's pinned reference.",
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -229,18 +292,29 @@
           "enum": [
             "members",
             "toolkits",
-            "levels"
+            "levels",
+            "reference"
           ]
+        },
+        "kind": {
+          "$ref": "#/$defs/Kind",
+          "description": "For compare: reference, the kind of entry the check applies to."
         },
         "quantity": {
           "$ref": "#/$defs/Quantity"
         },
         "metric": {
-          "description": "max_abs_difference: the largest absolute difference over every number the quantity holds, at the request's points for a rule. max_relative_difference: the same, divided by the larger of one and the first value's magnitude.",
+          "description": "max_abs_difference: the largest absolute difference over every number the quantity holds, at the request's points for a rule. max_relative_difference: the same, divided by the larger of one and the first value's magnitude. max_relative_to_reference, for compare: reference: the absolute difference divided by the larger of the floor and the reference's own magnitude.",
           "enum": [
             "max_abs_difference",
-            "max_relative_difference"
+            "max_relative_difference",
+            "max_relative_to_reference"
           ]
+        },
+        "floor": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "For max_relative_to_reference: the least magnitude a distance is divided by, so that a reference value of zero is not."
         },
         "pairs": {
           "description": "For compare: members, the pairs, in the order the expectation reads them.",
@@ -256,7 +330,7 @@
           }
         },
         "members": {
-          "description": "For compare: toolkits or levels, the members it applies to; every member when left out.",
+          "description": "For compare: toolkits, levels or reference, the members it applies to; every member when left out, and for reference every member that pins one.",
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
@@ -264,13 +338,23 @@
             "$ref": "#/$defs/Id"
           }
         },
+        "levels": {
+          "description": "The levels the check applies to, in the order the expectation reads them; every level, as the experiment lists them, when left out.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Level"
+          }
+        },
         "expect": {
-          "description": "decreasing: each pair's metric smaller than the pair before it, at every level. falls_with_level: the metric smaller at each finer level. at_most: the metric no larger than the number, at every level.",
+          "description": "decreasing: each pair's metric smaller than the pair before it, at every level. falls_with_level: the metric smaller at each finer level; against a reference, a level whose distance is no larger than the reference's stated error under the check's metric has reached it and counts as fallen. at_most: the metric no larger than the number, at every level. within_reference_error, for an exact entry against the reference: every distance no larger than the reference's stated error under the check's metric.",
           "oneOf": [
             {
               "enum": [
                 "decreasing",
-                "falls_with_level"
+                "falls_with_level",
+                "within_reference_error"
               ]
             },
             {
@@ -345,9 +429,144 @@
               "compare": {
                 "enum": [
                   "toolkits",
-                  "levels"
+                  "levels",
+                  "reference"
                 ]
               }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "compare": {
+                "const": "reference"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "kind"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "kind"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "expect": {
+                "const": "within_reference_error"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "compare": {
+                "const": "reference"
+              },
+              "kind": {
+                "const": "exact"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "compare": {
+                "const": "reference"
+              },
+              "expect": {
+                "const": "falls_with_level"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "numerical"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "metric": {
+                "const": "max_relative_to_reference"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "floor"
+            ],
+            "properties": {
+              "compare": {
+                "const": "reference"
+              }
+            }
+          },
+          "else": {
+            "not": {
+              "required": [
+                "floor"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "Level": {
+      "description": "A named precision level, as numerics.md names them.",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "Kind": {
+      "description": "How a solution is obtained. exact: evaluated from a closed form, with no settings and no error but round-off. numerical: approximated by a method with settings, at a level.",
+      "enum": [
+        "exact",
+        "numerical"
+      ]
+    },
+    "Producer": {
+      "description": "What produced a solution: a string, such as the model repository's checker at a commit, or a toolkit with its commit, its settings and the execution record of the solve. It names no entry of the registry file.",
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "toolkit"
+          ],
+          "properties": {
+            "toolkit": {
+              "type": "string",
+              "minLength": 1
+            },
+            "commit": {
+              "type": "string",
+              "minLength": 1
+            },
+            "settings": {
+              "type": "string",
+              "minLength": 1
+            },
+            "record": {
+              "$ref": "#/$defs/RelativePath",
+              "description": "The execution record of the solve."
             }
           }
         }

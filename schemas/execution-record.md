@@ -51,8 +51,9 @@ conditions, the start, end and duration, the outcome, and the extensions.
 
 ## A model repository's fields
 
-Under the namespace `sce-wg-1`: the experiment and its hash, the toolkit and, when it has several ways of solving the
-same member, the mode, the adapter's path and the hash of its code, the member with its canonical hash and its file's
+Under the namespace `sce-wg-1`: the experiment and its hash, the toolkit, its kind as an entry, exact or numerical,
+and, when it has several ways of solving the same member, the mode, the adapter's path and the hash of its code, the
+member with its canonical hash and its file's
 hash, the request file's hash, the level, the settings', methods' and results files' hashes, the toolkit's version, the
 verification's verdict with its problems, the comparison with the reference as a status of computed or not run with
 the reference file's hash, the report's path and the largest distance with the reference's error beside it, never a
