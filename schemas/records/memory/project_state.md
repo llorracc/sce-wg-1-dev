@@ -20,8 +20,9 @@ metadata:
   table among them, with no release tagged; the core's use of REMARK's records and schema waits on a tag.
 - **Two model repositories pin the core:** the buffer-stock model's and the perfect-foresight model's, the second
   at the commit #16 merged.
-- **The fork has eleven worktrees and eighteen local branches,** most of them finished; a plan to bring them to two
-  each is proposed, its first step begun ([the plan](../plans/2026-11-12_branches-and-worktrees.md)).
+- **The fork has six worktrees and six local branches** since 17:02 on 2026-11-12, when the plan's first step
+  cleared away twelve merged branches and five worktrees on his word; the plan's other steps, which bring them to two
+  each, wait on his decisions ([the plan](../plans/2026-11-12_branches-and-worktrees.md)).
 - **What is open with the owner** is in [the deferred items](../deferred.md): the three branches; four further
   points on metrics from the buffer-stock session; the plan's five decisions; the rule on a failed build's image and
   three small fixes to the core; the ontology's statement on Bellman's documentation; and the records branch's

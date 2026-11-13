@@ -10,7 +10,9 @@ Times are EST, from the clock, the transcript or git.
   fork's main: [#16](https://github.com/llorracc/sce-wg-1-dev/pull/16), open, not a draft, mergeable, its two checks
   pending when read at 09:00. Its base is the fork's own main and not the working group's repository, whose main
   holds no core until the pull requests open there are merged. Merging it is his.
-- **09:02, the pull request's checks pass,** the fork's three jobs, the core's tests among them. On his word it is
+- **09:02, the pull request's checks pass,** the fork's three jobs, the core's tests among them. *Corrected at
+  17:03: the three jobs, `wg1`, `primer` and `assemble` of `publish.yml`, build and check the website; none runs the
+  core's tests, which were run locally.* On his word it is
   opened in his browser.
 - **By 09:02, his request for a plan to consolidate the fork's branches and worktrees;** written by 09:06 as
   [a proposed plan](../plans/2026-11-12_branches-and-worktrees.md), nothing in it done. Read for it, after a fetch:
@@ -122,3 +124,31 @@ word; two local branches unpushed and unmerged, for him to read: `stone-method-f
 further points from the buffer-stock session put to him; this records branch not pushed, held on the HAFiscal session's open question; the
 ontology's statement on Bellman's documentation still with him; REMARK's updates merged into its main and not yet
 tagged; four changes to the core and one to the record schema's rule on the image proposed, none made.
+
+**After the memorial.**
+- **15:43:03, his request again for a plan to consolidate the worktrees and branches,** there being eleven
+  worktrees. The plan of the morning revised in place by 15:47 against a fresh fetch
+  ([the plan](../plans/2026-11-12_branches-and-worktrees.md)): eleven worktrees, all clean, with no other session in
+  any; eighteen local branches, nineteen on the fork, nine open pull requests, no tags. Found in the reading: the
+  buffer-stock model's repository names `tree/d8f65e2` in its ontology's source, a commit reachable on the fork only
+  through this records branch; the Markov results schema's commit dcb3bb4 is in no other repository found; the
+  fork's pull requests run the website's build and not the core's tests (the correction above); of the 94 files this
+  branch carries besides the records, the model repository has 80 at the same path, main 8 under the same name, and
+  6 are nowhere else.
+- **17:02:06, his word here: clear locally,** the plan's first step. Each branch checked again after a fetch, in
+  main or on the fork at the same commit, and each worktree clean, its ignored files only caches and virtual
+  environments. From 17:02:18 to 17:02:29: the worktrees `reference-kind`, `comparator`, `stone-convention`,
+  `harness-core` and `stage-derivative-terms` removed; deleted with `git branch -d` from main's worktree, none
+  forced, the local branches `reference-as-its-own-kind` (6c12de1), `comparator` (f0c8f14), `stone-convention`
+  (359fb78), `exact-definition` (5a4d160), `ontology-probability-distributions` (c3f3f15), `apparatus` (d1b50b0),
+  `ontology-buffer-stock-models` (d329bce), `shock-laws-and-stones` (12e8120), `experiment-and-record-schemas`
+  (4912255), `harness-core` (fc5b3ac), `buffer-stock-schema-work_CDC` (d8f65e2) and `stage-derivative-terms`
+  (73c063f). Nothing changed on GitHub. Six worktrees and six local branches remain: this records branch, `main`,
+  `markov-results`, and the three of live work.
+- **By 17:03, his request for this session's recommendations on the plan's four remaining decisions,** given in
+  the reply.
+
+**State at 17:05 on 2026-11-12.** The fork unchanged on GitHub: main at f557ef4, nineteen branches, the two open pull
+requests in the fork and seven in the working group's repository. Locally six worktrees and six branches. This records
+branch 62 commits ahead of the fork, its push held; the plan's revision and this entry uncommitted.
+
