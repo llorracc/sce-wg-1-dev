@@ -1,6 +1,6 @@
 # Precedents for the apparatus: six families of model and software intercomparison
 
-Researched on 2026-11-03 at the owner's request, as the ground for [`schemas/participation.md`](../../participation.md),
+Researched on 2026-11-03 at the owner's request, as the ground for [`schemas/participation.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/participation.md),
 and proposed with it. Each family is described by what it is, how it is organized, what it establishes
 for this project and what it does not. Sources are addresses that were fetched during the research; addresses that could
 not be fetched are left out, and a claim that rested only on an unfetched page is dropped or marked.

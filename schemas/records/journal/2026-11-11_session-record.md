@@ -32,7 +32,7 @@ Times are EST, from the clock, the transcript or git.
   - **The unit** is the model repository, one row each; a replication, by model, toolkit and mode, is a cell
     derived from that repository's two files and never kept by hand.
   - **The catalog of pointers fits**, as [the architecture rulings](../rulings/2026-11-04_architecture.md) and
-    [the registry design](../../registry.md) already assume, with a pinned commit or tag that the reader honors,
+    [the registry design](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/registry.md) already assume, with a pinned commit or tag that the reader honors,
     a command that reads both levels and validates the records without running anything, and entries that may be
     private. One working repository contradicts the ruling of one repository per model. The template and pinned
     package of the third are right, the core being that package, but a query by topic pins nothing.
@@ -63,7 +63,7 @@ Times are EST, from the clock, the transcript or git.
   nothing asked: the catalog design as agreed, with this session's amendment taken, one committed file in the model
   repository mapping an experiment, a toolkit and a mode to the run folder that is its run of record. From the
   other two sessions it took that the execution record's schema is REMARK's once REMARK's third update ships it, the
-  core keeping the working group's extensions, which is what [the registry design](../../registry.md) adopted and
+  core keeping the working group's extensions, which is what [the registry design](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/registry.md) adopted and
   not yet the state: the schema's file is in the core's package today; that REMARK's tool pins by tag alone while
   the buffer-stock repository can be pinned only by commit; and that a toolkit which cannot be built publicly needs
   a stated status. His decisions, as it lists them: pushing REMARK's two committed branches; a sixth update to

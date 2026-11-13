@@ -12,10 +12,10 @@ this public repository.
   The owner asked whether the fourth has a usual name. The answer given: "harness", as in a test or evaluation harness,
   and the whole is a model intercomparison, as CMIP is for climate models.
 - **09:57:09, the drafts.** The experiment schema and the harness plan to be drafted. Done:
-  - [`experiments.md`](../../experiments.md), [`experiment.schema.json`](../../experiment.schema.json) and the first
+  - [`experiments.md`](../../experiments.md), [`experiment.schema.json`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/experiment.schema.json) and the first
     experiment;
-  - [`harness.md`](../../harness.md).
-- **10:33:47, the plan's six decisions** ([`harness.md`](../../harness.md), "The owner's decisions"):
+  - [`harness.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/harness.md).
+- **10:33:47, the plan's six decisions** ([`harness.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/harness.md), "The owner's decisions"):
   - **Words:** approved. What were called test suites are experiments, and `numerics.md`'s suite of settings elements is
     a ladder.
   - **When two toolkits agree:** the first experiment's two checks stand: the same effective member, and a difference
@@ -35,7 +35,7 @@ this public repository.
 - **18:24:32, memorialize.** Not a push: pushing stays the owner's to approve.
 - **18:28:43, what the harness gives a toolkit.** Parameters, not methods or settings. The runner as built passes a level
   number that the adapters' shared code turns into grids, nodes and tolerances, and hands both toolkits the same nodes,
-  grids and population method; a departure from the ruling, to be undone ([`harness.md`](../../harness.md)).
+  grids and population method; a departure from the ruling, to be undone ([`harness.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/harness.md)).
 - **19:09:13, what the harness asks.** The buffer-stock target; the ergodic distributions of m or a and of permanent
   income, and the joint distributions an economy of these consumers generates, from which population-wide E[c],
   E[u′(c)], E[a] and E[m], and perhaps their log variances, are computed. The shared code must not insist on one
@@ -64,9 +64,9 @@ this public repository.
   econ-ark-tools, commit `68a242d7`, unpushed: version 8.1.0, the row `stationary-perm-inc-factor` with `\SPIFac` = ℒ𝒢
   (ℒ at the trend), the defined term, the changelog. The registry quotes his words of the evening, as its rows do.
 
-  Consequences, written into the documents the same evening as a proposal ([`bst/conditions.md`](../../bst/conditions.md),
-  [`bst/results.md`](../../bst/results.md), [`bst/model.md`](../../bst/model.md), [`experiments.md`](../../experiments.md),
-  [`harness.md`](../../harness.md)): every member carries `newborn: {permanent_income: one | trend}`, so every hash
+  Consequences, written into the documents the same evening as a proposal ([`bst/conditions.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/bst/conditions.md),
+  [`bst/results.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/bst/results.md), [`bst/model.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/bst/model.md), [`experiments.md`](../../experiments.md),
+  [`harness.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/harness.md)): every member carries `newborn: {permanent_income: one | trend}`, so every hash
   changes; BST's baseline and `library` (the same model as `bst-p-zero-0.005`, hash `b2e365cd…`) are out as written,
   `library` retired; the restrained-limit experiment's four members take ℒ = 0.98 at the trend and the experiment its
   second version, with the hand run of 2026-11-01 as the first version's record; the results schema gains the economy

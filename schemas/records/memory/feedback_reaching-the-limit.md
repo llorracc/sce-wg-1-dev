@@ -15,7 +15,7 @@ written with alternatives reads as a choice, when it is one number that the mode
 
 **How to apply:**
 - Write "ends a period at the limit" or "reaches the limit"; when "binds" is used, define it once in that sense, as
-  [`constraint-scenarios.md`](../../constraint-scenarios.md) does.
+  [`constraint-scenarios.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/constraint-scenarios.md) does.
 - State ϱ < k with k defined as the number of shocks with densities at their floors, so that each model has one
   threshold; say what the class's ϱ > 1 leaves of it.
 

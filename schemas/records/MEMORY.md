@@ -110,7 +110,7 @@ Rulings, journal, findings:
 - [Deferred follow-ups](deferred.md) — what was put off, and what brings each item back.
 - [Defects](defects.md) — faults found and their status.
 
-Plans keep their status lines in place: [`foundation.md`](../foundation.md), [`effective-member.md`](../effective-member.md),
-[`existing-syntax.md`](../existing-syntax.md) (the HAFiscal design note moved to HAFiscal-Latest on 2026-11-04), and since 2026-11-02 [`experiments.md`](../experiments.md) and [`harness.md`](../harness.md). The plan for the Bellman pull request on the
-truncated lognormal is kept outside this repository, since it names the private repository's files. The glossary is the [README](../README.md)'s
+Plans keep their status lines in place: [`foundation.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/foundation.md), [`effective-member.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/effective-member.md),
+[`existing-syntax.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/existing-syntax.md) (the HAFiscal design note moved to HAFiscal-Latest on 2026-11-04), and since 2026-11-02 [`experiments.md`](../experiments.md) and [`harness.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/harness.md). The plan for the Bellman pull request on the
+truncated lognormal is kept outside this repository, since it names the private repository's files. The glossary is the [README](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/README.md)'s
 vocabulary section.

@@ -1,7 +1,7 @@
 # Journal of 2026-11-04
 
 Times are EST, from the session's transcript. The day opens on the two questions of
-[`comparing-solutions.md`](../../comparing-solutions.md) put to the owner at 22:27:51 the evening before
+[`comparing-solutions.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/comparing-solutions.md) put to the owner at 22:27:51 the evening before
 ([the journal of 2026-11-03](2026-11-03_session-record.md)), the evening's proposals and records uncommitted since
 `2ae4c35`.
 
@@ -22,7 +22,7 @@ Times are EST, from the session's transcript. The day opens on the two questions
   precision, what is public, HARK's defaults); to the HARK-dev session (where the continuous path is, what it solves,
   its precision, the Kink-Split page); to the HARK session (the concavity-and-kinks pull requests, the defaults of
   0.17.2, the ergodic tools). No answer at the time of this entry.
-- **By 06:45.** The ruling recorded; the proposal [`reference-solution.md`](../../reference-solution.md) written: the
+- **By 06:45.** The ruling recorded; the proposal [`reference-solution.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/reference-solution.md) written: the
   ruling in substance, what the reference is, the five continuous methods with their sources, the grids with the
   percentiles read from the committed files, the certification by two independent solves and the closed forms, default
   settings per toolkit, the comparison as a report with the reference's error beside every distance, who solves it and
@@ -119,7 +119,7 @@ Times are EST, from the session's transcript. The day opens on the two questions
   applied: the request rule moving a point off a genuine atom one unit up in its third figure with the checker flagging
   such a point; points of a's own; pooled points. The session answered.
 - **Before 11:17:43.** The owner asks for the definitions of the terms coined for the system's parts. The vocabulary
-  section of [`schemas/README.md`](../../README.md), which already defined the families' and files' terms, gains the
+  section of [`schemas/README.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/README.md), which already defined the families' and files' terms, gains the
   apparatus's: toolkit, stone and cards, hub and spoke, adapter and its legs, the shared module, scenario, types and
   pooled, representation, the two measures, comparison points and the request rule, exported rule, coverage, level,
   the toolkit registry, locked environment, runner with jobs and manifest, comparator with checks and quantities,

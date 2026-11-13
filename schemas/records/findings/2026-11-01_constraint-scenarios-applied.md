@@ -1,6 +1,6 @@
 # The borrowing-constraint scenarios, applied
 
-2026-11-01, from 12:51 EST, on the owner's rulings of 12:50:56 ([`constraint-scenarios.md`](../../constraint-scenarios.md)).
+2026-11-01, from 12:51 EST, on the owner's rulings of 12:50:56 ([`constraint-scenarios.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/constraint-scenarios.md)).
 
 Since 13:43 the natural scenario without a point mass and the zero-infima scenario are in `other/` in both families
 (the owner's ruling of 13:38:32). The paths below are as they were when this was written.

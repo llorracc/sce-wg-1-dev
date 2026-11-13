@@ -2,7 +2,7 @@
 
 A probe, run in the scratchpad on the morning of 2026-11-04 after the owner's ruling of 06:23:39
 ([the ruling](../../rulings/2026-11-04_reference-solution.md)) and recorded here without its logs. It is step 2 of the
-order of work in [`reference-solution.md`](../../../reference-solution.md): the first measurement of what the continuous
+order of work in [`reference-solution.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/reference-solution.md): the first measurement of what the continuous
 solution method reaches on the four members of the restrained-limit experiment, in the bench's own code, before any
 reference file exists. Nothing here is a reference of record, and nothing is committed to the harness.
 

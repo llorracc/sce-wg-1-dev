@@ -96,12 +96,12 @@ evening; the notation registry's branch `notation-v8.1-spic` in the econ-ark-too
   Found: no description for a toolkit's author exists as one document, the content being spread over the READMEs of
   the schemas, the harness, the adapters and the stones; the pages published on 2026-10-31 and 2026-11-01 are private
   artifacts under this session's account, which another login cannot open; and the branch holding the apparatus is
-  unpushed, so the public fork shows the schemas as of 2026-10-22. Drafted [`for-toolkit-authors.md`](../../for-toolkit-authors.md),
+  unpushed, so the public fork shows the schemas as of 2026-10-22. Drafted [`for-toolkit-authors.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/for-toolkit-authors.md),
   what an author receives, supplies, is given, must report, is judged by, and does in order, with the three results
   blocks marked as proposed; opened in VS Code at 17:51, for his reading before anything is sent
   ([deferred](../deferred.md)).
 - **Soon after.** He asks what the families are and why there are four. Answered from
-  [`constraint-scenarios.md`](../../constraint-scenarios.md) and his ruling of 12:50:56 on 2026-11-01.
+  [`constraint-scenarios.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/constraint-scenarios.md) and his ruling of 12:50:56 on 2026-11-01.
 - **17:59:50 and 18:01:14.** He abolishes `bst-natural-no-point-mass/1` as an uninteresting case, and then
   `bst-zero-infima/1` too ([the rulings](../rulings/2026-11-03_harness-decisions.md)). Applied by 18:16, as the
   Markov family's retirement was: `bst/other/` removed from the tree, the checker and its tests, the results validator,
@@ -136,9 +136,9 @@ evening; the notation registry's branch `notation-v8.1-spic` in the econ-ark-too
   at the finest level is about 3e-5, below the residual under the stated laws and above the residual under the
   toolkits' own, stated in numbers in place of a claim; the thirteen documents the first draft linked are about 2,700
   lines, not 3,300; the adapters' interface named by its classes; the comparison paper of the 2010 JEDC suite cited by
-  its DOI, Kollmann's copy being a dead link. Written as proposals, uncommitted: [`participation.md`](../../participation.md),
+  its DOI, Kollmann's copy being a dead link. Written as proposals, uncommitted: [`participation.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/participation.md),
   [the precedents](../findings/2026-11-03_precedents-for-the-apparatus.md) and
-  [`for-toolkit-authors.md`](../../for-toolkit-authors.md) rewritten at its path, the afternoon's draft kept outside the
+  [`for-toolkit-authors.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/for-toolkit-authors.md) rewritten at its path, the afternoon's draft kept outside the
   repository; the README's contents map, the index and the deferred list gain their lines. Opened in VS Code. Nothing
   committed, pushed or sent.
 - **20:21:43.** He asks to open the three documents in VS Code; opened again, one call per file, in the local window.
@@ -148,14 +148,14 @@ evening; the notation registry's branch `notation-v8.1-spic` in the econ-ark-too
   existing-syntax notes, the effective-member note, the stones' README, the rulings of 2026-10-19, 2026-10-20,
   2026-10-31, 2026-11-01 and 2026-11-02, the experiment-checks and dolo-probe findings, the workflow's judgments, and the
   committed ladders, where every step moves the named expectations, by 1.6e-2 and then 3.4e-3, so that no step of
-  either measures the solver alone. Written by 20:37 as [`comparing-solutions.md`](../../comparing-solutions.md),
+  either measures the solver alone. Written by 20:37 as [`comparing-solutions.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/comparing-solutions.md),
   PROPOSED: fidelity and agreement as two questions; the lessons under four heads with their consequences; the bench
   in place of the kit, computing the diagnostics from each toolkit's exports; the method-only step detected from the
   effective member as the tolerance's source; the statement a participant is held to; the stone's departures from a
   cited reading of the source; six decisions in order. The plan's status line points to it; the README's contents map
   and the deferred list gain their lines. Opened in VS Code. Nothing committed, pushed or sent; the HARK and HAFiscal
   sessions not yet consulted on the split, which waits on his reading.
-- **21:42:46.** He asks that the design of [`comparing-solutions.md`](../../comparing-solutions.md) be pursued and
+- **21:42:46.** He asks that the design of [`comparing-solutions.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/comparing-solutions.md) be pursued and
   that its two questions be put to him. The two questions were put to the committed runs first, by a script that reads
   the restrained-limit suite's twenty-four results files and the checker's closed forms and solves nothing, and then to
   one more run per toolkit and member: the method-only step the design asks every ladder to hold, level 4's grids with

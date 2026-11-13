@@ -30,7 +30,7 @@ the evening. The answers are kept outside this repository; this record holds wha
   them.
 - **A correction it made to the material:** Bellman-SYM's laws page gives a measure-valued definition for `N`, `LogNormal`
   and `Mixture` only, the four discrete families holding none; the plan had said "each". Corrected in
-  [`existing-syntax.md`](../../existing-syntax.md).
+  [`existing-syntax.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/existing-syntax.md).
 
 ## Session 2: the operator layer
 
@@ -159,7 +159,7 @@ the shock-law document, the corrected description of the branch and the digests 
   and refusals agreeing with the rows' Bellman labels. The identity rule applied as resolve, fill, normalize, convert,
   compare, a vacuous conditioning reducing to none.
 - **What it leaves undecided:** the stage-file grammar's treatment of keyword calls and nested coined families, unverified
-  against its sources; and nine choices for the owner, folded into the list in [`existing-syntax.md`](../../existing-syntax.md).
+  against its sources; and nine choices for the owner, folded into the list in [`existing-syntax.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/existing-syntax.md).
   The bellman session settled the unverifiable items the same evening from its branch and by probing the elaborator: the
   branch's laws page lists eight families and names the support condition `law-support`; a keyword call is refused when
   the file is read, and `null` as a name the stage does not declare, so a stage file writes no bound as `inf` or `-inf`;
@@ -176,7 +176,7 @@ block of Bellman's recipes.
 
 ## Since
 
-The owner ruled on the decisions in [`existing-syntax.md`](../../existing-syntax.md) on the morning of 2026-10-20 (see
+The owner ruled on the decisions in [`existing-syntax.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/existing-syntax.md) on the morning of 2026-10-20 (see
 that day's rulings), as recommended except in three places:
 - Bellman-SYM's truncated lognormal is aligned with the truncated normal its main had gained that morning. It is
   `TruncatedLogNormal(μ, σ, l, u)`, taking the location and spread of the logarithm with bounds on the draw, and σ > 0.

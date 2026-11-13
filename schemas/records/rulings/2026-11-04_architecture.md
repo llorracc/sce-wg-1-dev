@@ -39,7 +39,7 @@ purpose rulings of the same day are in [their own file](2026-11-04_purpose.md).
   decisions he types there (the estimation's go, the emitter's move to the new schema, the continuous method for the
   reference), and the member alone may come back first on his word.
 - **Before 15:12:59, the REMARK plan adopted.** The owner adopts the idea of adapting the REMARK framework to these
-  purposes ([`schemas/registry.md`](../../registry.md), now ADOPTED) and has opened a session in the local clone of
+  purposes ([`schemas/registry.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/registry.md), now ADOPTED) and has opened a session in the local clone of
   econ-ark/REMARK, `jd_REMARK_integrate-with-WG1`, for the REMARK side of the work; he asks whether this session can
   see it. It can: one session there, in `/home/shared/github/econ-ark/REMARK`, idle. The five decisions the proposal
   lists stay open; the REMARK session is briefed with the proposal's REMARK-side items as information, its work on

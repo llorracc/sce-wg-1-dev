@@ -199,7 +199,7 @@ the conditions this ontology states are what make such a definition well-posed."
    estimation of a published paper's model, with the HAFiscal-Latest repository since 2026-11-04, is the case of this.
 6. **Vocabulary in the fork aligns.** "Bug-free toolkit, given enough computation" becomes "valid solution method, given
    unbounded computation" in the two documents that say it, the schemas' README and
-   [`for-toolkit-authors.md`](../schemas/for-toolkit-authors.md), since a bug and a silently settled convention are the
+   [`for-toolkit-authors.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/for-toolkit-authors.md), since a bug and a silently settled convention are the
    same thing to the criterion, a departure from the definition, and the method, not the toolkit, is what converges.
    "True model", the fork's name for the stated model as against a toolkit's effective member, stays: it names the
    thing the canonical definition defines.

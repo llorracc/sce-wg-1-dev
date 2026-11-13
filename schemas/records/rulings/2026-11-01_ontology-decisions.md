@@ -54,7 +54,7 @@ saving time ended at 02:00 that morning). His words are kept outside this public
   He placed HAFiscal in the second, and asked what had put it outside BST's class.
 - **12:30:17, condition names.** A modified condition carries its modifier after the base name: `fvac-pf`, not `pf-fvac`
   ([[feedback_modified-condition-names]]).
-- **12:50:56, the scenarios ruled** ([`constraint-scenarios.md`](../../constraint-scenarios.md)):
+- **12:50:56, the scenarios ruled** ([`constraint-scenarios.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/constraint-scenarios.md)):
   - the natural scenario widened to hNrmMin ≥ 0, so that BST's own model belongs to it;
   - the natural scenario without a point mass made a scenario of its own;
   - the point mass required at the joint worst income, in place of the worst transitory realization of the ruling of

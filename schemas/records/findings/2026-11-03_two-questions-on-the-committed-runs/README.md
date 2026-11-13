@@ -1,7 +1,7 @@
 # The two questions, put to the committed runs
 
 2026-11-03, in the evening, on the owner's request to pursue the design of
-[`comparing-solutions.md`](../../../comparing-solutions.md) and put its two questions to him. The design separates
+[`comparing-solutions.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/comparing-solutions.md) and put its two questions to him. The design separates
 **fidelity**, one toolkit against the stated member, from **agreement**, two toolkits against each other, and says what
 each check needs. This record puts both questions to the restrained-limit suite's committed runs of 2026-11-01, HARK's
 and dolo's ([HARK's run](../2026-11-01_restrained-limit-suite-hark/README.md),
@@ -155,7 +155,7 @@ factor of 3 to 4.
 
 ## Pending
 
-- The owner's answers to the two questions, as [`comparing-solutions.md`](../../../comparing-solutions.md) now puts
+- The owner's answers to the two questions, as [`comparing-solutions.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/comparing-solutions.md) now puts
   them: what fidelity requires, and whether the residual under a toolkit's own laws becomes required; whether agreement
   is reported and classed with the method-only step as its tolerance's source, which brings forward the deferral of
   2026-11-02, and whether the rule is compared on the relative scale.

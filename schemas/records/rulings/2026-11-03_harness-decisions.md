@@ -44,7 +44,7 @@ The owner's decisions, in substance and by time (EST). His words are kept outsid
   tested. Answered: no; the member `toy` is solved and verified, the Jacobian interface is approved and measured on no
   member, and the experiment waits on its member, whose three types are HAFiscal's to estimate in its session on his
   word. He says to ask HAFiscal to do it. The estimation is requested of the HAFiscal-Latest session at 05:23, with
-  his words and their stamp for that session's relay check, and the specification as [`bst/model.md`](../../bst/model.md)
+  his words and their stamp for that session's relay check, and the specification as [`bst/model.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/bst/model.md)
   states it at `3ef2423`: the model, the three types, the targets, the objective, the prize and the newborn; to deliver
   the member file, the fit and the code's commit, the wealth variable and the denominator of K/Y, and the provenance of
   6.60.
@@ -56,7 +56,7 @@ The owner's decisions, in substance and by time (EST). His words are kept outsid
   `2ae4c35`; the checker and its tests, the results validator's list of families, the notation and stone checks,
   HARK's adapter tests, the stones, the adapters' README and the families' documents brought to two families; the
   ontology's two family rows retired, its two scenario classes kept and written by no family; the records. The two
-  scenarios stay described in [`constraint-scenarios.md`](../../constraint-scenarios.md), which is why the natural
+  scenarios stay described in [`constraint-scenarios.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/constraint-scenarios.md), which is why the natural
   family requires a point mass at the joint worst income and the artificial one positive floors; a natural member
   without the point mass is now refused with no family to send it to
   ([the finding](../findings/2026-11-03_two-families-abolished.md)).

@@ -113,11 +113,11 @@ metadata:
 - **The toy-hafiscal work moved to HAFiscal-Latest** until it is ready: the bundle verified there row by row; the member
   `iid-ui-artificial`, the HAFiscal design note, the Lorenz-in-levels finding and the model document's section removed
   here, the Jacobian interface kept and made general. It returns as one piece on three decisions typed in that session.
-- **The run registry on REMARK's machinery, adopted** ([`registry.md`](../../registry.md)): the model repository as a
+- **The run registry on REMARK's machinery, adopted** ([`registry.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/registry.md)): the model repository as a
   REMARK whose `reproduce.sh` is the comparison and whose exit is the verdicts, `binder/` defining the organizer's
   image; a registry entry as a REMARK execution record, the core
-  [`harness/execution-record.schema.json`](../../../harness/execution-record.schema.json) at 0.1.0-draft.4 after three
-  readings by the REMARK session, the fork's entry [`harness/runs.registry.schema.json`](../../../harness/runs.registry.schema.json);
+  [`harness/execution-record.schema.json`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/harness/execution-record.schema.json) at 0.1.0-draft.4 after three
+  readings by the REMARK session, the fork's entry [`harness/runs.registry.schema.json`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/harness/runs.registry.schema.json);
   five updates to REMARK begun in the session `jd_REMARK_integrate-with-WG1` on the owner's word, its first, execution
   without a terminal, committed locally there, the push and the pull requests on his word in that session.
 - **Built here.** `harness/adapters/<toolkit>/env/` with a Dockerfile beside each lock file, both images built; the
@@ -180,7 +180,7 @@ comparison points of its own: the request rule, the request file's `a_points`, t
 
 **The borrowing-constraint scenarios** (ruled 12:50:56 on 2026-11-01, applied that afternoon on `buffer-stock-ontology`,
 committed and unpushed, for a draft pull request stacked on #15): `bst/1` gave way to four families, each with its own
-stage file ([`constraint-scenarios.md`](../../constraint-scenarios.md),
+stage file ([`constraint-scenarios.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/constraint-scenarios.md),
 [the findings](../findings/2026-11-01_constraint-scenarios-applied.md)). Since 13:38 two are principal, `bst-natural/1`
 and `bst-artificial/1`, in `bst/`; `bst-natural-no-point-mass/1` and `bst-zero-infima/1` were in `bst/other/` until
 the owner abolished both on 2026-11-03 as uninteresting cases ([the rulings of 2026-11-03](../rulings/2026-11-03_harness-decisions.md)):
@@ -356,7 +356,7 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
 
 **The harness's rulings of 2026-11-02 and the revised proposal of 2026-11-03**
 ([the rulings of 2026-11-02](../rulings/2026-11-02_harness-decisions.md), [of 2026-11-03](../rulings/2026-11-03_harness-decisions.md);
-[`harness.md`](../../harness.md), [`experiments.md`](../../experiments.md), [`bst/results.md`](../../bst/results.md)), in
+[`harness.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/harness.md), [`experiments.md`](../../experiments.md), [`bst/results.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/bst/results.md)), in
 no validator, checker, member or adapter:
 - The harness gives each toolkit parameters, never methods or settings (18:28:43 on 2026-11-02); the laws' representation
   is each toolkit's own, the true model the one with truncated lognormals (19:09:13). The experiment's checks
@@ -414,7 +414,7 @@ Registering `w3id.org/sce` is not raised before a pull request from this fork is
   identical by a test, `reproduce.sh` and `reproduce_min.sh`, the catalog entry on the owner's word; the two HARK modes
   and the `mode` string; the runner calling REMARK's package once its signatures are final;
 - HARK's adapter writing the Jacobians block, from a branch carrying #1863, once an estimated member returns;
-- the harness, approved on 2026-11-02 ([`../../harness.md`](../../harness.md)): the layout's move done in `9675109`
+- the harness, approved on 2026-11-02 ([`../../harness.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/harness.md)): the layout's move done in `9675109`
   (`rosetta/`, `harness/adapters/`, `schemas/bst/experiments/`); the registry, lock files and runner built and accepted
   (`harness/`; the findings of 2026-11-02 on its acceptance); next, on the owner's reading of the revised proposal, the
   three results blocks with the checker's statuses, the restrained-limit experiment's second version, the adapters'

@@ -99,7 +99,7 @@ form that the test keeps today, the lexicon's coverage and the cards' shape, sta
 ## The ladder file, and the levels
 
 The ruling of 2026-11-04 has each stone state three precision levels, the harness being silent about method. The
-ladder file of [`numerics.md`](../../numerics.md) is where, and the model repository has begun it for two toolkits.
+ladder file of [`numerics.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/numerics.md) is where, and the model repository has begun it for two toolkits.
 Settings are the one thing a reader must not infer, and five things would complete this:
 
 - **dolo.** Its adapter takes its grid from the shared code's table. A ladder file in dolo's own names, read by its
