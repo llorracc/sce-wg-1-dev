@@ -35,12 +35,17 @@ registered in [the conventions](conventions.md).
 - **Validator:** a JSON Schema file that checks a parameter or results file's form.
 - **Checker:** a program that checks what a validator cannot express, such as a law's mean or a regularity condition.
 - **Addressable part** and **method target:** a part of a family's model that a method can be attached to, such as the
-  expectation over one shock, named by the stage file's own name for it.
-- **Method file:** the algorithm chosen for each part of the model, with no numerical values. **Settings file:** plain
-  values for the settings those methods read. **Method registry:** the definitions of the methods, each with its
-  contract and the settings it reads.
-- **Handler:** the routine a method entry names, which carries out what the entry's method tag leaves open.
-- **Ladder:** one method file run under many settings, so that results show how each quantity converges. **Level:** a
+  expectation over one shock. It is named by its **place** in the family's stage file, as Bellman names it: a block by
+  its identifier, the evaluation that closes a block, an operator by its name.
+- **Method files:** the algorithm chosen for each part of the model, with no numerical values, in two files with each
+  part in exactly one. The **methods addition** is a file in Bellman's language, added to the family's stage file,
+  whose entries name a method word or a handler at a place. The YAML **method file**, which every run writes, holds
+  what an addition cannot, such as a part the stage has no place for, and names the addition with its hash.
+  **Settings file:** plain values for the settings those methods read. **Method registry:** the definitions of the
+  methods, each with its contract and the settings it reads; for a method word, Bellman's table of method types.
+- **Handler:** the routine a place's entry names, which carries out what the method word leaves open, or stands alone
+  where Bellman has no word for the method.
+- **Ladder:** the same methods run under many settings, so that results show how each quantity converges. **Level:** a
   named rung of a toolkit's ladder, the one input the harness passes that is not a parameter.
 - **Experiment:** what every toolkit is to do with some members, and what the results must show, stated in an
   experiment file. **Reports:** the results-file quantities every run of an experiment must carry beyond what the

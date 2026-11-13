@@ -59,7 +59,7 @@ to make that test cheap to run, hard to get wrong, and honest about what it esta
 ## How a toolkit takes part
 
 1. **The card:** half a page, the first section of the toolkit's stone: the toolkit and its version, the families it
-   solves, how it represents the laws, its method on each of the stage file's targets, its names, timing and
+   solves, how it represents the laws, its method at each of the stage file's places, its names, timing and
    normalization for the parameter file's keys and the results objects, and what it does not compute.
 2. **The adapter:** the contract's command line in any language, reading the parameter and request files and writing
    the results, method and settings files, with its environment pinned beside it.
