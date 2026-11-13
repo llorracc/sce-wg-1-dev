@@ -1,9 +1,27 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of the memorial of 11:46 on 2026-11-12 (earlier memorials' blocks kept below it): the fork's main with the reference as its own kind, three branches of live work unmerged, a plan for the branches; and as of the memorial of 19:12:50 on 2026-11-04 (the state of the evening's commit and of the memorial of 08:07 on 2026-11-03 kept below the later changes): the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two buffer-stock families, the other two abolished on 2026-11-03; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted; the rulings of 2026-11-02 that the harness gives parameters only and leaves the representation to each toolkit, and the revised proposal of 2026-11-03 that followed, the distributions of permanent income and of wealth in levels and the joint, with the adapters' independence planned, all awaiting the owner's reading; the toy-hafiscal estimation built in the HAFiscal session on his request; the ontology at draft.2, naming no toolkit; the ruling of 2026-11-04 that a reference solution is the standard, his answers to its decisions later that morning, and the results-schema ruling of the same morning, the quantiles required and the distribution function at the comparison points added"
+description: "What the schema project holds, what is settled and what is open, as of 13:15 on 2026-11-13: main at 8b34952 with the three live branches merged, the records branch renamed `records`, slimmed and pushed, the hold released, two worktrees and two branches; and as of the memorial of 11:46 on 2026-11-12 (earlier memorials' blocks kept below it): the fork's main with the reference as its own kind, three branches of live work unmerged, a plan for the branches; and as of the memorial of 19:12:50 on 2026-11-04 (the state of the evening's commit and of the memorial of 08:07 on 2026-11-03 kept below the later changes): the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two buffer-stock families, the other two abolished on 2026-11-03; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted; the rulings of 2026-11-02 that the harness gives parameters only and leaves the representation to each toolkit, and the revised proposal of 2026-11-03 that followed, the distributions of permanent income and of wealth in levels and the joint, with the adapters' independence planned, all awaiting the owner's reading; the toy-hafiscal estimation built in the HAFiscal session on his request; the ontology at draft.2, naming no toolkit; the ruling of 2026-11-04 that a reference solution is the standard, his answers to its decisions later that morning, and the results-schema ruling of the same morning, the quantiles required and the distribution function at the comparison points added"
 metadata:
   type: project
 ---
+
+**As of 13:15 on 2026-11-13**, what has changed since the blocks below:
+- **The fork's main is at 8b34952,** pushed. It gained three merges that day, each by pull request with a merge
+  commit and the core's tests run on it first: #17, the stone convention amended for the method files; #18, the
+  core's reader for REMARK's status table, kind `canonical-model`; #19, the metrics an experiment defines, with the
+  registry schema's eighth draft. 50 tests pass on main.
+- **The records branch is `records`,** renamed from `buffer-stock-ontology` on GitHub and locally, pushed, the hold on
+  its push released by the owner at 12:58:10. It holds the records, the instructions file and two documents found
+  nowhere else, the model's stale files removed; 16 files it shares with main in older versions remain, for his
+  decision.
+- **The fork has two worktrees and two local branches,** the records branch and main; nine branches on GitHub, main,
+  `records` and the heads of the working group's seven open pull requests; two archive tags; no open pull requests
+  ([the plan](../plans/2026-11-12_branches-and-worktrees.md), its steps in the fork done).
+- **What is open with the owner** is in [the deferred items](../deferred.md): whether the working group's seven pull
+  requests are merged by him or put to the group first; the 16 older shared files; the fork's deploy job, failing
+  for want of GitHub Pages; the status reader's reading of records of earlier drafts, due since the merges; four
+  further points on metrics; the rule on a failed build's image and three small fixes to the core; the ontology's
+  statement on Bellman's documentation.
 
 **As of the memorial of 11:46 on 2026-11-12**, what has changed since the blocks below:
 - **The fork's main is at f557ef4,** pushed. It gained, by pull request #16, the reference as an object of its own:

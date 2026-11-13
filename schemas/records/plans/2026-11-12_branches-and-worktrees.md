@@ -1,7 +1,10 @@
 # Plan: fewer branches and worktrees in the fork
 
-**Status: PROPOSED on 2026-11-12, on the owner's request of that morning; REVISED at 15:47 EST the same day, on his
-second request, against the state read then.** Done so far: the fork's pull request #16 merged with a merge commit
+**Status: EXECUTED in the fork on 2026-11-13 by 13:14, on the owner's word of 12:58:33 to pursue its recommendations,
+after his release of the records branch's hold at 12:58:10; what remains is the working group's repository, whose seven
+pull requests wait on whether he merges them or puts them to the group first, and two questions the execution raised
+([the journal](../journal/2026-11-13_session-record.md)). PROPOSED on 2026-11-12, on the owner's request of that
+morning; REVISED at 15:47 EST the same day, on his second request, against the state read then.** Done so far: the fork's pull request #16 merged with a merge commit
 (f557ef4) on his word at 11:03; its branch is not yet deleted on the fork. **Clearing locally DONE** on his word at
 17:02:06, by 17:02:29: five worktrees removed and twelve local branches deleted, none forced; six of each remain
 ([the journal](../journal/2026-11-12_session-record.md)). Every step that merges, closes a pull request, deletes

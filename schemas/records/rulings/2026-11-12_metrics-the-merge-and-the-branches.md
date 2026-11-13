@@ -33,3 +33,7 @@ not computed giving "not compared" in place of an error ([the deferred items](..
 
 Written as [a proposed plan](../plans/2026-11-12_branches-and-worktrees.md). Its first step is begun with the merge
 above; its five decisions are open.
+- **15:43:03, here:** the plan is asked for again; revised by 15:47.
+- **17:02:06, here:** the plan's local step is done: the merged branches and their worktrees cleared locally.
+- **17:02:37, here:** this session's recommendations on the plan's four remaining decisions are asked for, and given
+  ([the rulings of 2026-11-13](2026-11-13_the-hold-released-and-the-plan-pursued.md) record what he chose).
