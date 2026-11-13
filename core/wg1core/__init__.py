@@ -7,6 +7,8 @@
   and the hash that identifies a model.
 - `laws`: the shock laws a parameter file states, with their moments in closed form.
 - `experiment`: experiment files, and what their validator cannot say about them.
+- `metrics`: the distance between two files' numbers: the core's three metrics by name, and those an experiment
+  defines, a pointwise distance with an aggregate or a function of the model's repository.
 - `comparator`: the experiment's checks evaluated on a run, and every job's distance from its member's reference.
 - `status`: what a model repository holds, its runs of record with what their records say, read without running
   anything; the reader REMARK's status table finds for the kind `canonical-model`, and the `wg1core status` command.

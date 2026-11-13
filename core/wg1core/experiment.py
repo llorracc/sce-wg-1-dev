@@ -3,7 +3,8 @@
 `problems(experiment, folder, results_schema, anchors)` returns everything wrong with an experiment, the validator's
 errors first: missing or misnamed files, hashes that differ, a request file for another member, checks naming
 undeclared members or levels, a check against the reference for a member that pins none or whose reference states no
-error the check needs, quantities the model's results schema does not define, missing report scripts, and anchors the
+error the check needs, a metric that is neither the core's nor defined by the experiment, a metric's function that is
+missing or changed, quantities the model's results schema does not define, missing report scripts, and anchors the
 model's source page does not have. The results schema and the anchors are the model repository's, named in its
 registry file; the runner calls this before it runs anything.
 
@@ -21,7 +22,7 @@ from pathlib import Path
 
 import jsonschema
 
-from . import canonical
+from . import canonical, metrics
 
 SCHEMA = json.loads((Path(__file__).resolve().parent / "schemas" / "experiment.schema.json").read_text(encoding="utf-8"))
 
@@ -114,6 +115,7 @@ def problems(experiment: dict, folder: Path, results_schema: dict | None = None,
                 out.append(f"{m['id']}: the reference file's hash differs")
             if results_schema is not None:
                 out += [f"the results schema has no {q}" for q in m["reference"].get("errors", {}) if not resolves(q, results_schema)]
+    out += metrics.static_problems(experiment, folder)
     check_ids = [c["id"] for c in experiment["checks"]]
     if len(set(check_ids)) != len(check_ids):
         out.append("a check's id is repeated")

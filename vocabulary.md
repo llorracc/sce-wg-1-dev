@@ -51,6 +51,9 @@ registered in [the conventions](conventions.md).
   experiment file. **Reports:** the results-file quantities every run of an experiment must carry beyond what the
   schema requires. **Checks:** the experiment's comparisons across members, toolkits or levels of one quantity, each
   under a metric and an expectation.
+- **Metric:** the distance between two files' numbers for one quantity: a distance at each number with an aggregate
+  over them, the largest, the mean, the root mean square or a quantile, or a function of the model's repository. A
+  check names its metric, and none is the default.
 - **Request file:** the comparison points at which a results file reports, kept apart from the parameter file so that
   the model's hash does not change. **Comparison points:** the values of the state at which the rule, its derivative,
   the Euler residuals and the distribution function are reported; the **request rule** generates them from a **quick

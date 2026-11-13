@@ -129,7 +129,7 @@ def test_an_entry_has_a_kind_and_the_run_carries_it(tmp_path):
         folder = model["out"] / toolkit / "m1" / "low"
         record = json.loads((folder / "record.json").read_text())
         assert record["extensions"]["sce-wg-1"]["entry_kind"] == kind
-        assert record["$schema"] == records.MODEL_SCHEMA_ID and record["$schema"].endswith("/0.1.0-draft.7.json")
+        assert record["$schema"] == records.MODEL_SCHEMA_ID
         records.validate(record)
         # a numerical entry's fingerprint is what it was before entries had kinds; an exact entry's names its kind
         assert json.loads((folder / "job.json").read_text())["fingerprint"].get("kind") == (None if kind == "numerical" else "exact")

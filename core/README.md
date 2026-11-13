@@ -89,7 +89,9 @@ wg1core status
 - **`compare`** evaluates the experiment's checks on the run's results files, each with a verdict of pass, fail, not
   applicable or error, among them the checks that hold the entries of one kind to a member's reference; and it reports
   every job's distances from its member's reference on the experiment's quantities, with where the largest sits and
-  the reference's own error beside each, and no verdict. An entry's kind is the run's own, read from its manifest. A comparison that cannot be computed for a member that
+  the reference's own error beside each, and no verdict. An entry's kind is the run's own, read from its manifest. A
+  metric is one of the core's three or one the experiment defines; a metric defined as a function of the model's
+  repository is imported and run by this command. A comparison that cannot be computed for a member that
   pins a reference, the reference not loading, not agreeing with the job's file on the model's identity keys, or a
   quantity not comparable, is an error. It writes `comparison.json` and `comparison.md` in the run folder, a report in
   each job's folder, and each record's comparison block; its exit status is the checks' and the errors', never a
@@ -147,6 +149,7 @@ and this package offers the reader for that kind, `wg1core.status:read`, as an e
 | `canonical` | the strict YAML subset, the canonical serialization and the hash that identifies a model |
 | `laws` | the shock laws a parameter file states, with their moments in closed form and their counterparts in the stage files' language |
 | `experiment` | experiment files and what their validator cannot say |
+| `metrics` | the distance between two files' numbers: the core's three metrics, and those an experiment defines |
 | `comparator` | the experiment's checks evaluated on a run, and every job's distance from its member's reference |
 | `status` | what a repository holds, its runs of record with what their records say; REMARK's reader for the kind `canonical-model` |
 | `schemas/` | `experiment.schema.json`, `execution-record.schema.json`, `runs.registry.schema.json` |
