@@ -1,6 +1,7 @@
 """The status reader's tests, on the tiny model repository of test_core.py: a run is made, verified, compared and
 registered, and the reader is asked what the repository holds, with and without a file of runs of record, with a
-changed experiment, a newer run, records of another draft, a mode of solution, and a file with problems.
+changed experiment, a newer run, records of an earlier draft and of one the core does not hold, a mode of solution,
+and a file with problems.
 
     uv run --project core --with pytest pytest -q core/tests
 """
@@ -98,19 +99,54 @@ def test_a_changed_experiment_and_a_newer_run_are_noted_and_are_no_problem(regis
     assert runner.main(["--registry", str(registered["registry"]), "status"]) == 0
 
 
-def test_a_record_of_another_draft_is_unchecked_and_an_invalid_one_is_a_problem(registered):
+def test_a_record_of_a_draft_the_core_does_not_hold_is_unchecked_and_an_invalid_one_is_a_problem(registered):
     name_runs(registered, of_record(registered))
-    earlier = "https://github.com/econ-ark/sce-wg-1/schemas/runs.registry/0.1.0-draft.4.json"
-    rewrite(registered, registered["run"], lambda r: r.update({"$schema": earlier}))
+    unheld = "https://github.com/econ-ark/sce-wg-1/schemas/runs.registry/0.1.0-draft.3.json"
+    rewrite(registered, registered["run"], lambda r: r.update({"$schema": unheld}))
     (cell,) = status.read(registered["root"])["data"]["cells"]
     assert cell["schema"]["unchecked"] == 2 and cell["schema"]["valid"] == cell["schema"]["invalid"] == 0
-    assert cell["schema"]["drafts"] == ["0.1.0-draft.4"]
+    assert cell["schema"]["drafts"] == ["0.1.0-draft.3"]
     rewrite(registered, registered["run"], lambda r: (r.update({"$schema": records.MODEL_SCHEMA_ID}),
                                                        r["extensions"]["sce-wg-1"]["verification"].update(verdict="perhaps")))
     found = status.read(registered["root"])
     assert found["data"]["cells"][0]["schema"]["invalid"] == 2
     assert len(found["data"]["problems"]) == 1 and "do not validate" in found["data"]["problems"][0]
     assert found["summary"].endswith("; 1 problem")
+
+
+def test_a_record_of_an_earlier_draft_is_checked_against_that_draft(registered):
+    """Draft 7 allowed only the core's three metrics by name, where draft 8 allows an experiment's own: a record that
+    names draft 7 and a metric of an experiment's own is invalid under the draft it names, though the core's own
+    draft would take it."""
+    name_runs(registered, of_record(registered))
+    seventh = "https://github.com/econ-ark/sce-wg-1/schemas/runs.registry/0.1.0-draft.7.json"
+    rewrite(registered, registered["run"], lambda r: r.update({"$schema": seventh}))
+    found = status.read(registered["root"])
+    assert found["data"]["cells"][0]["schema"] | {"errors": []} == {"valid": 2, "invalid": 0, "unchecked": 0,
+                                                                     "drafts": ["0.1.0-draft.7"], "errors": []}
+    assert not found["data"]["problems"]
+
+    def own_metric(record):
+        largest = record["extensions"]["sce-wg-1"].get("comparison", {}).get("largest_distance")
+        if largest:
+            largest["metric"] = "mean_abs_difference"
+    rewrite(registered, registered["run"], own_metric)
+    found = status.read(registered["root"])
+    assert (found["data"]["cells"][0]["schema"]["valid"], found["data"]["cells"][0]["schema"]["invalid"]) == (1, 1)
+    assert len(found["data"]["problems"]) == 1
+    rewrite(registered, registered["run"], lambda r: r.update({"$schema": records.MODEL_SCHEMA_ID}))
+    assert status.read(registered["root"])["data"]["cells"][0]["schema"]["valid"] == 2
+
+
+def test_the_earlier_drafts_are_held_under_their_own_identifiers():
+    schemas = records.held()
+    assert records.MODEL_SCHEMA_ID in schemas and len(schemas) == 2 + len(list(records.EARLIER.glob("*.json")))
+    for path in records.EARLIER.glob("*.json"):
+        identifier = json.loads(path.read_text(encoding="utf-8"))["$id"]
+        assert path.name.removeprefix("fork-") == "-".join(identifier.removesuffix(".json").split("/")[-2:]) + ".json"
+        assert ("llorracc/sce-wg-1-dev" in identifier) == path.name.startswith("fork-")
+    with pytest.raises(ValueError, match="does not hold"):
+        records.validate({}, "https://github.com/econ-ark/sce-wg-1/schemas/runs.registry/0.1.0-draft.3.json")
 
 
 def test_a_mode_of_solution_is_a_cell_of_its_own(registered):
