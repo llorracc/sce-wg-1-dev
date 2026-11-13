@@ -30,9 +30,10 @@ from the reference at each level with the reference's error beside it. It notes 
 changes, a job that did not end cleanly, an experiment whose hash is no longer the run's, and a newer run of the same
 cell in the registry. A row without one says so, and names the newest run the registry holds for the cell.
 
-A record that names a draft of the schema other than this core's is reported as unchecked, never as invalid. An
-experiment's hash is compared as this core computes it. Nothing here is a score, a rank or a duration: a distance is
-reported with the reference's error beside it and carries no verdict.
+A record is checked against the draft of the schema it names: this core's own, or an earlier one the core holds. A
+record that names a draft the core does not hold is reported as unchecked, never as invalid. An experiment's hash is
+compared as this core computes it. Nothing here is a score, a rank or a duration: a distance is reported with the
+reference's error beside it and carries no verdict.
 
 Two things are kept apart. A problem is something wrong with what the repository states: the file of runs of record
 malformed, or naming a folder, a toolkit or an experiment the repository does not hold, or a record of a run of
@@ -174,15 +175,16 @@ def schema_draft(record: dict) -> str:
 
 
 def checked(cell_records: list[dict]) -> dict:
-    """Each record against the schema it names: valid or invalid where that is this core's, unchecked where it is
-    another draft's, which this core does not hold."""
+    """Each record against the draft of the schema it names: valid or invalid where the core holds that draft, its
+    own or an earlier one, and unchecked where it does not."""
     out = {"valid": 0, "invalid": 0, "unchecked": 0, "drafts": sorted({schema_draft(r) for r in cell_records}), "errors": []}
+    drafts = records.held()
     for record in cell_records:
-        if record.get("$schema") != records.MODEL_SCHEMA_ID:
+        if record.get("$schema") not in drafts:
             out["unchecked"] += 1
             continue
         try:
-            records.validate(record)
+            records.validate(record, record["$schema"])
             out["valid"] += 1
         except ValueError as e:
             out["invalid"] += 1

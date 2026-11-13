@@ -125,9 +125,10 @@ gives the repository's commit, the toolkit's version, whether the run was in a c
 covers, the draft of the registry schema its records name and whether they validate under it, the verification's
 verdicts, and the largest distance from the reference at each level with the reference's error beside it. It notes
 a run from a tree with uncommitted changes, a job that did not end cleanly, an experiment whose hash is no longer the
-run's, and a newer run of the same toolkit on the same experiment. A row without one says so. A record written under
-a draft of the schema that this core does not hold is reported as unchecked, never as invalid. No row carries a
-score, a rank or a duration.
+run's, and a newer run of the same toolkit on the same experiment. A row without one says so. A record is checked
+against the draft of the schema it names: the core's own, or an earlier draft that a published core wrote, which the
+core keeps in [`wg1core/schemas/earlier/`](wg1core/schemas/earlier/). A record written under a draft the core does
+not hold is reported as unchecked, never as invalid. No row carries a score, a rank or a duration.
 
 The same report is a canonical model's row in the status table of REMARK's catalog. `remark status` pulls each
 cataloged repository at its tag and asks a reader, chosen by the kind of unit the repository declares, what it

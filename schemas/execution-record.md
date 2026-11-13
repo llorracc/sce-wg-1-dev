@@ -73,9 +73,10 @@ records it names and runs nothing. For each experiment and toolkit it reports th
 repository's commit, the toolkit's version, the members and levels covered, the verification's verdicts and the
 largest distance from the reference at each level with the reference's error beside it; and it notes what a reader
 should weigh: a run from a dirty tree, a job that did not end cleanly, an experiment whose hash is no longer the
-run's, a newer run in the registry, a toolkit with no run of record. Records written under an earlier draft of the
-schema are read and reported as unchecked, since the core holds the validator of its own draft only. It reports no
-duration, and nothing that scores or ranks.
+run's, a newer run in the registry, a toolkit with no run of record. Each record is checked against the draft of the
+schema it names: the core keeps every earlier draft a published core wrote beside its own, so a record of a run made
+under one is valid or invalid under it. A record naming a draft the core does not hold is reported as unchecked. It
+reports no duration, and nothing that scores or ranks.
 
 REMARK's catalog shows the same report. Its status table has a row for every cataloged repository, read at its tag
 by a reader chosen by the kind of unit the repository declares in its `REMARK.md`; a canonical model's repository
