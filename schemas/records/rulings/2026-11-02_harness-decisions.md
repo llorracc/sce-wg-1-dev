@@ -12,7 +12,7 @@ this public repository.
   The owner asked whether the fourth has a usual name. The answer given: "harness", as in a test or evaluation harness,
   and the whole is a model intercomparison, as CMIP is for climate models.
 - **09:57:09, the drafts.** The experiment schema and the harness plan to be drafted. Done:
-  - [`experiments.md`](../../experiments.md), [`experiment.schema.json`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/experiment.schema.json) and the first
+  - [`experiments.md`](https://github.com/llorracc/sce-wg-1-dev/blob/72ee2eef21c1c75f60c109a851118f9b4f025ad8/schemas/experiments.md), [`experiment.schema.json`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/experiment.schema.json) and the first
     experiment;
   - [`harness.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/harness.md).
 - **10:33:47, the plan's six decisions** ([`harness.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/harness.md), "The owner's decisions"):
@@ -65,7 +65,7 @@ this public repository.
   (ℒ at the trend), the defined term, the changelog. The registry quotes his words of the evening, as its rows do.
 
   Consequences, written into the documents the same evening as a proposal ([`bst/conditions.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/bst/conditions.md),
-  [`bst/results.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/bst/results.md), [`bst/model.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/bst/model.md), [`experiments.md`](../../experiments.md),
+  [`bst/results.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/bst/results.md), [`bst/model.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/bst/model.md), [`experiments.md`](https://github.com/llorracc/sce-wg-1-dev/blob/72ee2eef21c1c75f60c109a851118f9b4f025ad8/schemas/experiments.md),
   [`harness.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/harness.md)): every member carries `newborn: {permanent_income: one | trend}`, so every hash
   changes; BST's baseline and `library` (the same model as `bst-p-zero-0.005`, hash `b2e365cd…`) are out as written,
   `library` retired; the restrained-limit experiment's four members take ℒ = 0.98 at the trend and the experiment its

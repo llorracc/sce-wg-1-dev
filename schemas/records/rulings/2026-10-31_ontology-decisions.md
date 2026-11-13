@@ -22,7 +22,7 @@ kept outside this public repository.
 
   He asked which of the two, the ontology or the schema, the working group needs. The answer given was both: the
   semantic ontology is the deliverable, and the schemas are its syntax
-  ([the ontology's README](../../../ontologies/buffer-stock-models/README.md)).
+  ([the ontology's README](https://github.com/llorracc/sce-wg-1-dev/blob/72ee2eef21c1c75f60c109a851118f9b4f025ad8/ontologies/buffer-stock-models/README.md)).
 - **17:44, "memorialize".**
 
 **Earlier rulings the ontology takes,** recorded where they were made:

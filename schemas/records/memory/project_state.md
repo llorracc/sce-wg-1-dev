@@ -374,7 +374,7 @@ The merged branches and their worktrees were deleted at 18:07 on 2026-10-22. Wit
 
 **The harness's rulings of 2026-11-02 and the revised proposal of 2026-11-03**
 ([the rulings of 2026-11-02](../rulings/2026-11-02_harness-decisions.md), [of 2026-11-03](../rulings/2026-11-03_harness-decisions.md);
-[`harness.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/harness.md), [`experiments.md`](../../experiments.md), [`bst/results.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/bst/results.md)), in
+[`harness.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/harness.md), [`experiments.md`](https://github.com/llorracc/sce-wg-1-dev/blob/72ee2eef21c1c75f60c109a851118f9b4f025ad8/schemas/experiments.md), [`bst/results.md`](https://github.com/llorracc/sce-wg-1-dev/blob/b42e4b5a85e19fa7bbb4cf0ebc50aeb083f99d60/schemas/bst/results.md)), in
 no validator, checker, member or adapter:
 - The harness gives each toolkit parameters, never methods or settings (18:28:43 on 2026-11-02); the laws' representation
   is each toolkit's own, the true model the one with truncated lognormals (19:09:13). The experiment's checks
@@ -437,7 +437,7 @@ Registering `w3id.org/sce` is not raised before a pull request from this fork is
   (`harness/`; the findings of 2026-11-02 on its acceptance); next, on the owner's reading of the revised proposal, the
   three results blocks with the checker's statuses, the restrained-limit experiment's second version, the adapters'
   independence (stage 4, planned) and the comparator (stage 5). The experiment schema and its first experiment are
-  drafted and approved ([`../../experiments.md`](../../experiments.md));
+  drafted and approved ([`../../experiments.md`](https://github.com/llorracc/sce-wg-1-dev/blob/72ee2eef21c1c75f60c109a851118f9b4f025ad8/schemas/experiments.md));
 - the estimated member, once the HAFiscal session returns it ready: validated and hashed by the checker, solved by
   HARK's adapter, the fit evaluated again with the family's newborn; then its experiment file and request file;
 - the proposal to the working group's repository, whose trigger, dolo's adapter and the first comparison of two

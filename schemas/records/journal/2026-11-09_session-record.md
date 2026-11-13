@@ -9,7 +9,7 @@ Times are EST, from the clock, the transcript or git.
   clone of `bellman` is gone from this machine.
 - **10:34 to 10:45, the review.** What this fork takes from Bellman: the concept slugs pinned in the ontology on
   2026-10-31; its two stage files, last checked against Bellman's main that evening; the distribution grammar that
-  [the shock laws](../../shock-laws.md), the ontology of probability distributions and the core's converter write;
+  [the shock laws](https://github.com/llorracc/sce-wg-1-dev/blob/72ee2eef21c1c75f60c109a851118f9b4f025ad8/schemas/shock-laws.md), the ontology of probability distributions and the core's converter write;
   the account of Bellman's method types and registry in the stone convention and in [the accepted
   plan](../plans/2026-11-06_stones-as-data.md); and the public pages read for that plan on 2026-11-06. Bellman-dev's
   main as posted this morning, 195 commits after the evening of 2026-10-31 and 92 after the pages were read, checked

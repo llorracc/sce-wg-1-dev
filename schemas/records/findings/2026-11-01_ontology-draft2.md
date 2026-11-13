@@ -1,7 +1,7 @@
 # The ontology of buffer-stock models, draft.2: the stage files, the two constraints, Ma, Stachurski and Toda
 
 2026-10-31 evening to 2026-11-01. The draft is `ontologies/buffer-stock-models/`, version 0.1.0-draft.2, on branch
-`buffer-stock-ontology`; its [changelog](../../../ontologies/buffer-stock-models/CHANGELOG.md) lists every row it adds or
+`buffer-stock-ontology`; its [changelog](https://github.com/llorracc/sce-wg-1-dev/blob/72ee2eef21c1c75f60c109a851118f9b4f025ad8/ontologies/buffer-stock-models/CHANGELOG.md) lists every row it adds or
 changes. 193 rows, with 12 identifiers retired.
 
 ## What the tests establish, and what they do not

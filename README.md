@@ -1,26 +1,12 @@
-# SCE Working Group 1: Language and Semantics
+# The schema project's records
 
-Working Group 1 of the Society for Computational Economics develops formal specifications of dynamic economic models and their solution and estimation methods. The group was formed at CEF 2026 in Venice and works with [Econ-ARK](https://econ-ark.org) and [QuantEcon](https://quantecon.org).
+This branch holds the records of the fork's schema project, and nothing else: the memory, the owner's rulings, the
+journal, the findings, the plans, the deferred items and the defects, in [`schemas/records/`](schemas/records/), with
+their index in [`schemas/records/MEMORY.md`](schemas/records/MEMORY.md). The instructions file for the sessions
+that keep them is [`CLAUDE.md`](CLAUDE.md). Two documents stay here as records because no other branch has them:
+[the plan for the pull requests to the working group's repository](schemas/upstreaming.md) and
+[the applied proposal to make the purpose exact](project-a/exact-definition.md).
 
-[Working group website](https://econ-ark.github.io/sce-wg-1/)
-
-## Projects
-
-- [Project A: Semantics of Economic Models](https://econ-ark.github.io/sce-wg-1/project-a.html)
-- [Project B: Baseline Model Library](https://quantecon.github.io/community-library/)
-
-## Website
-
-GitHub Pages publishes the site through [`.github/workflows/publish.yml`](.github/workflows/publish.yml) after each push to `main`. The landing page comes from [`docs/index.html`](docs/index.html); the Project A page and PDF are generated from [`project-a/special-issue-proposal.md`](project-a/special-issue-proposal.md) — build instructions are in [`project-a/README.md`](project-a/README.md).
-
-## Participation
-
-The repository and issue tracker are public. Membership is by invitation. Use the issue tracker for questions or expressions of interest.
-
-## Contacts
-
-Matt McKay (QuantEcon;
-[github.com/mmcky](https://github.com/mmcky)) and Akshay Shanker
-(Econ-ARK; a.shanker@unsw.edu.au ·
-[github.com/akshayshanker](https://github.com/akshayshanker)) co-chair
-the group.
+The working group's code, schemas and website are on [`main`](https://github.com/llorracc/sce-wg-1-dev/tree/main)
+and in the working group's repository, [econ-ark/sce-wg-1](https://github.com/econ-ark/sce-wg-1). A record that
+cites a file of theirs links to it at a fixed commit, so the link shows what the record was written about.
