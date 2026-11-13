@@ -1,4 +1,4 @@
-# Rulings of 2026-11-13: the hold released, and the plan for the fork's branches pursued
+# Rulings of 2026-11-13: the hold released, the plan for the fork's branches pursued, and three of its questions settled
 
 The owner's decisions, in substance and by time (EST). His words are kept outside this public repository.
 
@@ -22,3 +22,16 @@ word as typed at 13:00:01 and lifted the hold in its own records.
 himself or puts them to the group for review first, so they were not touched. Also open: two questions the execution
 raised, the 16 files the records branch shares with main in older versions and the fork's deploy job
 ([the deferred items](../deferred.md)).
+
+## The questions the execution raised
+
+- **14:53:27, here:** this session's recommendations on three of the four questions it put to him at 13:17 are taken.
+  The records branch holds the records alone. The fork's website workflow deploys in the working group's repository
+  only, not by turning on Pages in the fork, which would publish a second copy of the site. The core keeps the earlier
+  drafts of the registry schema, so the status reader checks each record against the draft it names.
+
+**What it supersedes.** The status reader's rule of 2026-11-11 that a record of another draft is unchecked, which now
+holds only for a draft the core does not hold.
+
+**What stays open.** The first question, whether the working group's seven pull requests are merged by him or put to
+the group for review first. Also open: what [the deferred items](../deferred.md) carried from before.

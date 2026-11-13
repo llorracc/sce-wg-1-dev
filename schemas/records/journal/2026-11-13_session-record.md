@@ -50,3 +50,42 @@ clone's own folder and main under `.worktrees/main`, and two local branches. The
 requests. Open with the owner: whether the working group's seven pull requests are merged by him or put to the group
 first; the 16 older shared files on the records branch; the fork's failing deploy job; the status reader's reading of
 records of earlier drafts, due since the merges; and what [the deferred items](../deferred.md) carried from before.
+
+## After the report
+
+- **13:17, the report to him,** with four questions: the working group's seven pull requests, the 16 files the
+  records branch shares with main in older versions, the fork's deploy job, and the status reader's reading of records
+  of earlier drafts; a recommendation on the last three.
+- **14:53:27, his word here: go with the recommendations on the second, third and fourth.** The first stays his. Done
+  under it:
+  - **The deploy job** limited to the working group's repository, `github.repository == 'econ-ark/sce-wg-1'`, a fork
+    still building and checking the site. [#20](https://github.com/llorracc/sce-wg-1-dev/pull/20) opened 14:56:12,
+    its checks passed, merged 15:00:35 (135069e), GitHub's merge tree the branch's own.
+  - **The earlier drafts of the registry schema kept in the core,** in `core/wg1core/schemas/earlier/`, each copied
+    from git unchanged: the working group's drafts 4 to 7, draft 7 in its last form (6c12de1), and the harness's
+    fork-named draft 4 of the registry and execution-record schemas (5c6961b). A record is validated against the draft
+    it names. The reader reports a record as unchecked only where the core does not hold its draft. Read at the model
+    repositories' pushed main, from copies in a scratch folder, all 70 records they have registered are valid under
+    their drafts: the buffer-stock repository's 20 of draft 6 and 10 of the fork-named draft 4, and the
+    perfect-foresight repository's 28 of draft 6 and 12 of draft 7. Neither has a file of runs of record yet.
+    [#21](https://github.com/llorracc/sce-wg-1-dev/pull/21) opened 14:59:07; 52 tests passed on its merge with the new
+    main; its checks passed; merged 15:01:07 (9fc7d27), GitHub's merge tree the tested one.
+  - **Both branches and their worktrees deleted,** locally and on the fork.
+  - **The records branch holds the records alone** (72231b2). The recommendation had named the 16 files the branch
+    shares with main in older versions. The branch shared 56 more, identical to main's, which would go stale as main
+    moves, and the recommendation's reason, a branch of the records alone, covers them. So all 72 were removed, except
+    that the guard hook is kept. The branch has its own README and `.gitignore`. The 9 links from the records and the
+    plan for upstreaming to removed files are permanent links to 72ee2ee. Six files remain besides the records: the
+    guard hook, the `.gitignore`, the README, the instructions file, the plan for upstreaming and the applied proposal.
+    One link in the records was broken before and stays so: a finding of 2026-10-18 names a path in a checkout. The
+    harness's environments, caches and one run's outputs from before the split, 1.5 GB never tracked, stay in the
+    clone's folder, excluded in its local `.git/info/exclude`.
+  - **The website workflow on the fork's main passes,** for the first time since at least 2026-11-05: the runs on
+    135069e and 9fc7d27 succeeded by 15:04, the site built and checked and the deploy job skipped.
+
+**State at 15:10 on 2026-11-13.** The fork's main at 9fc7d27, its workflow passing. The clone has two worktrees and two
+local branches, the records branch in the clone's own folder and main under `.worktrees/main`. The fork has nine
+branches, two archive tags and no open pull requests. Open with the owner: whether the working group's seven pull
+requests are merged by him or put to the group first, and what [the deferred items](../deferred.md) carried from
+before. For the model repositories' sessions: declaring the kind, writing the file of runs of record, repinning the
+core.
