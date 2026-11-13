@@ -19,6 +19,10 @@ dependencies = [
 [project.scripts]
 wg1core = "wg1core.runner:main"
 
+# The reader REMARK's status table finds for a repository whose REMARK.md declares `kind: canonical-model`.
+[project.entry-points."remark.status"]
+canonical-model = "wg1core.status:read"
+
 [dependency-groups]
 dev = ["pytest"]
 

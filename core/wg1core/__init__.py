@@ -8,6 +8,8 @@
 - `laws`: the shock laws a parameter file states, with their moments in closed form.
 - `experiment`: experiment files, and what their validator cannot say about them.
 - `comparator`: the experiment's checks evaluated on a run, and every job's distance from its member's reference.
+- `status`: what a model repository holds, its runs of record with what their records say, read without running
+  anything; the reader REMARK's status table finds for the kind `canonical-model`, and the `wg1core status` command.
 - `schemas/`: the validators of an experiment file, of an execution record, and of a model repository's registry entry.
 """
 

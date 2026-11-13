@@ -7,6 +7,7 @@ registry's records. The `wg1core` command.
     wg1core verify <run folder>
     wg1core compare <run folder>
     wg1core register <run folder>
+    wg1core status
 
 Every command reads a model repository's registry file, `--registry`, `harness/toolkits.yaml` under the current
 directory by default. The file names the toolkits, each with its adapter, the files its runs depend on, its
@@ -36,7 +37,9 @@ from its member's reference, with the reference's error beside each, every entry
 manifest states it, writing `comparison.json` and `comparison.md` in
 the run folder, a report in each job's folder and each record's comparison block; its exit status is the checks' and
 the comparison errors', never a distance's. `register` copies a run's records into the registry folder, one file per job and one per build, validating
-each.
+each. `status` prints what the repository holds, running nothing: its runs of record with what their records say
+(status.py), the table REMARK's catalog shows for a canonical model; its exit status is nonzero when the file of runs
+of record or a record it names has a problem.
 """
 
 from __future__ import annotations
@@ -67,6 +70,7 @@ IMAGE_PREFIX = "sce-wg-1"
 TOOLKIT_KEYS = {"adapter", "code", "environment", "stone", "levels", "threads", "kind"}
 KINDS = ("exact", "numerical")  # how an entry obtains its solution; numerical when the registry file states none
 MODEL_KEYS = {"results_schema", "anchors", "experiments", "verifier", "registry_dir", "identity"}
+REGISTRY_FILES = ("harness/toolkits.yaml", "toolkits.yaml")
 
 
 def sha256_file(path: Path) -> str:
@@ -609,11 +613,23 @@ def cmd_list(args) -> int:
     return 0
 
 
+def cmd_status(args) -> int:
+    """What the repository holds, as REMARK's status table shows it; nothing is run."""
+    from . import status
+
+    try:
+        found = status.report(Path(args.registry))
+    except ValueError as e:
+        raise SystemExit(str(e))
+    print(found["summary"], "", found["table"], sep="\n", end="")
+    return 1 if found["data"]["problems"] else 0
+
+
 def default_registry() -> str:
-    for candidate in ("harness/toolkits.yaml", "toolkits.yaml"):
+    for candidate in REGISTRY_FILES:
         if Path(candidate).is_file():
             return candidate
-    return "harness/toolkits.yaml"
+    return REGISTRY_FILES[0]
 
 
 def main(argv=None) -> int:
@@ -642,8 +658,10 @@ def main(argv=None) -> int:
     g = sub.add_parser("register")
     g.add_argument("run")
     g.add_argument("--registry-dir", help="where to register (default: the registry file's registry_dir, runs.registry beside it)")
+    sub.add_parser("status")
     args = ap.parse_args(argv)
-    return {"list": cmd_list, "run": cmd_run, "verify": cmd_verify, "compare": cmd_compare, "register": cmd_register}[args.command](args)
+    return {"list": cmd_list, "run": cmd_run, "verify": cmd_verify, "compare": cmd_compare, "register": cmd_register,
+            "status": cmd_status}[args.command](args)
 
 
 if __name__ == "__main__":

@@ -26,7 +26,8 @@ to make that test cheap to run, hard to get wrong, and honest about what it esta
   ontologies, of the model classes and of the probability distributions the laws are written on; the convention for a
   Rosetta Stone; the schemas of an experiment and of an execution record; the harness's generic parts, the runner that
   expands an experiment into jobs, runs each under the container contract, verifies the results and registers the
-  records; and the rules of participation. A model's repository pins the core at a version.
+  records, and the reader that reports a model repository's runs of record without running anything; and the rules
+  of participation. A model's repository pins the core at a version.
 - **The toolkits' images.** A toolkit's environment is defined and pinned by its adapter: a lock file and a Dockerfile
   beside it, built into an image identified by its digest. The image holds the toolkit and its dependencies and
   nothing of the model, which is mounted when a job runs.
@@ -38,12 +39,15 @@ to make that test cheap to run, hard to get wrong, and honest about what it esta
 - **The execution records and the registry.** Every image built and every job run writes a record: the repository's
   commit and whether its tree was dirty, the environment's hash over what git records, the image, the machine, the
   conditions, the start, end and duration, how the job ended, the outputs' hashes, and the model repository's own
-  fields, the verification's verdict among them. A run's records are registered in the model's repository. A duration
-  is read with its machine and conditions beside it, never alone and never as a ranking of toolkits.
+  fields, the verification's verdict among them. A run's records are registered in the model's repository, and one
+  file there names the run of record for each experiment and toolkit. A duration is read with its machine and
+  conditions beside it, never alone and never as a ranking of toolkits.
 - **REMARK's tool,** econ-ark/REMARK's: it pulls a cataloged repository at its tag, builds its image, executes its
   reproduce script and lints it against the standard. The working group's additions to it, in order: execution
   without a terminal, a package of its functions, the execution records, builds from a subdirectory, and an entry
-  point with arguments.
+  point with arguments; then catalog entries marked private until their repositories are public, and a status
+  table, a row for every cataloged repository read at its tag with nothing run. A canonical model's row is the
+  core's reader's, found by the kind the repository declares.
 
 ## Where each part lives
 
