@@ -35,3 +35,9 @@ holds only for a draft the core does not hold.
 
 **What stays open.** The first question, whether the working group's seven pull requests are merged by him or put to
 the group for review first. Also open: what [the deferred items](../deferred.md) carried from before.
+
+## The working group's seven pull requests
+
+- **15:12:22, here:** he does not want to merge the working group's seven pull requests (econ-ark/sce-wg-1 #14–#20)
+  yet. They stay open as they are, and so do their seven heads on the fork; nothing goes to the working group's
+  repository until he says.

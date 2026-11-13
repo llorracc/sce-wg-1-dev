@@ -89,3 +89,9 @@ branches, two archive tags and no open pull requests. Open with the owner: wheth
 requests are merged by him or put to the group first, and what [the deferred items](../deferred.md) carried from
 before. For the model repositories' sessions: declaring the kind, writing the file of runs of record, repinning the
 core.
+- **15:12:22, his word here: he does not want to merge the working group's seven pull requests yet.** They and their
+  heads on the fork stay as they are.
+- **By 16:57, HARK-dev reported back on the release relayed to it at midday.** It checked that the owner typed the
+  release at 12:58:10, and restored the six held places in its copy of the handoff bundle from the bundle as it stood
+  before the hold. It keeps its own holds. The HAFiscal session's own statements stay removed, as they were removed
+  from the copy relayed. Its README records the release, to be committed with its next memorial.

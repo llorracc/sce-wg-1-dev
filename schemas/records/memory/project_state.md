@@ -14,8 +14,8 @@ metadata:
   instructions file, the plan for upstreaming and the applied proposal; its links to files of main are permanent
   links.
 - **Still two worktrees and two local branches;** nine branches on GitHub; no open pull requests in the fork.
-- **What is open with the owner:** whether the working group's seven pull requests are merged by him or put to the
-  group first; four further points on metrics; the rule on a failed build's image and three small fixes to the core;
+- **What is open with the owner:** the working group's seven pull requests, which he said at 15:12:22 he does not
+  want merged yet; four further points on metrics; the rule on a failed build's image and three small fixes to the core;
   the ontology's statement on Bellman's documentation ([the deferred items](../deferred.md)). For the model
   repositories' sessions: declaring the kind, writing the file of runs of record, and repinning the core.
 

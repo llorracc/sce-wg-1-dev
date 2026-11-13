@@ -2,7 +2,7 @@
 
 **Status: EXECUTED in the fork on 2026-11-13 by 13:14, on the owner's word of 12:58:33 to pursue its recommendations,
 after his release of the records branch's hold at 12:58:10; what remains is the working group's repository, whose seven
-pull requests wait on whether he merges them or puts them to the group first. The two questions the execution raised
+pull requests wait on him, who said at 15:12:22 that he does not want them merged yet. The two questions the execution raised
 were settled on his word at 14:53:27: the records branch holds the records alone (72231b2), and the fork's deploy job
 runs only in the working group's repository, by pull request #20 ([the journal](../journal/2026-11-13_session-record.md)). PROPOSED on 2026-11-12, on the owner's request of that
 morning; REVISED at 15:47 EST the same day, on his second request, against the state read then.** Done so far: the fork's pull request #16 merged with a merge commit
