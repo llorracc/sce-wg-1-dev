@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/econ-ark/sce-wg-1/schemas/runs.registry/0.1.0-draft.4.json",
+  "$id": "https://github.com/econ-ark/sce-wg-1/schemas/runs.registry/0.1.0-draft.8.json",
   "title": "A record in a model repository's registry",
-  "description": "DRAFT 0.1.0-draft.4, 2026-11-04. Every file of a run's folder, harness/runs.registry/<stamp>_<experiment>/: the build records, which are the core schema's (execution-record.schema.json, destined for REMARK), and the execution records, one per job, <toolkit>_<member>_<level>.json, which are the core's with a model repository's fields under the namespace sce-wg-1, defined here and nowhere in the core. One schema covers the whole folder, dispatching on `kind`.",
+  "description": "DRAFT 0.1.0-draft.8, 2026-11-12. Every file of a run's folder, harness/runs.registry/<stamp>_<experiment>/: the build records, which are the core schema's (execution-record.schema.json, destined for REMARK), and the execution records, one per job, <toolkit>_<member>_<level>.json, which are the core's with a model repository's fields under the namespace sce-wg-1, defined here and nowhere in the core. One schema covers the whole folder, dispatching on `kind`.",
   "allOf": [
     {
       "$ref": "https://github.com/econ-ark/sce-wg-1/schemas/execution-record/0.1.0-draft.4.json"
@@ -73,6 +73,13 @@
         "toolkit": {
           "type": "string",
           "description": "The toolkit's name as harness/toolkits.yaml spells it."
+        },
+        "entry_kind": {
+          "enum": [
+            "exact",
+            "numerical"
+          ],
+          "description": "The entry's kind as the registry file states it: exact, evaluated from a closed form, or numerical, approximated by a method with settings; numerical when the registry file states none."
         },
         "mode": {
           "type": "string",
@@ -169,27 +176,66 @@
           }
         },
         "comparison": {
+          "description": "The job's comparison with its member's reference, as the comparator wrote it: reported, never judged, since a distance from the reference carries no verdict; only the experiment's checks pass or fail.",
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "verdict"
+            "status"
           ],
           "properties": {
-            "reference": {
-              "$ref": "#/$defs/Sha256",
-              "description": "The reference results file's hash."
-            },
-            "verdict": {
+            "status": {
               "type": "string",
               "enum": [
-                "pass",
-                "fail",
-                "not run"
-              ]
+                "computed",
+                "not run",
+                "error"
+              ],
+              "description": "computed: every named distance computed; not run: the member pins no reference, or the job wrote no results file; error: the member pins a reference and the comparison could not be computed, the reference not loading, not answering the same question by the model's identity keys, or a quantity not comparable. An error fails the compare command; a distance never does."
+            },
+            "reference": {
+              "$ref": "#/$defs/Sha256",
+              "description": "The reference results file's hash, as the experiment pins it."
             },
             "report": {
               "type": "string",
-              "description": "The comparator's report, relative to the record."
+              "description": "The comparator's report for the job, relative to the record: every distance with the reference's error beside it."
+            },
+            "largest_distance": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "quantity",
+                "metric",
+                "distance"
+              ],
+              "properties": {
+                "quantity": {
+                  "type": "string"
+                },
+                "metric": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9]*(_[a-z0-9]+)*$",
+                  "description": "The metric's name: one of the core's three, or one the experiment defines."
+                },
+                "floor": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "description": "Under max_relative_to_reference, the floor the distance was taken with."
+                },
+                "distance": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "reference_error": {
+                  "type": "number",
+                  "minimum": 0,
+                  "description": "The reference's own certified error for that quantity under that metric, when the experiment states one."
+                }
+              }
+            },
+            "reason": {
+              "type": "string",
+              "description": "Why the comparison was not run or is in error."
             }
           }
         },

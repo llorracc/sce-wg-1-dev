@@ -1,9 +1,9 @@
 # Execution records
 
 What every build of an environment and every run of a script writes, so that a result can be traced to the exact
-state that produced it and reproduced from it. The format is [`execution-record.schema.json`](execution-record.schema.json),
+state that produced it and reproduced from it. The format is [`execution-record.schema.json`](../core/wg1core/schemas/execution-record.schema.json), in the core's package,
 the core every project shares, with a project's own fields under an `extensions` object keyed by namespace;
-[`runs.registry.schema.json`](runs.registry.schema.json) is the pattern of a canonical model repository's entry, the
+[`runs.registry.schema.json`](../core/wg1core/schemas/runs.registry.schema.json) is the pattern of a canonical model repository's entry, the
 core with that repository's fields under its namespace. The core is drafted here for REMARK, the econ-ark standard for
 reproducible projects, whose tool is to write records in this format for any cataloged repository.
 
@@ -24,7 +24,8 @@ conditions, the start, end and duration, the outcome, and the extensions.
   working tree was dirty, which means that `git status --porcelain` printed anything, tracked changes or untracked
   files that are not ignored; and when it was, the tree of the working tree as it stood, written through a temporary
   index that both git commands read, so that the real index is neither read nor touched. A finding is not made from
-  a dirty run, but the record says exactly what ran.
+  a dirty run, but the record says exactly what ran. A clone whose origin is a local path has no remote a record can
+  name, and the runner refuses it before anything runs.
 - **The environment's hash** is taken over what git records under the environment's directory in the tree that ran,
   the commit's tree when clean and the working tree's when dirty, listed with `git ls-tree`, never from the index or
   the files on disk, since the index can hold staged blobs and the bytes on disk can differ from a blob under
@@ -33,7 +34,10 @@ conditions, the start, end and duration, the outcome, and the extensions.
   the result: builds are not bit-reproducible, and a REMARK's image depends on its whole checkout. The image's
   identifier is the image's identity.
 - **The machine** is the host's facts alone: the processor, its logical cores, the memory, the operating system and
-  kernel, and the container runtime, or none for a run on the host. **The conditions** are what the run was set and
+  kernel, and the container runtime, or none for a run on the host; and, when a continuous-integration service ran
+  it, the run itself under `ci`: the provider, the run's identifier and the address of the attempt, which is what
+  ties a record registered from such a run back to it, the runner's host name being a throwaway. **The conditions**
+  are what the run was set and
   limited to: the thread variables actually set, whether a just-in-time compiler's cache was cold, so that the duration
   includes compilation, and the caps on processors, memory, wall time and network.
 - **The stamps** are RFC 3339 with an offset, and the **duration** comes from a monotonic clock around the build or the
@@ -47,9 +51,33 @@ conditions, the start, end and duration, the outcome, and the extensions.
 
 ## A model repository's fields
 
-Under the namespace `sce-wg-1`: the experiment and its hash, the toolkit and, when it has several ways of solving the
-same member, the mode, the adapter's path and the hash of its code, the member with its canonical hash and its file's
+Under the namespace `sce-wg-1`: the experiment and its hash, the toolkit, its kind as an entry, exact or numerical,
+and, when it has several ways of solving the same member, the mode, the adapter's path and the hash of its code, the
+member with its canonical hash and its file's
 hash, the request file's hash, the level, the settings', methods' and results files' hashes, the toolkit's version, the
-verification's verdict with its problems, the comparison's verdict against the reference, and the version of the core
-that gated the run. A run's records are registered in the model repository's registry, one file per job and one per
+verification's verdict with its problems, the comparison with the reference as a status of computed or not run with
+the reference file's hash, the report's path and the largest distance with the reference's error beside it, never a
+verdict, and the version of the core that gated the run. A run's records are registered in the model repository's registry, one file per job and one per
 build, and one validation covers the folder, since the model's schema dispatches on the record's kind.
+
+## The runs of record and the status table
+
+The registry holds every run that was registered, and a later run does not make an earlier one disappear. Which run
+is the measurement for an experiment, a toolkit and, where a toolkit has several, a mode of solution, the repository
+says in one committed file, `runs-of-record.yaml` in the registry folder: a list under `runs_of_record` whose entries
+each name an experiment, a toolkit, a mode where there is one, and the run's folder. The file designates and states
+nothing else. What a run of record established is read from its records, never kept a second time by hand.
+
+The core's reader ([`status.py`](../core/wg1core/status.py), the `wg1core status` command) reads that file and the
+records it names and runs nothing. For each experiment and toolkit it reports the run of record with the
+repository's commit, the toolkit's version, the members and levels covered, the verification's verdicts and the
+largest distance from the reference at each level with the reference's error beside it; and it notes what a reader
+should weigh: a run from a dirty tree, a job that did not end cleanly, an experiment whose hash is no longer the
+run's, a newer run in the registry, a toolkit with no run of record. Each record is checked against the draft of the
+schema it names: the core keeps every earlier draft a published core wrote beside its own, so a record of a run made
+under one is valid or invalid under it. A record naming a draft the core does not hold is reported as unchecked. It
+reports no duration, and nothing that scores or ranks.
+
+REMARK's catalog shows the same report. Its status table has a row for every cataloged repository, read at its tag
+by a reader chosen by the kind of unit the repository declares in its `REMARK.md`; a canonical model's repository
+declares `kind: canonical-model`, and the core's reader is the one REMARK finds for that kind.
