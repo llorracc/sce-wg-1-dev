@@ -50,8 +50,12 @@ metadata:
   schemas' own. Since 2026-11-09, on the owner's word, Bellman is read in `bellman-dev`, the development repository,
   and consulted through the bellman-dev session; `bellman` is its public export. Both, and `bellman-ark`, answer an
   unauthenticated request with 404 that morning and are treated as private. The documentation is public at
-  https://bellman.io/ since the evening of 2026-11-08 (its changelog at https://bellman.io/changelog/; the earlier
-  address under econ-ark's GitHub pages redirects there). The two stage files elaborate unchanged under the package
+  https://bellman.io/ from the evening of 2026-11-08 (its changelog at https://bellman.io/changelog/; the earlier
+  address under econ-ark's GitHub pages redirects there); since a change to econ-ark/bellman's Pages settings after
+  2026-11-11 the site answers 404, found on 2026-11-14 ([the journal](../journal/2026-11-14_session-record.md)). The
+  Bellman commit both model repositories pin, 3937a8eb2 (bellman-dev's main at d43c11f9b with pull request 34 merged),
+  is kept fetchable since 10:54 on 2026-11-14 by the tag `pinned/main-with-the-forward-record-2026-11-14` in
+  econ-ark/bellman-dev, a pin and no release; the branch that held it alone is to be retired. The two stage files elaborate unchanged under the package
   of 2026-11-09, specification 0.7 included ([the journal](../journal/2026-11-09_session-record.md)), and again under
   that of 2026-11-11 ([the journal](../journal/2026-11-11_session-record.md)).
 - Matsya: the design review of 2026-10-18 ran as four questions in one session and one stage-file question in another; the
