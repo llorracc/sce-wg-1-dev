@@ -5,7 +5,9 @@ metadata:
   type: reference
 ---
 
-- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls, none open as of 2026-11-14: #1 (the
+- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls: #25, open as of 15:45 on 2026-11-14,
+  the links to Bellman's public documentation and two corrections; #24, merged at 15:14 that day (main at 9648831),
+  the ontology of buffer-stock models at 0.1.0-draft.3. Before them: #1 (the
   ontology, into `main`) and pulls 2 to 13 merged on 2026-10-22 and 2026-10-23, the project state listing what each
   held; #14 and #15 closed unmerged; #16 to #23 merged from 2026-11-12 to 2026-11-14 with merge commits, the last,
   #23, the core's four small fixes (main at 2311754).
@@ -30,8 +32,8 @@ metadata:
 - HARK's main branch at `4c285e86` (2026-10-07), the commit the HARK stone was read at.
 - QuantEcon's lecture on the income fluctuation problem with stochastic returns, `lectures/ifp_advanced.md` of
   QuantEcon/lecture-python.myst at `96ede2993` (2026-08-12), the code the QuantEcon stone describes.
-- Bellman-SYM's draft pull request for `TruncatedLogNormal(μ, σ, l, u)`, in Bellman's repository, which is private; the
-  bellman session's, cited here by subject only.
+- Bellman-SYM's `TruncatedLogNormal(μ, σ, l, u)`, once a draft pull request in Bellman's then private repository: since
+  2026-11-14 among the families of Bellman-SYM's shock distributions, https://bellman.io/Bellman-Sym/reference/laws/.
 - ProbOnto (Swat, Grenon, Wimalaratne, Bioinformatics 2016; CC BY 4.0): the knowledge base of distributions and
   parameterizations whose families, charts and conversions the ontology copies, with `skos` cross-references.
 - HARK pull request econ-ark/HARK#1855 (draft): the survival probability in the risk-modified finite-value-of-autarky factor.
@@ -53,7 +55,13 @@ metadata:
   unauthenticated request with 404 that morning and are treated as private. The documentation is public at
   https://bellman.io/ from the evening of 2026-11-08 (its changelog at https://bellman.io/changelog/; the earlier
   address under econ-ark's GitHub pages redirects there); since a change to econ-ark/bellman's Pages settings after
-  2026-11-11 the site answers 404, found on 2026-11-14 ([the journal](../journal/2026-11-14_session-record.md)). The
+  2026-11-11 the site answers 404, found on 2026-11-14 ([the journal](../journal/2026-11-14_session-record.md)).
+  **Since 13:38 EST on 2026-11-14 econ-ark/bellman (https://github.com/econ-ark/bellman) and https://bellman.io/ are
+  public**, made so by the owner; bellman-dev stays private. The pages the fork links: the wiki, one page a concept,
+  https://bellman.io/wiki/<slug>/; Bellman-SYM's chapters and reference (stages, methodization, method types, shock
+  distributions, refusals); the calculus; the overview and its workflow; the examples, among them Bellman's own
+  buffer-stock and perfect-foresight models. Cite without `www`, and prefer a page or a path on main to a pinned commit
+  ([[feedback_checkable-sources]]). The
   Bellman commit both model repositories pin, 3937a8eb2 (bellman-dev's main at d43c11f9b with pull request 34 merged),
   is kept fetchable since 10:54 on 2026-11-14 by the tag `pinned/main-with-the-forward-record-2026-11-14` in
   econ-ark/bellman-dev, a pin and no release; the branch that held it alone is to be retired. The two stage files elaborate unchanged under the package

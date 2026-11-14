@@ -250,3 +250,11 @@ Faults found in this project's own work, with their status.
   kind in their records while the manifest still states the old one. Suspected by the independent review of
   2026-11-11 from reading the runner, and not run.
   **Status:** open, unconfirmed; a rerun that completes writes the manifest and removes the disagreement.
+- **Statements that Bellman's publication made false.** The semantic-ontology primer's footnote said Bellman-SYM's and
+  bellman-ddsl's documentation is internal and not yet public, and another called the wiki internal. The primer is on
+  econ-ark/sce-wg-1's main, so the sentence is live at https://econ-ark.github.io/sce-wg-1/semantic-ontology-primer/.
+  `schemas/shock-laws.md` said Bellman-SYM's truncated lognormal is in preparation, which its documentation of shock
+  distributions now lists. Both were found on 2026-11-14 in the survey of links, after econ-ark/bellman and bellman.io
+  went public at 13:38. **Status:** corrected in the fork's pull request #25, open, its merge waiting on the owner's
+  word. The live page waits for `primer-bellman-public`, cut from the working group's main and not yet pushed, to be
+  opened and merged there.

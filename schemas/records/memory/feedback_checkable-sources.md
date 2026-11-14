@@ -1,6 +1,6 @@
 ---
 name: feedback_checkable-sources
-description: "Public documents cite what a reader can check, such as a commit, a public pull request or a published page; who read what, and when, stays in the records"
+description: "Public documents cite what a reader can check, such as a commit, a public pull request or a published page; who read what, and when, stays in the records; Bellman's documentation, public since 2026-11-14, is cited at bellman.io"
 metadata:
   type: feedback
 ---
@@ -23,10 +23,17 @@ hold it with its stamps.
 or page, or a named public document. Describe anything private as not public, without its path or identifiers. Keep who read
 what, and when, in the journal and the findings. See [[feedback_no-timings]].
 
-**Bellman's documentation is not published** (2026-10-22: its site returned "Site not found", and its repository is
-private). A rule learned from Bellman, such as where a method attaches, is therefore stated in a public document as the
-schemas' own, and no Bellman page is cited for it; the findings record where it came from
-([[feedback_method-attachment]]).
+**Bellman's documentation is public, and is cited** (since 2026-11-14). From 2026-10-22, when its site returned "Site not
+found" and its repository was private, a rule learned from Bellman was stated in a public document as the schemas'
+own, with no Bellman page cited; the findings record where each came from ([[feedback_method-attachment]]). From
+13:38 EST on 2026-11-14 econ-ark/bellman and https://bellman.io/ are public, and the owner asked that the documents
+link them ([the rulings](../rulings/2026-11-14_core-fixes-ontology-held-and-the-series.md)). So:
+- cite a page of bellman.io, written without `www`, whose certificate names bellman.io alone; or cite a path on
+  econ-ark/bellman's main (`blob/main/<path>`). Don't pin a commit there: the repository changes only when bellman-dev
+  is exported to it, and its history may be started again;
+- a rule still stated in the schemas' own words keeps them, with a link beside it;
+- econ-ark/bellman-dev, the development repository, stays private, and a link into it reaches no public reader.
+  Whether a public record may name its commits, pull requests or paths was undecided on 2026-11-14.
 
 **Cite the public commit, not a checkout** (2026-10-31). A local clone can sit on a commit no remote has: the
 HAFiscal-Latest session's first line citations came from such a checkout of HAFiscal-QE, and at the public head the

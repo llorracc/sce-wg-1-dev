@@ -110,3 +110,72 @@ Times are EST, from the clock, the transcript, git or GitHub.
   - merging the series himself or putting it to the group;
   - the ontology's correction, once bellman.io answers;
   - who removed the site's domain, a question for Bellman's maintainers or an owner of the econ-ark organization.
+
+- **12:35:30, his question:** whether the records branch can be merged into main. The answer: not by a plain merge. A
+  trial merge of `records` into main at 2311754, never committed, gave five conflicts, and the merge would put the
+  records on main, against his ruling of 2026-11-13 at 14:53:27 that the records branch holds the records alone. It
+  would also end the series' reproducing main. A way to do it was given, a merge commit keeping main's files outside
+  the records with the series' rule then excluding `schemas/records/` and `CLAUDE.md`, and keeping them apart was
+  recommended.
+- **12:42:32, his word here:** the two branches kept apart ([the rulings](../rulings/2026-11-14_core-fixes-ontology-held-and-the-series.md)).
+- **12:49:29 and 12:57:38, his questions:** whether another session is pointed at the fork; and whether the session
+  that opened in his browser, when another session was asked to message this one, was a cloud session, and whether its
+  pushed changes can be seen here. No other session was in the repository on this machine. Nothing had reached the fork
+  or econ-ark/sce-wg-1 since the push of 12:14, checked at 12:57 and again at 13:57, with no new branch and no push
+  event. It was most likely a cloud session, reached through the Remote Control name this session had before it was
+  renamed, which is listed offline.
+- **13:51, the bellman session's report,** at the owner's request there: econ-ark/bellman and bellman.io public since
+  13:38, bellman-dev private. Checked here at 13:52 without login: the repository and the site answer, bellman-dev
+  answers 404, and each of the 61 concept pages the ontology pins answers at `https://bellman.io/wiki/<slug>/`. At about
+  14:07 it corrected one point: that nothing of bellman-dev may be cited was its own judgment. Whether public records
+  may name bellman-dev's commits, pull requests or paths is undecided.
+- **13:52 to 13:57, the ontology's correction,** on his word of 09:21:16, released by the site's answer: version
+  0.1.0-draft.3 on the branch `ontology-bellman-public`, committed at 13:56 as 7a53094, not pushed. The statement that
+  Bellman-SYM's documentation is not public corrected; each concept linked to its page (21 in the Turtle file, 12 in
+  the table); the source `bellman-sym` declared; two tests added, 39 passing, and the ontology of probability
+  distributions' 12.
+- **14:02, the owner's request through the bellman session:** a survey of the places this repository, and what it
+  publishes, should link to the newly public material. Sent at 14:06: about thirty places, and two statements the
+  publication had made false. The semantic-ontology primer's footnote called Bellman's documentation internal and not
+  yet public, and that footnote is live on the working group's site, from econ-ark/sce-wg-1's main. `schemas/shock-laws.md`
+  called Bellman-SYM's truncated lognormal in preparation, which its documentation now lists.
+- **15:12:01, his word here:** the correction pushed, opened and merged. Opened at 15:12 as the fork's pull request
+  #24; its checks passed (`primer`, `wg1`, `assemble`; `deploy` skipped), and it was merged at 15:14 with a merge
+  commit, 9648831, its tree the one tested. #17's head took main's ontology folder (093e3ff) and was pushed; the
+  series, merged in order with the deploy job's branch onto the working group's main, reproduces 9648831. At 15:16 the
+  buffer-stock repository's session was told, its copy of the ontology to be refreshed there.
+- **15:23:52, his word in the bellman session,** relayed at 15:24 and found by the relay checker as typed by him: the
+  links the survey proposed to be made. **15:25:28, his word here:** the open items fixed: the links, the truncated
+  lognormal's sentence, the primer's footnote with its pull request in the working group's repository, and the
+  memorial.
+- **15:26 to 15:30, the links,** committed at 15:29 as 3bab286 on the branch `bellman-links`:
+  - rosetta/README.md, vocabulary.md and apparatus.md link the pages of the terms they take from Bellman;
+  - the shock laws, the conventions and the core link Bellman-SYM's shock distributions;
+  - the ontology of probability distributions, version 0.1.0-draft.2, declares that page as a source beside ProbOnto;
+  - the ontology of buffer-stock models' README links the pages on the stage and its perches;
+  - the primer's footnotes link the pages they cite, each section number checked against the live page and found as
+    cited;
+  - the two false statements are corrected.
+
+  Thirty addresses, each answering with its anchor. The core's 57 tests and the ontologies' 39 and 12 pass. Pushed and
+  opened at 15:30 as the fork's pull request #25; its checks passed. At 15:31 the session's auto-mode classifier
+  refused the merge, so #25 is open.
+- **By 15:33, the heads for #25, local and not pushed:** #16 at 4768945, #15 at 62be772, #17 at 5b6c8d5 (the updated
+  #15 merged in, then its own folder), #18 at 2a3d569 and #20 at abc0445, each taking #25's version of its files. The
+  primer's change sits on `primer-bellman-public` (f488976), cut from the working group's main for a pull request of its
+  own, since no pull request of the series carries the primer. Merged in order with the deploy job's branch and that
+  one onto the working group's main, they reproduce #25's tree, 3bab286.
+
+**State at the memorial of 15:45 on 2026-11-14.**
+- **The fork's main** is at 9648831, and `.worktrees/main` is fast-forwarded to it. #25 is open with its checks passed,
+  and its merge waits on his word.
+- **Local, unpushed:** the five heads above and `primer-bellman-public`, each in a worktree of its name under
+  `.worktrees/`, with `bellman-links`, `records` and `.worktrees/main`.
+- **Open with the owner:**
+  - merging #25;
+  - opening the primer's pull request on econ-ark/sce-wg-1, and merging it, which corrects the live page;
+  - pushing the heads once #25 is in;
+  - posting the descriptions;
+  - the eighth pull request;
+  - merging the series himself or putting it to the group;
+  - whether public records may name bellman-dev.

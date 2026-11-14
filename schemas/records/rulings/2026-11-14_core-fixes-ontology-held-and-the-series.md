@@ -1,4 +1,4 @@
-# Rulings of 2026-11-14: the core's small fixes, the never-linked rule rescinded, and the working group's pull requests kept as a series
+# Rulings of 2026-11-14: the core's small fixes, the never-linked rule rescinded, the working group's pull requests kept as a series, and Bellman's public documentation linked
 
 The owner's decisions, in substance and by time (EST). His words are kept outside this public repository.
 
@@ -49,3 +49,39 @@ new main and pushed; the series, merged in order, reproduces it.
 
 **What it supersedes.** The hold on pushing the branch, which the session's auto-mode classifier had imposed at 10:05
 for want of his word.
+
+## The records kept apart from main
+
+- **12:42:32, here:** the records branch and main are kept apart. He had asked at 12:35:30 whether the records branch
+  can be merged into main, and was told it cannot by a plain merge without putting the records on main.
+
+**What it supersedes.** Nothing: it confirms his ruling of 2026-11-13 at 14:53:27 that the records branch holds the
+records alone.
+
+## The ontology's correction pushed and merged
+
+- **15:12:01, here:** the ontology's correction pushed, opened as a pull request on the fork and merged. The correction
+  had waited, under his ruling of 09:21:16, for bellman.io to answer; the site and econ-ark/bellman were public from
+  13:38, made so by him in the bellman session.
+
+**What followed.** The fork's pull request #24 was merged at 15:14 with a merge commit, 9648831. The ontology of
+buffer-stock models is at version 0.1.0-draft.3, each Bellman-SYM concept it names linked to its page. #17's head was
+brought to main under the standing rule on the series.
+
+## Bellman's public documentation linked
+
+- **15:23:52, in the bellman session,** relayed and checked: the links this session's survey proposed are to be made.
+- **15:25:28, here:** the items left open are to be fixed: the links; the sentence that the truncated lognormal is in
+  preparation in Bellman-SYM; the primer's footnote that Bellman's documentation is not public, live on the working
+  group's site, whose correction there takes a pull request in the working group's repository; and the memorial.
+
+**What followed.** The links and both corrections are the fork's pull request #25, with its checks passed. The
+session's auto-mode classifier refused its merge at 15:31, so it waits on his word to merge. The series' heads and a
+branch for the primer's pull request in the working group's repository were made locally and not pushed.
+
+**What it supersedes.** The rule that a rule learned from Bellman is stated as the schemas' own, with no Bellman page
+cited, because its documentation was not published ([the memory](../memory/feedback_checkable-sources.md)). Its pages are
+cited now.
+
+**What stays open.** Merging #25; opening the primer's pull request in the working group's repository and merging it;
+whether public records may name bellman-dev, the development repository, which stays private.
