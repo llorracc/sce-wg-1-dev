@@ -37,4 +37,15 @@ documentation is public would be false, so the correction and the links wait for
 updated on the fork, by commits and merges and never by a rebase or a force-push; none was merged.
 
 **What stays open.** Whether he merges the series himself or puts it to the group; opening the eighth pull request;
-posting the seven updated descriptions, drafted and not posted; pushing `core-small-fixes`.
+posting the seven updated descriptions, drafted and not posted.
+
+## The core's small fixes merged
+
+- **12:00:25, here:** `core-small-fixes` is to be pushed, its pull request opened on the fork and merged.
+
+**What followed.** The branch was pushed and opened as the fork's pull request #23, its checks passed, and it was
+merged at 12:03 with a merge commit, 2311754. Under the standing rule on the series, #19 and #20 were brought to the
+new main and pushed; the series, merged in order, reproduces it.
+
+**What it supersedes.** The hold on pushing the branch, which the session's auto-mode classifier had imposed at 10:05
+for want of his word.

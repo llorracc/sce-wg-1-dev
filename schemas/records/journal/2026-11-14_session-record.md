@@ -68,14 +68,43 @@ Times are EST, from the clock, the transcript, git or GitHub.
   the Bellman commit both model repositories pin, bellman-dev's main with pull request 34 merged. It stood on a branch
   alone that is to be retired, and the tag keeps it fetchable; it is no release. Nothing in the fork pins a Bellman
   commit, so nothing here changes. The pointer is in [the references](../memory/reference_pointers.md).
+- **By 11:30, the buffer-stock repository's session asked what it needs to appear in REMARK's status table,** on the
+  owner's instruction there to confer. It was answered from the code, with the core's reader run on a scratch clone of
+  its main at 539aa8a:
+  - `kind: canonical-model` can go in its `REMARK.md` now, and REMARK's main reads it;
+  - a catalog entry in REMARK, `private: true`, pinned by a tag, is still to be made, by the REMARK session or the
+    owner;
+  - the core requires neither containers nor every level of a run of record, and what it must meet is the owner's to
+    say;
+  - an entry with `mode: markov` would be a problem, since the core's runner records no mode;
+  - main's code is unchanged since 9fc7d27;
+  - the reader finds no problem on the repository today.
+- **12:00:25, his word here:** the core's fixes to be pushed, opened as a pull request on the fork and merged
+  ([the rulings](../rulings/2026-11-14_core-fixes-ontology-held-and-the-series.md)). Its merge with main at dcd0fa6
+  was built first, and the core's 57 tests pass on it. Pushed at 12:01 and opened as the fork's pull request #23; its
+  checks passed (`primer`, `wg1`, `assemble`; `deploy` skipped, as on the fork), and it was merged at 12:03 with a
+  merge commit, 2311754, its tree the one tested.
+- **By 12:05, #19 and #20 brought to the new main,** under the standing rule
+  ([the memory](../memory/feedback_upstream-series-tracks-main.md)):
+  - #19 took main's `schemas/execution-record.md` and `schemas/experiments.md`, at 97039e6;
+  - #20 merged the updated #19 and took main's `core/`, at 21f2d2a.
 
-**State at 10:40 on 2026-11-14.**
-- **The fork's main** is at dcd0fa6, and its `.worktrees/main` is fast-forwarded to it. A third worktree,
-  `.worktrees/core-small-fixes`, holds 0694471, unpushed.
-- **The fork's branches:** the seven heads are updated and pushed. `deploy-from-the-group-only` and `core-gitignore`
-  (merged) are on the fork.
+  Both were pushed as fast-forwards. Merged in the series' order with the deploy job's branch onto the working group's
+  main, the eight reproduce 2311754's tree; without that branch they differ in the deploy job's `if:` line alone. On
+  the result the core's 57 tests and the ontologies' 37 and 12 pass. The drafted descriptions of #19 and #20 now name
+  the fixes and 57 tests, and all seven name 2311754; none is posted. The worktree `.worktrees/core-small-fixes` and
+  the local branch were removed; the fork's branch `core-small-fixes` remains.
+- **By 12:06, the perfect-foresight repository's session reported** that the repository pins the core at 9fc7d27 on
+  the owner's word there, committed and not pushed. A trial of `closed-form-agreement/3` at that core passes its
+  three checks with files identical to the run of record's, and `records.validate` reads its 46 registered records
+  as valid. It has not taken the four fixes.
+
+**State at the memorial of 12:15 on 2026-11-14.**
+- **The fork's main** is at 2311754, and its `.worktrees/main` is fast-forwarded to it. Two worktrees, `records` and
+  `.worktrees/main`, and two local branches.
+- **The fork's branches:** the seven heads are updated and pushed. `deploy-from-the-group-only`, and `core-gitignore`
+  and `core-small-fixes` (both merged), are on the fork.
 - **Open with the owner:**
-  - pushing the core fixes;
   - posting the descriptions;
   - the eighth pull request;
   - merging the series himself or putting it to the group;

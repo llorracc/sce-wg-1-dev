@@ -5,9 +5,10 @@ metadata:
   type: reference
 ---
 
-- The fork's eleven pull requests, all merged: https://github.com/llorracc/sce-wg-1-dev/pull/1 (the ontology, into
-  `main`) and pulls 2 to 7 on 2026-10-21, 8 to 11 on 2026-10-22 (into the schemas' branch). The project state lists what
-  each held.
+- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls, none open as of 2026-11-14: #1 (the
+  ontology, into `main`) and pulls 2 to 13 merged on 2026-10-22 and 2026-10-23, the project state listing what each
+  held; #14 and #15 closed unmerged; #16 to #23 merged from 2026-11-12 to 2026-11-14 with merge commits, the last,
+  #23, the core's four small fixes (main at 2311754).
 - HARK's draft pull requests from the owner's fork that bear on the adapters: econ-ark/HARK#1858 (the Markov solver's
   expectations on the current state's points, and its value function; the HARK adapter's pin, commit `03a2c7a1` on
   llorracc/HARK's branch `markov-exact-expectations`), #1859 (the employment income process for the Markov consumer),
@@ -73,8 +74,8 @@ metadata:
 - HARK's commit `54083db5` (2021-07-09; issue econ-ark/HARK#1022, merged in #1039): the cyclical solve order, under which
   entry k of a time-varying list is the move into k. Its simulation of shocks, growth and the return was left reading
   entry s − 1.
-- The fork's pull request #15, open: https://github.com/llorracc/sce-wg-1-dev/pull/15, the stage files' rewrite with
-  derivative terms (2026-10-31).
+- The fork's pull request #15, https://github.com/llorracc/sce-wg-1-dev/pull/15, the stage files' rewrite with
+  derivative terms (2026-10-31), closed unmerged.
 - An issue in the paper's private repository (2026-11-01) asks for a proof that the WRIC is necessary without an
   artificial constraint; this public repository gives no link to it.
 - Ma, Stachurski and Toda, read for the ontology on 2026-11-01 in their arXiv versions:

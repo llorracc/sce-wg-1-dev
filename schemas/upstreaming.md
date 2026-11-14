@@ -1,6 +1,6 @@
 # Bringing the work to the working group's repository: the pull requests in order
 
-**Status on 2026-11-14:** the seven pull requests, #14–#20, open and unmerged, their heads brought to the fork's main that morning on the owner's word, so that merged in order they reproduce it but for the site's deploy job, whose branch waits for his word; kept as a series as main moves ([the memory](records/memory/feedback_upstream-series-tracks-main.md)).
+**Status on 2026-11-14:** the seven pull requests, #14–#20, open and unmerged, their heads brought to the fork's main that morning on the owner's word, and #19's and #20's again at noon after the fork's #23 merged the core's four small fixes, so that merged in order they reproduce it but for the site's deploy job, whose branch waits for his word; kept as a series as main moves ([the memory](records/memory/feedback_upstream-series-tracks-main.md)).
 
 **Status: ADOPTED, 2026-11-04, in the evening, with the recommendations taken on every decision below: the framework upstream and the model in its repository; the records kept out of upstream; the apparatus document at the repository's root; the order as listed, the first new pull requests cut at once.** The owner asked, in the evening, how thoroughly the new way of doing things is
 documented and where, and whether the work since the fork left econ-ark/sce-wg-1 should be organized into a set of

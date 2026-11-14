@@ -224,7 +224,8 @@ Faults found in this project's own work, with their status.
   **Status:** fixed on the branch `core-small-fixes` (0694471) on 2026-11-14, on the owner's word of 09:21:16: the
   listing with `-z`, the names split on the null byte and hashed as bytes; a test with a name outside ASCII gives
   one hash under both settings of `core.quotePath` and fails on main's code; every environment of both model
-  repositories hashes as before. Not yet pushed or merged.
+  repositories hashes as before. Pushed, and merged into the fork's main as pull request #23 at 12:03 that day
+  (2311754), on his word of 12:00:25; it goes upstream with #20.
 - **The experiments' document describes two checks the core does not have.** `schemas/experiments.md` on the fork's
   main lists, among what a check may compare, `stated`, a toolkit's files against the checker's report of the stated
   member, and, among the expectations, `within_own_convergence`; its account of the first experiment names checks
