@@ -51,9 +51,33 @@ conditions, the start, end and duration, the outcome, and the extensions.
 
 ## A model repository's fields
 
-Under the namespace `sce-wg-1`: the experiment and its hash, the toolkit and, when it has several ways of solving the
-same member, the mode, the adapter's path and the hash of its code, the member with its canonical hash and its file's
+Under the namespace `sce-wg-1`: the experiment and its hash, the toolkit, its kind as an entry, exact or numerical,
+and, when it has several ways of solving the same member, the mode, the adapter's path and the hash of its code, the
+member with its canonical hash and its file's
 hash, the request file's hash, the level, the settings', methods' and results files' hashes, the toolkit's version, the
-verification's verdict with its problems, the comparison's verdict against the reference, and the version of the core
-that gated the run. A run's records are registered in the model repository's registry, one file per job and one per
+verification's verdict with its problems, the comparison with the reference as a status of computed or not run with
+the reference file's hash, the report's path and the largest distance with the reference's error beside it, never a
+verdict, and the version of the core that gated the run. A run's records are registered in the model repository's registry, one file per job and one per
 build, and one validation covers the folder, since the model's schema dispatches on the record's kind.
+
+## The runs of record and the status table
+
+The registry holds every run that was registered, and a later run does not make an earlier one disappear. Which run
+is the measurement for an experiment, a toolkit and, where a toolkit has several, a mode of solution, the repository
+says in one committed file, `runs-of-record.yaml` in the registry folder: a list under `runs_of_record` whose entries
+each name an experiment, a toolkit, a mode where there is one, and the run's folder. The file designates and states
+nothing else. What a run of record established is read from its records, never kept a second time by hand.
+
+The core's reader ([`status.py`](../core/wg1core/status.py), the `wg1core status` command) reads that file and the
+records it names and runs nothing. For each experiment and toolkit it reports the run of record with the
+repository's commit, the toolkit's version, the members and levels covered, the verification's verdicts and the
+largest distance from the reference at each level with the reference's error beside it; and it notes what a reader
+should weigh: a run from a dirty tree, a job that did not end cleanly, an experiment whose hash is no longer the
+run's, a newer run in the registry, a toolkit with no run of record. Each record is checked against the draft of the
+schema it names: the core keeps every earlier draft a published core wrote beside its own, so a record of a run made
+under one is valid or invalid under it. A record naming a draft the core does not hold is reported as unchecked. It
+reports no duration, and nothing that scores or ranks.
+
+REMARK's catalog shows the same report. Its status table has a row for every cataloged repository, read at its tag
+by a reader chosen by the kind of unit the repository declares in its `REMARK.md`; a canonical model's repository
+declares `kind: canonical-model`, and the core's reader is the one REMARK finds for that kind.
