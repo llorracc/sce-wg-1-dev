@@ -1,11 +1,17 @@
 # Rosetta Stones
 
 What a Rosetta Stone is and what it holds. The stones themselves live with each canonical model's repository, beside
-the adapters they describe; the first are the buffer-stock model's, for HARK, dolo and QuantEcon's JAX code.
+the adapters they describe; the first are the buffer-stock model's, for HARK, dolo and QuantEcon's endogenous-grid
+operator.
 
 A Rosetta Stone says how one toolkit solves a family's members as the family's stage file states them. With a stone for
 each toolkit, one stage file and one parameter file can be solved by every toolkit that has one. Each toolkit writes a
 results file, the checker verifies each file, and the files are compared.
+
+A stone is written for a competent reader: an AI session or a person who reads the toolkit's documentation and code,
+knows the mathematical structure of the problem, and is given the parameters and the settings. It states what the
+toolkit is expected to perform, and it records what a reader did to make the toolkit perform it. It does not prescribe
+how the toolkit is to be called: that is the reader's to work out from the toolkit, and to record.
 
 ## The hub and the spokes
 
@@ -15,48 +21,113 @@ toolkits meet only in their results files, which the family's results schema mak
 
 This is the design of Project Bellman's Rosetta stone. That registry records which operations and methods a toolkit's
 routines carry out, and the conventions under which each correspondence holds (Bellman's documentation, *Core
-concepts*). A stone here uses that registry's field names, so that Bellman can take it in as cards. It holds the
-toolkit's side only: the operator's side, the stage's own, is Bellman's to fill. It also adds what this project needs at
-the two ends, which Bellman's registry does not hold: the parameter file going in and the results file coming out.
+concepts*). A stone holds the toolkit's side only: the operator's side, the stage's own, is Bellman's to fill. It adds
+what this project needs at the two ends, which Bellman's registry does not hold: the parameter file going in and the
+results file coming out.
 
 ## What a stone holds
 
-Each stone is a document, with its cards in a YAML file beside it.
-1. **The lexicon.** One row for each parameter of the stage file, each key of the parameter file and each object the
-   results file reports. Each row gives the toolkit's name for it and its timing and normalization. Where the toolkit
-   differs, it states the difference and what the adapter does about it, citing the toolkit's own documentation.
-2. **The handlers.** One for each of the toolkit's routines that the adapter calls. Each names the stage target it
-   carries out, the family's method targets. It also says whether it does the whole stage or one
-   part, whether the stage's transition is built into it, and whether it takes one step or iterates to convergence.
-3. **The adapter.** Code in two legs around the handler's call.
-   - *Encode* takes a parameter file and the settings to the toolkit's arguments.
-   - *Decode* takes the toolkit's output to a results file that reports the toolkit's effective member
-     as the family's results schema asks.
+A stone has two parts, which answer two questions: what is expected of the toolkit, and what a reader did.
 
-   The adapter does not change the model. The laws, the transitions and the constraint are the member's. The grids and
-   the nodes are settings, and any randomness has an explicit seed.
-4. **The methods.** For each target, the method, its settings and the handler. A whole-stage handler covers several
-   parts, and for each of them the stone says whether it honors the method file's setting, fixes the part inside, or
-   cannot take it, so that the adapter must. The cards write these with Bellman's tokens: `honours`, `fixed`,
-   `requires_own_handler` and `absent`. A part the whole-stage handler runs names no handler of its own.
-   - The targets are the stage's, under the family's rules of attachment:
-     an expectation's method on its operator, `E_ψ_θ_j`; the solution on `policy.euler.solve`; the rule's interpolation
-     on `policy`.
-   - A method is written in words, with its tag beside it where it has one. An entry lists only the settings its tag
-     names, unless it names a handler that reads the rest; the others are in the handler's map of settings.
-5. **The evidence.** What has been checked and how:
-   - the source, read at a stated version;
-   - the checker's verification of the adapter's files;
-   - agreement with another toolkit.
+### The desiderata
 
-   Nothing counts as correct until a run is recorded.
+What the reader may not decide for itself. Short, exact, and in one place each.
+
+1. **The model, by reference.** The family's stage file and the member's parameter file. The stone restates neither.
+2. **The method expected at each of the stage's places:** the endogenous grid method on the policy's block, an
+   interpolation on the evaluation that closes it, a quadrature on an expectation, a histogram on the population's
+   transition, and so on, under the family's rules of attachment. Each place takes one method. The methods are
+   stated in two files, each part in exactly one of them.
+   - *The methods addition* holds whatever Bellman's language can state. It is a methods file in Bellman's form
+     (Bellman's documentation, *Addition* and *Methodization*): an addition to the family's stage file, kept beside
+     the adapter, one for each family the toolkit solves. An entry names the place by its path in the stage and the
+     method by Bellman's word for it, from Bellman's published method types; once a reader has realized the method,
+     the entry also names the handler, as a package and a callable in it. A place whose method Bellman has no word
+     for carries its handler alone. The addition is checked by binding it on the stage file under Bellman's package,
+     which refuses a place the stage does not have and a word the place does not admit.
+   - *The YAML method file* holds what an addition cannot: a part the stage has no place for, such as the stationary
+     population, and a method that is neither a word nor a routine at a place. Every run writes it beside its
+     results, with the addition the run used, and names that addition by the hash of its bytes, so that the one hash
+     a record carries covers both.
+
+   A toolkit that computes no value function enters nothing at the value's place, in either file: silence there
+   means not computed, and the results file reports what needs the value, such as welfare, as not computed. The
+   harness's own instruments, such as the expectation in the Euler residuals, are no toolkit's method and are in no
+   method file; the results file names them.
+3. **The settings at each named level**, in the toolkit's own names and with their values, in the stone's ladder file
+   (the numerics document): the grids, the tolerances, the limits of iteration, the nodes. The toolkit's own defaults
+   are an element of their own, read from the toolkit's documentation at the pin, with the citation. Settings are the
+   one thing a reader must not infer. A setting that another toolkit's run produces says so where it is named, and the
+   run's settings file records the value.
+4. **The conventions that move a reported number** and that neither the math nor the toolkit decides: which
+   side's slope is reported at a point that is a node of a grid; how far above a natural limit a grid may start; what
+   a solve that stops at its cap is. A convention every toolkit meets is the family's results document's, and the
+   stone points to it.
+5. **What the results file says of the toolkit:** its name, its version and commit at the pin, and how it represents
+   the laws. The results schema names these fields; the stone fills them.
+
+### The realization
+
+What a reader did, so that the next reader can check it.
+
+6. **The adapter.** Code in two legs around the toolkit's call. *Encode* takes a parameter file and the settings to the
+   toolkit's arguments. *Decode* takes the toolkit's output to a results file that reports the toolkit's effective
+   member as the family's results schema asks. The adapter does not change the model: the laws, the transitions and
+   the constraint are the member's, the grids and the nodes are settings, and any randomness has an explicit seed. The
+   toolkit is imported at its pin and never copied and changed; what has to differ is done from outside it, and the
+   record says what.
+7. **The record.** What the reader read in the toolkit's documentation and source, and where; every choice the
+   desiderata left to it, with its reason; every value it fixed, with its reason; every statement in the stone or the
+   hub that it found wrong or stale. A value with no reason is a finding, not a default. What two readers decide
+   differently is a desideratum that was missing, and goes into the stone.
+8. **The evidence.** The toolkit's source read at a stated version; the checker's verification of the adapter's files;
+   the comparator's distances from the reference; the ladder's convergence; agreement with another toolkit. Nothing
+   counts as correct until a run is recorded.
+
+### The document, and the cards
+
+The document is for people: the lexicon, one row for each parameter of the stage file, each key of the parameter
+file and each object the results file reports, with the toolkit's name for it, its timing and normalization, and,
+where the toolkit differs, the difference and what the adapter does about it, citing the toolkit's documentation; and
+the departures. It is written from the record, not before it, and it states no value that the desiderata state: it
+points.
+
+The cards, in the field names of Bellman's registry, are an export from the method and ladder files, made when that
+registry takes cards. Nobody edits them by hand.
+
+### What a stone does not hold
+
+Whatever is the same for every toolkit. The adapter contract, the command line and the files between the harness and
+an adapter, is the harness's. Where a model's adapters share code, what a toolkit's part hands it is that code's own
+page to state; such code is a reference realization of the toolkit-neutral parts, the effective member, the
+population, the residuals and the files, which a reader may use or replace under the same acceptance.
 
 A stone records no run times or speeds: those belong to the run registry, with the machine and the conditions beside
 them.
 
+## How a stone is accepted
+
+By its outcome, not by its form.
+
+- A reader given the stone's folder and the hub, and nothing of an earlier adapter, produces a toolkit's part whose
+  results verify with the checker and stand from the reference within the level's own error, with no quantity the
+  experiment asks for missing.
+- Its record names a source for every value that is not in the desiderata: the toolkit's documentation, a decision
+  with its reason, or a convention of the hub.
+
+This is run when a stone's desiderata change and when the toolkit's pin changes, not on every commit. The checks of
+form, that the lexicon covers every parameter and key and that the cards keep their shape, run on every commit.
+
+## The vocabulary
+
+A **parameter** is the model's, stated in the parameter file; a **setting** is a method's, stated in the ladder file,
+whatever the toolkit calls it; an **argument** is an input of a call. A **desideratum** states what is expected of
+the toolkit; a **realization** is what a reader did to meet it; the **reader** is whoever builds or checks an adapter
+from the stone.
+
 ## The workflow
 
-    stage file + parameter file + method file + settings element + request file
+    stage file + parameter file + method files + settings element + request file
       → each toolkit's adapter → one results file per toolkit
       → check.py --verify-results on each
       → the comparison of the files, at the request file's points
@@ -93,8 +164,9 @@ reviews of this draft.
     the households as well as the grid. Otherwise the measured tolerance is too tight, and a difference of method looks
     like a difference of model.
 - **The residuals say whether the same model was solved.** The Euler residual is taken against the stated member's laws,
-  by a quadrature unlike either household's own (`diagnostics.expectation`). The stationarity residual detects a
-  distribution that is still moving. Both are diagnostics beside the measured tolerance, not the tolerance itself.
+  by a quadrature unlike either household's own: the harness's, one for every toolkit, which the results file names.
+  The stationarity residual detects a distribution that is still moving. Both are diagnostics beside the measured
+  tolerance, not the tolerance itself.
 - **A difference of method is reported as one.** An example is the kink of a code that drops the pair at zero saving.
 - **Within one toolkit, identity is attainable:** the same code, libraries and machine, with the same threads, give the
   same bits.
