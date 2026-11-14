@@ -83,5 +83,23 @@ branch for the primer's pull request in the working group's repository were made
 cited, because its documentation was not published ([the memory](../memory/feedback_checkable-sources.md)). Its pages are
 cited now.
 
-**What stays open.** Merging #25; opening the primer's pull request in the working group's repository and merging it;
-whether public records may name bellman-dev, the development repository, which stays private.
+**What followed, later.**
+- **15:52:59, here:** #25 merged, at 15:53 (c7e7dee), and the series' heads pushed.
+- **15:54:31, here:** the primer's pull request opened in the working group's repository and merged. It is
+  econ-ark/sce-wg-1 #21, merged at 15:57 (4395e8d); the live page was corrected by 15:59. It is the first pull request
+  from the fork to be merged into the working group's repository since the series was opened.
+
+**What stays open.** Whether public records may name bellman-dev, the development repository, which stays private.
+
+## The ontology's home
+
+- **15:54:52, here:** this repository's copy of the ontology of buffer-stock models is the ontology's home. It takes the
+  two corrections made on 2026-11-12 in the buffer-stock model's repository's copy, as a pull request of its own.
+- **16:04:01, here:** that pull request, the fork's #26, merged.
+
+**What followed.** #26 was merged at 16:04 (69bc191), and #17's head was brought to it, so that the working group's
+repository receives the corrected ontology. A correction made in a model repository's copy comes here as a pull
+request ([the memory](../memory/feedback_ontology-home-is-the-fork.md)).
+
+**What it supersedes.** Nothing ruled. Until then neither copy had been named the home, and each had taken changes the
+other lacked.

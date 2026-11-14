@@ -255,6 +255,5 @@ Faults found in this project's own work, with their status.
   econ-ark/sce-wg-1's main, so the sentence is live at https://econ-ark.github.io/sce-wg-1/semantic-ontology-primer/.
   `schemas/shock-laws.md` said Bellman-SYM's truncated lognormal is in preparation, which its documentation of shock
   distributions now lists. Both were found on 2026-11-14 in the survey of links, after econ-ark/bellman and bellman.io
-  went public at 13:38. **Status:** corrected in the fork's pull request #25, open, its merge waiting on the owner's
-  word. The live page waits for `primer-bellman-public`, cut from the working group's main and not yet pushed, to be
-  opened and merged there.
+  went public at 13:38. **Status:** fixed. In the fork by pull request #25, merged at 15:53 on 2026-11-14. In the working
+  group's repository by its pull request #21, merged at 15:57; the live page was checked at 15:59.

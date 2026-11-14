@@ -5,9 +5,13 @@ metadata:
   type: reference
 ---
 
-- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls: #25, open as of 15:45 on 2026-11-14,
-  the links to Bellman's public documentation and two corrections; #24, merged at 15:14 that day (main at 9648831),
-  the ontology of buffer-stock models at 0.1.0-draft.3. Before them: #1 (the
+- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls, none open as of 16:10 on 2026-11-14:
+  - #26, merged at 16:04 that day (main at 69bc191): the ontology's two corrections of 2026-11-12;
+  - #25, merged at 15:53: the links to Bellman's public documentation and two corrections;
+  - #24, merged at 15:14: the ontology of buffer-stock models at 0.1.0-draft.3.
+
+  The working group's pull request econ-ark/sce-wg-1#21, from the fork's `primer-bellman-public`, merged there at 15:57
+  (4395e8d): the primer's footnotes. Before them: #1 (the
   ontology, into `main`) and pulls 2 to 13 merged on 2026-10-22 and 2026-10-23, the project state listing what each
   held; #14 and #15 closed unmerged; #16 to #23 merged from 2026-11-12 to 2026-11-14 with merge commits, the last,
   #23, the core's four small fixes (main at 2311754).

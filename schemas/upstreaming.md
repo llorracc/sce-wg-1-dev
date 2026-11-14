@@ -1,10 +1,10 @@
 # Bringing the work to the working group's repository: the pull requests in order
 
-**Status at 15:45 on 2026-11-14:** the fork's main at 9648831 (#24, the ontology of buffer-stock models at draft.3), and
-#17's head brought to it and pushed. The fork's #25, open, links Bellman's public documentation, so the heads of #15,
-#16, #17, #18 and #20 are brought to its tree locally, to be pushed once it merges. It also corrects the primer, which
-no pull request of the series carries, since it is on the working group's main already. Its correction there is a
-pull request of its own, from `primer-bellman-public`, not yet opened. **Earlier on 2026-11-14:** the seven pull
+**Status at 16:10 on 2026-11-14:** the fork's main at 69bc191: #24, #25 and #26, the ontology's draft.3, the links to
+Bellman's public documentation, and the ontology's corrections of 2026-11-12. The heads of #15–#18 and #20 are brought
+to it and pushed. The primer, which no pull request of the series carries, was corrected in the working group's
+repository by its own pull request, #21, merged there at 15:57 (4395e8d). Merged in order onto that main with the deploy
+job's branch, the series reproduces the fork's main. **Earlier on 2026-11-14:** the seven pull
 requests, #14–#20, open and unmerged, their heads brought to the fork's main that morning on the owner's word, and #19's and #20's again at noon after the fork's #23 merged the core's four small fixes, so that merged in order they reproduce it but for the site's deploy job, whose branch waits for his word; kept as a series as main moves ([the memory](records/memory/feedback_upstream-series-tracks-main.md)).
 
 **Status: ADOPTED, 2026-11-04, in the evening, with the recommendations taken on every decision below: the framework upstream and the model in its repository; the records kept out of upstream; the apparatus document at the repository's root; the order as listed, the first new pull requests cut at once.** The owner asked, in the evening, how thoroughly the new way of doing things is

@@ -179,3 +179,40 @@ Times are EST, from the clock, the transcript, git or GitHub.
   - the eighth pull request;
   - merging the series himself or putting it to the group;
   - whether public records may name bellman-dev.
+
+- **15:52:59, his word here:** merge #25. Merged at 15:53 with a merge commit, c7e7dee, its tree the one tested. The
+  five heads made for it were pushed: #15 at 62be772, #16 at 4768945, #17 at 5b6c8d5, #18 at 2a3d569, #20 at abc0445.
+  Each upstream pull request reports itself mergeable. Merged in order with the deploy job's branch and the primer's
+  onto the working group's main, they reproduce c7e7dee.
+- **15:54:31, his word here:** the primer's pull request opened in the working group's repository and merged. Opened at
+  15:54 as econ-ark/sce-wg-1 #21 from `primer-bellman-public`; its checks passed (`primer`, `wg1`, `assemble`; `deploy`
+  skipped), and it was merged at 15:57 with a merge commit, 4395e8d. The site's deploy succeeded. At 15:59 the live
+  primer had no "not yet public" and carried the 14 links to bellman.io. The series, merged in order onto 4395e8d with
+  the deploy job's branch, reproduces the fork's main.
+- **15:54:52, his word here:** the fork's copy of the ontology of buffer-stock models is its home, and it takes the two
+  corrections the buffer-stock model's repository made on 2026-11-12 as a pull request of its own. That repository's
+  session had reported at about 15:21 that our copy lacked them, and that it had applied #24 to its own copy as a
+  patch. Its commits for the two (202aa2f, 3901bc6), the source only, applied cleanly to the fork's copy:
+  - `BSM_0000081`, `natural-limit`: its meaning corrected where ψ_min ≥ ℛ;
+  - `BSM_0000055`, `expectation`: written `E_{ψ,ξ}`;
+  - `BSM_0000033` to `35`: as the stage files now draw the shocks.
+
+  The five rows match that copy's field for field. Its other twelve differing rows differ in attribution only, which
+  the fork's rule on checkable sources keeps out of public text, and in the fork's repository key. Opened at 16:01 as
+  the fork's #26, recorded under draft.3; its checks passed.
+- **16:04:01, his word here:** merge #26. Merged at 16:04 with a merge commit, 69bc191, its tree the one tested. #17's
+  head took main's ontology folder (7283278) and was pushed; the series reproduces 69bc191. The buffer-stock model's
+  repository's session was told of #26 at 16:02. Whether its copy takes the fork's folder is for it and the owner.
+- **16:05:02, his word here:** memorialize and push.
+
+**State at the memorial of 16:10 on 2026-11-14.**
+- **The fork's main** is at 69bc191, and `.worktrees/main` is fast-forwarded to it. Two worktrees, `records` and
+  `.worktrees/main`.
+- **The working group's main** is at 4395e8d, with the primer corrected; the live site was checked. The seven pull
+  requests, #14–#20, are open, their heads at main's files. Merged in order with `deploy-from-the-group-only`, they
+  reproduce the fork's main.
+- **Open with the owner:**
+  - posting the seven descriptions, drafted and not posted;
+  - the deploy job's pull request;
+  - merging the series himself or putting it to the group;
+  - whether public records may name bellman-dev.
