@@ -35,17 +35,25 @@ registered in [the conventions](conventions.md).
 - **Validator:** a JSON Schema file that checks a parameter or results file's form.
 - **Checker:** a program that checks what a validator cannot express, such as a law's mean or a regularity condition.
 - **Addressable part** and **method target:** a part of a family's model that a method can be attached to, such as the
-  expectation over one shock, named by the stage file's own name for it.
-- **Method file:** the algorithm chosen for each part of the model, with no numerical values. **Settings file:** plain
-  values for the settings those methods read. **Method registry:** the definitions of the methods, each with its
-  contract and the settings it reads.
-- **Handler:** the routine a method entry names, which carries out what the entry's method tag leaves open.
-- **Ladder:** one method file run under many settings, so that results show how each quantity converges. **Level:** a
+  expectation over one shock. It is named by its **place** in the family's stage file, as Bellman names it: a block by
+  its identifier, the evaluation that closes a block, an operator by its name.
+- **Method files:** the algorithm chosen for each part of the model, with no numerical values, in two files with each
+  part in exactly one. The **methods addition** is a file in Bellman's language, added to the family's stage file,
+  whose entries name a method word or a handler at a place. The YAML **method file**, which every run writes, holds
+  what an addition cannot, such as a part the stage has no place for, and names the addition with its hash.
+  **Settings file:** plain values for the settings those methods read. **Method registry:** the definitions of the
+  methods, each with its contract and the settings it reads; for a method word, Bellman's table of method types.
+- **Handler:** the routine a place's entry names, which carries out what the method word leaves open, or stands alone
+  where Bellman has no word for the method.
+- **Ladder:** the same methods run under many settings, so that results show how each quantity converges. **Level:** a
   named rung of a toolkit's ladder, the one input the harness passes that is not a parameter.
 - **Experiment:** what every toolkit is to do with some members, and what the results must show, stated in an
   experiment file. **Reports:** the results-file quantities every run of an experiment must carry beyond what the
   schema requires. **Checks:** the experiment's comparisons across members, toolkits or levels of one quantity, each
   under a metric and an expectation.
+- **Metric:** the distance between two files' numbers for one quantity: a distance at each number with an aggregate
+  over them, the largest, the mean, the root mean square or a quantile, or a function of the model's repository. A
+  check names its metric, and none is the default.
 - **Request file:** the comparison points at which a results file reports, kept apart from the parameter file so that
   the model's hash does not change. **Comparison points:** the values of the state at which the rule, its derivative,
   the Euler residuals and the distribution function are reported; the **request rule** generates them from a **quick
@@ -95,12 +103,19 @@ registered in [the conventions](conventions.md).
 - **Execution record:** what every build and every job writes: the repository's state, the environment's hash, the
   image, the machine, the conditions, the duration, how it ended and the outputs' hashes, with the model repository's
   own fields under its namespace. **Run registry:** a model repository's folder of registered records, one per job
-  and per build of each run of record.
+  and per build of each registered run, with the file that names, for each experiment, toolkit and mode, its run of
+  record.
 - **Reference solution,** or **the reference:** the organizer's solve of a member to very high precision by continuous
   methods, the standard every solution at default settings is compared to; its own error is reported beside every
-  distance. **The continuous methods:** the expectation integrated against the shocks' continuous laws and split at
-  the kink's preimage, the cubic Hermite interpolation that makes legal, the natural limit from the laws' infima, and
-  the continuous landing of the transition's mass on the distribution grid.
+  distance. Where the model has a closed form, the reference is the closed form, evaluated exactly. **The continuous
+  methods:** the expectation integrated against the shocks' continuous laws and split at the kink's preimage, the
+  cubic Hermite interpolation that makes legal, the natural limit from the laws' infima, and the continuous landing
+  of the transition's mass on the distribution grid.
+- **Kind of a solution:** how it is obtained: **exact,** evaluated from a closed form, with no settings and no error
+  but round-off, or **numerical,** approximated by a method with settings at a level. **Role of a solution:** what it
+  is for in an experiment: the **reference,** which a member pins with its stated errors, or an **entry,** a
+  registered toolkit's solution measured against it. A reference may be of either kind, and so may an entry: an exact
+  entry is the closed form written in a toolkit's language, and is no second method.
 - **The bench:** the organizer's own numerical code, which is no toolkit: the diagnostics' quadrature, the comparator,
   the reference solver.
 - **Probe:** a measurement made for planning and recorded as a finding; not a run of record. **Run of record:** a run
@@ -111,6 +126,8 @@ registered in [the conventions](conventions.md).
   toolkit's author who provides a card, an adapter or results files.
 - **REMARK:** a repository that meets econ-ark's standard for a reproducible project: a tagged release, a Dockerfile,
   a reproduce script, an environment file, and at the higher tiers a citation file and an archived release. A
-  canonical model's repository is one.
+  canonical model's repository is one. **Kind of unit:** what sort of unit a cataloged repository is, declared in its
+  `REMARK.md`; a canonical model's is `canonical-model`. **Status table:** the catalog's table of what each
+  repository holds at its tag, read and never run, each row by the reader for the repository's kind.
 - **Records:** a project's own memory, its rulings, journal, findings and deferred follow-ups, kept with the model's
   repository and written for publication.
