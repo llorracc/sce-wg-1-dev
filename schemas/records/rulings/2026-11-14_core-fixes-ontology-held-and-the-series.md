@@ -132,3 +132,16 @@ may name the development repository's commits, pull requests or paths.
 **What followed.** Done by 16:18:47; each description opens with the mark. None can be merged until he marks it ready.
 
 **What stays open.** When the series is ready, and whether he merges it or puts it to the group.
+
+## The ontologies' table and the copied folder's links
+
+- **16:50:22, here:** the first two of the three points the buffer-stock model's repository's session found in the
+  fork's ontology folder fixed, pushed, opened as a pull request on the fork and merged.
+
+**What followed.** The fork's #27 merged at 16:53:11 (bd22255): the table in `ontologies/README.md` lists the ontology
+of buffer-stock models, and that ontology's README links Project A and the Rosetta Stones by absolute address. #17's
+head was brought to it. A link from the folder to anything outside the ontologies' folder is absolute from here on
+([the memory](../memory/feedback_ontology-home-is-the-fork.md)).
+
+**What stays open.** The third point: whether that repository's copy of the ontology of probability distributions, at
+draft.1, follows the fork's draft.2. It is that session's question to him.

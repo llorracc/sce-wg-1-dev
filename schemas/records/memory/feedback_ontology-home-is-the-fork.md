@@ -1,6 +1,6 @@
 ---
 name: feedback_ontology-home-is-the-fork
-description: "The ontology of buffer-stock models lives in this repository; a model repository's copy follows it, and a correction made in a copy is brought here as a pull request (2026-11-14)"
+description: "The ontology of buffer-stock models lives in this repository; a model repository's copy follows it, and a correction made in a copy is brought here as a pull request; the folder links outward by absolute address (2026-11-14)"
 metadata:
   type: feedback
 ---
@@ -22,3 +22,9 @@ which that copy lacked. This copy is public, and it is the one the working group
   rows impersonally ([[feedback_checkable-sources]]), and the family rows carry a `repository` key, since the schemas
   are in the model repository.
 - When this copy changes, tell that repository's session. Whether its copy takes the folder is for it and the owner.
+  Since 16:18 on 2026-11-14 its copy is this folder unchanged, its `ontologies/home.yaml` recording the fork's commit
+  and each file's SHA-256.
+- A link from the folder to anything outside `ontologies/` is an absolute address, since a copy of the folder lives in
+  another repository: Project A at https://econ-ark.github.io/sce-wg-1/project-a.html, the Rosetta Stones at the fork's
+  `rosetta/README.md` on GitHub. A link to the sibling ontology stays relative, every copy holding both (#27,
+  2026-11-14).

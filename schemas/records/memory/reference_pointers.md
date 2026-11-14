@@ -5,8 +5,10 @@ metadata:
   type: reference
 ---
 
-- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls, none open as of 16:10 on 2026-11-14:
-  - #26, merged at 16:04 that day (main at 69bc191): the ontology's two corrections of 2026-11-12;
+- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls, none open as of 18:40 on 2026-11-14:
+  - #27, merged at 16:53 that day (main at bd22255): the ontologies' table, and the buffer-stock ontology's absolute
+    links;
+  - #26, merged at 16:04 (69bc191): the ontology's two corrections of 2026-11-12;
   - #25, merged at 15:53: the links to Bellman's public documentation and two corrections;
   - #24, merged at 15:14: the ontology of buffer-stock models at 0.1.0-draft.3.
 

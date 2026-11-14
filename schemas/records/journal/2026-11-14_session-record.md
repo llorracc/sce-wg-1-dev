@@ -253,3 +253,47 @@ Times are EST, from the clock, the transcript, git or GitHub.
 **State at 16:25 on 2026-11-14.** As at 16:20, the seven pull requests now drafts. **Open with the owner:**
 - the deploy job's pull request;
 - when the series is ready, and whether he merges it or puts it to the group.
+- **16:50:22, his word here:** the first two of the buffer-stock model's repository's session's three points fixed,
+  pushed, opened and merged. That session had found them in the fork's copy of the ontology folder, and they were
+  checked here and put to him at 16:22:
+  - `ontologies/README.md`'s table listed only the ontology of probability distributions;
+  - the buffer-stock ontology's README linked Project A by a relative path, which breaks in any copy of the folder.
+
+  The third point, whether that repository's copy of the ontology of probability distributions, at 0.1.0-draft.1,
+  follows the fork's draft.2, is that session's question to him.
+- **16:51 to 16:53, the fork's #27.** From `ontology-readme-links` (5c2b1b0):
+  - the table's row for `buffer-stock-models/`;
+  - Project A linked at https://econ-ark.github.io/sce-wg-1/project-a.html;
+  - the README's two links to the Rosetta Stones, which had the same fault, linked at the fork's `rosetta/README.md`;
+  - a bullet in the CHANGELOG under draft.3.
+
+  The link to the sibling ontology stays relative, since every copy holds both folders. The ontology's 39 tests passed
+  and its generated files were current. Opened at 16:51, its checks passed (`primer`, `wg1`, `assemble`; `deploy`
+  skipped), and it was merged at 16:53:11 with a merge commit, bd22255, its tree the one tested.
+- **16:53, #17's head.** It took main's `ontologies/README.md` and `ontologies/buffer-stock-models/` and was pushed
+  (9eedc35). It is still a draft and reports itself mergeable. The table's row is carried by #17, not #15, since the row
+  belongs to the ontology #17 adds. Merged in order with the deploy job's branch onto the working group's 4395e8d, the
+  series reproduces bd22255. #17's description, posted at 16:08, still names the fork's main at 69bc191. The
+  buffer-stock model's repository's session was told at 16:53; its copy now differs from the fork's in the README and
+  the CHANGELOG only.
+- **Reported by the buffer-stock model's repository's session.**
+  - **At 16:18,** on the owner's word there of 16:08:37: its copy of the ontology of buffer-stock models takes the
+    fork's folder at 69bc191 unchanged. A record, `ontologies/home.yaml`, holds the fork's commit and each file's
+    SHA-256; a test holds the folder to it; and a script moves the copy to a later commit of the fork. The 21 tests the
+    fork's test file leaves to that repository run there, importing the fork's tests' functions.
+  - **At 16:51:** the folder committed there as e84bd7e. The ruling of 16:17:37 applied there on the owner's word there
+    of 16:25:38, after it checked the relay, and committed and pushed as 4d34690: 676 mentions in 64 files reworded, a
+    test and the commit guard refusing the name, and 27 earlier commit messages keeping it.
+- **18:35:38, his word here:** memorialize and push.
+
+**State at the memorial of 18:40 on 2026-11-14.**
+- **The fork's main** is at bd22255, and `.worktrees/main` is fast-forwarded to it. Two worktrees, `records` and
+  `.worktrees/main`.
+- **The working group's main** is at 4395e8d. #14–#20 are drafts, marked not ready to be merged; #17's head is at
+  9eedc35. Merged in order with `deploy-from-the-group-only`, they reproduce the fork's main.
+- **Open with the owner:**
+  - the deploy job's pull request;
+  - when the series is ready, and whether he merges it or puts it to the group;
+  - #17's description, which predates #27;
+  - the buffer-stock model's repository's question, whether its copy of the ontology of probability distributions
+    follows the fork.
