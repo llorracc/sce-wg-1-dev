@@ -216,3 +216,18 @@ Times are EST, from the clock, the transcript, git or GitHub.
   - the deploy job's pull request;
   - merging the series himself or putting it to the group;
   - whether public records may name bellman-dev.
+- **16:07:21, his word here:** the drafted descriptions posted. Six drafts existed, for #15–#20. #14's head is unchanged
+  since it was opened, and its description stands. They were first brought to the afternoon's state:
+  - the series' sentence now names the fork's main at 69bc191 and the working group's at 4395e8d, and the deploy job's
+    branch as not yet a pull request, since the working group's #21 is now the primer's;
+  - each names its part of #25 and #26;
+  - the series' sentence was filled in where #19's and #20's drafts still held a placeholder.
+
+  Posted from 16:08:46 to 16:08:58; each posted text was read back and matches its draft.
+- **16:16:33, his word here:** memorialize and push.
+
+**State at the memorial of 16:20 on 2026-11-14.** As at 16:10, with the seven descriptions current: six posted at
+16:08, #14's unchanged. **Open with the owner:**
+- the deploy job's pull request;
+- merging the series himself or putting it to the group;
+- whether public records may name bellman-dev.

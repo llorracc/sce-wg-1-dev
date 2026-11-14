@@ -103,3 +103,14 @@ request ([the memory](../memory/feedback_ontology-home-is-the-fork.md)).
 
 **What it supersedes.** Nothing ruled. Until then neither copy had been named the home, and each had taken changes the
 other lacked.
+
+## The descriptions posted
+
+- **16:07:21, here:** the drafted descriptions of the working group's pull requests posted.
+
+**What followed.** The six drafts, for #15–#20, were brought to the afternoon's state and posted at 16:08. #14's
+description stands, since its head is unchanged.
+
+**What it supersedes.** The hold on posting them, open since the descriptions were drafted that morning.
+
+**What stays open.** Opening the deploy job's pull request; merging the series or putting it to the group.
