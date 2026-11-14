@@ -1,12 +1,12 @@
 # Bellman's changes since the fork last read it: a review
 
-Made on 2026-11-09 between 10:34 and 10:45 EST on [the owner's ruling of that morning](../rulings/2026-11-09_bellman-dev.md),
+Made on 2026-11-09 between 10:34 and 10:45 EST on [the owner's ruling of that morning](../rulings/2026-11-09_where-bellman-is-read.md),
 and repeated on 2026-11-11 at a later commit. Bellman's repositories are private; its documentation is public at
 https://bellman.io/ since the evening of 2026-11-08, and what is cited here is public there or is a commit's hash.
 
 ## What was compared
 
-- **The base:** `bellman-dev`'s commit `461ee659c`, of the evening of 2026-10-31, when the fork's stage files were
+- **The base:** Bellman's commit `461ee659c`, of the evening of 2026-10-31, when the fork's stage files were
   last checked against Bellman's main.
 - **The head:** its main of the morning of 2026-11-09, `2f11e0ddc`, 195 commits later; and on 2026-11-11 the commit
   `930199a`, whose package tree is that of its main of that morning.

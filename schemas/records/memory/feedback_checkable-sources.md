@@ -29,11 +29,13 @@ own, with no Bellman page cited; the findings record where each came from ([[fee
 13:38 EST on 2026-11-14 econ-ark/bellman and https://bellman.io/ are public, and the owner asked that the documents
 link them ([the rulings](../rulings/2026-11-14_core-fixes-ontology-held-and-the-series.md)). So:
 - cite a page of bellman.io, written without `www`, whose certificate names bellman.io alone; or cite a path on
-  econ-ark/bellman's main (`blob/main/<path>`). Don't pin a commit there: the repository changes only when bellman-dev
-  is exported to it, and its history may be started again;
+  econ-ark/bellman's main (`blob/main/<path>`). Don't pin a commit there: the repository changes only when Bellman's
+  development repository is exported to it, and its history may be started again;
 - a rule still stated in the schemas' own words keeps them, with a link beside it;
-- econ-ark/bellman-dev, the development repository, stays private, and a link into it reaches no public reader.
-  Whether a public record may name its commits, pull requests or paths was undecided on 2026-11-14.
+- public records name Bellman, never its development repository, which stays private: the owner's ruling of
+  2026-11-14 at 16:17:37. A link into that repository reaches no public reader, and its commits and pull requests
+  are not found in econ-ark/bellman, so a public record says "Bellman" and gives a hash only where the record needs
+  one; the sessions that work in it are "the Bellman session".
 
 **Cite the public commit, not a checkout** (2026-10-31). A local clone can sit on a commit no remote has: the
 HAFiscal-Latest session's first line citations came from such a checkout of HAFiscal-QE, and at the public head the

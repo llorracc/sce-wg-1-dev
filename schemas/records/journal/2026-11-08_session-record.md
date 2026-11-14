@@ -5,7 +5,7 @@ Times are EST, from the clock, the transcript or git.
 - **17:15, in the model repository's session; answered from here at 17:26.** The owner asks that session for a second
   model repository, modeled on wg1-buffer-stock, for the perfect-foresight CRRA consumption problem with two solution
   methods only, the closed form and the endogenous grid method on an exogenous grid of savings with linear
-  interpolation, and has it consult this session and the bellman-dev session on the design. Its five questions
+  interpolation, and has it consult this session and the Bellman session on the design. Its five questions
   answered from the fork's code and records, read-only: the core on the fork's main is model-agnostic throughout, so a
   second model imports the runner, the records, the canonical hash, the experiment checker and the comparator and
   makes only its family's checker, its results schema, its members and requests, and its adapters; the pin stays a

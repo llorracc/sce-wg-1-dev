@@ -93,10 +93,10 @@ Times are EST, from the clock, the transcript or git.
   Neither the old head nor its parent is named anywhere in this fork, on any branch, by a search of both hashes;
   the records cite the pull request by its number. Answered so; nothing changes here.
 - **11:42:37, the owner's word here: memorialize.** Every category of the records brought current and committed on
-  this branch, unpushed. Written for it: the rulings of [2026-11-09](../rulings/2026-11-09_bellman-dev.md),
+  this branch, unpushed. Written for it: the rulings of [2026-11-09](../rulings/2026-11-09_where-bellman-is-read.md),
   [2026-11-11](../rulings/2026-11-11_registry-method-files-and-kind.md) and
   [2026-11-12](../rulings/2026-11-12_metrics-the-merge-and-the-branches.md), which until now stood only in the
-  journals; two findings, [the review of Bellman's changes](../findings/2026-11-09_bellman-dev-review.md) and
+  journals; two findings, [the review of Bellman's changes](../findings/2026-11-09_bellman-review.md) and
   [the core's two changes tried on real runs](../findings/2026-11-12_the-cores-changes-on-real-runs.md); a rule of
   memory, [that the fork merges by a merge commit](../memory/feedback_merge-commits-keep-pins.md), and five more
   lapses added to [the rule on stamps](../memory/feedback_stamps-from-the-clock.md); the project's state; a suspected

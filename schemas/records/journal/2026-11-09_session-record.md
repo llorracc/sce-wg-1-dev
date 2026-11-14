@@ -3,15 +3,15 @@
 Times are EST, from the clock, the transcript or git.
 
 - **10:33:44, in the econ-ark-tools session; received here at 10:34.** The owner has the sessions that used Bellman
-  use `bellman-dev`, the development repository, in its place, and examine its changes since they last used Bellman,
+  use Bellman's development repository in its place, and examine its changes since they last used Bellman,
   for anything that requires revision. His words, typed there, checked against that session's transcript. From here on
-  Bellman is read in the clone of `bellman-dev` on this machine and consulted through the bellman-dev session; the
+  Bellman is read in a clone of its development repository on this machine and consulted through its session; the
   clone of `bellman` is gone from this machine.
 - **10:34 to 10:45, the review.** What this fork takes from Bellman: the concept slugs pinned in the ontology on
   2026-10-31; its two stage files, last checked against Bellman's main that evening; the distribution grammar that
   [the shock laws](https://github.com/llorracc/sce-wg-1-dev/blob/72ee2eef21c1c75f60c109a851118f9b4f025ad8/schemas/shock-laws.md), the ontology of probability distributions and the core's converter write;
   the account of Bellman's method types and registry in the stone convention and in [the accepted
-  plan](../plans/2026-11-06_stones-as-data.md); and the public pages read for that plan on 2026-11-06. Bellman-dev's
+  plan](../plans/2026-11-06_stones-as-data.md); and the public pages read for that plan on 2026-11-06. Bellman's
   main as posted this morning, 195 commits after the evening of 2026-10-31 and 92 after the pages were read, checked
   against each, read-only:
   - **The stage files need no change.** Bellman's package at both ends (version 0.1.6 at both, so the number says
@@ -49,7 +49,7 @@ Times are EST, from the clock, the transcript or git.
     method files.
   - **The documentation is public.** Since the evening of 2026-11-08 the site answers at bellman.io, by its own
     record of that evening; the address this fork's plan cites, under econ-ark's GitHub pages, redirects there, and the
-    pages the plan names answer. The three repositories, `bellman`, `bellman-dev` and `bellman-ark`, still answer an
+    pages the plan names answer. Bellman's repositories, and `bellman-ark`, still answer an
     unauthenticated request with 404 at 10:3x and are treated as private. The ontology's statement that Bellman-SYM's
     documentation is not public, written on 2026-10-31, is therefore stale as a statement of fact, in its README, in
     the header of `bellman-concepts.txt`, in the generator's property description and in the generated files; its
@@ -63,14 +63,14 @@ Times are EST, from the clock, the transcript or git.
   ontology's statement of fact corrected, with or without the rule; the plan's addresses brought to bellman.io. Nothing
   changed on the fork's main. The records: [the pointers](../memory/reference_pointers.md), [the routing
   memory](../memory/feedback_route-matsya-work-to-matsya.md), [the deferred items](../deferred.md) and [the
-  state](../memory/project_state.md) say bellman-dev where they said bellman.
+  state](../memory/project_state.md) point to Bellman's development repository where they pointed to `bellman`.
 - **10:5x, the model repository's session's answer.** Its findings agree, with two facts from its side. On the two
-  families' stage files under bellman-dev's main of this morning, methods files in the new form bind, `!egm` at the
+  families' stage files under Bellman's main of this morning, methods files in the new form bind, `!egm` at the
   policy builder with its handler and the method's three lines, `!Linear` at the rule's evaluate place and
   `!quadrature` at the expectation, and the compiled pieces of the three builders that QuantEcon's adapter reads are
   identical, digest for digest, to those at the earlier pin, 13 of 13 and 14 of 14, the adapter's suite passing as
   at the pin: the hub and the kernels are unchanged, and only the methods file's form and the pin move. Its pin now
-  points at bellman-dev's main of today and its method files are in the new form, with a finding of its own on the
+  points at Bellman's main of today and its method files are in the new form, with a finding of its own on the
   day, committed and pushed on his word there within the hour (below). And the targets' move into Bellman's places, the policy
   builder for the solution, its evaluate place for the rule's representation, the value's evaluate place and the
   expectation, has been a step of that repository's plan for the Bellman substrate, open with the owner since
@@ -78,7 +78,7 @@ Times are EST, from the clock, the transcript or git.
   put to him in two places: whichever session he answers in tells the other the ruling's time and substance, and
   the other brings its documents into line without asking him twice.
 - **11:01:29, in the model repository's session; reported here at 11:0x.** On the owner's word typed there, that
-  repository's move is committed and pushed on its working branch: QuantEcon's adapter pinned to bellman-dev's main of
+  repository's move is committed and pushed on its working branch: QuantEcon's adapter pinned to Bellman's main of
   today, the method files as `.bl` additions, and its finding on the day. Nothing asked of this session.
 
 **State at the end of the entry.** The fork's main at 7a4889f, pushed; this records branch not pushed, held on the

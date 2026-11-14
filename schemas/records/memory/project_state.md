@@ -1,9 +1,15 @@
 ---
 name: project_state
-description: "What the schema project holds, what is settled and what is open, as of 16:20 on 2026-11-14: the seven pull requests' descriptions current, six posted at 16:08; as of 16:10 on 2026-11-14: main at 69bc191, the links to Bellman's documentation (#25) and the ontology's two corrections of 2026-11-12 (#26) merged, the fork the ontology's home; the working group's main at 4395e8d with the primer corrected (#21); the series reproducing main; as of 15:45 on 2026-11-14: main at 9648831 with the ontology of buffer-stock models at draft.3 (#24), the links to Bellman's public documentation and two corrections open as #25, its merge refused by the classifier, the heads and the primer's upstream branch local; as of 12:10 on 2026-11-14: main at 2311754 with the core's four small fixes merged as #23, #19 and #20 brought to it; as of 10:40 on 2026-11-14: main at dcd0fa6; the seven pull requests to the working group a series brought to main, not merged; the core fixes on an unpushed branch; the ontology correction waiting for bellman.io; as of 15:10 on 2026-11-13: main at 9fc7d27, the deploy job limited to the working group's repository and the earlier drafts of the registry schema kept in the core; the records branch holding the records alone; as of 13:15 on 2026-11-13: main at 8b34952 with the three live branches merged, the records branch renamed `records`, slimmed and pushed, the hold released, two worktrees and two branches; and as of the memorial of 11:46 on 2026-11-12 (earlier memorials' blocks kept below it): the fork's main with the reference as its own kind, three branches of live work unmerged, a plan for the branches; and as of the memorial of 19:12:50 on 2026-11-04 (the state of the evening's commit and of the memorial of 08:07 on 2026-11-03 kept below the later changes): the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two buffer-stock families, the other two abolished on 2026-11-03; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted; the rulings of 2026-11-02 that the harness gives parameters only and leaves the representation to each toolkit, and the revised proposal of 2026-11-03 that followed, the distributions of permanent income and of wealth in levels and the joint, with the adapters' independence planned, all awaiting the owner's reading; the toy-hafiscal estimation built in the HAFiscal session on his request; the ontology at draft.2, naming no toolkit; the ruling of 2026-11-04 that a reference solution is the standard, his answers to its decisions later that morning, and the results-schema ruling of the same morning, the quantiles required and the distribution function at the comparison points added"
+description: "What the schema project holds, what is settled and what is open, as of 16:25 on 2026-11-14: the seven pull requests drafts, marked not ready to be merged; public records name Bellman, not its development repository; as of 16:20 on 2026-11-14: the seven pull requests' descriptions current, six posted at 16:08; as of 16:10 on 2026-11-14: main at 69bc191, the links to Bellman's documentation (#25) and the ontology's two corrections of 2026-11-12 (#26) merged, the fork the ontology's home; the working group's main at 4395e8d with the primer corrected (#21); the series reproducing main; as of 15:45 on 2026-11-14: main at 9648831 with the ontology of buffer-stock models at draft.3 (#24), the links to Bellman's public documentation and two corrections open as #25, its merge refused by the classifier, the heads and the primer's upstream branch local; as of 12:10 on 2026-11-14: main at 2311754 with the core's four small fixes merged as #23, #19 and #20 brought to it; as of 10:40 on 2026-11-14: main at dcd0fa6; the seven pull requests to the working group a series brought to main, not merged; the core fixes on an unpushed branch; the ontology correction waiting for bellman.io; as of 15:10 on 2026-11-13: main at 9fc7d27, the deploy job limited to the working group's repository and the earlier drafts of the registry schema kept in the core; the records branch holding the records alone; as of 13:15 on 2026-11-13: main at 8b34952 with the three live branches merged, the records branch renamed `records`, slimmed and pushed, the hold released, two worktrees and two branches; and as of the memorial of 11:46 on 2026-11-12 (earlier memorials' blocks kept below it): the fork's main with the reference as its own kind, three branches of live work unmerged, a plan for the branches; and as of the memorial of 19:12:50 on 2026-11-04 (the state of the evening's commit and of the memorial of 08:07 on 2026-11-03 kept below the later changes): the fork's thirteen pull requests merged, #15 open, the ontology's branch unpushed; two buffer-stock families, the other two abolished on 2026-11-03; the Markov family retired; two experiments; the Jacobian interface approved, in the results schema and verified by the checker; the restrained-limit experiment run with HARK and with dolo, whose adapter shares its toolkit-neutral code with HARK's; the experiment schema and the harness plan approved, with the words experiment and ladder; the layout of ontologies/, schemas/, rosetta/ and harness/; the harness's runner built and accepted; the rulings of 2026-11-02 that the harness gives parameters only and leaves the representation to each toolkit, and the revised proposal of 2026-11-03 that followed, the distributions of permanent income and of wealth in levels and the joint, with the adapters' independence planned, all awaiting the owner's reading; the toy-hafiscal estimation built in the HAFiscal session on his request; the ontology at draft.2, naming no toolkit; the ruling of 2026-11-04 that a reference solution is the standard, his answers to its decisions later that morning, and the results-schema ruling of the same morning, the quantiles required and the distribution function at the comparison points added"
 metadata:
   type: project
 ---
+
+**As of 16:25 on 2026-11-14**, what has changed since the blocks below:
+- **The working group's seven pull requests are drafts,** each marked "Not ready to be merged" at the top of its
+  description, on the owner's word of 16:17:55.
+- **Public records name Bellman, never its development repository** (16:17:37). The records were reworded to match
+  ([[feedback_checkable-sources]]).
 
 **As of 16:20 on 2026-11-14**, what has changed since the blocks below:
 - **The working group's pull requests have current descriptions.** #15–#20's were posted at 16:08 on the owner's word,
@@ -25,7 +31,7 @@ metadata:
 - **Two worktrees,** `records` and `.worktrees/main`.
 
 **As of 15:45 on 2026-11-14**, what has changed since the blocks below:
-- **Bellman is public:** econ-ark/bellman and https://bellman.io/ since 13:38, bellman-dev private. Its pages are now
+- **Bellman is public:** econ-ark/bellman and https://bellman.io/ since 13:38, its development repository private. Its pages are now
   cited ([[feedback_checkable-sources]]).
 - **The fork's main is at 9648831:** #24 merged the ontology of buffer-stock models at version 0.1.0-draft.3, each
   Bellman-SYM concept linked to its page. #17's head took it, and the series reproduces main.
@@ -106,7 +112,7 @@ metadata:
   file; `status-reader` (74312f9), the core's reader for the status table of REMARK's catalog, kind
   `canonical-model`; `experiment-metrics` (09a4548), the metrics an experiment defines, with the registry schema's
   eighth draft.
-- **Bellman is read in `bellman-dev`** and consulted through its session, since 2026-11-09; its documentation is
+- **Bellman is read in its development repository** and consulted through its session, since 2026-11-09; its documentation is
   public at bellman.io.
 - **REMARK's main holds the working group's six updates,** the execution records, the private mark and the status
   table among them, with no release tagged; the core's use of REMARK's records and schema waits on a tag.
@@ -492,7 +498,7 @@ no validator, checker, member or adapter:
 - in the HARK session: #1858 and #1862, which stay drafts; the tags on HARK's fork at the adapter's two pins,
   `sce-adapter/2026-10-22` and `sce-adapter/2026-10-22.2`, were made on 2026-10-22;
 - what goes to the working group's repository, and when;
-- in the bellman-dev session, the bellman session's successor since 2026-11-09: nothing pending from the owner; Bellman's
+- in the Bellman session, in its development repository since 2026-11-09: nothing pending from the owner; Bellman's
   truncated lognormal and the uniform comparator merged on 2026-10-22, and the parameter-condition defect is filed;
 - in the bellman-ark session: the three changes asked of Bellman on 2026-10-31, drafted on 2026-11-03 (a message to its
   maintainer on the Matsya service's lag behind the language, a pull request on the typography of fields and
@@ -525,7 +531,7 @@ See [`../deferred.md`](../deferred.md).
 - **The econ-ark-tools session** keeps econ-ark's notation registry (version 8.0.0 on its master since 2026-10-22); no
   session lives in its clone on this machine, whose branch `notation-v8.1-spic` is superseded, to delete. **The NARK
   session** keeps econ-ark's naming conventions.
-- **The bellman-dev session**, in the clone of `bellman-dev`, the development repository, is since 2026-11-09 the
+- **The Bellman session**, in a clone of Bellman's development repository, is since 2026-11-09 the
   session Bellman is read in and consulted through, on the owner's word; the bellman session before it held Bellman's
   draft pull requests for the truncated lognormal and the uniform and ran Matsya, and its consultation of 2026-10-31
   on the ontology is in its on-box record. Bellman's changes to 2026-11-09 are reviewed in

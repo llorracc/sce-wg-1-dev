@@ -54,27 +54,27 @@ metadata:
 - Bellman-SYM: the stage files here were elaborated and calibrated by the bellman session under Bellman at its repository
   head and under the Matsya service's installed version; the repository and its documentation site were not public on
   2026-10-18, nor on 2026-10-22, so its pages were cited by title, and since 2026-10-22 its rules are stated as the
-  schemas' own. Since 2026-11-09, on the owner's word, Bellman is read in `bellman-dev`, the development repository,
-  and consulted through the bellman-dev session; `bellman` is its public export. Both, and `bellman-ark`, answer an
-  unauthenticated request with 404 that morning and are treated as private. The documentation is public at
+  schemas' own. Since 2026-11-09, on the owner's word, Bellman is read in its development repository and consulted
+  through the Bellman session; `bellman` is its public export. Bellman's repositories, and `bellman-ark`, answered an
+  unauthenticated request with 404 that morning and were treated as private. The documentation is public at
   https://bellman.io/ from the evening of 2026-11-08 (its changelog at https://bellman.io/changelog/; the earlier
   address under econ-ark's GitHub pages redirects there); since a change to econ-ark/bellman's Pages settings after
   2026-11-11 the site answers 404, found on 2026-11-14 ([the journal](../journal/2026-11-14_session-record.md)).
   **Since 13:38 EST on 2026-11-14 econ-ark/bellman (https://github.com/econ-ark/bellman) and https://bellman.io/ are
-  public**, made so by the owner; bellman-dev stays private. The pages the fork links: the wiki, one page a concept,
+  public**, made so by the owner; its development repository stays private, and public records do not name it. The pages the fork links: the wiki, one page a concept,
   https://bellman.io/wiki/<slug>/; Bellman-SYM's chapters and reference (stages, methodization, method types, shock
   distributions, refusals); the calculus; the overview and its workflow; the examples, among them Bellman's own
   buffer-stock and perfect-foresight models. Cite without `www`, and prefer a page or a path on main to a pinned commit
   ([[feedback_checkable-sources]]). The
-  Bellman commit both model repositories pin, 3937a8eb2 (bellman-dev's main at d43c11f9b with pull request 34 merged),
+  Bellman commit both model repositories pin, 3937a8eb2 (Bellman's main of the morning of 2026-11-14),
   is kept fetchable since 10:54 on 2026-11-14 by the tag `pinned/main-with-the-forward-record-2026-11-14` in
-  econ-ark/bellman-dev, a pin and no release; the branch that held it alone is to be retired. The two stage files elaborate unchanged under the package
+  Bellman's development repository, a pin and no release; the branch that held it alone is to be retired. The two stage files elaborate unchanged under the package
   of 2026-11-09, specification 0.7 included ([the journal](../journal/2026-11-09_session-record.md)), and again under
   that of 2026-11-11 ([the journal](../journal/2026-11-11_session-record.md)).
 - Matsya: the design review of 2026-10-18 ran as four questions in one session and one stage-file question in another; the
   client is `bellman-matsya`. Its four questions-only sessions on the ontology of probability distributions ran from the
   bellman session on 2026-10-19; their answers are kept outside this repository, and the findings of that day hold what
-  they say. Since 2026-11-09 a consultation goes through the bellman-dev session.
+  they say. Since 2026-11-09 a consultation goes through the Bellman session.
 - The buffer-stock benchmark `bst_bench` lives in HAFiscal-Latest, destined for its own econ-ark repository; its emitter of
   results files in this schema's form is the HAFiscal-Latest session's.
 - The ontology of buffer-stock models' sources, pinned on 2026-10-31:
@@ -147,5 +147,5 @@ metadata:
   and the plan for HARK's pull requests and the point mass as `plans/20261105-1249h_hark-pull-requests-point-mass_plan.md`, both made from
   its handoff record `records/handoffs/2026-11-05_expectation-redesign-from-sce-wg-1-dev/`; this repository keeps what the
   harness needs of them in `plans/2026-11-05_expectation-machinery-redesign.md`.
-- Since 2026-11-08, in prospect: a second model repository, for the perfect-foresight CRRA consumption problem with two solution methods, the closed form and the endogenous grid method with linear interpolation, modeled on wg1-buffer-stock and asked of that repository's session by the owner at 17:15 EST, under the working name `sce-wg-1_perfforesightcrra`; this session and the bellman-dev session consulted on its design ([the journal](../journal/2026-11-08_session-record.md)). It is the first canonical model outside the buffer-stock class, which the ontology of buffer-stock models names `perfect-foresight-benchmark`.
+- Since 2026-11-08, in prospect: a second model repository, for the perfect-foresight CRRA consumption problem with two solution methods, the closed form and the endogenous grid method with linear interpolation, modeled on wg1-buffer-stock and asked of that repository's session by the owner at 17:15 EST, under the working name `sce-wg-1_perfforesightcrra`; this session and the Bellman session consulted on its design ([the journal](../journal/2026-11-08_session-record.md)). It is the first canonical model outside the buffer-stock class, which the ontology of buffer-stock models names `perfect-foresight-benchmark`.
 - Since 2026-11-11, REMARK's updates for this project as stacked pull requests on econ-ark/REMARK, each on the one before: https://github.com/econ-ark/REMARK/pull/196 (execution without a terminal, container limits), https://github.com/econ-ark/REMARK/pull/197 (the tool as the package `remark`), https://github.com/econ-ark/REMARK/pull/198 (execution records; its schema, `remark/schemas/execution-record.schema.json`, is the core's fourth draft under REMARK's identifier), https://github.com/econ-ark/REMARK/pull/199 (environments in subdirectories; read-only and further mounts). Stacked on them the same afternoon: https://github.com/econ-ark/REMARK/pull/200 (catalog entries marked private) and https://github.com/econ-ark/REMARK/pull/201 (the status table, whose reader for a unit is found by its kind in the entry-point group `remark.status`; the core's reader for a model repository is the fork's to supply). The REMARK session's; all six merged into econ-ark/REMARK's main at 16:05 EST that day (main at `8a1f77a`, package version 0.2.0), no release tagged; its main at `2ac99d5` that night, by its clone's remote ref, after two further merges that do not touch the status table. The core's reader for it is on the fork's local branch `status-reader` (`cf8ddf2`, its head `74312f9`, 2026-11-11, unpushed, unmerged), offered as the entry point `canonical-model`; the reference as its own kind of object is on the branch `reference-as-its-own-kind` (`6c12de1`, the same night; pushed to the fork on 2026-11-12 and merged into its main the same morning by https://github.com/llorracc/sce-wg-1-dev/pull/16, the fork's main at `f557ef4`); the metrics an experiment defines are on the local branch `experiment-metrics` (`09a4548`, 2026-11-12, unpushed, unmerged), built to the plan `schemas/records/plans/2026-11-11_the-reference-as-its-own-kind.md` of the perfect-foresight repository, which is private; the stone convention's amendment for the method files is on the local branch `stone-method-files` (`76fa199` and its correction `2700da6`, the same night, unpushed, unmerged). Both in worktrees under `.worktrees/` of the fork's clone on jhu-dell. When a release holding #198 is tagged, the fork's registry schema is to refer to REMARK's schema, on the owner's word ([the deferred items](../deferred.md)).

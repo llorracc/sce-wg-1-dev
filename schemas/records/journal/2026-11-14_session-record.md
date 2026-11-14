@@ -64,8 +64,8 @@ Times are EST, from the clock, the transcript, git or GitHub.
   the eighth is not opened. #22 was merged at 10:35 with a merge commit, dcd0fa6, its tree the one tested. Merged
   without the eighth, the seven reproduce main except for the deploy job's `if:` line.
 - **By 10:55, Bellman's development session reported a tag** made on the owner's word in that session:
-  `pinned/main-with-the-forward-record-2026-11-14` in econ-ark/bellman-dev, pushed at 10:54, on 3937a8eb2. That is
-  the Bellman commit both model repositories pin, bellman-dev's main with pull request 34 merged. It stood on a branch
+  `pinned/main-with-the-forward-record-2026-11-14` in Bellman's development repository, pushed at 10:54, on 3937a8eb2. That is
+  the Bellman commit both model repositories pin, Bellman's main of that morning. It stood on a branch
   alone that is to be retired, and the tag keeps it fetchable; it is no release. Nothing in the fork pins a Bellman
   commit, so nothing here changes. The pointer is in [the references](../memory/reference_pointers.md).
 - **By 11:30, the buffer-stock repository's session asked what it needs to appear in REMARK's status table,** on the
@@ -125,10 +125,10 @@ Times are EST, from the clock, the transcript, git or GitHub.
   event. It was most likely a cloud session, reached through the Remote Control name this session had before it was
   renamed, which is listed offline.
 - **13:51, the bellman session's report,** at the owner's request there: econ-ark/bellman and bellman.io public since
-  13:38, bellman-dev private. Checked here at 13:52 without login: the repository and the site answer, bellman-dev
-  answers 404, and each of the 61 concept pages the ontology pins answers at `https://bellman.io/wiki/<slug>/`. At about
-  14:07 it corrected one point: that nothing of bellman-dev may be cited was its own judgment. Whether public records
-  may name bellman-dev's commits, pull requests or paths is undecided.
+  13:38, its development repository private. Checked here at 13:52 without login: the repository and the site answer,
+  the development repository answers 404, and each of the 61 concept pages the ontology pins answers at `https://bellman.io/wiki/<slug>/`. At about
+  14:07 it corrected one point: that nothing of the development repository may be cited was its own judgment. Whether public
+  records may name that repository's commits, pull requests or paths was undecided until 16:17:37 (below).
 - **13:52 to 13:57, the ontology's correction,** on his word of 09:21:16, released by the site's answer: version
   0.1.0-draft.3 on the branch `ontology-bellman-public`, committed at 13:56 as 7a53094, not pushed. The statement that
   Bellman-SYM's documentation is not public corrected; each concept linked to its page (21 in the Turtle file, 12 in
@@ -178,7 +178,7 @@ Times are EST, from the clock, the transcript, git or GitHub.
   - posting the descriptions;
   - the eighth pull request;
   - merging the series himself or putting it to the group;
-  - whether public records may name bellman-dev.
+  - whether public records may name Bellman's development repository.
 
 - **15:52:59, his word here:** merge #25. Merged at 15:53 with a merge commit, c7e7dee, its tree the one tested. The
   five heads made for it were pushed: #15 at 62be772, #16 at 4768945, #17 at 5b6c8d5, #18 at 2a3d569, #20 at abc0445.
@@ -215,7 +215,7 @@ Times are EST, from the clock, the transcript, git or GitHub.
   - posting the seven descriptions, drafted and not posted;
   - the deploy job's pull request;
   - merging the series himself or putting it to the group;
-  - whether public records may name bellman-dev.
+  - whether public records may name Bellman's development repository.
 - **16:07:21, his word here:** the drafted descriptions posted. Six drafts existed, for #15–#20. #14's head is unchanged
   since it was opened, and its description stands. They were first brought to the afternoon's state:
   - the series' sentence now names the fork's main at 69bc191 and the working group's at 4395e8d, and the deploy job's
@@ -230,4 +230,26 @@ Times are EST, from the clock, the transcript, git or GitHub.
 16:08, #14's unchanged. **Open with the owner:**
 - the deploy job's pull request;
 - merging the series himself or putting it to the group;
-- whether public records may name bellman-dev.
+- whether public records may name Bellman's development repository.
+- **16:17:13, his question here:** whether all his pull requests in the working group's repository are drafts, and,
+  for any that are not, whether he has named a reviewer. None was a draft: #14–#20 were all marked ready for review,
+  with no reviewer requested, no assignee and no review. The repository has no CODEOWNERS file, and its thirteen
+  collaborators are all admins.
+- **16:17:37, his word here:** public records name Bellman, and never its development repository
+  ([the rulings](../rulings/2026-11-14_core-fixes-ontology-held-and-the-series.md)). The fork's main named it nowhere,
+  and neither did the pull requests' descriptions or comments in either repository. The records named it 52 times in
+  14 files, two of them in file names. Each mention was reworded:
+  - "Bellman" where the repository was meant;
+  - "the Bellman session" for its session;
+  - "Bellman's development repository" where the record needs the private repository told apart from econ-ark/bellman.
+
+  The two files were renamed `rulings/2026-11-09_where-bellman-is-read.md` and
+  `findings/2026-11-09_bellman-review.md`, and their links followed. Six commit messages on the records branch still
+  name it. History is kept as it is, since the fork never rewrites it.
+- **16:17:55, his word here:** the seven made drafts and marked not ready to be merged. By 16:18:47 #14–#20 were drafts,
+  and each description opened with "**Not ready to be merged.**", held with the rest of the series until he says it is
+  ready. No label was made in the working group's repository.
+
+**State at 16:25 on 2026-11-14.** As at 16:20, the seven pull requests now drafts. **Open with the owner:**
+- the deploy job's pull request;
+- when the series is ready, and whether he merges it or puts it to the group.

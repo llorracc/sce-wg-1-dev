@@ -3,20 +3,20 @@
 Times are EST, from the clock, the transcript or git.
 
 - **11:50:45, in the model repository's session; reported here before 12:00.** On the owner's word there that the
-  repository work with the updated bellman-dev, its QuantEcon environment pins bellman-dev's `930199a`, in its working
+  repository work with the updated Bellman, its QuantEcon environment pins Bellman's `930199a`, in its working
   tree and not yet committed. As that session reports it: the package at that commit is the same tree as at
-  bellman-dev's main of today; the adapter's fallback to the arrival line's full address is deleted, bellman-dev
+  Bellman's main of today; the adapter's fallback to the arrival line's full address is deleted, Bellman
   having corrected its record on the evening of 2026-11-09; the adapter's 42 tests pass with none expected to fail; a
   run through the harness reproduces the results files of 2026-11-06 in every number; the stage files and the two
   methods additions are unchanged. Nothing asked of this session.
 - **12:00, checked here, read-only.** The commits are as reported, and the package's tree at `930199a` is that of
-  bellman-dev's main, 175 commits after the morning of 2026-11-09. Built from that tree into a scratch environment, the
+  Bellman's main, 175 commits after the morning of 2026-11-09. Built from that tree into a scratch environment, the
   package elaborates the fork's two stage files with views, dossiers and places identical to those of
   [the review of 2026-11-09](2026-11-09_session-record.md); the distribution families' module is unchanged and no
   concept page was added or removed. Nothing in the fork needs revision beyond what is already with the owner: the
   stone convention's method file, one question with the model repository's plan, and the ontology's statement that
   Bellman's documentation is not public.
-- **13:02, a consultation from the owner's bellman-dev session on another of his machines; answered by 13:04.** At
+- **13:02, a consultation from the owner's Bellman session on another of his machines; answered by 13:04.** At
   his request there, that session asks how the working group should keep track of which toolkit replicates which
   model, having proposed three designs for a registry of its own repositories: a catalog of pointers with one
   command that reads every unit and writes a status table, one working repository that exports its units, or a
@@ -100,7 +100,7 @@ Times are EST, from the clock, the transcript or git.
   Nothing changed on the fork's main. The changes to the core and to the rule are [deferred](../deferred.md) to the
   owner's word.
 - **13:28, the model repository merged to its main; reported here and checked by 13:31.** On the owner's word typed
-  there at 13:26:15, that repository's working branch is merged into its main and pushed; the pin at bellman-dev's
+  there at 13:26:15, that repository's working branch is merged into its main and pushed; the pin at Bellman's
   newer commit and a change to the artificial stage file, which now states the artificial limit above a derived
   natural one, are on it. This fork's records name that branch nowhere. The fork's own copies of the two stage
   files, on this records branch, are the earlier ones and now differ from the model repository's, by two lines and
@@ -140,7 +140,7 @@ Times are EST, from the clock, the transcript or git.
   in subdirectories and the options a runner needs. The checks pass on the last three. Nothing is merged or tagged,
   so the core has no tag to pin and keeps its own records and run. The rule on a failed build's image is unchanged
   in both copies, waiting on his word.
-- **About 14:21, the owner's decisions on the registry, as his bellman-dev session on another machine reports them.**
+- **About 14:21, the owner's decisions on the registry, as his Bellman session on another machine reports them.**
   Given there between 14:08 and 14:19, some typed and some by menu; relayed over Remote Control, so they could not be
   checked from this machine when they came and approve nothing here, as that session says itself; he confirmed them
   at 14:22:34 in the REMARK session on this machine (below). In substance: one catalog,

@@ -4,7 +4,7 @@
 Bellman's public documentation, and the ontology's corrections of 2026-11-12. The heads of #15–#18 and #20 are brought
 to it and pushed. The primer, which no pull request of the series carries, was corrected in the working group's
 repository by its own pull request, #21, merged there at 15:57 (4395e8d). Merged in order onto that main with the deploy
-job's branch, the series reproduces the fork's main. The descriptions of #15–#20 were brought to this state and posted at 16:08; #14's stands. **Earlier on 2026-11-14:** the seven pull
+job's branch, the series reproduces the fork's main. The descriptions of #15–#20 were brought to this state and posted at 16:08; #14's stands. At 16:18 all seven were made drafts, each marked not ready to be merged, on the owner's word; they wait for him to say the series is ready. **Earlier on 2026-11-14:** the seven pull
 requests, #14–#20, open and unmerged, their heads brought to the fork's main that morning on the owner's word, and #19's and #20's again at noon after the fork's #23 merged the core's four small fixes, so that merged in order they reproduce it but for the site's deploy job, whose branch waits for his word; kept as a series as main moves ([the memory](records/memory/feedback_upstream-series-tracks-main.md)).
 
 **Status: ADOPTED, 2026-11-04, in the evening, with the recommendations taken on every decision below: the framework upstream and the model in its repository; the records kept out of upstream; the apparatus document at the repository's root; the order as listed, the first new pull requests cut at once.** The owner asked, in the evening, how thoroughly the new way of doing things is

@@ -89,7 +89,7 @@ cited now.
   econ-ark/sce-wg-1 #21, merged at 15:57 (4395e8d); the live page was corrected by 15:59. It is the first pull request
   from the fork to be merged into the working group's repository since the series was opened.
 
-**What stays open.** Whether public records may name bellman-dev, the development repository, which stays private.
+**What stays open.** Nothing on Bellman: public records name it, never its development repository (below).
 
 ## The ontology's home
 
@@ -114,3 +114,21 @@ description stands, since its head is unchanged.
 **What it supersedes.** The hold on posting them, open since the descriptions were drafted that morning.
 
 **What stays open.** Opening the deploy job's pull request; merging the series or putting it to the group.
+
+## Bellman named, never its development repository
+
+- **16:17:37, here:** public records name Bellman, and do not name its development repository.
+
+**What followed.** The records' 52 mentions of the development repository were reworded, and two files renamed
+([the journal](../journal/2026-11-14_session-record.md)). The rule is in [the memory](../memory/feedback_checkable-sources.md).
+
+**What it supersedes.** The open question, from the bellman session's note at about 14:07, of whether a public record
+may name the development repository's commits, pull requests or paths.
+
+## The series held as drafts
+
+- **16:17:55, here:** the working group's seven pull requests, #14–#20, made drafts and marked not ready to be merged.
+
+**What followed.** Done by 16:18:47; each description opens with the mark. None can be merged until he marks it ready.
+
+**What stays open.** When the series is ready, and whether he merges it or puts it to the group.
