@@ -5,12 +5,17 @@ registry's records. The `wg1core` command.
     wg1core run <experiment.yaml> --toolkits hark,dolo [--levels low,medium] [--members <id>,...] [--jobs 8] \\
         [--out <run folder>] [--runtime uv|docker] [--cpus 2] [--memory 8g] [--wall-seconds 3600]
     wg1core verify <run folder>
+    wg1core compare <run folder>
     wg1core register <run folder>
+    wg1core status
 
 Every command reads a model repository's registry file, `--registry`, `harness/toolkits.yaml` under the current
 directory by default. The file names the toolkits, each with its adapter, the files its runs depend on, its
-environment, its stone, its levels and its thread cap, and under `model` what the core needs of the repository: its
-results schema, its source page's anchors, its experiments folder, its verifier and its registry folder (README.md).
+environment, its stone, its levels, its thread cap and its kind, exact for an entry that evaluates a closed form and
+numerical, the default, for one that approximates by a method, and under `model` what the core needs of the
+repository: its
+results schema, its source page's anchors, its experiments folder, its verifier, its registry folder and the
+identity keys a results file and its reference must agree on (README.md).
 The repository's root is the git top level of the registry file's folder.
 
 `run` checks the experiment and refuses one with problems. It then runs one job for each toolkit, member and level,
@@ -18,7 +23,8 @@ in parallel, each through the toolkit's adapter: with `--runtime uv`, the defaul
 machine; with `--runtime docker`, in an image built from the adapter's environment directory and run under the
 container contract (the repository mounted read-only at /src, the job's folder at /out, no network, the thread cap, a
 scratch /tmp, and the caps given). Each toolkit's first job runs alone before its others, so that one process writes
-what the toolkit compiles and caches. A job writes into <run folder>/<toolkit>/<member>/level-<n>/ and leaves there
+what the toolkit compiles and caches. A job writes into <run folder>/<toolkit>/<member>/<level>/, the folder named
+for the level and never for its position, and leaves there
 the adapter's log, `job.json`, its status and a fingerprint of everything its output depends on, and `record.json`,
 its execution record for the registry. A job whose fingerprint is unchanged and whose results file exists is skipped.
 With `--runtime docker` each toolkit's image is built first and its build record written as
@@ -26,8 +32,14 @@ With `--runtime docker` each toolkit's image is built first and its build record
 
 `verify` runs the model's verifier on every results file, or validates it against the results schema when the model
 names none, checks that each carries the quantities the experiment's `reports` names, and writes `verification.json`
-and each record's verdict. `register` copies a run's records into the registry folder, one file per job and one per
-build, validating each.
+and each record's verdict. `compare` evaluates the experiment's checks on the run's results and every job's distances
+from its member's reference, with the reference's error beside each, every entry's kind being the run's own as its
+manifest states it, writing `comparison.json` and `comparison.md` in
+the run folder, a report in each job's folder and each record's comparison block; its exit status is the checks' and
+the comparison errors', never a distance's. `register` copies a run's records into the registry folder, one file per job and one per build, validating
+each. `status` prints what the repository holds, running nothing: its runs of record with what their records say
+(status.py), the table REMARK's catalog shows for a canonical model; its exit status is nonzero when the file of runs
+of record or a record it names has a problem.
 """
 
 from __future__ import annotations
@@ -52,12 +64,13 @@ import yaml
 from . import VERSION, canonical, identity, records
 from . import experiment as experiments
 
-LEVEL_NUMBER = {"low": 1, "medium": 2, "high": 3}
 THREAD_VARIABLES = ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS")
 OUTPUTS = ("results.json", "methods.yaml", "settings.yaml")
 IMAGE_PREFIX = "sce-wg-1"
-TOOLKIT_KEYS = {"adapter", "code", "environment", "stone", "levels", "threads"}
-MODEL_KEYS = {"results_schema", "anchors", "experiments", "verifier", "registry_dir"}
+TOOLKIT_KEYS = {"adapter", "code", "environment", "stone", "levels", "threads", "kind"}
+KINDS = ("exact", "numerical")  # how an entry obtains its solution; numerical when the registry file states none
+MODEL_KEYS = {"results_schema", "anchors", "experiments", "verifier", "registry_dir", "identity"}
+REGISTRY_FILES = ("harness/toolkits.yaml", "toolkits.yaml")
 
 
 def sha256_file(path: Path) -> str:
@@ -89,6 +102,7 @@ class Model:
         self.experiments_dir = (self.dir / m["experiments"]).resolve() if m.get("experiments") else self.root
         self.verifier = [str(a) for a in m["verifier"]] if m.get("verifier") else None
         self.registry_dir = (self.dir / m.get("registry_dir", "runs.registry")).resolve()
+        self.identity = [str(k) for k in m.get("identity", [])]
         self.toolkits = self._toolkits(raw.get("toolkits") or {})
 
     def _toolkits(self, raw: dict) -> dict:
@@ -97,7 +111,9 @@ class Model:
             unknown = set(entry) - TOOLKIT_KEYS
             if unknown or not {"adapter", "levels"} <= set(entry):
                 raise SystemExit(f"{self.file.name}: {name}: unknown keys {sorted(unknown)} or no adapter or levels")
-            tk = {"name": name, "adapter": (self.dir / entry["adapter"]).resolve(),
+            if entry.get("kind", "numerical") not in KINDS:
+                raise SystemExit(f"{self.file.name}: {name}: kind is {entry['kind']!r}; it is one of {', '.join(KINDS)}")
+            tk = {"name": name, "adapter": (self.dir / entry["adapter"]).resolve(), "kind": entry.get("kind", "numerical"),
                   "levels": dict(entry["levels"]), "threads": int(entry.get("threads", 2))}
             tk["environment"] = (self.dir / entry["environment"]).resolve() if entry.get("environment") else None
             tk["stone"] = (self.dir / entry["stone"]).resolve() if entry.get("stone") else None
@@ -158,7 +174,7 @@ def plan_jobs(exp_path: Path, exp: dict, model: Model, toolkits: list[str], leve
     folder = Path(exp_path).resolve().parent
     by_id = {m["id"]: m for m in exp["members"]}
     unknown = [m for m in members if m not in by_id] + [t for t in toolkits if t not in model.toolkits]
-    unknown += [lv for lv in levels if lv not in LEVEL_NUMBER]
+    unknown += [lv for lv in levels if lv not in exp["levels"]]
     if unknown:
         raise SystemExit(f"unknown toolkit, member or level: {unknown}")
     jobs = []
@@ -170,20 +186,25 @@ def plan_jobs(exp_path: Path, exp: dict, model: Model, toolkits: list[str], leve
         for mid in members:
             m = by_id[mid]
             for lv in levels:
-                jobs.append({"toolkit": name, "member": mid, "level": lv, "level_arg": tk["levels"][lv],
+                jobs.append({"toolkit": name, "kind": tk["kind"], "member": mid, "level": lv, "level_arg": tk["levels"][lv],
                              "parameter_file": (folder / m["parameter_file"]).resolve(),
                              "request_file": (folder / m["request_file"]).resolve(),
                              "parameter_file_sha256": m["parameter_file_sha256"],
                              "request_file_sha256": m["request_file_sha256"],
-                             "dir": out / name / mid / f"level-{LEVEL_NUMBER[lv]}"})
+                             "dir": out / name / mid / lv})
     return jobs
 
 
 def fingerprint(job: dict, tk: dict, model: Model) -> dict:
-    """Everything a job's output depends on that the harness can name."""
-    return {"toolkit": tk["name"], "member": job["member"], "level": job["level"], "level_arg": job["level_arg"],
-            "parameter_file_sha256": job["parameter_file_sha256"], "request_file_sha256": job["request_file_sha256"],
-            "environment": environment_identity(tk, model), "code_sha256": code_sha256(tk, model), "threads": tk["threads"]}
+    """Everything a job's output depends on that the harness can name. An entry's kind is named only when it is not
+    the default, so that a numerical entry's fingerprint is what it was before entries had kinds, and an entry newly
+    stated to be exact is run again, its record then saying so."""
+    out = {"toolkit": tk["name"], "member": job["member"], "level": job["level"], "level_arg": job["level_arg"],
+           "parameter_file_sha256": job["parameter_file_sha256"], "request_file_sha256": job["request_file_sha256"],
+           "environment": environment_identity(tk, model), "code_sha256": code_sha256(tk, model), "threads": tk["threads"]}
+    if tk["kind"] != "numerical":
+        out["kind"] = tk["kind"]
+    return out
 
 
 def adapter_arguments(job: dict, out_dir: str, in_container: bool, model: Model) -> list[str]:
@@ -280,7 +301,7 @@ def execution_record(job: dict, tk: dict, ctx: dict, cmd: list[str], when: dict,
                "outputs": records.outputs(d, OUTPUTS), "log": "adapter.log"}
     if signal:
         outcome["signal"] = signal
-    fields = {"experiment": ctx["experiment"], "toolkit": tk["name"],
+    fields = {"experiment": ctx["experiment"], "toolkit": tk["name"], "entry_kind": tk["kind"],
               "adapter": {"path": model.rel(tk["adapter"]), "code_sha256": code_sha256(tk, model)},
               "member": {"id": job["member"], "hash": ctx["member_hashes"][job["member"]],
                          "parameter_file_sha256": job["parameter_file_sha256"]},
@@ -425,7 +446,8 @@ def cmd_run(args) -> int:
         "members": [{k: m[k] for k in ("id", "parameter_file_sha256", "request_file_sha256")} for m in exp["members"]
                     if m["id"] in members],
         "levels": levels,
-        "toolkits": {n: {"adapter": model.rel(model.toolkits[n]["adapter"]), "environment": environment_identity(model.toolkits[n], model),
+        "toolkits": {n: {"adapter": model.rel(model.toolkits[n]["adapter"]), "kind": model.toolkits[n]["kind"],
+                         "environment": environment_identity(model.toolkits[n], model),
                          "code_sha256": code_sha256(model.toolkits[n], model), "threads": model.toolkits[n]["threads"]} for n in toolkits},
         "model": model_commit(model),
         "core": identity(),
@@ -547,6 +569,39 @@ def cmd_register(args) -> int:
     return 0
 
 
+def cmd_compare(args) -> int:
+    """The experiment's checks on a run's results, and every job's distances from its member's reference; the exit
+    status is the checks' alone. An entry's kind is the run's own, as its manifest states it, numerical where a
+    manifest written before entries had kinds states none."""
+    from . import comparator
+
+    model = Model(Path(args.registry))
+    run = Path(args.run).resolve()
+    manifest = json.loads((run / "manifest.json").read_text(encoding="utf-8"))
+    exp_path = model.root / manifest["experiment"]["file"]
+    exp, exp_hash = load_experiment(exp_path, model)
+    if exp_hash != manifest["experiment"]["sha256"]:
+        raise SystemExit("the experiment file has changed since the run")
+    jobs = plan_jobs(exp_path, exp, model, list(manifest["toolkits"]), manifest["levels"],
+                     [m["id"] for m in manifest["members"]], run)
+    for j in jobs:
+        j["kind"] = manifest["toolkits"][j["toolkit"]].get("kind", "numerical")
+    try:
+        report = comparator.run_comparison(exp, exp_path, jobs, run, model.identity)
+    except ValueError as e:  # a metric's function that cannot be imported: a refusal, as an experiment with problems is
+        raise SystemExit(str(e))
+    comparator.write_outputs(report, jobs, run)
+    for c in report["checks"]:
+        print(f"{c['id']:32s} {c['verdict']}" + (f"  {c['errors'][0]}" if c["errors"] else ""))
+    computed = [j for j in report["reference"] if j["status"] == "computed"]
+    in_error = [j for j in report["reference"] if j["status"] == "error"]
+    for j in in_error:
+        print(f"{j['toolkit']:6s} {j['member']:22s} {j['level']:7s} comparison error: {j['reason']}")
+    print(f"{len(report['checks'])} checks; distances from the reference computed for {len(computed)} of {len(report['reference'])} jobs,"
+          f" {len(in_error)} in error; the report is in {model.rel(run / 'comparison.md')}")
+    return 1 if report["failed"] else 0
+
+
 def cmd_list(args) -> int:
     model = Model(Path(args.registry))
     print("experiments:")
@@ -561,11 +616,23 @@ def cmd_list(args) -> int:
     return 0
 
 
+def cmd_status(args) -> int:
+    """What the repository holds, as REMARK's status table shows it; nothing is run."""
+    from . import status
+
+    try:
+        found = status.report(Path(args.registry))
+    except ValueError as e:
+        raise SystemExit(str(e))
+    print(found["summary"], "", found["table"], sep="\n", end="")
+    return 1 if found["data"]["problems"] else 0
+
+
 def default_registry() -> str:
-    for candidate in ("harness/toolkits.yaml", "toolkits.yaml"):
+    for candidate in REGISTRY_FILES:
         if Path(candidate).is_file():
             return candidate
-    return "harness/toolkits.yaml"
+    return REGISTRY_FILES[0]
 
 
 def main(argv=None) -> int:
@@ -589,11 +656,15 @@ def main(argv=None) -> int:
     v = sub.add_parser("verify")
     v.add_argument("run")
     v.add_argument("--jobs", type=int, default=4)
+    c = sub.add_parser("compare")
+    c.add_argument("run")
     g = sub.add_parser("register")
     g.add_argument("run")
     g.add_argument("--registry-dir", help="where to register (default: the registry file's registry_dir, runs.registry beside it)")
+    sub.add_parser("status")
     args = ap.parse_args(argv)
-    return {"list": cmd_list, "run": cmd_run, "verify": cmd_verify, "register": cmd_register}[args.command](args)
+    return {"list": cmd_list, "run": cmd_run, "verify": cmd_verify, "compare": cmd_compare, "register": cmd_register,
+            "status": cmd_status}[args.command](args)
 
 
 if __name__ == "__main__":

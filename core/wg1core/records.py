@@ -8,6 +8,10 @@ The repository's state: the remote normalized to https, the commit, whether the 
 environment's hash is taken over the files git records under its directory in the tree that ran, each blob read from
 git, then a sorted listing hashed, so that untracked files and caches never enter it and two specifications compare
 file by file.
+
+A record names the draft of the schema it was written under, by the identifier in its `$schema`. The core writes
+records of its own draft and holds every earlier draft a published core wrote, in `schemas/earlier/`, so that a record
+written under one is checked against it and not against a draft it was never meant to match.
 """
 
 from __future__ import annotations
@@ -27,6 +31,7 @@ CORE_SCHEMA = SCHEMAS / "execution-record.schema.json"
 MODEL_SCHEMA = SCHEMAS / "runs.registry.schema.json"
 RECORD_VERSION = "0.1.0-draft.4"
 MODEL_SCHEMA_ID = json.loads(MODEL_SCHEMA.read_text(encoding="utf-8"))["$id"]
+EARLIER = SCHEMAS / "earlier"
 
 
 def git(*args: str, cwd: Path) -> str:
@@ -180,18 +185,32 @@ def outputs(folder: Path, names: tuple[str, ...]) -> list[dict]:
     return out
 
 
-def validate(record: dict) -> None:
-    """Refuses a record that does not match the model repository's schema, which covers builds and executions."""
+def held() -> dict[str, dict]:
+    """Every schema this core holds, by its identifier: its own drafts, and the earlier ones in `schemas/earlier/`."""
+    out = {}
+    for path in [CORE_SCHEMA, MODEL_SCHEMA, *sorted(EARLIER.glob("*.json"))]:
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        if schema["$id"] in out:
+            raise ValueError(f"two schemas held under one identifier: {schema['$id']}")
+        out[schema["$id"]] = schema
+    return out
+
+
+def validate(record: dict, schema_id: str = MODEL_SCHEMA_ID) -> None:
+    """Refuses a record that does not match a registry schema this core holds, which covers builds and executions: by
+    default the core's own draft, which every record it writes must match; an earlier draft, named by its identifier,
+    for a record written under it."""
     import jsonschema
     from referencing import Registry, Resource
 
-    core = json.loads(CORE_SCHEMA.read_text(encoding="utf-8"))
-    model = json.loads(MODEL_SCHEMA.read_text(encoding="utf-8"))
-    registry = Registry().with_resources([(core["$id"], Resource.from_contents(core)),
-                                          (model["$id"], Resource.from_contents(model))])
-    errors = list(jsonschema.Draft202012Validator(model, registry=registry).iter_errors(record))
+    schemas = held()
+    if schema_id not in schemas:
+        raise ValueError(f"this core does not hold the schema {schema_id}")
+    registry = Registry().with_resources([(i, Resource.from_contents(s)) for i, s in schemas.items()])
+    errors = list(jsonschema.Draft202012Validator(schemas[schema_id], registry=registry).iter_errors(record))
     if errors:
-        raise ValueError("the record does not match runs.registry.schema.json:\n  "
+        name = "runs.registry.schema.json" if schema_id == MODEL_SCHEMA_ID else f"the draft it names, {schema_id}"
+        raise ValueError(f"the record does not match {name}:\n  "
                          + "\n  ".join(f"{e.json_path}: {e.message}" for e in errors[:5]))
 
 
