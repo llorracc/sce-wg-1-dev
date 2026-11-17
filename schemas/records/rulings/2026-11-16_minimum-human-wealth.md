@@ -25,3 +25,26 @@ paper's publication of that evening.
 
 **What stays open.** The deploy job's pull request; when the series is ready, and whether he merges it or puts it to
 the group.
+
+## The series' descriptions
+
+- **22:40:04, here:** the descriptions naming the fork's earlier main updated.
+
+**What followed.** #15, #16, #18, #19 and #20 updated at 22:41. #14's had nothing to update.
+
+## The open items, as recommended
+
+- **22:46:46, here:** this session's three recommendations followed:
+  - the deploy job's pull request opened, as a draft marked not ready;
+  - the buffer-stock model's repository's copy of the ontology of probability distributions follows the fork;
+  - the series put to the group rather than merged by him: once the fork's main is quiet, #14 marked ready first with
+    a reviewer he names, then #16, then the rest in order, the deploy job's last.
+
+**What followed.** #22 opened at 22:47 and the seven other descriptions name it. The copy of the ontology of
+probability distributions had followed the fork since his word in that session at 17:44:05 on 2026-11-14, so nothing
+was taken; the fork is the home of both ontologies ([the memory](../memory/feedback_ontology-home-is-the-fork.md)).
+
+**What it supersedes.** The deploy job's pull request, held since 2026-11-14. The question of whether he merges the
+series or puts it to the group, open since 2026-11-12.
+
+**What stays open.** When the fork's main is quiet, and who reviews #14.

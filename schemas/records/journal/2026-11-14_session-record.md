@@ -262,6 +262,8 @@ Times are EST, from the clock, the transcript, git or GitHub.
   - `ontologies/README.md`'s table listed only the ontology of probability distributions;
   - the buffer-stock ontology's README linked Project A by a relative path, which breaks in any copy of the folder.
 
+  *Corrected on 2026-11-16:* the third point had been settled in that session at 17:44:05 that day, on the owner's
+  word there, and the copy taken on 2026-11-15 ([the journal of 2026-11-16](2026-11-16_session-record.md)).
   The third point, whether that repository's copy of the ontology of probability distributions, at 0.1.0-draft.1,
   follows the fork's draft.2, is that session's question to him.
 - **16:51 to 16:53, the fork's #27.** From `ontology-readme-links` (5c2b1b0):

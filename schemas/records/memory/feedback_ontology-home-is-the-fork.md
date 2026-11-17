@@ -1,12 +1,15 @@
 ---
 name: feedback_ontology-home-is-the-fork
-description: "The ontology of buffer-stock models lives in this repository; a model repository's copy follows it, and a correction made in a copy is brought here as a pull request; the folder links outward by absolute address (2026-11-14)"
+description: "Both ontologies, of buffer-stock models and of probability distributions, live in this repository; a model repository's copy follows it, and a correction made in a copy is brought here as a pull request; the folder links outward by absolute address (2026-11-14)"
 metadata:
   type: feedback
 ---
 
 This repository's `ontologies/buffer-stock-models/` is the ontology's home, by the owner's decision of 2026-11-14 at
-15:54:52 ([the rulings](../rulings/2026-11-14_core-fixes-ontology-held-and-the-series.md)). The buffer-stock model's
+15:54:52 ([the rulings](../rulings/2026-11-14_core-fixes-ontology-held-and-the-series.md)). So is its
+`ontologies/probability-distributions/`: the buffer-stock model's repository's copy has followed it since his word in
+that session at 17:44:05 on 2026-11-14, confirmed here at 22:46:46 on 2026-11-16 ([the
+rulings](../rulings/2026-11-16_minimum-human-wealth.md)). That repository records both in its `ontologies/home.yaml`. The buffer-stock model's
 repository keeps a copy, and its tests hold the ontology to the families' files there.
 
 **Why:** the copies had drifted. That repository corrected the natural limit and the shocks' written forms on

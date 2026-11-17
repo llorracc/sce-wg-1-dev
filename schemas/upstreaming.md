@@ -1,6 +1,9 @@
 # Bringing the work to the working group's repository: the pull requests in order
 
-**Status at 22:40 on 2026-11-16:** the fork's main at 1925002, after #28 gave the ontology of buffer-stock models
+**Status at 22:55 on 2026-11-16:** the deploy job's pull request opened as #22, a draft; all eight, #14–#20 and #22,
+drafts marked not ready, with descriptions naming the fork's main at 1925002. On the owner's word of 22:46:46 the series
+goes to the group: once the fork's main is quiet, #14 first with a reviewer he names, then #16, then the rest, #22
+last. **At 22:40:** the fork's main at 1925002, after #28 gave the ontology of buffer-stock models
 minimum human wealth; #17's head brought to it (7b26427) and its description updated, so the series reproduces
 1925002; the other six descriptions name 69bc191. **At 18:40 on 2026-11-14:** the fork's main at bd22255, after #27 added the buffer-stock ontology's row to the
 ontologies' table and made that ontology's links out of its folder absolute; #17's head brought to it (9eedc35), so the
