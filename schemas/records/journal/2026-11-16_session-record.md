@@ -145,3 +145,11 @@ Times are EST, from the clock, the transcript, git or GitHub.
   `ontology-bellman-public`, `ontology-corrections-of-11-12`, `ontology-minimum-human-wealth`, `ontology-readme-links`,
   `primer-bellman-public`, `readme-perch-notation`), whose deletion would need his word.
 - **Open:** the co-author's reading of #14's wording and Project B's optional sentence ([the deferred items](../deferred.md)).
+- **23:32, the memorial committed and pushed** (3c2e749).
+- **23:32:58, his word here:** the co-author's reading not awaited, and #14 merged without it. #14 had merged at
+  23:01:50 on his earlier word, so nothing more was done on GitHub. The deferred item's part for the co-author's reading
+  was dropped. Its other part stands: the sentence offered to the co-chairs for Project B's blurb.
+- **23:34:57, his word here:** memorialize and push.
+
+**State at the memorial of 23:40 on 2026-11-16.** As at 23:35. **Open:** only the sentence offered to the co-chairs for
+Project B's blurb ([the deferred items](../deferred.md)).

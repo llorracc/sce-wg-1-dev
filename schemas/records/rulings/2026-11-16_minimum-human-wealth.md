@@ -75,3 +75,14 @@ merged by 23:23:40 under his word of 23:11:46; the working group's main is the f
 deleted at 23:30.
 
 **What it supersedes.** The hold on the series since 2026-11-13, and the plan for fewer branches' last step.
+
+## #14 without the co-author's reading
+
+- **23:32:58, here:** the co-author's reading of #14's wording is not to be awaited, and #14 merged without feedback
+  from the co-authors.
+
+**What followed.** #14 had merged at 23:01:50. The deferred item for the co-author's reading was dropped.
+
+**What it supersedes.** #14's description, which left its wording in the special-issue proposal to both authors' reading.
+
+**What stays open.** The sentence offered to the co-chairs for Project B's blurb.
