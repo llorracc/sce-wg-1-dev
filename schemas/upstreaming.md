@@ -1,6 +1,8 @@
 # Bringing the work to the working group's repository: the pull requests in order
 
-**Status at 22:55 on 2026-11-16:** the deploy job's pull request opened as #22, a draft; all eight, #14–#20 and #22,
+**Status at 23:15 on 2026-11-16:** #14 and #16 merged into the working group's repository (3ca9f70), each approved
+first from the owner's account ccarrollATjhuecon; the rest, #15, #17, #18, #19, #20 and #22, under way in that order on
+his word. **At 22:55:** the deploy job's pull request opened as #22, a draft; all eight, #14–#20 and #22,
 drafts marked not ready, with descriptions naming the fork's main at 1925002. On the owner's word of 22:46:46 the series
 goes to the group: once the fork's main is quiet, #14 first with a reviewer he names, then #16, then the rest, #22
 last. **At 22:40:** the fork's main at 1925002, after #28 gave the ontology of buffer-stock models

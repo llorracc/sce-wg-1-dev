@@ -76,3 +76,32 @@ Times are EST, from the clock, the transcript, git or GitHub.
   their descriptions are current. Merged in order, #22 last, they reproduce the fork's main.
 - **Open with the owner:** once the fork's main is quiet, the reviewer for #14 and his word to mark it ready; then
   #16, then the rest in order, #22 last.
+- **22:52, the memorial committed and pushed** (ad7ffbf). The buffer-stock session was told.
+- **22:55:59, his word here:** #14 marked ready, with ccarrollATjhuecon, his other GitHub account, as its reviewer.
+  That account is an admin collaborator of the working group's repository. By 22:56:43 #14 was ready for review, the
+  review requested, and its note replaced: ready for review, the first of the series, the others drafts until it is
+  reviewed.
+- **23:00:42, his word here:** the review posted as ccarrollATjhuecon, saying #14 is ready to merge, and #14 merged.
+  Its diff was read first: three files, one criterion. The branch merged cleanly onto the group's main, and its checks
+  had passed. The approval was posted at 23:01:36 from that account, `gh`'s active account switched to it and back to
+  llorracc in one command. The review says what was checked and ends with the line that it was generated with Claude
+  Code. #14 was merged at 23:01:50 with a merge commit, 14c25ee, whose tree is the clean merge of the tested head onto
+  4395e8d. The site's deploy succeeded, and the live page carries the new Vision paragraph. The fork's main already held
+  #14's three files, so nothing was brought back to it.
+- **23:07:15 and 23:07:41, his words here:** ccarrollATjhuecon to review #16, then #16 merged. Its four files were
+  read. The three documents are identical to the fork's main, and its one relative link to a folder the group's main
+  lacks, `conventions.md`'s to `ontologies/probability-distributions/`, waits on #15; the review says so. #16 was
+  marked ready and the review requested at 23:08:06, approved at 23:08:10, and merged at 23:08:23 with a merge commit,
+  3ca9f70, the clean merge of the tested head. The site's deploy succeeded.
+- **After each merge, the series checked again:** the remaining pull requests, merged in order onto the group's new
+  main, reproduce the fork's main, and GitHub reports each mergeable.
+- **23:11:46, his word here:** continue, with the series in the same way, in order. #15, #18 and #20 show no checks on
+  their current heads, so their reviews rest on tests run here on the trees they make.
+- **23:11:55, his word here:** memorialize and push.
+
+**State at the memorial of 23:15 on 2026-11-16.**
+- **The fork's main** is at 1925002. Two worktrees, `records` and `.worktrees/main`.
+- **The working group's main** is at 3ca9f70, with #14 and #16 merged. #15, #17, #18, #19, #20 and #22 are drafts, each
+  mergeable; merged in that order, they reproduce the fork's main.
+- **Under way, on his word of 23:11:46:** #15, then #17, #18, #19, #20 and #22, each reviewed as ccarrollATjhuecon and
+  merged, stopping at any problem.

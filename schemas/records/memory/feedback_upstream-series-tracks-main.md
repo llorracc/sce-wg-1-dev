@@ -26,7 +26,10 @@ the working group reads the work as parts it can review.
   2026-11-16.
 - Each description's series sentence names the fork's main at its last check and the tests on the result; keep it
   current when main moves, on his word.
-- All of them are drafts, marked not ready to be merged. They go to the group, not merged by him (2026-11-16): once the
-  fork's main is quiet, #14 is marked ready first, with a reviewer he names, then #16, then the rest in order, #22
-  last.
+- They go in order, #14 first, then #16, then the rest, #22 last. On 2026-11-16 he named his own second account,
+  ccarrollATjhuecon, as the reviewer, and had each reviewed from it and merged: #14 and #16 that night, the rest under
+  way. For each: read the diff, check that the branch merges cleanly onto the group's main, run the tests on the tree it
+  makes where its checks did not run, mark it ready, request the review, post the approval from that account (switching
+  `gh` to it and back to llorracc in one command), saying what was checked and that it was generated with Claude Code,
+  then merge with a merge commit and check the series again.
 - Related: [[feedback_merge-commits-keep-pins]], [[project_state]].

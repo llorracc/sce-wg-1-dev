@@ -48,3 +48,18 @@ was taken; the fork is the home of both ontologies ([the memory](../memory/feedb
 series or puts it to the group, open since 2026-11-12.
 
 **What stays open.** When the fork's main is quiet, and who reviews #14.
+
+## The series reviewed as ccarrollATjhuecon and merged
+
+- **22:55:59, here:** #14 marked ready, reviewed by his account ccarrollATjhuecon.
+- **23:00:42, here:** the review posted from that account, saying #14 is ready to merge, and #14 merged.
+- **23:07:15 and 23:07:41, here:** the same for #16.
+- **23:11:46, here:** the rest of the series continued the same way, in order.
+
+**What followed.** #14 merged at 23:01:50 (14c25ee) and #16 at 23:08:23 (3ca9f70), each approved from ccarrollATjhuecon
+after its diff was read, and the site redeployed each time.
+
+**What it supersedes.** The recommendation of 22:41:47 that a reviewer be requested from the group. He chose his own
+second account.
+
+**What stays open.** The rest of the series, under way.
