@@ -1,6 +1,8 @@
 # Bringing the work to the working group's repository: the pull requests in order
 
-**Status at 18:40 on 2026-11-14:** the fork's main at bd22255, after #27 added the buffer-stock ontology's row to the
+**Status at 22:40 on 2026-11-16:** the fork's main at 1925002, after #28 gave the ontology of buffer-stock models
+minimum human wealth; #17's head brought to it (7b26427) and its description updated, so the series reproduces
+1925002; the other six descriptions name 69bc191. **At 18:40 on 2026-11-14:** the fork's main at bd22255, after #27 added the buffer-stock ontology's row to the
 ontologies' table and made that ontology's links out of its folder absolute; #17's head brought to it (9eedc35), so the
 series reproduces bd22255; #17's description, posted at 16:08, predates it. **At 16:10:** the fork's main at 69bc191: #24, #25 and #26, the ontology's draft.3, the links to
 Bellman's public documentation, and the ontology's corrections of 2026-11-12. The heads of #15–#18 and #20 are brought

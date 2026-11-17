@@ -5,8 +5,10 @@ metadata:
   type: reference
 ---
 
-- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls, none open as of 18:40 on 2026-11-14:
-  - #27, merged at 16:53 that day (main at bd22255): the ontologies' table, and the buffer-stock ontology's absolute
+- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls, none open as of 22:40 on 2026-11-16:
+  - #28, merged at 22:22 on 2026-11-16 (main at 1925002): minimum human wealth in the ontology of buffer-stock models,
+    and its natural constraint as that field, `h_min[>]`;
+  - #27, merged at 16:53 on 2026-11-14 (bd22255): the ontologies' table, and the buffer-stock ontology's absolute
     links;
   - #26, merged at 16:04 (69bc191): the ontology's two corrections of 2026-11-12;
   - #25, merged at 15:53: the links to Bellman's public documentation and two corrections;
@@ -68,9 +70,12 @@ metadata:
   distributions, refusals); the calculus; the overview and its workflow; the examples, among them Bellman's own
   buffer-stock and perfect-foresight models. Cite without `www`, and prefer a page or a path on main to a pinned commit
   ([[feedback_checkable-sources]]). The
-  Bellman commit both model repositories pin, 3937a8eb2 (Bellman's main of the morning of 2026-11-14),
-  is kept fetchable since 10:54 on 2026-11-14 by the tag `pinned/main-with-the-forward-record-2026-11-14` in
-  Bellman's development repository, a pin and no release; the branch that held it alone is to be retired. The two stage files elaborate unchanged under the package
+  Bellman commit both model repositories pinned on 2026-11-14, 3937a8eb2, a merge on a branch that combined
+  Bellman's main with its open pull requests and never on main (corrected on 2026-11-15), is kept fetchable since 10:54
+  on 2026-11-14 by the tag `pinned/main-with-the-forward-record-2026-11-14` in Bellman's development repository, a pin
+  and no release. econ-ark/bellman's history was rewritten overnight on 2026-11-14 to 15 (its main then 362ff552a), so
+  a link by commit hash into its earlier history points at a commit on no branch; the fork links none. Since
+  2026-11-16 the paper and the buffer-stock model's repository name econ-ark/bellman at ac243808e, specification 0.8. The two stage files elaborate unchanged under the package
   of 2026-11-09, specification 0.7 included ([the journal](../journal/2026-11-09_session-record.md)), and again under
   that of 2026-11-11 ([the journal](../journal/2026-11-11_session-record.md)).
 - Matsya: the design review of 2026-10-18 ran as four questions in one session and one stage-file question in another; the

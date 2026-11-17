@@ -68,6 +68,9 @@ Times are EST, from the clock, the transcript, git or GitHub.
   the Bellman commit both model repositories pin, Bellman's main of that morning. It stood on a branch
   alone that is to be retired, and the tag keeps it fetchable; it is no release. Nothing in the fork pins a Bellman
   commit, so nothing here changes. The pointer is in [the references](../memory/reference_pointers.md).
+  - *Corrected on 2026-11-15:* 3937a8eb2 was never on Bellman's main. It is a merge on a branch that combined main
+    with open pull requests, and the tag keeps that branch's head of 14 November, by the Bellman session's check
+    through GitHub's API ([the journal of 2026-11-15](2026-11-15_session-record.md)).
 - **By 11:30, the buffer-stock repository's session asked what it needs to appear in REMARK's status table,** on the
   owner's instruction there to confer. It was answered from the code, with the core's reader run on a scratch clone of
   its main at 539aa8a:

@@ -23,7 +23,8 @@ which that copy lacked. This copy is public, and it is the one the working group
   are in the model repository.
 - When this copy changes, tell that repository's session. Whether its copy takes the folder is for it and the owner.
   Since 16:18 on 2026-11-14 its copy is this folder unchanged, its `ontologies/home.yaml` recording the fork's commit
-  and each file's SHA-256.
+  and each file's SHA-256. Send it the merge commit's full hash; it takes the folder with its script and commits it
+  when the tests pass (as with #28 on 2026-11-16).
 - A link from the folder to anything outside `ontologies/` is an absolute address, since a copy of the folder lives in
   another repository: Project A at https://econ-ark.github.io/sce-wg-1/project-a.html, the Rosetta Stones at the fork's
   `rosetta/README.md` on GitHub. A link to the sibling ontology stays relative, every copy holding both (#27,
