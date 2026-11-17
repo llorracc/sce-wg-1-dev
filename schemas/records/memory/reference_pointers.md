@@ -146,7 +146,8 @@ metadata:
   it begins; its session `jd_wg1-buffer-stock`); the series to the working group's repository, pull requests #14 to
   #20 on https://github.com/econ-ark/sce-wg-1/pulls (the purpose, the apparatus, the two ontologies, the shock laws
   and stone convention, the experiment and record schemas, the core as a package), with #22, the site's deploy job,
-  since 2026-11-16; #14 and #16 merged there that night (3ca9f70), the rest drafts; the fork's `main` as the trunk
+  since 2026-11-16; all eight merged there that night, the working group's main (bc8596b) then the fork's main file
+  for file, and their branches deleted from the fork; the fork's `main` as the trunk
   of the framework, https://github.com/llorracc/sce-wg-1-dev/tree/main, with `core/` the package a model repository
   pins; REMARK, https://github.com/econ-ark/REMARK, its clone at `/home/shared/github/econ-ark/REMARK` with the
   session `jd_REMARK_integrate-with-WG1`, whose first update is a local branch there.

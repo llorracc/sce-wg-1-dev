@@ -257,3 +257,8 @@ Faults found in this project's own work, with their status.
   distributions now lists. Both were found on 2026-11-14 in the survey of links, after econ-ark/bellman and bellman.io
   went public at 13:38. **Status:** fixed. In the fork by pull request #25, merged at 15:53 on 2026-11-14. In the working
   group's repository by its pull request #21, merged at 15:57; the live page was checked at 15:59.
+- **Perch-marked notation read as a link.** The buffer-stock ontology's README wrote `V[>](a)` and `D_{a}V[>](a)`
+  plainly, and GitHub's Markdown read `[>](a)` as a link, showing a link labeled ">" in place of the perch mark and the
+  argument. Found on 2026-11-16 at 23:15 in reviewing the working group's #17. **Status:** fixed 2026-11-16 23:19:48 by
+  the fork's #29 (495817f), the two expressions in code; the only instance in the fork's documents, by a scan for short
+  bracket-and-parenthesis forms outside code.

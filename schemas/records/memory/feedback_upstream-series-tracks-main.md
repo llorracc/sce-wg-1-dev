@@ -1,6 +1,6 @@
 ---
 name: feedback_upstream-series-tracks-main
-description: "The working group's open pull requests are kept as a series that, merged in order, brings econ-ark/sce-wg-1 to the fork's main file for file, each part comprehensible on its own; when main moves, the series is brought along"
+description: "Merged on 2026-11-16, the working group's repository then equal to the fork's main. The working group's open pull requests were kept as a series that, merged in order, brings econ-ark/sce-wg-1 to the fork's main file for file, each part comprehensible on its own; when main moves, the series is brought along"
 metadata:
   type: feedback
 ---
@@ -26,6 +26,8 @@ the working group reads the work as parts it can review.
   2026-11-16.
 - Each description's series sentence names the fork's main at its last check and the tests on the result; keep it
   current when main moves, on his word.
+- **Done on 2026-11-16:** all eight merged by 23:23:40, the working group's main (bc8596b) then the fork's main
+  (495817f) file for file, and their branches deleted from the fork. A later series follows the same practice.
 - They go in order, #14 first, then #16, then the rest, #22 last. On 2026-11-16 he named his own second account,
   ccarrollATjhuecon, as the reviewer, and had each reviewed from it and merged: #14 and #16 that night, the rest under
   way. For each: read the diff, check that the branch merges cleanly onto the group's main, run the tests on the tree it

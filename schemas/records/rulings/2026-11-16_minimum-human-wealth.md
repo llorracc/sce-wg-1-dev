@@ -63,3 +63,15 @@ after its diff was read, and the site redeployed each time.
 second account.
 
 **What stays open.** The rest of the series, under way.
+
+## A fault fixed in the fork before #17, and the series completed
+
+- **23:17:01, here:** the README's notation fixed now, before #17.
+- **23:19:19, here:** that fix, the fork's #29, merged.
+- **23:29:43, here:** the series' branches deleted from the fork.
+
+**What followed.** #29 merged at 23:19:48 (495817f). #17, #18, #19, #20 and #22 were reviewed from ccarrollATjhuecon and
+merged by 23:23:40 under his word of 23:11:46; the working group's main is the fork's main. The eight branches were
+deleted at 23:30.
+
+**What it supersedes.** The hold on the series since 2026-11-13, and the plan for fewer branches' last step.

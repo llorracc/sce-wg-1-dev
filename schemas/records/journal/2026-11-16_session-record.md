@@ -105,3 +105,43 @@ Times are EST, from the clock, the transcript, git or GitHub.
   mergeable; merged in that order, they reproduce the fork's main.
 - **Under way, on his word of 23:11:46:** #15, then #17, #18, #19, #20 and #22, each reviewed as ccarrollATjhuecon and
   merged, stopping at any problem.
+- **23:13:43, the memorial committed and pushed** (eafa5c2).
+- **23:14, #15.** No checks had run on its head, so the tree its merge makes was built here and tested: the ontology's
+  12 tests pass, the generated files are current, its files are identical to the fork's main, and the link
+  `conventions.md` had waited on resolves. Marked ready and approved from ccarrollATjhuecon at 23:14:29, merged at
+  23:14:49 (063ee1d), the merged tree the one tested.
+- **23:15, #17 stopped.** On the tree its merge makes, both ontologies' tests passed (43 and 12) and `ontologies/` was
+  identical to the fork's main. But line 256 of the buffer-stock ontology's README wrote `V[>](a)` and `D_{a}V[>](a)`
+  plainly, and GitHub's Markdown read `[>](a)` as a link: it showed "V" and a link labeled ">" pointing at `a`. The
+  fork's main had the same text, the only instance in its documents. Put to the owner with a fix recommended first.
+- **23:17:01, his word here:** fix it now. The fork's #29 put the two expressions in code, with a CHANGELOG bullet
+  under draft.3; GitHub's renderer was checked on the line, and 43 tests passed. Opened at 23:17:59; its checks passed.
+  The classifier refused the merge, since the word had not said merge.
+- **23:19:19, his word here:** merge. #29 merged at 23:19:48 with a merge commit, 495817f, its tree the one tested.
+  #17's head took main's folder (3223902), and the series still reproduced the fork's main.
+- **23:20 to 23:24, the rest of the series,** each built onto the group's main and checked there, approved from
+  ccarrollATjhuecon, merged with a merge commit, and its merged tree found to be the one tested:
+  - #17, the buffer-stock ontology, at 23:21:08 (e1caf9d): 43 and 12 tests, the generated files current. GitHub still
+    counted #15's files in its diff; its diff from the merge base was its own 13 files;
+  - #18, the stone convention and the shock laws, at 23:21:48 (6dac1eb): no checks had run on its head; its links hold,
+    and its schema is a valid JSON Schema;
+  - #19, the experiment and record schemas, at 23:22:23 (c542bde): three valid schemas; two links into `core/` waited
+    on #20;
+  - #20, the core, at 23:23:06 (2da5e2f): no checks had run on its head; the core's 57 tests pass on the merged tree;
+  - #22, the deploy job, at 23:23:40 (bc8596b).
+
+  **The working group's main, bc8596b, is the fork's main, 495817f, file for file.** The site's last deploy succeeded;
+  two runs between were cancelled as later merges superseded them. No pull request of the owner's is open there. The
+  buffer-stock session was sent 495817f, its folder having changed in the README and the CHANGELOG.
+- **23:29:43, his word here:** the branches deleted. The eight series branches, each found in the group's main
+  history first, were deleted from the fork at 23:30. Nine of the fork's own merged branches remain, from its pull
+  requests #22–#29 and the primer's.
+- **23:29:49, his word here:** memorialize and push.
+
+**State at the memorial of 23:35 on 2026-11-16.**
+- **The fork's main** is at 495817f; **the working group's main** at bc8596b, the same files. The series is merged.
+- **Worktrees:** `records` and `.worktrees/main`.
+- **On the fork:** `main`, `records` and nine merged branches (`bellman-links`, `core-gitignore`, `core-small-fixes`,
+  `ontology-bellman-public`, `ontology-corrections-of-11-12`, `ontology-minimum-human-wealth`, `ontology-readme-links`,
+  `primer-bellman-public`, `readme-perch-notation`), whose deletion would need his word.
+- **Open:** the co-author's reading of #14's wording and Project B's optional sentence ([the deferred items](../deferred.md)).

@@ -1,6 +1,6 @@
 # Plan: fewer branches and worktrees in the fork
 
-**Status: EXECUTED in the fork on 2026-11-13 by 13:14, on the owner's word of 12:58:33 to pursue its recommendations,
+**Status: DONE on 2026-11-16:** its last step, the working group's pull requests, completed that night, all eight merged by 23:23:40 and their branches deleted from the fork at 23:30 ([the journal](../journal/2026-11-16_session-record.md)). **Before: EXECUTED in the fork on 2026-11-13 by 13:14, on the owner's word of 12:58:33 to pursue its recommendations,
 after his release of the records branch's hold at 12:58:10; what remains is the working group's repository, whose seven
 pull requests wait on him, who said at 15:12:22 that he does not want them merged yet. The two questions the execution raised
 were settled on his word at 14:53:27: the records branch holds the records alone (72231b2), and the fork's deploy job

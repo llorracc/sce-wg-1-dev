@@ -1,6 +1,9 @@
 # Bringing the work to the working group's repository: the pull requests in order
 
-**Status at 23:15 on 2026-11-16:** #14 and #16 merged into the working group's repository (3ca9f70), each approved
+**Status: DONE at 23:23:40 on 2026-11-16.** All eight pull requests merged into the working group's repository, each
+reviewed from the owner's account ccarrollATjhuecon and merged on his word: #14, #16, #15, #17, #18, #19, #20 and #22.
+Its main, bc8596b, is the fork's main, 495817f, file for file. The branches were deleted from the fork at 23:30.
+**At 23:15:** #14 and #16 merged into the working group's repository (3ca9f70), each approved
 first from the owner's account ccarrollATjhuecon; the rest, #15, #17, #18, #19, #20 and #22, under way in that order on
 his word. **At 22:55:** the deploy job's pull request opened as #22, a draft; all eight, #14–#20 and #22,
 drafts marked not ready, with descriptions naming the fork's main at 1925002. On the owner's word of 22:46:46 the series
