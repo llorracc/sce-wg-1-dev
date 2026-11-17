@@ -1,6 +1,7 @@
 # Bringing the work to the working group's repository: the pull requests in order
 
-**Status: DONE at 23:23:40 on 2026-11-16.** All eight pull requests merged into the working group's repository, each
+**Status: DONE at 23:23:40 on 2026-11-16;** one change since, Project B's sentence, merged there as #23 at 08:45:08 on
+2026-11-17 (d66f54b), the two mains again the same files. All eight pull requests merged into the working group's repository, each
 reviewed from the owner's account ccarrollATjhuecon and merged on his word: #14, #16, #15, #17, #18, #19, #20 and #22.
 Its main, bc8596b, is the fork's main, 495817f, file for file. The branches were deleted from the fork at 23:30.
 **At 23:15:** #14 and #16 merged into the working group's repository (3ca9f70), each approved

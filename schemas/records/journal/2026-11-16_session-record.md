@@ -153,3 +153,15 @@ Times are EST, from the clock, the transcript, git or GitHub.
 
 **State at the memorial of 23:40 on 2026-11-16.** As at 23:35. **Open:** only the sentence offered to the co-chairs for
 Project B's blurb ([the deferred items](../deferred.md)).
+- **23:35:37, the memorial committed and pushed** (35ba59b).
+- **23:40:36, his word here:** the sentence offered to the co-chairs put into Project B's blurb, without waiting for
+  them. On a branch from the fork's main, `project-b-exact-definition`, the landing page's blurb now reads "The
+  baselines provide shared reference models, each with a canonical, exact definition, for comparing implementations,
+  numerical methods, and results across toolkits." The record of the meeting of 2026-10-01, which has the old sentence,
+  keeps its wording. Opened as the fork's #30 at 23:41:32; its checks passed. The classifier refused the merge, since
+  the word had not said merge.
+- **23:44:03, his word here:** merge. #30 merged at 23:44:16 with a merge commit, 4e90bb1, its tree the one tested.
+  The classifier then refused to open the same branch in the working group's repository, which the word had not
+  named.
+
+**State at the end of the day.** The fork's main at 4e90bb1, a sentence ahead of the working group's main, bc8596b.

@@ -5,7 +5,10 @@ metadata:
   type: reference
 ---
 
-- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls, none open as of 22:40 on 2026-11-16:
+- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls, none open as of 08:55 on 2026-11-17:
+  - #30, merged at 23:44 on 2026-11-16 (main at 4e90bb1): Project B's blurb, each model with a canonical, exact
+    definition; taken to the working group as econ-ark/sce-wg-1#23, merged at 08:45 on 2026-11-17 (d66f54b);
+  - #29, merged at 23:19 on 2026-11-16 (495817f): the buffer-stock README's `V[>](a)` as code;
   - #28, merged at 22:22 on 2026-11-16 (main at 1925002): minimum human wealth in the ontology of buffer-stock models,
     and its natural constraint as that field, `h_min[>]`;
   - #27, merged at 16:53 on 2026-11-14 (bd22255): the ontologies' table, and the buffer-stock ontology's absolute

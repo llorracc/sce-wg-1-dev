@@ -86,3 +86,15 @@ deleted at 23:30.
 **What it supersedes.** #14's description, which left its wording in the special-issue proposal to both authors' reading.
 
 **What stays open.** The sentence offered to the co-chairs for Project B's blurb.
+
+## Project B's sentence, without the co-chairs
+
+- **23:40:36, here:** the sentence offered to the co-chairs for Project B's blurb put in without waiting for them.
+- **23:44:03, here:** the fork's #30 merged.
+- **2026-11-17 08:40:02, here:** the same opened, reviewed and merged in the working group's repository.
+
+**What followed.** The fork's #30 merged at 23:44:16 (4e90bb1). The working group's #23 was approved from
+ccarrollATjhuecon and merged at 08:45:08 the next morning (d66f54b), and the live site carries the sentence
+([the journal of 2026-11-17](../journal/2026-11-17_session-record.md)).
+
+**What it supersedes.** #14's offer of the sentence to the co-chairs, and the deferred item that waited on their answer.

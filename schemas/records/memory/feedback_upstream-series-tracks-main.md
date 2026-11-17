@@ -28,6 +28,10 @@ the working group reads the work as parts it can review.
   current when main moves, on his word.
 - **Done on 2026-11-16:** all eight merged by 23:23:40, the working group's main (bc8596b) then the fork's main
   (495817f) file for file, and their branches deleted from the fork. A later series follows the same practice.
+- **A later change goes to the fork first, then to the working group** (as #30, then #23, on 2026-11-16 and 17). The two
+  mains hold the same files through different merge commits. So before opening a fork branch there, merge the working
+  group's main into it with an ordinary merge commit, which leaves its tree unchanged. Otherwise GitHub diffs from an
+  older common ancestor and lists every file of the series.
 - They go in order, #14 first, then #16, then the rest, #22 last. On 2026-11-16 he named his own second account,
   ccarrollATjhuecon, as the reviewer, and had each reviewed from it and merged: #14 and #16 that night, the rest under
   way. For each: read the diff, check that the branch merges cleanly onto the group's main, run the tests on the tree it
