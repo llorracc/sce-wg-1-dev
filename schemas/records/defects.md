@@ -262,3 +262,20 @@ Faults found in this project's own work, with their status.
   argument. Found on 2026-11-16 at 23:15 in reviewing the working group's #17. **Status:** fixed 2026-11-16 23:19:48 by
   the fork's #29 (495817f), the two expressions in code; the only instance in the fork's documents, by a scan for short
   bracket-and-parenthesis forms outside code.
+- **An instruction to pin a tag that does not exist.** `core/README.md` tells a model repository to pin
+  `econ-ark/sce-wg-1@v0.1.0`; neither the working group's repository nor the fork has that tag. Prospective until the
+  core reached the working group's repository on 2026-11-16, an instruction that fails since. Found on 2026-11-17 at
+  08:55 in assessing the night's changes. **Status:** open; the fix recommended then, the tag on econ-ark/sce-wg-1 at
+  d66f54b, waits on the owner's word.
+- **"Any language" for an adapter.** `apparatus.md` says an adapter is the contract's command line in any language,
+  but the runner starts every adapter with `python`, on the host through `uv run ... python` and in a container
+  through `docker run ... python` (`core/wg1core/runner.py`). Found in the buffer-stock repository's participation
+  plan, and confirmed against the core on 2026-11-19 and 2026-11-20. **Status:** open; the comparator survey's
+  recommendation on the adapter as a command corrects the sentence ([the finding](findings/2026-11-20_comparator-projects/README.md)).
+- **Pull request descriptions and reviews with the "Generated with Claude Code" line.** The owner's rule of 2026-11-14,
+  made before 15:00 that day, leaves the line out of every pull request description. This machine's copy of his
+  instructions for every session lacked the rule until the morning of 2026-11-20, so the descriptions this session
+  wrote or edited after it carry the line: the fork's #24–#30 and the working group's #14–#18 and #21–#23. So do the
+  reviews posted from ccarrollATjhuecon on the working group's #14–#20, #22 and #23. Found on 2026-11-20 at 09:13.
+  **Status:** the rule followed from then on; taking the line out of the pull requests already merged, which are
+  public, waits on the owner's word.

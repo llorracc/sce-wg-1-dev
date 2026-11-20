@@ -131,3 +131,7 @@ In each sandbox, with the toolkit's pinned interpreter, bytecode writing off and
     --verify-results out/bst-restrained/results.json
 python measure.py <the committed adapter's results.json> out/bst-restrained/results.json
 ```
+
+**Note of 2026-11-18, on rerunning.** This finding ran at HARK 11852805. A rule coming in HARK refuses cubic
+interpolation (`CubicBool=True`) unless the expectation over income shocks is the continuous one, so a rerun on a HARK
+with that rule needs `CubicBool=False` or the continuous expectation ([the journal](../../journal/2026-11-18_session-record.md)).

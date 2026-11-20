@@ -31,8 +31,14 @@ metadata:
   of these pull requests, #1858 and #1862 among them, were rewritten on the owner's word in the HARK-dev session, the
   session trailers taken out of their commit messages and every tree unchanged, so their heads are new commits
   (`markov-exact-expectations` at `9cb777f9`, `natural-limit-infimum` at `2f58e7c9`); both tags still resolve, checked
-  on the fork at 15:40. Others' open ones: #1848 (cubic interpolation above the grid), #1853 (human wealth in the
-  Markov solver).
+  on the fork at 15:40. On 2026-11-18 #1862 was replaced in place, on the owner's word in the HARK-dev session, by a
+  version for the standard consumer only ("Compute IndShock's natural borrowing constraint from the shock laws'
+  infima"): `natural-limit-infimum` moved from `2f58e7c9` to `87640722` by a leased force-push, the Markov solver's half
+  left for a later pull request; the two tags still resolve, checked on 2026-11-20, and GitHub shows no `refs/archive/`
+  ref on the fork. The fork also carries a third tag, `sce-adapter/2026-11-12` (`347f7393`). Others' open ones: #1848
+  (cubic interpolation above the grid), #1853 (human wealth in the Markov solver). HARK's latest release is 0.17.2, of
+  2026-05-01; #1822 (b419c0d9, merged 2026-09-15), the growth factor in the income-weighted transition matrices under
+  mortality, and #1849 are on main only.
 - Econ-ark's notation registry, `@resources/notation/notation.yml` in econ-ark/econ-ark-tools, with the generated
   `econark-notation.sty`, `notation-math.yml` and `NOTATION.md`: version 1.0.0 on its master once econ-ark-tools' pull
   requests #38 to #44 merged on 2026-10-21, then 2.1.0 (#46), with rows for the schemas' own symbols, and 3.0.0 (#47)
@@ -159,5 +165,15 @@ metadata:
   and the plan for HARK's pull requests and the point mass as `plans/20261105-1249h_hark-pull-requests-point-mass_plan.md`, both made from
   its handoff record `records/handoffs/2026-11-05_expectation-redesign-from-sce-wg-1-dev/`; this repository keeps what the
   harness needs of them in `plans/2026-11-05_expectation-machinery-redesign.md`.
+  Since 2026-11-20 it also holds HARK-dev's plan for HARK and the working group's adapters,
+  `plans/20261120-0955h_hark-for-the-working-groups-adapters_plan.md`, PROPOSED and put to the owner there, asked for
+  from this session on his word ([the journal](../journal/2026-11-20_session-record.md)).
 - Since 2026-11-08, in prospect: a second model repository, for the perfect-foresight CRRA consumption problem with two solution methods, the closed form and the endogenous grid method with linear interpolation, modeled on wg1-buffer-stock and asked of that repository's session by the owner at 17:15 EST, under the working name `sce-wg-1_perfforesightcrra`; this session and the Bellman session consulted on its design ([the journal](../journal/2026-11-08_session-record.md)). It is the first canonical model outside the buffer-stock class, which the ontology of buffer-stock models names `perfect-foresight-benchmark`.
 - Since 2026-11-11, REMARK's updates for this project as stacked pull requests on econ-ark/REMARK, each on the one before: https://github.com/econ-ark/REMARK/pull/196 (execution without a terminal, container limits), https://github.com/econ-ark/REMARK/pull/197 (the tool as the package `remark`), https://github.com/econ-ark/REMARK/pull/198 (execution records; its schema, `remark/schemas/execution-record.schema.json`, is the core's fourth draft under REMARK's identifier), https://github.com/econ-ark/REMARK/pull/199 (environments in subdirectories; read-only and further mounts). Stacked on them the same afternoon: https://github.com/econ-ark/REMARK/pull/200 (catalog entries marked private) and https://github.com/econ-ark/REMARK/pull/201 (the status table, whose reader for a unit is found by its kind in the entry-point group `remark.status`; the core's reader for a model repository is the fork's to supply). The REMARK session's; all six merged into econ-ark/REMARK's main at 16:05 EST that day (main at `8a1f77a`, package version 0.2.0), no release tagged; its main at `2ac99d5` that night, by its clone's remote ref, after two further merges that do not touch the status table. The core's reader for it is on the fork's local branch `status-reader` (`cf8ddf2`, its head `74312f9`, 2026-11-11, unpushed, unmerged), offered as the entry point `canonical-model`; the reference as its own kind of object is on the branch `reference-as-its-own-kind` (`6c12de1`, the same night; pushed to the fork on 2026-11-12 and merged into its main the same morning by https://github.com/llorracc/sce-wg-1-dev/pull/16, the fork's main at `f557ef4`); the metrics an experiment defines are on the local branch `experiment-metrics` (`09a4548`, 2026-11-12, unpushed, unmerged), built to the plan `schemas/records/plans/2026-11-11_the-reference-as-its-own-kind.md` of the perfect-foresight repository, which is private; the stone convention's amendment for the method files is on the local branch `stone-method-files` (`76fa199` and its correction `2700da6`, the same night, unpushed, unmerged). Both in worktrees under `.worktrees/` of the fork's clone on jhu-dell. When a release holding #198 is tagged, the fork's registry schema is to refer to REMARK's schema, on the owner's word ([the deferred items](../deferred.md)).
+- Since 2026-11-19, in wg1-buffer-stock (private): the plan for the working group's other models,
+  `schemas/other-models.md`, PROPOSED, at 908cfa2 with this session's corrections folded in and marked; and the
+  finding `schemas/records/findings/2026-11-18_hark-s-coming-changes-read-against-the-adapter.md`, on HARK-dev's new
+  heads against the adapter's pin. The survey of 2026-11-03 is held there too, as here.
+- Since 2026-11-20: the comparator survey ([the finding](../findings/2026-11-20_comparator-projects/README.md)). Its
+  comparison by dimension, its critics' verdicts and the two sessions' answers cite the private repositories, so they
+  are kept with the session's on-box memory on jhu-dell, outside this repository.

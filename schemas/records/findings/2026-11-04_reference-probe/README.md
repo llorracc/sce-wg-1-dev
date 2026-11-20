@@ -160,3 +160,7 @@ results schema; the probe writes its own result files.
   block; the stationary distribution itself is not kept, being reproducible from the rule and the settings.
 - `default/hark/<member>/result.json`: HARK at its default settings.
 - `report.md`: the tables, generated.
+
+**Note of 2026-11-18, on rerunning.** This finding ran at HARK 11852805. A rule coming in HARK refuses cubic
+interpolation (`CubicBool=True`) unless the expectation over income shocks is the continuous one, so a rerun on a HARK
+with that rule needs `CubicBool=False` or the continuous expectation ([the journal](../../journal/2026-11-18_session-record.md)).
