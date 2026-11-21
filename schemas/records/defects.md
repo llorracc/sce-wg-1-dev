@@ -270,8 +270,11 @@ Faults found in this project's own work, with their status.
 - **"Any language" for an adapter.** `apparatus.md` says an adapter is the contract's command line in any language,
   but the runner starts every adapter with `python`, on the host through `uv run ... python` and in a container
   through `docker run ... python` (`core/wg1core/runner.py`). Found in the buffer-stock repository's participation
-  plan, and confirmed against the core on 2026-11-19 and 2026-11-20. **Status:** open; the comparator survey's
-  recommendation on the adapter as a command corrects the sentence ([the finding](findings/2026-11-20_comparator-projects/README.md)).
+  plan, and confirmed against the core on 2026-11-19 and 2026-11-20. **Status:** fixed on the fork on 2026-11-20 by
+  [#31](https://github.com/llorracc/sce-wg-1-dev/pull/31), merged at 19:40 (1b74c66): a registry entry may state the
+  command that starts its adapter, the comparator survey's recommendation on the adapter as a command
+  ([the finding](findings/2026-11-20_comparator-projects/README.md)). In the working group's repository, when
+  [#24](https://github.com/econ-ark/sce-wg-1/pull/24) is merged.
 - **Pull request descriptions and reviews with the "Generated with Claude Code" line.** The owner's rule of 2026-11-14,
   made before 15:00 that day, leaves the line out of every pull request description. This machine's copy of his
   instructions for every session lacked the rule until the morning of 2026-11-20, so the descriptions this session

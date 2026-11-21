@@ -78,3 +78,93 @@ Times are EST, from the clock, the transcript, git or GitHub.
   - the plan for other models, at 908cfa2 in wg1-buffer-stock;
   - HARK-dev's plan, in that session;
   - whether to take the "Generated with Claude Code" line out of the descriptions and reviews that carry it.
+
+## After the memorial of 15:32
+
+- **17:52:43, his word here:** open the survey in the running VS Code. The full report, kept on the machine because it
+  cites the private repositories, opened there.
+- **18:11:45, "tag v0.1.0",** interrupted by him at 18:11:50. The one call sent, a read of the clock and of the
+  defects, was refused; the tag was not made.
+- **18:19:48, his word here:** the comparator survey's *bench outside the adapter*, yes, with a plan asked for the
+  fork and both model repositories, and his proposal that a toolkit be given suggestions about its grid that it need
+  not take ([the rulings](../rulings/2026-11-20_the-bench-outside-the-adapter.md)).
+  - **Read:** the fork's main at 4e90bb1, wg1-buffer-stock at 6aceae5, sce-wg-1_perfforesightcrra at e9702ca, and
+    HARK-dev's plan of the morning.
+  - **What was found:** verification and the comparison have always run in the core, outside the toolkit's container,
+    and the measuring code is the organizer's. But it runs inside each adapter's process, and in the buffer-stock
+    model it hands every toolkit the same shock nodes, and in effect the same grid. The ruling of
+    [2026-11-02](../rulings/2026-11-02_harness-decisions.md) called that a departure to be undone. The split was
+    designed on 2026-11-03 and proposed again on 2026-11-19, and was never applied.
+  - **Before 18:31:** a plan in six decisions written on the machine and opened in VS Code.
+- **18:31:06, his question:** is the solve the toolkit's alone? Answered toolkit by toolkit from the model
+  repositories' adapters. The iteration is always the toolkit's; the inputs, and for two toolkits part of the reported
+  rule, are not. The answer was added to the plan.
+- **18:36:08, his agreement** to the line between the toolkit's solve and the adapter's part, and a plan to implement
+  it asked for at once. The implementation plan, in eight packages with drafts of each schema change, was written on
+  the machine before 18:45.
+- **18:45:18, his word here:** start the core, then send the sessions their parts.
+  - **18:45:34:** a worktree on a new branch from the fork's main. 57 tests passed as the baseline.
+  - **The adapter's command:** built, with 64 tests passing, and saved as its own patch.
+  - **Solve and measure and the text:** built by 18:57, with 74 tests passing, 10 of them new. Draft 9 of the
+    registry schema was written, with draft 8 kept among the earlier drafts.
+  - **Compatibility:** the new core's status reader read both model repositories' runs of record unchanged, 73
+    records valid under draft 8, and nothing in their trees changed.
+  - **After 18:57:** each model repository's session was sent its part: his words with their stamps, the two plans,
+    the interface as built, and its first package. Nothing it was sent approved a commit there.
+- **The perfect-foresight session's reply.** It checked his words with the relay checker and started its cut. It asked
+  for three things in the interface: the solve's provenance in the solution file, an optional arrival value, and a
+  fourth answer to a suggestion for an exact entry. The first two are that model's schema. The third was admitted in
+  the core's text. It also made four corrections to the plan's reading of its code, all taken into the plan. One
+  question went to the owner: the driver string its pinned reference records.
+- **The buffer-stock session's reply.** It checked his words, started its cut on a branch, and needed no change to the
+  interface. It made four points, all taken into the plans:
+  - HARK's value there is cubic in the pseudo-inverse;
+  - the read-back points are the adapter's, listed in the solution file, the experiment stating only the tolerance;
+  - out of process the bench runs on the harness's numerical library, so the move's acceptance needs a stated
+    tolerance near 1e-15 relative;
+  - the solve's provenance goes in the solution file.
+- **19:06:05 to 19:06:09, the perfect-foresight cut's acceptance run,** reported by that session:
+  - every number of all six results files the same as its run of record's;
+  - the methods and settings files the same byte for byte;
+  - the read-back exact at every point;
+  - uncommitted.
+- **19:10:39, his word here:** keep the driver string; commit and open the core's pull requests.
+  - **The driver string:** relayed to the perfect-foresight session.
+  - **The commits:** the adapter's command as f3ce154, on its own branch from the fork's main. Solve and measure as
+    5334e94: its branch, which had no commit yet, was moved onto the first before committing, so that its pull request
+    shows only its own changes.
+  - **The pull requests:** both branches pushed and opened as the fork's
+    [#31](https://github.com/llorracc/sce-wg-1-dev/pull/31) and
+    [#32](https://github.com/llorracc/sce-wg-1-dev/pull/32), the second based on the first. The descriptions leave
+    out the "Generated with Claude Code" line.
+- **19:40:00, his word here:** merge #31 and #32.
+  - **#31:** its checks passing, merged as 1b74c66.
+  - **#32:** retargeted to `main`, its checks passing, merged as f56d46e. Both were merge commits.
+  - **Afterward:** the local main brought up to date, and both sessions told. One message to the perfect-foresight
+    session carried a guessed time and a placeholder for the commit; it was corrected at once with the stamp from the
+    transcript and the full hash.
+- **19:42:12, his word here:** yes to all four suggestions then put.
+  - **Relayed** to the perfect-foresight session: commit the cut, repin to f56d46e, run the pilot. Pushing and the run
+    of record were not named.
+  - **The working group's repository:** the working group's main (d66f54b) was merged into `adapter-command` (7ae393a),
+    as for the fork's #30 before it. The branch was pushed and opened there as
+    [econ-ark/sce-wg-1#24](https://github.com/econ-ark/sce-wg-1/pull/24). Its checks passed by 19:46.
+- **19:44:45, his word here:** memorialize.
+
+**State at the memorial of 19:46 on 2026-11-20.**
+- **The mains:** the fork's at f56d46e, with #31 and #32. The working group's at d66f54b, its #24 open, the fork's
+  #32 to follow it. No tag on either.
+- **Worktrees:** `records`, `.worktrees/main`, `.worktrees/adapter-command` and `.worktrees/solve-and-measure`.
+- **Branches on the fork:** `main`, `records`, `adapter-command` (merged on the fork, and the head of the working
+  group's #24), `solve-and-measure` (merged), and the ten merged branches of before. Deleting any needs his word.
+- **The model repositories:** the perfect-foresight cut built and accepted, its commit, repin and pilot approved; the
+  buffer-stock cut under way. Both are uncommitted, as last reported.
+- **Open with the owner:**
+  - merging the working group's #24, and whether it is reviewed from ccarrollATjhuecon as before;
+  - the tag `v0.1.0`;
+  - the reading that quantecon-egm takes the suggested grid;
+  - the pilot's push and run of record;
+  - the comparator survey's other recommendations;
+  - the plan for other models;
+  - HARK-dev's plan;
+  - the "Generated with Claude Code" line in the earlier descriptions and reviews.

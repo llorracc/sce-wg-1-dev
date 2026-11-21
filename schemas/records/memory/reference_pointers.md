@@ -5,7 +5,11 @@ metadata:
   type: reference
 ---
 
-- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls, none open as of 08:55 on 2026-11-17:
+- The fork's pull requests, https://github.com/llorracc/sce-wg-1-dev/pulls, none open as of 19:46 on 2026-11-20:
+  - #32, merged at 19:40 on 2026-11-20 (main at f56d46e): solve and measure, the adapter contract's second form, with
+    the text and draft 9 of the registry schema;
+  - #31, merged at 19:40 on 2026-11-20 (1b74c66): the adapter's command; taken to the working group as
+    econ-ark/sce-wg-1#24 from `adapter-command` with its main merged in (7ae393a), open there;
   - #30, merged at 23:44 on 2026-11-16 (main at 4e90bb1): Project B's blurb, each model with a canonical, exact
     definition; taken to the working group as econ-ark/sce-wg-1#23, merged at 08:45 on 2026-11-17 (d66f54b);
   - #29, merged at 23:19 on 2026-11-16 (495817f): the buffer-stock README's `V[>](a)` as code;
@@ -174,6 +178,10 @@ metadata:
   `schemas/other-models.md`, PROPOSED, at 908cfa2 with this session's corrections folded in and marked; and the
   finding `schemas/records/findings/2026-11-18_hark-s-coming-changes-read-against-the-adapter.md`, on HARK-dev's new
   heads against the adapter's pin. The survey of 2026-11-03 is held there too, as here.
+- Since 2026-11-20 evening: [the plan for the bench outside the adapter](../plans/2026-11-20_bench-outside-the-adapter.md).
+  Its full design and implementation plans, which describe the model repositories' code, are kept with the session's
+  on-box memory on jhu-dell, outside this repository. Each model repository's packages are on a branch of its own,
+  in its session.
 - Since 2026-11-20: the comparator survey ([the finding](../findings/2026-11-20_comparator-projects/README.md)). Its
   comparison by dimension, its critics' verdicts and the two sessions' answers cite the private repositories, so they
   are kept with the session's on-box memory on jhu-dell, outside this repository.
